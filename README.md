@@ -1,2 +1,2 @@
 # micro-frontend
-Micro frontends of Bluelearn App for both Mobile and Web
+Micro frontends of Volt App for both Mobile and Web
