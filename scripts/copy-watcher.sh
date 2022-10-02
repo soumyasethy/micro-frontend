@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Trigger on rebuild of lib
-# Copy to BlueLearn App ->  only for dev use
+# Copy to Volt App ->  only for dev use
 APP_PATH="../volt-app/node_modules/@volt/micro-frontend"
 NO_CODE_PATH="../no-code-platform/node_modules/@volt/micro-frontend"
 [ -d $APP_PATH ] && cp -R $1 $APP_PATH/$1 && echo "👉 Watcher Copy @volt/micro-frontend -> Volt-App ✅ "
