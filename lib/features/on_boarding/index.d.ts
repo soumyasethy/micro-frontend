@@ -1,2 +1,3 @@
-import { TemplateSchema } from "@voltmoney/types";
-export declare const onBoarding: TemplateSchema;
+import { PageType, TemplateSchema } from "@voltmoney/types";
+export declare const template: TemplateSchema;
+export declare const onboardMF: PageType<any>;

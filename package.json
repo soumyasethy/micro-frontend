@@ -32,7 +32,7 @@
     "@voltmoney/schema": "*"
   },
   "bugs": {
-    "url": "https://github.com/VOLTMoney/design-component/issues"
+    "url": "https://github.com/VOLTMoney/micro-frontend/issues"
   },
   "gitHead": "857fd575bbf509d7713cee0212d517f37af3b46d",
   "publishConfig": {

@@ -1,4 +1,5 @@
-import { onBoarding } from "./features/on_boarding";
+import { onboardMF } from "./features/on_boarding";
+import {RouteMap} from "@voltmoney/types";
 
 export enum ROUTE {
   ON_BOARDING,
@@ -8,6 +9,6 @@ export enum ROUTE {
   PAN_VERIFY,
   PAN_CONFIRM,
 }
-export const RouteMap = {
-  ON_BOARDING: onBoarding,
+export const ROUTE_MAP:RouteMap = {
+  ON_BOARDING: onboardMF,
 };

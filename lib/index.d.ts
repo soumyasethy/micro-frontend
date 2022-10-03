@@ -1,3 +1,4 @@
+import { RouteMap } from "@voltmoney/types";
 export declare enum ROUTE {
     ON_BOARDING = 0,
     MOBILE_NO_VERIFY = 1,
@@ -6,6 +7,4 @@ export declare enum ROUTE {
     PAN_VERIFY = 4,
     PAN_CONFIRM = 5
 }
-export declare const RouteMap: {
-    ON_BOARDING: import("@voltmoney/types").TemplateSchema;
-};
+export declare const ROUTE_MAP: RouteMap;
