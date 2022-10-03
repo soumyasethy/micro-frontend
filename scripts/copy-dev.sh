@@ -1,5 +1,5 @@
 BUILD_PATH="lib"
-echo "Copy @volt/platform ⏳ "
+echo "Copy @volt/micro-frontend ⏳ "
 
 # 1.Copy to Volt App ->  only for dev use
 APP_PATH="../volt-app/node_modules/@volt/micro-frontend"

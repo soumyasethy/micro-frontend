@@ -1,5 +1,5 @@
 {
-  "name": "@volt/micro-frontend",
+  "name": "@voltmoney/micro-frontend",
   "version": "0.0.1",
   "description": "Business Logic for Volt App for Web and Mobile",
   "author": "soumyasethy <soumya.sethy@voltmoney.in>",
@@ -21,14 +21,15 @@
     "dev": "tsc -w",
     "copy": "sh scripts/copy-dev.sh",
     "version-bump": "npm version patch",
-    "publish": "npm publish --access public"
+    "publish": "npm publish --access public",
+    "npm-set-registry": "npm config set //gitlab.com/api/v4/packages/npm/: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"
   },
   "devDependencies": {
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@volt/platform": "git+ssh://git@github.com:VOLTMoney/design-platform.git",
-    "@volt/schema": "^0.0.29"
+    "@voltmoney/types": "*",
+    "@voltmoney/schema": "*"
   },
   "bugs": {
     "url": "https://github.com/VOLTMoney/design-component/issues"
