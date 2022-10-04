@@ -1,8 +1,17 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  FontSizeTokens,
   IconSizeTokens,
   IconTokens,
   keyboardTypeToken,
@@ -10,10 +19,13 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
+import { ROUTE } from "../../index";
+import { Action } from "./types";
+import { getStarted } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
-    id: "PAGE_NAME",
+    id: ROUTE.ON_BOARDING,
     type: LAYOUTS.LIST,
     widgets: [
       { id: "back", type: WIDGET.BUTTON, position: POSITION.FIXED_TOP },
@@ -26,14 +38,22 @@ export const template: TemplateSchema = {
   datastore: <Datastore>{
     back: <ButtonProps>{
       type: ButtonTypeTokens.IconGhost,
-      icon: { name: IconTokens.Back,size: IconSizeTokens.XL },
+      icon: { name: IconTokens.Back, size: IconSizeTokens.XL },
     },
-    continue: <ButtonProps>{
+    continue: <ButtonProps & WidgetProps>{
       label: "continue",
       type: ButtonTypeTokens.LargeElevated,
       width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: Action.CONTINUE,
+        payload: {},
+        routeId: ROUTE.ON_BOARDING,
+      },
     },
-    title: <TypographyProps>{ label: "Verify your email id" },
+    title: <TypographyProps>{
+      label: "Verify your email id",
+      fontSize: FontSizeTokens.XXL,
+    },
     subTitle: <TypographyProps>{
       label: "Your Volt app will only work with this email id",
     },
@@ -45,7 +65,7 @@ export const template: TemplateSchema = {
   },
 };
 
-export const onboardMF: PageType<any> = {
+export const onBoardingMF: PageType<any> = {
   onLoad: async () => Promise.resolve(template),
-  actions: {},
+  actions: { [Action.CONTINUE]: getStarted },
 };

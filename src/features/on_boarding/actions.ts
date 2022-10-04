@@ -1,7 +1,10 @@
 import { ActionFunction, Datastore } from "@voltmoney/types";
+import { ROUTE } from "../../index";
 
 export const getStarted: ActionFunction = async (
   action,
   _datastore,
-  { network, asyncStorage, appendWidgets }
-): Promise<any> => {};
+  { navigate }
+): Promise<any> => {
+  await navigate(ROUTE.SIGNUP);
+};

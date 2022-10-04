@@ -1,1 +1,3 @@
-export type X = {}
+export enum Action {
+  CONTINUE = "CONTINUE",
+}
