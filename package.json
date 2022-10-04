@@ -22,10 +22,12 @@
     "copy": "sh scripts/copy-dev.sh",
     "version-bump": "npm version patch",
     "publish": "npm publish --access public",
+    "copy-watcher": "node chokidar.js",
     "npm-set-registry": "npm config set //gitlab.com/api/v4/packages/npm/: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"
   },
   "devDependencies": {
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "chokidar": "^3.5.3"
   },
   "dependencies": {
     "@voltmoney/types": "*",
