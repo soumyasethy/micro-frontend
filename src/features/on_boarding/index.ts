@@ -1,15 +1,9 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema,} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  IconSizeTokens,
   IconTokens,
   keyboardTypeToken,
   TextInputProps,
@@ -31,9 +25,8 @@ export const template: TemplateSchema = {
   },
   datastore: <Datastore>{
     back: <ButtonProps>{
-      // label: "back",
-      type: ButtonTypeTokens.LargeElevated,
-      icon: { name: IconTokens.Back },
+      type: ButtonTypeTokens.IconGhost,
+      icon: { name: IconTokens.Back,size: IconSizeTokens.XL },
     },
     continue: <ButtonProps>{
       label: "continue",
