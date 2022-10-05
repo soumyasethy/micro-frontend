@@ -20,7 +20,7 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../index";
-import { Action } from "./types";
+import { ACTION, ContinuePayload } from "./types";
 import { getStarted } from "./actions";
 
 export const template: TemplateSchema = {
@@ -45,8 +45,8 @@ export const template: TemplateSchema = {
       type: ButtonTypeTokens.LargeElevated,
       width: ButtonWidthTypeToken.FULL,
       action: {
-        type: Action.CONTINUE,
-        payload: {},
+        type: ACTION.CONTINUE,
+        payload: <ContinuePayload>{ phone_number: null, widgetId: "input" },
         routeId: ROUTE.ON_BOARDING,
       },
     },
@@ -57,15 +57,16 @@ export const template: TemplateSchema = {
     subTitle: <TypographyProps>{
       label: "Your Volt app will only work with this email id",
     },
-    input: <TextInputProps>{
+    input: <TextInputProps & WidgetProps>{
       caption: "Enter your other email",
       title: "Email id",
       keyboardType: keyboardTypeToken.email,
+      value: "8763666620",
     },
   },
 };
 
 export const onBoardingMF: PageType<any> = {
   onLoad: async () => Promise.resolve(template),
-  actions: { [Action.CONTINUE]: getStarted },
+  actions: { [ACTION.CONTINUE]: getStarted },
 };

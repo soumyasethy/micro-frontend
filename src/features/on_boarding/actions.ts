@@ -1,10 +1,11 @@
-import { ActionFunction, Datastore } from "@voltmoney/types";
+import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../index";
+import { ContinuePayload } from "./types";
 
-export const getStarted: ActionFunction = async (
+export const getStarted: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
   { navigate }
 ): Promise<any> => {
-  await navigate(ROUTE.SIGNUP);
+  await navigate(ROUTE.LOGIN, { phone_number: "+918763821940" });
 };

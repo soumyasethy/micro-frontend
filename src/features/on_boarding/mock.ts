@@ -1,1 +1,1 @@
-export const mock={}
+export const mock = {};
