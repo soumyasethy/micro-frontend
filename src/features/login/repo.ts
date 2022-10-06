@@ -34,18 +34,15 @@ export const cognitoRepo = async ({
     cognitoUser.setAuthenticationFlowType("CUSTOM_AUTH");
     cognitoUser.initiateAuth(authenticationDetails, {
       onSuccess: function (result) {
-        // User authentication was successful
         return resolve(result);
       },
       onFailure: function (err) {
-        // User authentication was not successful
         console.warn("onFailure", err);
         reject(err);
       },
       customChallenge: function (challengeParameters) {
-        // User authentication depends on challenge response
-        const challengeResponses = password;
-        cognitoUser.sendCustomChallengeAnswer(challengeResponses, this);
+        // const challengeResponses = password;
+        cognitoUser.sendCustomChallengeAnswer(password, this);
         // console.warn("customChallenge", challengeParameters);
       },
     });

@@ -20,8 +20,8 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../index";
-import { ACTION, ContinuePayload } from "./types";
-import { getStarted } from "./actions";
+import { ACTION, ContinuePayload, TextOnChangePayload } from "./types";
+import { getStarted, textOnChange } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
@@ -62,11 +62,19 @@ export const template: TemplateSchema = {
       title: "Email id",
       keyboardType: keyboardTypeToken.email,
       value: "8763666620",
+      action: {
+        type: ACTION.TEXT_ON_CHANGE,
+        payload: <TextOnChangePayload>{ value: "", widgetId: "input" },
+        routeId: ROUTE.ON_BOARDING,
+      },
     },
   },
 };
 
 export const onBoardingMF: PageType<any> = {
   onLoad: async () => Promise.resolve(template),
-  actions: { [ACTION.CONTINUE]: getStarted },
+  actions: {
+    [ACTION.CONTINUE]: getStarted,
+    [ACTION.TEXT_ON_CHANGE]: textOnChange,
+  },
 };

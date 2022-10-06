@@ -1,6 +1,6 @@
 {
   "name": "@voltmoney/micro-frontend",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Business Logic for Volt App for Web and Mobile",
   "author": "soumyasethy <soumya.sethy@voltmoney.in>",
   "homepage": "https://github.com/VOLTMoney/micro-frontend#readme",

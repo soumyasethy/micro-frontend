@@ -54,7 +54,7 @@ export const template: (phone_number: number) => TemplateSchema = (
         action: {
           type: ACTIONS.LoginWithCognito,
           payload: <LoginAction>{
-            username: phone_number.toString(),
+            username: `${phone_number}`,
             confirmCode: "123456",
           },
           routeId: ROUTE.LOGIN,

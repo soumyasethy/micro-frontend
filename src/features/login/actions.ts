@@ -14,7 +14,7 @@ export const loginCognito: ActionFunction<LoginAction> = async (
       password: action.payload.confirmCode,
     });
     console.warn("Response->", result);
-    asyncStorage.set(action.routeId, JSON.stringify(result));
+    // asyncStorage.set(action.routeId, JSON.stringify(result));
   } catch (e) {
     console.warn("error: ", "loginCognito ->", e);
   }
