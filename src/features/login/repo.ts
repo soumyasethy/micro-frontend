@@ -4,17 +4,28 @@ import {
   CognitoUserPool,
   CognitoUserSession,
 } from "amazon-cognito-identity-js";
+import { Auth } from "aws-amplify";
 
 const cognitoConfig = {
-  userPoolId: "ap-south-1_FSibHwXRW", //
-  arn: "arn:aws:cognito-idp:ap-south-1:560013782704:userpool/ap-south-1_FSibHwXRW",
-  clientID: "9e1gbnl9vq32idlvpol6h900g",
+  userPoolId: "ap-south-1_SJsMBrpQV",
+  arn: "arn:aws:cognito-idp:ap-south-1:560013782704:userpool/ap-south-1_SJsMBrpQV",
+  clientID: "5let0kbcceb4h6sf8hppdic48c",
   region: "ap-south-1",
 };
 const userPool = new CognitoUserPool({
   UserPoolId: cognitoConfig.userPoolId,
   ClientId: cognitoConfig.clientID,
 });
+
+export const cognitoCheckUserExist = async ({
+  phoneNumber,
+}: {
+  phoneNumber: string;
+}): Promise<any> => {
+  const response = await Auth.signIn(phoneNumber);
+  return response;
+};
+
 export const cognitoRepo = async ({
   email,
   password,

@@ -20,12 +20,13 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../index";
-import { ACTIONS, LoginAction } from "./types";
-import { loginCognito } from "./actions";
+import { ACTIONS, LoginAction, OTPPayload } from "./types";
+import { loginCognito, otpOnChange } from "./actions";
 
-export const template: (phone_number: number) => TemplateSchema = (
-  phone_number
-) => {
+export const template: (
+  phone_number: number,
+  session?: any
+) => TemplateSchema = (phone_number, session) => {
   return {
     layout: <Layout>{
       id: ROUTE.ON_BOARDING,
@@ -55,7 +56,8 @@ export const template: (phone_number: number) => TemplateSchema = (
           type: ACTIONS.LoginWithCognito,
           payload: <LoginAction>{
             username: `${phone_number}`,
-            confirmCode: "123456",
+            password: "123456",
+            session: session,
           },
           routeId: ROUTE.LOGIN,
         },
@@ -67,20 +69,28 @@ export const template: (phone_number: number) => TemplateSchema = (
       subTitle: <TypographyProps>{
         label: `Please enter 4-digit code sent on your phone number ${phone_number} Edit`,
       },
-      input: <TextInputProps>{
+      input: <TextInputProps & WidgetProps>{
         caption: "Enter your OTP",
         title: "Enter your OTP",
         keyboardType: keyboardTypeToken.numberPad,
+        action: {
+          type: ACTIONS.OTP_NUMBER,
+          routeId: ROUTE.LOGIN,
+          payload: <OTPPayload>{ value: "", widgetId: "input" },
+        },
       },
     },
   };
 };
 
 export const loginMF: PageType<any> = {
-  onLoad: async (_, { phone_number }) => {
-    return Promise.resolve(template(phone_number));
+  onLoad: async (_, { phone_number, session }) => {
+    // const response = await cognitoCheckUserExist(phone_number);
+    // console.warn("*** AWS Response ***", response);
+    return Promise.resolve(template(phone_number, session));
   },
   actions: {
     [ACTIONS.LoginWithCognito]: loginCognito,
+    [ACTIONS.OTP_NUMBER]: otpOnChange,
   },
 };

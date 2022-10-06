@@ -1,21 +1,27 @@
 import { ActionFunction } from "@voltmoney/types";
-import { cognitoRepo } from "./repo";
-import { LoginAction } from "./types";
-import { CognitoUserSession } from "amazon-cognito-identity-js";
-
+import { LoginAction, OTPPayload } from "./types";
+import { Auth } from "aws-amplify";
+let otp;
 export const loginCognito: ActionFunction<LoginAction> = async (
   action,
   _datastore,
-  { asyncStorage }
+  {}
 ): Promise<any> => {
   try {
-    const result: CognitoUserSession = await cognitoRepo({
-      email: action.payload.username,
-      password: action.payload.confirmCode,
-    });
-    console.warn("Response->", result);
-    // asyncStorage.set(action.routeId, JSON.stringify(result));
+    const response = await Auth.sendCustomChallengeAnswer(
+      action.payload.session,
+      otp
+    );
+    console.warn("auth **->", response);
   } catch (e) {
     console.warn("error: ", "loginCognito ->", e);
   }
+};
+
+export const otpOnChange: ActionFunction<OTPPayload> = async (
+  action,
+  _datastore,
+  {}
+): Promise<any> => {
+  otp = action.payload.value;
 };

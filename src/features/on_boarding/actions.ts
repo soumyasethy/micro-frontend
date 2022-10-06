@@ -1,19 +1,40 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../index";
 import { ContinuePayload } from "./types";
+import { Auth } from "aws-amplify";
+
+let phoneNumber: string = "";
 
 export const getStarted: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
   { navigate }
 ): Promise<any> => {
-  await navigate(ROUTE.LOGIN, { phone_number: "+918763821940" });
+  console.warn("**** using phoneNumber ****", phoneNumber);
+  await Auth.signIn(phoneNumber)
+    .then(async (response) => {
+      console.warn("AWS response[SignIn]", response);
+      await navigate(ROUTE.LOGIN, { phone_number: phoneNumber, response });
+    })
+    .catch(async (err) => {
+      console.warn("AWS Error", err);
+      if (JSON.stringify(err).includes("UserNotFoundException")) {
+        await Auth.signUp({
+          username: phoneNumber,
+          password: "123456",
+          attributes: {
+            "custom:isWhatsappEnabled": "true",
+          },
+        }).then((response) => console.warn("AWS response[SignUp]", response));
+        await navigate(ROUTE.LOGIN, { phone_number: phoneNumber });
+      }
+    });
 };
 export const textOnChange: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { navigate }
+  {}
 ): Promise<any> => {
-  // await navigate(ROUTE.LOGIN, { phone_number: "+918763821940" });
-  console.warn("action", action);
+  // console.warn("**** update phoneNumber ****", action.payload.value);
+  phoneNumber = action.payload.value;
 };

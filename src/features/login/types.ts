@@ -1,8 +1,13 @@
 export enum ACTIONS {
   LoginWithCognitoAmplify = "LoginWithCognitoAmplify",
   LoginWithCognito = "LoginWithCognito",
+  OTP_NUMBER = "OTP_NUMBER",
 }
-export type LoginAction = { username: string; confirmCode: string };
+export type OTPPayload = {
+  value: string;
+  widgetId: string;
+};
+export type LoginAction = { username: string; password: string; session?: any };
 
 export type Login = {
   accessToken: AccessToken;
