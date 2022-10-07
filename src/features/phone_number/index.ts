@@ -70,7 +70,7 @@ export const template: TemplateSchema = {
   },
 };
 
-export const onBoardingMF: PageType<any> = {
+export const phoneNumberMF: PageType<any> = {
   onLoad: async () => Promise.resolve(template),
   actions: {
     [ACTION.CONTINUE]: getStarted,

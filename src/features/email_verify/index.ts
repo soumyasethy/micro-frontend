@@ -81,7 +81,7 @@ export const template: TemplateSchema = {
   },
 };
 
-export const signupMf: PageType<any> = {
+export const emailVerifyMF: PageType<any> = {
   onLoad: async () => Promise.resolve(template),
   actions: { [ACTIONS.GOOGLE_LOGIN]: loginGoogle },
 };

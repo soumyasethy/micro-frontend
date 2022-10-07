@@ -105,7 +105,7 @@ export const template: (
   };
 };
 
-export const loginMF: PageType<any> = {
+export const otpVerifyMF: PageType<any> = {
   onLoad: async (_, { phone_number, session }) => {
     // const response = await cognitoCheckUserExist(phone_number);
     console.warn("*** AWS Response ***", session);
