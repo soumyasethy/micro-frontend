@@ -11,10 +11,11 @@ export const getStarted: ActionFunction<ContinuePayload> = async (
   { navigate }
 ): Promise<any> => {
   console.warn("**** using phoneNumber ****", phoneNumber);
+
   await Auth.signIn(phoneNumber)
-    .then(async (response) => {
-      console.warn("AWS response[SignIn]", response);
-      await navigate(ROUTE.LOGIN, { phone_number: phoneNumber, response });
+    .then(async (session) => {
+      console.warn("AWS response[SignIn]", session);
+      await navigate(ROUTE.LOGIN, { phone_number: phoneNumber, session });
     })
     .catch(async (err) => {
       console.warn("AWS Error", err);
@@ -25,8 +26,19 @@ export const getStarted: ActionFunction<ContinuePayload> = async (
           attributes: {
             "custom:isWhatsappEnabled": "true",
           },
-        }).then((response) => console.warn("AWS response[SignUp]", response));
-        await navigate(ROUTE.LOGIN, { phone_number: phoneNumber });
+        }).then(async (signupResponse) => {
+          console.warn("AWS response[SignUp]", signupResponse);
+          await Auth.signIn(phoneNumber)
+            .then(async (session) => {
+              console.warn("AWS response[SignIn Again]", session);
+              await navigate(ROUTE.LOGIN, {
+                phone_number: phoneNumber,
+                session,
+              });
+            })
+            .catch((newErr) => console.warn("AWS Error", newErr));
+        });
+        // await navigate(ROUTE.LOGIN, { phone_number: phoneNumber });
       }
     });
 };

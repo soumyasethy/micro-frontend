@@ -1,6 +1,6 @@
 import { onBoardingMF } from "./features/phone_number";
 import { RouteMap } from "@voltmoney/types";
-import { signupMf } from "./features/signup";
+import { signupMf } from "./features/email_verify";
 import { loginMF } from "./features/otp_verify";
 
 export enum ROUTE {

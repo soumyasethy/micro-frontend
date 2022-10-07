@@ -5,6 +5,7 @@ import {
   PageType,
   POSITION,
   TemplateSchema,
+  WidgetProps,
 } from "@voltmoney/types";
 import {
   ButtonProps,
@@ -19,6 +20,8 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../index";
+import { ACTIONS } from "./types";
+import { loginGoogle } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
@@ -49,10 +52,15 @@ export const template: TemplateSchema = {
     subTitle: <TypographyProps>{
       label: "Note: It must be registered to your \n" + "mutual fund holdings",
     },
-    google: <ButtonProps>{
+    google: <ButtonProps & WidgetProps>{
       label: "Continue with Google",
       type: ButtonTypeTokens.LargeElevated,
       width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTIONS.GOOGLE_LOGIN,
+        routeId: ROUTE.SIGNUP,
+        payload: {},
+      },
     },
     apple: <ButtonProps>{
       label: "Continue with Apple",
@@ -75,5 +83,5 @@ export const template: TemplateSchema = {
 
 export const signupMf: PageType<any> = {
   onLoad: async () => Promise.resolve(template),
-  actions: {},
+  actions: { [ACTIONS.GOOGLE_LOGIN]: loginGoogle },
 };

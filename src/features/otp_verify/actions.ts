@@ -1,20 +1,28 @@
 import { ActionFunction } from "@voltmoney/types";
-import { LoginAction, OTPPayload } from "./types";
+import { LoginAction, OTPPayload, SignInUserSession } from "./types";
 import { Auth } from "aws-amplify";
+import { ROUTE } from "../../index";
 let otp;
 export const loginCognito: ActionFunction<LoginAction> = async (
   action,
   _datastore,
-  {}
+  { navigate }
 ): Promise<any> => {
+  console.warn("using otp: ", otp, "session--->", action.payload.session);
   try {
-    const response = await Auth.sendCustomChallengeAnswer(
-      action.payload.session,
-      otp
+    const response: { signInUserSession: SignInUserSession } =
+      await Auth.sendCustomChallengeAnswer(action.payload.session, otp);
+    console.warn(
+      "aws accessToken: --->",
+      response.signInUserSession.accessToken
     );
-    console.warn("auth **->", response);
+    if (response.signInUserSession.accessToken) {
+      await navigate(ROUTE.SIGNUP);
+    } else {
+      console.warn("Something wen wrong");
+    }
   } catch (e) {
-    console.warn("error: ", "loginCognito ->", e);
+    console.warn("aws error: ", e);
   }
 };
 

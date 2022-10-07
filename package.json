@@ -32,7 +32,9 @@
   "dependencies": {
     "@voltmoney/schema": "^0.0.12",
     "@voltmoney/types": "^1.0.11",
-    "aws-amplify": "^4.3.37"
+    "amazon-cognito-identity-js": "^5.2.10",
+    "aws-amplify": "^4.3.37",
+    "@react-native-google-signin/google-signin": "^8.0.0"
   },
   "bugs": {
     "url": "https://github.com/VOLTMoney/micro-frontend/issues"
