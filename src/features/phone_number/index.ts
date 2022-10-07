@@ -51,17 +51,16 @@ export const template: TemplateSchema = {
       },
     },
     title: <TypographyProps>{
-      label: "Verify your email id",
+      label: "Verify your mobile number",
       fontSize: FontSizeTokens.XXL,
     },
     subTitle: <TypographyProps>{
-      label: "Your Volt app will only work with this email id",
+      label: "We’ll send a verification code to this number.",
     },
     input: <TextInputProps & WidgetProps>{
-      caption: "Enter your other email",
-      title: "Email id",
+      caption: "+91 |Enter mobile number",
+      title: "Mobile Number",
       keyboardType: keyboardTypeToken.email,
-      // value:'',
       action: {
         type: ACTION.PHONE_NUMBER,
         payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },

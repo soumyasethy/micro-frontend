@@ -2,12 +2,18 @@ export enum ACTIONS {
   LoginWithCognitoAmplify = "LoginWithCognitoAmplify",
   LoginWithCognito = "LoginWithCognito",
   OTP_NUMBER = "OTP_NUMBER",
+  RESEND_OTP_NUMBER = "RESEND_OTP_NUMBER",
 }
 export type OTPPayload = {
   value: string;
   widgetId: string;
 };
-export type LoginAction = { username: string; password: string; session?: any };
+export type LoginAction = {
+  username: string;
+  password?: string;
+  session?: any;
+  isWhatsappEnabled?: boolean;
+};
 
 export type Login = {
   accessToken: AccessToken;

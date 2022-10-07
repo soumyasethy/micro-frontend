@@ -18,7 +18,7 @@ export const getStarted: ActionFunction<ContinuePayload> = async (
     })
     .catch(async (err) => {
       console.warn("AWS Error", err);
-      if (JSON.stringify(err).includes("UserNotFoundException")) {
+      if ((err.code = "UserNotFoundException")) {
         await Auth.signUp({
           username: phoneNumber,
           password: "123456",

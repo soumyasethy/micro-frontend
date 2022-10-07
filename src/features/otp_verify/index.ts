@@ -15,13 +15,15 @@ import {
   IconSizeTokens,
   IconTokens,
   keyboardTypeToken,
+  SizeTypeTokens,
+  SpaceProps,
   TextInputProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../index";
 import { ACTIONS, LoginAction, OTPPayload } from "./types";
-import { loginCognito, otpOnChange } from "./actions";
+import { loginCognito, otpOnChange, resendOtp } from "./actions";
 
 export const template: (
   phone_number: number,
@@ -40,7 +42,10 @@ export const template: (
         },
         { id: "title", type: WIDGET.TEXT },
         { id: "subTitle", type: WIDGET.TEXT },
+        { id: "space1", type: WIDGET.SPACE },
         { id: "input", type: WIDGET.INPUT },
+        { id: "space2", type: WIDGET.SPACE },
+        { id: "resend_otp", type: WIDGET.BUTTON },
       ],
     },
     datastore: <Datastore>{
@@ -79,6 +84,23 @@ export const template: (
           payload: <OTPPayload>{ value: "", widgetId: "input" },
         },
       },
+      space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
+      space2: <SpaceProps>{ size: SizeTypeTokens.XXL },
+      resend_otp: <ButtonProps & WidgetProps>{
+        label: "Resend OTP",
+        type: ButtonTypeTokens.LargeElevated,
+        width: ButtonWidthTypeToken.FULL,
+        action: {
+          type: ACTIONS.RESEND_OTP_NUMBER,
+          payload: <LoginAction>{
+            username: `${phone_number}`,
+            password: "123456",
+            session: session,
+            isWhatsappEnabled: true,
+          },
+          routeId: ROUTE.LOGIN,
+        },
+      },
     },
   };
 };
@@ -92,5 +114,6 @@ export const loginMF: PageType<any> = {
   actions: {
     [ACTIONS.LoginWithCognito]: loginCognito,
     [ACTIONS.OTP_NUMBER]: otpOnChange,
+    [ACTIONS.RESEND_OTP_NUMBER]: resendOtp,
   },
 };
