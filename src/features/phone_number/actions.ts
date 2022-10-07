@@ -15,7 +15,7 @@ export const getStarted: ActionFunction<ContinuePayload> = async (
   await Auth.signIn(phoneNumber)
     .then(async (session) => {
       console.warn("AWS response[SignIn]", session);
-      await navigate(ROUTE.LOGIN, { phone_number: phoneNumber, session });
+      await navigate(ROUTE.OTP_VERIFY, { phone_number: phoneNumber, session });
     })
     .catch(async (err) => {
       console.warn("AWS Error", err);
@@ -31,7 +31,7 @@ export const getStarted: ActionFunction<ContinuePayload> = async (
           await Auth.signIn(phoneNumber)
             .then(async (session) => {
               console.warn("AWS response[SignIn Again]", session);
-              await navigate(ROUTE.LOGIN, {
+              await navigate(ROUTE.OTP_VERIFY, {
                 phone_number: phoneNumber,
                 session,
               });

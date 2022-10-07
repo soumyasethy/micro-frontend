@@ -17,7 +17,7 @@ export const loginCognito: ActionFunction<LoginAction> = async (
       response.signInUserSession.accessToken
     );
     if (response.signInUserSession.accessToken) {
-      await navigate(ROUTE.SIGNUP);
+      await navigate(ROUTE.EMAIL_VERIFY);
     } else {
       console.warn("Something wen wrong");
     }

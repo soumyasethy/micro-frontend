@@ -31,7 +31,7 @@ export const template: (
 ) => TemplateSchema = (phone_number, session) => {
   return {
     layout: <Layout>{
-      id: ROUTE.ON_BOARDING,
+      id: ROUTE.OTP_VERIFY,
       type: LAYOUTS.LIST,
       widgets: [
         { id: "back", type: WIDGET.BUTTON, position: POSITION.FIXED_TOP },
@@ -64,7 +64,7 @@ export const template: (
             password: "123456",
             session: session,
           },
-          routeId: ROUTE.LOGIN,
+          routeId: ROUTE.OTP_VERIFY,
         },
       },
       title: <TypographyProps>{
@@ -80,7 +80,7 @@ export const template: (
         keyboardType: keyboardTypeToken.numberPad,
         action: {
           type: ACTIONS.OTP_NUMBER,
-          routeId: ROUTE.LOGIN,
+          routeId: ROUTE.OTP_VERIFY,
           payload: <OTPPayload>{ value: "", widgetId: "input" },
         },
       },
@@ -98,7 +98,7 @@ export const template: (
             session: session,
             isWhatsappEnabled: true,
           },
-          routeId: ROUTE.LOGIN,
+          routeId: ROUTE.OTP_VERIFY,
         },
       },
     },

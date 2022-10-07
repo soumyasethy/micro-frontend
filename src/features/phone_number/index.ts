@@ -25,7 +25,7 @@ import { getStarted, textOnChange } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
-    id: ROUTE.ON_BOARDING,
+    id: ROUTE.PHONE_NUMBER,
     type: LAYOUTS.LIST,
     widgets: [
       { id: "back", type: WIDGET.BUTTON, position: POSITION.FIXED_TOP },
@@ -47,7 +47,7 @@ export const template: TemplateSchema = {
       action: {
         type: ACTION.CONTINUE,
         payload: <ContinuePayload>{ value: "", widgetId: "input" },
-        routeId: ROUTE.ON_BOARDING,
+        routeId: ROUTE.PHONE_NUMBER,
       },
     },
     title: <TypographyProps>{
@@ -64,7 +64,7 @@ export const template: TemplateSchema = {
       action: {
         type: ACTION.PHONE_NUMBER,
         payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },
-        routeId: ROUTE.ON_BOARDING,
+        routeId: ROUTE.PHONE_NUMBER,
       },
     },
   },

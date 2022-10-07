@@ -25,7 +25,7 @@ import { loginGoogle } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
-    id: ROUTE.SIGNUP,
+    id: ROUTE.EMAIL_VERIFY,
     type: LAYOUTS.LIST,
     widgets: [
       { id: "back", type: WIDGET.BUTTON, position: POSITION.FIXED_TOP },
@@ -58,7 +58,7 @@ export const template: TemplateSchema = {
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTIONS.GOOGLE_LOGIN,
-        routeId: ROUTE.SIGNUP,
+        routeId: ROUTE.EMAIL_VERIFY,
         payload: {},
       },
     },
