@@ -33,6 +33,7 @@ export const otpOnChange: ActionFunction<OTPPayload> = async (
 ): Promise<any> => {
   otp = action.payload.value;
 };
+
 export const resendOtp: ActionFunction<LoginAction> = async (
   action,
   _datastore,

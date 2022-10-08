@@ -29,7 +29,7 @@ export const template: TemplateSchema = {
     type: LAYOUTS.LIST,
     widgets: [
       { id: "back", type: WIDGET.BUTTON, position: POSITION.FIXED_TOP },
-      { id: "continue", type: WIDGET.BUTTON, position: POSITION.FIXED_BOTTOM },
+      { id: "continue", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },
       { id: "title", type: WIDGET.TEXT },
       { id: "subTitle", type: WIDGET.TEXT },
       { id: "input", type: WIDGET.INPUT },
