@@ -1,7 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { LoginAction, OTPPayload, SignInUserSession } from "./types";
 import { Auth } from "aws-amplify";
-import { ROUTE } from "../../index";
+import { ROUTE } from "../../routes";
 let otp;
 export const loginCognito: ActionFunction<LoginAction> = async (
   action,

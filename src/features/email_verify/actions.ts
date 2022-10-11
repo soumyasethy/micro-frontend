@@ -1,4 +1,4 @@
-import { ActionFunction, Datastore } from "@voltmoney/types";
+import { ActionFunction } from "@voltmoney/types";
 import { signInGoogle } from "./repo";
 import { GoogleLoginResponse } from "./types";
 

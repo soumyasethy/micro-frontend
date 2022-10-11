@@ -19,14 +19,14 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../index";
+import { ROUTE } from "../../routes";
 import { ACTIONS } from "./types";
 import { loginGoogle } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
     id: ROUTE.EMAIL_VERIFY,
-    type: LAYOUTS.LIST,
+    type: LAYOUTS.MODAL,
     widgets: [
       { id: "back", type: WIDGET.BUTTON, position: POSITION.FIXED_TOP },
       { id: "title", type: WIDGET.TEXT },

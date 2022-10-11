@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ROUTE } from "../../index";
+import { ROUTE } from "../../routes";
 import { ContinuePayload } from "./types";
 import { Auth } from "aws-amplify";
 

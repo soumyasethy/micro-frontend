@@ -15,11 +15,13 @@ import {
   IconSizeTokens,
   IconTokens,
   keyboardTypeToken,
+  SizeTypeTokens,
+  SpaceProps,
   TextInputProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../index";
+import { ROUTE } from "../../routes";
 import { ACTION, ContinuePayload, PhoneNumberPayload } from "./types";
 import { getStarted, textOnChange } from "./actions";
 
@@ -29,10 +31,17 @@ export const template: TemplateSchema = {
     type: LAYOUTS.LIST,
     widgets: [
       { id: "back", type: WIDGET.BUTTON, position: POSITION.FIXED_TOP },
-      { id: "continue", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },
+      {
+        id: "continue",
+        type: WIDGET.BUTTON,
+        position: POSITION.FIXED_BOTTOM,
+      },
       { id: "title", type: WIDGET.TEXT },
+      { id: "space1", type: WIDGET.SPACE },
       { id: "subTitle", type: WIDGET.TEXT },
+      { id: "space2", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
+      { id: "space3", type: WIDGET.SPACE },
     ],
   },
   datastore: <Datastore>{
@@ -42,7 +51,7 @@ export const template: TemplateSchema = {
     },
     continue: <ButtonProps & WidgetProps>{
       label: "continue",
-      type: ButtonTypeTokens.LargeElevated,
+      type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.CONTINUE,
@@ -51,7 +60,7 @@ export const template: TemplateSchema = {
       },
     },
     title: <TypographyProps>{
-      label: "Verify your mobile number",
+      label: "Verify your mobile number.",
       fontSize: FontSizeTokens.XXL,
     },
     subTitle: <TypographyProps>{
@@ -67,6 +76,9 @@ export const template: TemplateSchema = {
         routeId: ROUTE.PHONE_NUMBER,
       },
     },
+    space1: <SpaceProps>{ size: SizeTypeTokens.XS },
+    space2: <SpaceProps>{ size: SizeTypeTokens.XXL },
+    space3: <SpaceProps>{ size: SizeTypeTokens.XXL },
   },
 };
 

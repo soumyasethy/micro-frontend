@@ -21,7 +21,7 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../index";
+import { ROUTE } from "../../routes";
 import { ACTIONS, LoginAction, OTPPayload } from "./types";
 import { loginCognito, otpOnChange, resendOtp } from "./actions";
 
