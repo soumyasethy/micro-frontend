@@ -76,10 +76,10 @@ export const template: TemplateSchema = {
       color: ColorTokens.Grey_Charcoal,
     },
     input: <TextInputProps & WidgetProps>{
-      type: InputTypeToken.MOBILE,
+      type: InputTypeToken.EMAIL,
       state: InputStateToken.DEFAULT,
       title: "Email id",
-      placeholder: "Enter mobile number",
+      placeholder: "Enter email id",
       keyboardType: KeyboardTypeToken.email,
       action: {
         type: ACTION.ENTER_EMAIL,

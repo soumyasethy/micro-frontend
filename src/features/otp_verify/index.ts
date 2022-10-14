@@ -31,7 +31,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTIONS, LoginAction, OTPPayload, ResendOtp } from "./types";
-import { goBack, loginCognito, resendOtp } from "./actions";
+import {fetchUserContext, goBack, loginCognito, resendOtp} from "./actions";
 
 export const template: (
   phone_number: number,
@@ -125,7 +125,8 @@ export const otpVerifyMF: PageType<any> = {
   },
   actions: {
     [ACTIONS.LoginWithCognito]: loginCognito,
-    [ACTIONS.GO_BACK]: goBack,
+    // [ACTIONS.GO_BACK]: goBack,
+    [ACTIONS.GO_BACK]: fetchUserContext,
     [ACTIONS.RESEND_OTP_NUMBER]: resendOtp,
   },
 };
