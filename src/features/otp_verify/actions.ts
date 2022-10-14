@@ -1,58 +1,71 @@
 import { ActionFunction } from "@voltmoney/types";
-import { LoginAction, OTPPayload, SignInUserSession } from "./types";
+import { LoginAction, OTPPayload, ResendOtp, SignInUserSession } from "./types";
 import { Auth } from "aws-amplify";
 import { ROUTE } from "../../routes";
+import { InputStateToken } from "@voltmoney/schema";
+import { api } from "../../configs/api";
 let otp;
-export const loginCognito: ActionFunction<LoginAction> = async (
+export const loginCognito: ActionFunction<LoginAction & OTPPayload> = async (
   action,
   _datastore,
-  { navigate }
+  { navigate, setDatastore }
 ): Promise<any> => {
-  console.warn("using otp: ", otp, "session--->", action.payload.session);
+  console.warn(
+    "using otp: ",
+    otp,
+    " session-->",
+    action.payload.session,
+    " otp-->",
+    action.payload.value
+  );
+  if (action.payload.value.length !== 6) {
+    console.warn("do nothing....");
+  }
   try {
     const response: { signInUserSession: SignInUserSession } =
-      await Auth.sendCustomChallengeAnswer(action.payload.session, otp);
+      await Auth.sendCustomChallengeAnswer(
+        action.payload.session,
+        action.payload.value
+      );
     console.warn(
       "aws accessToken: --->",
       response.signInUserSession.accessToken
     );
     if (response.signInUserSession.accessToken) {
+      await setDatastore(action.routeId, action.payload.widgetId, {
+        state: InputStateToken.SUCCESS,
+      });
       await navigate(ROUTE.EMAIL_VERIFY);
     } else {
-      console.warn("Something wen wrong");
+      console.warn("Something went wrong");
+      await setDatastore(action.routeId, action.payload.widgetId, {
+        state: InputStateToken.ERROR,
+      });
     }
   } catch (e) {
     console.warn("aws error: ", e);
+    await setDatastore(action.routeId, action.payload.widgetId, {
+      state: InputStateToken.ERROR,
+    });
   }
 };
 
-export const otpOnChange: ActionFunction<OTPPayload> = async (
+export const goBack: ActionFunction<any> = async (
   action,
   _datastore,
-  {}
+  { goBack }
 ): Promise<any> => {
-  otp = action.payload.value;
+  goBack();
 };
 
-export const resendOtp: ActionFunction<LoginAction> = async (
+export const resendOtp: ActionFunction<ResendOtp> = async (
   action,
   _datastore,
-  {}
+  { network }
 ) => {
-  await Auth.signIn(action.payload.username)
-    .then(async (response: any) => {
-      console.warn("AWS response[SignIn]", response);
-    })
-    .catch(async (err) => {
-      console.warn("AWS Error", err);
-      if ((err.code = "UserNotFoundException")) {
-        await Auth.signUp({
-          username: action.payload.username,
-          password: action.payload.password,
-          attributes: {
-            "custom:isWhatsappEnabled": action.payload.isWhatsappEnabled,
-          },
-        }).then((response) => console.warn("AWS response[SignUp]", response));
-      }
-    });
+  console.warn("resend otp number ->", action.payload.phoneNumber);
+  const response = await network.post(api.sendOTP, {
+    phoneNumber: `${action.payload.phoneNumber}`,
+  });
+  console.warn("resend otp response ->", response);
 };

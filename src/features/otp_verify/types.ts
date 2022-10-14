@@ -3,6 +3,7 @@ export enum ACTIONS {
   LoginWithCognito = "LoginWithCognito",
   OTP_NUMBER = "OTP_NUMBER",
   RESEND_OTP_NUMBER = "RESEND_OTP_NUMBER",
+  GO_BACK = "GO_BACK",
 }
 export type OTPPayload = {
   value: string;
@@ -13,6 +14,9 @@ export type LoginAction = {
   password?: string;
   session?: any;
   isWhatsappEnabled?: boolean;
+};
+export type ResendOtp = {
+  phoneNumber: string;
 };
 export interface SignInUserSession {
   accessToken: AccessToken;

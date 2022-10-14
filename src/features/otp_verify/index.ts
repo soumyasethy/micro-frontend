@@ -11,41 +11,44 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  ColorTokens,
   FontSizeTokens,
   IconSizeTokens,
   IconTokens,
-  keyboardTypeToken,
+  InputStateToken,
+  InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
+  StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
+  TextInputOtpProps,
   TextInputProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
-import { ACTIONS, LoginAction, OTPPayload } from "./types";
-import { loginCognito, otpOnChange, resendOtp } from "./actions";
+import { ACTIONS, LoginAction, OTPPayload, ResendOtp } from "./types";
+import { goBack, loginCognito, resendOtp } from "./actions";
 
 export const template: (
   phone_number: number,
-  session?: any
-) => TemplateSchema = (phone_number, session) => {
+  session?: any,
+  isWhatsAppEnabled?: boolean
+) => TemplateSchema = (phone_number, session, isWhatsAppEnabled) => {
   return {
     layout: <Layout>{
       id: ROUTE.OTP_VERIFY,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "back", type: WIDGET.BUTTON, position: POSITION.FIXED_TOP },
-        {
-          id: "login",
-          type: WIDGET.BUTTON,
-          position: POSITION.FIXED_BOTTOM,
-        },
         { id: "title", type: WIDGET.TEXT },
-        { id: "subTitle", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
-        { id: "input", type: WIDGET.INPUT },
+        { id: "subTitleStack", type: WIDGET.STACK },
         { id: "space2", type: WIDGET.SPACE },
-        { id: "resend_otp", type: WIDGET.BUTTON },
+        { id: "input", type: WIDGET.INPUT },
+        // { id: "resend_otp", type: WIDGET.BUTTON },
       ],
     },
     datastore: <Datastore>{
@@ -53,67 +56,76 @@ export const template: (
         type: ButtonTypeTokens.IconGhost,
         icon: { name: IconTokens.Back, size: IconSizeTokens.XL },
       },
-      login: <ButtonProps & WidgetProps>{
-        label: "login",
-        type: ButtonTypeTokens.LargeElevated,
-        width: ButtonWidthTypeToken.FULL,
-        action: {
-          type: ACTIONS.LoginWithCognito,
-          payload: <LoginAction>{
-            username: `${phone_number}`,
-            password: "123456",
-            session: session,
-          },
-          routeId: ROUTE.OTP_VERIFY,
-        },
-      },
       title: <TypographyProps>{
         label: "Enter OTP",
-        fontSize: FontSizeTokens.XXL,
+        fontSize: FontSizeTokens.XL,
+        color: ColorTokens.Grey_Night,
       },
-      subTitle: <TypographyProps>{
-        label: `Please enter 4-digit code sent on your phone number ${phone_number} Edit`,
-      },
-      input: <TextInputProps & WidgetProps>{
-        caption: "Enter your OTP",
-        title: "Enter your OTP",
-        keyboardType: keyboardTypeToken.numberPad,
+      subTitleStack: <StackProps & WidgetProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.flexStart,
+        widgetItems: [
+          { id: "subTitle", type: WIDGET.TEXT },
+          { id: "editNumber", type: WIDGET.TEXT },
+        ],
         action: {
-          type: ACTIONS.OTP_NUMBER,
+          type: ACTIONS.GO_BACK,
+          payload: {},
           routeId: ROUTE.OTP_VERIFY,
-          payload: <OTPPayload>{ value: "", widgetId: "input" },
         },
       },
-      space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
-      space2: <SpaceProps>{ size: SizeTypeTokens.XXL },
-      resend_otp: <ButtonProps & WidgetProps>{
-        label: "Resend OTP",
-        type: ButtonTypeTokens.LargeElevated,
-        width: ButtonWidthTypeToken.FULL,
+      subTitle: <TypographyProps>{
+        label: `A 6-digit OTP was sent on ${phone_number} `,
+        color: ColorTokens.Grey_Charcoal,
+        fontSize: FontSizeTokens.SM,
+      },
+      editNumber: <TypographyProps>{
+        label: `Edit`,
+        color: ColorTokens.Primary_100,
+        fontSize: FontSizeTokens.SM,
+      },
+      input: <TextInputProps & TextInputOtpProps & WidgetProps>{
+        title: "Enter OTP",
+        type: InputTypeToken.OTP,
+        state: InputStateToken.DEFAULT,
+        keyboardType: KeyboardTypeToken.numberPad,
+        charLimit: 6,
         action: {
-          type: ACTIONS.RESEND_OTP_NUMBER,
-          payload: <LoginAction>{
+          type: ACTIONS.LoginWithCognito,
+          routeId: ROUTE.OTP_VERIFY,
+          payload: <LoginAction & OTPPayload>{
             username: `${phone_number}`,
             password: "123456",
             session: session,
-            isWhatsappEnabled: true,
+            isWhatsAppEnabled,
+            value: "",
+            widgetId: "input",
+          },
+        },
+        otpAction: {
+          type: ACTIONS.RESEND_OTP_NUMBER,
+          payload: <ResendOtp>{
+            phoneNumber: `${phone_number}`,
           },
           routeId: ROUTE.OTP_VERIFY,
         },
       },
+      space1: <SpaceProps>{ size: SizeTypeTokens.MD },
+      space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     },
   };
 };
 
 export const otpVerifyMF: PageType<any> = {
-  onLoad: async (_, { phone_number, session }) => {
+  onLoad: async (_, { phone_number, session, isWhatsAppEnabled }) => {
     // const response = await cognitoCheckUserExist(phone_number);
     console.warn("*** AWS Response ***", session);
-    return Promise.resolve(template(phone_number, session));
+    return Promise.resolve(template(phone_number, session, isWhatsAppEnabled));
   },
   actions: {
     [ACTIONS.LoginWithCognito]: loginCognito,
-    [ACTIONS.OTP_NUMBER]: otpOnChange,
+    [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.RESEND_OTP_NUMBER]: resendOtp,
   },
 };

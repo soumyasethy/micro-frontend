@@ -30,17 +30,12 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
-import {
-  ACTION,
-  ContinuePayload,
-  PhoneNumberPayload,
-  WhatsAppEnabledPayload,
-} from "./types";
-import { getStarted, textOnChange, whatsappToggle } from "./actions";
+import { ACTION, ContinuePayload, EmailPayload } from "./types";
+import { saveEmailId, textOnChange } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
-    id: ROUTE.PHONE_NUMBER,
+    id: ROUTE.ENTER_EMAIL,
     type: LAYOUTS.LIST,
     widgets: [
       {
@@ -62,80 +57,47 @@ export const template: TemplateSchema = {
   datastore: <Datastore>{
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
-      label: "Get OTP",
+      label: "Continue",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.CONTINUE,
         payload: <ContinuePayload>{ value: "", widgetId: "input" },
-        routeId: ROUTE.PHONE_NUMBER,
+        routeId: ROUTE.ENTER_EMAIL,
       },
     },
     title: <TypographyProps>{
-      label: "Verify your mobile number.",
+      label: "Verify your email id",
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
     },
     subTitle: <TypographyProps>{
-      label: "We’ll send a verification code to this number.",
+      label: "Your Volt app will only work with this email id",
       color: ColorTokens.Grey_Charcoal,
     },
     input: <TextInputProps & WidgetProps>{
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
-      title: "Mobile Number",
-      charLimit: 10,
+      title: "Email id",
       placeholder: "Enter mobile number",
       keyboardType: KeyboardTypeToken.email,
       action: {
-        type: ACTION.PHONE_NUMBER,
-        payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },
-        routeId: ROUTE.PHONE_NUMBER,
+        type: ACTION.ENTER_EMAIL,
+        payload: <EmailPayload>{ value: "", widgetId: "input" },
+        routeId: ROUTE.ENTER_EMAIL,
       },
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     space3: <SpaceProps>{ size: SizeTypeTokens.LG },
     space4: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    whatsapp_space: <SpaceProps>{ size: SizeTypeTokens.XS },
-    whatsappStack: <StackProps & WidgetProps>{
-      type: StackType.row,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.flexStart,
-      widgetItems: [
-        { id: "radio", type: WIDGET.RADIO },
-        { id: "whatsapp_space", type: WIDGET.SPACE },
-        { id: "whatsapp", type: WIDGET.TEXT },
-      ],
-    },
-    radio: <RadioProps>{
-      isChecked: true,
-      size: IconSizeTokens.MD,
-      actionChecked: {
-        type: ACTION.WHATSAPP_CHECK,
-        payload: <WhatsAppEnabledPayload>{ value: true, widgetId: "radio" },
-        routeId: ROUTE.PHONE_NUMBER,
-      },
-      actionUnChecked: {
-        type: ACTION.WHATSAPP_UNCHECK,
-        payload: <WhatsAppEnabledPayload>{ value: false, widgetId: "radio" },
-        routeId: ROUTE.PHONE_NUMBER,
-      },
-    },
-    whatsapp: <TypographyProps>{
-      label: "Send OTP on Whatsapp",
-      fontSize: FontSizeTokens.XXS,
-      color: ColorTokens.Grey_Night,
-    },
   },
 };
 
-export const phoneNumberMF: PageType<any> = {
+export const emailMF: PageType<any> = {
   onLoad: async () => Promise.resolve(template),
   actions: {
-    [ACTION.CONTINUE]: getStarted,
-    [ACTION.PHONE_NUMBER]: textOnChange,
-    [ACTION.WHATSAPP_CHECK]: whatsappToggle,
-    [ACTION.WHATSAPP_UNCHECK]: whatsappToggle,
+    [ACTION.CONTINUE]: saveEmailId,
+    [ACTION.ENTER_EMAIL]: textOnChange,
   },
 };

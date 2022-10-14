@@ -1,6 +1,7 @@
 export enum ACTION {
   PHONE_NUMBER = "PHONE_NUMBER",
-  // USER_CHECK = "USER_CHECK",
+  WHATSAPP_CHECK = "WHATSAPP_CHECK",
+  WHATSAPP_UNCHECK = "WHATSAPP_UNCHECK",
   CONTINUE = "CONTINUE",
 }
 export type PhoneNumberPayload = {
@@ -10,5 +11,9 @@ export type PhoneNumberPayload = {
 
 export type ContinuePayload = {
   value: string;
+  widgetId: string;
+};
+export type WhatsAppEnabledPayload = {
+  value: boolean;
   widgetId: string;
 };
