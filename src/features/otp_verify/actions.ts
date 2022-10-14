@@ -103,8 +103,11 @@ export const fetchUserContext: ActionFunction<any> = async (
       Authorization: `Bearer ${token}`,
       "X-AppPlatform": "SDK_KFIN",
       "Content-Type": "application/json",
+      accept: "application/json",
     },
   };
-  const response = await network.get(api.userContext, config.headers);
+  const response = await network.get(api.userContext, {
+    headers: config.headers,
+  }); //network.get(api.userContext, config.headers);
   console.warn("****** User Response ", response);
 };
