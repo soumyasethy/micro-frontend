@@ -11,7 +11,8 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
-  ColorTokens, FontFamilyTokens,
+  ColorTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   IconSizeTokens,
   IconTokens,
@@ -60,7 +61,7 @@ export const template: (
         fontSize: FontSizeTokens.XL,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
-        fontWeight: '700'
+        fontWeight: "700",
       },
       subTitleStack: <StackProps & WidgetProps>{
         type: StackType.row,
@@ -91,7 +92,7 @@ export const template: (
         type: InputTypeToken.OTP,
         state: InputStateToken.DEFAULT,
         keyboardType: KeyboardTypeToken.numberPad,
-        charLimit: 6,
+        charLimit: 4,
         action: {
           type: ACTIONS.LoginWithCognito,
           routeId: ROUTE.OTP_VERIFY,

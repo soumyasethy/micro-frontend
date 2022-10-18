@@ -116,6 +116,7 @@ export const template: (applicationId: string) => TemplateSchema = (
 
 export const emailVerifyMF: PageType<any> = {
   onLoad: async (_, { applicationId }) => {
+    console.warn('applicationId')
     return Promise.resolve(template(applicationId));
   },
   actions: {

@@ -16,5 +16,6 @@ export const otherEmail: ActionFunction<OtherEmail> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
+  console.warn("sending application id ------>", action.payload.applicationId);
   navigate(ROUTE.ENTER_EMAIL, { applicationId: action.payload.applicationId });
 };

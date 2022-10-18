@@ -26,10 +26,10 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
     secureDataAttributeDetailsMap: {
       EMAIL: {
         secureDataAttributeDetails: {
-          value: action.payload.value,
+          value: emailId,
           sources: ["SELF"],
           verified: true,
-          verificationSources: [`mweb`],
+          verificationSources: [`web`],
           collectedOn: `${Date.now()}`,
           verifiedOn: `${Date.now()}`,
         },

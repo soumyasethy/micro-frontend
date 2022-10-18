@@ -13,7 +13,7 @@ export const loginCognito: ActionFunction<LoginAction & OTPPayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage, network, ...props }
 ): Promise<any> => {
-  if (action.payload.value.length !== 6) return;
+  if (action.payload.value.length !== 4) return;
 
   const headers = new Headers();
   headers.append("accept", "*/*");
@@ -155,7 +155,7 @@ export const nextStep: ActionFunction<any> = async (
 
   if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
     await navigate(ROUTE.EMAIL_VERIFY, {
-      applicationId: user.linkedApplications[0].applicationId,
+      applicationId: user.linkedBorrowerAccounts[0].accountId,
     });
   } else if (
     user.linkedApplications[0].currentStepId === ROUTE.KYC_PAN_VERIFICATION

@@ -70,7 +70,7 @@ export interface RefreshToken {
   token: string;
 }
 
-////////////
+//***************** User Model ***********************//
 
 export interface User {
   isLoggedIn?: boolean;
