@@ -11,7 +11,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
-  ColorTokens,
+  ColorTokens, FontFamilyTokens,
   FontSizeTokens,
   IconSizeTokens,
   IconTokens,
@@ -31,7 +31,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTIONS, LoginAction, OTPPayload, ResendOtp } from "./types";
-import {fetchUserContext, goBack, loginCognito, resendOtp} from "./actions";
+import { fetchUserContext, goBack, loginCognito, resendOtp } from "./actions";
 
 export const template: (
   phone_number: number,
@@ -48,7 +48,6 @@ export const template: (
         { id: "subTitleStack", type: WIDGET.STACK },
         { id: "space2", type: WIDGET.SPACE },
         { id: "input", type: WIDGET.INPUT },
-        // { id: "resend_otp", type: WIDGET.BUTTON },
       ],
     },
     datastore: <Datastore>{
@@ -60,6 +59,8 @@ export const template: (
         label: "Enter OTP",
         fontSize: FontSizeTokens.XL,
         color: ColorTokens.Grey_Night,
+        fontFamily: FontFamilyTokens.Poppins,
+        fontWeight: '700'
       },
       subTitleStack: <StackProps & WidgetProps>{
         type: StackType.row,
@@ -125,8 +126,8 @@ export const otpVerifyMF: PageType<any> = {
   },
   actions: {
     [ACTIONS.LoginWithCognito]: loginCognito,
-    // [ACTIONS.GO_BACK]: goBack,
-    [ACTIONS.GO_BACK]: fetchUserContext,
+    [ACTIONS.GO_BACK]: goBack,
+    // [ACTIONS.GO_BACK]: fetchUserContext,
     [ACTIONS.RESEND_OTP_NUMBER]: resendOtp,
   },
 };

@@ -12,9 +12,9 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   IconSizeTokens,
-  IconTokens,
   InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
@@ -33,10 +33,11 @@ import { ROUTE } from "../../routes";
 import {
   ACTION,
   ContinuePayload,
+  EnableDisableCTA,
   PhoneNumberPayload,
   WhatsAppEnabledPayload,
 } from "./types";
-import { getStarted, textOnChange, whatsappToggle } from "./actions";
+import { getStarted, textOnChange, toggleCTA, whatsappToggle } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
@@ -55,7 +56,7 @@ export const template: TemplateSchema = {
       { id: "space2", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
       { id: "space3", type: WIDGET.SPACE },
-      { id: "whatsappStack", type: WIDGET.STACK },
+      // { id: "whatsappStack", type: WIDGET.STACK },
       { id: "space4", type: WIDGET.SPACE },
     ],
   },
@@ -63,11 +64,11 @@ export const template: TemplateSchema = {
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
       label: "Get OTP",
-      type: ButtonTypeTokens.LargeFilled,
+      type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.CONTINUE,
-        payload: <ContinuePayload>{ value: "", widgetId: "input" },
+        payload: <ContinuePayload>{ value: "", widgetId: "continue" },
         routeId: ROUTE.PHONE_NUMBER,
       },
     },
@@ -75,10 +76,13 @@ export const template: TemplateSchema = {
       label: "Verify your mobile number.",
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
+      fontFamily: FontFamilyTokens.Poppins,
+      fontWeight: '700'
     },
     subTitle: <TypographyProps>{
       label: "We’ll send a verification code to this number.",
       color: ColorTokens.Grey_Charcoal,
+      fontSize: FontSizeTokens.SM,
     },
     input: <TextInputProps & WidgetProps>{
       type: InputTypeToken.MOBILE,
@@ -91,6 +95,17 @@ export const template: TemplateSchema = {
         type: ACTION.PHONE_NUMBER,
         payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },
         routeId: ROUTE.PHONE_NUMBER,
+      },
+      caption: { error: "Enter a valid 10 digit mobile number" },
+      errorAction: {
+        type: ACTION.DISABLE_CONTINUE,
+        routeId: ROUTE.PHONE_NUMBER,
+        payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
+      },
+      successAction: {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.PHONE_NUMBER,
+        payload: <EnableDisableCTA>{ value: true, targetWidgetId: "continue" },
       },
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
@@ -137,5 +152,7 @@ export const phoneNumberMF: PageType<any> = {
     [ACTION.PHONE_NUMBER]: textOnChange,
     [ACTION.WHATSAPP_CHECK]: whatsappToggle,
     [ACTION.WHATSAPP_UNCHECK]: whatsappToggle,
+    [ACTION.ENABLE_CONTINUE]: toggleCTA,
+    [ACTION.DISABLE_CONTINUE]: toggleCTA,
   },
 };

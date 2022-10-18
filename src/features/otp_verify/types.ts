@@ -12,7 +12,6 @@ export type OTPPayload = {
 export type LoginAction = {
   username: string;
   password?: string;
-  session?: any;
   isWhatsappEnabled?: boolean;
 };
 export type ResendOtp = {
@@ -69,4 +68,88 @@ export interface IDTokenPayload {
 
 export interface RefreshToken {
   token: string;
+}
+
+////////////
+
+export interface User {
+  isLoggedIn?: boolean;
+  user?: UserClass;
+  linkedBorrowerAccounts?: LinkedBorrowerAccount[];
+  linkedPartnerAccounts?: any[];
+  linkedPlatformAccounts?: LinkedPlatformAccount[];
+  linkedApplications?: LinkedApplication[];
+  linkedCredits?: any[];
+}
+
+export interface LinkedApplication {
+  applicationId?: string;
+  externalId?: string;
+  accountId?: string;
+  applicationType?: string;
+  applicationState?: string;
+  applicationApprovalStatus?: string;
+  creditAmount?: any;
+  currentStepId?: string;
+  stepStatusMap?: StepStatusMap;
+  createdOn?: number;
+  lastUpdatedOn?: number;
+  completedOn?: any;
+}
+
+export interface StepStatusMap {
+  KYC_PHOTO_VERIFICATION?: string;
+  MF_PLEDGING?: string;
+  CREDIT_APPROVAL?: string;
+  KYC_AADHAAR_VERIFICATION?: string;
+  MANDATE_SETUP?: string;
+  KYC_CKYC?: string;
+  KYC_PAN_VERIFICATION?: string;
+  AGREEMENT_SIGN?: string;
+  BANK_ACCOUNT_VERIFICATION?: string;
+}
+
+export interface LinkedBorrowerAccount {
+  "@type"?: string;
+  accountId?: string;
+  accountState?: string;
+  isInternal?: boolean;
+  accountTier?: string;
+  addedOnTimeStamp?: number;
+  lastUpdatedTimeStamp?: number;
+  accountHolderPhoneNumber?: string;
+  accountHolderEmail?: string;
+  isKYCVerified?: boolean;
+  isBankAccountVerified?: boolean;
+}
+
+export interface LinkedPlatformAccount {
+  "@type"?: string;
+  accountId?: string;
+  accountState?: string;
+  isInternal?: boolean;
+  accountTier?: string;
+  addedOnTimeStamp?: number;
+  lastUpdatedTimeStamp?: number;
+  platformName?: string;
+  platformLogoImgSrc?: string;
+  platformCode?: string;
+  platformAgreementIdUri?: string;
+  address?: string;
+}
+
+export interface UserClass {
+  userId?: string;
+  phoneNumber?: string;
+  emailId?: string;
+  fullName?: string;
+  gender?: string;
+  address?: string;
+  onboardingPartnerCode?: string;
+  onboardingRelationshipManagerCode?: string;
+  state?: string;
+  externalId?: string;
+  isInternal?: string;
+  addedOnTimeStamp?: number;
+  lastUpdatedTimeStamp?: number;
 }
