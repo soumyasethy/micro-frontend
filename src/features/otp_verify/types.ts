@@ -119,6 +119,7 @@ export interface LinkedBorrowerAccount {
   lastUpdatedTimeStamp?: number;
   accountHolderPhoneNumber?: string;
   accountHolderEmail?: string;
+  accountHolderPAN?: string;
   isKYCVerified?: boolean;
   isBankAccountVerified?: boolean;
 }

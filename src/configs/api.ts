@@ -14,6 +14,8 @@ export const api = {
     "http://beta-appor-jymzof76jn3q-1625527618.ap-south-1.elb.amazonaws.com/api/client/auth/requestOtp/",
   verifyOtp:
     "http://beta-appor-jymzof76jn3q-1625527618.ap-south-1.elb.amazonaws.com/api/client/auth/verifyOtp/",
+  pledgeInit:
+    "http://beta-appor-jymzof76jn3q-1625527618.ap-south-1.elb.amazonaws.com/app/borrower/application/pledge/init",
 };
 
 export const StoreKey = {

@@ -17,8 +17,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTION } from "./types";
-import { textOnChange, verifyPan } from "./actions";
-import { toggleCTA } from "../phone_number/actions";
+import { fetchMyPortfolio } from "./actions";
 
 export const template: (applicationId: string) => TemplateSchema = (
   applicationId
@@ -38,6 +37,7 @@ export const template: (applicationId: string) => TemplateSchema = (
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
         { id: "space2", type: WIDGET.SPACE },
+        { id: "fetchCTA", type: WIDGET.BUTTON, position: POSITION.FAB },
       ],
     },
     datastore: <Datastore>{
@@ -67,9 +67,6 @@ export const checkLimitMF: PageType<any> = {
     return Promise.resolve(template(applicationId));
   },
   actions: {
-    [ACTION.VERIFY_PAN]: verifyPan,
-    [ACTION.ENTER_PAN]: textOnChange,
-    [ACTION.ENABLE_CONTINUE]: toggleCTA,
-    [ACTION.DISABLE_CONTINUE]: toggleCTA,
+    [ACTION.FETCH_MY_PORTFOLIO]: fetchMyPortfolio,
   },
 };

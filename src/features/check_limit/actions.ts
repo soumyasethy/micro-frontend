@@ -1,25 +1,26 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ContinuePayload, PanPayload } from "./types";
+import { FetchPortfolioPayload } from "./types";
 import { api, StoreKey } from "../../configs/api";
-import { fetchUserContext } from "../otp_verify/actions";
-import { ROUTE } from "../../routes";
 
-let pan: string = "";
-
-export const verifyPan: ActionFunction<ContinuePayload> = async (
+export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   action,
   _datastore,
   { asyncStorage, ...props }
 ): Promise<any> => {
   const token = await asyncStorage.get(StoreKey.accessToken);
   const headers = new Headers();
-  headers.append("X-AppPlatform", "VOLT_MOBILE_APP");
+  headers.append("accept", "application/json");
   headers.append("Authorization", `Bearer ${token}`);
+  headers.append("X-AppPlatform", "SDK_KFIN");
   headers.append("Content-Type", "application/json");
 
   const raw = JSON.stringify({
-    applicationId: `${action.payload.applicationId}`,
-    panNumber: `${pan}`,
+    ...action.payload,
+    assetRepository: "CAMS",
+    applicationId: "1234",
+    emailId: "soumya.sethy@voltmoney.in",
+    panNumber: "EDZPS7363L",
+    phoneNumber: "+918763666620",
   });
 
   const requestOptions = {
@@ -28,20 +29,8 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
     body: raw,
   };
 
-  await fetch(api.panVerify, requestOptions)
+  await fetch(api.pledgeInit, requestOptions)
     .then((response) => response.json())
-    .then((result) => {
-      props.navigate(ROUTE.PAN_CONFIRM_NAME, {
-        name: result.stepResponseObject.fullName,
-      });
-    })
+    .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
-};
-export const textOnChange: ActionFunction<PanPayload> = async (
-  action,
-  _datastore,
-  {}
-): Promise<any> => {
-  console.warn("**** update pan ****", action.payload.value);
-  pan = action.payload.value;
 };

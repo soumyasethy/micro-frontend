@@ -1,16 +1,10 @@
 export enum ACTION {
-  ENTER_PAN = "ENTER_PAN",
-  VERIFY_PAN = "VERIFY_PAN",
-  ENABLE_CONTINUE='ENABLE_CONTINUE',
-  DISABLE_CONTINUE='DISABLE_CONTINUE'
+  FETCH_MY_PORTFOLIO,
 }
-export type PanPayload = {
-  value: string;
-  widgetId: string;
-};
-
-export type ContinuePayload = {
-  value: string;
-  widgetId: string;
-  applicationId:string;
+export type FetchPortfolioPayload = {
+  applicationId: string;
+  assetRepository: string;
+  emailId: string;
+  panNumber: string;
+  phoneNumber: string;
 };
