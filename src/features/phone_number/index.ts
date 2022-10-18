@@ -73,14 +73,14 @@ export const template: TemplateSchema = {
       },
     },
     title: <TypographyProps>{
-      label: "Verify your mobile number.",
+      label: "Verify your mobile number",
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: '700'
     },
     subTitle: <TypographyProps>{
-      label: "We’ll send a verification code to this number.",
+      label: "We’ll send a verification code to this number",
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
     },

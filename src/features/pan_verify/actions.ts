@@ -3,6 +3,7 @@ import { ContinuePayload, PanPayload } from "./types";
 import { api, StoreKey } from "../../configs/api";
 import { fetchUserContext } from "../otp_verify/actions";
 import { ROUTE } from "../../routes";
+import { User } from "../otp_verify/types";
 
 let pan: string = "";
 
@@ -30,7 +31,7 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
 
   await fetch(api.panVerify, requestOptions)
     .then((response) => response.json())
-    .then((result) => {
+    .then(async (result) => {
       props.navigate(ROUTE.PAN_CONFIRM_NAME, {
         name: result.stepResponseObject.fullName,
       });

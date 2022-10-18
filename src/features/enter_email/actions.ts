@@ -1,7 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ContinuePayload, EmailPayload } from "./types";
 import { api, StoreKey } from "../../configs/api";
-import { nextStep } from "../otp_verify/actions";
+import { fetchUserContext, nextStep } from "../otp_verify/actions";
 import { ROUTE } from "../../routes";
 import { User } from "../otp_verify/types";
 
@@ -53,16 +53,12 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
 
         user.linkedBorrowerAccounts[0].accountHolderEmail =
           action.payload.value;
+        console.warn("edited user->", JSON.stringify(user));
         await props.asyncStorage.set(
           StoreKey.userContext,
-          JSON.stringify(user)
+          JSON.stringify({ ...user })
         );
-
-        await nextStep(
-          { type: "NEXT_STEP", routeId: ROUTE.OTP_VERIFY, payload: {} },
-          {},
-          { ...props }
-        );
+        await fetchUserContext(action, _datastore, { ...props });
       }
     })
     .catch((error) => console.log("error", error));

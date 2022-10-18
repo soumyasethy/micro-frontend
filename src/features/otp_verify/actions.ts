@@ -87,7 +87,7 @@ export const goBack: ActionFunction<any> = async (
 export const resendOtp: ActionFunction<ResendOtp> = async (
   action,
   _datastore,
-  { setDatastore }
+  {}
 ) => {
   const headers = new Headers();
   headers.append("accept", "*/*");
