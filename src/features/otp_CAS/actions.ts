@@ -1,23 +1,28 @@
 import { ActionFunction } from "@voltmoney/types";
-import { LoginAction, OTPPayload, ResendOtp, User } from "./types";
+import { AuthCASPayload, ResendOtp, User } from "./types";
 import { ROUTE } from "../../routes";
-import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import { api, StoreKey } from "../../configs/api";
+import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 
-export const loginCognito: ActionFunction<LoginAction & OTPPayload> = async (
+export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage, network, ...props }
 ): Promise<any> => {
   if (action.payload.value.length !== 4) return;
-
+  await setDatastore(action.routeId, "input", <TextInputProps>{
+    state: InputStateToken.LOADING,
+  });
+  const token = await asyncStorage.get(StoreKey.accessToken);
   const headers = new Headers();
-  headers.append("accept", "*/*");
+  headers.append("X-AppPlatform", "VOLT_MOBILE_APP");
+  headers.append("Authorization", `Bearer ${token}`);
   headers.append("Content-Type", "application/json");
 
   const raw = JSON.stringify({
-    otp: action.payload.value,
-    phoneNo: action.payload.username,
+    applicationId: action.payload.applicationId,
+    otp: action.payload.value.length,
+    assetRepository: action.payload.assetRepository,
   });
 
   const requestOptions = {
@@ -25,51 +30,19 @@ export const loginCognito: ActionFunction<LoginAction & OTPPayload> = async (
     headers: headers,
     body: raw,
   };
-  type Response = {
-    status: string;
-    message: string;
-    jwt: string;
-  };
-  await setDatastore(action.routeId, action.payload.widgetId, <TextInputProps>{
-    state: InputStateToken.LOADING,
-  });
-  await fetch(api.verifyOtp, requestOptions)
+
+  await fetch(api.authCAS, requestOptions)
     .then((response) => response.json())
-    .then(async (response: Response) => {
-      if (response.status === "success") {
-        await setDatastore(action.routeId, action.payload.widgetId, {
-          state: InputStateToken.SUCCESS,
-        });
-        if (response.jwt) {
-          await setDatastore(action.routeId, action.payload.widgetId, <
-            TextInputProps
-          >{
-            state: InputStateToken.SUCCESS,
-          });
-          await asyncStorage.set(StoreKey.accessToken, response.jwt);
-          await fetchUserContext(
-            { payload: {}, type: "LOCAL_TRIGGER", routeId: ROUTE.OTP_VERIFY },
-            _datastore,
-            {
-              navigate,
-              setDatastore,
-              asyncStorage,
-              network,
-              ...props,
-            }
-          );
-        } else {
-          //update to error state
-          await setDatastore(action.routeId, action.payload.widgetId, <
-            TextInputProps
-          >{
-            state: InputStateToken.ERROR,
-            caption: { error: response.message },
-          });
-        }
-      }
+    .then(async (result) => {
+      await setDatastore(action.routeId, "input", <TextInputProps>{
+        state: InputStateToken.SUCCESS,
+      });
+      console.log(result);
     })
-    .catch((error) => console.log("error", error));
+    .catch(async (error) => {
+      await navigate(ROUTE.VERIFICATION_FAILED);
+      console.log("error", error);
+    });
 };
 
 export const goBack: ActionFunction<any> = async (

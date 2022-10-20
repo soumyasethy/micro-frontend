@@ -43,6 +43,7 @@ export const getStarted: ActionFunction<ContinuePayload> = async (
   });
   const headers = new Headers();
   headers.append("accept", "*/*");
+  headers.append("X-EntityType", "BORROWER");
 
   const requestOptions = {
     method: "GET",

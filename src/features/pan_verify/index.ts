@@ -11,7 +11,8 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
-  ColorTokens, FontFamilyTokens,
+  ColorTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   IconProps,
   IconSizeTokens,
@@ -35,9 +36,10 @@ import { textOnChange, verifyPan } from "./actions";
 import { EnableDisableCTA } from "../phone_number/types";
 import { toggleCTA } from "../phone_number/actions";
 
-export const template: (applicationId: string) => TemplateSchema = (
-  applicationId
-) => {
+export const template: (
+  applicationId: string,
+  targetRoute: string
+) => TemplateSchema = (applicationId, targetRoute) => {
   return {
     layout: <Layout>{
       id: ROUTE.KYC_PAN_VERIFICATION,
@@ -76,6 +78,7 @@ export const template: (applicationId: string) => TemplateSchema = (
             value: "",
             widgetId: "input",
             applicationId,
+            targetRouteId: targetRoute,
           },
           routeId: ROUTE.KYC_PAN_VERIFICATION,
         },
@@ -85,7 +88,7 @@ export const template: (applicationId: string) => TemplateSchema = (
         fontSize: FontSizeTokens.XL,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
-        fontWeight: '700'
+        fontWeight: "700",
       },
       subTitle: <TypographyProps>{
         label: "PAN is used to check your approved limit",
@@ -162,8 +165,8 @@ export const template: (applicationId: string) => TemplateSchema = (
 };
 
 export const panVerifyMF: PageType<any> = {
-  onLoad: async (_, { applicationId }) => {
-    return Promise.resolve(template(applicationId));
+  onLoad: async (_, { applicationId, targetRoute }) => {
+    return Promise.resolve(template(applicationId, targetRoute));
   },
   actions: {
     [ACTION.VERIFY_PAN]: verifyPan,

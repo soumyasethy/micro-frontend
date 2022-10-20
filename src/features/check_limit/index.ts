@@ -5,39 +5,57 @@ import {
   PageType,
   POSITION,
   TemplateSchema,
+  WidgetProps,
 } from "@voltmoney/types";
 import {
+  ButtonProps,
+  ButtonTypeTokens,
+  ButtonWidthTypeToken,
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  IconTokens,
+  ListItemProps,
   SizeTypeTokens,
   SpaceProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
-import { ACTION } from "./types";
-import { fetchMyPortfolio } from "./actions";
+import { ACTION, FetchPortfolioPayload, PanEditPayload } from "./types";
+import {
+  editEmailId,
+  editMobileNumber,
+  editPanNumber,
+  fetchMyPortfolio,
+} from "./actions";
+import { User } from "../otp_verify/types";
+import { StoreKey } from "../../configs/api";
 
-export const template: (applicationId: string) => TemplateSchema = (
-  applicationId
-) => {
+export const template: (
+  applicationId: string,
+  panNumber: string,
+  phoneNumber: string,
+  emailId: string
+) => TemplateSchema = (applicationId, panNumber, phoneNumber, emailId) => {
   return {
     layout: <Layout>{
       id: ROUTE.MF_PLEDGING,
       type: LAYOUTS.LIST,
       widgets: [
-        {
-          id: "continue",
-          type: WIDGET.BUTTON,
-          position: POSITION.FIXED_BOTTOM,
-        },
         { id: "space0", type: WIDGET.SPACE },
         { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
         { id: "space2", type: WIDGET.SPACE },
-        { id: "fetchCTA", type: WIDGET.BUTTON, position: POSITION.FAB },
+        { id: "panItem", type: WIDGET.LIST_ITEM },
+        { id: "mobileItem", type: WIDGET.LIST_ITEM },
+        { id: "emailItem", type: WIDGET.LIST_ITEM },
+        {
+          id: "fetchCTA",
+          type: WIDGET.BUTTON,
+          position: POSITION.ABSOLUTE_BOTTOM,
+        },
       ],
     },
     datastore: <Datastore>{
@@ -58,15 +76,84 @@ export const template: (applicationId: string) => TemplateSchema = (
 
       space1: <SpaceProps>{ size: SizeTypeTokens.SM },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      panItem: <ListItemProps & WidgetProps>{
+        title: "PAN Number",
+        subTitle: panNumber,
+        leadIconName: IconTokens.CreditCard,
+        trailIconName: IconTokens.Edit,
+        action: {
+          routeId: ROUTE.MF_PLEDGING,
+          type: ACTION.EDIT_PAN,
+          payload: <PanEditPayload>{
+            applicationId,
+            targetRoute: ROUTE.MF_PLEDGING,
+            panNumber: panNumber,
+          },
+        },
+      },
+      mobileItem: <ListItemProps & WidgetProps>{
+        title: "Mobile Number",
+        subTitle: phoneNumber,
+        leadIconName: IconTokens.Phone,
+        trailIconName: IconTokens.Edit,
+        action: {
+          type: ACTION.EDIT_MOBILE_NUMBER,
+          routeId: ROUTE.MF_PLEDGING,
+          payload: { targetWidgetId: "mobileItem" },
+        },
+      },
+      emailItem: <ListItemProps & WidgetProps>{
+        title: "Email ID",
+        subTitle: emailId,
+        leadIconName: IconTokens.Email,
+        trailIconName: IconTokens.Edit,
+        action: {
+          type: ACTION.EDIT_EMAIL,
+          routeId: ROUTE.MF_PLEDGING,
+          payload: { targetWidgetId: "emailItem" },
+        },
+      },
+      fetchCTA: <ButtonProps & WidgetProps>{
+        label: "Fetch my portfolio",
+        width: ButtonWidthTypeToken.FULL,
+        type: ButtonTypeTokens.LargeFilled,
+        action: {
+          routeId: ROUTE.MF_PLEDGING,
+          type: ACTION.FETCH_MY_PORTFOLIO,
+          payload: <FetchPortfolioPayload>{
+            applicationId,
+            emailId,
+            phoneNumber,
+            panNumber,
+            assetRepository: "KARVY",
+          },
+        },
+      },
     },
   };
 };
 
 export const checkLimitMF: PageType<any> = {
-  onLoad: async (_, { applicationId }) => {
-    return Promise.resolve(template(applicationId));
+  onLoad: async ({ asyncStorage }, { applicationId }) => {
+    const user: User = await asyncStorage
+      .get(StoreKey.userContext)
+      .then((response) => JSON.parse(response));
+    const panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
+    if (!applicationId) {
+      applicationId = user.linkedApplications[0].applicationId;
+    }
+
+    return Promise.resolve(
+      template(applicationId, panNumber, phoneNumber, emailId)
+    );
   },
   actions: {
     [ACTION.FETCH_MY_PORTFOLIO]: fetchMyPortfolio,
+    [ACTION.EDIT_PAN]: editPanNumber,
+    [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
+    [ACTION.EDIT_EMAIL]: editEmailId,
+    [ACTION.EDIT_PAN]: editPanNumber,
   },
 };

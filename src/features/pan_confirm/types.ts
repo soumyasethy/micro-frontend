@@ -10,5 +10,7 @@ export type PanPayload = {
 export type ContinuePayload = {
   value: string;
   widgetId: string;
-  applicationId:string;
+  applicationId: string;
+  panNumber?: string;
+  targetRoute?: string;
 };

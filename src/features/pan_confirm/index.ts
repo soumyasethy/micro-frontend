@@ -9,7 +9,8 @@ import {
 import {
   ButtonProps,
   ButtonTypeTokens,
-  ColorTokens, FontFamilyTokens,
+  ColorTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   SizeTypeTokens,
   SpaceProps,
@@ -21,12 +22,14 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
-import { ACTION } from "./types";
+import { ACTION, ContinuePayload } from "./types";
 import { changePanNo, confirmPan } from "./actions";
 
-export const template: (name: string) => TemplateSchema = (
-  name = "Test Name"
-) => {
+export const template: (
+  name: string,
+  panNumber: string,
+  targetRoute: string
+) => TemplateSchema = (name = "Test Name", panNumber, targetRoute) => {
   return {
     layout: <Layout>{
       id: ROUTE.PAN_CONFIRM_NAME,
@@ -50,7 +53,7 @@ export const template: (name: string) => TemplateSchema = (
         fontSize: FontSizeTokens.LG,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
-        fontWeight: '700'
+        fontWeight: "700",
       },
       title_space: <SpaceProps>{ size: SizeTypeTokens.XL },
       confirm: <ButtonProps & WidgetProps>{
@@ -58,7 +61,11 @@ export const template: (name: string) => TemplateSchema = (
         type: ButtonTypeTokens.LargeFilled,
         action: {
           type: ACTION.CONFIRM_PAN,
-          payload: {},
+          payload: <ContinuePayload>{
+            targetRoute,
+            panNumber,
+            widgetId: "panItem",
+          },
           routeId: ROUTE.PAN_CONFIRM_NAME,
         },
       },
@@ -90,8 +97,8 @@ export const template: (name: string) => TemplateSchema = (
 };
 
 export const panConfirmMF: PageType<any> = {
-  onLoad: async (_, { name }) => {
-    return Promise.resolve(template(name));
+  onLoad: async (_, { name, panNumber, targetRoute }) => {
+    return Promise.resolve(template(name, panNumber, targetRoute));
   },
   actions: {
     [ACTION.CONFIRM_PAN]: confirmPan,

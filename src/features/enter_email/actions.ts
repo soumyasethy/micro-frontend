@@ -1,8 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ContinuePayload, EmailPayload } from "./types";
 import { api, StoreKey } from "../../configs/api";
-import { fetchUserContext, nextStep } from "../otp_verify/actions";
-import { ROUTE } from "../../routes";
+import { fetchUserContext } from "../otp_verify/actions";
 import { User } from "../otp_verify/types";
 
 let emailId: string = "";
@@ -44,7 +43,10 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
     body: raw,
   };
 
-  await fetch(`${api.saveEmail}${action.payload.applicationId}`, requestOptions)
+  await fetch(
+    `${api.accountAttributes}${action.payload.applicationId}`,
+    requestOptions
+  )
     .then(async (response) => {
       if (response.status === 200) {
         const user: User = await props.asyncStorage

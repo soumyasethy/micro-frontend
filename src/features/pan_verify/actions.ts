@@ -34,6 +34,8 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
     .then(async (result) => {
       props.navigate(ROUTE.PAN_CONFIRM_NAME, {
         name: result.stepResponseObject.fullName,
+        panNumber: pan,
+        targetRoute: action.payload.targetRouteId,
       });
     })
     .catch((error) => console.log("error", error));

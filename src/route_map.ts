@@ -7,6 +7,10 @@ import { emailMF } from "./features/enter_email";
 import { panVerifyMF } from "./features/pan_verify";
 import { panConfirmMF } from "./features/pan_confirm";
 import { checkLimitMF } from "./features/check_limit";
+import { updateMobileNumberMF } from "./features/update_phoneNo";
+import { updateEmailMF } from "./features/update_emailId";
+import { otpVerifyAuthCASMF } from "./features/otp_CAS";
+import { verificationFailedMF } from "./features/verification_failed";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -16,4 +20,8 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.KYC_PAN_VERIFICATION]: panVerifyMF,
   [ROUTE.PAN_CONFIRM_NAME]: panConfirmMF,
   [ROUTE.MF_PLEDGING]: checkLimitMF,
+  [ROUTE.UPDATE_PHONE_NUMBER]: updateMobileNumberMF,
+  [ROUTE.UPDATE_EMAIL_ID]: updateEmailMF,
+  [ROUTE.OTP_AUTH_CAS]: otpVerifyAuthCASMF,
+  [ROUTE.VERIFICATION_FAILED]: verificationFailedMF,
 };

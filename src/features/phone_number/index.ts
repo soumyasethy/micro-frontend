@@ -77,7 +77,7 @@ export const template: TemplateSchema = {
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
-      fontWeight: '700'
+      fontWeight: "700",
     },
     subTitle: <TypographyProps>{
       label: "We’ll send a verification code to this number",
