@@ -3,14 +3,22 @@ import { ContinuePayload, EmailPayload } from "./types";
 import { api, StoreKey } from "../../configs/api";
 import { fetchUserContext } from "../otp_verify/actions";
 import { User } from "../otp_verify/types";
+import {
+  ButtonProps,
+  InputStateToken,
+  TextInputProps,
+} from "@voltmoney/schema";
 
 let emailId: string = "";
 
 export const saveEmailId: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { ...props }
+  { setDatastore, ...props }
 ): Promise<any> => {
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: true,
+  });
   const token = await props.asyncStorage.get(StoreKey.accessToken);
   console.warn("**** using emailId ****", emailId);
   const headers = new Headers();
@@ -48,6 +56,9 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
     requestOptions
   )
     .then(async (response) => {
+      await setDatastore(action.routeId, "continue", <ButtonProps>{
+        loading: false,
+      });
       if (response.status === 200) {
         const user: User = await props.asyncStorage
           .get(StoreKey.userContext)
@@ -60,10 +71,18 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
           StoreKey.userContext,
           JSON.stringify({ ...user })
         );
-        await fetchUserContext(action, _datastore, { ...props });
+        await fetchUserContext(action, _datastore, {
+          setDatastore,
+          ...props,
+        });
       }
     })
-    .catch((error) => console.log("error", error));
+    .catch(async (error) => {
+      console.log("error", error);
+      await setDatastore(action.routeId, "continue", <ButtonProps>{
+        loading: false,
+      });
+    });
 };
 export const textOnChange: ActionFunction<EmailPayload> = async (
   action,

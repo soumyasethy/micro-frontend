@@ -13,4 +13,5 @@ export type ContinuePayload = {
   applicationId: string;
   panNumber?: string;
   targetRoute?: string;
+  currentStepId?: string;
 };

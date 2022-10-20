@@ -3,6 +3,7 @@ import { LoginAction, OTPPayload, ResendOtp, User } from "./types";
 import { ROUTE } from "../../routes";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import { api, StoreKey } from "../../configs/api";
+import { ContinuePayload } from "../pan_confirm/types";
 
 export const loginCognito: ActionFunction<LoginAction & OTPPayload> = async (
   action,
@@ -48,7 +49,18 @@ export const loginCognito: ActionFunction<LoginAction & OTPPayload> = async (
           });
           await asyncStorage.set(StoreKey.accessToken, response.jwt);
           await fetchUserContext(
-            { payload: {}, type: "LOCAL_TRIGGER", routeId: ROUTE.OTP_VERIFY },
+            {
+              payload: {
+                currentStepId: null,
+                panNumber: null,
+                widgetId: null,
+                value: null,
+                targetRoute: null,
+                applicationId: null,
+              },
+              type: "LOCAL_TRIGGER",
+              routeId: ROUTE.OTP_VERIFY,
+            },
             _datastore,
             {
               navigate,
@@ -102,12 +114,23 @@ export const resendOtp: ActionFunction<ResendOtp> = async (
       console.log("error", error);
     });
 };
-export const fetchUserContext: ActionFunction<any> = async (
+export const fetchUserContext: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
   { ...props }
 ): Promise<any> => {
   const token = await props.asyncStorage.get(StoreKey.accessToken);
+
+  let user: User = await props.asyncStorage
+    .get(StoreKey.userContext)
+    .then((res) => JSON.parse(res));
+  if (
+    !user.linkedBorrowerAccounts[0].accountHolderPAN &&
+    action.payload.panNumber
+  ) {
+    user.linkedBorrowerAccounts[0].accountHolderPAN = action.payload.panNumber;
+  }
+
   console.warn("***** token async ****", token);
   const headers = new Headers();
   headers.append("X-AppMode", "INVESTOR_VIEW");
@@ -123,12 +146,15 @@ export const fetchUserContext: ActionFunction<any> = async (
     body: raw,
   };
 
-  const user: User = await fetch(api.userContext, requestOptions)
-    .then((response) => response.json())
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => console.log("error", error));
+  if (action.payload.currentStepId) {
+    user.linkedApplications[0].currentStepId = action.payload.currentStepId;
+  } else {
+    user = await fetch(api.userContext, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        return response;
+      });
+  }
 
   await props.asyncStorage.set(StoreKey.userContext, JSON.stringify(user));
   console.warn("User Logged In ->", JSON.stringify(user));

@@ -28,8 +28,14 @@ import { changePanNo, confirmPan } from "./actions";
 export const template: (
   name: string,
   panNumber: string,
-  targetRoute: string
-) => TemplateSchema = (name = "Test Name", panNumber, targetRoute) => {
+  targetRoute: string,
+  currentStepId: string
+) => TemplateSchema = (
+  name = "Test Name",
+  panNumber,
+  targetRoute,
+  currentStepId
+) => {
   return {
     layout: <Layout>{
       id: ROUTE.PAN_CONFIRM_NAME,
@@ -49,7 +55,7 @@ export const template: (
         ],
       },
       title: <TypographyProps>{
-        label: name,
+        label: `Hello, \n${name}`,
         fontSize: FontSizeTokens.LG,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
@@ -57,13 +63,14 @@ export const template: (
       },
       title_space: <SpaceProps>{ size: SizeTypeTokens.XL },
       confirm: <ButtonProps & WidgetProps>{
-        label: `Confirm I am ${name}`,
+        label: `Yes, this is me!`,
         type: ButtonTypeTokens.LargeFilled,
         action: {
           type: ACTION.CONFIRM_PAN,
           payload: <ContinuePayload>{
             targetRoute,
             panNumber,
+            currentStepId,
             widgetId: "panItem",
           },
           routeId: ROUTE.PAN_CONFIRM_NAME,
@@ -83,12 +90,12 @@ export const template: (
         },
       },
       wrong1: <TypographyProps>{
-        label: "Wrong name? ",
+        label: "Not you? ",
         fontSize: FontSizeTokens.SM,
         color: ColorTokens.Grey_Night,
       },
       wrong2: <TypographyProps>{
-        label: "Renter PAN",
+        label: "Enter PAN again",
         fontSize: FontSizeTokens.SM,
         color: ColorTokens.Primary_100,
       },
@@ -97,8 +104,10 @@ export const template: (
 };
 
 export const panConfirmMF: PageType<any> = {
-  onLoad: async (_, { name, panNumber, targetRoute }) => {
-    return Promise.resolve(template(name, panNumber, targetRoute));
+  onLoad: async (_, { name, panNumber, targetRoute, currentStepId }) => {
+    return Promise.resolve(
+      template(name, panNumber, targetRoute, currentStepId)
+    );
   },
   actions: {
     [ACTION.CONFIRM_PAN]: confirmPan,

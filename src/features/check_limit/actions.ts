@@ -92,5 +92,6 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
       await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
         loading: false,
       });
+      await navigate(ROUTE.VERIFICATION_FAILED);
     });
 };

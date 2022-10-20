@@ -108,7 +108,7 @@ export const template: (
           routeId: ROUTE.KYC_PAN_VERIFICATION,
         },
         caption: {
-          success: "Successfully verified",
+          success: "",
           error: "Enter a valid PAN number",
         },
         errorAction: {

@@ -40,7 +40,9 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
       console.log(result);
     })
     .catch(async (error) => {
-      await navigate(ROUTE.VERIFICATION_FAILED);
+      await setDatastore(action.routeId, "input", <TextInputProps>{
+        state: InputStateToken.ERROR,
+      });
       console.log("error", error);
     });
 };
