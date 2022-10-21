@@ -32,7 +32,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTIONS, LoginAction, OTPPayload, ResendOtp } from "./types";
-import { fetchUserContext, goBack, loginCognito, resendOtp } from "./actions";
+import { fetchUserDetails, goBack, loginCognito, resendOtp } from "./actions";
 
 export const template: (
   phone_number: number,
@@ -121,14 +121,12 @@ export const template: (
 
 export const otpVerifyMF: PageType<any> = {
   onLoad: async (_, { phone_number, session, isWhatsAppEnabled }) => {
-    // const response = await cognitoCheckUserExist(phone_number);
     console.warn("*** AWS Response ***", session);
     return Promise.resolve(template(phone_number, session, isWhatsAppEnabled));
   },
   actions: {
     [ACTIONS.LoginWithCognito]: loginCognito,
     [ACTIONS.GO_BACK]: goBack,
-    // [ACTIONS.GO_BACK]: fetchUserContext,
     [ACTIONS.RESEND_OTP_NUMBER]: resendOtp,
   },
 };

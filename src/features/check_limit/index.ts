@@ -134,19 +134,24 @@ export const template: (
 };
 
 export const checkLimitMF: PageType<any> = {
-  onLoad: async ({ asyncStorage }, { applicationId }) => {
+  onLoad: async (
+    { asyncStorage },
+    { applicationId, email, panNumber, mobileNumber }
+  ) => {
     const user: User = await asyncStorage
       .get(StoreKey.userContext)
       .then((response) => JSON.parse(response));
-    const panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
-    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
+    const panNumberX =
+      panNumber || user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const phoneNumber =
+      mobileNumber || user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    const emailId = email || user.linkedBorrowerAccounts[0].accountHolderEmail;
     if (!applicationId) {
-      applicationId = user.linkedApplications[0].applicationId;
+      applicationId = applicationId || user.linkedApplications[0].applicationId;
     }
 
     return Promise.resolve(
-      template(applicationId, panNumber, phoneNumber, emailId)
+      template(applicationId, panNumberX, phoneNumber, emailId)
     );
   },
   actions: {

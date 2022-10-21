@@ -1,5 +1,4 @@
 export enum ACTIONS {
-  LoginWithCognitoAmplify = "LoginWithCognitoAmplify",
   AUTH_CAS = "AUTH_CAS",
   OTP_NUMBER = "OTP_NUMBER",
   RESEND_OTP_AUTH_CAS = "RESEND_OTP_AUTH_CAS",

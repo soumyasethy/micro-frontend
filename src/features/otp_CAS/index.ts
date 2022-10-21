@@ -26,8 +26,8 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
-import { authCAS, resendOtp } from "./actions";
-import { ACTION, FetchPortfolioPayload } from "../check_limit/types";
+import { authCAS } from "./actions";
+import { FetchPortfolioPayload } from "../check_limit/types";
 import { fetchMyPortfolio } from "../check_limit/actions";
 
 export const template: (

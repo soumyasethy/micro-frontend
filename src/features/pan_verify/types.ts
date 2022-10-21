@@ -13,5 +13,5 @@ export type ContinuePayload = {
   value: string;
   widgetId: string;
   applicationId: string;
-  targetRouteId?: string;
+  targetRoute?: string;
 };

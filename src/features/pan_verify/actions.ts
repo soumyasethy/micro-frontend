@@ -37,7 +37,7 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
   };
 
   await fetch(api.panVerify, requestOptions)
-    .then((response) => response.json())
+    .then(async (response) => await response.json())
     .then(async (result) => {
       await setDatastore(action.routeId, "continue", <ButtonProps>{
         loading: false,
@@ -50,8 +50,8 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
         const currentStepId = result.updatedApplicationObj.currentStepId;
         await props.navigate(ROUTE.PAN_CONFIRM_NAME, {
           name: result.stepResponseObject.fullName,
-          panNumber: pan,
-          targetRoute: action.payload.targetRouteId,
+          panNumber: result.stepResponseObject.panNumber,
+          targetRoute: action.payload.targetRoute,
           currentStepId,
         });
       } else {

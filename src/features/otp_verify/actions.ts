@@ -48,15 +48,15 @@ export const loginCognito: ActionFunction<LoginAction & OTPPayload> = async (
             state: InputStateToken.SUCCESS,
           });
           await asyncStorage.set(StoreKey.accessToken, response.jwt);
-          await fetchUserContext(
+          await fetchUserDetails(
             {
-              payload: {
-                currentStepId: null,
-                panNumber: null,
-                widgetId: null,
-                value: null,
-                targetRoute: null,
-                applicationId: null,
+              payload: <ContinuePayload>{
+                currentStepId: "",
+                panNumber: "",
+                widgetId: "",
+                value: "",
+                targetRoute: "",
+                applicationId: "",
               },
               type: "LOCAL_TRIGGER",
               routeId: ROUTE.OTP_VERIFY,
@@ -114,24 +114,17 @@ export const resendOtp: ActionFunction<ResendOtp> = async (
       console.log("error", error);
     });
 };
-export const fetchUserContext: ActionFunction<ContinuePayload> = async (
+export const fetchUserDetails: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { ...props }
+  { navigate, ...props }
 ): Promise<any> => {
   const token = await props.asyncStorage.get(StoreKey.accessToken);
 
   let user: User = await props.asyncStorage
     .get(StoreKey.userContext)
     .then((res) => JSON.parse(res));
-  if (
-    !user.linkedBorrowerAccounts[0].accountHolderPAN &&
-    action.payload.panNumber
-  ) {
-    user.linkedBorrowerAccounts[0].accountHolderPAN = action.payload.panNumber;
-  }
 
-  console.warn("***** token async ****", token);
   const headers = new Headers();
   headers.append("X-AppMode", "INVESTOR_VIEW");
   headers.append("X-AppPlatform", "VOLT_MOBILE_APP");
@@ -145,36 +138,20 @@ export const fetchUserContext: ActionFunction<ContinuePayload> = async (
     headers: headers,
     body: raw,
   };
-
+  console.warn("action.payload.panNumber--->", action.payload.panNumber);
   if (action.payload.currentStepId) {
     user.linkedApplications[0].currentStepId = action.payload.currentStepId;
+    user.linkedBorrowerAccounts[0].accountHolderPAN = action.payload.panNumber;
   } else {
-    user = await fetch(api.userContext, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        return response;
-      });
+    user = await fetch(api.userContext, requestOptions).then((response) =>
+      response.json()
+    );
   }
-
   await props.asyncStorage.set(StoreKey.userContext, JSON.stringify(user));
-  console.warn("User Logged In ->", JSON.stringify(user));
-  await nextStep(
-    { type: "NEXT_STEP", routeId: "NEXT_ID", payload: {} },
-    {},
-    { ...props }
-  );
+  await nextStep(navigate, user);
 };
 
-export const nextStep: ActionFunction<any> = async (
-  action,
-  _datastore,
-  { asyncStorage, navigate }
-): Promise<any> => {
-  const user: User = await asyncStorage
-    .get(StoreKey.userContext)
-    .then((result) => JSON.parse(result));
-  console.warn("fetched saved user", user);
-
+export const nextStep = async (navigate, user: User): Promise<any> => {
   if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
     await navigate(ROUTE.EMAIL_VERIFY, {
       applicationId: user.linkedBorrowerAccounts[0].accountId,
@@ -184,10 +161,14 @@ export const nextStep: ActionFunction<any> = async (
   ) {
     await navigate(ROUTE.KYC_PAN_VERIFICATION, {
       applicationId: user.linkedApplications[0].applicationId,
+      targetRoute: ROUTE.MF_PLEDGING,
     });
   } else if (user.linkedApplications[0].currentStepId === ROUTE.MF_PLEDGING) {
     await navigate(ROUTE.MF_PLEDGING, {
       applicationId: user.linkedApplications[0].applicationId,
+      email: user.linkedBorrowerAccounts[0].accountHolderEmail,
+      panNumber: user.linkedBorrowerAccounts[0].accountHolderPAN,
+      mobileNumber: user.linkedBorrowerAccounts[0].accountHolderPhoneNumber,
     });
   }
 };

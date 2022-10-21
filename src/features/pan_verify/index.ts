@@ -35,11 +35,14 @@ import { ACTION, ContinuePayload, PanPayload } from "./types";
 import { textOnChange, verifyPan } from "./actions";
 import { EnableDisableCTA } from "../phone_number/types";
 import { toggleCTA } from "../phone_number/actions";
+import { User } from "../otp_verify/types";
+import { StoreKey } from "../../configs/api";
 
 export const template: (
   applicationId: string,
-  targetRoute: string
-) => TemplateSchema = (applicationId, targetRoute) => {
+  targetRoute: string,
+  prefilledPanNumber: string
+) => TemplateSchema = (applicationId, targetRoute, prefilledPanNumber) => {
   return {
     layout: <Layout>{
       id: ROUTE.KYC_PAN_VERIFICATION,
@@ -75,10 +78,10 @@ export const template: (
         action: {
           type: ACTION.VERIFY_PAN,
           payload: <ContinuePayload>{
-            value: "",
+            value: prefilledPanNumber || "",
             widgetId: "input",
             applicationId,
-            targetRouteId: targetRoute,
+            targetRoute: targetRoute,
           },
           routeId: ROUTE.KYC_PAN_VERIFICATION,
         },
@@ -96,6 +99,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       input: <TextInputProps & WidgetProps>{
+        value: prefilledPanNumber,
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
         charLimit: 10,
@@ -165,8 +169,14 @@ export const template: (
 };
 
 export const panVerifyMF: PageType<any> = {
-  onLoad: async (_, { applicationId, targetRoute }) => {
-    return Promise.resolve(template(applicationId, targetRoute));
+  onLoad: async ({ asyncStorage }, { applicationId, targetRoute }) => {
+    const user: User = await asyncStorage
+      .get(StoreKey.userContext)
+      .then((res) => JSON.parse(res));
+    const prefilledPanNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    return Promise.resolve(
+      template(applicationId, targetRoute, prefilledPanNumber)
+    );
   },
   actions: {
     [ACTION.VERIFY_PAN]: verifyPan,

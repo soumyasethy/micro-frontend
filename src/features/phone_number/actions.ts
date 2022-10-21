@@ -34,8 +34,9 @@ export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
 export const getStarted: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore }
+  { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
+  asyncStorage.clear();
   phoneNumber = phoneNumber.includes("+91") ? phoneNumber : `+91${phoneNumber}`;
   console.warn("**** using phoneNumber ****", phoneNumber);
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{

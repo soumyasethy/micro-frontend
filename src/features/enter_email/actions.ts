@@ -1,13 +1,9 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ContinuePayload, EmailPayload } from "./types";
 import { api, StoreKey } from "../../configs/api";
-import { fetchUserContext } from "../otp_verify/actions";
+import { fetchUserDetails } from "../otp_verify/actions";
 import { User } from "../otp_verify/types";
-import {
-  ButtonProps,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
+import { ButtonProps } from "@voltmoney/schema";
 
 let emailId: string = "";
 
@@ -71,7 +67,7 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
           StoreKey.userContext,
           JSON.stringify({ ...user })
         );
-        await fetchUserContext(action, _datastore, {
+        await fetchUserDetails(action, _datastore, {
           setDatastore,
           ...props,
         });
