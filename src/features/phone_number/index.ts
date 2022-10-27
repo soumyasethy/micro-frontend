@@ -37,7 +37,7 @@ import {
   PhoneNumberPayload,
   WhatsAppEnabledPayload,
 } from "./types";
-import { getStarted, textOnChange, toggleCTA, whatsappToggle } from "./actions";
+import { sendOtp, textOnChange, toggleCTA, whatsappToggle } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
@@ -68,7 +68,11 @@ export const template: TemplateSchema = {
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.CONTINUE,
-        payload: <ContinuePayload>{ value: "", widgetId: "continue" },
+        payload: <ContinuePayload>{
+          value: "",
+          widgetId: "continue",
+          isResend: false,
+        },
         routeId: ROUTE.PHONE_NUMBER,
       },
     },
@@ -148,7 +152,7 @@ export const template: TemplateSchema = {
 export const phoneNumberMF: PageType<any> = {
   onLoad: async () => Promise.resolve(template),
   actions: {
-    [ACTION.CONTINUE]: getStarted,
+    [ACTION.CONTINUE]: sendOtp,
     [ACTION.PHONE_NUMBER]: textOnChange,
     [ACTION.WHATSAPP_CHECK]: whatsappToggle,
     [ACTION.WHATSAPP_UNCHECK]: whatsappToggle,

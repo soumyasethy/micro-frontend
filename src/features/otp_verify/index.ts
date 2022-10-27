@@ -3,14 +3,12 @@ import {
   Layout,
   LAYOUTS,
   PageType,
-  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
-  ButtonWidthTypeToken,
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
@@ -31,14 +29,15 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
-import { ACTIONS, LoginAction, OTPPayload, ResendOtp } from "./types";
-import { fetchUserDetails, goBack, loginCognito, resendOtp } from "./actions";
+import { ACTIONS, LoginAction, OTPPayload } from "./types";
+import { goBack, login } from "./actions";
+import { sendOtp } from "../phone_number/actions";
+import { ContinuePayload } from "../phone_number/types";
 
 export const template: (
   phone_number: number,
-  session?: any,
   isWhatsAppEnabled?: boolean
-) => TemplateSchema = (phone_number, session, isWhatsAppEnabled) => {
+) => TemplateSchema = (phone_number, isWhatsAppEnabled) => {
   return {
     layout: <Layout>{
       id: ROUTE.OTP_VERIFY,
@@ -99,7 +98,6 @@ export const template: (
           payload: <LoginAction & OTPPayload>{
             username: `${phone_number}`,
             password: "123456",
-            session: session,
             isWhatsAppEnabled,
             value: "",
             widgetId: "input",
@@ -107,8 +105,10 @@ export const template: (
         },
         otpAction: {
           type: ACTIONS.RESEND_OTP_NUMBER,
-          payload: <ResendOtp>{
-            phoneNumber: `${phone_number}`,
+          payload: <ContinuePayload>{
+            value: `${phone_number}`,
+            widgetId: "input",
+            isResend: true,
           },
           routeId: ROUTE.OTP_VERIFY,
         },
@@ -120,13 +120,12 @@ export const template: (
 };
 
 export const otpVerifyMF: PageType<any> = {
-  onLoad: async (_, { phone_number, session, isWhatsAppEnabled }) => {
-    console.warn("*** AWS Response ***", session);
-    return Promise.resolve(template(phone_number, session, isWhatsAppEnabled));
+  onLoad: async (_, { phone_number, isWhatsAppEnabled }) => {
+    return Promise.resolve(template(phone_number, isWhatsAppEnabled));
   },
   actions: {
-    [ACTIONS.LoginWithCognito]: loginCognito,
+    [ACTIONS.LoginWithCognito]: login,
     [ACTIONS.GO_BACK]: goBack,
-    [ACTIONS.RESEND_OTP_NUMBER]: resendOtp,
+    [ACTIONS.RESEND_OTP_NUMBER]: sendOtp,
   },
 };

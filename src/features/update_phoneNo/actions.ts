@@ -4,6 +4,7 @@ import { ContinuePayload } from "../phone_number/types";
 import { User } from "../otp_verify/types";
 import { StoreKey } from "../../configs/api";
 import { ROUTE } from "../../routes";
+import SharedPropsService from "../../SharedPropsService";
 
 let phoneNumber = "";
 export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
@@ -11,12 +12,11 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage, goBack, ...props }
 ): Promise<any> => {
-  const user: User = await asyncStorage
-    .get(StoreKey.userContext)
-    .then((result) => JSON.parse(result));
+  const user: User = SharedPropsService.getUser();
 
   user.linkedBorrowerAccounts[0].accountHolderPhoneNumber = phoneNumber;
-  await asyncStorage.set(StoreKey.userContext, JSON.stringify(user));
+  await SharedPropsService.setUser(user);
+
   console.warn("action", action);
   await setDatastore(ROUTE.MF_PLEDGING, action.payload.targetWidgetId, {
     subTitle: phoneNumber,

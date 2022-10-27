@@ -8,6 +8,7 @@ import {
   InputStateToken,
   TextInputProps,
 } from "@voltmoney/schema";
+import SharedPropsService from "../../SharedPropsService";
 
 let pan: string = "";
 
@@ -19,10 +20,9 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  const token = await asyncStorage.get(StoreKey.accessToken);
   const headers = new Headers();
   headers.append("X-AppPlatform", "VOLT_MOBILE_APP");
-  headers.append("Authorization", `Bearer ${token}`);
+  headers.append("Authorization", `Bearer ${SharedPropsService.getToken()}`);
   headers.append("Content-Type", "application/json");
 
   const raw = JSON.stringify({
@@ -43,11 +43,20 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
         loading: false,
       });
       if (result.stepResponseObject.fullName) {
+        result.stepResponseObject.panNumber = pan;
         console.warn("success pan ", result);
+
         await setDatastore(action.routeId, "input", <TextInputProps>{
           state: InputStateToken.SUCCESS,
         });
-        const currentStepId = result.updatedApplicationObj.currentStepId;
+        const currentStepId = await result.updatedApplicationObj.currentStepId;
+
+        console.warn("Navigate ", ROUTE.PAN_CONFIRM_NAME, "->", {
+          name: result.stepResponseObject.fullName,
+          panNumber: pan,
+          targetRoute: action.payload.targetRoute,
+          currentStepId,
+        });
         await props.navigate(ROUTE.PAN_CONFIRM_NAME, {
           name: result.stepResponseObject.fullName,
           panNumber: result.stepResponseObject.panNumber,

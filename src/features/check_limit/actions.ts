@@ -4,6 +4,7 @@ import { api, StoreKey } from "../../configs/api";
 import { ROUTE } from "../../routes";
 import { User } from "../otp_verify/types";
 import { ButtonProps } from "@voltmoney/schema";
+import SharedPropsService from "../../SharedPropsService";
 let hasChangedInDetails = false;
 
 export const editPanNumber: ActionFunction<PanEditPayload> = async (
@@ -46,18 +47,15 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
     loading: true,
   });
-  const token = await asyncStorage.get(StoreKey.accessToken);
 
   const headers = new Headers();
   headers.append("accept", "application/json");
-  headers.append("Authorization", `Bearer ${token}`);
+  headers.append("Authorization", `Bearer ${SharedPropsService.getToken()}`);
   headers.append("X-AppPlatform", "SDK_KFIN");
   headers.append("Content-Type", "application/json");
 
   if (hasChangedInDetails) {
-    const user: User = await asyncStorage
-      .get(StoreKey.userContext)
-      .then((response) => JSON.parse(response));
+    const user: User = SharedPropsService.getUser();
     action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
     action.payload.phoneNumber =
       user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;

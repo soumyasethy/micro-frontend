@@ -31,7 +31,7 @@ export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
   });
 };
 
-export const getStarted: ActionFunction<ContinuePayload> = async (
+export const sendOtp: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
@@ -54,6 +54,7 @@ export const getStarted: ActionFunction<ContinuePayload> = async (
   await fetch(`${api.login}${phoneNumber}`, requestOptions)
     .then((response) => response.json())
     .then(async (result) => {
+      if (action.payload.isResend) return;
       console.log(result);
       if (result.status === "success") {
         await setDatastore(action.routeId, action.payload.widgetId, <

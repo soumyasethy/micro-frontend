@@ -9,6 +9,8 @@ export const api = {
   authCAS: `${baseUrl}/app/borrower/application/pledge/authCAS`,
   userContext: `${baseUrl}/app/borrower/user`,
   accountAttributes: `${baseUrl}/app/borrower/accountAttributes/`,
+  aadharInit: `${baseUrl}/app/borrower/application/kyc/aadhaar/init`,
+  aadharVerify: `${baseUrl}/app/borrower/application/kyc/aadhaar/verify`,
 };
 
 export const StoreKey = {

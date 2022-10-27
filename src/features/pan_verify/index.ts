@@ -37,6 +37,7 @@ import { EnableDisableCTA } from "../phone_number/types";
 import { toggleCTA } from "../phone_number/actions";
 import { User } from "../otp_verify/types";
 import { StoreKey } from "../../configs/api";
+import SharedPropsService from "../../SharedPropsService";
 
 export const template: (
   applicationId: string,
@@ -170,9 +171,7 @@ export const template: (
 
 export const panVerifyMF: PageType<any> = {
   onLoad: async ({ asyncStorage }, { applicationId, targetRoute }) => {
-    const user: User = await asyncStorage
-      .get(StoreKey.userContext)
-      .then((res) => JSON.parse(res));
+    const user: User = SharedPropsService.getUser();
     const prefilledPanNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
     return Promise.resolve(
       template(applicationId, targetRoute, prefilledPanNumber)

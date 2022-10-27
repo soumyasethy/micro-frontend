@@ -18,6 +18,7 @@ export type PhoneNumberPayload = {
 export type ContinuePayload = {
   value: string;
   widgetId: string;
+  isResend?: boolean;
 };
 export type WhatsAppEnabledPayload = {
   value: boolean;
