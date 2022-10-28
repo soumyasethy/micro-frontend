@@ -36,7 +36,7 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  asyncStorage.clear();
+  // asyncStorage.clear();
   phoneNumber = phoneNumber.includes("+91") ? phoneNumber : `+91${phoneNumber}`;
   console.warn("**** using phoneNumber ****", phoneNumber);
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
@@ -80,7 +80,7 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
       }
     })
     .catch(async (error) => {
-      console.log("error", error);
+      console.warn("error", error);
       await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
         loading: false,
       });

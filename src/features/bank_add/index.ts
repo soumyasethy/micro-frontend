@@ -10,6 +10,8 @@ import {
 import {
   ColorTokens,
   FontSizeTokens,
+  gridImageItemProps,
+  gridItemTypeTokens,
   ImageProps,
   InputTypeToken,
   SizeTypeTokens,
@@ -75,15 +77,7 @@ export const template: (
         { id: "space1", type: WIDGET.SPACE },
         { id: "searchInput", type: WIDGET.INPUT },
         { id: "searchInputSpace", type: WIDGET.SPACE },
-        { id: "title1", type: WIDGET.TEXT },
-        { id: "spaceTitle", type: WIDGET.SPACE },
-        { id: "stack1", type: WIDGET.STACK },
-        { id: "stackSpace1", type: WIDGET.SPACE },
-        { id: "stack2", type: WIDGET.STACK },
-        { id: "stackSpace2", type: WIDGET.SPACE },
-        { id: "title2", type: WIDGET.TEXT },
-        { id: "titleSpace2", type: WIDGET.SPACE },
-        { id: "stack3", type: WIDGET.STACK },
+        { id: "gridItem", type: WIDGET.GRIDITEM },
       ],
     },
     datastore: <Datastore>{
@@ -94,6 +88,28 @@ export const template: (
         caption: { success: "", error: "" },
       },
       searchInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      gridItem: <gridImageItemProps>{
+        type: gridItemTypeTokens.horizontal,
+        data: [
+          {
+            label: "HDFC",
+            image:
+              "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+          },
+        ],
+        otherItem: [
+          {
+            label: "HDFC",
+            image:
+              "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+          },
+        ],
+        title: "Popular banks",
+        other: "All other banks",
+        bgColor: ColorTokens.Grey_Milk,
+        borderColor: ColorTokens.Grey_Milk_1,
+
+      },
       title1: <TypographyProps>{
         label: "Popular banks",
         color: ColorTokens.Grey_Night,
