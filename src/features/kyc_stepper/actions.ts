@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ROUTE } from "../../routes";
+import { nextStep } from "../otp_verify/repo";
 
 export const Go_Next_Action: ActionFunction<any> = async (
   action,
@@ -7,5 +7,8 @@ export const Go_Next_Action: ActionFunction<any> = async (
   { navigate }
 ): Promise<any> => {
   console.warn("**** Test Action Triggered ****", action);
-  await navigate(ROUTE.KYC_DIGILOCKER);
+
+  const routeObj = await nextStep();
+  console.warn("**** routeObj ****", routeObj);
+  await navigate(routeObj.routeId, routeObj.params);
 };

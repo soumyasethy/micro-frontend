@@ -26,7 +26,6 @@ import { ROUTE } from "../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
 import { AadharInitPayload } from "../kyc_digilocker/types";
-import SharedPropsService, {mockUser} from "../../SharedPropsService";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
@@ -90,7 +89,7 @@ export const template: TemplateSchema = {
         type: ACTION.TRIGGER_CTA,
         routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
         payload: <AadharInitPayload>{
-          applicationId: mockUser.linkedApplications[0].applicationId,
+          applicationId: "",
           aadhaarNumber: "",
         },
       },

@@ -10,9 +10,10 @@ export const AadharInitAction: ActionFunction<AadharInitPayload> = async (
 ): Promise<any> => {
   console.warn("**** Test Action Triggered ****", action);
   const response = await AadharInitRepo(
-    action.payload.aadhaarNumber,
-    action.payload.applicationId
+    action.payload.applicationId,
+    action.payload.aadhaarNumber
   );
   console.warn("response", response);
-  await navigate(ROUTE.KYC_AADHAAR_VERIFICATION);
+  if (response) await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
+  else await navigate(ROUTE.KYC_AADHAAR_VERIFICATION);
 };

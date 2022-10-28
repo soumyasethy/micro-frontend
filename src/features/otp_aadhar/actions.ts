@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ContinuePayload, EnableDisableCTA } from "../phone_number/types";
+import { EnableDisableCTA } from "../phone_number/types";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import { AadharInputPayload } from "./types";
 import { ROUTE } from "../../routes";
@@ -37,9 +37,9 @@ export const triggerCTA: ActionFunction<AadharInputPayload> = async (
 ): Promise<any> => {
   if (action.payload.value.length === 6) {
     const response = await aadharVerifyRepo(
-      action.payload.value,
-      SharedPropsService.getUser().linkedApplications[0].applicationId
+      SharedPropsService.getUser().linkedApplications[0].applicationId,
+      action.payload.value
     );
-    /*if (response)*/ navigate(ROUTE.CAMERA_OPEN);
+    if (response) navigate(ROUTE.CAMERA_OPEN);
   }
 };

@@ -49,17 +49,22 @@ export interface LinkedApplication {
   lastUpdatedOn?: number;
   completedOn?: any;
 }
-
+export enum StepStatusEnum {
+  NOT_STARTED = "NOT_STARTED",
+  COMPLETED = "COMPLETED",
+  SKIPPED = "SKIPPED",
+  BLOCKED = "BLOCKED",
+}
 export interface StepStatusMap {
-  KYC_PHOTO_VERIFICATION?: string;
-  MF_PLEDGING?: string;
-  CREDIT_APPROVAL?: string;
-  KYC_AADHAAR_VERIFICATION?: string;
-  MANDATE_SETUP?: string;
-  KYC_CKYC?: string;
-  KYC_PAN_VERIFICATION?: string;
-  AGREEMENT_SIGN?: string;
-  BANK_ACCOUNT_VERIFICATION?: string;
+  KYC_PHOTO_VERIFICATION?: StepStatusEnum;
+  MF_PLEDGING?: StepStatusEnum;
+  CREDIT_APPROVAL?: StepStatusEnum;
+  KYC_AADHAAR_VERIFICATION?: StepStatusEnum;
+  MANDATE_SETUP?: StepStatusEnum;
+  KYC_CKYC?: StepStatusEnum;
+  KYC_PAN_VERIFICATION?: StepStatusEnum;
+  AGREEMENT_SIGN?: StepStatusEnum;
+  BANK_ACCOUNT_VERIFICATION?: StepStatusEnum;
 }
 
 export interface LinkedBorrowerAccount {

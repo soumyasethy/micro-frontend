@@ -37,6 +37,14 @@ export const nextStep = async (
         mobileNumber: user.linkedBorrowerAccounts[0].accountHolderPhoneNumber,
       },
     };
+  } else if (
+    user.linkedApplications[0].currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION
+  ) {
+    return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
+  } else if (
+    user.linkedApplications[0].currentStepId === "KYC_PHOTO_VERIFICATION"
+  ) {
+    return { routeId: ROUTE.CAMERA_OPEN, params: {} };
   }
 };
 

@@ -1,9 +1,10 @@
 import { api } from "../../configs/api";
+import SharedPropsService from "../../SharedPropsService";
 
 export const aadharVerifyRepo = async (applicationId: string, otp: string) => {
   const headers = new Headers();
   headers.append("accept", "application/json");
-  headers.append("Authorization", "Bearer access_token");
+  headers.append("Authorization", `Bearer ${SharedPropsService.getToken()}`);
   headers.append("X-AppPlatform", "SDK_KFIN");
   headers.append("Content-Type", "application/json");
 
@@ -19,6 +20,6 @@ export const aadharVerifyRepo = async (applicationId: string, otp: string) => {
   };
 
   return await fetch(api.aadharVerify, requestOptions)
-    .then((response) => response.text())
+    .then((response) => response.json())
     .catch((error) => console.log("error", error));
 };

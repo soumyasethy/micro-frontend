@@ -4,6 +4,7 @@ import {
   LAYOUTS,
   PageType,
   TemplateSchema,
+  WidgetProps,
 } from "@voltmoney/types";
 import {
   VerificationCardTypeTokens,
@@ -22,12 +23,17 @@ export const template: TemplateSchema = {
     widgets: [{ id: "verify", type: WIDGET.VERIFICATIONCARD }],
   },
   datastore: <Datastore>{
-    verify: <VerificationCardProps>{
+    verify: <VerificationCardProps & WidgetProps>{
       buttonText: "Submit",
       buttonType: VerificationCardButtonTypeToken.FULL,
       label: "Take photo",
       message: "Note: This will help to verify your identity",
       type: VerificationCardTypeTokens.Default,
+      action: {
+        type: ACTION.CAMERA_ACTION,
+        routeId: ROUTE.CAMERA_OPEN,
+        payload: {},
+      },
     },
   },
 };

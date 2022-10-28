@@ -3,6 +3,7 @@ import { Authentication, LoginAction, OTPPayload, User } from "./types";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import SharedPropsService from "../../SharedPropsService";
 import { fetchUserDetails, loginRepo, nextStep } from "./repo";
+import { ROUTE } from "../../routes";
 
 export const login: ActionFunction<LoginAction & OTPPayload> = async (
   action,
@@ -27,8 +28,17 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
     });
     const user: User = await fetchUserDetails();
     const nextRoute = await nextStep(user);
+
     console.warn("NextRouteId -> ", nextRoute);
-    await navigate(nextRoute.routeId, nextRoute.params);
+    if (
+      nextRoute.routeId === ROUTE.KYC_AADHAAR_VERIFICATION ||
+      "KYC_PHOTO_VERIFICATION"
+    ) {
+      await navigate(ROUTE.KYC_STEPPER);
+    }
+    else {
+      await navigate(nextRoute.routeId, nextRoute.params);
+    }
   } else {
     //update to error state
     await setDatastore(action.routeId, action.payload.widgetId, <

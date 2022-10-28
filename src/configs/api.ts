@@ -1,16 +1,16 @@
-const baseUrl =
-  "http://beta-appor-y52xud3gnv47-417447330.ap-south-1.elb.amazonaws.com";
+import { config } from "./config";
 
 export const api = {
-  login: `${baseUrl}/api/client/auth/requestOtp/`,
-  verifyOtp: `${baseUrl}/api/client/auth/verifyOtp/`,
-  panVerify: `${baseUrl}/app/borrower/application/kyc/pan/panVerify`,
-  pledgeInit: `${baseUrl}/app/borrower/application/pledge/init`,
-  authCAS: `${baseUrl}/app/borrower/application/pledge/authCAS`,
-  userContext: `${baseUrl}/app/borrower/user`,
-  accountAttributes: `${baseUrl}/app/borrower/accountAttributes/`,
-  aadharInit: `${baseUrl}/app/borrower/application/kyc/aadhaar/init`,
-  aadharVerify: `${baseUrl}/app/borrower/application/kyc/aadhaar/verify`,
+  login: `${config.baseUrl}/api/client/auth/requestOtp/`,
+  verifyOtp: `${config.baseUrl}/api/client/auth/verifyOtp/`,
+  panVerify: `${config.baseUrl}/app/borrower/application/kyc/pan/panVerify`,
+  pledgeInit: `${config.baseUrl}/app/borrower/application/pledge/init`,
+  authCAS: `${config.baseUrl}/app/borrower/application/pledge/authCAS`,
+  userContext: `${config.baseUrl}/app/borrower/user`,
+  accountAttributes: `${config.baseUrl}/app/borrower/accountAttributes/`,
+  aadharInit: `${config.baseUrl}/app/borrower/application/kyc/aadhaar/init`,
+  aadharVerify: `${config.baseUrl}/app/borrower/application/kyc/aadhaar/verify`,
+  kycSummary: `${config.baseUrl}/app/borrower/application/kyc/summary/`,
 };
 
 export const StoreKey = {

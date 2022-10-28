@@ -27,11 +27,8 @@ import {
 import { ROUTE } from "../../routes";
 import { AadharInitPayload, ACTION } from "./types";
 import { AadharInitAction } from "./actions";
-import SharedPropsService from "../../SharedPropsService";
 
-export const template: (applicationId: string) => TemplateSchema = (
-  applicationId
-) => ({
+export const template: TemplateSchema = {
   layout: <Layout>{
     id: ROUTE.KYC_DIGILOCKER,
     type: LAYOUTS.LIST,
@@ -76,18 +73,15 @@ export const template: (applicationId: string) => TemplateSchema = (
         type: ACTION.AADHAR_INIT,
         routeId: ROUTE.KYC_DIGILOCKER,
         payload: <AadharInitPayload>{
-          applicationId: applicationId,
+          applicationId: "",
         },
       },
     },
   },
-});
-
+};
 export const kycDigiLockerMF: PageType<any> = {
   onLoad: async () => {
-    const applicationId = "";
-    // SharedPropsService.getUser().linkedApplications[0].applicationId;
-    return Promise.resolve(template(applicationId));
+    return Promise.resolve(template);
   },
   actions: {
     [ACTION.AADHAR_INIT]: AadharInitAction,

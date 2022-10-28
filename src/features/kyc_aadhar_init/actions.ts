@@ -38,8 +38,8 @@ export const triggerCTA: ActionFunction<AadharInitPayload> = async (
   console.warn("action", action);
   action.payload.aadhaarNumber = aadharNumber;
   const response = await AadharInitRepo(
-    action.payload.aadhaarNumber,
-    action.payload.applicationId
+    action.payload.applicationId,
+    action.payload.aadhaarNumber
   );
-  /*if (response)*/ await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
+  if (response) await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
 };

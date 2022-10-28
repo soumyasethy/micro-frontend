@@ -16,6 +16,7 @@ import {
   ImageSizeTokens,
   SizeTypeTokens,
   SpaceProps,
+  StepperItem,
   StepperProps,
   StepperTypeTokens,
   WIDGET,
@@ -23,8 +24,10 @@ import {
 import { ROUTE } from "../../routes";
 import { ACTION } from "./types";
 import { Go_Next_Action } from "./actions";
+import { User } from "../otp_verify/types";
+import SharedPropsService from "../../SharedPropsService";
 
-export const template: TemplateSchema = {
+export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   layout: <Layout>{
     id: ROUTE.TEST_PAGE,
     type: LAYOUTS.LIST,
@@ -47,40 +50,7 @@ export const template: TemplateSchema = {
     space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     stepper: <StepperProps & WidgetProps>{
       type: StepperTypeTokens.VERTICAL,
-      data: [
-        {
-          id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-          step: "1",
-          title: "KYC Verification",
-          subTitle: "lorme ipsum doler smit en",
-          status: "",
-          message: "",
-        },
-        {
-          id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-          step: "2",
-          title: "bank Verification",
-          subTitle: "lorme ipsum doler smit en",
-          status: "",
-          message: "",
-        },
-        {
-          id: "58694a0f-3da1-471f-bd96-145571e29d72",
-          step: "3",
-          title: "Mondate",
-          subTitle: "lorme ipsum doler smit en",
-          status: "In Progress",
-          message: "Something Went Wrong",
-        },
-        {
-          id: "58694a0f-3da1-471f-bd96-145571e29d74",
-          step: "4",
-          title: "Loan Agreement",
-          subTitle: "lorme ipsum doler smit en",
-          status: "",
-          message: "",
-        },
-      ],
+      data: data,
     },
     continue: <ButtonProps & WidgetProps>{
       label: "start",
@@ -93,10 +63,49 @@ export const template: TemplateSchema = {
       },
     },
   },
-};
+});
 
 export const kycStepperMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async () => {
+    const user: User = SharedPropsService.getUser();
+    const data: StepperItem[] = [
+      {
+        id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+        step: "1",
+        title: "KYC Verification",
+        subTitle: "lorme ipsum doler smit en",
+        status:
+          user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION,
+        message: "",
+      },
+      {
+        id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+        step: "2",
+        title: "bank Verification",
+        subTitle: "lorme ipsum doler smit en",
+        status:
+          user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
+        message: "",
+      },
+      {
+        id: "58694a0f-3da1-471f-bd96-145571e29d72",
+        step: "3",
+        title: "Mondate",
+        subTitle: "lorme ipsum doler smit en",
+        status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+        message: "Something Went Wrong",
+      },
+      {
+        id: "58694a0f-3da1-471f-bd96-145571e29d74",
+        step: "4",
+        title: "Loan Agreement",
+        subTitle: "lorme ipsum doler smit en",
+        status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
+        message: "",
+      },
+    ];
+    return Promise.resolve(template(data));
+  },
   actions: {
     [ACTION.GO_TO_AADHAR_INIT]: Go_Next_Action,
   },

@@ -1,28 +1,32 @@
-import SharedPropsService, { mockUser } from "../../SharedPropsService";
+import SharedPropsService from "../../SharedPropsService";
 import { api } from "../../configs/api";
-
+import { config } from "../../configs/config";
 export const AadharInitRepo = async (
-  aadhaarNumber: string,
-  applicationId: string
+  applicationId: string,
+  aadhaarNumber: string
 ) => {
-  const headers = new Headers();
-  headers.append("accept", "application/json");
-  headers.append("Authorization", `Bearer ${SharedPropsService.getToken()}`);
-  headers.append("X-AppPlatform", "SDK_KFIN");
-  headers.append("Content-Type", "application/json");
-
   const raw = JSON.stringify({
-    aadhaarNumber,
-    applicationId: mockUser.linkedApplications[0].applicationId,
+    applicationId:
+      applicationId ||
+      SharedPropsService.getUser().linkedApplications[0].applicationId,
+    aadhaarNumber:
+      aadhaarNumber ||
+      SharedPropsService.getUser().linkedBorrowerAccounts[0].accountHolderPhoneNumber.replaceAll(
+        "+91",
+        ""
+      ),
   });
 
   const requestOptions = {
     method: "POST",
-    headers: headers,
+    headers: config.headers,
     body: raw,
   };
 
   return await fetch(api.aadharInit, requestOptions)
     .then((response) => response.json())
-    .catch((error) => console.log("error", error));
+    .catch((error) => {
+      console.log("error", error);
+      return error;
+    });
 };
