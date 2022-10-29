@@ -1,5 +1,7 @@
-import { User } from "./features/otp_verify/types";
-
+import { User } from "./features/login/otp_verify/types";
+import { __isTest__, config } from "./configs/config";
+import { MockUser } from "./mock/MockUser";
+import { MockToken } from "./mock/MockToken";
 type GlobalProps = {
   user: User;
   access_token: string;
@@ -25,9 +27,13 @@ async function setUser(props: User) {
 }
 
 function getUser() {
+  if (__isTest__) {
+    return MockUser;
+  }
   if (_globalProps && _globalProps.user) {
     return _globalProps.user;
   }
+
   return null;
 }
 async function setToken(access_token: string) {
@@ -35,9 +41,13 @@ async function setToken(access_token: string) {
 }
 
 function getToken() {
+  if (__isTest__) {
+    return MockToken;
+  }
   if (_globalProps && _globalProps.access_token) {
     return _globalProps.access_token;
   }
+
   return null;
 }
 

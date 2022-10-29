@@ -11,6 +11,8 @@ export const api = {
   aadharInit: `${config.baseUrl}/app/borrower/application/kyc/aadhaar/init`,
   aadharVerify: `${config.baseUrl}/app/borrower/application/kyc/aadhaar/verify`,
   kycSummary: `${config.baseUrl}/app/borrower/application/kyc/summary/`,
+  bav: `${config.baseUrl}/app/borrower/application/bav/`,
+  bavVerify: `${config.baseUrl}/app/borrower/application/bav/verify`,
 };
 
 export const StoreKey = {

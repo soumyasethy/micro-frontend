@@ -1,11 +1,26 @@
 import SharedPropsService from "../SharedPropsService";
-const isTest = true;
+export const __isTest__ = true;
+export const defaultAuthHeaders = () => {
+  const headers = new Headers();
+  headers.append("X-EntityType", "BORROWER");
+  headers.append(
+    "X-AppPlatform",
+    __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP"
+  );
+  headers.append("Content-Type", "application/json");
+  return headers;
+};
+export const defaultHeaders = () => {
+  const headers = new Headers();
+  headers.append("X-AppMode", "INVESTOR_VIEW");
+  headers.append(
+    "X-AppPlatform",
+    __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP"
+  );
+  headers.append("Authorization", `Bearer ${SharedPropsService.getToken()}`);
+  headers.append("Content-Type", "application/json");
+  return headers;
+};
 export const config = {
-  headers: {
-    "X-AppPlatform": isTest ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP",
-    Authorization: `Bearer ${SharedPropsService.getToken()}`,
-    "Content-Type": "application/json",
-  },
-  baseUrl:
-    "http://beta-appor-y52xud3gnv47-417447330.ap-south-1.elb.amazonaws.com",
+  baseUrl: "https://api.voltmoney.in",
 };
