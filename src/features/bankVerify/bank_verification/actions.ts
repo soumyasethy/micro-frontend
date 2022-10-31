@@ -8,6 +8,7 @@ import {
 } from "@voltmoney/schema";
 import { postBankRepo } from "./repo";
 import { ROUTE } from "../../../routes";
+import SharedPropsService from "../../../SharedPropsService";
 
 let selectedWidget = undefined;
 let ifscCode = undefined;
@@ -49,7 +50,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
     loading: true,
   });
   const response = await postBankRepo(
-    action.payload.applicationId,
+    SharedPropsService.getUser().linkedApplications[0].applicationId,
     bankAccountNumber,
     ifscCode
   );

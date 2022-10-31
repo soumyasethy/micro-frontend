@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -14,13 +15,15 @@ import {
   ButtonWidthTypeToken,
   FontFamilyTokens,
   FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   ImageProps,
   ImageSizeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
   StackJustifyContent,
-  StackProps,
+  StackProps, StepperProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -42,9 +45,18 @@ export const template: TemplateSchema = {
         id: "continue",
         type: WIDGET.BUTTON,
       },
+      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
     ],
   },
   datastore: <Datastore>{
+    header: <HeaderProps>{
+      leadIcon: "https://reactnative.dev/img/tiny_logo.png",
+      subTitle:
+        "Volt Protects your financial information with Bank Grade Security",
+      title: "Bank Verification",
+      type: HeaderTypeTokens.verification,
+      stepper:<StepperProps>{}
+    },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     title: <TypographyProps>{
       label: "Fetch document from Digilocker",

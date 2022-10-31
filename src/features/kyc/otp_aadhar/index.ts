@@ -13,10 +13,13 @@ import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   InputStateToken,
   InputTypeToken,
   SizeTypeTokens,
   SpaceProps,
+  StepperProps,
   TextInputProps,
   TypographyProps,
   WIDGET,
@@ -35,9 +38,18 @@ export const template: TemplateSchema = {
       { id: "subTitle", type: WIDGET.TEXT },
       { id: "spaceInput", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
+      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
     ],
   },
   datastore: <Datastore>{
+    header: <HeaderProps>{
+      leadIcon: "https://reactnative.dev/img/tiny_logo.png",
+      subTitle:
+        "Volt Protects your financial information with Bank Grade Security",
+      title: "Bank Verification",
+      type: HeaderTypeTokens.verification,
+      stepper: <StepperProps>{},
+    },
     title: <TypographyProps>{
       label: "Instant KYC",
       color: ColorTokens.Grey_Night,

@@ -4,12 +4,12 @@ import {
   LAYOUTS,
   PageType,
   TemplateSchema,
+  WidgetProps,
 } from "@voltmoney/types";
 import {
   ColorTokens,
   DividerProps,
   DividerSizeTokens,
-  FontSizeTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
@@ -22,14 +22,13 @@ import {
   StackProps,
   StackType,
   TextInputProps,
-  TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
-import { TestAction } from "./actions";
-
-export const template: TemplateSchema = {
+import { ACTION, IFSCSearchActionPayload } from "./types";
+import { IFSCSearchAction, OnSelectIFSCAction } from "./actions";
+export let bankCodeX = "";
+export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   layout: <Layout>{
     id: ROUTE.BANK_BRANCH_SEARCH,
     type: LAYOUTS.LIST,
@@ -73,51 +72,33 @@ export const template: TemplateSchema = {
       ],
     },
     leadIcon: <IconProps>{ name: IconTokens.Fire, size: IconSizeTokens.MD },
-    searchInput: <TextInputProps>{
+    searchInput: <TextInputProps & WidgetProps>{
       placeholder: "Search by branch or IFSC",
       type: InputTypeToken.DEFAULT,
       title: "Search",
       state: InputStateToken.DEFAULT,
       caption: { success: "", error: "" },
+      action: {
+        type: ACTION.SEARCH_IFSC_ACTION,
+        routeId: ROUTE.BANK_BRANCH_SEARCH,
+        payload: <IFSCSearchActionPayload>{
+          bankCode: `${bankCode}`,
+          value: "",
+        },
+      },
     },
     dividerSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
-    listItemStack: <StackProps>{
-      type: StackType.column,
-      alignItems: StackAlignItems.flexStart,
-      justifyContent: StackJustifyContent.flexStart,
-      widgetItems: [
-        { id: "title", type: WIDGET.TEXT },
-        { id: "titleSpace", type: WIDGET.SPACE },
-        { id: "subTitle", type: WIDGET.TEXT },
-        { id: "spaceEnd", type: WIDGET.SPACE },
-        { id: "dividerEnd", type: WIDGET.DIVIDER },
-      ],
-    },
-    title: <TypographyProps>{
-      label: "HDFC0005531",
-      color: ColorTokens.Grey_Night,
-      fontSize: FontSizeTokens.SM,
-      fontWeight: "700",
-    },
-    titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
-    subTitle: <TypographyProps>{
-      label:
-        "24/3 51, Kasturba Rd, Mahatma Gandhi Rd, Bengaluru, Karnataka 560001",
-      color: ColorTokens.Grey_Night,
-      fontSize: FontSizeTokens.SM,
-    },
-    spaceEnd: <SpaceProps>{ size: SizeTypeTokens.XL },
-    dividerEnd: <DividerProps>{
-      size: DividerSizeTokens.SM,
-      color: ColorTokens.Grey_Milk_1,
-      // margin: { horizontal: -SizeTypeTokens.XXL },
-    },
   },
-};
+});
 
 export const bankSearchBranchMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async ({}, { bankCode }) => {
+    console.warn("bankSearchBranchMF Onload**********", bankCode);
+    bankCodeX = bankCode;
+    return Promise.resolve(template(bankCode));
+  },
   actions: {
-    [ACTION.TEST_ACTION]: TestAction,
+    [ACTION.ON_SELECT_IFSC]: OnSelectIFSCAction,
+    [ACTION.SEARCH_IFSC_ACTION]: IFSCSearchAction,
   },
 };

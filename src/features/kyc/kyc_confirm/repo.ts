@@ -1,15 +1,11 @@
 import { api } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
+import { defaultHeaders } from "../../../configs/config";
 
-export const fetchKycSummary = async (accountId: string) => {
-  const headers = new Headers();
-  headers.append("accept", "application/json");
-  headers.append("Authorization", `Bearer ${SharedPropsService.getToken()}`);
-  headers.append("X-AppPlatform", "SDK_KFIN");
-
+export const fetchKycSummaryRepo = async (accountId: string) => {
   const requestOptions = {
     method: "GET",
-    headers: headers,
+    headers: defaultHeaders(),
   };
 
   return await fetch(`${api.kycSummary}${accountId}`, requestOptions)

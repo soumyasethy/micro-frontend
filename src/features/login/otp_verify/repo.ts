@@ -1,9 +1,9 @@
-import { User } from "./types";
+import {StepStatusEnum, User} from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { defaultAuthHeaders, defaultHeaders } from "../../../configs/config";
-import { StepperItem } from "@voltmoney/schema";
+import {StepperItem, StepperStateToken} from "@voltmoney/schema";
 
 export const stepperPayload = async () => {
   let KYCVerification = "";
@@ -27,7 +27,11 @@ export const stepperPayload = async () => {
       step: "1",
       title: "KYC Verification",
       subTitle: "lorme ipsum doler smit en",
-      status: "", //KYCVerification === "COMPLETED" ? "" : KYCVerification,
+      status:
+          user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+          StepStatusEnum.COMPLETED
+              ? StepperStateToken.COMPLETED
+              : StepperStateToken.IN_PROGRESS,
       message: "",
     },
     {
@@ -36,23 +40,34 @@ export const stepperPayload = async () => {
       title: "bank Verification",
       subTitle: "lorme ipsum doler smit en",
       status:
-        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
+          user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
+          StepStatusEnum.COMPLETED
+              ? StepperStateToken.COMPLETED
+              : StepperStateToken.IN_PROGRESS,
       message: "",
     },
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
-      title: "Mandate",
+      title: "Mondate",
       subTitle: "lorme ipsum doler smit en",
-      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
-      message: "Something Went Wrong",
+      status:
+          user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+          StepStatusEnum.COMPLETED
+              ? StepperStateToken.COMPLETED
+              : StepperStateToken.IN_PROGRESS,
+      message: "Verify in progress",
     },
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d74",
       step: "4",
       title: "Loan Agreement",
       subTitle: "lorme ipsum doler smit en",
-      status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
+      status:
+          user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+          StepStatusEnum.COMPLETED
+              ? StepperStateToken.COMPLETED
+              : StepperStateToken.IN_PROGRESS,
       message: "",
     },
   ];

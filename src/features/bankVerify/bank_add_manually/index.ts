@@ -5,6 +5,7 @@ import {
   PageType,
   POSITION,
   TemplateSchema,
+  WidgetProps,
 } from "@voltmoney/types";
 import {
   ButtonProps,
@@ -18,6 +19,7 @@ import {
   ImageProps,
   ImageSizeTokens,
   InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -29,10 +31,21 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
-import { TestAction } from "./actions";
-
-export const template: TemplateSchema = {
+import {
+  ACTION,
+  InputNumberActionPayload,
+  NavigationSearchIFSCActionPayload,
+} from "./types";
+import {
+  BavVerifyManualAction,
+  onChangeAccountNumber,
+  onChangeIFSCNumber,
+  NavigationSearchIFSCAction,
+  ToggleCTA,
+  ChangeBankGoBackAction,
+} from "./actions";
+import { BAVVerifyActionPayload } from "../bank_verification/types";
+export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   layout: <Layout>{
     id: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
     type: LAYOUTS.LIST,
@@ -41,7 +54,7 @@ export const template: TemplateSchema = {
       { id: "accountSpace", type: WIDGET.SPACE },
       { id: "accountInput", type: WIDGET.INPUT },
       { id: "IFSCSpace", type: WIDGET.SPACE },
-      { id: "IFSCInput", type: WIDGET.INPUT },
+      { id: "IFSCInputStack", type: WIDGET.STACK },
       {
         id: "continue",
         type: WIDGET.BUTTON,
@@ -76,40 +89,84 @@ export const template: TemplateSchema = {
     },
     leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     bankName: <TypographyProps>{
-      label: "hello",
+      label: bankCode,
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XL,
       fontWeight: "600",
     },
-    trailIcon: <IconProps>{
+    trailIcon: <IconProps & WidgetProps>{
       name: IconTokens.Edit,
       size: IconSizeTokens.XXL,
+      action: {
+        type: ACTION.CHANGE_BANK_GO_BACK,
+        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        payload: {},
+      },
     },
     accountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    accountInput: <TextInputProps>{
+    accountInput: <TextInputProps & WidgetProps>{
       type: InputTypeToken.DEFAULT,
       title: "Account number",
       placeholder: "Enter account number",
+      value: "",
       caption: { success: "", error: "" },
+      keyboardType: KeyboardTypeToken.email,
+      action: {
+        type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
+        payload: <InputNumberActionPayload>{ value: "" },
+        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+      },
     },
     IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    IFSCInput: <TextInputProps>{
+    IFSCInputStack: <StackProps & WidgetProps>{
+      type: StackType.column,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.center,
+      widgetItems: [{ id: "IFSCInput", type: WIDGET.INPUT }],
+      action: {
+        type: ACTION.NAVIGATION_SEARCH_IFSC,
+        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        payload: <NavigationSearchIFSCActionPayload>{ bankCode: bankCode },
+      },
+    },
+    IFSCInput: <TextInputProps & WidgetProps>{
       type: InputTypeToken.DEFAULT,
       title: "Branch or IFSC",
       placeholder: "Search",
+      value: "",
       caption: { success: "", error: "" },
+      action: {
+        type: ACTION.ONCHANGE_IFSC_NUMBER,
+        payload: <InputNumberActionPayload>{ value: "" },
+        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+      },
     },
-    continue: <ButtonProps>{
+    continue: <ButtonProps & WidgetProps>{
       label: "Verify bank",
       type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTION.TRIGGER_CTA,
+        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        payload: <BAVVerifyActionPayload>{
+          applicationId: "",
+        },
+      },
     },
   },
-};
+});
 
 export const addBankManuallyMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async ({}, { bankCode }) => {
+    console.warn("addBankManuallyMF OnLoad bankCode->", bankCode);
+    return Promise.resolve(template(bankCode));
+  },
   actions: {
-    [ACTION.TEST_ACTION]: TestAction,
+    [ACTION.NAVIGATION_SEARCH_IFSC]: NavigationSearchIFSCAction,
+    [ACTION.ONCHANGE_ACCOUNT_NUMBER]: onChangeAccountNumber,
+    [ACTION.ONCHANGE_IFSC_NUMBER]: onChangeIFSCNumber,
+    [ACTION.TOGGLE_CTA]: ToggleCTA,
+    [ACTION.TRIGGER_CTA]: BavVerifyManualAction,
+    [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
   },
 };

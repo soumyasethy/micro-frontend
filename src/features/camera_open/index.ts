@@ -18,8 +18,8 @@ import { CameraAction } from "./actions";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
-    id: ROUTE.TEST_PAGE,
-    type: LAYOUTS.LIST,
+    id: ROUTE.CAMERA_OPEN,
+    type: LAYOUTS.MODAL,
     widgets: [{ id: "verify", type: WIDGET.VERIFICATIONCARD }],
   },
   datastore: <Datastore>{

@@ -13,6 +13,7 @@ export const api = {
   kycSummary: `${config.baseUrl}/app/borrower/application/kyc/summary/`,
   bav: `${config.baseUrl}/app/borrower/application/bav/`,
   bavVerify: `${config.baseUrl}/app/borrower/application/bav/verify`,
+  bankInfoSearch:`${config.baseUrl}/util/bankInfo/search/`
 };
 
 export const StoreKey = {

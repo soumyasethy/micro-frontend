@@ -24,8 +24,12 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, SearchActionPayload } from "./types";
-import { SearchAction, TestAction } from "./actions";
+import {
+  ACTION,
+  NavSearchIfscBranchInfoActionPayload,
+  SearchActionPayload,
+} from "./types";
+import { SearchAction, NavSearchIfscBranchInfoAction } from "./actions";
 import { BanksRepo } from "./repo";
 
 const popularBankItem = (
@@ -95,7 +99,7 @@ export const template: (
         },
       },
       searchInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-      gridItem: <GridImageItemProps>{
+      gridItem: <GridImageItemProps & WidgetProps>{
         type: GridItemTypeTokens.HORIZONTAl_VERITICAL,
         data: [
           ...Object.values(BanksRepo.POPULAR).map((name) => ({
@@ -115,6 +119,11 @@ export const template: (
         other: "All other banks",
         bgColor: ColorTokens.Grey_Milk,
         borderColor: ColorTokens.Grey_Milk_1,
+        action: {
+          type: ACTION.NAV_IFSC_SEARCH_BRANCH_INFO,
+          routeId: ROUTE.BANK_ACCOUNT_ADD,
+          payload: <NavSearchIfscBranchInfoActionPayload>{ value: "" },
+        },
       },
     },
   };
@@ -147,6 +156,6 @@ export const bankAddMF: PageType<any> = {
   },
   actions: {
     [ACTION.SEARCH_BANK]: SearchAction,
-    [ACTION.TEST_ACTION]: TestAction,
+    [ACTION.NAV_IFSC_SEARCH_BRANCH_INFO]: NavSearchIfscBranchInfoAction,
   },
 };

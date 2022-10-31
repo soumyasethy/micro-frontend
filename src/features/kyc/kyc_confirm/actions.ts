@@ -1,6 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
-import { fetchKycSummary } from "./repo";
+import { fetchKycSummaryRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
+import { ROUTE } from "../../../routes";
 
 export const fetchKycSummaryAction: ActionFunction<any> = async (
   action,
@@ -9,8 +10,15 @@ export const fetchKycSummaryAction: ActionFunction<any> = async (
 ): Promise<any> => {
   console.warn("**** Test Action Triggered ****", action);
 
-  const response = await fetchKycSummary(
+  const response = await fetchKycSummaryRepo(
     SharedPropsService.getUser().linkedBorrowerAccounts[0].accountId
   );
   console.warn("response", response);
+};
+export const NavToBankAction: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  await navigate(ROUTE.BANK_ACCOUNT_VERIFICATION);
 };

@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -12,6 +13,8 @@ import {
   ButtonWidthTypeToken,
   ColorTokens,
   FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   IconAlignmentTokens,
   IconSizeTokens,
   IconTokens,
@@ -24,6 +27,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StepperProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -35,7 +39,6 @@ import {
   ToggleSelectAction,
 } from "./actions";
 import { fetchBankRepo } from "./repo";
-import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   banks: { accountNumber: string; ifscCode: string; bankName: string }[]
@@ -90,6 +93,7 @@ export const template: (
       id: ROUTE.BANK_ACCOUNT_VERIFICATION,
       type: LAYOUTS.LIST,
       widgets: [
+        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
         { id: "space1", type: WIDGET.SPACE },
         { id: "titleStack", type: WIDGET.STACK },
         { id: "titleSpace", type: WIDGET.SPACE },
@@ -99,6 +103,14 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      header: <HeaderProps>{
+        leadIcon: "https://reactnative.dev/img/tiny_logo.png",
+        subTitle:
+          "Volt Protects your financial information with Bank Grade Security",
+        title: "Bank Verification",
+        type: HeaderTypeTokens.verification,
+        stepper: <StepperProps>{},
+      },
       space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       titleStack: <StackProps>{
         type: StackType.row,
@@ -141,8 +153,7 @@ export const template: (
           type: ACTION.TRIGGER_CTA,
           routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
           payload: <BAVVerifyActionPayload>{
-            applicationId:
-              SharedPropsService.getUser().linkedApplications[0].applicationId,
+            applicationId: "",
           },
         },
       },
