@@ -2,7 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import { FetchPortfolioPayload, PanEditPayload } from "./types";
 import { api, StoreKey } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
-import { User } from "../../login/otp_verify/types";
+import { LinkedApplication, User } from "../../login/otp_verify/types";
 import { ButtonProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import { config, defaultHeaders } from "../../../configs/config";
@@ -76,9 +76,15 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
       await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
         loading: false,
       });
-      await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
-        ...action.payload,
-      });
+      if (result) {
+        const user: User = SharedPropsService.getUser();
+        user.linkedApplications[0].currentStepId =
+          result.updatedApplicationObj.currentStepId;
+        await SharedPropsService.setUser(user);
+        await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
+          ...action.payload,
+        });
+      }
     })
     .catch(async (error) => {
       console.log("error", error);

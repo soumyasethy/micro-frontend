@@ -23,6 +23,7 @@ import { kycStepperMF } from "./features/kyc/kyc_stepper";
 import { kycAfterCameraMF } from "./features/kyc/kyc_after_camera";
 import { cameraOpenMF } from "./features/camera_open";
 import { kycDigiLockerMF } from "./features/kyc/kyc_digilocker";
+import { alertMF } from "./features/popup_loader";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -48,4 +49,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.KYC_AFTER_CAMERA]: kycAfterCameraMF,
   [ROUTE.CAMERA_OPEN]: cameraOpenMF,
   [ROUTE.KYC_DIGILOCKER]: kycDigiLockerMF,
+  [ROUTE.ALERT_PAGE]: alertMF,
 };

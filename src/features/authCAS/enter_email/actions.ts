@@ -22,8 +22,9 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
     "EMAIL",
     action.payload.value || emailId
   );
-  SharedPropsService.getUser().linkedBorrowerAccounts[0].accountHolderEmail =
-    action.payload.value;
+  // const user: User = SharedPropsService.getUser();
+  // user.linkedBorrowerAccounts[0].accountHolderEmail = action.payload.value;
+  // await SharedPropsService.setUser(user);
   const route = await nextStep();
   await navigate(route.routeId, route.params);
 };
