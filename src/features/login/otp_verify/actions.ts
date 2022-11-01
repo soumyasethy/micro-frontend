@@ -3,7 +3,7 @@ import { Authentication, LoginAction, OTPPayload, User } from "./types";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import { fetchUserDetails, loginRepo } from "./repo";
-import {nextStep} from "../../../configs/utils";
+import { clearAllData, nextStep } from "../../../configs/utils";
 
 export const login: ActionFunction<LoginAction & OTPPayload> = async (
   action,
@@ -20,6 +20,7 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
   );
 
   if (response.status === "success" && response.jwt) {
+    await clearAllData();
     await SharedPropsService.setToken(response.jwt);
     await setDatastore(action.routeId, action.payload.widgetId, <
       TextInputProps

@@ -2,6 +2,13 @@ import { StepperItem, StepperStateToken } from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
 import { User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export const clearAllData = async () => {
+  await AsyncStorage.getAllKeys()
+    .then((keys) => AsyncStorage.multiRemove(keys))
+    .then(() => console.warn("Clear data"));
+};
 
 export const stepperRepo = async () => {
   let KYC_VERIFICATION: StepperStateToken;
