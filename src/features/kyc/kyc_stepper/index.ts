@@ -25,8 +25,10 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { Go_Next_Action } from "./actions";
-import { StepStatusEnum, User } from "../../login/otp_verify/types";
+import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
+import { stepperRepo } from "../../login/otp_verify/repo";
+const message = "We’re processing. Check after sometime.";
 
 export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   layout: <Layout>{
@@ -68,58 +70,7 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
 
 export const kycStepperMF: PageType<any> = {
   onLoad: async () => {
-    const user: User = SharedPropsService.getUser();
-    const data: StepperItem[] = [
-      {
-        id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-        step: "1",
-        title: "KYC Verification",
-        subTitle: "lorme ipsum doler smit en",
-        status:
-          user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-          StepStatusEnum.COMPLETED
-            ? StepperStateToken.COMPLETED
-            : StepperStateToken.IN_PROGRESS,
-        message: "",
-      },
-      {
-        id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-        step: "2",
-        title: "bank Verification",
-        subTitle: "lorme ipsum doler smit en",
-        status:
-          user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
-          StepStatusEnum.COMPLETED
-            ? StepperStateToken.COMPLETED
-            : StepperStateToken.IN_PROGRESS,
-        message: "",
-      },
-      {
-        id: "58694a0f-3da1-471f-bd96-145571e29d72",
-        step: "3",
-        title: "Mondate",
-        subTitle: "lorme ipsum doler smit en",
-        status:
-          user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-          StepStatusEnum.COMPLETED
-            ? StepperStateToken.COMPLETED
-            : StepperStateToken.IN_PROGRESS,
-        message: "Verify in progress",
-      },
-      {
-        id: "58694a0f-3da1-471f-bd96-145571e29d74",
-        step: "4",
-        title: "Loan Agreement",
-        subTitle: "lorme ipsum doler smit en",
-        status:
-          user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-          StepStatusEnum.COMPLETED
-            ? StepperStateToken.COMPLETED
-            : StepperStateToken.IN_PROGRESS,
-        message: "",
-      },
-    ];
-    return Promise.resolve(template(data));
+    return Promise.resolve(template(await stepperRepo()));
   },
   actions: {
     [ACTION.GO_TO_AADHAR_INIT]: Go_Next_Action,

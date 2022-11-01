@@ -2,9 +2,8 @@ import { ActionFunction } from "@voltmoney/types";
 import { AuthCASPayload } from "./types";
 import { api } from "../../../configs/api";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
-import SharedPropsService from "../../../SharedPropsService";
 import { ROUTE } from "../../../routes";
-import {config, defaultHeaders} from "../../../configs/config";
+import { defaultHeaders } from "../../../configs/config";
 
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
@@ -24,7 +23,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
 
   const requestOptions = {
     method: "POST",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
     body: raw,
   };
 

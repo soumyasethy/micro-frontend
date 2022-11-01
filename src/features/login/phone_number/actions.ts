@@ -12,11 +12,7 @@ import {
   TextInputProps,
 } from "@voltmoney/schema";
 import { api } from "../../../configs/api";
-import {
-  config,
-  defaultAuthHeaders,
-  defaultHeaders,
-} from "../../../configs/config";
+import { defaultAuthHeaders } from "../../../configs/config";
 
 let phoneNumber: string = "";
 let isWhatsAppEnabled: boolean = false;

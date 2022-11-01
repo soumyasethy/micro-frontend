@@ -100,11 +100,13 @@ export const template: (
 export const kycConfirmMF: PageType<any> = {
   onLoad: async (_) => {
     const response = await fetchKycSummaryRepo(
-      SharedPropsService.getUser().linkedBorrowerAccounts[0].accountId
+      (
+        await SharedPropsService.getUser()
+      ).linkedBorrowerAccounts[0].accountId
     );
     const { address, dob, fullName, photoURL } = response;
-    const pan =
-      SharedPropsService.getUser().linkedBorrowerAccounts[0].accountHolderPAN;
+    const pan = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
+      .accountHolderPAN;
     return Promise.resolve(template(pan, address, dob, fullName, photoURL));
   },
   actions: { [ACTION.NAV_TO_BANK_ADD]: NavToBankAction },

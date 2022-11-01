@@ -1,6 +1,6 @@
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
-import { config, defaultHeaders } from "../../../configs/config";
+import { defaultHeaders } from "../../../configs/config";
 export const AadharInitRepo = async (
   applicationId: string,
   aadhaarNumber: string
@@ -8,10 +8,12 @@ export const AadharInitRepo = async (
   const raw = JSON.stringify({
     applicationId:
       applicationId ||
-      SharedPropsService.getUser().linkedApplications[0].applicationId,
+      (await SharedPropsService.getUser()).linkedApplications[0].applicationId,
     aadhaarNumber:
       aadhaarNumber ||
-      SharedPropsService.getUser().linkedBorrowerAccounts[0].accountHolderPhoneNumber.replaceAll(
+      (
+        await SharedPropsService.getUser()
+      ).linkedBorrowerAccounts[0].accountHolderPhoneNumber.replaceAll(
         "+91",
         ""
       ),
@@ -19,7 +21,7 @@ export const AadharInitRepo = async (
 
   const requestOptions = {
     method: "POST",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
     body: raw,
   };
 

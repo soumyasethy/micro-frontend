@@ -11,7 +11,7 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage, goBack, ...props }
 ): Promise<any> => {
-  const user: User = SharedPropsService.getUser();
+  const user: User = await SharedPropsService.getUser();
 
   user.linkedBorrowerAccounts[0].accountHolderPhoneNumber = phoneNumber;
   await SharedPropsService.setUser(user);

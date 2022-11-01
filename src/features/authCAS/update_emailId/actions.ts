@@ -12,7 +12,7 @@ export const updateEmailId: ActionFunction<UpdateEmailIdPayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage, goBack, ...props }
 ): Promise<any> => {
-  const user: User = SharedPropsService.getUser();
+  const user: User = await SharedPropsService.getUser();
   user.linkedBorrowerAccounts[0].accountHolderEmail = emailId;
   await SharedPropsService.setUser(user);
   await setDatastore(ROUTE.MF_PLEDGING, action.payload.targetWidgetId, {

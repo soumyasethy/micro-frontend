@@ -11,7 +11,7 @@ export const confirmPan: ActionFunction<ContinuePayload> = async (
   _datastore,
   { asyncStorage, goBack, setDatastore, navigate, ...props }
 ): Promise<any> => {
-  const user: User = SharedPropsService.getUser();
+  const user: User = await SharedPropsService.getUser();
   user.linkedBorrowerAccounts[0].accountHolderPAN = action.payload.panNumber;
   await SharedPropsService.setUser(user);
   await setDatastore(ROUTE.MF_PLEDGING, action.payload.widgetId, <

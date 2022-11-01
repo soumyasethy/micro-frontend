@@ -1,14 +1,13 @@
-import {StepStatusEnum, User} from "./types";
+import { User } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { defaultAuthHeaders, defaultHeaders } from "../../../configs/config";
-import {StepperItem, StepperStateToken} from "@voltmoney/schema";
+import { StepperItem, StepperStateToken } from "@voltmoney/schema";
 
-export const stepperPayload = async () => {
-  let KYCVerification = "";
+export const stepperRepo = async () => {
+  let KYC_VERIFICATION: StepperStateToken;
   let message = "We’re processing. Check after sometime.";
-  let status = "In progress";
   const user = await SharedPropsService.getUser();
 
   if (
@@ -18,7 +17,9 @@ export const stepperPayload = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
       "COMPLETED"
   ) {
-    KYCVerification = "In Progress";
+    KYC_VERIFICATION = StepperStateToken.COMPLETED;
+  } else {
+    KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
   }
 
   const data: StepperItem[] = [
@@ -27,12 +28,14 @@ export const stepperPayload = async () => {
       step: "1",
       title: "KYC Verification",
       subTitle: "lorme ipsum doler smit en",
-      status:
-          user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-          StepStatusEnum.COMPLETED
-              ? StepperStateToken.COMPLETED
-              : StepperStateToken.IN_PROGRESS,
-      message: "",
+      status: KYC_VERIFICATION,
+      message:
+        KYC_VERIFICATION === StepperStateToken.COMPLETED
+          ? ""
+          : user.linkedApplications[0].stepStatusMap
+              .KYC_AADHAAR_VERIFICATION === StepperStateToken.IN_PROGRESS
+          ? message
+          : "",
     },
     {
       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
@@ -40,35 +43,45 @@ export const stepperPayload = async () => {
       title: "bank Verification",
       subTitle: "lorme ipsum doler smit en",
       status:
-          user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
-          StepStatusEnum.COMPLETED
-              ? StepperStateToken.COMPLETED
-              : StepperStateToken.IN_PROGRESS,
-      message: "",
+        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
+      message:
+        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
+        StepperStateToken.COMPLETED
+          ? ""
+          : user.linkedApplications[0].stepStatusMap
+              .BANK_ACCOUNT_VERIFICATION === StepperStateToken.IN_PROGRESS
+          ? message
+          : "",
     },
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
       title: "Mondate",
       subTitle: "lorme ipsum doler smit en",
-      status:
-          user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-          StepStatusEnum.COMPLETED
-              ? StepperStateToken.COMPLETED
-              : StepperStateToken.IN_PROGRESS,
-      message: "Verify in progress",
+      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      message:
+        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+        StepperStateToken.COMPLETED
+          ? ""
+          : user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+            StepperStateToken.IN_PROGRESS
+          ? message
+          : "",
     },
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d74",
       step: "4",
       title: "Loan Agreement",
       subTitle: "lorme ipsum doler smit en",
-      status:
-          user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-          StepStatusEnum.COMPLETED
-              ? StepperStateToken.COMPLETED
-              : StepperStateToken.IN_PROGRESS,
-      message: "",
+      status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
+      message:
+        user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+        StepperStateToken.COMPLETED
+          ? ""
+          : user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+            StepperStateToken.IN_PROGRESS
+          ? message
+          : "",
     },
   ];
   return data;
@@ -152,7 +165,7 @@ export const fetchUserDetails: (
 
     const requestOptions = {
       method: "POST",
-      headers: defaultHeaders(),
+      headers: await defaultHeaders(),
       body: raw,
     };
     user = await fetch(api.userContext, requestOptions).then((response) =>

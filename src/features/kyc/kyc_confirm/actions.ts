@@ -11,7 +11,9 @@ export const fetchKycSummaryAction: ActionFunction<any> = async (
   console.warn("**** Test Action Triggered ****", action);
 
   const response = await fetchKycSummaryRepo(
-    SharedPropsService.getUser().linkedBorrowerAccounts[0].accountId
+    (
+      await SharedPropsService.getUser()
+    ).linkedBorrowerAccounts[0].accountId
   );
   console.warn("response", response);
 };

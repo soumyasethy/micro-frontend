@@ -1,11 +1,11 @@
 import { ActionFunction } from "@voltmoney/types";
 import { FetchPortfolioPayload, PanEditPayload } from "./types";
-import { api, StoreKey } from "../../../configs/api";
+import { api } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
-import { LinkedApplication, User } from "../../login/otp_verify/types";
+import { User } from "../../login/otp_verify/types";
 import { ButtonProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import { config, defaultHeaders } from "../../../configs/config";
+import { defaultHeaders } from "../../../configs/config";
 let hasChangedInDetails = false;
 
 export const editPanNumber: ActionFunction<PanEditPayload> = async (
@@ -50,7 +50,7 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   });
 
   if (hasChangedInDetails) {
-    const user: User = SharedPropsService.getUser();
+    const user: User = await SharedPropsService.getUser();
     action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
     action.payload.phoneNumber =
       user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
@@ -66,7 +66,7 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
 
   const requestOptions = {
     method: "POST",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
     body: raw,
   };
 
@@ -77,7 +77,7 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
         loading: false,
       });
       if (result) {
-        const user: User = SharedPropsService.getUser();
+        const user: User = await SharedPropsService.getUser();
         user.linkedApplications[0].currentStepId =
           result.updatedApplicationObj.currentStepId;
         await SharedPropsService.setUser(user);

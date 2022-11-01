@@ -29,7 +29,7 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
 
   const requestOptions = {
     method: "POST",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
     body: raw,
   };
 
@@ -47,8 +47,9 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
           state: InputStateToken.SUCCESS,
         });
         const currentStepId = await result.updatedApplicationObj.currentStepId;
-        SharedPropsService.getUser().linkedApplications[0].currentStepId =
-          currentStepId;
+        (
+          await SharedPropsService.getUser()
+        ).linkedApplications[0].currentStepId = currentStepId;
 
         await props.navigate(ROUTE.PAN_CONFIRM_NAME, {
           name: result.stepResponseObject.fullName,

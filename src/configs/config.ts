@@ -10,17 +10,17 @@ export const defaultAuthHeaders = () => {
   headers.append("Content-Type", "application/json");
   return headers;
 };
-export const defaultHeaders = () => {
+export const defaultHeaders = async () => {
   const headers = new Headers();
   headers.append("X-AppMode", "INVESTOR_VIEW");
   headers.append(
     "X-AppPlatform",
     __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP"
   );
-  headers.append("Authorization", `Bearer ${SharedPropsService.getToken()}`);
+  headers.append(
+    "Authorization",
+    `Bearer ${await SharedPropsService.getToken()}`
+  );
   headers.append("Content-Type", "application/json");
   return headers;
-};
-export const config = {
-  baseUrl: "https://api.voltmoney.in",
 };

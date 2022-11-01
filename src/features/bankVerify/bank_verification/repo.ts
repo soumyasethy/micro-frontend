@@ -1,18 +1,16 @@
 import { api } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
-import { config, defaultHeaders } from "../../../configs/config";
+import { defaultHeaders } from "../../../configs/config";
 
 export const fetchBankRepo = async () => {
   const requestOptions = {
     method: "GET",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
   };
-  return await fetch(
-    `${api.bav}${
-      SharedPropsService.getUser().linkedApplications[0].applicationId
-    }`,
-    requestOptions
-  )
+  const applicationId = (await SharedPropsService.getUser())
+    .linkedApplications[0].applicationId;
+
+  return await fetch(`${api.bav}${applicationId}`, requestOptions)
     .then((response) => response.json())
     .catch((error) => console.log("error", error));
 };
@@ -32,7 +30,7 @@ export const postBankRepo = async (
 
   const requestOptions = {
     method: "POST",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
     body: raw,
   };
 

@@ -37,7 +37,9 @@ export const triggerCTA: ActionFunction<AadharInputPayload> = async (
 ): Promise<any> => {
   if (action.payload.value.length === 6) {
     const response = await aadharVerifyRepo(
-      SharedPropsService.getUser().linkedApplications[0].applicationId,
+      (
+        await SharedPropsService.getUser()
+      ).linkedApplications[0].applicationId,
       action.payload.value
     );
     if (response) navigate(ROUTE.CAMERA_OPEN);

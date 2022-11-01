@@ -1,3 +1,5 @@
+import { StepperStateToken } from "@voltmoney/schema";
+
 export enum ACTIONS {
   LoginWithCognitoAmplify = "LoginWithCognitoAmplify",
   LoginWithCognito = "LoginWithCognito",
@@ -49,22 +51,17 @@ export interface LinkedApplication {
   lastUpdatedOn?: number;
   completedOn?: any;
 }
-export enum StepStatusEnum {
-  NOT_STARTED = "NOT_STARTED",
-  COMPLETED = "COMPLETED",
-  SKIPPED = "SKIPPED",
-  BLOCKED = "BLOCKED",
-}
+
 export interface StepStatusMap {
-  KYC_PHOTO_VERIFICATION?: StepStatusEnum;
-  MF_PLEDGING?: StepStatusEnum;
-  CREDIT_APPROVAL?: StepStatusEnum;
-  KYC_AADHAAR_VERIFICATION?: StepStatusEnum;
-  MANDATE_SETUP?: StepStatusEnum;
-  KYC_CKYC?: StepStatusEnum;
-  KYC_PAN_VERIFICATION?: StepStatusEnum;
-  AGREEMENT_SIGN?: StepStatusEnum;
-  BANK_ACCOUNT_VERIFICATION?: StepStatusEnum;
+  KYC_PHOTO_VERIFICATION?: StepperStateToken;
+  MF_PLEDGING?: StepperStateToken;
+  CREDIT_APPROVAL?: StepperStateToken;
+  KYC_AADHAAR_VERIFICATION?: StepperStateToken;
+  MANDATE_SETUP?: StepperStateToken;
+  KYC_CKYC?: StepperStateToken;
+  KYC_PAN_VERIFICATION?: StepperStateToken;
+  AGREEMENT_SIGN?: StepperStateToken;
+  BANK_ACCOUNT_VERIFICATION?: StepperStateToken;
 }
 
 export interface LinkedBorrowerAccount {

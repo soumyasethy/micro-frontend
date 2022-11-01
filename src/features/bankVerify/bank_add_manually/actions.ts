@@ -63,7 +63,9 @@ export const BavVerifyManualAction: ActionFunction<
     loading: true,
   });
   const response = await postBankRepo(
-    SharedPropsService.getUser().linkedApplications[0].applicationId,
+    (
+      await SharedPropsService.getUser()
+    ).linkedApplications[0].applicationId,
     bankAccountNumber,
     bankIfsc
   );

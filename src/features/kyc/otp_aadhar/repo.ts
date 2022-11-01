@@ -1,6 +1,5 @@
 import { api } from "../../../configs/api";
-import SharedPropsService from "../../../SharedPropsService";
-import { config, defaultHeaders } from "../../../configs/config";
+import { defaultHeaders } from "../../../configs/config";
 
 export const aadharVerifyRepo = async (applicationId: string, otp: string) => {
   const raw = JSON.stringify({
@@ -10,7 +9,7 @@ export const aadharVerifyRepo = async (applicationId: string, otp: string) => {
 
   const requestOptions = {
     method: "POST",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
     body: raw,
   };
 

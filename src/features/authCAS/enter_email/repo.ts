@@ -26,7 +26,7 @@ export const saveAttribute = async (
 
   const requestOptions = {
     method: "PATCH",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
     body: body,
   };
   const xxx = {

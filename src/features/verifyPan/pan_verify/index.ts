@@ -171,7 +171,7 @@ export const template: (
 
 export const panVerifyMF: PageType<any> = {
   onLoad: async ({ asyncStorage }, { applicationId, targetRoute }) => {
-    const user: User = SharedPropsService.getUser();
+    const user: User = await SharedPropsService.getUser();
     const prefilledPanNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
     return Promise.resolve(
       template(applicationId, targetRoute, prefilledPanNumber)

@@ -5,7 +5,7 @@ import { defaultHeaders } from "../../../configs/config";
 export const fetchKycSummaryRepo = async (accountId: string) => {
   const requestOptions = {
     method: "GET",
-    headers: defaultHeaders(),
+    headers: await defaultHeaders(),
   };
 
   return await fetch(`${api.kycSummary}${accountId}`, requestOptions)
