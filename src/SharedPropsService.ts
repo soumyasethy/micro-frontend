@@ -27,9 +27,9 @@ async function setUser(props: User) {
 }
 
 function getUser() {
-  // if (__isTest__) {
-  //   return MockUser;
-  // }
+  if (__isTest__) {
+    return MockUser;
+  }
   if (_globalProps && _globalProps.user) {
     return _globalProps.user;
   }
@@ -41,9 +41,9 @@ async function setToken(access_token: string) {
 }
 
 function getToken() {
-  // if (__isTest__) {
-  //   return MockToken;
-  // }
+  if (__isTest__) {
+    return MockToken;
+  }
   if (_globalProps && _globalProps.access_token) {
     return _globalProps.access_token;
   }
