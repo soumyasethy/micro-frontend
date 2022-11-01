@@ -3,8 +3,8 @@ import { ContinuePayload, PanPayload } from "./types";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
 import { ListItemProps } from "@voltmoney/schema";
-import { nextStep } from "../../login/otp_verify/repo";
 import SharedPropsService from "../../../SharedPropsService";
+import { nextStep } from "../../../configs/utils";
 
 export const confirmPan: ActionFunction<ContinuePayload> = async (
   action,
@@ -20,7 +20,6 @@ export const confirmPan: ActionFunction<ContinuePayload> = async (
     subTitle: user.linkedBorrowerAccounts[0].accountHolderPAN,
   });
   const routeObj = await nextStep(user);
-  console.warn("routeObj", routeObj.routeId);
   await goBack();
   await navigate(routeObj.routeId, routeObj.params);
 };

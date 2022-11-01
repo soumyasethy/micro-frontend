@@ -25,10 +25,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { Go_Next_Action } from "./actions";
-import { User } from "../../login/otp_verify/types";
-import SharedPropsService from "../../../SharedPropsService";
-import { stepperRepo } from "../../login/otp_verify/repo";
-const message = "We’re processing. Check after sometime.";
+import {stepperRepo} from "../../../configs/utils";
 
 export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   layout: <Layout>{

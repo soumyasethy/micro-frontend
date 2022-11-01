@@ -8,6 +8,6 @@ export const CameraAction: ActionFunction<any> = async (
 ): Promise<any> => {
   console.warn("**** Camera Action Triggered ****", action);
   await goBack();
-  // await cameraPicker();
+  await cameraPicker();
   await navigate(ROUTE.KYC_AADHAAR_CONFIRM);
 };

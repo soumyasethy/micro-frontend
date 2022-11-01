@@ -1,11 +1,8 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ContinuePayload, EmailPayload } from "./types";
-import { api, StoreKey } from "../../../configs/api";
-import { User } from "../../login/otp_verify/types";
 import { ButtonProps } from "@voltmoney/schema";
-import SharedPropsService from "../../../SharedPropsService";
 import { saveAttribute } from "./repo";
-import { nextStep } from "../../login/otp_verify/repo";
+import {nextStep} from "../../../configs/utils";
 
 let emailId: string = "";
 

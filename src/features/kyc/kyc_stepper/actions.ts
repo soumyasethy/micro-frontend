@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { nextStepStepper } from "../../login/otp_verify/repo";
+import {nextStepStepper} from "../../../configs/utils";
 
 export const Go_Next_Action: ActionFunction<any> = async (
   action,

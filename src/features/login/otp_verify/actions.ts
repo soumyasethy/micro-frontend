@@ -2,7 +2,8 @@ import { ActionFunction } from "@voltmoney/types";
 import { Authentication, LoginAction, OTPPayload, User } from "./types";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import { fetchUserDetails, loginRepo, nextStep } from "./repo";
+import { fetchUserDetails, loginRepo } from "./repo";
+import {nextStep} from "../../../configs/utils";
 
 export const login: ActionFunction<LoginAction & OTPPayload> = async (
   action,
