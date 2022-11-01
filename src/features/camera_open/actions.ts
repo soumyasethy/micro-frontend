@@ -4,7 +4,7 @@ import { ROUTE } from "../../routes";
 export const CameraAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, goBack }
+  { navigate, goBack, cameraPicker }
 ): Promise<any> => {
   console.warn("**** Camera Action Triggered ****", action);
   await goBack();
