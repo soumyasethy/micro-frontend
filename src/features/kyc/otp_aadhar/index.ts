@@ -7,9 +7,6 @@ import {
   TemplateSchema,
 } from "@voltmoney/types";
 import {
-  ButtonProps,
-  ButtonTypeTokens,
-  ButtonWidthTypeToken,
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
@@ -19,7 +16,9 @@ import {
   InputTypeToken,
   SizeTypeTokens,
   SpaceProps,
+  StepperItem,
   StepperProps,
+  StepperTypeTokens,
   TextInputProps,
   TypographyProps,
   WIDGET,
@@ -27,12 +26,16 @@ import {
 import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
+import { stepperRepo } from "../../../configs/utils";
 
-export const template: TemplateSchema = {
+export const template: (stepper: StepperItem[]) => TemplateSchema = (
+  stepper
+) => ({
   layout: <Layout>{
     id: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
     type: LAYOUTS.LIST,
     widgets: [
+      { id: "topSpace", type: WIDGET.SPACE },
       { id: "title", type: WIDGET.TEXT },
       { id: "spaceSubTitle", type: WIDGET.SPACE },
       { id: "subTitle", type: WIDGET.TEXT },
@@ -42,13 +45,17 @@ export const template: TemplateSchema = {
     ],
   },
   datastore: <Datastore>{
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     header: <HeaderProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
         "Volt Protects your financial information with Bank Grade Security",
       title: "Bank Verification",
       type: HeaderTypeTokens.verification,
-      stepper: <StepperProps>{},
+      stepperProps: <StepperProps>{
+        type: StepperTypeTokens.HORIZONTAL,
+        data: stepper,
+      },
     },
     title: <TypographyProps>{
       label: "Instant KYC",
@@ -90,10 +97,13 @@ export const template: TemplateSchema = {
       },
     },
   },
-};
+});
 
 export const kycAadharOTPVerifyMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async () => {
+    const stepper: StepperItem[] = await stepperRepo();
+    return Promise.resolve(template(stepper));
+  },
   actions: {
     [ACTION.TRIGGER_CTA]: triggerCTA,
     [ACTION.ENABLE_CTA]: toggleCTA,

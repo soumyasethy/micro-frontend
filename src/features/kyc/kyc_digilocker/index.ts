@@ -42,6 +42,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     id: ROUTE.KYC_DIGILOCKER,
     type: LAYOUTS.LIST,
     widgets: [
+      { id: "topSpace", type: WIDGET.SPACE },
       { id: "space1", type: WIDGET.SPACE },
       { id: "title", type: WIDGET.TEXT },
       { id: "spaceTitle", type: WIDGET.SPACE },
@@ -55,13 +56,14 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     ],
   },
   datastore: <Datastore>{
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     header: <HeaderProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
         "Volt Protects your financial information with Bank Grade Security",
       title: "Bank Verification",
       type: HeaderTypeTokens.verification,
-      stepper: <StepperProps>{
+      stepperProps: <StepperProps>{
         type: StepperTypeTokens.HORIZONTAL,
         data: stepper,
       },

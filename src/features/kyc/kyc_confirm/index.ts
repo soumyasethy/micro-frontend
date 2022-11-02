@@ -44,6 +44,7 @@ export const template: (
     id: ROUTE.KYC_AADHAAR_CONFIRM,
     type: LAYOUTS.LIST,
     widgets: [
+      { id: "topSpace", type: WIDGET.SPACE },
       { id: "space1", type: WIDGET.SPACE },
       { id: "image", type: WIDGET.IMAGE },
       { id: "panItem", type: WIDGET.LIST_ITEM },
@@ -58,13 +59,14 @@ export const template: (
     ],
   },
   datastore: <Datastore>{
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     header: <HeaderProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
         "Volt Protects your financial information with Bank Grade Security",
       title: "Bank Verification",
       type: HeaderTypeTokens.verification,
-      stepper: <StepperProps>{
+      stepperProps: <StepperProps>{
         type: StepperTypeTokens.HORIZONTAL,
         data: stepper,
       },

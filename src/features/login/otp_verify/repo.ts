@@ -1,11 +1,7 @@
 import { User } from "./types";
-import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { defaultAuthHeaders, defaultHeaders } from "../../../configs/config";
-import { StepperItem, StepperStateToken } from "@voltmoney/schema";
-
-
 
 export const fetchUserDetails: (
   currentStepId?: string,
