@@ -1,15 +1,18 @@
 import { ActionFunction } from "@voltmoney/types";
-import { signInGoogle } from "./repo";
+import { signInGoogle, signInGoogleWeb } from "./repo";
 import { GoogleLoginResponse, OtherEmail } from "./types";
 import { ROUTE } from "../../../routes";
 
 export const loginGoogle: ActionFunction<any> = async (
   action,
   _datastore,
-  { network, asyncStorage, appendWidgets }
+  { navigate }
 ): Promise<any> => {
-  const response: GoogleLoginResponse = await signInGoogle();
-  console.warn("email id ------>", response.user.email);
+  // const responseWeb = await signInGoogleWeb();
+  // console.warn("responseWeb-->", responseWeb);
+  // const response: GoogleLoginResponse = await signInGoogle();
+  // console.warn("email id ------>", response.user.email);
+  navigate(ROUTE.ENTER_EMAIL, { applicationId: action.payload.applicationId });
 };
 export const otherEmail: ActionFunction<OtherEmail> = async (
   action,

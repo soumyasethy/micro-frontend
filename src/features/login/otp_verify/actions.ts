@@ -14,13 +14,13 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
   await setDatastore(action.routeId, action.payload.widgetId, <TextInputProps>{
     state: InputStateToken.LOADING,
   });
+  await clearAllData();
   const response: Authentication = await loginRepo(
     action.payload.value,
     action.payload.username
   );
 
   if (response.status === "success" && response.jwt) {
-    await clearAllData();
     await SharedPropsService.setToken(response.jwt);
     await setDatastore(action.routeId, action.payload.widgetId, <
       TextInputProps

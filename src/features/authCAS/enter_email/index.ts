@@ -28,6 +28,7 @@ import { ACTION, ContinuePayload, EmailPayload } from "./types";
 import { saveEmailId, textOnChange } from "./actions";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { toggleCTA } from "../../login/phone_number/actions";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (applicationId: string) => TemplateSchema = (
   applicationId
@@ -120,6 +121,9 @@ export const template: (applicationId: string) => TemplateSchema = (
 
 export const emailMF: PageType<any> = {
   onLoad: async (_, { applicationId }) => {
+    if (!applicationId)
+      applicationId = (await SharedPropsService.getUser()).linkedApplications[0]
+        .applicationId;
     return Promise.resolve(template(applicationId));
   },
   actions: {

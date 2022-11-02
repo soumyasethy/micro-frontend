@@ -2,13 +2,16 @@ import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { GoogleLoginResponseOffline, useGoogleLogin } from "react-google-login";
+
 import { GoogleLoginResponse } from "./types";
 
 export const signInGoogle = async () => {
   GoogleSignin.configure({
     iosClientId:
       "487300478427-tfvesrcgup8dfqvskj5k563qotiab4jc.apps.googleusercontent.com",
-    // webClientId: "GOOGLE_ANDROID_WEB_CLIENT_ID",
+    webClientId:
+      "85274716805-4c9hnt3nm3ntslg72ojt79ubnfkmp9lf.apps.googleusercontent.com",
   });
   try {
     await GoogleSignin.hasPlayServices();
@@ -47,4 +50,16 @@ const GoogleResponse = {
     photo:
       "https://lh3.googleusercontent.com/a/ALm5wu3r9S7z3X4rRbkt0yGjDGiQZxWkEvLCLUQOgd4A=s120",
   },
+};
+
+export const signInGoogleWeb = async () => {
+  const { signIn, loaded } = useGoogleLogin({
+    onSuccess: (response) => {
+      console.warn("google error", response);
+    },
+    clientId:
+      "85274716805-4c9hnt3nm3ntslg72ojt79ubnfkmp9lf.apps.googleusercontent.com",
+    cookiePolicy: "single_host_origin",
+  });
+  await signIn();
 };

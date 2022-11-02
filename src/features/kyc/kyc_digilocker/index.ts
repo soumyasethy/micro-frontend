@@ -23,15 +23,21 @@ import {
   SpaceProps,
   StackAlignItems,
   StackJustifyContent,
-  StackProps, StepperProps,
+  StackProps,
+  StepperItem,
+  StepperProps,
+  StepperTypeTokens,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { AadharInitPayload, ACTION } from "./types";
 import { AadharInitAction } from "./actions";
+import { stepperRepo } from "../../../configs/utils";
 
-export const template: TemplateSchema = {
+export const template: (stepper: StepperItem[]) => TemplateSchema = (
+  stepper
+) => ({
   layout: <Layout>{
     id: ROUTE.KYC_DIGILOCKER,
     type: LAYOUTS.LIST,
@@ -55,7 +61,10 @@ export const template: TemplateSchema = {
         "Volt Protects your financial information with Bank Grade Security",
       title: "Bank Verification",
       type: HeaderTypeTokens.verification,
-      stepper:<StepperProps>{}
+      stepper: <StepperProps>{
+        type: StepperTypeTokens.HORIZONTAL,
+        data: stepper,
+      },
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     title: <TypographyProps>{
@@ -90,10 +99,11 @@ export const template: TemplateSchema = {
       },
     },
   },
-};
+});
 export const kycDigiLockerMF: PageType<any> = {
   onLoad: async () => {
-    return Promise.resolve(template);
+    const stepper: StepperItem[] = await stepperRepo();
+    return Promise.resolve(template(stepper));
   },
   actions: {
     [ACTION.AADHAR_INIT]: AadharInitAction,

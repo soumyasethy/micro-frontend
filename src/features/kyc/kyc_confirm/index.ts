@@ -20,7 +20,9 @@ import {
   ListItemProps,
   SizeTypeTokens,
   SpaceProps,
+  StepperItem,
   StepperProps,
+  StepperTypeTokens,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
@@ -28,14 +30,16 @@ import { fetchKycSummaryRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
 import { ACTION } from "./types";
 import { NavToBankAction } from "./actions";
+import { stepperRepo } from "../../../configs/utils";
 
 export const template: (
   pan: string,
   address: string,
   dob: string,
   fullName: string,
-  photoURL: string
-) => TemplateSchema = (pan, address, dob, fullName, photoURL) => ({
+  photoURL: string,
+  stepper: StepperItem[]
+) => TemplateSchema = (pan, address, dob, fullName, photoURL, stepper) => ({
   layout: <Layout>{
     id: ROUTE.KYC_AADHAAR_CONFIRM,
     type: LAYOUTS.LIST,
@@ -60,7 +64,10 @@ export const template: (
         "Volt Protects your financial information with Bank Grade Security",
       title: "Bank Verification",
       type: HeaderTypeTokens.verification,
-      stepper: <StepperProps>{},
+      stepper: <StepperProps>{
+        type: StepperTypeTokens.HORIZONTAL,
+        data: stepper,
+      },
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     image: <ImageProps>{
@@ -107,7 +114,10 @@ export const kycConfirmMF: PageType<any> = {
     const { address, dob, fullName, photoURL } = response;
     const pan = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
       .accountHolderPAN;
-    return Promise.resolve(template(pan, address, dob, fullName, photoURL));
+    const stepper: StepperItem[] = await stepperRepo();
+    return Promise.resolve(
+      template(pan, address, dob, fullName, photoURL, stepper)
+    );
   },
   actions: { [ACTION.NAV_TO_BANK_ADD]: NavToBankAction },
 };

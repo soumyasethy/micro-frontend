@@ -1,5 +1,5 @@
 import { User } from "./features/login/otp_verify/types";
-import { __isTest__ } from "./configs/config";
+import { __isMock__, __isTest__ } from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -30,9 +30,9 @@ async function setUser(props: User) {
 }
 
 async function getUser() {
-  // if (__isTest__) {
-  //   return MockUser;
-  // }
+  if (__isMock__) {
+    return MockUser;
+  }
   if (Object.values(_globalProps.user).length > 0) {
     return _globalProps.user;
   }
@@ -53,9 +53,9 @@ async function setToken(access_token: string) {
 }
 
 async function getToken() {
-  // if (__isTest__) {
-  //   return MockToken;
-  // }
+  if (__isMock__) {
+    return MockToken;
+  }
   if (_globalProps && _globalProps.access_token != "") {
     return _globalProps.access_token;
   }

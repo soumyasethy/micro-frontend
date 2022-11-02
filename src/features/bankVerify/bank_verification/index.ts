@@ -27,7 +27,9 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StepperItem,
   StepperProps,
+  StepperTypeTokens,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -39,10 +41,17 @@ import {
   ToggleSelectAction,
 } from "./actions";
 import { fetchBankRepo } from "./repo";
+import { stepperRepo } from "../../../configs/utils";
 
 export const template: (
-  banks: { accountNumber: string; ifscCode: string; bankName: string }[]
-) => Promise<TemplateSchema> = async (banks) => {
+  banks: {
+    accountNumber: string;
+    ifscCode: string;
+    bankName: string;
+    stepper: StepperItem[];
+  }[],
+  stepper: StepperItem[]
+) => Promise<TemplateSchema> = async (banks, stepper) => {
   const buildDS = (
     index: number,
     name: string,
@@ -109,7 +118,10 @@ export const template: (
           "Volt Protects your financial information with Bank Grade Security",
         title: "Bank Verification",
         type: HeaderTypeTokens.verification,
-        stepper: <StepperProps>{},
+        stepper: <StepperProps>{
+          type: StepperTypeTokens.HORIZONTAL,
+          data: stepper,
+        },
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       titleStack: <StackProps>{
@@ -164,11 +176,10 @@ export const template: (
 export const bankVerifyMF: PageType<any> = {
   onLoad: async () => {
     const response = await fetchBankRepo();
-    console.warn("response", response.stepResponseObject);
     const banks = response.stepResponseObject;
-    console.warn("banks", response.stepResponseObject);
-    const templateX = await template(banks);
-    console.warn("templateX->", templateX);
+    const stepper: StepperItem[] = await stepperRepo();
+    const templateX = await template(banks, stepper);
+
     return Promise.resolve(templateX);
   },
   actions: {

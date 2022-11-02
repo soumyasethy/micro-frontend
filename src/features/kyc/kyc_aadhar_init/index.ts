@@ -20,7 +20,9 @@ import {
   InputTypeToken,
   SizeTypeTokens,
   SpaceProps,
+  StepperItem,
   StepperProps,
+  StepperTypeTokens,
   TextInputProps,
   TypographyProps,
   WIDGET,
@@ -29,8 +31,11 @@ import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
 import { AadharInitPayload } from "../kyc_digilocker/types";
+import { stepperRepo } from "../../../configs/utils";
 
-export const template: TemplateSchema = {
+export const template: (stepper: StepperItem[]) => TemplateSchema = (
+  stepper
+) => ({
   layout: <Layout>{
     id: ROUTE.KYC_AADHAAR_VERIFICATION,
     type: LAYOUTS.LIST,
@@ -52,7 +57,10 @@ export const template: TemplateSchema = {
         "Volt Protects your financial information with Bank Grade Security",
       title: "Bank Verification",
       type: HeaderTypeTokens.verification,
-      stepper: <StepperProps>{},
+      stepper: <StepperProps>{
+        data: [...stepper],
+        type: StepperTypeTokens.HORIZONTAL,
+      },
     },
     title: <TypographyProps>{
       label: "Instant KYC",
@@ -108,10 +116,14 @@ export const template: TemplateSchema = {
     },
     spaceContinue: <SpaceProps>{ size: SizeTypeTokens.XXXL },
   },
-};
+});
 
 export const kycAadharVerifyMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async () => {
+    const stepper: StepperItem[] = await stepperRepo();
+    console.warn("stepper", stepper);
+    return Promise.resolve(template(stepper));
+  },
   actions: {
     [ACTION.TRIGGER_CTA]: triggerCTA,
     [ACTION.ENABLE_CTA]: toggleCTA,
