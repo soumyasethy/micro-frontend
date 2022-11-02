@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -26,25 +18,24 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
   TextInputProps,
+  TextInputTypeToken,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import {
-  ACTION,
-  InputNumberActionPayload,
-  NavigationSearchIFSCActionPayload,
-} from "./types";
+import {ROUTE} from "../../../routes";
+import {ACTION, InputNumberActionPayload, NavigationSearchIFSCActionPayload,} from "./types";
 import {
   BavVerifyManualAction,
+  ChangeBankGoBackAction,
+  NavigationSearchIFSCAction,
   onChangeAccountNumber,
   onChangeIFSCNumber,
-  NavigationSearchIFSCAction,
   ToggleCTA,
-  ChangeBankGoBackAction,
 } from "./actions";
-import { BAVVerifyActionPayload } from "../bank_verification/types";
+import {BAVVerifyActionPayload} from "../bank_verification/types";
+
 export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   layout: <Layout>{
     id: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
@@ -122,6 +113,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       type: StackType.column,
       alignItems: StackAlignItems.center,
       justifyContent: StackJustifyContent.center,
+      width: StackWidth.FULL,
       widgetItems: [{ id: "IFSCInput", type: WIDGET.INPUT }],
       action: {
         type: ACTION.NAVIGATION_SEARCH_IFSC,
@@ -135,6 +127,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       placeholder: "Search",
       value: "",
       caption: { success: "", error: "" },
+      width: TextInputTypeToken.FULL,
       action: {
         type: ACTION.ONCHANGE_IFSC_NUMBER,
         payload: <InputNumberActionPayload>{ value: "" },

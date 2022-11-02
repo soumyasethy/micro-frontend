@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -29,19 +21,16 @@ import {
   StackType,
   StepperItem,
   StepperProps,
+  StepperStateToken,
   StepperTypeTokens,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTION, BAVVerifyActionPayload, ToggleActionPayload } from "./types";
-import {
-  AddAccountNavAction,
-  BavVerifyAction,
-  ToggleSelectAction,
-} from "./actions";
-import { fetchBankRepo } from "./repo";
-import { stepperRepo } from "../../../configs/utils";
+import {ROUTE} from "../../../routes";
+import {ACTION, BAVVerifyActionPayload, ToggleActionPayload} from "./types";
+import {AddAccountNavAction, BavVerifyAction, ToggleSelectAction,} from "./actions";
+import {fetchBankRepo} from "./repo";
+import {stepperRepo} from "../../../configs/utils";
 
 export const template: (
   banks: {
@@ -118,7 +107,7 @@ export const template: (
           "Volt Protects your financial information with Bank Grade Security",
         title: "Bank Verification",
         type: HeaderTypeTokens.verification,
-        stepper: <StepperProps>{
+        stepperProps: <StepperProps>{
           type: StepperTypeTokens.HORIZONTAL,
           data: stepper,
         },
@@ -178,6 +167,7 @@ export const bankVerifyMF: PageType<any> = {
     const response = await fetchBankRepo();
     const banks = response.stepResponseObject;
     const stepper: StepperItem[] = await stepperRepo();
+    stepper[1].status = StepperStateToken.COMPLETED;
     const templateX = await template(banks, stepper);
 
     return Promise.resolve(templateX);
