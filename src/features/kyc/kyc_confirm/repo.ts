@@ -1,5 +1,4 @@
 import { api } from "../../../configs/api";
-import SharedPropsService from "../../../SharedPropsService";
 import { defaultHeaders } from "../../../configs/config";
 
 export const fetchKycSummaryRepo = async (accountId: string) => {

@@ -1,9 +1,11 @@
 import { ActionFunction } from "@voltmoney/types";
+import { EnableDisableCTA } from "../../login/phone_number/types";
 import {
-  ContinuePayload,
-  EnableDisableCTA,
-} from "../../login/phone_number/types";
-import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+  ButtonProps,
+  ButtonTypeTokens,
+  InputStateToken,
+  TextInputProps,
+} from "@voltmoney/schema";
 import { AadharInputPayload } from "./types";
 import { AadharInitPayload } from "../kyc_digilocker/types";
 import { AadharInitRepo } from "../kyc_digilocker/repo";
@@ -15,7 +17,6 @@ export const onChangeAadhar: ActionFunction<AadharInputPayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** Test Action Triggered ****", action);
   aadharNumber = action.payload.value;
 };
 export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
@@ -50,5 +51,11 @@ export const triggerCTA: ActionFunction<AadharInitPayload> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-  if (response) await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
+  if (response.hasOwnProperty("statusCode") && response.statusCode === "200")
+    await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
+  else {
+    await setDatastore(action.routeId, "input", <TextInputProps>{
+      state: InputStateToken.ERROR,
+    });
+  }
 };

@@ -21,9 +21,11 @@ import { bankSearchBranchMF } from "./features/bankVerify/bank_search_branch";
 import { kycConfirmMF } from "./features/kyc/kyc_confirm";
 import { kycStepperMF } from "./features/kyc/kyc_stepper";
 import { kycAfterCameraMF } from "./features/kyc/kyc_after_camera";
-import { cameraOpenMF } from "./features/camera_open";
+import { cameraOpenMF } from "./features/camera_confirm";
 import { kycDigiLockerMF } from "./features/kyc/kyc_digilocker";
 import { alertMF } from "./features/popup_loader";
+import { cameraCaptureMF } from "./features/camera_capture";
+import { splashScreenMF } from "./features/spalsh_screen";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -32,7 +34,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.ENTER_EMAIL]: emailMF,
   [ROUTE.KYC_PAN_VERIFICATION]: panVerifyMF,
   [ROUTE.PAN_CONFIRM_NAME]: panConfirmMF,
-  [ROUTE.MF_PLEDGING]: checkLimitMF,
+  [ROUTE.MF_FETCH_PORTFOLIO]: checkLimitMF,
   [ROUTE.UPDATE_PHONE_NUMBER]: updateMobileNumberMF,
   [ROUTE.UPDATE_EMAIL_ID]: updateEmailMF,
   [ROUTE.OTP_AUTH_CAS]: otpVerifyAuthCASMF,
@@ -47,7 +49,9 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.KYC_AADHAAR_CONFIRM]: kycConfirmMF,
   [ROUTE.KYC_STEPPER]: kycStepperMF,
   [ROUTE.KYC_AFTER_CAMERA]: kycAfterCameraMF,
-  [ROUTE.CAMERA_OPEN]: cameraOpenMF,
+  [ROUTE.KYC_PHOTO_VERIFICATION]: cameraOpenMF,
   [ROUTE.KYC_DIGILOCKER]: kycDigiLockerMF,
   [ROUTE.ALERT_PAGE]: alertMF,
+  [ROUTE.CAMERA_CAPTURE]: cameraCaptureMF,
+  [ROUTE.SPLASH_SCREEN]: splashScreenMF,
 };

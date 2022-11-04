@@ -2,8 +2,9 @@ import { ActionFunction } from "@voltmoney/types";
 import { Authentication, LoginAction, OTPPayload, User } from "./types";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import { fetchUserDetails, loginRepo } from "./repo";
-import { clearAllData, nextStep } from "../../../configs/utils";
+import { loginRepo } from "./repo";
+import { clearAllData, nextStepId } from "../../../configs/utils";
+import { fetchUserDetails } from "../../spalsh_screen/repo";
 
 export const login: ActionFunction<LoginAction & OTPPayload> = async (
   action,
@@ -28,7 +29,9 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
       state: InputStateToken.SUCCESS,
     });
     const user: User = await fetchUserDetails();
-    const nextRoute = await nextStep(user);
+    const nextRoute = await nextStepId(
+      user.linkedApplications[0].currentStepId
+    );
     await navigate(nextRoute.routeId, nextRoute.params);
   } else {
     //update to error state

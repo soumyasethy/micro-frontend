@@ -2,13 +2,13 @@ export const IFSCSearchActionRepo = async (
   bankCode: string,
   searchKey: string
 ) => {
-  console.warn(
-    "IFSCSearchActionRepo->",
-    " bankCode ",
-    bankCode,
-    " searchKey ",
-    searchKey
-  );
+  // console.warn(
+  //   "IFSCSearchActionRepo->",
+  //   " bankCode ",
+  //   bankCode,
+  //   " searchKey ",
+  //   searchKey
+  // );
   if (!bankCode && !searchKey) return;
   const requestOptions = {
     method: "GET",

@@ -25,6 +25,8 @@ import {
 } from "@voltmoney/schema";
 import { IFSCSearchActionRepo } from "./repo";
 import { bankCodeX } from "./index";
+import { debounce } from "../../../configs/utils";
+import _ from "lodash";
 
 export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   action,
@@ -81,17 +83,22 @@ const widgetItemDs = (index: number, ifscCode: string, address: string) => {
     },
   };
 };
+const searchDebounce = () => _.debounce(IFSCSearchActionRepo, 250);
+
 export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
   action,
   _datastore,
   { appendWidgets }
 ): Promise<any> => {
-  console.warn("**** IFSCSearchActionPayload Action Triggered ****", action);
-
+  // console.warn("**** IFSCSearchActionPayload Action Triggered ****", action);
   const bankCode = action.payload.bankCode || bankCodeX;
   if (bankCode.length < 3) return;
   const response = await IFSCSearchActionRepo(bankCode, action.payload.value);
+
+  // const response = await searchDebounce()(bankCode, action.payload.value);
+
   const bankBranchArr = [];
+
   Object.keys(response).map((bankCode) => {
     bankBranchArr.push({ bankCode: response[bankCode] });
   });

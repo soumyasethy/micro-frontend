@@ -20,4 +20,6 @@ export const api = {
   bav: `${config.baseUrl}/app/borrower/application/bav/`,
   bavVerify: `${config.baseUrl}/app/borrower/application/bav/verify`,
   bankInfoSearch: `${config.baseUrl}/util/bankInfo/search/`,
+  photoInit: `${config.baseUrl}/app/borrower/application/kyc/photo/init`,
+  photoVerify: `${config.baseUrl}/app/borrower/application/kyc/photo/verify`,
 };

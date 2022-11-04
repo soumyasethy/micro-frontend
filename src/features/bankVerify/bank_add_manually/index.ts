@@ -163,3 +163,6 @@ export const addBankManuallyMF: PageType<any> = {
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
   },
 };
+
+///ICIC0006933
+//693301701400

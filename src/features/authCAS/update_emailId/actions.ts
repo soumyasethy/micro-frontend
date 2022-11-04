@@ -15,7 +15,7 @@ export const updateEmailId: ActionFunction<UpdateEmailIdPayload> = async (
   const user: User = await SharedPropsService.getUser();
   user.linkedBorrowerAccounts[0].accountHolderEmail = emailId;
   await SharedPropsService.setUser(user);
-  await setDatastore(ROUTE.MF_PLEDGING, action.payload.targetWidgetId, {
+  await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.targetWidgetId, {
     subTitle: emailId,
   });
   await goBack();

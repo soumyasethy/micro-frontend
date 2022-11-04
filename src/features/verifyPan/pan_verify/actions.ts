@@ -25,6 +25,7 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
   const raw = JSON.stringify({
     applicationId: `${action.payload.applicationId}`,
     panNumber: `${pan}`,
+    dob: "917136000000",
   });
 
   const requestOptions = {

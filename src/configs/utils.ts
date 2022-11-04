@@ -45,7 +45,7 @@ export const stepperRepo = async () => {
     {
       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
       step: "2",
-      title: "bank Verification",
+      title: "Bank verification",
       subTitle: "lorme ipsum doler smit en",
       status:
         user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
@@ -61,7 +61,7 @@ export const stepperRepo = async () => {
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
-      title: "Mondate",
+      title: "Repayment",
       subTitle: "lorme ipsum doler smit en",
       status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
       message:
@@ -76,7 +76,7 @@ export const stepperRepo = async () => {
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d74",
       step: "4",
-      title: "Loan Agreement",
+      title: "Loan agreement",
       subTitle: "lorme ipsum doler smit en",
       status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
       message:
@@ -92,34 +92,28 @@ export const stepperRepo = async () => {
   return data;
 };
 
-export const nextStepStepper = async (userObj?: User) => {
-  const user: User = userObj ? userObj : await SharedPropsService.getUser();
-  console.warn(
-    "user.linkedApplications[0].currentStepId",
-    user.linkedApplications[0].currentStepId
-  );
+export const nextStepCredStepper = async (currentStepId?: string) => {
+  if (!currentStepId) {
+    currentStepId = (await SharedPropsService.getUser()).linkedApplications[0]
+      .currentStepId;
+  }
   //need to land stepper check if any starts from kyc, bank, mandate,
-  if (user.linkedApplications[0].currentStepId === "KYC_CKYC") {
+  /*  if (currentStepId === "KYC_CKYC") {
     return { routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP, params: {} };
-  } else if (
-    user.linkedApplications[0].currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION
-  ) {
+  } else*/
+  if (currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION) {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
-  } else if (
-    user.linkedApplications[0].currentStepId === "KYC_PHOTO_VERIFICATION"
-  ) {
-    return { routeId: ROUTE.CAMERA_OPEN, params: {} };
-  } else if (
-    user.linkedApplications[0].currentStepId === "BANK_ACCOUNT_VERIFICATION"
-  ) {
+  } else if (currentStepId === "KYC_PHOTO_VERIFICATION") {
+    return { routeId: ROUTE.KYC_PHOTO_VERIFICATION, params: {} };
+  } else if (currentStepId === "BANK_ACCOUNT_VERIFICATION") {
     return { routeId: ROUTE.BANK_ACCOUNT_VERIFICATION, params: {} };
   }
 };
 
-export const nextStep = async (
-  userObj?: User
+export const nextStepId = async (
+  currentStepId: string
 ): Promise<{ routeId: string; params: object }> => {
-  const user: User = userObj ? userObj : await SharedPropsService.getUser();
+  const user: User = await SharedPropsService.getUser();
   if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
     return {
       routeId: ROUTE.EMAIL_VERIFY,
@@ -130,20 +124,21 @@ export const nextStep = async (
   }
 
   ///check if any application IN_PROGRESS
-  else if (user.linkedApplications[0].applicationState === "IN_PROGRESS") {
-    if (
-      user.linkedApplications[0].currentStepId === ROUTE.KYC_PAN_VERIFICATION
-    ) {
+  else if (
+    currentStepId ||
+    user.linkedApplications[0].applicationState === "IN_PROGRESS"
+  ) {
+    if (currentStepId === ROUTE.KYC_PAN_VERIFICATION) {
       return {
         routeId: ROUTE.KYC_PAN_VERIFICATION,
         params: {
           applicationId: user.linkedApplications[0].applicationId,
-          targetRoute: ROUTE.MF_PLEDGING,
+          targetRoute: ROUTE.MF_FETCH_PORTFOLIO,
         },
       };
-    } else if (user.linkedApplications[0].currentStepId === ROUTE.MF_PLEDGING) {
+    } else if (currentStepId === ROUTE.MF_FETCH_PORTFOLIO) {
       return {
-        routeId: ROUTE.MF_PLEDGING,
+        routeId: ROUTE.MF_FETCH_PORTFOLIO,
         params: {
           applicationId: user.linkedApplications[0].applicationId,
           email: user.linkedBorrowerAccounts[0].accountHolderEmail,
@@ -151,8 +146,24 @@ export const nextStep = async (
           mobileNumber: user.linkedBorrowerAccounts[0].accountHolderPhoneNumber,
         },
       };
-    } else {
+    } else if (
+      currentStepId === "KYC_CKYC" ||
+      currentStepId === "KYC_PHOTO_VERIFICATION" ||
+      currentStepId === "KYC_AADHAAR_VERIFICATION" ||
+      currentStepId === "BANK_ACCOUNT_VERIFICATION" ||
+      currentStepId === "MANDATE_SETUP" ||
+      currentStepId === "AGREEMENT_SIGN"
+    ) {
       return { routeId: ROUTE.KYC_STEPPER, params: {} };
     }
   }
+};
+export const debounce = (callback, wait) => {
+  let timeoutId = null;
+  return (...args) => {
+    window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(async () => {
+      return await callback.apply(null, args);
+    }, wait);
+  };
 };

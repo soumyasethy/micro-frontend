@@ -7,7 +7,9 @@ export const saveAttribute = async (
   applicationId: string,
   key: string,
   value: string
-) => {
+): Promise<User> => {
+  applicationId = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
+    .accountId;
   const body = JSON.stringify({
     secureDataAttributeDetailsMap: {
       [key]: {
@@ -30,14 +32,13 @@ export const saveAttribute = async (
     body: body,
   };
 
-  await fetch(`${api.accountAttributes}${applicationId}`, requestOptions)
-    .then(async (response) => {
-      const updatedUser: User = await response.json();
-      await SharedPropsService.setUser(updatedUser);
-      console.warn("updatedUser ", updatedUser);
-    })
-    .catch(async (error) => {
-      console.log("error", error);
-      return Promise.reject(error);
-    });
+  const response: User = await fetch(
+    `${api.accountAttributes}${applicationId}`,
+    requestOptions
+  ).then(async (response) => {
+    const user: User = await response.json();
+    await SharedPropsService.setUser(user);
+    return response.json();
+  });
+  return response;
 };

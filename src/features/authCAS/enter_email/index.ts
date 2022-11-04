@@ -121,9 +121,8 @@ export const template: (applicationId: string) => TemplateSchema = (
 
 export const emailMF: PageType<any> = {
   onLoad: async (_, { applicationId }) => {
-    if (!applicationId)
-      applicationId = (await SharedPropsService.getUser()).linkedApplications[0]
-        .applicationId;
+    applicationId = (await SharedPropsService.getUser())
+      .linkedBorrowerAccounts[0].accountId;
     return Promise.resolve(template(applicationId));
   },
   actions: {

@@ -8,7 +8,7 @@ export const goBack: ActionFunction<any> = async (
   { goBack, appendWidgets }
 ): Promise<any> => {
   await appendWidgets(
-    ROUTE.MF_PLEDGING,
+    ROUTE.MF_FETCH_PORTFOLIO,
     {
       error_msg: <MessageProps>{
         label:

@@ -17,7 +17,7 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
   await SharedPropsService.setUser(user);
 
   console.warn("action", action);
-  await setDatastore(ROUTE.MF_PLEDGING, action.payload.targetWidgetId, {
+  await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.targetWidgetId, {
     subTitle: phoneNumber,
   });
   await goBack();

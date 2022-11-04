@@ -1,9 +1,9 @@
 import { ActionFunction } from "@voltmoney/types";
-import { fetchKycSummaryRepo } from "./repo";
-import SharedPropsService from "../../../SharedPropsService";
+// import { fetchKycSummaryRepo } from "./repo";
+// import SharedPropsService from "../../../SharedPropsService";
 import { ROUTE } from "../../../routes";
 
-export const fetchKycSummaryAction: ActionFunction<any> = async (
+/*export const fetchKycSummaryAction: ActionFunction<any> = async (
   action,
   _datastore,
   {}
@@ -16,7 +16,7 @@ export const fetchKycSummaryAction: ActionFunction<any> = async (
     ).linkedBorrowerAccounts[0].accountId
   );
   console.warn("response", response);
-};
+};*/
 export const NavToBankAction: ActionFunction<any> = async (
   action,
   _datastore,

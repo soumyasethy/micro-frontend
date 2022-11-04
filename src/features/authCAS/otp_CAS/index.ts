@@ -68,7 +68,7 @@ export const template: (
         fontWeight: "700",
       },
       subTitle: <TypographyProps>{
-        label: `A 4-digit OTP was sent on ${phoneNumber} `,
+        label: `A 5-digit OTP was sent on ${phoneNumber} `,
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.SM,
       },
@@ -77,7 +77,7 @@ export const template: (
         type: InputTypeToken.OTP,
         state: InputStateToken.DEFAULT,
         keyboardType: KeyboardTypeToken.numberPad,
-        charLimit: 4,
+        charLimit: 5,
         action: {
           type: ACTIONS.AUTH_CAS,
           routeId: ROUTE.OTP_AUTH_CAS,

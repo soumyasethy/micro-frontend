@@ -13,6 +13,7 @@ import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  GoogleButtonProps,
   IconAlignmentTokens,
   IconSizeTokens,
   IconTokens,
@@ -47,7 +48,7 @@ export const template: (applicationId: string) => TemplateSchema = (
         { id: "titleSpace", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
         { id: "subSpace", type: WIDGET.SPACE },
-        { id: "google", type: WIDGET.BUTTON },
+        { id: "google", type: WIDGET.GOOGLE_BUTTON },
         // { id: "space1", type: WIDGET.SPACE },
         // { id: "apple", type: WIDGET.BUTTON },
         { id: "space2", type: WIDGET.SPACE },
@@ -73,15 +74,8 @@ export const template: (applicationId: string) => TemplateSchema = (
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
     },
-    google: <ButtonProps & WidgetProps>{
+    google: <GoogleButtonProps & WidgetProps>{
       label: "Continue with Google",
-      type: ButtonTypeTokens.LargeSoftFilled,
-      width: ButtonWidthTypeToken.FULL,
-      // icon: {
-      //   name: IconTokens.Google,
-      //   size: IconSizeTokens.MD,
-      //   align: IconAlignmentTokens.left,
-      // },
       action: {
         type: ACTIONS.GOOGLE_LOGIN,
         routeId: ROUTE.EMAIL_VERIFY,
@@ -116,7 +110,6 @@ export const template: (applicationId: string) => TemplateSchema = (
 
 export const emailVerifyMF: PageType<any> = {
   onLoad: async (_, { applicationId }) => {
-    console.warn('applicationId')
     return Promise.resolve(template(applicationId));
   },
   actions: {

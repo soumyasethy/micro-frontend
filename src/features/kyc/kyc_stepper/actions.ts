@@ -1,12 +1,12 @@
 import { ActionFunction } from "@voltmoney/types";
-import {nextStepStepper} from "../../../configs/utils";
+import { nextStepCredStepper } from "../../../configs/utils";
 
 export const Go_Next_Action: ActionFunction<any> = async (
   action,
   _datastore,
   { navigate }
 ): Promise<any> => {
-  const routeObj = await nextStepStepper();
+  const routeObj = await nextStepCredStepper();
   console.warn("**** NextStep ****", routeObj);
   await navigate(routeObj.routeId, routeObj.params);
 };

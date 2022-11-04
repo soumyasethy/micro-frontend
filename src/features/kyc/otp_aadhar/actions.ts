@@ -42,6 +42,6 @@ export const triggerCTA: ActionFunction<AadharInputPayload> = async (
       ).linkedApplications[0].applicationId,
       action.payload.value
     );
-    if (response) navigate(ROUTE.CAMERA_OPEN);
+    if (response) navigate(ROUTE.KYC_PHOTO_VERIFICATION);
   }
 };

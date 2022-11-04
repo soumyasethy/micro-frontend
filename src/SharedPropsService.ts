@@ -26,7 +26,7 @@ function getPropsValue(key?: string) {
 }
 async function setUser(props: User) {
   _globalProps.user = await props;
-  await AsyncStorage.setItem(StoreKey.userContext, JSON.stringify(props));
+  // await AsyncStorage.setItem(StoreKey.userContext, JSON.stringify(props));
 }
 
 async function getUser() {

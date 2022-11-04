@@ -40,7 +40,7 @@ export const template: (
 ) => TemplateSchema = (applicationId, panNumber, phoneNumber, emailId) => {
   return {
     layout: <Layout>{
-      id: ROUTE.MF_PLEDGING,
+      id: ROUTE.MF_FETCH_PORTFOLIO,
       type: LAYOUTS.LIST,
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
@@ -82,11 +82,11 @@ export const template: (
         leadIconName: IconTokens.CreditCard,
         trailIconName: IconTokens.Edit,
         action: {
-          routeId: ROUTE.MF_PLEDGING,
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
           type: ACTION.EDIT_PAN,
           payload: <PanEditPayload>{
             applicationId,
-            targetRoute: ROUTE.MF_PLEDGING,
+            targetRoute: ROUTE.MF_FETCH_PORTFOLIO,
             panNumber: panNumber,
           },
         },
@@ -98,7 +98,7 @@ export const template: (
         trailIconName: IconTokens.Edit,
         action: {
           type: ACTION.EDIT_MOBILE_NUMBER,
-          routeId: ROUTE.MF_PLEDGING,
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
           payload: { targetWidgetId: "mobileItem" },
         },
       },
@@ -109,7 +109,7 @@ export const template: (
         trailIconName: IconTokens.Edit,
         action: {
           type: ACTION.EDIT_EMAIL,
-          routeId: ROUTE.MF_PLEDGING,
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
           payload: { targetWidgetId: "emailItem" },
         },
       },
@@ -118,14 +118,14 @@ export const template: (
         width: ButtonWidthTypeToken.FULL,
         type: ButtonTypeTokens.LargeFilled,
         action: {
-          routeId: ROUTE.MF_PLEDGING,
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
           type: ACTION.FETCH_MY_PORTFOLIO,
           payload: <FetchPortfolioPayload>{
             applicationId,
             emailId,
             phoneNumber,
             panNumber,
-            assetRepository: "KARVY",
+            assetRepository: "CAMS",
           },
         },
       },
