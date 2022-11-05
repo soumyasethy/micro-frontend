@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ContinuePayload, PanPayload } from "./types";
+import { ContinuePayload, InputPayload } from "./types";
 import { api } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
 import {
@@ -10,8 +10,10 @@ import {
 } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import { defaultHeaders } from "../../../configs/config";
+import moment from "moment";
 
 let pan: string = "";
+let dob: string = "";
 
 export const verifyPan: ActionFunction<ContinuePayload> = async (
   action,
@@ -25,7 +27,7 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
   const raw = JSON.stringify({
     applicationId: `${action.payload.applicationId}`,
     panNumber: `${pan}`,
-    dob: "917136000000",
+    dob: dob,
   });
 
   const requestOptions = {
@@ -78,11 +80,20 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
       });
     });
 };
-export const textOnChange: ActionFunction<PanPayload> = async (
+export const PanOnChange: ActionFunction<InputPayload> = async (
   action,
   _datastore,
   {}
 ): Promise<any> => {
   console.warn("**** update pan ****", action.payload.value);
   pan = action.payload.value;
+};
+export const CalendarOnChange: ActionFunction<InputPayload> = async (
+  action,
+  _datastore,
+  {}
+): Promise<any> => {
+  console.warn("**** update dob ****", action.payload.value);
+  dob = `${moment(action.payload.value).unix()}`;
+  console.warn("**** update dob epoch ****", dob);
 };

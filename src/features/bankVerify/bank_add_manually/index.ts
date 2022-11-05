@@ -1,4 +1,12 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -10,6 +18,7 @@ import {
   IconTokens,
   ImageProps,
   ImageSizeTokens,
+  InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
   SizeTypeTokens,
@@ -24,8 +33,12 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION, InputNumberActionPayload, NavigationSearchIFSCActionPayload,} from "./types";
+import { ROUTE } from "../../../routes";
+import {
+  ACTION,
+  InputNumberActionPayload,
+  NavigationSearchIFSCActionPayload,
+} from "./types";
 import {
   BavVerifyManualAction,
   ChangeBankGoBackAction,
@@ -34,7 +47,7 @@ import {
   onChangeIFSCNumber,
   ToggleCTA,
 } from "./actions";
-import {BAVVerifyActionPayload} from "../bank_verification/types";
+import { BAVVerifyActionPayload } from "../bank_verification/types";
 
 export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   layout: <Layout>{
@@ -45,7 +58,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       { id: "accountSpace", type: WIDGET.SPACE },
       { id: "accountInput", type: WIDGET.INPUT },
       { id: "IFSCSpace", type: WIDGET.SPACE },
-      { id: "IFSCInputStack", type: WIDGET.STACK },
+      { id: "IFSCInput", type: WIDGET.INPUT },
       {
         id: "continue",
         type: WIDGET.BUTTON,
@@ -110,10 +123,10 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     },
     IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     IFSCInputStack: <StackProps & WidgetProps>{
+      width: StackWidth.FULL,
       type: StackType.column,
       alignItems: StackAlignItems.center,
       justifyContent: StackJustifyContent.center,
-      width: StackWidth.FULL,
       widgetItems: [{ id: "IFSCInput", type: WIDGET.INPUT }],
       action: {
         type: ACTION.NAVIGATION_SEARCH_IFSC,
@@ -123,6 +136,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     },
     IFSCInput: <TextInputProps & WidgetProps>{
       type: InputTypeToken.DEFAULT,
+      state: InputStateToken.DISABLED,
       title: "Branch or IFSC",
       placeholder: "Search",
       value: "",
@@ -132,6 +146,11 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
         type: ACTION.ONCHANGE_IFSC_NUMBER,
         payload: <InputNumberActionPayload>{ value: "" },
         routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+      },
+      onPressAction: {
+        type: ACTION.NAVIGATION_SEARCH_IFSC,
+        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        payload: <NavigationSearchIFSCActionPayload>{ bankCode: bankCode },
       },
     },
     continue: <ButtonProps & WidgetProps>{

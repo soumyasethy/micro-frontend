@@ -34,8 +34,8 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     type: LAYOUTS.LIST,
     widgets: [
       {
-        id: "headerStack",
-        type: WIDGET.STACK /*position: POSITION.FIXED_TOP*/,
+        id: "searchInput",
+        type: WIDGET.INPUT /*position: POSITION.FIXED_TOP*/,
       },
       {
         id: "space",
@@ -74,7 +74,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     leadIcon: <IconProps>{ name: IconTokens.Fire, size: IconSizeTokens.MD },
     searchInput: <TextInputProps & WidgetProps>{
       placeholder: "Search by branch or IFSC",
-      type: InputTypeToken.DEFAULT,
+      type: InputTypeToken.SEARCH,
       title: "Search",
       state: InputStateToken.DEFAULT,
       caption: { success: "", error: "" },

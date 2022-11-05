@@ -8,6 +8,7 @@ import {
 } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
+import { AlertNavProps } from "../../popup_loader/types";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -57,7 +58,7 @@ export const ToggleCTA: ActionFunction<any> = async (
 
 export const BavVerifyManualAction: ActionFunction<
   BAVVerifyActionPayload
-> = async (action, _datastore, { setDatastore }): Promise<any> => {
+> = async (action, _datastore, { setDatastore, navigate }): Promise<any> => {
   console.warn("**** BavVerifyManualAction Action Triggered ****", action);
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
@@ -77,6 +78,14 @@ export const BavVerifyManualAction: ActionFunction<
     "currentStepId-->",
     response.updatedApplicationObj.currentStepId
   );
+  if (response.statusCode === "500") {
+    navigate(ROUTE.ALERT_PAGE, {
+      alertProps: <AlertNavProps>{
+        title: "Verification Failed!",
+        subTitle: response.message,
+      },
+    });
+  }
 };
 export const ChangeBankGoBackAction: ActionFunction<
   InputNumberActionPayload

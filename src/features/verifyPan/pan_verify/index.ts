@@ -31,12 +31,11 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, ContinuePayload, PanPayload } from "./types";
-import { textOnChange, verifyPan } from "./actions";
+import { ACTION, ContinuePayload, InputPayload } from "./types";
+import { CalendarOnChange, PanOnChange, verifyPan } from "./actions";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { toggleCTA } from "../../login/phone_number/actions";
 import { User } from "../../login/otp_verify/types";
-import { StoreKey } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
@@ -60,6 +59,8 @@ export const template: (
         { id: "subTitle", type: WIDGET.TEXT },
         { id: "space2", type: WIDGET.SPACE },
         { id: "input", type: WIDGET.INPUT },
+        { id: "space5", type: WIDGET.SPACE },
+        { id: "calendarInput", type: WIDGET.INPUT },
         { id: "space3", type: WIDGET.SPACE },
         { id: "whatsappStack", type: WIDGET.STACK },
         { id: "space4", type: WIDGET.SPACE },
@@ -109,12 +110,45 @@ export const template: (
         keyboardType: KeyboardTypeToken.email,
         action: {
           type: ACTION.ENTER_PAN,
-          payload: <PanPayload>{ value: "", widgetId: "input" },
+          payload: <InputPayload>{ value: "", widgetId: "input" },
           routeId: ROUTE.KYC_PAN_VERIFICATION,
         },
         caption: {
           success: "",
-          error: "Enter a valid PAN number",
+          error: "Enter a valid PAN. eg: ABCDE1234F",
+        },
+        errorAction: {
+          type: ACTION.DISABLE_CONTINUE,
+          routeId: ROUTE.KYC_PAN_VERIFICATION,
+          payload: <EnableDisableCTA>{
+            value: false,
+            targetWidgetId: "continue",
+          },
+        },
+        successAction: {
+          type: ACTION.ENABLE_CONTINUE,
+          routeId: ROUTE.KYC_PAN_VERIFICATION,
+          payload: <EnableDisableCTA>{
+            value: true,
+            targetWidgetId: "continue",
+          },
+        },
+      },
+      calendarInput: <TextInputProps & WidgetProps>{
+        value: prefilledPanNumber,
+        type: InputTypeToken.CALENDAR,
+        state: InputStateToken.DEFAULT,
+        title: "Date of birth",
+        placeholder: "Enter date of birth",
+        keyboardType: KeyboardTypeToken.email,
+        action: {
+          type: ACTION.ENTER_DOB,
+          payload: <InputPayload>{ value: "", widgetId: "calendarInput" },
+          routeId: ROUTE.KYC_PAN_VERIFICATION,
+        },
+        caption: {
+          success: "",
+          error: "Please select a proper date",
         },
         errorAction: {
           type: ACTION.DISABLE_CONTINUE,
@@ -135,6 +169,7 @@ export const template: (
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.SM },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      space5: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       space3: <SpaceProps>{ size: SizeTypeTokens.LG },
       space4: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       disclaimerStack: <StackProps>{
@@ -179,7 +214,8 @@ export const panVerifyMF: PageType<any> = {
   },
   actions: {
     [ACTION.VERIFY_PAN]: verifyPan,
-    [ACTION.ENTER_PAN]: textOnChange,
+    [ACTION.ENTER_PAN]: PanOnChange,
+    [ACTION.ENTER_DOB]: CalendarOnChange,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
   },

@@ -3,20 +3,13 @@ import { api } from "../../../configs/api";
 import { defaultHeaders } from "../../../configs/config";
 export const AadharInitRepo = async (
   applicationId: string,
-  aadhaarNumber: string
+  aadhaarNumber?: string
 ) => {
   const raw = JSON.stringify({
     applicationId:
       applicationId ||
       (await SharedPropsService.getUser()).linkedApplications[0].applicationId,
-    aadhaarNumber:
-      aadhaarNumber ||
-      (
-        await SharedPropsService.getUser()
-      ).linkedBorrowerAccounts[0].accountHolderPhoneNumber.replaceAll(
-        "+91",
-        ""
-      ),
+    aadhaarNumber: aadhaarNumber,
   });
 
   const requestOptions = {

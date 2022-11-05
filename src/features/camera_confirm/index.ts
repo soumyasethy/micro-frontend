@@ -7,11 +7,12 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
-  VerificationCardTypeTokens,
+  IconSizeTokens,
+  IconTokens,
   VerificationCardButtonTypeToken,
   VerificationCardProps,
+  VerificationCardTypeTokens,
   WIDGET,
-  IconTokens,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTION } from "./types";
@@ -26,6 +27,7 @@ export const template: TemplateSchema = {
   datastore: <Datastore>{
     verify: <VerificationCardProps & WidgetProps>{
       iconName: IconTokens.Camera,
+      icon: { name: IconTokens.Camera, size: IconSizeTokens.LG },
       buttonText: "Open Camera",
       buttonType: VerificationCardButtonTypeToken.FULL,
       label: "Take photo",

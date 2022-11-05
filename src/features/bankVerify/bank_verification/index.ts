@@ -1,4 +1,12 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -26,11 +34,15 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION, BAVVerifyActionPayload, ToggleActionPayload} from "./types";
-import {AddAccountNavAction, BavVerifyAction, ToggleSelectAction,} from "./actions";
-import {fetchBankRepo} from "./repo";
-import {stepperRepo} from "../../../configs/utils";
+import { ROUTE } from "../../../routes";
+import { ACTION, BAVVerifyActionPayload, ToggleActionPayload } from "./types";
+import {
+  AddAccountNavAction,
+  BavVerifyAction,
+  ToggleSelectAction,
+} from "./actions";
+import { fetchBankRepo } from "./repo";
+import { stepperRepo } from "../../../configs/utils";
 
 export const template: (
   banks: {

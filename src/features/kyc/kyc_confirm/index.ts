@@ -111,7 +111,7 @@ export const kycConfirmMF: PageType<any> = {
     const response = await fetchKycSummaryRepo(
       (
         await SharedPropsService.getUser()
-      ).linkedBorrowerAccounts[0].accountId
+      ).linkedApplications[0].applicationId
     );
     const { address, dob, fullName, photoURL } = response;
     const pan = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]

@@ -27,6 +27,7 @@ export const loginGoogle: ActionFunction<any> = async (
     "EMAIL",
     action.payload.value.profileObj.email
   );
+  await SharedPropsService.setUser(updatedUser);
   const route = await nextStepId(
     updatedUser.linkedApplications[0].currentStepId
   );

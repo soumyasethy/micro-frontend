@@ -2,8 +2,10 @@ import { ActionFunction } from "@voltmoney/types";
 import { defaultHeaders } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
-import { ROUTE } from "../../../routes";
 import { ButtonProps } from "@voltmoney/schema";
+import { ROUTE } from "../../../routes";
+import { AlertNavProps } from "../../popup_loader/types";
+import { ACTION } from "../otp_aadhar/types";
 
 export const PhotoVerifyAction: ActionFunction<any> = async (
   action,
@@ -36,7 +38,22 @@ export const PhotoVerifyAction: ActionFunction<any> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-  if (response.statusCode === "200") await navigate(ROUTE.KYC_AADHAAR_CONFIRM);
+  if (response.status === "SUCCESS")
+    await navigate(response.updatedApplicationObj.currentStepId);
+  else if (response.message) {
+    await navigate(ROUTE.ALERT_PAGE, {
+      alertProps: <AlertNavProps>{
+        title: "Verification failed!",
+        subTitle: response.message,
+        ctaLabel: "Got It",
+        ctaAction: {
+          type: ACTION.GO_BACK,
+          routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+          payload: {},
+        },
+      },
+    });
+  }
 };
 export const RetakePhoto: ActionFunction<any> = async (
   action,

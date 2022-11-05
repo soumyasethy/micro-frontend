@@ -4,7 +4,7 @@ import {
   WidgetItem,
   WidgetProps,
 } from "@voltmoney/types";
-import { IFSCSearchActionPayload, IFSCCodePayload, ACTION } from "./types";
+import { ACTION, IFSCCodePayload, IFSCSearchActionPayload } from "./types";
 import { ROUTE } from "../../../routes";
 import {
   ButtonProps,
@@ -13,6 +13,7 @@ import {
   DividerProps,
   DividerSizeTokens,
   FontSizeTokens,
+  InputStateToken,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -25,8 +26,6 @@ import {
 } from "@voltmoney/schema";
 import { IFSCSearchActionRepo } from "./repo";
 import { bankCodeX } from "./index";
-import { debounce } from "../../../configs/utils";
-import _ from "lodash";
 
 export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   action,
@@ -37,6 +36,7 @@ export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   await setDatastore(ROUTE.BANK_ACCOUNT_ADD_MANUALLY, "IFSCInput", <
     TextInputProps
   >{
+    state: InputStateToken.DISABLED,
     value: action.payload.ifscCode,
   });
   await setDatastore(ROUTE.BANK_ACCOUNT_ADD_MANUALLY, "continue", <ButtonProps>{
@@ -83,7 +83,6 @@ const widgetItemDs = (index: number, ifscCode: string, address: string) => {
     },
   };
 };
-const searchDebounce = () => _.debounce(IFSCSearchActionRepo, 250);
 
 export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
   action,
@@ -92,10 +91,15 @@ export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
 ): Promise<any> => {
   // console.warn("**** IFSCSearchActionPayload Action Triggered ****", action);
   const bankCode = action.payload.bankCode || bankCodeX;
-  if (bankCode.length < 3) return;
-  const response = await IFSCSearchActionRepo(bankCode, action.payload.value);
+  let searchLength: number;
+  if (bankCode.toUpperCase().includes(action.payload.value.toUpperCase())) {
+    searchLength = bankCode.length;
+  } else {
+    searchLength = 4;
+  }
+  if (action.payload.value.length < searchLength) return;
 
-  // const response = await searchDebounce()(bankCode, action.payload.value);
+  const response = await IFSCSearchActionRepo(bankCode, action.payload.value);
 
   const bankBranchArr = [];
 

@@ -13,6 +13,7 @@ import {
   HeaderProps,
   HeaderTypeTokens,
   ImageProps,
+  ImageSizeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -70,7 +71,10 @@ export const template: (
         { id: "disclaimer", type: WIDGET.TEXT },
       ],
     },
-    previewImage: <ImageProps>{ uri: `data:image/gif;base64,${photo}` },
+    previewImage: <ImageProps>{
+      uri: `data:image/gif;base64,${photo}`,
+      size: ImageSizeTokens.XXXL,
+    },
     retake: <ButtonProps & WidgetProps>{
       label: "Retake",
       type: ButtonTypeTokens.LargeGhost,

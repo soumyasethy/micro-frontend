@@ -4,6 +4,7 @@ export enum ACTION {
   DISABLE_CTA = "DISABLE_CTA",
   ENABLE_CTA = "ENABLE_CTA",
   AADHAR_NUMBER = "AADHAR_NUMBER",
+  GO_BACK = "GO_BACK",
 }
 export type EnableDisableCTA = {
   value: boolean;

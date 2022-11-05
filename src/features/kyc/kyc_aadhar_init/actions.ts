@@ -51,11 +51,13 @@ export const triggerCTA: ActionFunction<AadharInitPayload> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-  if (response.hasOwnProperty("statusCode") && response.statusCode === "200")
+  console.warn("KYC INIT response", response);
+  if (response.hasOwnProperty("status") && response.status === "SUCCESS")
     await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
-  else {
+  else if (response.message) {
     await setDatastore(action.routeId, "input", <TextInputProps>{
       state: InputStateToken.ERROR,
+      caption: { error: response.message },
     });
   }
 };

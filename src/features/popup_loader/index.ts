@@ -46,7 +46,11 @@ export const template: (alertProps: AlertNavProps) => TemplateSchema = (
       type: VerificationCardTypeTokens.Default,
       iconName: IconTokens.Fire,
       buttonText: alertProps.ctaLabel,
-      action: alertProps.ctaAction,
+      action: {
+        type: ACTION.TEST_ACTION,
+        routeId: ROUTE.ALERT_PAGE,
+        payload: {},
+      },
     },
     stack: <StackProps>{
       type: StackType.row,
@@ -81,7 +85,7 @@ const alertPropsX: AlertNavProps = {
 };
 
 export const alertMF: PageType<any> = {
-  onLoad: async ({}, { alertProps = alertPropsX }) => {
+  onLoad: async ({}, { alertProps }) => {
     return Promise.resolve(template(alertProps));
   },
   actions: {

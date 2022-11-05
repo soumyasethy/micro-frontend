@@ -32,13 +32,8 @@ export const saveAttribute = async (
     body: body,
   };
 
-  const response: User = await fetch(
+  return await fetch(
     `${api.accountAttributes}${applicationId}`,
     requestOptions
-  ).then(async (response) => {
-    const user: User = await response.json();
-    await SharedPropsService.setUser(user);
-    return response.json();
-  });
-  return response;
+  ).then((response) => response.json());
 };

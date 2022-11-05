@@ -25,7 +25,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { Go_Next_Action } from "./actions";
-import {stepperRepo} from "../../../configs/utils";
+import { stepperRepo } from "../../../configs/utils";
 
 export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   layout: <Layout>{
