@@ -27,6 +27,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, IFSCSearchActionPayload } from "./types";
 import { IFSCSearchAction, OnSelectIFSCAction } from "./actions";
+import _ from "lodash";
 export let bankCodeX = "";
 export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   layout: <Layout>{
@@ -93,12 +94,11 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
 
 export const bankSearchBranchMF: PageType<any> = {
   onLoad: async ({}, { bankCode }) => {
-    console.warn("bankSearchBranchMF Onload**********", bankCode);
     bankCodeX = bankCode;
     return Promise.resolve(template(bankCode));
   },
   actions: {
     [ACTION.ON_SELECT_IFSC]: OnSelectIFSCAction,
-    [ACTION.SEARCH_IFSC_ACTION]: IFSCSearchAction,
+    [ACTION.SEARCH_IFSC_ACTION]: _.debounce(IFSCSearchAction, 250),
   },
 };
