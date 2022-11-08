@@ -3,13 +3,15 @@ import { BAVVerifyActionPayload, ToggleActionPayload } from "./types";
 import {
   ButtonProps,
   ButtonTypeTokens,
+  IconTokens,
   SelectiveListItemProps,
   SelectiveListItemStateTokens,
 } from "@voltmoney/schema";
 import { postBankRepo } from "./repo";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
-import {AadharInitPayload} from "../../kyc/kyc_init/types";
+import { AadharInitPayload } from "../../kyc/kyc_init/types";
+import { showBottomSheet } from "../../../configs/utils";
 
 let selectedWidget = undefined;
 let ifscCode = undefined;
@@ -45,7 +47,7 @@ export const ToggleSelectAction: ActionFunction<ToggleActionPayload> = async (
 export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
   action,
   _datastore,
-  { setDatastore }
+  { setDatastore, navigate }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
@@ -61,6 +63,15 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
     loading: false,
   });
   console.warn("bavVerifyAction-->", response);
+  if (response.hasOwnProperty("message")) {
+    const route = showBottomSheet({
+      // title: result.statusCode,
+      message: response.message,
+      primary: true,
+      iconName: IconTokens.Error,
+    });
+    await navigate(route.routeId, route.params);
+  }
 };
 export const AddAccountNavAction: ActionFunction<
   BAVVerifyActionPayload
@@ -68,9 +79,9 @@ export const AddAccountNavAction: ActionFunction<
   navigate(ROUTE.BANK_ACCOUNT_ADD);
 };
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
-    action,
-    _datastore,
-    { goBack }
+  action,
+  _datastore,
+  { goBack }
 ): Promise<any> => {
   await goBack();
 };

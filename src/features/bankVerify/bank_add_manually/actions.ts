@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, IconTokens } from "@voltmoney/schema";
 import { BAVVerifyActionPayload } from "../bank_verification/types";
 import { postBankRepo } from "../bank_verification/repo";
 import {
@@ -9,6 +9,7 @@ import {
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { AlertNavProps } from "../../popup_loader/types";
+import { showBottomSheet } from "../../../configs/utils";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -77,13 +78,14 @@ export const BavVerifyManualAction: ActionFunction<
     "currentStepId-->",
     response.updatedApplicationObj.currentStepId
   );
-  if (response.statusCode === "500") {
-    navigate(ROUTE.ALERT_PAGE, {
-      alertProps: <AlertNavProps>{
-        title: "Verification Failed!",
-        subTitle: response.message,
-      },
+  if (response.hasOwnProperty("message")) {
+    const route = showBottomSheet({
+      // title: result.statusCode,
+      message: response.message,
+      primary: true,
+      iconName: IconTokens.Error,
     });
+    await navigate(route.routeId, route.params);
   }
 };
 export const ChangeBankGoBackAction: ActionFunction<

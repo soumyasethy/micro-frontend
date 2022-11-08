@@ -44,7 +44,7 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
       await setDatastore(action.routeId, "continue", <ButtonProps>{
         loading: false,
       });
-      if (result.stepResponseObject.fullName) {
+      if (result?.stepResponseObject?.fullName) {
         result.stepResponseObject.panNumber = pan;
         console.warn("success pan ", result);
 
@@ -72,7 +72,7 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
         });
         if (result.hasOwnProperty("message")) {
           const route = showBottomSheet({
-            title: result.statusCode,
+            // title: result.statusCode,
             message: result.message,
             primary: true,
             iconName: IconTokens.Error,
@@ -89,6 +89,15 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
       await setDatastore(action.routeId, "input", <TextInputProps>{
         state: InputStateToken.ERROR,
       });
+      if (error.hasOwnProperty("message")) {
+        const route = showBottomSheet({
+          // title: error.statusCode,
+          message: error.message,
+          primary: true,
+          iconName: IconTokens.Error,
+        });
+        await navigate(route.routeId, route.params);
+      }
     });
 };
 export const PanOnChange: ActionFunction<InputPayload> = async (

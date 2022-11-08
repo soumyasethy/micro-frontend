@@ -1,10 +1,20 @@
-import { StepperItem, StepperStateToken } from "@voltmoney/schema";
+import {IconTokens, StepperItem, StepperStateToken} from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
 import { User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
 
+
+/*if (error.hasOwnProperty("message")) {
+  const route = showBottomSheet({
+    title: error.statusCode,
+    message: error.message,
+    primary: true,
+    iconName: IconTokens.Error,
+  });
+  await navigate(route.routeId, route.params);
+}*/
 export const showBottomSheet = ({
   title = "Verification Failed!",
   subTitle,
