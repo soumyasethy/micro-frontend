@@ -54,6 +54,7 @@ export interface LinkedApplication {
 
 export interface StepStatusMap {
   KYC_PHOTO_VERIFICATION?: StepperStateToken;
+  KYC_SUMMARY?: StepperStateToken;
   MF_PLEDGING?: StepperStateToken;
   CREDIT_APPROVAL?: StepperStateToken;
   KYC_AADHAAR_VERIFICATION?: StepperStateToken;

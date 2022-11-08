@@ -1,11 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   FontSizeTokens,
   IconProps,
@@ -18,13 +11,14 @@ import {
   StackProps,
   StackType,
   TypographyProps,
+  VerificationCardButtonTypeToken,
   VerificationCardProps,
   VerificationCardTypeTokens,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../routes";
-import { ACTION, AlertNavProps } from "./types";
-import { TestAction } from "./actions";
+import {ROUTE} from "../../routes";
+import {ACTION, AlertNavProps} from "./types";
+import {TestAction} from "./actions";
 
 export const template: (alertProps: AlertNavProps) => TemplateSchema = (
   alertProps
@@ -51,6 +45,7 @@ export const template: (alertProps: AlertNavProps) => TemplateSchema = (
         routeId: ROUTE.ALERT_PAGE,
         payload: {},
       },
+      buttonType: VerificationCardButtonTypeToken.FULL
     },
     stack: <StackProps>{
       type: StackType.row,

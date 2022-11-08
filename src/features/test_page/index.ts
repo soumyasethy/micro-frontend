@@ -4,6 +4,7 @@ import {
   LAYOUTS,
   PageType,
   TemplateSchema,
+  WidgetProps,
 } from "@voltmoney/types";
 import {
   ButtonProps,
@@ -20,7 +21,7 @@ import { TestAction } from "./actions";
 export const template: TemplateSchema = {
   layout: <Layout>{
     id: ROUTE.TEST_PAGE,
-    type: LAYOUTS.LIST,
+    type: LAYOUTS.MODAL,
     widgets: [
       { id: "space1", type: WIDGET.SPACE },
       { id: "button", type: WIDGET.BUTTON },
@@ -28,10 +29,16 @@ export const template: TemplateSchema = {
   },
   datastore: <Datastore>{
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
-    button: <ButtonProps>{
-      label: "hello",
+    button: <ButtonProps & WidgetProps>{
+      label: "hello world",
+      loading: true,
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTION.TEST_ACTION,
+        routeId: ROUTE.TEST_PAGE,
+        payload: { hello: "world" },
+      },
     },
   },
 };

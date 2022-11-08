@@ -26,7 +26,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, IFSCSearchActionPayload } from "./types";
-import { IFSCSearchAction, OnSelectIFSCAction } from "./actions";
+import { clearAction, IFSCSearchAction, OnSelectIFSCAction } from "./actions";
 import _ from "lodash";
 export let bankCodeX = "";
 export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
@@ -87,6 +87,11 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
           value: "",
         },
       },
+      clearAction: {
+        type: ACTION.CLEAR_SEARCH,
+        routeId: ROUTE.BANK_BRANCH_SEARCH,
+        payload: {},
+      },
     },
     dividerSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
   },
@@ -99,6 +104,8 @@ export const bankSearchBranchMF: PageType<any> = {
   },
   actions: {
     [ACTION.ON_SELECT_IFSC]: OnSelectIFSCAction,
+    [ACTION.CLEAR_SEARCH]: clearAction,
     [ACTION.SEARCH_IFSC_ACTION]: _.debounce(IFSCSearchAction, 250),
   },
+  clearPrevious: true,
 };

@@ -1,1 +1,3 @@
-export const TestRepo = {};
+export const APITestRepo = () => {
+  return {};
+};

@@ -32,7 +32,7 @@ export const onChangeIFSCNumber: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
   console.warn("**** onChangeIFSCNumber Action Triggered ****", action);
-  bankIfsc = bankAccountNumber = action.payload.value;
+  bankIfsc = action.payload.value;
   await ToggleCTA(action, _datastore, props);
 };
 
@@ -73,7 +73,6 @@ export const BavVerifyManualAction: ActionFunction<
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-  console.warn("BavVerifyManualAction-->", response);
   console.warn(
     "currentStepId-->",
     response.updatedApplicationObj.currentStepId

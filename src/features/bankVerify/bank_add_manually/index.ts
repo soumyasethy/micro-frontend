@@ -109,6 +109,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     },
     accountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     accountInput: <TextInputProps & WidgetProps>{
+      isFocus: true,
       type: InputTypeToken.DEFAULT,
       title: "Account number",
       placeholder: "Enter account number",
@@ -135,6 +136,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       },
     },
     IFSCInput: <TextInputProps & WidgetProps>{
+      isFocus: false,
       type: InputTypeToken.DEFAULT,
       state: InputStateToken.DISABLED,
       title: "Branch or IFSC",

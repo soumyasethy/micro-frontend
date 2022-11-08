@@ -39,6 +39,7 @@ import { ACTION, BAVVerifyActionPayload, ToggleActionPayload } from "./types";
 import {
   AddAccountNavAction,
   BavVerifyAction,
+  GoBackAction,
   ToggleSelectAction,
 } from "./actions";
 import { fetchBankRepo } from "./repo";
@@ -113,7 +114,7 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
-      header: <HeaderProps>{
+      header: <HeaderProps & WidgetProps>{
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         subTitle:
           "Volt Protects your financial information with Bank Grade Security",
@@ -122,6 +123,11 @@ export const template: (
         stepperProps: <StepperProps>{
           type: StepperTypeTokens.HORIZONTAL,
           data: stepper,
+        },
+        action: {
+          type: ACTION.GO_BACK,
+          routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
+          payload: {},
         },
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
@@ -188,5 +194,6 @@ export const bankVerifyMF: PageType<any> = {
     [ACTION.TOGGLE_SELECT]: ToggleSelectAction,
     [ACTION.TRIGGER_CTA]: BavVerifyAction,
     [ACTION.GO_ADD_ACCOUNT]: AddAccountNavAction,
+    [ACTION.GO_BACK]: GoBackAction,
   },
 };

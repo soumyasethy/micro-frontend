@@ -9,6 +9,7 @@ import {
 import { postBankRepo } from "./repo";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
+import {AadharInitPayload} from "../../kyc/kyc_init/types";
 
 let selectedWidget = undefined;
 let ifscCode = undefined;
@@ -65,4 +66,11 @@ export const AddAccountNavAction: ActionFunction<
   BAVVerifyActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
   navigate(ROUTE.BANK_ACCOUNT_ADD);
+};
+export const GoBackAction: ActionFunction<AadharInitPayload> = async (
+    action,
+    _datastore,
+    { goBack }
+): Promise<any> => {
+  await goBack();
 };

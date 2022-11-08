@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -11,10 +12,11 @@ import {
   IconSizeTokens,
   IconTokens,
   StackAlignItems,
-  StackFlexWrap,
+  StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
@@ -25,10 +27,18 @@ const template: TemplateSchema = {
   layout: <Layout>{
     id: ROUTE.SPLASH_SCREEN,
     type: LAYOUTS.LIST,
-    widgets: [{ id: "splashStack", type: WIDGET.STACK }],
+    widgets: [
+      {
+        id: "splashStack",
+        type: WIDGET.STACK,
+        position: POSITION.ABSOLUTE_CENTER,
+      },
+    ],
   },
   datastore: <Datastore>{
     splashStack: <StackProps>{
+      width: StackWidth.FULL,
+      height: StackHeight.FULL,
       type: StackType.column,
       justifyContent: StackJustifyContent.center,
       alignItems: StackAlignItems.center,

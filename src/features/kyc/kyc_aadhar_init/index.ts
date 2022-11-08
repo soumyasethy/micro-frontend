@@ -29,8 +29,8 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
-import { onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
-import { AadharInitPayload } from "../kyc_digilocker/types";
+import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
+import { AadharInitPayload } from "../kyc_init/types";
 import { stepperRepo } from "../../../configs/utils";
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
@@ -58,7 +58,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     },
     datastore: <Datastore>{
       topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-      header: <HeaderProps>{
+      header: <HeaderProps & WidgetProps>{
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         subTitle:
           "Volt Protects your financial information with Bank Grade Security",
@@ -67,6 +67,11 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         stepperProps: <StepperProps>{
           data: stepper,
           type: StepperTypeTokens.HORIZONTAL,
+        },
+        action: {
+          type: ACTION.GO_BACK,
+          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
+          payload: {},
         },
       },
       title: <TypographyProps>{
@@ -142,5 +147,6 @@ export const kycAadharVerifyMF: PageType<any> = {
     [ACTION.ENABLE_CTA]: toggleCTA,
     [ACTION.DISABLE_CTA]: toggleCTA,
     [ACTION.AADHAR_NUMBER]: onChangeAadhar,
+    [ACTION.GO_BACK]: GoBackAction,
   },
 };

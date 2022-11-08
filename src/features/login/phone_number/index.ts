@@ -44,11 +44,6 @@ export const template: TemplateSchema = {
     id: ROUTE.PHONE_NUMBER,
     type: LAYOUTS.LIST,
     widgets: [
-      {
-        id: "continue",
-        type: WIDGET.BUTTON,
-        position: POSITION.FIXED_BOTTOM,
-      },
       { id: "space0", type: WIDGET.SPACE },
       { id: "title", type: WIDGET.TEXT },
       { id: "space1", type: WIDGET.SPACE },
@@ -58,6 +53,11 @@ export const template: TemplateSchema = {
       { id: "space3", type: WIDGET.SPACE },
       // { id: "whatsappStack", type: WIDGET.STACK },
       { id: "space4", type: WIDGET.SPACE },
+      {
+        id: "continue",
+        type: WIDGET.BUTTON,
+        // position: POSITION.FIXED_BOTTOM,
+      },
     ],
   },
   datastore: <Datastore>{

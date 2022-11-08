@@ -27,6 +27,15 @@ import {
 import { IFSCSearchActionRepo } from "./repo";
 import { bankCodeX } from "./index";
 
+let widgetItems: WidgetItem[] = [];
+
+export const clearAction: ActionFunction<IFSCCodePayload> = async (
+  action,
+  _datastore,
+  { removeWidgets }
+): Promise<any> => {
+  await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
+};
 export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   action,
   _datastore,
@@ -87,17 +96,36 @@ const widgetItemDs = (index: number, ifscCode: string, address: string) => {
 export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
   action,
   _datastore,
-  { appendWidgets }
+  { appendWidgets, removeWidgets }
 ): Promise<any> => {
   // console.warn("**** IFSCSearchActionPayload Action Triggered ****", action);
-  const bankCode = action.payload.bankCode || bankCodeX;
+  const bankCode = action.payload.bankCode || bankCodeX; //HDFC
+  // action.payload.value // user value
   let searchLength: number;
-  if (bankCode.toUpperCase().includes(action.payload.value.toUpperCase())) {
-    searchLength = bankCode.length;
+  console.warn(
+    "bankCode->",
+    bankCode.toUpperCase(),
+    "input",
+    action.payload.value.toUpperCase(),
+    bankCode.toUpperCase().includes(action.payload.value.toUpperCase())
+  );
+  if (bankCode.length > action.payload.value.length) {
+    if (bankCode.toUpperCase().includes(action.payload.value.toUpperCase())) {
+      searchLength = 11;
+    } else {
+      searchLength = 3;
+    }
   } else {
-    searchLength = 4;
+    if (action.payload.value.toUpperCase().includes(bankCode.toUpperCase())) {
+      searchLength = 11;
+    } else {
+      searchLength = 3;
+    }
   }
   if (action.payload.value.length < searchLength) return;
+
+  if (widgetItems.length > 0)
+    await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
 
   const response = await IFSCSearchActionRepo(bankCode, action.payload.value);
 
@@ -106,8 +134,8 @@ export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
   Object.keys(response).map((bankCode) => {
     bankBranchArr.push({ bankCode: response[bankCode] });
   });
+  widgetItems = [];
 
-  const widgetItems: WidgetItem[] = [];
   let dataStore: Datastore = {};
   bankBranchArr.map((bank, index) => {
     if (!bank.bankCode.IFSC && !bank.bankCode.ADDRESS) return;

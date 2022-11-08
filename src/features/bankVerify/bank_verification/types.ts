@@ -2,6 +2,7 @@ export enum ACTION {
   TOGGLE_SELECT = "TOGGLE_SELECT",
   TRIGGER_CTA = "TRIGGER_CTA",
   GO_ADD_ACCOUNT = "GO_ADD_ACCOUNT",
+  GO_BACK = "GO_BACK",
 }
 export type BAVVerifyActionPayload = {
   applicationId: string;

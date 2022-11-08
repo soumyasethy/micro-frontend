@@ -7,8 +7,8 @@ import {
   TextInputProps,
 } from "@voltmoney/schema";
 import { AadharInputPayload } from "./types";
-import { AadharInitPayload } from "../kyc_digilocker/types";
-import { AadharInitRepo } from "../kyc_digilocker/repo";
+import { AadharInitPayload } from "../kyc_init/types";
+import { AadharInitRepo } from "../kyc_init/repo";
 import { ROUTE } from "../../../routes";
 
 let aadharNumber = "";
@@ -60,4 +60,12 @@ export const triggerCTA: ActionFunction<AadharInitPayload> = async (
       caption: { error: response.message },
     });
   }
+};
+
+export const GoBackAction: ActionFunction<AadharInitPayload> = async (
+  action,
+  _datastore,
+  { goBack }
+): Promise<any> => {
+  await goBack();
 };

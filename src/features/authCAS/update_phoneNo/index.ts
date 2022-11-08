@@ -22,7 +22,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, UpdateMobileNumber } from "./types";
 import { EnableDisableCTA } from "../../login/phone_number/types";
-import { updateMobileNumber, phoneOnChange, emailOnChange } from "./actions";
+import { updateMobileNumber, phoneOnChange } from "./actions";
 import { toggleCTA } from "../../login/phone_number/actions";
 
 export const template: TemplateSchema = {
