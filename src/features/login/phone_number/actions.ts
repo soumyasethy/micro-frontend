@@ -22,7 +22,7 @@ export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
   _datastore,
   { setDatastore, }
 ): Promise<any> => {
-  console.warn("action", action);
+  console.warn("action", action.payload);
   await setDatastore(action.routeId, action.payload.targetWidgetId, <
     ButtonProps
   >{

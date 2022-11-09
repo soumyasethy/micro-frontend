@@ -36,6 +36,13 @@ export const clearAction: ActionFunction<IFSCCodePayload> = async (
 ): Promise<any> => {
   await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
 };
+export const GoBackAction: ActionFunction<IFSCCodePayload> = async (
+  action,
+  _datastore,
+  { removeWidgets }
+): Promise<any> => {
+  await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
+};
 export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   action,
   _datastore,

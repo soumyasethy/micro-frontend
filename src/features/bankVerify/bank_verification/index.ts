@@ -16,6 +16,7 @@ import {
   HeaderProps,
   HeaderTypeTokens,
   IconAlignmentTokens,
+  IconProps,
   IconSizeTokens,
   IconTokens,
   SelectiveListItemProps,
@@ -27,6 +28,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
   StepperItem,
   StepperProps,
   StepperStateToken,
@@ -132,13 +134,29 @@ export const template: (
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       titleStack: <StackProps>{
+        width: StackWidth.FULL,
         type: StackType.row,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
           { id: "bank_select", type: WIDGET.TEXT },
-          { id: "add_account", type: WIDGET.BUTTON },
+          { id: "addAccountStack", type: WIDGET.STACK },
         ],
+      },
+      addAccountStack: <StackProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.flexStart,
+        widgetItems: [
+          { id: "icon", type: WIDGET.ICON },
+          { id: "iconSpace", type: WIDGET.SPACE },
+          { id: "addUser", type: WIDGET.TEXT },
+        ],
+        action: {
+          type: ACTION.GO_ADD_ACCOUNT,
+          routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
+          payload: {},
+        },
       },
       titleSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       bank_select: <TypographyProps>{
@@ -147,12 +165,23 @@ export const template: (
         color: ColorTokens.Grey_Night,
         fontWeight: "600",
       },
+      icon: <IconProps>{
+        name: IconTokens.Add,
+        size: IconSizeTokens.XL,
+      },
+      iconSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
+      addUser: <TypographyProps>{
+        label: "Add account",
+        color: ColorTokens.Primary_100,
+        fontSize: FontSizeTokens.SM,
+        fontWeight: "600",
+      },
       add_account: <ButtonProps & WidgetProps>{
         label: "Add account",
         type: ButtonTypeTokens.LargeGhost,
         width: ButtonWidthTypeToken.CONTENT,
         icon: {
-          name: IconTokens.AddUser,
+          name: IconTokens.Add,
           size: IconSizeTokens.XL,
           align: IconAlignmentTokens.left,
         },

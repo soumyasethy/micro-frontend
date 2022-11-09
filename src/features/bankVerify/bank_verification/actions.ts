@@ -34,8 +34,6 @@ export const ToggleSelectAction: ActionFunction<ToggleActionPayload> = async (
   await setDatastore(action.routeId, action.payload.targetWidgetId, <
     SelectiveListItemProps
   >{ state: SelectiveListItemStateTokens.SELECTED });
-  selectedWidget = action.payload.targetWidgetId;
-
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     type: ButtonTypeTokens.LargeFilled,
   });
