@@ -26,6 +26,16 @@ import { kycDigiLockerMF } from "./features/kyc/kyc_init";
 import { alertMF } from "./features/popup_loader";
 import { cameraCaptureMF } from "./features/kyc/kyc_photo_init";
 import { splashScreenMF } from "./features/spalsh_screen";
+import { unlockLimitMF } from "./features/unlockLimit/unlock_limit";
+import { pledgeVerifyMF } from "./features/unlockLimit/pledge_verify";
+import { pledgeLoadingMF } from "./features/unlockLimit/pledge_loading";
+import { pledgeConfirmationLoadingMF } from "./features/unlockLimit/pledge_confirmation_loader";
+import { pledgeConfirmationMF } from "./features/unlockLimit/pledge_confirmation";
+import { unlockSuccessMF } from "./features/unlockLimit/unlock_success";
+import { modifyLimitMF } from "./features/unlockLimit/modify_limit";
+import { portfolioMF } from "./features/unlockLimit/portfolio";
+import { pledgeAmountMF } from "./features/unlockLimit/pledged_amount";
+import { modifyPledgeMF } from "./features/unlockLimit/modify_pledged_amount";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -54,4 +64,14 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.ALERT_PAGE]: alertMF,
   [ROUTE.CAMERA_CAPTURE]: cameraCaptureMF,
   [ROUTE.SPLASH_SCREEN]: splashScreenMF,
+  [ROUTE.UNLOCK_LIMIT]: unlockLimitMF,
+  [ROUTE.PLEDGE_CONFIRMATION_LOADING]: pledgeConfirmationLoadingMF,
+  [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMF,
+  [ROUTE.PLEDGE_VERIFY]: pledgeVerifyMF,
+  [ROUTE.PLEDGE_LOADING]: pledgeLoadingMF,
+  [ROUTE.UNLOCK_SUCCESS]: unlockSuccessMF,
+  [ROUTE.MODIFY_LIMIT]: modifyLimitMF,
+  [ROUTE.PORTFOLIO]: portfolioMF,
+  [ROUTE.PLEDGED_AMOUNT]: pledgeAmountMF,
+  [ROUTE.MODIFY_PLEDGED_AMOUNT]: modifyPledgeMF,
 };
