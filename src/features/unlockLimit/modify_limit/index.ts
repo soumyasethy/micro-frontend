@@ -69,7 +69,7 @@ export const template: TemplateSchema = {
                 routeId: ROUTE.MODIFY_LIMIT,
             },
         },
-        space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+        space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
         inputItem: <TextInputProps & WidgetProps>{
             placeholder: "Search Portfolio",
             type: InputTypeToken.DEFAULT,
@@ -104,7 +104,7 @@ export const template: TemplateSchema = {
                 type: ACTION.MODIFY_LIMIT,
                 payload: <AssetsPayload>{
                     value: "",
-                    widgetId: "continue",
+                    widgetId: "input",
                     isResend: false,
                 },
                 routeId: ROUTE.MODIFY_LIMIT,
@@ -118,7 +118,7 @@ export const template: TemplateSchema = {
                 type: ACTION.MODIFY_LIMIT,
                 payload: <AssetsPayload>{
                     value: "",
-                    widgetId: "continue",
+                    widgetId: "input",
                     isResend: false,
                 },
                 routeId: ROUTE.MODIFY_LIMIT,

@@ -61,7 +61,7 @@ export const template: TemplateSchema = {
       trailIcon: 'Account',
       type: 'DEFAULT'
     },
-    space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
+    space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
       title: 'Approved Cash List',
       subTitle: '30,000',

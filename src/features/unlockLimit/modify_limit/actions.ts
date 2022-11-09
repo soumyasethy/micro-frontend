@@ -18,8 +18,8 @@ export const selectAssets: ActionFunction<AssetsPayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  phoneNumber = phoneNumber.includes("+91") ? phoneNumber : `+91${phoneNumber}`;
-  console.warn("**** using phoneNumber ****", phoneNumber);
+
+  console.warn("**** using phoneNumber ****",  action.payload.value);
   //await navigate(ROUTE.PORTFOLIO);
   console.warn("**** Assets data****");
 };
