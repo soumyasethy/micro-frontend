@@ -19,8 +19,8 @@ export const selectAssets: ActionFunction<AssetsPayload> = async (
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
 
-  console.warn("**** using phoneNumber ****",  action.payload.value);
-  //await navigate(ROUTE.PORTFOLIO);
+  //console.warn("**** using phoneNumber ****",  action.payload.value);
+  await navigate(ROUTE.PORTFOLIO);
   console.warn("**** Assets data****");
 };
 

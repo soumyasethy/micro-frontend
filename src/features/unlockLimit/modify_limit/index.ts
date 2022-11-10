@@ -71,7 +71,7 @@ export const template: TemplateSchema = {
         },
         space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
         inputItem: <TextInputProps & WidgetProps>{
-            placeholder: "Search Portfolio",
+            placeholder: "",
             type: InputTypeToken.DEFAULT,
             title: "Enter amount",
             state: InputStateToken.DEFAULT,
