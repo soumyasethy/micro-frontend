@@ -9,15 +9,18 @@ import {
   TextInputProps,
 } from "@voltmoney/schema";
 import { api } from "../../../configs/api";
-import { defaultAuthHeaders } from "../../../configs/config";
+import { defaultHeaders } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
+import { PledgeCreateRepo } from "./repo";
+//let availableCAS: string = "";
 
 export const continueLimit: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  console.warn("**** unlock limit data****");
-  navigate(ROUTE.PLEDGE_CONFIRMATION);
+
+  navigate(ROUTE.PLEDGE_CONFIRMATION, { availableCAS: action.payload.value });
 };
 
 export const modifyLimit: ActionFunction<LimitPayload> = async (
@@ -25,7 +28,7 @@ export const modifyLimit: ActionFunction<LimitPayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  console.warn("**** modify limit data****");
+
   navigate(ROUTE.MODIFY_LIMIT);
 };
 

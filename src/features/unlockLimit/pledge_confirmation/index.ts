@@ -22,14 +22,16 @@ import {
     ACTION,
     OtpPayload,
 } from "./types";
-import { sendOtp,goBack } from "./actions";
+import { sendOtp, goBack } from "./actions";
 
-export const template: TemplateSchema = {
+export const template: (
+    stepResponseObject
+) => TemplateSchema = (stepResponseObject) => ({
     layout: <Layout>{
         id: ROUTE.PLEDGE_CONFIRMATION,
         type: LAYOUTS.LIST,
         widgets: [
-            { id: "header", type: WIDGET.HEADER,position: POSITION.FIXED_TOP},
+            { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
             { id: "space0", type: WIDGET.SPACE },
             { id: "lineItem", type: WIDGET.LINEITEMCARD },
             { id: "buttonSpace", type: WIDGET.SPACE },
@@ -46,39 +48,39 @@ export const template: TemplateSchema = {
             leadIcon: 'https://reactnative.dev/img/tiny_logo.png',
             isBackButton: true,
             type: 'DEFAULT',
-            action:{
+            action: {
                 type: ACTION.BACK_BUTTON,
-                payload: <OtpPayload>{
-                    value: "",
-                    widgetId: "continue",
-                    isResend: false,
+                payload: <{}>{
+                    // value: "",
+                    // widgetId: "continue",
+                    // isResend: false,
                 },
                 routeId: ROUTE.PORTFOLIO,
             }
         },
         space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
         lineItem: <LineItemCardProps>{
-           // type: LineItemCardTypeTokens.DEFAULT,
+            // type: LineItemCardTypeTokens.DEFAULT,
             data: [
                 {
                     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
                     title: 'Total Cash Limit',
-                    amount: 30000
+                    amount: `${stepResponseObject.availableCreditAmount}`
                 },
                 {
                     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
                     title: 'Processing Charge 1',
-                    amount: 56
+                    amount: `${stepResponseObject.processingFees || 0}`
                 },
                 {
                     id: '58694a0f-3da1-471f-bd96-145571e29d72',
                     title: 'Processing Charge 2	',
-                    amount: 56
+                    amount: 0
                 },
                 {
                     id: '58694a0f-3da1-471f-bd96-145571e29d72',
                     title: 'Total Charges',
-                    amount: 76
+                    amount: 0
                 },
             ]
         },
@@ -87,11 +89,11 @@ export const template: TemplateSchema = {
             label: "Confirm & Get OTP",
             type: ButtonTypeTokens.MediumFilled,
             width: ButtonWidthTypeToken.FULL,
-            loading: true,
+           // loading: true,
             action: {
                 type: ACTION.PLEDGE_CONFIRMATION,
                 payload: <OtpPayload>{
-                    value: "",
+                    value: stepResponseObject,
                     widgetId: "continue",
                     isResend: false,
                 },
@@ -99,10 +101,13 @@ export const template: TemplateSchema = {
             },
         },
     },
-};
+});
 
 export const pledgeConfirmationMF: PageType<any> = {
-    onLoad: async () => Promise.resolve(template),
+    onLoad: async ({ }, { availableCAS }) => {
+        console.log(availableCAS);
+        return Promise.resolve(template(availableCAS))
+    },
     actions: {
         [ACTION.PLEDGE_CONFIRMATION]: sendOtp,
         [ACTION.BACK_BUTTON]: goBack,

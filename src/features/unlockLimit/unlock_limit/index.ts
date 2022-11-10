@@ -12,11 +12,8 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
-  ColorTokens,
   HeaderProps,
   IconAlignmentTokens,
-  IconProps,
-  IconSizeTokens,
   IconTokens,
   PromoCardProps,
   SizeTypeTokens,
@@ -26,16 +23,20 @@ import {
 import { ROUTE } from "../../../routes";
 import {
   ACTION,
+  AvailableCASItem,
   LimitPayload,
 } from "./types";
-import { continueLimit,modifyLimit } from "./actions";
+import { continueLimit, modifyLimit } from "./actions";
+import { fetchPledgeLimitRepo } from "./repo";
 
-export const template: TemplateSchema = {
+export const template: (
+  availableCreditAmount: number, availableCAS: AvailableCASItem[], stepResponseObject
+) => TemplateSchema = (availableCreditAmount, availableCAS, stepResponseObject) => ({
   layout: <Layout>{
     id: ROUTE.UNLOCK_LIMIT,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "header", type: WIDGET.HEADER,position: POSITION.FIXED_TOP },
+      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
       { id: "space0", type: WIDGET.SPACE },
       { id: "amount", type: WIDGET.AMOUNTCARD },
       { id: "space1", type: WIDGET.SPACE },
@@ -64,7 +65,7 @@ export const template: TemplateSchema = {
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
       title: 'Approved Cash List',
-      subTitle: '30,000',
+      subTitle: `${availableCreditAmount}`,
       chipText: 'How?',
       type: 'default'
     },
@@ -80,7 +81,7 @@ export const template: TemplateSchema = {
       action: {
         type: ACTION.UNLOCK_LIMIT,
         payload: <LimitPayload>{
-          value: "",
+          value: stepResponseObject,
           widgetId: "continue",
           isResend: false,
         },
@@ -98,7 +99,7 @@ export const template: TemplateSchema = {
       },
       action: {
         type: ACTION.MODIFY_LIMIT,
-        payload: <LimitPayload>{
+        payload: <{}>{
           value: "",
           widgetId: "continue",
           isResend: false,
@@ -132,12 +133,22 @@ export const template: TemplateSchema = {
     },
 
   },
-};
+});
+
+
+
 
 export const unlockLimitMF: PageType<any> = {
-  onLoad: async ({navigate},{}) => Promise.resolve(template),
+  onLoad: async () => {
+    const response = await fetchPledgeLimitRepo();
+    const availableCreditAmount: number = response.stepResponseObject.availableCreditAmount || 0;
+    const availableCAS: AvailableCASItem[] = response.stepResponseObject.availableCAS || [];
+    const stepResponseObject = response.stepResponseObject;
+    return Promise.resolve(template(availableCreditAmount, availableCAS, stepResponseObject));
+  },
+
   actions: {
-       [ACTION.UNLOCK_LIMIT]: continueLimit,
-       [ACTION.MODIFY_LIMIT]: modifyLimit,
+    [ACTION.UNLOCK_LIMIT]: continueLimit,
+    [ACTION.MODIFY_LIMIT]: modifyLimit,
   },
 };
