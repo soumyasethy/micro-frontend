@@ -1,10 +1,9 @@
-import {IconTokens, StepperItem, StepperStateToken} from "@voltmoney/schema";
+import { IconTokens, StepperItem, StepperStateToken } from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
 import { User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
-
 
 /*if (error.hasOwnProperty("message")) {
   const route = showBottomSheet({
@@ -51,11 +50,11 @@ export const stepperRepo = async () => {
   const user = await SharedPropsService.getUser();
 
   if (
-    ((user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
       "COMPLETED" ||
       user.linkedApplications[0].stepStatusMap.KYC_CKYC === "COMPLETED") &&
-      user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-        "COMPLETED") ||
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+      "COMPLETED" &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY === "COMPLETED"
   ) {
     KYC_VERIFICATION = StepperStateToken.COMPLETED;
@@ -73,8 +72,7 @@ export const stepperRepo = async () => {
       message:
         KYC_VERIFICATION === StepperStateToken.COMPLETED
           ? ""
-          : user.linkedApplications[0].stepStatusMap
-              .KYC_AADHAAR_VERIFICATION === StepperStateToken.IN_PROGRESS
+          : KYC_VERIFICATION === StepperStateToken.IN_PROGRESS
           ? message
           : "",
     },

@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetItem,
   WidgetProps,
@@ -11,6 +12,8 @@ import {
   ColorTokens,
   GridImageItemProps,
   GridItemTypeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   ImageProps,
   InputTypeToken,
   SizeTypeTokens,
@@ -29,7 +32,11 @@ import {
   NavSearchIfscBranchInfoActionPayload,
   SearchActionPayload,
 } from "./types";
-import { SearchAction, NavSearchIfscBranchInfoAction } from "./actions";
+import {
+  SearchAction,
+  NavSearchIfscBranchInfoAction,
+  GoBackAction,
+} from "./actions";
 import { BanksRepo } from "./repo";
 
 const popularBankItem = (
@@ -74,16 +81,31 @@ export const template: (
 ) => {
   return {
     layout: <Layout>{
-      id: ROUTE.BANK_ACCOUNT_ADD,
+      id: ROUTE.BANK_VERIFY_MANUALLY,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "space1", type: WIDGET.SPACE },
+        {
+          id: "header",
+          type: WIDGET.HEADER,
+          position: POSITION.FIXED_TOP,
+        },
+        // { id: "space1", type: WIDGET.SPACE },
         { id: "searchInput", type: WIDGET.INPUT },
-        { id: "searchInputSpace", type: WIDGET.SPACE },
+        // { id: "searchInputSpace", type: WIDGET.SPACE },
         { id: "gridItem", type: WIDGET.GRIDITEM },
       ],
     },
     datastore: <Datastore>{
+      header: <HeaderProps & WidgetProps>{
+        isBackButton: true,
+        type: HeaderTypeTokens.DEFAULT,
+        title: "Select your bank",
+        action: {
+          type: ACTION.GO_BACK,
+          routeId: ROUTE.BANK_VERIFY_MANUALLY,
+          payload: {},
+        },
+      },
       space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       searchInput: <TextInputProps & WidgetProps>{
         placeholder: "Search by bank name",
@@ -91,7 +113,7 @@ export const template: (
         caption: { default: "", success: "", error: "" },
         action: {
           type: ACTION.SEARCH_BANK,
-          routeId: ROUTE.BANK_ACCOUNT_ADD,
+          routeId: ROUTE.BANK_VERIFY_MANUALLY,
           payload: <SearchActionPayload>{
             value: "",
             targetWidgetId: "gridItem",
@@ -121,7 +143,7 @@ export const template: (
         borderColor: ColorTokens.Grey_Milk_1,
         action: {
           type: ACTION.NAV_IFSC_SEARCH_BRANCH_INFO,
-          routeId: ROUTE.BANK_ACCOUNT_ADD,
+          routeId: ROUTE.BANK_VERIFY_MANUALLY,
           payload: <NavSearchIfscBranchInfoActionPayload>{ value: "" },
         },
       },
@@ -129,7 +151,7 @@ export const template: (
   };
 };
 
-export const bankAddMF: PageType<any> = {
+export const bankVerifyManuallyMF: PageType<any> = {
   onLoad: async () => {
     let populatDS = {};
     const popularBanks: {
@@ -155,6 +177,7 @@ export const bankAddMF: PageType<any> = {
     return Promise.resolve(templateX);
   },
   actions: {
+    [ACTION.GO_BACK]: GoBackAction,
     [ACTION.SEARCH_BANK]: SearchAction,
     [ACTION.NAV_IFSC_SEARCH_BRANCH_INFO]: NavSearchIfscBranchInfoAction,
   },

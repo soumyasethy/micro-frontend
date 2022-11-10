@@ -14,10 +14,10 @@ import { verificationFailedMF } from "./features/authCAS/verification_failed";
 import { testPageMF } from "./features/test_page";
 import { kycAadharVerifyMF } from "./features/kyc/kyc_aadhar_init";
 import { kycAadharOTPVerifyMF } from "./features/kyc/kyc_otp";
-import { bankVerifyMF } from "./features/bankVerify/bank_verification";
-import { bankAddMF } from "./features/bankVerify/bank_add";
-import { addBankManuallyMF } from "./features/bankVerify/bank_add_manually";
-import { bankSearchBranchMF } from "./features/bankVerify/bank_search_branch";
+import { bankVerifyMF } from "./features/bankVerify/bank_verify";
+import { bankVerifyManuallyMF } from "./features/bankVerify/select_bank";
+import { bankSelectMF } from "./features/bankVerify/bank_very_manually";
+import { bankSearchBranchMF } from "./features/bankVerify/search_branch";
 import { kycSummaryMf } from "./features/kyc/kyc_summary";
 import { kycStepperMF } from "./features/kyc/kyc_stepper";
 import { kycAfterCameraMF } from "./features/kyc/kyc_photo_verify";
@@ -53,8 +53,8 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.KYC_AADHAAR_VERIFICATION]: kycAadharVerifyMF,
   [ROUTE.KYC_AADHAAR_VERIFICATION_OTP]: kycAadharOTPVerifyMF,
   [ROUTE.BANK_ACCOUNT_VERIFICATION]: bankVerifyMF,
-  [ROUTE.BANK_ACCOUNT_ADD]: bankAddMF,
-  [ROUTE.BANK_ACCOUNT_ADD_MANUALLY]: addBankManuallyMF,
+  [ROUTE.BANK_VERIFY_MANUALLY]: bankVerifyManuallyMF,
+  [ROUTE.BANK_SELECT]: bankSelectMF,
   [ROUTE.BANK_BRANCH_SEARCH]: bankSearchBranchMF,
   [ROUTE.KYC_SUMMARY]: kycSummaryMf,
   [ROUTE.KYC_STEPPER]: kycStepperMF,

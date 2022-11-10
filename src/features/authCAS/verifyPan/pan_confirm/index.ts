@@ -3,12 +3,14 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
+  ButtonWidthTypeToken,
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
@@ -18,6 +20,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  TextAlignTokens,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -51,20 +54,25 @@ export const template: (
           { id: "title_space", type: WIDGET.SPACE },
           { id: "confirm", type: WIDGET.BUTTON },
           { id: "wrong_space", type: WIDGET.SPACE },
-          { id: "confirm_stack", type: WIDGET.STACK },
+          {
+            id: "confirm_stack",
+            type: WIDGET.STACK,
+          },
         ],
       },
       title: <TypographyProps>{
-        label: `Hello, \n${name}`,
+        label: `Hello, \n${name.toUpperCase()}`,
         fontSize: FontSizeTokens.LG,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
+        textAlign: TextAlignTokens.center,
       },
       title_space: <SpaceProps>{ size: SizeTypeTokens.XL },
       confirm: <ButtonProps & WidgetProps>{
         label: `Yes, this is me!`,
         type: ButtonTypeTokens.LargeFilled,
+        width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.CONFIRM_PAN,
           payload: <ContinuePayload>{
@@ -98,6 +106,7 @@ export const template: (
         label: "Enter PAN again",
         fontSize: FontSizeTokens.SM,
         color: ColorTokens.Primary_100,
+        fontWeight: "600",
       },
     },
   };

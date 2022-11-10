@@ -36,19 +36,27 @@ export const clearAction: ActionFunction<IFSCCodePayload> = async (
 ): Promise<any> => {
   await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
 };
+export const GoBackAction: ActionFunction<IFSCCodePayload> = async (
+  action,
+  _datastore,
+  { removeWidgets, goBack }
+): Promise<any> => {
+  await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
+  await goBack();
+};
 export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   action,
   _datastore,
   { setDatastore, goBack }
 ): Promise<any> => {
   console.warn("**** OnSelectIFSCAction Action Triggered ****", action);
-  await setDatastore(ROUTE.BANK_ACCOUNT_ADD_MANUALLY, "IFSCInput", <
+  await setDatastore(ROUTE.BANK_SELECT, "IFSCInput", <
     TextInputProps
   >{
     state: InputStateToken.DISABLED,
     value: action.payload.ifscCode,
   });
-  await setDatastore(ROUTE.BANK_ACCOUNT_ADD_MANUALLY, "continue", <ButtonProps>{
+  await setDatastore(ROUTE.BANK_SELECT, "continue", <ButtonProps>{
     type: ButtonTypeTokens.LargeFilled,
   });
   await goBack();

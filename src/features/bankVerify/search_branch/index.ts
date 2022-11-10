@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -10,6 +11,8 @@ import {
   ColorTokens,
   DividerProps,
   DividerSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
@@ -26,8 +29,14 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, IFSCSearchActionPayload } from "./types";
-import { clearAction, IFSCSearchAction, OnSelectIFSCAction } from "./actions";
+import {
+  clearAction,
+  GoBackAction,
+  IFSCSearchAction,
+  OnSelectIFSCAction,
+} from "./actions";
 import _ from "lodash";
+
 export let bankCodeX = "";
 export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   layout: <Layout>{
@@ -35,17 +44,18 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     type: LAYOUTS.LIST,
     widgets: [
       {
-        id: "searchInput",
-        type: WIDGET.INPUT /*position: POSITION.FIXED_TOP*/,
+        id: "header",
+        type: WIDGET.HEADER,
+        position: POSITION.FIXED_TOP,
       },
-      {
-        id: "space",
-        type: WIDGET.SPACE /*position: POSITION.FIXED_TOP*/,
-      },
-      {
-        id: "dividerHeader",
-        type: WIDGET.DIVIDER /*position: POSITION.FIXED_TOP*/,
-      },
+      // {
+      //   id: "space",
+      //   type: WIDGET.SPACE /*position: POSITION.FIXED_TOP*/,
+      // },
+      // {
+      //   id: "dividerHeader",
+      //   type: WIDGET.DIVIDER /*position: POSITION.FIXED_TOP*/,
+      // },
       {
         id: "dividerSpace",
         type: WIDGET.SPACE /*position: POSITION.FIXED_TOP*/,
@@ -57,6 +67,20 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     ],
   },
   datastore: <Datastore>{
+    header: <HeaderProps & WidgetProps>{
+      isBackButton: true,
+      type: HeaderTypeTokens.DEFAULT,
+      title: "Select your bank",
+      action: {
+        type: ACTION.GO_BACK,
+        routeId: ROUTE.BANK_BRANCH_SEARCH,
+        payload: {},
+      },
+      widgetItem: {
+        id: "searchInput",
+        type: WIDGET.INPUT,
+      },
+    },
     space: <SpaceProps>{ size: SizeTypeTokens.XL },
     dividerHeader: <DividerProps>{
       size: DividerSizeTokens.SM,
@@ -106,6 +130,7 @@ export const bankSearchBranchMF: PageType<any> = {
     [ACTION.ON_SELECT_IFSC]: OnSelectIFSCAction,
     [ACTION.CLEAR_SEARCH]: clearAction,
     [ACTION.SEARCH_IFSC_ACTION]: _.debounce(IFSCSearchAction, 250),
+    [ACTION.GO_BACK]: GoBackAction,
   },
   clearPrevious: true,
 };

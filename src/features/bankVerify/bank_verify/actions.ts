@@ -34,8 +34,6 @@ export const ToggleSelectAction: ActionFunction<ToggleActionPayload> = async (
   await setDatastore(action.routeId, action.payload.targetWidgetId, <
     SelectiveListItemProps
   >{ state: SelectiveListItemStateTokens.SELECTED });
-  selectedWidget = action.payload.targetWidgetId;
-
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     type: ButtonTypeTokens.LargeFilled,
   });
@@ -76,7 +74,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
 export const AddAccountNavAction: ActionFunction<
   BAVVerifyActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  navigate(ROUTE.BANK_ACCOUNT_ADD);
+  navigate(ROUTE.BANK_VERIFY_MANUALLY);
 };
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
   action,
