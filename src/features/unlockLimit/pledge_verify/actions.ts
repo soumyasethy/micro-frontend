@@ -12,7 +12,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   const response = await AuthPledgeRepo("CAMS", action.payload.value);
   console.warn('AuthPledgeRepo',response)
   if (response) {
-    await handleError(response);
+    await handleError(response, {success:'Unlocked', failed:'Fail'});
   }
 
   // await navigate(ROUTE.MODIFY_LIMIT);
