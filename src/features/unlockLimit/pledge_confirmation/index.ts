@@ -58,9 +58,8 @@ export const template: (
                 routeId: ROUTE.PORTFOLIO,
             }
         },
-        space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
+        space0: <SpaceProps>{ size: SizeTypeTokens.XL },
         lineItem: <LineItemCardProps>{
-            // type: LineItemCardTypeTokens.DEFAULT,
             data: [
                 {
                     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -75,12 +74,12 @@ export const template: (
                 {
                     id: '58694a0f-3da1-471f-bd96-145571e29d72',
                     title: 'Processing Charge 2	',
-                    amount: 0
+                    amount: `${stepResponseObject.processingFees || 0}`
                 },
                 {
                     id: '58694a0f-3da1-471f-bd96-145571e29d72',
                     title: 'Total Charges',
-                    amount: 0
+                    amount: `${stepResponseObject.processingFees || 0}`
                 },
             ]
         },

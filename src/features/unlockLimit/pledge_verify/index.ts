@@ -30,10 +30,12 @@ import {
 import { ROUTE } from "../../../routes";
 import {
     ACTION,
-    OtpPayload,
+    OtpPledgePayload,
 } from "./types";
 import { verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
+import { sendOtp } from "../pledge_confirmation/actions";
+import { OtpPayload } from "../pledge_confirmation/types";
 export const template: (
     phoneNumber: string
 ) => TemplateSchema = (phoneNumber) => ({
@@ -95,9 +97,18 @@ export const template: (
             keyboardType: KeyboardTypeToken.numberPad,
             action: {
                 type: ACTION.PLEDGE_VERIFY,
-                payload: <OtpPayload>{ value: "", widgetId: "input" },
+                payload: <OtpPledgePayload>{ value: "", widgetId: "input" },
                 routeId: ROUTE.PLEDGE_VERIFY,
             },
+            // otpAction: {
+            //     type: ACTION.RESEND_OTP_NUMBER,
+            //     payload: <OtpPayload>{
+            //       value: stepResponseObject,
+            //       widgetId: "input",
+            //       isResend: true,
+            //     },
+            //     routeId: ROUTE.OTP_VERIFY,
+            //   },
         },
         inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
         message: <TypographyProps>{
@@ -121,5 +132,6 @@ export const pledgeVerifyMF: PageType<any> = {
 
     actions: {
         [ACTION.PLEDGE_VERIFY]: verifyOTP,
+        [ACTION.RESEND_OTP_NUMBER]: sendOtp,
     },
 };
