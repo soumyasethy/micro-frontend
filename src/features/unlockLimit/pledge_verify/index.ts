@@ -33,8 +33,12 @@ import {
     OtpPayload,
 } from "./types";
 import { verifyOTP } from "./actions";
+import { fetchUserRepo } from "./repo";
+export const template: (
+    phoneNumber: string
+) => TemplateSchema = (phoneNumber) => ({
 
-export const template: TemplateSchema = {
+    //export const template: TemplateSchema = {
     layout: <Layout>{
         id: ROUTE.PLEDGE_VERIFY,
         type: LAYOUTS.MODAL,
@@ -69,15 +73,15 @@ export const template: TemplateSchema = {
             fontFamily: FontFamilyTokens.Poppins,
             fontWeight: "600",
         },
-        leadIcon: <IconProps>{ 
+        leadIcon: <IconProps>{
             name: IconTokens.Cancel,
             size: IconSizeTokens.MD,
             color: ColorTokens.Grey_Night
-        
+
         },
         titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
         subTitle: <TypographyProps>{
-            label: "A 4-digit OTP was sent on 982*****54",
+            label: "A 4-digit OTP was sent on " + `${phoneNumber}`,
             color: ColorTokens.Grey_Charcoal,
             fontSize: FontSizeTokens.SM,
             fontFamily: FontFamilyTokens.Inter,
@@ -91,7 +95,7 @@ export const template: TemplateSchema = {
             keyboardType: KeyboardTypeToken.numberPad,
             action: {
                 type: ACTION.PLEDGE_VERIFY,
-                //payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },
+                payload: <OtpPayload>{ value: "", widgetId: "input" },
                 routeId: ROUTE.PLEDGE_VERIFY,
             },
         },
@@ -105,10 +109,16 @@ export const template: TemplateSchema = {
         },
 
     },
-};
+});
 
 export const pledgeVerifyMF: PageType<any> = {
-    onLoad: async () => Promise.resolve(template),
+
+    onLoad: async () => {
+        const response = await fetchUserRepo();
+        const phoneNumber = response.user.phoneNumber;
+        return Promise.resolve(template(phoneNumber))
+    },
+
     actions: {
         [ACTION.PLEDGE_VERIFY]: verifyOTP,
     },
