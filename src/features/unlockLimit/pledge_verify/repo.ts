@@ -8,7 +8,7 @@ export const AuthPledgeRepo = async (
 ) => {
 
   var raw = JSON.stringify({
-    "applicationId": (await (SharedPropsService.getUser())).linkedApplications[0].applicationId,
+   // "applicationId": (await (SharedPropsService.getUser())).linkedApplications[0].applicationId,
     assetRepository,
     otp
   });
