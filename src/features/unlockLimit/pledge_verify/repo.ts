@@ -7,13 +7,13 @@ export const AuthPledgeRepo = async (
   assetRepository: string, otp: string
 ) => {
 
-  var raw = JSON.stringify({
-   // "applicationId": (await (SharedPropsService.getUser())).linkedApplications[0].applicationId,
+  const raw = JSON.stringify({
+    "applicationId": (await (SharedPropsService.getUser())).linkedApplications[0].applicationId,
     assetRepository,
     otp
   });
 
-  var requestOptions = {
+  const requestOptions = {
     method: 'POST',
     headers: await defaultHeaders(),
     body: raw,

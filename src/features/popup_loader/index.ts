@@ -1,5 +1,14 @@
-import {Datastore, Layout, LAYOUTS, PageType, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
+  AlertProps,
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
+import {
+  ColorTokens,
   FontSizeTokens,
   IconProps,
   IconSizeTokens,
@@ -16,36 +25,61 @@ import {
   VerificationCardTypeTokens,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../routes";
-import {ACTION, AlertNavProps} from "./types";
-import {TestAction} from "./actions";
+import { ROUTE } from "../../routes";
+import { ACTION, AlertNavProps } from "./types";
+import { TestAction } from "./actions";
 
-export const template: (alertProps: AlertNavProps) => TemplateSchema = (
-  alertProps
-) => ({
+const _applyType = (
+  type: "SUCCESS" | "FAILED" | "IN_PROGRESS" | "LOADING" | "DEFAULT"
+) => {
+  switch (type) {
+    case "DEFAULT":
+      return VerificationCardTypeTokens.Default;
+    case "SUCCESS":
+      return VerificationCardTypeTokens.Success;
+    case "IN_PROGRESS":
+      return VerificationCardTypeTokens.InProgress;
+    case "FAILED":
+      return VerificationCardTypeTokens.Failed;
+    case "LOADING":
+      return VerificationCardTypeTokens.Default;
+  }
+};
+
+export const template: (alertProps: AlertProps) => TemplateSchema = ({
+  title = "",
+  message = "",
+  subTitle = "",
+  iconName = "",
+  primary = "",
+  ctaLabel = "",
+  ctaAction,
+  type,
+}) => ({
   layout: <Layout>{
     id: ROUTE.ALERT_PAGE,
     type: LAYOUTS.MODAL,
     widgets: [
       { id: "space1", type: WIDGET.SPACE },
       { id: "alert", type: WIDGET.VERIFICATIONCARD },
-      { id: "stack", type: WIDGET.STACK },
+      // { id: "stack", type: WIDGET.STACK },
     ],
   },
   datastore: <Datastore>{
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     alert: <VerificationCardProps & WidgetProps>{
-      label: alertProps.title,
-      message: alertProps.subTitle,
-      type: VerificationCardTypeTokens.Default,
-      iconName: IconTokens.Fire,
-      buttonText: alertProps.ctaLabel,
+      iconColor: ColorTokens.Primary_100,
+      label: title || "",
+      message: subTitle || "",
+      type: _applyType(type),
+      iconName: iconName,
+      buttonText: ctaLabel,
       action: {
         type: ACTION.TEST_ACTION,
         routeId: ROUTE.ALERT_PAGE,
         payload: {},
       },
-      buttonType: VerificationCardButtonTypeToken.FULL
+      buttonType: VerificationCardButtonTypeToken.FULL,
     },
     stack: <StackProps>{
       type: StackType.row,
@@ -60,7 +94,7 @@ export const template: (alertProps: AlertNavProps) => TemplateSchema = (
     messageIcon: <IconProps>{ name: IconTokens.Fire, size: IconSizeTokens.MD },
     iconSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     message: <TypographyProps>{
-      label: alertProps.message,
+      label: message,
       fontSize: FontSizeTokens.XS,
     },
   },
@@ -77,6 +111,7 @@ const alertPropsX: AlertNavProps = {
     routeId: ROUTE.ALERT_PAGE,
     payload: { hello: "world" },
   },
+  type: "DEFAULT",
 };
 
 export const alertMF: PageType<any> = {

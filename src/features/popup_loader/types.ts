@@ -13,4 +13,5 @@ export type AlertNavProps = {
   ctaLabel?: string;
   primary?: boolean;
   ctaAction?: Action<any>;
+  type?: "SUCCESS" | "FAILED" | "IN_PROGRESS" | "LOADING" | "DEFAULT";
 };
