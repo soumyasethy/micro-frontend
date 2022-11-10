@@ -15,7 +15,7 @@ export const template: TemplateSchema = {
   layout: <Layout>{
     id: ROUTE.CAMERA_CAPTURE,
     type: LAYOUTS.LIST,
-    widgets: [{ id: "camera", type: WIDGET.CAMERA }],
+    widgets: [{ id: "camera", type: WIDGET.CAMERA, padding: {horizontal: 0} }],
   },
   datastore: <Datastore>{
     camera: <CameraPickerProps & WidgetProps>{

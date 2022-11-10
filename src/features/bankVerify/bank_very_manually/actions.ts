@@ -10,6 +10,7 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { AlertNavProps } from "../../popup_loader/types";
 import { showBottomSheet } from "../../../configs/utils";
+import {ACTION} from "../../kyc/kyc_otp/types";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -59,7 +60,7 @@ export const ToggleCTA: ActionFunction<any> = async (
 
 export const BavVerifyManualAction: ActionFunction<
   BAVVerifyActionPayload
-> = async (action, _datastore, { setDatastore, navigate }): Promise<any> => {
+> = async (action, _datastore, { setDatastore, handleError }): Promise<any> => {
   console.warn("**** BavVerifyManualAction Action Triggered ****", action);
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
@@ -78,15 +79,16 @@ export const BavVerifyManualAction: ActionFunction<
     "currentStepId-->",
     response.updatedApplicationObj.currentStepId
   );
-  if (response.hasOwnProperty("message")) {
-    const route = showBottomSheet({
-      // title: result.statusCode,
-      message: response.message,
-      primary: true,
-      iconName: IconTokens.Error,
-    });
-    await navigate(route.routeId, route.params);
-  }
+  await handleError(response, {
+    success: "Account verified successfully!",
+    failed: "Verification failed!",
+    ctaLabel: "Retake",
+    ctaAction: {
+      type: ACTION.GO_BACK,
+      routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+      payload: {},
+    },
+  });
 };
 export const ChangeBankGoBackAction: ActionFunction<
   InputNumberActionPayload

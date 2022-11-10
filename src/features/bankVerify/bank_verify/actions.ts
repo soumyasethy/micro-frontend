@@ -12,6 +12,7 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { AadharInitPayload } from "../../kyc/kyc_init/types";
 import { showBottomSheet } from "../../../configs/utils";
+import { ACTION } from "../../kyc/kyc_otp/types";
 
 let selectedWidget = undefined;
 let ifscCode = undefined;
@@ -45,7 +46,7 @@ export const ToggleSelectAction: ActionFunction<ToggleActionPayload> = async (
 export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
   action,
   _datastore,
-  { setDatastore, navigate }
+  { setDatastore, navigate, handleError }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
@@ -61,15 +62,16 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
     loading: false,
   });
   console.warn("bavVerifyAction-->", response);
-  if (response.hasOwnProperty("message")) {
-    const route = showBottomSheet({
-      // title: result.statusCode,
-      message: response.message,
-      primary: true,
-      iconName: IconTokens.Error,
-    });
-    await navigate(route.routeId, route.params);
-  }
+  await handleError(response, {
+    success: "Account verified successfully!",
+    failed: "Verification failed!",
+    ctaLabel: "Retake",
+    ctaAction: {
+      type: ACTION.GO_BACK,
+      routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+      payload: {},
+    },
+  });
 };
 export const AddAccountNavAction: ActionFunction<
   BAVVerifyActionPayload

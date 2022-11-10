@@ -6,6 +6,7 @@ import { User } from "../../login/otp_verify/types";
 import { ButtonProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import { defaultHeaders } from "../../../configs/config";
+import { ACTION } from "../../kyc/kyc_otp/types";
 let hasChangedInDetails = false;
 
 export const editPanNumber: ActionFunction<PanEditPayload> = async (
@@ -43,7 +44,7 @@ export const editEmailId: ActionFunction<PanEditPayload> = async (
 export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   action,
   _datastore,
-  { navigate, asyncStorage, setDatastore, ...props }
+  { navigate, asyncStorage, setDatastore, handleError, ...props }
 ): Promise<any> => {
   await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
     loading: true,
@@ -92,5 +93,15 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
         loading: false,
       });
       await navigate(ROUTE.VERIFICATION_FAILED);
+      await handleError(error, {
+        success: "KYC done successfully!",
+        failed: "Verification failed!",
+        ctaLabel: "Retake",
+        ctaAction: {
+          type: ACTION.GO_BACK,
+          routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+          payload: {},
+        },
+      });
     });
 };
