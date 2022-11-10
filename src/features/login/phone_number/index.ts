@@ -3,7 +3,6 @@ import {
   Layout,
   LAYOUTS,
   PageType,
-  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";

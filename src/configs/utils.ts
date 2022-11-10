@@ -178,6 +178,11 @@ export const nextStepId = async (
           mobileNumber: user.linkedBorrowerAccounts[0].accountHolderPhoneNumber,
         },
       };
+    } else if (currentStepId === ROUTE.MF_PLEDGING_PORTFOLIO) {
+      return {
+        routeId: ROUTE.MF_PLEDGING_PORTFOLIO,
+        params: {},
+      };
     } else if (
       currentStepId === "KYC_CKYC" ||
       currentStepId === "KYC_PHOTO_VERIFICATION" ||

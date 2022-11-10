@@ -31,6 +31,7 @@ import {
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import { StoreKey } from "../../../configs/api";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   applicationId: string,
@@ -138,9 +139,7 @@ export const checkLimitMF: PageType<any> = {
     { asyncStorage },
     { applicationId, email, panNumber, mobileNumber }
   ) => {
-    const user: User = await asyncStorage
-      .get(StoreKey.userContext)
-      .then((response) => JSON.parse(response));
+    const user: User = await SharedPropsService.getUser();
     const panNumberX =
       panNumber || user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber =
