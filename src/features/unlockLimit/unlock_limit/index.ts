@@ -40,7 +40,7 @@ export const template: (
   availableCreditAmount: number, availableCAS: AvailableCASItem[], stepResponseObject
 ) => TemplateSchema = (availableCreditAmount, availableCAS, stepResponseObject) => ({
   layout: <Layout>{
-    id: ROUTE.UNLOCK_LIMIT,
+    id: ROUTE.MF_PLEDGING_PORTFOLIO,
     type: LAYOUTS.LIST,
     widgets: [
       { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
@@ -101,7 +101,7 @@ export const template: (
           widgetId: "continue",
           isResend: false,
         },
-        routeId: ROUTE.UNLOCK_LIMIT,
+        routeId: ROUTE.MF_PLEDGING_PORTFOLIO,
       },
     },
     space2: <SpaceProps>{ size: SizeTypeTokens.XL },
