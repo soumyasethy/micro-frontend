@@ -17,25 +17,19 @@ import { AuthPledgeRepo } from "./repo";
 export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate, setDatastore, asyncStorage,showPopup,handleError }
 ): Promise<any> => {
   console.log("verify otp")
   if (action.payload.value.length !== 4) return;
-  // await setDatastore(action.routeId, action.payload.widgetId, <TextInputProps>{
-  //   state: InputStateToken.LOADING,
-  // });
-  // await clearAllData();
   const response = await AuthPledgeRepo(
     "CAMS",
     action.payload.value
   );
 
-  const route = showBottomSheet({
-    // title: result.statusCode,
-    message: response.message,
-    primary: true,
-    iconName: IconTokens.Volt,
-  });
+  if(response){
+    handleError(response)
+  }
+  
  // await navigate(ROUTE.MODIFY_LIMIT);
 
 };

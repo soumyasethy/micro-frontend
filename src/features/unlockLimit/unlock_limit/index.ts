@@ -49,14 +49,14 @@ export const template: (
       { id: "space1", type: WIDGET.SPACE },
       { id: "cardItem", type: WIDGET.CARD,
         padding: {
-          horizontal:20,
-          all: 24
+          horizontal:0,
+          all: 0
         } 
       },
       {
         id: "promoCard", type: WIDGET.CARD, padding: {
-          horizontal:20,
-          all: 24
+          horizontal:0,
+          all: 0
         }
       },
 
