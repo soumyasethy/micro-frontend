@@ -1,6 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 
-export const TestAction: ActionFunction<any> = async (
+export const GoBackAction: ActionFunction<any> = async (
   action,
   _datastore,
   { goBack }

@@ -1,7 +1,7 @@
 import { Action } from "@voltmoney/types";
 
 export enum ACTION {
-  TEST_ACTION = "TEST_ACTION",
+  GO_BACK = "GO_BACK",
 }
 export type TestActionPayload = {};
 

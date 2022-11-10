@@ -27,7 +27,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTION, AlertNavProps } from "./types";
-import { TestAction } from "./actions";
+import { GoBackAction } from "./actions";
 
 const _applyType = (
   type: "SUCCESS" | "FAILED" | "IN_PROGRESS" | "LOADING" | "DEFAULT"
@@ -74,11 +74,13 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
       type: _applyType(type),
       iconName: iconName,
       buttonText: ctaLabel,
-      action: {
-        type: ACTION.TEST_ACTION,
-        routeId: ROUTE.ALERT_PAGE,
-        payload: {},
-      },
+      action: ctaAction
+        ? ctaAction
+        : {
+            type: ACTION.GO_BACK,
+            routeId: ROUTE.ALERT_PAGE,
+            payload: {},
+          },
       buttonType: VerificationCardButtonTypeToken.FULL,
     },
     stack: <StackProps>{
@@ -107,7 +109,7 @@ const alertPropsX: AlertNavProps = {
   ctaLabel: "continue",
   message: "Don’t worry your data is secured with Volt",
   ctaAction: {
-    type: ACTION.TEST_ACTION,
+    type: ACTION.GO_BACK,
     routeId: ROUTE.ALERT_PAGE,
     payload: { hello: "world" },
   },
@@ -119,6 +121,6 @@ export const alertMF: PageType<any> = {
     return Promise.resolve(template(alertProps));
   },
   actions: {
-    [ACTION.TEST_ACTION]: TestAction,
+    [ACTION.GO_BACK]: GoBackAction,
   },
 };
