@@ -17,3 +17,11 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
 
   // await navigate(ROUTE.MODIFY_LIMIT);
 };
+
+export const goBack: ActionFunction<OtpPledgePayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage,goBack }
+): Promise<any> => {
+  goBack();
+};

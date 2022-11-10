@@ -23,3 +23,10 @@ export const updateAmount: ActionFunction<amountPayload> = async (
   // });
 };
 
+export const goBack: ActionFunction<amountPayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage,goBack }
+): Promise<any> => {
+  goBack();
+};

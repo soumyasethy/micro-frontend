@@ -11,6 +11,7 @@ import {
     ButtonProps,
     ButtonTypeTokens,
     ButtonWidthTypeToken,
+    CtaCardProps,
     HeaderProps,
     InputStateToken,
     InputTypeToken,
@@ -27,14 +28,14 @@ import {
     ACTION,
     OtpPayload,
 } from "./types";
-import { otpSend,goBack } from "./actions";
+import { otpSend, goBack } from "./actions";
 
 export const template: TemplateSchema = {
     layout: <Layout>{
         id: ROUTE.PORTFOLIO,
         type: LAYOUTS.LIST,
         widgets: [
-            { id: "header", type: WIDGET.HEADER,position: POSITION.FIXED_TOP},
+            { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
             { id: "space0", type: WIDGET.SPACE },
             { id: "inputItem", type: WIDGET.INPUT },
             { id: "inputSpace", type: WIDGET.SPACE },
@@ -42,7 +43,7 @@ export const template: TemplateSchema = {
             { id: "listSpace", type: WIDGET.SPACE },
             {
                 id: "totalItem",
-                type: WIDGET.BUTTON,
+                type: WIDGET.CTACARD,
                 position: POSITION.ABSOLUTE_BOTTOM
             },
         ],
@@ -53,7 +54,7 @@ export const template: TemplateSchema = {
             leadIcon: 'https://reactnative.dev/img/tiny_logo.png',
             isBackButton: true,
             type: 'DEFAULT',
-            action:{
+            action: {
                 type: ACTION.BACK_BUTTON,
                 payload: <OtpPayload>{
                     value: "",
@@ -67,8 +68,8 @@ export const template: TemplateSchema = {
         inputItem: <TextInputProps & WidgetProps>{
             type: InputTypeToken.SEARCH,
             state: InputStateToken.DEFAULT,
-            placeholder: "",
-            title: "Enter amount",
+            placeholder: "Search Portfolio",
+            title: "",
             caption: { success: "", error: "" },
             keyboardType: KeyboardTypeToken.default,
             action: {
@@ -86,40 +87,40 @@ export const template: TemplateSchema = {
                     trailTitle: '₹4,000',
                     trailSubTitle: '/ ₹4,000',
                     action: 'edit',
-                  },
-                  {
+                },
+                {
                     label: 'Axis Long Term Equity Mutual Funds',
                     info: '',
                     trailTitle: '₹4,000',
                     trailSubTitle: '/ ₹4,000',
                     action: 'edit',
-                  },
-                  {
+                },
+                {
                     label: 'Axis Long Term Equity Mutual Funds',
                     info: '',
                     trailTitle: '₹4,000',
                     trailSubTitle: '/ ₹4,000',
                     action: 'edit',
-                  },
-                  {
+                },
+                {
                     label: 'Axis Long Term Equity Mutual Funds',
                     info: '',
                     trailTitle: '₹4,000',
                     trailSubTitle: '/ ₹4,000',
                     action: 'edit',
-                  }],
-                type: ListTypeTokens.CHECKLIST
+                }],
+            type: ListTypeTokens.CHECKLIST
         },
         listSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
-        totalItem: <ButtonProps & WidgetProps>{
-            label: "Confirm & Get OTP",
-            type: ButtonTypeTokens.MediumFilled,
-            width: ButtonWidthTypeToken.FULL,
+        totalItem: <CtaCardProps>{
+            label: 'Total credit limit',
+            info: '₹10,000',
+            actionLabel: 'Confirm & get OTP',
             action: {
                 type: ACTION.PORTFOLIO,
-                payload: <OtpPayload>{
+                payload: <{}>{
                     value: "",
-                    widgetId: "continue",
+                    widgetId: "totalItem",
                     isResend: false,
                 },
                 routeId: ROUTE.PORTFOLIO,
@@ -132,6 +133,6 @@ export const portfolioMF: PageType<any> = {
     onLoad: async () => Promise.resolve(template),
     actions: {
         [ACTION.PORTFOLIO]: otpSend,
-        [ACTION.BACK_BUTTON]:goBack,
+        [ACTION.BACK_BUTTON]: goBack,
     },
 };

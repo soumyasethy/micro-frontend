@@ -124,7 +124,7 @@ export const template: (
           widgetId: "continue",
           isResend: false,
         },
-        routeId: ROUTE.PHONE_NUMBER,
+        routeId: ROUTE.MF_PLEDGING_PORTFOLIO,
       },
     },
     space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },

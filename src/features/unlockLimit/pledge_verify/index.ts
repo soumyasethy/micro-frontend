@@ -8,9 +8,13 @@ import {
     WidgetProps,
 } from "@voltmoney/types";
 import {
+    ButtonProps,
+    ButtonTypeTokens,
+    ButtonWidthTypeToken,
     ColorTokens,
     FontFamilyTokens,
     FontSizeTokens,
+    IconAlignmentTokens,
     IconProps,
     IconSizeTokens,
     IconTokens,
@@ -32,7 +36,7 @@ import {
     ACTION,
     OtpPledgePayload,
 } from "./types";
-import { verifyOTP } from "./actions";
+import { goBack, verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
 import { sendOtp } from "../pledge_confirmation/actions";
 //import { OtpPayload } from "../pledge_confirmation/types";
@@ -65,7 +69,7 @@ export const template: (
             justifyContent: StackJustifyContent.spaceBetween,
             widgetItems: [
                 { id: "title", type: WIDGET.TEXT },
-                { id: "leadIcon", type: WIDGET.ICON },
+                { id: "leadIcon", type: WIDGET.BUTTON },
             ],
         },
         title: <TypographyProps>{
@@ -75,11 +79,29 @@ export const template: (
             fontFamily: FontFamilyTokens.Poppins,
             fontWeight: "600",
         },
-        leadIcon: <IconProps>{
-            name: IconTokens.Cancel,
-            size: IconSizeTokens.MD,
-            color: ColorTokens.Grey_Night
-
+        leadIcon: <ButtonProps & WidgetProps>{
+            label: "",
+            type: ButtonTypeTokens.SmallGhost,
+            width: ButtonWidthTypeToken.CONTENT,
+            stack: <StackProps>{
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                justifyContent: StackJustifyContent.flexStart
+            },
+            icon: {
+                name: IconTokens.Cancel,
+                align: IconAlignmentTokens.right,
+                size:IconSizeTokens.XXXXL
+            },
+            action: {
+                type: ACTION.GO_BACK,
+                payload: <{}>{
+                    value: "",
+                    widgetId: "input",
+                    isResend: false,
+                },
+                routeId: ROUTE.PLEDGE_VERIFY,
+            },
         },
         titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
         subTitle: <TypographyProps>{
@@ -133,5 +155,6 @@ export const pledgeVerifyMF: PageType<any> = {
     actions: {
         [ACTION.PLEDGE_VERIFY]: verifyOTP,
         [ACTION.RESEND_OTP_NUMBER]: sendOtp,
+        [ACTION.GO_BACK]: goBack,
     },
 };

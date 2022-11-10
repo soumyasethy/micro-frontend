@@ -14,6 +14,7 @@ import {
     ColorTokens,
     FontFamilyTokens,
     FontSizeTokens,
+    IconAlignmentTokens,
     IconProps,
     IconSizeTokens,
     IconTokens,
@@ -35,11 +36,11 @@ import {
     ACTION,
     amountPayload   ,
 } from "./types";
-import { updateAmount } from "./actions";
+import { goBack, updateAmount } from "./actions";
 
 export const template: TemplateSchema = {
     layout: <Layout>{
-        id: ROUTE.PLEDGE_VERIFY,
+        id: ROUTE.PLEDGED_AMOUNT,
         type: LAYOUTS.MODAL,
         widgets: [
             {
@@ -61,7 +62,7 @@ export const template: TemplateSchema = {
             justifyContent: StackJustifyContent.spaceBetween,
             widgetItems: [
                 { id: "title", type: WIDGET.TEXT },
-                { id: "leadIcon", type: WIDGET.ICON },
+                { id: "leadIcon", type: WIDGET.BUTTON },
             ],
         },
         title: <TypographyProps>{
@@ -71,11 +72,29 @@ export const template: TemplateSchema = {
             fontFamily: FontFamilyTokens.Inter,
             fontWeight: "600",
         },
-        leadIcon: <IconProps>{ 
-            name: IconTokens.Cancel,
-            size: IconSizeTokens.MD,
-            color: ColorTokens.Grey_Night
-        
+        leadIcon: <ButtonProps & WidgetProps>{
+            label: "",
+            type: ButtonTypeTokens.SmallGhost,
+            width: ButtonWidthTypeToken.CONTENT,
+            stack: <StackProps>{
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                justifyContent: StackJustifyContent.flexStart
+            },
+            icon: {
+                name: IconTokens.Cancel,
+                align: IconAlignmentTokens.right,
+                size:IconSizeTokens.XXXXL
+            },
+            action: {
+                type: ACTION.GO_BACK,
+                payload: <{}>{
+                    value: "",
+                    widgetId: "input",
+                    isResend: false,
+                },
+                routeId: ROUTE.PLEDGED_AMOUNT,
+            },
         },
         titleSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
         input: <TextInputProps & WidgetProps>{
@@ -115,5 +134,6 @@ export const pledgeAmountMF: PageType<any> = {
     onLoad: async () => Promise.resolve(template),
     actions: {
         [ACTION.PLEDGED_AMOUNT]: updateAmount,
+        [ACTION.GO_BACK]: goBack,
     },
 };
