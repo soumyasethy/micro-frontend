@@ -13,6 +13,11 @@ function getKeyByValue(object, value) {
   return Object.keys(object).find((key) => object[key] === value);
 }
 
+export const GoBackAction: ActionFunction<
+  NavSearchIfscBranchInfoActionPayload
+> = async (action, _datastore, { goBack }): Promise<any> => {
+  await goBack();
+};
 export const NavSearchIfscBranchInfoAction: ActionFunction<
   NavSearchIfscBranchInfoActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
@@ -23,7 +28,7 @@ export const NavSearchIfscBranchInfoAction: ActionFunction<
   const pool = { ...bankRepo.ALLBANKS, ...bankRepo.POPULAR };
   const bankCode = getKeyByValue(pool, action.payload.value);
   console.warn("bankCode->", bankCode);
-  await navigate(ROUTE.BANK_ACCOUNT_ADD_MANUALLY, { bankCode });
+  await navigate(ROUTE.BANK_SELECT, { bankCode });
 };
 
 export const SearchAction: ActionFunction<SearchActionPayload> = async (

@@ -74,7 +74,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
 export const AddAccountNavAction: ActionFunction<
   BAVVerifyActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  navigate(ROUTE.BANK_ACCOUNT_ADD);
+  navigate(ROUTE.BANK_VERIFY_MANUALLY);
 };
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
   action,

@@ -13,6 +13,8 @@ import {
   ButtonWidthTypeToken,
   ColorTokens,
   FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
@@ -47,13 +49,18 @@ import {
   onChangeIFSCNumber,
   ToggleCTA,
 } from "./actions";
-import { BAVVerifyActionPayload } from "../bank_verification/types";
+import { BAVVerifyActionPayload } from "../bank_verify/types";
 
 export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   layout: <Layout>{
-    id: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+    id: ROUTE.BANK_SELECT,
     type: LAYOUTS.LIST,
     widgets: [
+      {
+        id: "header",
+        type: WIDGET.HEADER,
+        position: POSITION.FIXED_TOP,
+      },
       { id: "cardStack", type: WIDGET.STACK },
       { id: "accountSpace", type: WIDGET.SPACE },
       { id: "accountInput", type: WIDGET.INPUT },
@@ -67,6 +74,16 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     ],
   },
   datastore: <Datastore>{
+    header: <HeaderProps & WidgetProps>{
+      isBackButton: true,
+      type: HeaderTypeTokens.DEFAULT,
+      title: "Select your bank",
+      action: {
+        type: ACTION.CHANGE_BANK_GO_BACK,
+        routeId: ROUTE.BANK_SELECT,
+        payload: {},
+      },
+    },
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     cardStack: <StackProps>{
       type: StackType.row,
@@ -103,7 +120,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       size: IconSizeTokens.XXL,
       action: {
         type: ACTION.CHANGE_BANK_GO_BACK,
-        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        routeId: ROUTE.BANK_SELECT,
         payload: {},
       },
     },
@@ -119,7 +136,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       action: {
         type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
         payload: <InputNumberActionPayload>{ value: "" },
-        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        routeId: ROUTE.BANK_SELECT,
       },
     },
     IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
@@ -131,7 +148,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       widgetItems: [{ id: "IFSCInput", type: WIDGET.INPUT }],
       action: {
         type: ACTION.NAVIGATION_SEARCH_IFSC,
-        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        routeId: ROUTE.BANK_SELECT,
         payload: <NavigationSearchIFSCActionPayload>{ bankCode: bankCode },
       },
     },
@@ -147,11 +164,11 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       action: {
         type: ACTION.ONCHANGE_IFSC_NUMBER,
         payload: <InputNumberActionPayload>{ value: "" },
-        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        routeId: ROUTE.BANK_SELECT,
       },
       onPressAction: {
         type: ACTION.NAVIGATION_SEARCH_IFSC,
-        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        routeId: ROUTE.BANK_SELECT,
         payload: <NavigationSearchIFSCActionPayload>{ bankCode: bankCode },
       },
     },
@@ -161,7 +178,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.TRIGGER_CTA,
-        routeId: ROUTE.BANK_ACCOUNT_ADD_MANUALLY,
+        routeId: ROUTE.BANK_SELECT,
         payload: <BAVVerifyActionPayload>{
           applicationId: "",
         },
@@ -170,7 +187,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   },
 });
 
-export const addBankManuallyMF: PageType<any> = {
+export const bankSelectMF: PageType<any> = {
   onLoad: async ({}, { bankCode }) => {
     console.warn("addBankManuallyMF OnLoad bankCode->", bankCode);
     return Promise.resolve(template(bankCode));
@@ -184,6 +201,3 @@ export const addBankManuallyMF: PageType<any> = {
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
   },
 };
-
-///ICIC0006933
-//693301701400

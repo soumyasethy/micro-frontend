@@ -117,6 +117,7 @@ export const template: (
     },
     datastore: <Datastore>{
       header: <HeaderProps & WidgetProps>{
+        isBackButton: true,
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         subTitle:
           "Volt Protects your financial information with Bank Grade Security",

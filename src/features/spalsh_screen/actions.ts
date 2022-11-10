@@ -18,8 +18,8 @@ export const SplashAction: ActionFunction<any> = async (
         const nextRoute = await nextStepId(
           user.linkedApplications[0].currentStepId
         );
-        await navigate(nextRoute.routeId, nextRoute.params);
-        // await navigate(ROUTE.KYC_PAN_VERIFICATION, {});
+        // await navigate(nextRoute.routeId, nextRoute.params);
+        await navigate(ROUTE.BANK_ACCOUNT_VERIFICATION, {});
       } else {
         await clearAllData();
         await navigate(ROUTE.PHONE_NUMBER);

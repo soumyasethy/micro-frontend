@@ -1,7 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ButtonProps, ButtonTypeTokens, IconTokens } from "@voltmoney/schema";
-import { BAVVerifyActionPayload } from "../bank_verification/types";
-import { postBankRepo } from "../bank_verification/repo";
+import { BAVVerifyActionPayload } from "../bank_verify/types";
+import { postBankRepo } from "../bank_verify/repo";
 import {
   InputNumberActionPayload,
   NavigationSearchIFSCActionPayload,

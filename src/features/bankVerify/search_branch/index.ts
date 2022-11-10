@@ -48,18 +48,14 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
         type: WIDGET.HEADER,
         position: POSITION.FIXED_TOP,
       },
-      {
-        id: "searchInput",
-        type: WIDGET.INPUT /*position: POSITION.FIXED_TOP*/,
-      },
-      {
-        id: "space",
-        type: WIDGET.SPACE /*position: POSITION.FIXED_TOP*/,
-      },
-      {
-        id: "dividerHeader",
-        type: WIDGET.DIVIDER /*position: POSITION.FIXED_TOP*/,
-      },
+      // {
+      //   id: "space",
+      //   type: WIDGET.SPACE /*position: POSITION.FIXED_TOP*/,
+      // },
+      // {
+      //   id: "dividerHeader",
+      //   type: WIDGET.DIVIDER /*position: POSITION.FIXED_TOP*/,
+      // },
       {
         id: "dividerSpace",
         type: WIDGET.SPACE /*position: POSITION.FIXED_TOP*/,
@@ -72,12 +68,17 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
   },
   datastore: <Datastore>{
     header: <HeaderProps & WidgetProps>{
+      isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
       title: "Select your bank",
       action: {
         type: ACTION.GO_BACK,
         routeId: ROUTE.BANK_BRANCH_SEARCH,
         payload: {},
+      },
+      widgetItem: {
+        id: "searchInput",
+        type: WIDGET.INPUT,
       },
     },
     space: <SpaceProps>{ size: SizeTypeTokens.XL },
