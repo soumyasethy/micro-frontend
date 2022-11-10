@@ -35,7 +35,7 @@ import {
 import { verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
 import { sendOtp } from "../pledge_confirmation/actions";
-import { OtpPayload } from "../pledge_confirmation/types";
+//import { OtpPayload } from "../pledge_confirmation/types";
 export const template: (
     phoneNumber: string
 ) => TemplateSchema = (phoneNumber) => ({

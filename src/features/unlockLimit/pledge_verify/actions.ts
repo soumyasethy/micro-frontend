@@ -1,7 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import {
-  OtpPayload
+   OtpPledgePayload
 } from "./types";
 import {
   ButtonProps,
@@ -14,7 +14,7 @@ import { defaultAuthHeaders } from "../../../configs/config";
 import { clearAllData, showBottomSheet } from "../../../configs/utils";
 import { AuthPledgeRepo } from "./repo";
 
-export const verifyOTP: ActionFunction<OtpPayload> = async (
+export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }

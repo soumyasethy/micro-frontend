@@ -47,12 +47,16 @@ export const template: (
       { id: "space0", type: WIDGET.SPACE },
       { id: "amount", type: WIDGET.AMOUNTCARD },
       { id: "space1", type: WIDGET.SPACE },
-      { id: "cardItem", type: WIDGET.CARD,padding: {
-        all: 0
-      } },
+      { id: "cardItem", type: WIDGET.CARD,
+        padding: {
+          horizontal:20,
+          all: 24
+        } 
+      },
       {
         id: "promoCard", type: WIDGET.CARD, padding: {
-          all: 0
+          horizontal:20,
+          all: 24
         }
       },
 
