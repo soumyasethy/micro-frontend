@@ -36,6 +36,10 @@ import { modifyLimitMF } from "./features/unlockLimit/modify_limit";
 import { portfolioMF } from "./features/unlockLimit/portfolio";
 import { pledgeAmountMF } from "./features/unlockLimit/pledged_amount";
 import { modifyPledgeMF } from "./features/unlockLimit/modify_pledged_amount";
+import { dashboardMF } from "./features/unlockLimit/afterUnlock/dashboard";
+import { withdraw_amountMF } from "./features/unlockLimit/afterUnlock/withdraw_amount";
+import { withdrawalOtpMF } from "./features/unlockLimit/afterUnlock/withdrawal_otp";
+import { withdrawalSuccessMF } from "./features/unlockLimit/afterUnlock/withdrawal_success";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -74,4 +78,8 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.PORTFOLIO]: portfolioMF,
   [ROUTE.PLEDGED_AMOUNT]: pledgeAmountMF,
   [ROUTE.MODIFY_PLEDGED_AMOUNT]: modifyPledgeMF,
+  [ROUTE.DASHBOARD]: dashboardMF,
+  [ROUTE.WITHDRAW_AMOUNT]: withdraw_amountMF,
+  [ROUTE.WITHDRAWAL_OTP]: withdrawalOtpMF,
+  [ROUTE.WITHDRAWAL_SUCCESS]: withdrawalSuccessMF,
 };
