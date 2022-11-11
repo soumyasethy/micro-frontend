@@ -58,6 +58,17 @@ export const stepperRepo = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY === "COMPLETED"
   ) {
     KYC_VERIFICATION = StepperStateToken.COMPLETED;
+  } else if (
+    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+      "PENDING_MANUAL_VERIFICATION" ||
+      user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
+        "PENDING_MANUAL_VERIFICATION") &&
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+      "PENDING_MANUAL_VERIFICATION" &&
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
+      "PENDING_MANUAL_VERIFICATION"
+  ) {
+    KYC_VERIFICATION = StepperStateToken.PENDING_MANUAL_VERIFICATION;
   } else {
     KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
   }
@@ -70,9 +81,7 @@ export const stepperRepo = async () => {
       subTitle: "lorme ipsum doler smit en",
       status: KYC_VERIFICATION,
       message:
-        KYC_VERIFICATION === StepperStateToken.COMPLETED
-          ? ""
-          : KYC_VERIFICATION === StepperStateToken.IN_PROGRESS
+        KYC_VERIFICATION === StepperStateToken.PENDING_MANUAL_VERIFICATION
           ? message
           : "",
     },
@@ -85,10 +94,7 @@ export const stepperRepo = async () => {
         user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
       message:
         user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
-        StepperStateToken.COMPLETED
-          ? ""
-          : user.linkedApplications[0].stepStatusMap
-              .BANK_ACCOUNT_VERIFICATION === StepperStateToken.IN_PROGRESS
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
           ? message
           : "",
     },
@@ -178,9 +184,9 @@ export const nextStepId = async (
           mobileNumber: user.linkedBorrowerAccounts[0].accountHolderPhoneNumber,
         },
       };
-    } else if (currentStepId === ROUTE.MF_PLEDGING_PORTFOLIO) {
+    } else if (currentStepId === ROUTE.MF_PLEDGE_PORTFOLIO) {
       return {
-        routeId: ROUTE.MF_PLEDGING_PORTFOLIO,
+        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
         params: {},
       };
     } else if (

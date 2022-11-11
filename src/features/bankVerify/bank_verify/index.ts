@@ -215,7 +215,7 @@ export const bankVerifyMF: PageType<any> = {
     const response = await fetchBankRepo();
     const banks = response.stepResponseObject;
     const stepper: StepperItem[] = await stepperRepo();
-    stepper[1].status = StepperStateToken.COMPLETED;
+    // stepper[1].status = StepperStateToken.COMPLETED;
     const templateX = await template(banks, stepper);
 
     return Promise.resolve(templateX);

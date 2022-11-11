@@ -13,6 +13,7 @@ import SharedPropsService from "../../../../SharedPropsService";
 import { defaultHeaders } from "../../../../configs/config";
 import moment from "moment";
 import { showBottomSheet } from "../../../../configs/utils";
+import { ACTION } from "../../../kyc/kyc_otp/types";
 
 let pan: string = "";
 let dob: string = "";
@@ -20,7 +21,7 @@ let dob: string = "";
 export const verifyPan: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { asyncStorage, setDatastore, navigate, ...props }
+  { asyncStorage, setDatastore, navigate, handleError, ...props }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
@@ -70,15 +71,16 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
         await setDatastore(action.routeId, "input", <TextInputProps>{
           state: InputStateToken.ERROR,
         });
-        if (result.hasOwnProperty("message")) {
-          const route = showBottomSheet({
-            // title: result.statusCode,
-            message: result.message,
-            primary: true,
-            iconName: IconTokens.Error,
-          });
-          await navigate(route.routeId, route.params);
-        }
+        await handleError(result, {
+          success: "Pan verified successfully!",
+          failed: "Verification failed!",
+          ctaLabel: "Go Back",
+          ctaAction: {
+            type: ACTION.GO_BACK,
+            routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+            payload: {},
+          },
+        });
       }
     })
     .catch(async (error) => {

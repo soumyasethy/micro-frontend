@@ -9,3 +9,6 @@ export type AadharInitPayload = {
 export type ToggleKYCVerifyCTA = {
   value: boolean;
 };
+export type NavigationNext = {
+  stepId: string;
+};

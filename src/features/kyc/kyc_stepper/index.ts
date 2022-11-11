@@ -18,7 +18,6 @@ import {
   SpaceProps,
   StepperItem,
   StepperProps,
-  StepperStateToken,
   StepperTypeTokens,
   WIDGET,
 } from "@voltmoney/schema";

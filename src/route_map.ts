@@ -64,7 +64,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.ALERT_PAGE]: alertMF,
   [ROUTE.CAMERA_CAPTURE]: cameraCaptureMF,
   [ROUTE.SPLASH_SCREEN]: splashScreenMF,
-  [ROUTE.MF_PLEDGING_PORTFOLIO]: unlockLimitMF,
+  [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMF,
   [ROUTE.PLEDGE_CONFIRMATION_LOADING]: pledgeConfirmationLoadingMF,
   [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMF,
   [ROUTE.PLEDGE_VERIFY]: pledgeVerifyMF,

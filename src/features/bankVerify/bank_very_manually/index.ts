@@ -200,4 +200,5 @@ export const bankSelectMF: PageType<any> = {
     [ACTION.TRIGGER_CTA]: BavVerifyManualAction,
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
   },
+  clearPrevious: true,
 };

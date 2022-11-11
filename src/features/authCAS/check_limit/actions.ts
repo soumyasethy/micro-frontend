@@ -92,11 +92,10 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
       await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
         loading: false,
       });
-      await navigate(ROUTE.VERIFICATION_FAILED);
       await handleError(error, {
-        success: "KYC done successfully!",
+        success: "SUCCESS",
         failed: "Verification failed!",
-        ctaLabel: "Retake",
+        ctaLabel: "Done",
         ctaAction: {
           type: ACTION.GO_BACK,
           routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,

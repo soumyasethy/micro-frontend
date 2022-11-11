@@ -1,15 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import {
-  amountPayload
-} from "./types";
-import {
-  ButtonProps,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
-import { api } from "../../../configs/api";
-import { defaultAuthHeaders } from "../../../configs/config";
+import { amountPayload } from "./types";
 
 export const updateAmount: ActionFunction<amountPayload> = async (
   action,
@@ -26,7 +17,7 @@ export const updateAmount: ActionFunction<amountPayload> = async (
 export const goBack: ActionFunction<amountPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage,goBack }
+  { navigate, setDatastore, asyncStorage, goBack }
 ): Promise<any> => {
   goBack();
 };

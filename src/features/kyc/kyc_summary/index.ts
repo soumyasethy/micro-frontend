@@ -39,7 +39,7 @@ import { ROUTE } from "../../../routes";
 import { kycSummaryInitRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
 import { ACTION } from "./types";
-import { GoBackAction, ToggleKYCSummaryCTA, verifyKycSummary } from "./actions";
+import {GoBackAction, NavigateNext, ToggleKYCSummaryCTA, verifyKycSummary} from "./actions";
 import { stepperRepo } from "../../../configs/utils";
 import { ToggleKYCVerifyCTA } from "../kyc_init/types";
 import moment from "moment";
@@ -105,7 +105,7 @@ export const template: (
     },
     dobItem: <ListItemProps>{
       leadIconName: IconTokens.Calendar,
-      subTitle: moment.unix(Number(dob) / 1000).format("dd-MM-yyyy"),
+      subTitle: moment.unix(Number(dob) / 1000).format("DD-MM-yyyy"),
       title: "DOB",
     },
     addressItem: <ListItemProps>{
@@ -179,5 +179,6 @@ export const kycSummaryMf: PageType<any> = {
     [ACTION.NAV_TO_BANK_ADD]: verifyKycSummary,
     [ACTION.GO_BACK]: GoBackAction,
     [ACTION.TOGGLE_CTA]: ToggleKYCSummaryCTA,
+    [ACTION.NAVIGATION_NEXT]: NavigateNext,
   },
 };

@@ -1,34 +1,45 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import {
-  OtpPayload
-} from "./types";
-import {
-  ButtonProps,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
-import { api } from "../../../configs/api";
-import { defaultAuthHeaders } from "../../../configs/config";
+import { OtpPayload } from "./types";
+import { ButtonProps } from "@voltmoney/schema";
 import { PledgeCreateRepo } from "../unlock_limit/repo";
-import SharedPropsService from "../../../SharedPropsService";
+import { ACTION } from "../../kyc/kyc_otp/types";
 
 export const sendOtp: ActionFunction<OtpPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate, setDatastore, handleError }
 ): Promise<any> => {
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     loading: true,
   });
-  const response = await PledgeCreateRepo("CAMS", action.payload.value.availableCAS);
-  await setDatastore(action.routeId, action.payload.widgetId, <
-    ButtonProps
-    >{
-      loading: false,
-    });
-  navigate(ROUTE.PLEDGE_VERIFY);
+  const assetRepositoryCams = [];
+  const assetRepositoryKFIN = [];
+  action.payload.value.availableCAS.map((item) => {
+    if (item.assetRepository === "CAMS") {
+      assetRepositoryCams.push({
+        ...item,
+        is_pledged: true,
+        pledgedUnits: item.totalAvailableUnits,
+      });
+    } else if (item.assetRepository === "KARVY") {
+      assetRepositoryKFIN.push({
+        ...item,
+        is_pledged: true,
+        pledgedUnits: item.totalAvailableUnits,
+      });
+    }
+  });
 
+  const response = await PledgeCreateRepo("KARVY", assetRepositoryKFIN);
+  await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+    loading: false,
+  });
+  await handleError(response, {
+    failed: "Something went wrong",
+    ctaLabel: "Go Back",
+  });
+  await navigate(ROUTE.PLEDGE_VERIFY, { assetRepository: "KARVY" });
 };
 
 export const goBack: ActionFunction<any> = async (
@@ -38,4 +49,3 @@ export const goBack: ActionFunction<any> = async (
 ): Promise<any> => {
   goBack();
 };
-

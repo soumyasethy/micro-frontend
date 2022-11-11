@@ -53,7 +53,7 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
   iconName = "",
   primary = "",
   ctaLabel = "",
-  ctaAction,
+  ctaAction = null,
   type,
 }) => ({
   layout: <Layout>{
@@ -72,7 +72,7 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
       label: title || "",
       message: subTitle || "",
       type: _applyType(type),
-      iconName: iconName,
+      iconName: (iconName as IconTokens) || IconTokens.Alert,
       buttonText: ctaLabel,
       action: ctaAction
         ? ctaAction
@@ -123,4 +123,5 @@ export const alertMF: PageType<any> = {
   actions: {
     [ACTION.GO_BACK]: GoBackAction,
   },
+  clearPrevious: true,
 };

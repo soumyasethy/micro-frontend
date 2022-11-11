@@ -3,5 +3,6 @@ export enum ACTION {
   NAV_TO_BANK_ADD = "NAV_TO_BANK_ADD",
   GO_BACK = "GO_BACK",
   TOGGLE_CTA = "TOGGLE_CTA",
+  NAVIGATION_NEXT = "NAVIGATION_NEXT",
 }
 export type TestActionPayload = {};

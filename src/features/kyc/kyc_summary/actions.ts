@@ -1,14 +1,19 @@
 import { ActionFunction } from "@voltmoney/types";
 import { kycSummaryVerifyRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
-import { AadharInitPayload, ToggleKYCVerifyCTA } from "../kyc_init/types";
+import {
+  AadharInitPayload,
+  NavigationNext,
+  ToggleKYCVerifyCTA,
+} from "../kyc_init/types";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-
+import { ACTION } from "./types";
+import _ from "lodash";
 export const verifyKycSummary: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, setDatastore }
+  { setDatastore, showPopup, handleError }
 ): Promise<any> => {
   await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
     loading: true,
@@ -17,13 +22,41 @@ export const verifyKycSummary: ActionFunction<any> = async (
     .linkedApplications[0].applicationId;
 
   const response = await kycSummaryVerifyRepo(applicationId);
-  console.warn("verifyKycSummary->", response);
+  if (_.get(response, "updatedApplicationObj")) {
+    await showPopup({
+      title: "KYC done successfully!",
+      subTitle: "You will be redirected to next step in few seconds",
+      type: "SUCCESS",
+      ctaLabel: "Proceed to verify bank account",
+      primary: true,
+      ctaAction: {
+        type: ACTION.NAVIGATION_NEXT,
+        routeId: ROUTE.KYC_SUMMARY,
+        payload: <NavigationNext>{
+          stepId: response.updatedApplicationObj.currentStepId,
+        },
+      },
+    });
+  } else {
+    await handleError(response, {
+      failed: "Verification failed!",
+      ctaLabel: "Go Back",
+    });
+  }
   await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
     loading: false,
   });
-  if (response.updatedApplicationObj.currentStepId)
-    await navigate(response.updatedApplicationObj.currentStepId);
 };
+
+export const NavigateNext: ActionFunction<NavigationNext> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  await goBack();
+  if (action.payload.stepId) await navigate(action.payload.stepId);
+};
+
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
   action,
   _datastore,
