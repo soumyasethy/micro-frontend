@@ -1,4 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
+import { ROUTE } from "../../../../routes";
 import { OtpPledgePayload } from "./types";
 
 
@@ -9,7 +10,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
 ): Promise<any> => {
 
 
-  // await navigate(ROUTE.);
+  await navigate(ROUTE.WITHDRAWAL_SUCCESS);
 };
 
 export const goBack: ActionFunction<OtpPledgePayload> = async (

@@ -11,23 +11,12 @@ import {
 import { api } from "../../../../configs/api";
 import { defaultAuthHeaders } from "../../../../configs/config";
 
-let phoneNumber: string = "";
-
-export const withdrawNow: ActionFunction<AssetsPayload> = async (
-  action,
-  _datastore,
-  { navigate, setDatastore, asyncStorage }
-): Promise<any> => {
-  await navigate(ROUTE.WITHDRAW_AMOUNT);
-};
-
 export const repayment: ActionFunction<AssetsPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  console.warn("**** Go Repayment****");
-  await navigate(ROUTE.REPAYMENT);
+  await navigate(ROUTE.DASHBOARD);
 };
 
 export const goBack: ActionFunction<AssetsPayload> = async (
@@ -35,6 +24,6 @@ export const goBack: ActionFunction<AssetsPayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  console.warn("**** Go Back****");
+  await navigate(ROUTE.DASHBOARD);
 };
 

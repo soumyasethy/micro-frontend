@@ -39,7 +39,7 @@ import {
     ACTION,
     AssetsPayload,
 } from "./types";
-import { goBack, withdrawNow } from "./actions";
+import { goBack, withdrawNow,repayment } from "./actions";
 
 export const template: TemplateSchema = {
     layout: <Layout>{
@@ -152,11 +152,12 @@ export const template: TemplateSchema = {
         },
         message: <MessageProps>{
             label: 'We Couldnt find a portfolio match your details. Please Review & Try Again',
-            actionText: '',
             labelColor: ColorTokens.Grey_Charcoal,
             bgColor: ColorTokens.System_Warning_BG,
-            icon: <IconProps>{
-                name:""
+            actionIcon: <IconProps>{
+                name:IconTokens.Cancel,
+                size:IconSizeTokens.MD,
+                color: ColorTokens.Grey_Night
             }
         },
         space0: <SpaceProps>{ size: SizeTypeTokens.XL },
@@ -198,7 +199,16 @@ export const template: TemplateSchema = {
             title: 'Repayment',
             message: 'Outstanding amount',
             amount: '5,000',
-            btnText: 'Flexi Pay'
+            btnText: 'Flexi Pay',
+            action: {
+                type: ACTION.REPAYMENT,
+                payload: <{}>{
+                    value: "",
+                    widgetId: "input",
+                    isResend: false,
+                },
+                routeId: ROUTE.DASHBOARD,
+            },
         },
         repaymentSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
         promoCard: <CardProps>{
@@ -239,6 +249,7 @@ export const dashboardMF: PageType<any> = {
     onLoad: async () => Promise.resolve(template),
     actions: {
         [ACTION.DASHBOARD]: withdrawNow,
-        [ACTION.REPAYMENT]: goBack,
+        [ACTION.REPAYMENT]: repayment,
+        [ACTION.MENU]: goBack,
     },
 };
