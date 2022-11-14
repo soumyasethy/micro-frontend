@@ -4,14 +4,13 @@ import { api } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
 import { ButtonProps } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { AlertNavProps } from "../../popup_loader/types";
 import { ACTION } from "../kyc_otp/types";
-import { AadharInitPayload } from "../kyc_init/types";
+import { AadharInitPayload, NavigationNext } from "../kyc_init/types";
 
 export const PhotoVerifyAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, setDatastore, handleError }
+  { navigate, setDatastore, handleError, showPopup }
 ): Promise<any> => {
   console.warn("**** PhotoVerify Action Triggered ****", action);
 
@@ -39,18 +38,22 @@ export const PhotoVerifyAction: ActionFunction<any> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-  await handleError(response, {
-    success: "KYC done successfully!",
-    failed: "Verification failed!",
-    ctaLabel: "Retake",
-    ctaAction: {
-      type: ACTION.GO_BACK,
-      routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
-      payload: {},
-    },
-  });
   if (response.status === "SUCCESS")
     await navigate(response.updatedApplicationObj.currentStepId);
+  else {
+    await showPopup({
+      title: "Verification failed!",
+      subTitle: "We couldn't verify the account. Retake your photo & try again",
+      type: "FAILED",
+      ctaLabel: "Retake",
+      primary: true,
+      ctaAction: {
+        type: ACTION.GO_BACK,
+        routeId: ROUTE.KYC_AFTER_CAMERA,
+        payload: {},
+      },
+    });
+  }
 };
 export const RetakePhoto: ActionFunction<any> = async (
   action,

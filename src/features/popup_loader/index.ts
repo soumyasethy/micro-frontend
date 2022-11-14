@@ -52,7 +52,7 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
   subTitle = "",
   iconName = "",
   primary = "",
-  ctaLabel = "",
+  ctaLabel = null,
   ctaAction = null,
   type,
 }) => ({
@@ -74,13 +74,11 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
       type: _applyType(type),
       iconName: (iconName as IconTokens) || IconTokens.Alert,
       buttonText: ctaLabel,
-      action: ctaAction
-        ? ctaAction
-        : {
-            type: ACTION.CLOSE_POPUP,
-            routeId: ROUTE.ALERT_PAGE,
-            payload: {},
-          },
+      action: {
+        type: ACTION.CLOSE_POPUP,
+        routeId: ROUTE.ALERT_PAGE,
+        payload: {},
+      },
       buttonType: VerificationCardButtonTypeToken.FULL,
     },
     stack: <StackProps>{
@@ -118,6 +116,7 @@ const alertPropsX: AlertNavProps = {
 
 export const alertMF: PageType<any> = {
   onLoad: async ({}, { alertProps }) => {
+    console.warn("alertProps", alertProps);
     return Promise.resolve(template(alertProps));
   },
   actions: {

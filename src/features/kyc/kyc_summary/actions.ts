@@ -38,9 +38,19 @@ export const verifyKycSummary: ActionFunction<any> = async (
       },
     });
   } else {
-    await handleError(response, {
-      failed: "Verification failed!",
-      ctaLabel: "Go Back",
+    await showPopup({
+      title: "Verification failed!",
+      subTitle: "We couldn't verify the account. Retake your photo & try again",
+      type: "FAILED",
+      ctaLabel: "Edit Details",
+      primary: true,
+      ctaAction: {
+        type: ACTION.NAVIGATION_NEXT,
+        routeId: ROUTE.KYC_SUMMARY,
+        payload: <NavigationNext>{
+          stepId: response.updatedApplicationObj.currentStepId,
+        },
+      },
     });
   }
   await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
