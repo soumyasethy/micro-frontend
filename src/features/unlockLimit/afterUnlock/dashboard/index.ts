@@ -10,6 +10,8 @@ import {
 import {
     AmountCardProps,
     AmountCardTypeTokens,
+    BottomTabProps,
+    BottomTabStateToken,
     ButtonProps,
     ButtonTypeTokens,
     ButtonWidthTypeToken,
@@ -60,19 +62,16 @@ export const template: TemplateSchema = {
                     all: 0
                 }
             },
-            // {
-            //     id: "repaymentCard", type: WIDGET.CARD, padding: {
-            //         horizontal: 0,
-            //         all: 0
-            //     }
-            // },
-
-            // {
-            //     id: "promoCard", type: WIDGET.CARD, padding: {
-            //         horizontal: 0,
-            //         all: 0
-            //     }
-            // },
+            {
+                id: "cardNav", type: WIDGET.CARD,
+                position:POSITION.ABSOLUTE_BOTTOM,
+                padding: {
+                    horizontal: 0,
+                    vertical:0,
+                    all: 0
+                }
+            },
+            
         ],
     },
     datastore: <Datastore>{
@@ -125,11 +124,7 @@ export const template: TemplateSchema = {
                     { id: "space0", type: WIDGET.SPACE },
                     { id: "amountItem", type: WIDGET.AMOUNTCARD },
                     { id: "cardSpace", type: WIDGET.SPACE },
-                    {
-                        id: "continue",
-                        type: WIDGET.BUTTON,
-
-                    },
+                    { id: "continue", type: WIDGET.BUTTON },
                     { id: "continueSpace", type: WIDGET.SPACE },
                     {
                         id: "repaymentCard", type: WIDGET.CARD, padding: {
@@ -144,9 +139,7 @@ export const template: TemplateSchema = {
                             all: 0
                         }
                     },
-
-
-
+                    
                 ],
             }
         },
@@ -242,6 +235,61 @@ export const template: TemplateSchema = {
             ],
             heading: 'Why Volt?'
         },
+        cardNav: <CardProps>{
+            bgColor: ColorTokens.White,
+            body: {
+                widgetItems: [
+                    {
+                        id: "bottomNav", type: WIDGET.BOTTOMTAB
+                    }
+                ]
+            }
+        },
+        bottomNav:<BottomTabProps>{
+            data:[
+                {
+                    id: '1',
+                    title: 'My Account',
+                    status: BottomTabStateToken.SELECTED,
+                    icon : {
+                        name: IconTokens.Chart,
+                        size: IconSizeTokens.XL,
+                        align: IconAlignmentTokens.left,
+                    },
+                  },
+                  {
+                    id: '2',
+                    title: 'Transaction',
+                    status: BottomTabStateToken.NOT_SELECTED,
+                    icon : {
+                        name: IconTokens.RuppeFile,
+                        size: IconSizeTokens.XL,
+                        align: IconAlignmentTokens.left,
+                    },
+                  },
+                  {
+                    id: '3',
+                    title: 'Protfolio',
+                    status: BottomTabStateToken.NOT_SELECTED,
+                    icon : {
+                        name: IconTokens.Square,
+                        size: IconSizeTokens.XL,
+                        align: IconAlignmentTokens.left,
+                    },
+                  },
+                  {
+                    id: '4',
+                    title: 'Refer & Earn',
+                    status: BottomTabStateToken.NOT_SELECTED,
+                    icon : {
+                        name: IconTokens.GiftOutline,
+                        size: IconSizeTokens.XL,
+                        align: IconAlignmentTokens.left,
+                    },
+                  },
+                 
+            ]
+        }
     },
 };
 

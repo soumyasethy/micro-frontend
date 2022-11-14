@@ -16,6 +16,7 @@ import {
   HeaderTypeTokens,
   ImageProps,
   InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -111,6 +112,7 @@ export const template: (
         placeholder: "Search by bank name",
         type: InputTypeToken.DEFAULT,
         caption: { default: "", success: "", error: "" },
+        keyboardType: KeyboardTypeToken.default,
         action: {
           type: ACTION.SEARCH_BANK,
           routeId: ROUTE.BANK_VERIFY_MANUALLY,
