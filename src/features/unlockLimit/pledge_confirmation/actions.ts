@@ -46,5 +46,5 @@ export const goBack: ActionFunction<any> = async (
   _datastore,
   { goBack }
 ): Promise<any> => {
-  goBack();
+  await goBack();
 };

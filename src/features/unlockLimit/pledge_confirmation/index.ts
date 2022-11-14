@@ -51,7 +51,7 @@ export const template: (
         action: {
           type: ACTION.BACK_BUTTON,
           payload: {},
-          routeId: ROUTE.PORTFOLIO,
+          routeId: ROUTE.PLEDGE_CONFIRMATION,
         },
       },
       space0: <SpaceProps>{ size: SizeTypeTokens.XL },

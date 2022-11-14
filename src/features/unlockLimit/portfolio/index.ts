@@ -56,7 +56,7 @@ export const template: (
         label: availableCASItem.schemeName, //"Axis Long Term Equity Mutual Funds",
         info: "",
         trailIcon: { name: IconTokens.CheckedSquare },
-        trailTitle: `${getTotalLimit(
+        trailTitle: `₹${getTotalLimit(
           [availableCASItem],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
