@@ -9,6 +9,7 @@ import {
 } from "@voltmoney/types";
 import {
   AmountCardProps,
+  ButtonBaseProps,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -86,6 +87,10 @@ export const template: (
     space1: <SpaceProps>{ size: SizeTypeTokens.LG },
     cardItem: <CardProps>{
       bgColor: ColorTokens.Grey_Milk,
+      padding: {
+        left: SizeTypeTokens.XXXL,
+        right: SizeTypeTokens.XXXL
+      },
       body: {
         widgetItems: [
           { id: "unlockItem", type: WIDGET.BUTTON },
