@@ -20,9 +20,8 @@ let isWhatsAppEnabled: boolean = false;
 export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
   action,
   _datastore,
-  { setDatastore, }
+  { setDatastore }
 ): Promise<any> => {
-  console.warn("action", action.payload);
   await setDatastore(action.routeId, action.payload.targetWidgetId, <
     ButtonProps
   >{

@@ -1,12 +1,16 @@
+import { StepResponseObject } from "../unlock_limit/types";
+
 export enum ACTION {
-    MODIFY_PLEDGED_AMOUNT = "MODIFY_PLEDGED_AMOUNT",
-  }
+  MODIFY_PLEDGED_AMOUNT = "MODIFY_PLEDGED_AMOUNT",
+  EDIT_AMOUNT = "EDIT_AMOUNT",
+}
 
-  
-  export type amountPayload = {
-    value: string;
-    widgetId: string;
-    isResend?: boolean;
-  };
-
-  
+export type ModifyAmountPayload = {
+  index: number;
+  stepResponseObject: StepResponseObject;
+  selectedMap: { [key in number]: boolean };
+  portfolioSearchKeyword?: string
+};
+export type AmountPayload = {
+  value: string;
+};

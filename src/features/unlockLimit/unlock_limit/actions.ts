@@ -5,15 +5,23 @@ import { LimitPayload } from "./types";
 export const continueLimit: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
-  navigate(ROUTE.PLEDGE_CONFIRMATION, { availableCAS: action.payload.value });
+  action.payload.value.availableCAS.forEach((item, index) => {
+    action.payload.value.availableCAS[index].pledgedUnits =
+      item.totalAvailableUnits;
+  });
+  await navigate(ROUTE.PLEDGE_CONFIRMATION, {
+    stepResponseObject: action.payload.value,
+  });
 };
 
 export const modifyLimit: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
-  navigate(ROUTE.MODIFY_LIMIT);
+  await navigate(ROUTE.MODIFY_LIMIT, {
+    stepResponseObject: action.payload.value,
+  });
 };

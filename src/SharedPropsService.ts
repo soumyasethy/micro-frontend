@@ -4,14 +4,17 @@ import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
+import { AvailableCASItem } from "./features/unlockLimit/unlock_limit/types";
 type GlobalProps = {
   user: User;
   access_token: string;
+  availableAuthCasMap: { [key in string]: AvailableCASItem };
 };
 
 let _globalProps: GlobalProps = {
   user: {},
   access_token: "",
+  availableAuthCasMap: {},
 };
 
 async function setGlobalProps(props: GlobalProps) {
@@ -67,6 +70,16 @@ async function getToken() {
   return null;
 }
 
+async function setAvailableCASMap(availableAuthCasMap: {
+  [key in string]: AvailableCASItem;
+}) {
+  _globalProps.availableAuthCasMap = availableAuthCasMap;
+}
+
+async function getAvailableCASMap() {
+  return _globalProps.availableAuthCasMap;
+}
+
 export default {
   setGlobalProps,
   getPropsValue,
@@ -74,4 +87,6 @@ export default {
   getUser,
   setToken,
   getToken,
+  setAvailableCASMap,
+  getAvailableCASMap
 };

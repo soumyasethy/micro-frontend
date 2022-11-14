@@ -14,6 +14,7 @@ import { defaultHeaders } from "../../../../configs/config";
 import moment from "moment";
 import { showBottomSheet } from "../../../../configs/utils";
 import { ACTION } from "../../../kyc/kyc_otp/types";
+import { EnableDisableCTA } from "../../../login/phone_number/types";
 
 let pan: string = "";
 let dob: string = "";
@@ -107,7 +108,6 @@ export const PanOnChange: ActionFunction<InputPayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** update pan ****", action.payload.value);
   pan = action.payload.value;
 };
 export const CalendarOnChange: ActionFunction<InputPayload> = async (
@@ -115,7 +115,21 @@ export const CalendarOnChange: ActionFunction<InputPayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** update dob ****", action.payload.value);
-  dob = `${moment(action.payload.value, "dd-MM-yyyy").valueOf()}`;
+  dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
   console.warn("**** update dob epoch ****", dob);
+};
+
+export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
+  action,
+  _datastore,
+  { setDatastore }
+): Promise<any> => {
+  await setDatastore(action.routeId, action.payload.targetWidgetId, <
+    ButtonProps
+  >{
+    type:
+      action.payload.value && pan && dob
+        ? ButtonTypeTokens.LargeFilled
+        : ButtonTypeTokens.LargeOutline,
+  });
 };

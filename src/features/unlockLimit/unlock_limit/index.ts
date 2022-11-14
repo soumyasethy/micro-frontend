@@ -28,15 +28,15 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, AvailableCASItem, LimitPayload } from "./types";
+import {ACTION, AvailableCASItem, LimitPayload, StepResponseObject} from "./types";
 import { continueLimit, modifyLimit } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 
-let sourceX='';
+let sourceX = "";
 export const template: (
   availableCreditAmount: number,
   availableCAS: AvailableCASItem[],
-  stepResponseObject
+  stepResponseObject: StepResponseObject
 ) => TemplateSchema = (
   availableCreditAmount,
   availableCAS,
@@ -125,7 +125,7 @@ export const template: (
       action: {
         type: ACTION.MODIFY_LIMIT,
         payload: <{}>{
-          value: "",
+          value: stepResponseObject,
           widgetId: "continue",
           isResend: false,
         },

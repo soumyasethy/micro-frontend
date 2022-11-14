@@ -3,7 +3,6 @@ import { ROUTE } from "../../../routes";
 import { OtpPayload } from "./types";
 import { ButtonProps } from "@voltmoney/schema";
 import { PledgeCreateRepo } from "../unlock_limit/repo";
-import { ACTION } from "../../kyc/kyc_otp/types";
 
 export const sendOtp: ActionFunction<OtpPayload> = async (
   action,
@@ -20,13 +19,13 @@ export const sendOtp: ActionFunction<OtpPayload> = async (
       assetRepositoryCams.push({
         ...item,
         is_pledged: true,
-        pledgedUnits: item.totalAvailableUnits,
+        // pledgedUnits: item.totalAvailableUnits,
       });
     } else if (item.assetRepository === "KARVY") {
       assetRepositoryKFIN.push({
         ...item,
         is_pledged: true,
-        pledgedUnits: item.totalAvailableUnits,
+        // pledgedUnits: item.totalAvailableUnits,
       });
     }
   });

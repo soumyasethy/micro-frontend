@@ -27,7 +27,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTION, AlertNavProps } from "./types";
-import { GoBackAction } from "./actions";
+import { ClosePopup } from "./actions";
 
 const _applyType = (
   type: "SUCCESS" | "FAILED" | "IN_PROGRESS" | "LOADING" | "DEFAULT"
@@ -77,7 +77,7 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
       action: ctaAction
         ? ctaAction
         : {
-            type: ACTION.GO_BACK,
+            type: ACTION.CLOSE_POPUP,
             routeId: ROUTE.ALERT_PAGE,
             payload: {},
           },
@@ -109,7 +109,7 @@ const alertPropsX: AlertNavProps = {
   ctaLabel: "continue",
   message: "Don’t worry your data is secured with Volt",
   ctaAction: {
-    type: ACTION.GO_BACK,
+    type: ACTION.CLOSE_POPUP,
     routeId: ROUTE.ALERT_PAGE,
     payload: { hello: "world" },
   },
@@ -121,7 +121,7 @@ export const alertMF: PageType<any> = {
     return Promise.resolve(template(alertProps));
   },
   actions: {
-    [ACTION.GO_BACK]: GoBackAction,
+    [ACTION.CLOSE_POPUP]: ClosePopup,
   },
   clearPrevious: true,
 };

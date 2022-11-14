@@ -1,16 +1,18 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ButtonProps, ButtonTypeTokens, IconTokens } from "@voltmoney/schema";
-import { BAVVerifyActionPayload } from "../bank_verify/types";
+import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import {
+  ACTION as ACTION_CURRENT,
+  BAVVerifyActionPayload,
+} from "../bank_verify/types";
 import { postBankRepo } from "../bank_verify/repo";
 import {
+  ACTION,
   InputNumberActionPayload,
   NavigationSearchIFSCActionPayload,
 } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
-import { AlertNavProps } from "../../popup_loader/types";
-import { showBottomSheet } from "../../../configs/utils";
-import { ACTION } from "../../kyc/kyc_otp/types";
+import _ from "lodash";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -85,14 +87,38 @@ export const BavVerifyManualAction: ActionFunction<
     loading: false,
   });
   await goBack();
-  await handleError(response, {
-    success: "Account verified successfully!",
-    failed: "Verification failed!",
-    ctaLabel: "Edit details",
-  });
+  if (_.get(response, "updatedApplicationObj.currentStepId")) {
+    await showPopup({
+      type: "SUCCESS",
+      title: "Account verified successfully!",
+      subTitle: "You will be redirected to next step in few seconds",
+      ctaLabel: "Continue",
+      ctaAction: {
+        type: ACTION_CURRENT.GO_NEXT,
+        routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
+        payload: {
+          currentStepId: _.get(response, "updatedApplicationObj.currentStepId"),
+        },
+      },
+    });
+  } else {
+    await showPopup({
+      type: "FAILED",
+      title: "Verification failed!",
+      subTitle: "We couldn't verify the account. Edit bank details & try again",
+      ctaLabel: "Edit details",
+      ctaAction: {
+        type: ACTION_CURRENT.GO_BACK,
+        routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
+        payload: {},
+      },
+    });
+  }
 };
-export const ChangeBankGoBackAction: ActionFunction<
-  InputNumberActionPayload
-> = async (action, _datastore, { goBack }): Promise<any> => {
+export const ChangeBankGoBackAction: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { goBack }
+): Promise<any> => {
   await goBack();
 };
