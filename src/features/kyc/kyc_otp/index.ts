@@ -15,6 +15,7 @@ import {
   HeaderTypeTokens,
   InputStateToken,
   InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StepperItem,
@@ -86,6 +87,7 @@ export const template: (
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
       charLimit: 6,
+      keyboardType: KeyboardTypeToken.numberPad,
       caption: { error: "Please enter a valid 12 digit number" },
       action: {
         type: ACTION.TRIGGER_CTA,

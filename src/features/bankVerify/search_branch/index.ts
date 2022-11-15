@@ -18,6 +18,7 @@ import {
   IconTokens,
   InputStateToken,
   InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -102,6 +103,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       type: InputTypeToken.SEARCH,
       title: "Search",
       state: InputStateToken.DEFAULT,
+      keyboardType: KeyboardTypeToken.default,
       caption: { success: "", error: "" },
       action: {
         type: ACTION.SEARCH_IFSC_ACTION,

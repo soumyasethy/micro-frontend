@@ -158,6 +158,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       state: InputStateToken.DISABLED,
       title: "Branch or IFSC",
       placeholder: "Search",
+      keyboardType: KeyboardTypeToken.email,
       value: "",
       caption: { success: "", error: "" },
       width: TextInputTypeToken.FULL,

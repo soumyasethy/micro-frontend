@@ -18,6 +18,7 @@ import {
   HeaderTypeTokens,
   InputStateToken,
   InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StepperItem,
@@ -95,6 +96,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         title: "Enter Aadhaar number",
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
+        keyboardType: KeyboardTypeToken.numberPad,
         charLimit: 12,
         caption: { error: "Please enter a valid 12 digit number" },
         action: {
