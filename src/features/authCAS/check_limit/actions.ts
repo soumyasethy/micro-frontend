@@ -3,10 +3,15 @@ import { FetchPortfolioPayload, PanEditPayload } from "./types";
 import { api } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
-import { ButtonProps } from "@voltmoney/schema";
+import { ButtonProps, IconTokens } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import { defaultHeaders } from "../../../configs/config";
+import {
+  __isTest__,
+  getAppHeader,
+  defaultHeaders,
+} from "../../../configs/config";
 import { ACTION } from "../../kyc/kyc_otp/types";
+import _ from "lodash";
 let hasChangedInDetails = false;
 
 export const editPanNumber: ActionFunction<PanEditPayload> = async (
@@ -44,7 +49,15 @@ export const editEmailId: ActionFunction<PanEditPayload> = async (
 export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   action,
   _datastore,
-  { navigate, asyncStorage, setDatastore, handleError, ...props }
+  {
+    network,
+    navigate,
+    asyncStorage,
+    setDatastore,
+    handleError,
+    showPopup,
+    ...props
+  }
 ): Promise<any> => {
   await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
     loading: true,
@@ -60,47 +73,28 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
       action.payload.applicationId = user.linkedApplications[0].applicationId;
     }
   }
-
-  const raw = JSON.stringify(<FetchPortfolioPayload>{
-    ...action.payload,
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: await defaultHeaders(),
-    body: raw,
-  };
-
-  await fetch(api.pledgeInit, requestOptions)
-    .then((response) => response.json())
-    .then(async (result) => {
-      await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
-        loading: false,
-      });
-      if (result) {
-        const user: User = await SharedPropsService.getUser();
-        user.linkedApplications[0].currentStepId =
-          result.updatedApplicationObj.currentStepId;
-        await SharedPropsService.setUser(user);
-        await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
-          ...action.payload,
-        });
+  await network
+    .post(
+      api.pledgeInit,
+      <FetchPortfolioPayload>{
+        ...action.payload,
+      },
+      {
+        headers: await getAppHeader(),
       }
+    )
+    .then(async (response) => {
+      const user: User = await SharedPropsService.getUser();
+      user.linkedApplications[0].currentStepId =
+        response.data.updatedApplicationObj.currentStepId;
+      await SharedPropsService.setUser(user);
+      await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
+        ...action.payload,
+      });
     })
-    .catch(async (error) => {
-      console.log("error", error);
+    .finally(async () => {
       await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
         loading: false,
-      });
-      await handleError(error, {
-        success: "SUCCESS",
-        failed: "Verification failed!",
-        ctaLabel: "Done",
-        ctaAction: {
-          type: ACTION.GO_BACK,
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
-          payload: {},
-        },
       });
     });
 };

@@ -50,12 +50,11 @@ export const template: TemplateSchema = {
       { id: "space2", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
       { id: "space3", type: WIDGET.SPACE },
-      // { id: "whatsappStack", type: WIDGET.STACK },
+      { id: "whatsappStack", type: WIDGET.STACK },
       { id: "space4", type: WIDGET.SPACE },
       {
         id: "continue",
         type: WIDGET.BUTTON,
-        // position: POSITION.FIXED_BOTTOM,
       },
     ],
   },

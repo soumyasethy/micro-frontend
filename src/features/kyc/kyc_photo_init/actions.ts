@@ -9,13 +9,13 @@ export const CameraAction: ActionFunction<CameraPayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  const video = document.querySelector("video");
-  const mediaStream = video.srcObject;
-  if ("getTracks" in mediaStream) {
-    const tracks = mediaStream.getTracks();
-    tracks[0].stop();
-    tracks.forEach((track) => track.stop());
-  }
+  // const video = document.querySelector("video");
+  // const mediaStream = video.srcObject;
+  // if ("getTracks" in mediaStream) {
+  //   const tracks = mediaStream.getTracks();
+  //   tracks[0].stop();
+  //   tracks.forEach((track) => track.stop());
+  // }
 
   let base64Image: string = action.payload.value;
   base64Image = base64Image.replace(/^data:image\/[a-z]+;base64,/, "");

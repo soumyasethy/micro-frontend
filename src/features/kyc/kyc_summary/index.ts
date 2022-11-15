@@ -39,10 +39,17 @@ import { ROUTE } from "../../../routes";
 import { kycSummaryInitRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
 import { ACTION } from "./types";
-import {GoBackAction, NavigateNext, ToggleKYCSummaryCTA, verifyKycSummary} from "./actions";
+import {
+  GoBackAction,
+  NavigateNext,
+  ToggleKYCSummaryCTA,
+  verifyKycSummary,
+} from "./actions";
 import { stepperRepo } from "../../../configs/utils";
-import { ToggleKYCVerifyCTA } from "../kyc_init/types";
+import { NavigationNext, ToggleKYCVerifyCTA } from "../kyc_init/types";
 import moment from "moment";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 export const template: (
   pan: string,
@@ -159,15 +166,16 @@ export const template: (
 });
 
 export const kycSummaryMf: PageType<any> = {
-  onLoad: async (_) => {
-    const response = await kycSummaryInitRepo(
-      (
-        await SharedPropsService.getUser()
-      ).linkedApplications[0].applicationId
+  onLoad: async ({ network }) => {
+    const applicationId = (await SharedPropsService.getUser())
+      .linkedApplications[0].applicationId;
+    const response = await network.get(
+      `${api.kycSummaryInit}${applicationId}`,
+      { headers: await getAppHeader() }
     );
 
-    const { address, dob, fullName, photoURL } =
-      await response.stepResponseObject;
+    const { address, dob, fullName, photoURL } = await response.data
+      .stepResponseObject;
     const pan = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
       .accountHolderPAN;
     const stepper: StepperItem[] = await stepperRepo();

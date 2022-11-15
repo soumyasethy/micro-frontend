@@ -37,7 +37,6 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
   phoneNumber = phoneNumber.includes("+91") ? phoneNumber : `+91${phoneNumber}`;
-  console.warn("**** using phoneNumber ****", phoneNumber);
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     loading: true,
   });
@@ -90,7 +89,6 @@ export const textOnChange: ActionFunction<ContinuePayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** update phoneNumber ****", action.payload.value);
   phoneNumber = action.payload.value;
 };
 export const whatsappToggle: ActionFunction<WhatsAppEnabledPayload> = async (
@@ -98,6 +96,5 @@ export const whatsappToggle: ActionFunction<WhatsAppEnabledPayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** isWhatsApp Enabled ****", action.payload.value);
   isWhatsAppEnabled = action.payload.value;
 };

@@ -10,10 +10,12 @@ import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import _ from "lodash";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 export const verifyKycSummary: ActionFunction<any> = async (
   action,
   _datastore,
-  { setDatastore, showPopup, handleError }
+  { network, setDatastore, showPopup }
 ): Promise<any> => {
   await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
     loading: true,
@@ -21,8 +23,14 @@ export const verifyKycSummary: ActionFunction<any> = async (
   const applicationId = (await SharedPropsService.getUser())
     .linkedApplications[0].applicationId;
 
-  const response = await kycSummaryVerifyRepo(applicationId);
-  if (_.get(response, "updatedApplicationObj")) {
+  const response = await network.get(
+    `${api.kycSummaryVerify}${applicationId}`,
+    { headers: await getAppHeader() }
+  );
+  await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
+    loading: false,
+  });
+  if (_.get(response, "data.updatedApplicationObj.currentStepId", false))
     await showPopup({
       title: "KYC done successfully!",
       subTitle: "You will be redirected to next step in few seconds",
@@ -33,29 +41,10 @@ export const verifyKycSummary: ActionFunction<any> = async (
         type: ACTION.NAVIGATION_NEXT,
         routeId: ROUTE.KYC_SUMMARY,
         payload: <NavigationNext>{
-          stepId: response.updatedApplicationObj.currentStepId,
+          stepId: _.get(response, "data.updatedApplicationObj.currentStepId"),
         },
       },
     });
-  } else {
-    await showPopup({
-      title: "Verification failed!",
-      subTitle: "We couldn't verify the account. Retake your photo & try again",
-      type: "FAILED",
-      ctaLabel: "Edit Details",
-      primary: true,
-      ctaAction: {
-        type: ACTION.NAVIGATION_NEXT,
-        routeId: ROUTE.KYC_SUMMARY,
-        payload: <NavigationNext>{
-          stepId: response.updatedApplicationObj.currentStepId,
-        },
-      },
-    });
-  }
-  await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
-    loading: false,
-  });
 };
 
 export const NavigateNext: ActionFunction<NavigationNext> = async (

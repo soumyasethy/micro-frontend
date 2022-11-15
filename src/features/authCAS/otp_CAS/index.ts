@@ -118,4 +118,5 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.AUTH_CAS]: authCAS,
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
   },
+  clearPrevious: true,
 };

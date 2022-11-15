@@ -128,4 +128,5 @@ export const otpVerifyMF: PageType<any> = {
     [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.RESEND_OTP_NUMBER]: sendOtp,
   },
+  clearPrevious: true,
 };

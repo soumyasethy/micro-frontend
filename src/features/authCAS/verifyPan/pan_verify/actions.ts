@@ -10,7 +10,7 @@ import {
   TextInputProps,
 } from "@voltmoney/schema";
 import SharedPropsService from "../../../../SharedPropsService";
-import { defaultHeaders } from "../../../../configs/config";
+import { defaultHeaders, getAppHeader } from "../../../../configs/config";
 import moment from "moment";
 import { showBottomSheet } from "../../../../configs/utils";
 import { ACTION } from "../../../kyc/kyc_otp/types";
@@ -22,85 +22,53 @@ let dob: string = "";
 export const verifyPan: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { asyncStorage, setDatastore, navigate, handleError, ...props }
+  { network, asyncStorage, setDatastore, navigate, handleError, ...props }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
 
-  const raw = JSON.stringify({
-    applicationId: `${action.payload.applicationId}`,
-    panNumber: `${pan}`,
-    dob: dob,
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: await defaultHeaders(),
-    body: raw,
-  };
-
-  await fetch(api.panVerify, requestOptions)
-    .then(async (response) => await response.json())
-    .then(async (result) => {
+  await network
+    .post(
+      api.panVerify,
+      {
+        applicationId: `${action.payload.applicationId}`,
+        panNumber: `${pan}`,
+        dob: dob,
+      },
+      { headers: await getAppHeader() }
+    )
+    .then(async (response) => {
       await setDatastore(action.routeId, "continue", <ButtonProps>{
         loading: false,
       });
-      if (result?.stepResponseObject?.fullName) {
-        result.stepResponseObject.panNumber = pan;
-        console.warn("success pan ", result);
-
+      if (response?.data.stepResponseObject?.fullName) {
+        response.data.stepResponseObject.panNumber = pan;
         await setDatastore(action.routeId, "input", <TextInputProps>{
           state: InputStateToken.SUCCESS,
         });
-        const currentStepId = await result.updatedApplicationObj.currentStepId;
+        const currentStepId = await response?.data.updatedApplicationObj
+          .currentStepId;
         (
           await SharedPropsService.getUser()
         ).linkedApplications[0].currentStepId = currentStepId;
 
         await navigate(ROUTE.PAN_CONFIRM_NAME, {
-          name: result.stepResponseObject.fullName,
-          panNumber: result.stepResponseObject.panNumber,
+          name: response?.data.stepResponseObject?.fullName,
+          panNumber: response?.data.stepResponseObject?.panNumber,
           targetRoute: action.payload.targetRoute,
           currentStepId,
-        });
-      } else {
-        console.warn("failed pan ", result);
-        await setDatastore(action.routeId, "continue", <ButtonProps>{
-          type: ButtonTypeTokens.LargeOutline,
-        });
-        await setDatastore(action.routeId, "input", <TextInputProps>{
-          state: InputStateToken.ERROR,
-        });
-        await handleError(result, {
-          success: "Pan verified successfully!",
-          failed: "Verification failed!",
-          ctaLabel: "Go Back",
-          ctaAction: {
-            type: ACTION.GO_BACK,
-            routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
-            payload: {},
-          },
         });
       }
     })
     .catch(async (error) => {
-      console.log("error", error);
       await setDatastore(action.routeId, "continue", <ButtonProps>{
+        type: ButtonTypeTokens.LargeOutline,
         loading: false,
       });
       await setDatastore(action.routeId, "input", <TextInputProps>{
         state: InputStateToken.ERROR,
       });
-      if (error.hasOwnProperty("message")) {
-        const route = showBottomSheet({
-          // title: error.statusCode,
-          message: error.message,
-          primary: true,
-          iconName: IconTokens.Error,
-        });
-        await navigate(route.routeId, route.params);
-      }
     });
 };
 export const PanOnChange: ActionFunction<InputPayload> = async (

@@ -99,12 +99,6 @@ export const template: (
 
 export const pledgeConfirmationMF: PageType<any> = {
   onLoad: async ({}, { stepResponseObject }) => {
-    // const updateAvailableCASMapX =
-    //   await SharedPropsService.getAvailableCASMap();
-    // const selectedCAS: AvailableCASItem[] = [];
-    // Object.keys(updateAvailableCASMapX).forEach((key) => {
-    //   selectedCAS.push(updateAvailableCASMapX[key]);
-    // });
     return Promise.resolve(template(stepResponseObject as StepResponseObject));
   },
   actions: {

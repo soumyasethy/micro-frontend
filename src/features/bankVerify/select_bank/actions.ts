@@ -21,13 +21,8 @@ export const GoBackAction: ActionFunction<
 export const NavSearchIfscBranchInfoAction: ActionFunction<
   NavSearchIfscBranchInfoActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  console.warn(
-    "**** NavSearchIfscBranchInfoAction Action Triggered ****",
-    action
-  );
   const pool = { ...bankRepo.ALLBANKS, ...bankRepo.POPULAR };
   const bankCode = getKeyByValue(pool, action.payload.value);
-  console.warn("bankCode->", bankCode);
   await navigate(ROUTE.BANK_SELECT, { bankCode });
 };
 
@@ -36,7 +31,6 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.warn("**** Search Action Triggered ****", action.payload);
   await setDatastore(action.routeId, "gridItem", <GridImageItemProps>{
     type: GridItemTypeTokens.HORIZONTAl_VERITICAL,
     title: "Popular banks",

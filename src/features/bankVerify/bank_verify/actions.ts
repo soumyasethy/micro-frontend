@@ -13,6 +13,8 @@ import { AadharInitPayload } from "../../kyc/kyc_init/types";
 import { ACTION } from "../../kyc/kyc_otp/types";
 import { ACTION as ACTION_CURRENT } from "./types";
 import _ from "lodash";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 let selectedWidget = undefined;
 let ifscCode = undefined;
 let bankAccountNumber = undefined;
@@ -45,23 +47,26 @@ export const ToggleSelectAction: ActionFunction<ToggleActionPayload> = async (
 export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
   action,
   _datastore,
-  { setDatastore, navigate, handleError, showPopup }
+  { setDatastore, network, showPopup }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  const response = await postBankRepo(
-    (
-      await SharedPropsService.getUser()
-    ).linkedApplications[0].applicationId,
-    bankAccountNumber,
-    ifscCode
+  const applicationId = (await SharedPropsService.getUser())
+    .linkedApplications[0].applicationId;
+  const response = await network.post(
+    api.bavVerify,
+    {
+      applicationId,
+      bankAccountDetails: {
+        bankAccountNumber,
+        bankIfscCode: ifscCode,
+      },
+    },
+    { headers: await getAppHeader() }
   );
-  await setDatastore(action.routeId, "continue", <ButtonProps>{
-    loading: false,
-  });
-  console.warn("bavVerifyAction-->", response);
-  if (_.get(response, "updatedApplicationObj.currentStepId")) {
+
+  if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
     await showPopup({
       type: "SUCCESS",
       title: "Account verified successfully!",
@@ -71,23 +76,15 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
         type: ACTION_CURRENT.GO_NEXT,
         routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
         payload: {
-          currentStepId: _.get(response, "updatedApplicationObj.currentStepId"),
+          currentStepId: _.get(response, "data.updatedApplicationObj.currentStepId"),
         },
       },
     });
-  } else {
-    await showPopup({
-      type: "FAILED",
-      title: "Verification failed!",
-      subTitle: "We couldn't verify the account. Edit bank details & try again",
-      ctaLabel: "Edit details",
-      ctaAction: {
-        type: ACTION.GO_BACK,
-        routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
-        payload: {},
-      },
-    });
   }
+
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: false,
+  });
 };
 export const AddAccountNavAction: ActionFunction<
   BAVVerifyActionPayload
