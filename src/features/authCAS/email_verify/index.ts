@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -20,6 +21,8 @@ import {
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
+  StackFlexWrap,
+  StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
@@ -36,14 +39,17 @@ export const template: (applicationId: string) => TemplateSchema = (
   layout: <Layout>{
     id: ROUTE.EMAIL_VERIFY,
     type: LAYOUTS.LIST,
-    widgets: [{ id: "stack_root", type: WIDGET.STACK }],
+    widgets: [{ id: "stack_root", type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER, }],
   },
   datastore: <Datastore>{
     stack_root: <StackProps>{
       type: StackType.column,
-      justifyContent: StackJustifyContent.center,
+      height: StackHeight.FULL,
+      flexWrap: StackFlexWrap.wrap, 
+      justifyContent: StackJustifyContent.spaceAround,
       alignItems: StackAlignItems.flexStart,
       widgetItems: [
+        { id: "space0", type: WIDGET.SPACE },
         { id: "title", type: WIDGET.TEXT },
         { id: "titleSpace", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
@@ -56,6 +62,7 @@ export const template: (applicationId: string) => TemplateSchema = (
         { id: "space3", type: WIDGET.SPACE },
       ],
     },
+    space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     subSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
     back: <ButtonProps>{
@@ -63,14 +70,14 @@ export const template: (applicationId: string) => TemplateSchema = (
       icon: { name: IconTokens.Back, size: IconSizeTokens.XL },
     },
     title: <TypographyProps>{
-      label: "Verify your email id",
+      label: "Verify your email",
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
     },
     subTitle: <TypographyProps>{
-      label: "Your Volt app will only work with this email id",
+      label: "We need email linked with your investments",
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
     },
@@ -82,11 +89,11 @@ export const template: (applicationId: string) => TemplateSchema = (
         payload: {},
       },
     },
-    apple: <ButtonProps>{
-      label: "Continue with Apple",
-      type: ButtonTypeTokens.LargeOutline,
-      width: ButtonWidthTypeToken.FULL,
-    },
+    // apple: <ButtonProps>{
+    //   label: "Continue with Apple",
+    //   type: ButtonTypeTokens.LargeOutline,
+    //   width: ButtonWidthTypeToken.FULL,
+    // },
     email: <ButtonProps & WidgetProps>{
       label: "Continue with Other Email",
       type: ButtonTypeTokens.LargeGhost,
