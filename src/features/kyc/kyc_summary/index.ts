@@ -45,7 +45,7 @@ import {
   ToggleKYCSummaryCTA,
   verifyKycSummary,
 } from "./actions";
-import { stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
 import { NavigationNext, ToggleKYCVerifyCTA } from "../kyc_init/types";
 import moment from "moment";
 import { api } from "../../../configs/api";
@@ -178,7 +178,7 @@ export const kycSummaryMf: PageType<any> = {
       .stepResponseObject;
     const pan = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
       .accountHolderPAN;
-    const stepper: StepperItem[] = await stepperRepo();
+    const stepper: StepperItem[] = await horizontalStepperRepo();
     return Promise.resolve(
       template(pan, address, dob, fullName, photoURL, stepper)
     );

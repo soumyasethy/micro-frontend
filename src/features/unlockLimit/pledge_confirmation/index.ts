@@ -59,7 +59,7 @@ export const template: (
         data: [
           {
             id: "total_cash_imit",
-            title: "Total Cash Limit",
+            title: "Total cash limit",
             amount: `${stepResponseObject.availableCreditAmount}`,
           },
           ...Object.keys(
@@ -73,7 +73,7 @@ export const template: (
           }),
           {
             id: "total_charges",
-            title: "Total Charges",
+            title: "Total charges",
             amount: `${stepResponseObject.processingFees || 0}`,
           },
         ],

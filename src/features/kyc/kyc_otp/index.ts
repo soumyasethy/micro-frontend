@@ -28,7 +28,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
-import { stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
@@ -110,7 +110,7 @@ export const template: (
 
 export const kycAadharOTPVerifyMF: PageType<any> = {
   onLoad: async () => {
-    const stepper: StepperItem[] = await stepperRepo();
+    const stepper: StepperItem[] = await horizontalStepperRepo();
     const mobileNumber = (await SharedPropsService.getUser())
       .linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     return Promise.resolve(template(stepper, mobileNumber));

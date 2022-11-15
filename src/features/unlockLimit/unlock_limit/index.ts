@@ -79,7 +79,7 @@ export const template: (
     },
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
-      title: "Approved Cash List",
+      title: "Approved Cash Limit",
       subTitle: `${availableCreditAmount}`,
       chipText: "How?",
       type: "default",
