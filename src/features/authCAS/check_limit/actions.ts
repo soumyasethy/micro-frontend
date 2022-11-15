@@ -3,15 +3,9 @@ import { FetchPortfolioPayload, PanEditPayload } from "./types";
 import { api } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
-import { ButtonProps, IconTokens } from "@voltmoney/schema";
+import { ButtonProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import {
-  __isTest__,
-  getAppHeader,
-  defaultHeaders,
-} from "../../../configs/config";
-import { ACTION } from "../../kyc/kyc_otp/types";
-import _ from "lodash";
+import { getAppHeader } from "../../../configs/config";
 let hasChangedInDetails = false;
 
 export const editPanNumber: ActionFunction<PanEditPayload> = async (

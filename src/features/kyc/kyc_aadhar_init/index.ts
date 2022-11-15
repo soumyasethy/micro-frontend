@@ -62,7 +62,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         subTitle:
           "Volt Protects your financial information with Bank Grade Security",
-        title: "Bank Verification",
+        title: "KYC Verification",
         type: HeaderTypeTokens.verification,
         stepperProps: <StepperProps>{
           data: stepper,

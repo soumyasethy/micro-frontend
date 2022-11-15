@@ -18,7 +18,7 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
   });
   await clearAllData();
 
-  const loginResponse = await network.post("api.verifyOtp", {
+  const loginResponse = await network.post(api.verifyOtp, {
     otp: action.payload.value,
     phoneNo: action.payload.username,
   });
