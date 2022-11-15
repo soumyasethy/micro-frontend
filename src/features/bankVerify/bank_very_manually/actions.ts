@@ -4,9 +4,7 @@ import {
   ACTION as ACTION_CURRENT,
   BAVVerifyActionPayload,
 } from "../bank_verify/types";
-import { postBankRepo } from "../bank_verify/repo";
 import {
-  ACTION,
   InputNumberActionPayload,
   NavigationSearchIFSCActionPayload,
 } from "./types";

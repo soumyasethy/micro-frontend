@@ -67,9 +67,9 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
   if (
     _.get(
       response,
-      "data.updatedApplicationObj.currentStepId",
+      "data.updatedApplicationObj.applicationState",
       "NOT_COMPLETED"
-    ) === null
+    ) === "COMPLETED"
   ) {
     await showPopup({
       type: "SUCCESS",
@@ -111,5 +111,5 @@ export const GoNext: ActionFunction<any> = async (
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
-  await navigate(ROUTE.KYC_STEPPER);
+  await navigate(ROUTE.DASHBOARD);
 };

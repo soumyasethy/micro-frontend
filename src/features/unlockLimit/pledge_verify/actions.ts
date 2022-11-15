@@ -7,6 +7,7 @@ import { NavigationNext } from "../../kyc/kyc_init/types";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
+import { User } from "../../login/otp_verify/types";
 
 export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   action,
@@ -69,5 +70,9 @@ export const NavigateNext: ActionFunction<NavigationNext> = async (
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
-  if (action.payload.stepId) await navigate(action.payload.stepId);
+  // if (action.payload.stepId) await navigate(action.payload.stepId);
+  const user: User = await SharedPropsService.getUser();
+  user.linkedApplications[0].currentStepId = ROUTE.KYC_AADHAAR_VERIFICATION;
+  await SharedPropsService.setUser(user);
+  navigate(ROUTE.KYC_STEPPER, {});
 };
