@@ -136,6 +136,7 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     return { routeId: ROUTE.KYC_SUMMARY, params: {} };
   } else if (currentStepId === "BANK_ACCOUNT_VERIFICATION") {
     return { routeId: ROUTE.BANK_ACCOUNT_VERIFICATION, params: {} };
+  } else {
   }
 };
 

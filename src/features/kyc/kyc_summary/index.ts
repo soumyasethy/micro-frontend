@@ -102,7 +102,7 @@ export const template: (
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A1_1,
       borderRadius: BorderRadiusTokens.BR1,
-      size: ImageSizeTokens.LG,
+      size: ImageSizeTokens.XXXL,
       uri: photoURL,
     },
     panItem: <ListItemProps>{

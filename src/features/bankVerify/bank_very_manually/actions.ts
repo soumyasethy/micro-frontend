@@ -92,7 +92,13 @@ export const BavVerifyManualAction: ActionFunction<
     { headers: await getAppHeader() }
   );
 
-  if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
+  if (
+    _.get(
+      response,
+      "data.updatedApplicationObj.currentStepId",
+      "NOT_COMPLETED"
+    ) === null
+  ) {
     await showPopup({
       type: "SUCCESS",
       title: "Account verified successfully!",

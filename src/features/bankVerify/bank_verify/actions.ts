@@ -6,11 +6,9 @@ import {
   SelectiveListItemProps,
   SelectiveListItemStateTokens,
 } from "@voltmoney/schema";
-import { postBankRepo } from "./repo";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { AadharInitPayload } from "../../kyc/kyc_init/types";
-import { ACTION } from "../../kyc/kyc_otp/types";
 import { ACTION as ACTION_CURRENT } from "./types";
 import _ from "lodash";
 import { api } from "../../../configs/api";
@@ -66,7 +64,13 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
     { headers: await getAppHeader() }
   );
 
-  if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
+  if (
+    _.get(
+      response,
+      "data.updatedApplicationObj.currentStepId",
+      "NOT_COMPLETED"
+    ) === null
+  ) {
     await showPopup({
       type: "SUCCESS",
       title: "Account verified successfully!",
@@ -76,7 +80,10 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
         type: ACTION_CURRENT.GO_NEXT,
         routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
         payload: {
-          currentStepId: _.get(response, "data.updatedApplicationObj.currentStepId"),
+          currentStepId: _.get(
+            response,
+            "data.updatedApplicationObj.currentStepId"
+          ),
         },
       },
     });

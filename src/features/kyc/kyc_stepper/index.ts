@@ -52,7 +52,7 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
       data: data,
     },
     continue: <ButtonProps & WidgetProps>{
-      label: "start",
+      label: "Start",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {
