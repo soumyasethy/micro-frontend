@@ -116,7 +116,7 @@ export const template: (
         },
       },
       label: <TypographyProps>{
-        label: "Select assets for pleding",
+        label: "Select assets for pledging",
         color: ColorTokens.Primary_100,
         fontWeight: "500",
         fontSize: FontSizeTokens.SM,

@@ -35,7 +35,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { GoBackAction, PhotoVerifyAction, RetakePhoto } from "./actions";
-import { stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
 
 export const template: (
   stepper: StepperItem[],
@@ -140,7 +140,7 @@ export const template: (
 
 export const kycAfterCameraMF: PageType<any> = {
   onLoad: async (_, { photo }) => {
-    const stepper: StepperItem[] = await stepperRepo();
+    const stepper: StepperItem[] = await horizontalStepperRepo();
     return Promise.resolve(template(stepper, photo));
   },
 

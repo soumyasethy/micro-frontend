@@ -33,7 +33,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { AadharInitPayload, ACTION } from "./types";
 import { AadharInitAction, GoBackAction } from "./actions";
-import { stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
@@ -109,7 +109,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
 });
 export const kycDigiLockerMF: PageType<any> = {
   onLoad: async () => {
-    const stepper: StepperItem[] = await stepperRepo();
+    const stepper: StepperItem[] = await horizontalStepperRepo();
     return Promise.resolve(template(stepper));
   },
   actions: {
