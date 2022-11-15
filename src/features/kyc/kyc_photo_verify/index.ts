@@ -105,7 +105,7 @@ export const template: (
     },
     previewImage: <ImageProps>{
       uri: `data:image/gif;base64,${photo}`,
-      size: ImageSizeTokens.XXXL,
+      size: ImageSizeTokens.XXXXL,
       aspectRatio: AspectRatioToken.A1_1,
     },
     retake: <ButtonProps & WidgetProps>{
