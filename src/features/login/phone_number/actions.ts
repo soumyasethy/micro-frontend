@@ -20,9 +20,8 @@ let isWhatsAppEnabled: boolean = false;
 export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
   action,
   _datastore,
-  { setDatastore, }
+  { setDatastore }
 ): Promise<any> => {
-  console.warn("action", action.payload);
   await setDatastore(action.routeId, action.payload.targetWidgetId, <
     ButtonProps
   >{
@@ -38,7 +37,6 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
   phoneNumber = phoneNumber.includes("+91") ? phoneNumber : `+91${phoneNumber}`;
-  console.warn("**** using phoneNumber ****", phoneNumber);
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     loading: true,
   });
@@ -48,6 +46,7 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
     headers: defaultAuthHeaders(),
   };
 
+  if(phoneNumber.length ===13) {
   await fetch(`${api.login}${phoneNumber}`, requestOptions)
     .then((response) => response.json())
     .then(async (result) => {
@@ -85,13 +84,20 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
         state: InputStateToken.ERROR,
       });
     });
+  } else {
+    await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+      loading: false,
+    });
+    await setDatastore(action.routeId, "input", <TextInputProps>{
+      state: InputStateToken.ERROR,
+    });
+  }
 };
 export const textOnChange: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** update phoneNumber ****", action.payload.value);
   phoneNumber = action.payload.value;
 };
 export const whatsappToggle: ActionFunction<WhatsAppEnabledPayload> = async (
@@ -99,6 +105,5 @@ export const whatsappToggle: ActionFunction<WhatsAppEnabledPayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** isWhatsApp Enabled ****", action.payload.value);
   isWhatsAppEnabled = action.payload.value;
 };

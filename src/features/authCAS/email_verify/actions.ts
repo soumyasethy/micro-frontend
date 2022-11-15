@@ -8,6 +8,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { saveAttribute } from "../enter_email/repo";
 import { nextStepId } from "../../../configs/utils";
 import { User } from "../../login/otp_verify/types";
+import { ButtonProps } from "@voltmoney/schema";
 
 export const loginGoogle: ActionFunction<any> = async (
   action,
@@ -36,8 +37,11 @@ export const loginGoogle: ActionFunction<any> = async (
 export const otherEmail: ActionFunction<OtherEmail> = async (
   action,
   _datastore,
-  { navigate }
+  { setDatastore, navigate }
 ): Promise<any> => {
+  await setDatastore(action.routeId, "email", <ButtonProps>{
+    loading: true,
+  });
   console.warn("sending application id ------>", action.payload.applicationId);
   navigate(ROUTE.ENTER_EMAIL, { applicationId: action.payload.applicationId });
 };

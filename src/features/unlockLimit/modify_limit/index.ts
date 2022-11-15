@@ -1,136 +1,159 @@
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
-    Datastore,
-    Layout,
-    LAYOUTS,
-    PageType,
-    POSITION,
-    TemplateSchema,
-    WidgetProps,
-} from "@voltmoney/types";
-import {
-    ButtonProps,
-    ButtonTypeTokens,
-    ButtonWidthTypeToken,
-    HeaderProps,
-    IconAlignmentTokens,
-    IconTokens,
-    InputStateToken,
-    InputTypeToken,
-    SizeTypeTokens,
-    SpaceProps,
-    StackAlignItems,
-    StackJustifyContent,
-    StackProps,
-    StackType,
-    TextInputProps,
-    WIDGET,
+  ButtonProps,
+  ButtonTypeTokens,
+  ButtonWidthTypeToken,
+  ColorTokens,
+  FontSizeTokens,
+  HeaderProps,
+  IconAlignmentTokens,
+  IconProps,
+  IconSizeTokens,
+  IconTokens,
+  InputStateToken,
+  InputTypeToken,
+  KeyboardTypeToken,
+  SizeTypeTokens,
+  SpaceProps,
+  StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
+  TextInputProps,
+  TypographyProps,
+  WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import {
-    ACTION,
-    AssetsPayload,
-} from "./types";
-import { selectAssets, goBack } from "./actions";
+import {ROUTE} from "../../../routes";
+import {ACTION, AssetsPayload} from "./types";
+import {ConfirmCTA, EnterAmountAction, goBack, SelectAssets} from "./actions";
+import {StepResponseObject} from "../unlock_limit/types";
+import {getTotalLimit} from "../portfolio/actions";
 
-export const template: TemplateSchema = {
+export const template: (
+  stepResponseObject: StepResponseObject
+) => TemplateSchema = (stepResponseObject) => {
+  const totalAmount = getTotalLimit(
+    [
+      ...stepResponseObject.availableCAS.map((item) => ({
+        ...item,
+        pledgedUnits: item.totalAvailableUnits,
+      })),
+    ],
+    stepResponseObject.isinNAVMap,
+    stepResponseObject.isinLTVMap
+  );
+
+  return {
     layout: <Layout>{
-        id: ROUTE.PLEDGE_CONFIRMATION,
-        type: LAYOUTS.LIST,
-        widgets: [
-            { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-            { id: "space0", type: WIDGET.SPACE },
-            { id: "inputItem", type: WIDGET.INPUT },
-            { id: "inputSpace", type: WIDGET.SPACE },
-            {
-                id: "continue",
-                type: WIDGET.BUTTON,
-
-            },
-            {
-                id: "otpItem",
-                type: WIDGET.BUTTON,
-                position: POSITION.ABSOLUTE_BOTTOM
-            },
-        ],
+      id: ROUTE.PLEDGE_CONFIRMATION,
+      type: LAYOUTS.LIST,
+      widgets: [
+        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+        { id: "space0", type: WIDGET.SPACE },
+        { id: "inputItem", type: WIDGET.INPUT },
+        { id: "inputSpace", type: WIDGET.SPACE },
+        { id: "selectAssetForPledge", type: WIDGET.STACK },
+        {
+          id: "otpItem",
+          type: WIDGET.BUTTON,
+          position: POSITION.ABSOLUTE_BOTTOM,
+        },
+      ],
     },
     datastore: <Datastore>{
-        header: <HeaderProps>{
-            title: 'Modify Limit',
-            leadIcon: 'https://reactnative.dev/img/tiny_logo.png',
-            isBackButton: true,
-            type: 'DEFAULT',
-            action: {
-                type: ACTION.BACK_BUTTON,
-                payload: <AssetsPayload>{
-                    value: "",
-                    widgetId: "continue",
-                    isResend: false,
-                },
-                routeId: ROUTE.MODIFY_LIMIT,
-            },
+      header: <HeaderProps>{
+        title: "Modify Limit",
+        leadIcon: "https://reactnative.dev/img/tiny_logo.png",
+        isBackButton: true,
+        type: "DEFAULT",
+        action: {
+          type: ACTION.BACK_BUTTON,
+          payload: <AssetsPayload>{
+            value: "",
+            widgetId: "continue",
+            isResend: false,
+            stepResponseObject,
+          },
+          routeId: ROUTE.MODIFY_LIMIT,
         },
-        space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
-        inputItem: <TextInputProps & WidgetProps>{
-            placeholder: "",
-            type: InputTypeToken.DEFAULT,
-            title: "Enter amount",
-            state: InputStateToken.DEFAULT,
-            charLimit: 30000,
-            caption: { success: "", error: "" },
-            action: {
-                type: ACTION.MODIFY_LIMIT,
-                routeId: ROUTE.MODIFY_LIMIT,
-                payload: <AssetsPayload>{
-                    value: "",
-                    widgetId: "input",
-                },
-            },
+      },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
+      inputItem: <TextInputProps & WidgetProps>{
+        placeholder: "",
+        type: InputTypeToken.DEFAULT,
+        keyboardType: KeyboardTypeToken.decimalPad,
+        title: "Enter amount",
+        state: InputStateToken.DEFAULT,
+        limit: totalAmount,
+        caption: { success: "", error: "" },
+        action: {
+          type: ACTION.ENTER_AMOUNT,
+          routeId: ROUTE.MODIFY_LIMIT,
+          payload: <AssetsPayload>{
+            value: "",
+            widgetId: "input",
+          },
         },
-        inputSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
-        continue: <ButtonProps & WidgetProps>{
-            label: "Select assets for pleding",
-            type: ButtonTypeTokens.MediumGhost,
-            width: ButtonWidthTypeToken.CONTENT,
-            stack: <StackProps>{
-                type: StackType.row,
-                alignItems: StackAlignItems.flexStart,
-                justifyContent: StackJustifyContent.flexStart
-            },
-            icon: {
-                name: IconTokens.ChervonDownRight,
-                align: IconAlignmentTokens.right,
-            },
-            action: {
-                type: ACTION.MODIFY_LIMIT,
-                payload: <AssetsPayload>{
-                    value: "",
-                    widgetId: "input",
-                    isResend: false,
-                },
-                routeId: ROUTE.MODIFY_LIMIT,
-            },
+      },
+      inputSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
+      selectAssetForPledge: <StackProps & WidgetProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.flexStart,
+        justifyContent: StackJustifyContent.flexStart,
+        widgetItems: [
+          { id: "label", type: WIDGET.TEXT },
+          { id: "space", type: WIDGET.SPACE },
+          { id: "icon", type: WIDGET.ICON },
+        ],
+        action: {
+          type: ACTION.MODIFY_LIMIT,
+          payload: <AssetsPayload>{
+            value: "",
+            widgetId: "input",
+            stepResponseObject,
+          },
+          routeId: ROUTE.MODIFY_LIMIT,
         },
-        otpItem: <ButtonProps & WidgetProps>{
-            label: "Confirm & get OTP",
-            type: ButtonTypeTokens.MediumFilled,
-            width: ButtonWidthTypeToken.FULL,
-            action: {
-                type: ACTION.MODIFY_LIMIT,
-                payload: <AssetsPayload>{
-                    value: "",
-                    widgetId: "input",
-                    isResend: false,
-                },
-                routeId: ROUTE.MODIFY_LIMIT,
-            },
+      },
+      label: <TypographyProps>{
+        label: "Select assets for pleding",
+        color: ColorTokens.Primary_100,
+        fontWeight: "500",
+        fontSize: FontSizeTokens.SM,
+      },
+      space: <SpaceProps>{ size: SizeTypeTokens.XS },
+      icon: <IconProps>{
+        name: IconTokens.ChervonDownRight,
+        align: IconAlignmentTokens.right,
+        size: IconSizeTokens.XL,
+        color: ColorTokens.Primary_100
+      },
+      otpItem: <ButtonProps & WidgetProps>{
+        label: "Confirm & get OTP",
+        type: ButtonTypeTokens.LargeFilled,
+        width: ButtonWidthTypeToken.FULL,
+        action: {
+          type: ACTION.CONFIRM_CTA,
+          payload: <AssetsPayload>{
+            value: "",
+            widgetId: "input",
+            stepResponseObject,
+          },
+          routeId: ROUTE.MODIFY_LIMIT,
         },
+      },
     },
+  };
 };
 
 export const modifyLimitMF: PageType<any> = {
-    onLoad: async () => Promise.resolve(template),
-    actions: {
-        [ACTION.MODIFY_LIMIT]: selectAssets,
-        [ACTION.BACK_BUTTON]: goBack,
-    },
+  onLoad: async ({}, { stepResponseObject }) => {
+    return Promise.resolve(template(stepResponseObject));
+  },
+  actions: {
+    [ACTION.ENTER_AMOUNT]: EnterAmountAction,
+    [ACTION.MODIFY_LIMIT]: SelectAssets,
+    [ACTION.CONFIRM_CTA]: ConfirmCTA,
+    [ACTION.BACK_BUTTON]: goBack,
+  },
 };

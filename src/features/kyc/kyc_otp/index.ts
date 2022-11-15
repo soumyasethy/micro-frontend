@@ -4,7 +4,8 @@ import {
   LAYOUTS,
   PageType,
   POSITION,
-  TemplateSchema, WidgetProps,
+  TemplateSchema,
+  WidgetProps,
 } from "@voltmoney/types";
 import {
   ColorTokens,
@@ -26,7 +27,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
-import {GoBackAction, onChangeAadhar, toggleCTA, triggerCTA} from "./actions";
+import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
 import { stepperRepo } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
 
@@ -53,7 +54,7 @@ export const template: (
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
         "Volt Protects your financial information with Bank Grade Security",
-      title: "Bank Verification",
+      title: "KYC Verification",
       type: HeaderTypeTokens.verification,
       stepperProps: <StepperProps>{
         type: StepperTypeTokens.HORIZONTAL,
@@ -121,4 +122,5 @@ export const kycAadharOTPVerifyMF: PageType<any> = {
     [ACTION.AADHAR_NUMBER]: onChangeAadhar,
     [ACTION.GO_BACK]: GoBackAction,
   },
+  clearPrevious: true,
 };

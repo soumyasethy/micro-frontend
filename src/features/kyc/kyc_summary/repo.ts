@@ -11,7 +11,7 @@ export const kycSummaryInitRepo = async (applicationId: string) => {
     .then((response) => response.json())
     .catch((error) => console.log("error", error));
 };
-export const kycSummaryVerifyRepo = async (applicationId: string) => {
+export const kycSummaryVerifyRepo = async (applicationId: string,) => {
   const requestOptions = {
     method: "GET",
     headers: await defaultHeaders(),

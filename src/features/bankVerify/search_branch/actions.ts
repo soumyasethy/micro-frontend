@@ -50,9 +50,7 @@ export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   { setDatastore, goBack }
 ): Promise<any> => {
   console.warn("**** OnSelectIFSCAction Action Triggered ****", action);
-  await setDatastore(ROUTE.BANK_SELECT, "IFSCInput", <
-    TextInputProps
-  >{
+  await setDatastore(ROUTE.BANK_SELECT, "IFSCInput", <TextInputProps>{
     state: InputStateToken.DISABLED,
     value: action.payload.ifscCode,
   });
@@ -106,30 +104,9 @@ export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
   _datastore,
   { appendWidgets, removeWidgets }
 ): Promise<any> => {
-  // console.warn("**** IFSCSearchActionPayload Action Triggered ****", action);
   const bankCode = action.payload.bankCode || bankCodeX; //HDFC
-  // action.payload.value // user value
-  let searchLength: number;
-  console.warn(
-    "bankCode->",
-    bankCode.toUpperCase(),
-    "input",
-    action.payload.value.toUpperCase(),
-    bankCode.toUpperCase().includes(action.payload.value.toUpperCase())
-  );
-  if (bankCode.length > action.payload.value.length) {
-    if (bankCode.toUpperCase().includes(action.payload.value.toUpperCase())) {
-      searchLength = 11;
-    } else {
-      searchLength = 3;
-    }
-  } else {
-    if (action.payload.value.toUpperCase().includes(bankCode.toUpperCase())) {
-      searchLength = 11;
-    } else {
-      searchLength = 3;
-    }
-  }
+  let searchLength: number = 3;
+
   if (action.payload.value.length < searchLength) return;
 
   if (widgetItems.length > 0)

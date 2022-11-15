@@ -27,7 +27,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTION, AlertNavProps } from "./types";
-import { GoBackAction } from "./actions";
+import { ClosePopup } from "./actions";
 
 const _applyType = (
   type: "SUCCESS" | "FAILED" | "IN_PROGRESS" | "LOADING" | "DEFAULT"
@@ -47,12 +47,12 @@ const _applyType = (
 };
 
 export const template: (alertProps: AlertProps) => TemplateSchema = ({
-  title = "",
-  message = "",
-  subTitle = "",
-  iconName = "",
-  primary = "",
-  ctaLabel = "",
+  title,
+  message,
+  subTitle,
+  iconName,
+  primary,
+  ctaLabel,
   ctaAction,
   type,
 }) => ({
@@ -72,16 +72,18 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
       label: title || "",
       message: subTitle || "",
       type: _applyType(type),
-      iconName: iconName,
+      iconName: (iconName as IconTokens) || IconTokens.Alert,
       buttonText: ctaLabel,
       action: ctaAction
         ? ctaAction
         : {
-            type: ACTION.GO_BACK,
+            type: ACTION.CLOSE_POPUP,
             routeId: ROUTE.ALERT_PAGE,
             payload: {},
           },
-      buttonType: VerificationCardButtonTypeToken.FULL,
+      buttonType: primary
+        ? VerificationCardButtonTypeToken.FULL
+        : VerificationCardButtonTypeToken.OUTLINE,
     },
     stack: <StackProps>{
       type: StackType.row,
@@ -109,7 +111,7 @@ const alertPropsX: AlertNavProps = {
   ctaLabel: "continue",
   message: "Don’t worry your data is secured with Volt",
   ctaAction: {
-    type: ACTION.GO_BACK,
+    type: ACTION.CLOSE_POPUP,
     routeId: ROUTE.ALERT_PAGE,
     payload: { hello: "world" },
   },
@@ -118,9 +120,11 @@ const alertPropsX: AlertNavProps = {
 
 export const alertMF: PageType<any> = {
   onLoad: async ({}, { alertProps }) => {
+    console.warn("alertProps", alertProps);
     return Promise.resolve(template(alertProps));
   },
   actions: {
-    [ACTION.GO_BACK]: GoBackAction,
+    [ACTION.CLOSE_POPUP]: ClosePopup,
   },
+  clearPrevious: true,
 };

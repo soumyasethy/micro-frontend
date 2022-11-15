@@ -5,6 +5,7 @@ import { saveAttribute } from "./repo";
 import { nextStepId } from "../../../configs/utils";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
+import { ROUTE } from "../../../routes";
 
 let emailId: string = "";
 

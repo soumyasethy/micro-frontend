@@ -39,10 +39,17 @@ import { ROUTE } from "../../../routes";
 import { kycSummaryInitRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
 import { ACTION } from "./types";
-import { GoBackAction, ToggleKYCSummaryCTA, verifyKycSummary } from "./actions";
+import {
+  GoBackAction,
+  NavigateNext,
+  ToggleKYCSummaryCTA,
+  verifyKycSummary,
+} from "./actions";
 import { stepperRepo } from "../../../configs/utils";
-import { ToggleKYCVerifyCTA } from "../kyc_init/types";
+import { NavigationNext, ToggleKYCVerifyCTA } from "../kyc_init/types";
 import moment from "moment";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 export const template: (
   pan: string,
@@ -95,7 +102,7 @@ export const template: (
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A1_1,
       borderRadius: BorderRadiusTokens.BR1,
-      size: ImageSizeTokens.LG,
+      size: ImageSizeTokens.XXXL,
       uri: photoURL,
     },
     panItem: <ListItemProps>{
@@ -105,7 +112,7 @@ export const template: (
     },
     dobItem: <ListItemProps>{
       leadIconName: IconTokens.Calendar,
-      subTitle: moment.unix(Number(dob) / 1000).format("dd-MM-yyyy"),
+      subTitle: moment.unix(Number(dob) / 1000).format("DD-MM-yyyy"),
       title: "DOB",
     },
     addressItem: <ListItemProps>{
@@ -159,15 +166,16 @@ export const template: (
 });
 
 export const kycSummaryMf: PageType<any> = {
-  onLoad: async (_) => {
-    const response = await kycSummaryInitRepo(
-      (
-        await SharedPropsService.getUser()
-      ).linkedApplications[0].applicationId
+  onLoad: async ({ network }) => {
+    const applicationId = (await SharedPropsService.getUser())
+      .linkedApplications[0].applicationId;
+    const response = await network.get(
+      `${api.kycSummaryInit}${applicationId}`,
+      { headers: await getAppHeader() }
     );
 
-    const { address, dob, fullName, photoURL } =
-      await response.stepResponseObject;
+    const { address, dob, fullName, photoURL } = await response.data
+      .stepResponseObject;
     const pan = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
       .accountHolderPAN;
     const stepper: StepperItem[] = await stepperRepo();
@@ -179,5 +187,6 @@ export const kycSummaryMf: PageType<any> = {
     [ACTION.NAV_TO_BANK_ADD]: verifyKycSummary,
     [ACTION.GO_BACK]: GoBackAction,
     [ACTION.TOGGLE_CTA]: ToggleKYCSummaryCTA,
+    [ACTION.NAVIGATION_NEXT]: NavigateNext,
   },
 };

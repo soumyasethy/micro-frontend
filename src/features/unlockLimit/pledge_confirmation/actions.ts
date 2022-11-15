@@ -1,34 +1,55 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import {
-  OtpPayload
-} from "./types";
-import {
-  ButtonProps,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
-import { api } from "../../../configs/api";
-import { defaultAuthHeaders } from "../../../configs/config";
+import { OtpPayload } from "./types";
+import { ButtonProps } from "@voltmoney/schema";
 import { PledgeCreateRepo } from "../unlock_limit/repo";
 import SharedPropsService from "../../../SharedPropsService";
+import { getAppHeader } from "../../../configs/config";
+import { api } from "../../../configs/api";
+import _ from "lodash";
 
 export const sendOtp: ActionFunction<OtpPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { network, navigate, setDatastore, handleError }
 ): Promise<any> => {
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     loading: true,
   });
-  const response = await PledgeCreateRepo("CAMS", action.payload.value.availableCAS);
-  await setDatastore(action.routeId, action.payload.widgetId, <
-    ButtonProps
-    >{
-      loading: false,
-    });
-  navigate(ROUTE.PLEDGE_VERIFY);
+  const assetRepositoryCams = [];
+  const assetRepositoryKFIN = [];
+  action.payload.value.availableCAS.map((item) => {
+    if (item.assetRepository === "CAMS") {
+      assetRepositoryCams.push({
+        ...item,
+        is_pledged: true,
+      });
+    } else if (item.assetRepository === "KARVY") {
+      assetRepositoryKFIN.push({
+        ...item,
+        is_pledged: true,
+      });
+    }
+  });
 
+  const response = await network.post(
+    api.pledgeCreate,
+    {
+      applicationId: (
+        await SharedPropsService.getUser()
+      ).linkedApplications[0].applicationId,
+      assetRepository: "KARVY",
+      portfolioItemList: assetRepositoryKFIN,
+    },
+    { headers: await getAppHeader() }
+  );
+  if (_.get(response, "data.status") === "SUCCESS") {
+    await navigate(ROUTE.PLEDGE_VERIFY, { assetRepository: "KARVY" });
+  }
+
+  await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+    loading: false,
+  });
 };
 
 export const goBack: ActionFunction<any> = async (
@@ -36,6 +57,5 @@ export const goBack: ActionFunction<any> = async (
   _datastore,
   { goBack }
 ): Promise<any> => {
-  goBack();
+  await goBack();
 };
-

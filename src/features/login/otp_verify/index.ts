@@ -43,6 +43,7 @@ export const template: (
       id: ROUTE.OTP_VERIFY,
       type: LAYOUTS.LIST,
       widgets: [
+        {id: "space0", type: WIDGET.SPACE},
         { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitleStack", type: WIDGET.STACK },
@@ -68,6 +69,7 @@ export const template: (
         justifyContent: StackJustifyContent.flexStart,
         widgetItems: [
           { id: "subTitle", type: WIDGET.TEXT },
+          { id: "subTitle2", type: WIDGET.TEXT },
           { id: "editNumber", type: WIDGET.TEXT },
         ],
         action: {
@@ -77,14 +79,21 @@ export const template: (
         },
       },
       subTitle: <TypographyProps>{
-        label: `A 6-digit OTP was sent on ${phone_number} `,
+        label: `We’ve sent an OTP to `,
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.SM,
       },
+      subTitle2: <TypographyProps>{
+        label: `${phone_number}`,
+        color: ColorTokens.Grey_Charcoal,
+        fontSize: FontSizeTokens.SM,
+        fontWeight: "bold",
+      },
       editNumber: <TypographyProps>{
-        label: `Edit`,
+        label: ` Edit`,
         color: ColorTokens.Primary_100,
         fontSize: FontSizeTokens.SM,
+        fontWeight: "bold",
       },
       input: <TextInputProps & TextInputOtpProps & WidgetProps>{
         title: "Enter OTP",
@@ -113,6 +122,7 @@ export const template: (
           routeId: ROUTE.OTP_VERIFY,
         },
       },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
       space1: <SpaceProps>{ size: SizeTypeTokens.MD },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     },
@@ -128,4 +138,5 @@ export const otpVerifyMF: PageType<any> = {
     [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.RESEND_OTP_NUMBER]: sendOtp,
   },
+  clearPrevious: true,
 };

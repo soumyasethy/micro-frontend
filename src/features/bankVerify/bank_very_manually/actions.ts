@@ -1,16 +1,20 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ButtonProps, ButtonTypeTokens, IconTokens } from "@voltmoney/schema";
-import { BAVVerifyActionPayload } from "../bank_verify/types";
+import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import {
+  ACTION as ACTION_CURRENT,
+  BAVVerifyActionPayload,
+} from "../bank_verify/types";
 import { postBankRepo } from "../bank_verify/repo";
 import {
+  ACTION,
   InputNumberActionPayload,
   NavigationSearchIFSCActionPayload,
 } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
-import { AlertNavProps } from "../../popup_loader/types";
-import { showBottomSheet } from "../../../configs/utils";
-import {ACTION} from "../../kyc/kyc_otp/types";
+import _ from "lodash";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -60,38 +64,66 @@ export const ToggleCTA: ActionFunction<any> = async (
 
 export const BavVerifyManualAction: ActionFunction<
   BAVVerifyActionPayload
-> = async (action, _datastore, { setDatastore, handleError }): Promise<any> => {
-  console.warn("**** BavVerifyManualAction Action Triggered ****", action);
+> = async (
+  action,
+  _datastore,
+  { setDatastore, network, showPopup, goBack }
+): Promise<any> => {
+  // await showPopup({
+  //   title: "Depositing Rs 1",
+  //   subTitle: "We’re doing this to verify your account.",
+  //   type: "LOADING",
+  // });
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  const response = await postBankRepo(
-    (
-      await SharedPropsService.getUser()
-    ).linkedApplications[0].applicationId,
-    bankAccountNumber,
-    bankIfsc
+
+  const applicationId = (await SharedPropsService.getUser())
+    .linkedApplications[0].applicationId;
+  const response = await network.post(
+    api.bavVerify,
+    {
+      applicationId,
+      bankAccountDetails: {
+        bankAccountNumber,
+        bankIfscCode: bankIfsc,
+      },
+    },
+    { headers: await getAppHeader() }
   );
+
+  if (
+    _.get(
+      response,
+      "data.updatedApplicationObj.currentStepId",
+      "NOT_COMPLETED"
+    ) === null
+  ) {
+    await showPopup({
+      type: "SUCCESS",
+      title: "Account verified successfully!",
+      subTitle: "You will be redirected to next step in few seconds",
+      ctaLabel: "Continue",
+      ctaAction: {
+        type: ACTION_CURRENT.GO_NEXT,
+        routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
+        payload: {
+          currentStepId: _.get(
+            response,
+            "data.updatedApplicationObj.currentStepId"
+          ),
+        },
+      },
+    });
+  }
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-  console.warn(
-    "currentStepId-->",
-    response.updatedApplicationObj.currentStepId
-  );
-  await handleError(response, {
-    success: "Account verified successfully!",
-    failed: "Verification failed!",
-    ctaLabel: "Retake",
-    ctaAction: {
-      type: ACTION.GO_BACK,
-      routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
-      payload: {},
-    },
-  });
 };
-export const ChangeBankGoBackAction: ActionFunction<
-  InputNumberActionPayload
-> = async (action, _datastore, { goBack }): Promise<any> => {
+export const ChangeBankGoBackAction: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { goBack }
+): Promise<any> => {
   await goBack();
 };

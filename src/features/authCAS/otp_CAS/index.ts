@@ -68,7 +68,7 @@ export const template: (
         fontWeight: "700",
       },
       subTitle: <TypographyProps>{
-        label: `A 5-digit OTP was sent on ${phoneNumber} `,
+        label: `A 6-digit OTP was sent on ${phoneNumber} `,
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.SM,
       },
@@ -77,7 +77,7 @@ export const template: (
         type: InputTypeToken.OTP,
         state: InputStateToken.DEFAULT,
         keyboardType: KeyboardTypeToken.numberPad,
-        charLimit: 5,
+        charLimit: 6,
         action: {
           type: ACTIONS.AUTH_CAS,
           routeId: ROUTE.OTP_AUTH_CAS,
@@ -118,4 +118,5 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.AUTH_CAS]: authCAS,
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
   },
+  clearPrevious: true,
 };

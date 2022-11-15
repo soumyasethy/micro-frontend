@@ -1,10 +1,10 @@
 import { ActionFunction } from "@voltmoney/types";
 
-export const GoBackAction: ActionFunction<any> = async (
+export const ClosePopup: ActionFunction<any> = async (
   action,
   _datastore,
   { goBack }
 ): Promise<any> => {
-  console.warn("**** Test Action Triggered ****", action);
+  console.warn("**** ClosePopup ****", action);
   await goBack();
 };

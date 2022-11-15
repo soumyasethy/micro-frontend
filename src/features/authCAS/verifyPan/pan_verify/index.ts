@@ -32,9 +32,8 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../../routes";
 import { ACTION, ContinuePayload, InputPayload } from "./types";
-import { CalendarOnChange, PanOnChange, verifyPan } from "./actions";
+import { CalendarOnChange, PanOnChange, verifyPan, toggleCTA } from "./actions";
 import { EnableDisableCTA } from "../../../login/phone_number/types";
-import { toggleCTA } from "../../../login/phone_number/actions";
 import { User } from "../../../login/otp_verify/types";
 import SharedPropsService from "../../../../SharedPropsService";
 

@@ -1,14 +1,21 @@
 import { ActionFunction } from "@voltmoney/types";
 import { kycSummaryVerifyRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
-import { AadharInitPayload, ToggleKYCVerifyCTA } from "../kyc_init/types";
+import {
+  AadharInitPayload,
+  NavigationNext,
+  ToggleKYCVerifyCTA,
+} from "../kyc_init/types";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-
+import { ACTION } from "./types";
+import _ from "lodash";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 export const verifyKycSummary: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, setDatastore }
+  { network, setDatastore, showPopup }
 ): Promise<any> => {
   await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
     loading: true,
@@ -16,14 +23,39 @@ export const verifyKycSummary: ActionFunction<any> = async (
   const applicationId = (await SharedPropsService.getUser())
     .linkedApplications[0].applicationId;
 
-  const response = await kycSummaryVerifyRepo(applicationId);
-  console.warn("verifyKycSummary->", response);
+  const response = await network.get(
+    `${api.kycSummaryVerify}${applicationId}`,
+    { headers: await getAppHeader() }
+  );
   await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
     loading: false,
   });
-  if (response.updatedApplicationObj.currentStepId)
-    await navigate(response.updatedApplicationObj.currentStepId);
+  if (_.get(response, "data.updatedApplicationObj.currentStepId", false))
+    await showPopup({
+      title: "KYC done successfully!",
+      subTitle: "You will be redirected to next step in few seconds",
+      type: "SUCCESS",
+      ctaLabel: "Proceed to verify bank account",
+      primary: true,
+      ctaAction: {
+        type: ACTION.NAVIGATION_NEXT,
+        routeId: ROUTE.KYC_SUMMARY,
+        payload: <NavigationNext>{
+          stepId: _.get(response, "data.updatedApplicationObj.currentStepId"),
+        },
+      },
+    });
 };
+
+export const NavigateNext: ActionFunction<NavigationNext> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  await goBack();
+  if (action.payload.stepId) await navigate(action.payload.stepId);
+};
+
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
   action,
   _datastore,

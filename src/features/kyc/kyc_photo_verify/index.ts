@@ -149,4 +149,5 @@ export const kycAfterCameraMF: PageType<any> = {
     [ACTION.PHOTO_RETAKE]: RetakePhoto,
     [ACTION.GO_BACK]: GoBackAction,
   },
+  clearPrevious: true,
 };

@@ -36,5 +36,8 @@ export const postBankRepo = async (
 
   return await fetch(api.bavVerify, requestOptions)
     .then((response) => response.json())
-    .catch((error) => console.log("error", error));
+    .catch((error) => {
+      console.log("error", error);
+      return error;
+    });
 };

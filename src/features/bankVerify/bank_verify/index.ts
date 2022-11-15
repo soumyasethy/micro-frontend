@@ -42,6 +42,7 @@ import {
   AddAccountNavAction,
   BavVerifyAction,
   GoBackAction,
+  GoNext,
   ToggleSelectAction,
 } from "./actions";
 import { fetchBankRepo } from "./repo";
@@ -215,7 +216,6 @@ export const bankVerifyMF: PageType<any> = {
     const response = await fetchBankRepo();
     const banks = response.stepResponseObject;
     const stepper: StepperItem[] = await stepperRepo();
-    stepper[1].status = StepperStateToken.COMPLETED;
     const templateX = await template(banks, stepper);
 
     return Promise.resolve(templateX);
@@ -225,5 +225,6 @@ export const bankVerifyMF: PageType<any> = {
     [ACTION.TRIGGER_CTA]: BavVerifyAction,
     [ACTION.GO_ADD_ACCOUNT]: AddAccountNavAction,
     [ACTION.GO_BACK]: GoBackAction,
+    [ACTION.GO_NEXT]: GoNext,
   },
 };
