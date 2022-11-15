@@ -6,12 +6,17 @@ import {
   NavigationNext,
   ToggleKYCVerifyCTA,
 } from "../kyc_init/types";
-import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import {
+  ButtonProps,
+  ButtonTypeTokens,
+  StepperStateToken,
+} from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import _ from "lodash";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import { User } from "../../login/otp_verify/types";
 export const verifyKycSummary: ActionFunction<any> = async (
   action,
   _datastore,
@@ -30,7 +35,16 @@ export const verifyKycSummary: ActionFunction<any> = async (
   await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
     loading: false,
   });
-  if (_.get(response, "data.updatedApplicationObj.currentStepId", false))
+  if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+    const user: User = await SharedPropsService.getUser();
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY =
+      StepperStateToken.COMPLETED;
+    user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION =
+      StepperStateToken.COMPLETED;
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION =
+      StepperStateToken.COMPLETED;
+    await SharedPropsService.setUser(user);
+
     await showPopup({
       title: "KYC done successfully!",
       subTitle: "You will be redirected to next step in few seconds",
@@ -45,6 +59,7 @@ export const verifyKycSummary: ActionFunction<any> = async (
         },
       },
     });
+  }
 };
 
 export const NavigateNext: ActionFunction<NavigationNext> = async (

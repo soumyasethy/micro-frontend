@@ -1,5 +1,9 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import {
+  ButtonProps,
+  ButtonTypeTokens,
+  StepperStateToken,
+} from "@voltmoney/schema";
 import {
   ACTION as ACTION_CURRENT,
   BAVVerifyActionPayload,
@@ -13,6 +17,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import { User } from "../../login/otp_verify/types";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -97,6 +102,11 @@ export const BavVerifyManualAction: ActionFunction<
       "NOT_COMPLETED"
     ) === null
   ) {
+    const user: User = await SharedPropsService.getUser();
+    user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
+      StepperStateToken.COMPLETED;
+    await SharedPropsService.setUser(user);
+
     await showPopup({
       type: "SUCCESS",
       title: "Account verified successfully!",
