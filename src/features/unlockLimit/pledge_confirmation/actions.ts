@@ -2,7 +2,6 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { OtpPayload } from "./types";
 import { ButtonProps } from "@voltmoney/schema";
-import { PledgeCreateRepo } from "../unlock_limit/repo";
 import SharedPropsService from "../../../SharedPropsService";
 import { getAppHeader } from "../../../configs/config";
 import { api } from "../../../configs/api";

@@ -43,7 +43,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
       )} unlocked successfully!`,
       subTitle: "You will be redirected to next step in few seconds",
       type: "SUCCESS",
-      ctaLabel: "Proceed to verify bank account",
+      ctaLabel: "Continue",
       primary: true,
       ctaAction: {
         type: PAGE_ACTION.NAV_NEXT,
