@@ -91,7 +91,7 @@ export const template: TemplateSchema = {
             message: 'Enjoy flexible repayments. Pay partially or the complete amount in just one go.',
             warning: '',
             chipText: '',
-            type: AmountCardTypeTokens.MESSAGE
+            type: AmountCardTypeTokens.default
         },
         amountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
         headStack: <TypographyProps>{
@@ -146,14 +146,14 @@ export const template: TemplateSchema = {
         listItem1: <ListItemProps>{
             title: 'IFSC',
             subTitle: 'HDFC0000675',
-            trailIconName: IconTokens.Copy,
+           // trailIconName: IconTokens.Copy,
             trailLabel: 'Copy',
             onPress: () => { },
         },
         listItem2: <ListItemProps>{
             title: 'Account number',
             subTitle: '05001 42345 38421',
-            trailIconName: IconTokens.Copy,
+           // trailIconName: IconTokens.Copy,
             trailLabel: 'Copy',
             onPress: () => { },
         },

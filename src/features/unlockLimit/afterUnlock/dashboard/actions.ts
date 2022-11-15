@@ -1,7 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../../routes";
 import {
-  AssetsPayload
+  CreditPayload
 } from "./types";
 import {
   ButtonProps,
@@ -13,7 +13,7 @@ import { defaultAuthHeaders } from "../../../../configs/config";
 
 let phoneNumber: string = "";
 
-export const withdrawNow: ActionFunction<AssetsPayload> = async (
+export const withdrawNow: ActionFunction<CreditPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
@@ -21,7 +21,7 @@ export const withdrawNow: ActionFunction<AssetsPayload> = async (
   await navigate(ROUTE.WITHDRAW_AMOUNT);
 };
 
-export const repayment: ActionFunction<AssetsPayload> = async (
+export const repayment: ActionFunction<CreditPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
@@ -30,7 +30,7 @@ export const repayment: ActionFunction<AssetsPayload> = async (
   await navigate(ROUTE.REPAYMENT);
 };
 
-export const goBack: ActionFunction<AssetsPayload> = async (
+export const goBack: ActionFunction<CreditPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }

@@ -39,13 +39,16 @@ import {
 import { ROUTE } from "../../../../routes";
 import {
     ACTION,
-    AssetsPayload,
+    CreditPayload,
+    creditData
 } from "./types";
 import { goBack, withdrawNow,repayment } from "./actions";
-
-export const template: TemplateSchema = {
+import { fetchUserDetails } from "./repo";
+export const template: (
+    availableCreditAmount:number,userData
+  ) => TemplateSchema = (availableCreditAmount) => ({
     layout: <Layout>{
-        id: ROUTE.PLEDGE_CONFIRMATION,
+        id: ROUTE.DASHBOARD,
         type: LAYOUTS.LIST,
         widgets: [
             {
@@ -156,8 +159,8 @@ export const template: TemplateSchema = {
         space0: <SpaceProps>{ size: SizeTypeTokens.XL },
         amountItem: <AmountCardProps>{
             title: 'Available cash',
-            subTitle: '30,000',
-            subscriptTitle: 'out of ₹30,000',
+            subTitle: `${availableCreditAmount}`,
+            subscriptTitle: 'out of ₹ '+`${availableCreditAmount}`,
             progressLabel: '0% of total limit available',
             warning: 'Recommended to use as per limit',
             chipText: '',
@@ -168,15 +171,15 @@ export const template: TemplateSchema = {
             label: "Withdraw now",
             type: ButtonTypeTokens.LargeFilled,
             width: ButtonWidthTypeToken.FULL,
-            action: {
-                type: ACTION.DASHBOARD,
-                payload: <{}>{
-                    value: "",
-                    widgetId: "input",
-                    isResend: false,
-                },
-                routeId: ROUTE.DASHBOARD,
-            },
+            // action: {
+            //     type: ACTION.DASHBOARD,
+            //     payload: <CreditPayload>{
+            //         // value: userData,
+            //         // widgetId: "continue",
+            //         // isResend: false,
+            //     },
+            //     routeId: ROUTE.DASHBOARD,
+            // },
         },
         continueSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
         repaymentCard: <CardProps>{
@@ -291,10 +294,20 @@ export const template: TemplateSchema = {
             ]
         }
     },
-};
+});
+
+
 
 export const dashboardMF: PageType<any> = {
-    onLoad: async () => Promise.resolve(template),
+   
+    onLoad: async () => {
+        const response = await fetchUserDetails();
+        console.log(response);
+        const availableCreditAmount: number =  response.linkedCredits[0]?.actualLoanAmount | 0;
+        const userData = response.linkedCredits;
+        return Promise.resolve(template(availableCreditAmount,userData));
+    },
+    
     actions: {
         [ACTION.DASHBOARD]: withdrawNow,
         [ACTION.REPAYMENT]: repayment,
