@@ -21,6 +21,7 @@ import {
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
+  StackFlexWrap,
   StackJustifyContent,
   StackProps,
   StackType,
@@ -56,12 +57,14 @@ export const template: TemplateSchema = {
         id: "continue",
         type: WIDGET.BUTTON,
       },
+      { id: "space5", type: WIDGET.SPACE },
+      { id: "stackText", type: WIDGET.STACK },
     ],
   },
   datastore: <Datastore>{
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
-      label: "Get OTP",
+      label: "Continue",
       type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
@@ -75,14 +78,14 @@ export const template: TemplateSchema = {
       },
     },
     title: <TypographyProps>{
-      label: "Verify your mobile number",
+      label: "Enter your mobile number",
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
     },
     subTitle: <TypographyProps>{
-      label: "We’ll send a verification code to this number",
+      label: "We’ll send an OTP to verify this number",
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
     },
@@ -92,7 +95,7 @@ export const template: TemplateSchema = {
       title: "Mobile Number",
       charLimit: 10,
       placeholder: "Enter mobile number",
-      keyboardType: KeyboardTypeToken.email,
+      keyboardType: KeyboardTypeToken.numberPad,
       action: {
         type: ACTION.PHONE_NUMBER,
         payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },
@@ -112,7 +115,7 @@ export const template: TemplateSchema = {
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    space3: <SpaceProps>{ size: SizeTypeTokens.LG },
+    space3: <SpaceProps>{ size: SizeTypeTokens.MD },
     space4: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     whatsapp_space: <SpaceProps>{ size: SizeTypeTokens.XS },
     whatsappStack: <StackProps & WidgetProps>{
@@ -140,9 +143,65 @@ export const template: TemplateSchema = {
       },
     },
     whatsapp: <TypographyProps>{
-      label: "Send OTP on Whatsapp",
+      label: "Get updates on WhatsApp",
       fontSize: FontSizeTokens.XXS,
       color: ColorTokens.Grey_Night,
+    },
+    space5: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    stackText: <StackProps & WidgetProps>{
+      flexWrap: StackFlexWrap.wrap,
+      type: StackType.column,
+      alignItems: StackAlignItems.flexStart,
+      justifyContent: StackJustifyContent.flexStart,
+      widgetItems: [
+        { id: "stack2", type: WIDGET.STACK },
+        { id: "text5", type: WIDGET.TEXT },
+      ],
+    },
+    stack2: <StackProps & WidgetProps>{
+      type: StackType.row,
+      alignItems: StackAlignItems.center,
+      widgetItems: [
+        {id: "text1", type: WIDGET.TEXT},
+        {id: "text2", type: WIDGET.TEXT},
+        {id: "text3", type: WIDGET.TEXT},
+        {id: "text4", type: WIDGET.TEXT},
+      ]
+    },
+    text1: <TypographyProps>{
+      label: "By proceeding, I accept ",
+      fontSize: FontSizeTokens.SM,
+      color: ColorTokens.Black,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "400",
+    },
+    text2: <TypographyProps>{
+      label: "T&Cs, Privacy Policy ",
+      fontSize: FontSizeTokens.SM,
+      color: ColorTokens.Blue_700,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "400",
+    },
+    text3: <TypographyProps>{
+      label: "and ",
+      fontSize: FontSizeTokens.SM,
+      color: ColorTokens.Black,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "400",
+    },
+    text4: <TypographyProps>{
+      label: "Authorize ",
+      fontSize: FontSizeTokens.SM,
+      color: ColorTokens.Blue_700,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "400",
+    },
+    text5: <TypographyProps>{
+      label: "to obtain my cKYC & credit report.",
+      fontSize: FontSizeTokens.SM,
+      color: ColorTokens.Black,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "400",
     },
   },
 };

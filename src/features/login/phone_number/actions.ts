@@ -46,6 +46,7 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
     headers: defaultAuthHeaders(),
   };
 
+  if(phoneNumber.length ===13) {
   await fetch(`${api.login}${phoneNumber}`, requestOptions)
     .then((response) => response.json())
     .then(async (result) => {
@@ -83,6 +84,14 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
         state: InputStateToken.ERROR,
       });
     });
+  } else {
+    await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+      loading: false,
+    });
+    await setDatastore(action.routeId, "input", <TextInputProps>{
+      state: InputStateToken.ERROR,
+    });
+  }
 };
 export const textOnChange: ActionFunction<ContinuePayload> = async (
   action,
