@@ -84,7 +84,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       subTitle2: <TypographyProps>{
-        label: `${phone_number}`,
+        label: `${phone_number}`.substring(3),
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.SM,
         fontWeight: "bold",

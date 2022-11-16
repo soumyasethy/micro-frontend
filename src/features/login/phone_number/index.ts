@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -56,10 +57,10 @@ export const template: TemplateSchema = {
       {
         id: "continue",
         type: WIDGET.BUTTON,
-        // position: POSITION.FIXED_BOTTOM,
+        position: POSITION.ABSOLUTE_BOTTOM
       },
-      { id: "space5", type: WIDGET.SPACE },
-      { id: "stackText", type: WIDGET.STACK },
+      { id: "space5", type: WIDGET.SPACE, position: POSITION.ABSOLUTE_BOTTOM },
+      { id: "stackText", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
     ],
   },
   datastore: <Datastore>{
@@ -91,6 +92,7 @@ export const template: TemplateSchema = {
       fontSize: FontSizeTokens.SM,
     },
     input: <TextInputProps & WidgetProps>{
+      regex: "^[0-9]*$",
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
       title: "Mobile Number",
@@ -102,7 +104,7 @@ export const template: TemplateSchema = {
         payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },
         routeId: ROUTE.PHONE_NUMBER,
       },
-      caption: { error: "Enter a valid 10 digit mobile number" },
+      caption: { error: "Enter a 10 digit mobile number" },
       errorAction: {
         type: ACTION.DISABLE_CONTINUE,
         routeId: ROUTE.PHONE_NUMBER,
@@ -145,6 +147,8 @@ export const template: TemplateSchema = {
     },
     whatsapp: <TypographyProps>{
       label: "Get updates on WhatsApp",
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
       fontSize: FontSizeTokens.XXS,
       color: ColorTokens.Grey_Night,
     },
@@ -171,35 +175,35 @@ export const template: TemplateSchema = {
     },
     text1: <TypographyProps>{
       label: "By proceeding, I accept ",
-      fontSize: FontSizeTokens.SM,
+      fontSize: FontSizeTokens.XS,
       color: ColorTokens.Black,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
     text2: <TypographyProps>{
       label: "T&Cs, Privacy Policy ",
-      fontSize: FontSizeTokens.SM,
+      fontSize: FontSizeTokens.XS,
       color: ColorTokens.Blue_700,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
     text3: <TypographyProps>{
       label: "and ",
-      fontSize: FontSizeTokens.SM,
+      fontSize: FontSizeTokens.XS,
       color: ColorTokens.Black,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
     text4: <TypographyProps>{
       label: "Authorize ",
-      fontSize: FontSizeTokens.SM,
+      fontSize: FontSizeTokens.XS,
       color: ColorTokens.Blue_700,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
     text5: <TypographyProps>{
       label: "to obtain my cKYC & credit report.",
-      fontSize: FontSizeTokens.SM,
+      fontSize: FontSizeTokens.XS,
       color: ColorTokens.Black,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
