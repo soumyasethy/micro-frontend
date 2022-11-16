@@ -1,4 +1,4 @@
-import { IconTokens, StepperItem, StepperStateToken } from "@voltmoney/schema";
+import { StepperItem, StepperStateToken } from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
 import { User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
@@ -218,13 +218,14 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
   }
   if (currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION) {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
-  } else if (currentStepId === "KYC_PHOTO_VERIFICATION") {
+  } else if (currentStepId === ROUTE.KYC_PHOTO_VERIFICATION) {
     return { routeId: ROUTE.KYC_PHOTO_VERIFICATION, params: {} };
-  } else if (currentStepId === "KYC_SUMMARY") {
+  } else if (currentStepId === ROUTE.KYC_SUMMARY) {
     return { routeId: ROUTE.KYC_SUMMARY, params: {} };
-  } else if (currentStepId === "BANK_ACCOUNT_VERIFICATION") {
+  } else if (currentStepId === ROUTE.BANK_ACCOUNT_VERIFICATION) {
     return { routeId: ROUTE.BANK_ACCOUNT_VERIFICATION, params: {} };
   } else {
+    return { routeId: ROUTE.DASHBOARD };
   }
 };
 

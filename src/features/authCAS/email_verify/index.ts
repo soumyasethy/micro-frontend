@@ -26,6 +26,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  TextAlignTokens,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -78,8 +79,9 @@ export const template: (applicationId: string) => TemplateSchema = (
     },
     subTitle: <TypographyProps>{
       label: "We need email linked with your investments",
-      fontSize: FontSizeTokens.SM,
+      fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Charcoal,
+      numberOfLines: 1,
     },
     google: <GoogleButtonProps & WidgetProps>{
       label: "Continue with Google",
@@ -95,12 +97,12 @@ export const template: (applicationId: string) => TemplateSchema = (
     //   width: ButtonWidthTypeToken.FULL,
     // },
     email: <ButtonProps & WidgetProps>{
-      label: "Continue with Other Email",
+      label: "Continue with other email",
       type: ButtonTypeTokens.LargeGhost,
       width: ButtonWidthTypeToken.FULL,
       icon: {
         name: IconTokens.Email,
-        size: IconSizeTokens.MD,
+        size: IconSizeTokens.LG,
         align: IconAlignmentTokens.left,
       },
       action: {

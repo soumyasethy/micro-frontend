@@ -67,6 +67,7 @@ export const template: (
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
+        numberOfLines: 1,
       },
       subTitle: <TypographyProps>{
         label: "PAN is used to check your approved limit",
@@ -115,7 +116,7 @@ export const template: (
         },
       },
       fetchCTA: <ButtonProps & WidgetProps>{
-        label: "Fetch my portfolio",
+        label: "Get my portfolio",
         width: ButtonWidthTypeToken.FULL,
         type: ButtonTypeTokens.LargeFilled,
         action: {

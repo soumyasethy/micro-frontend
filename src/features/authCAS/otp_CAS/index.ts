@@ -19,6 +19,10 @@ import {
   KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
+  StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
   TextInputOtpProps,
   TextInputProps,
   TypographyProps,
@@ -50,7 +54,7 @@ export const template: (
       widgets: [
         { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
-        { id: "subTitle", type: WIDGET.TEXT },
+        { id: "subTitleStack", type: WIDGET.STACK },
         { id: "space2", type: WIDGET.SPACE },
         { id: "input", type: WIDGET.INPUT },
       ],
@@ -67,10 +71,25 @@ export const template: (
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
       },
+      subTitleStack: <StackProps & WidgetProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.flexStart,
+        widgetItems: [
+          { id: "subTitle", type: WIDGET.TEXT },
+          { id: "subTitle2", type: WIDGET.TEXT },
+        ]
+      },
       subTitle: <TypographyProps>{
-        label: `A 6-digit OTP was sent on ${phoneNumber} `,
+        label: `A 6-digit OTP was sent on `,
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.SM,
+      },
+      subTitle2: <TypographyProps>{
+        label: `${phoneNumber}`.substring(3).slice(0,3) + "*****" + `${phoneNumber}`.substring(3).slice(-2),
+        color: ColorTokens.Grey_Charcoal,
+        fontSize: FontSizeTokens.SM,
+        fontWeight: "bold",
       },
       input: <TextInputProps & TextInputOtpProps & WidgetProps>{
         title: "Enter OTP",
