@@ -7,6 +7,7 @@ import {
     TemplateSchema,
     WidgetProps,
 } from "@voltmoney/types";
+import _ from "lodash";
 import {
     AmountCardProps,
     AmountCardTypeTokens,
@@ -45,8 +46,8 @@ import {
 import { goBack, withdrawNow,repayment } from "./actions";
 import { fetchUserDetails } from "./repo";
 export const template: (
-    availableCreditAmount:number,userData
-  ) => TemplateSchema = (availableCreditAmount) => ({
+    availableCreditAmount:number,actualLoanAmount:number,isRepayment: boolean
+  ) => TemplateSchema = (availableCreditAmount,actualLoanAmount,isRepayment) => ({
     layout: <Layout>{
         id: ROUTE.DASHBOARD,
         type: LAYOUTS.LIST,
@@ -159,9 +160,9 @@ export const template: (
         space0: <SpaceProps>{ size: SizeTypeTokens.XL },
         amountItem: <AmountCardProps>{
             title: 'Available cash',
-            subTitle: `${availableCreditAmount}`,
+            subTitle: `${actualLoanAmount}`,
             subscriptTitle: 'out of ₹ '+`${availableCreditAmount}`,
-            progressLabel: '0% of total limit available',
+            progressLabel:parseFloat((actualLoanAmount*100/availableCreditAmount).toFixed(2))+'% of total limit available',
             warning: 'Recommended to use as per limit',
             chipText: '',
             type: AmountCardTypeTokens.wallet
@@ -171,28 +172,26 @@ export const template: (
             label: "Withdraw now",
             type: ButtonTypeTokens.LargeFilled,
             width: ButtonWidthTypeToken.FULL,
-            // action: {
-            //     type: ACTION.DASHBOARD,
-            //     payload: <CreditPayload>{
-            //         // value: userData,
-            //         // widgetId: "continue",
-            //         // isResend: false,
-            //     },
-            //     routeId: ROUTE.DASHBOARD,
-            // },
+            action: {
+                type: ACTION.DASHBOARD,
+                payload: <CreditPayload>{
+                    value: availableCreditAmount,
+                    widgetId: "continue"
+                },
+                routeId: ROUTE.DASHBOARD,
+            },
         },
         continueSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
         repaymentCard: <CardProps>{
             bgColor: ColorTokens.White,
             body: {
                 widgetItems: [
-                    { id: "repaymentItem", type: WIDGET.REPAYMENT },
-
+                    `${isRepayment} !== false` && { id: "repaymentItem", type: WIDGET.REPAYMENT },
                 ]
             }
         },
-        repaymentItem: <RepaymentProps>{
-            title: 'Repayment',
+         repaymentItem: <RepaymentProps>{
+            title: "Repayment",
             message: 'Outstanding amount',
             amount: '5,000',
             btnText: 'Flexi Pay',
@@ -289,8 +288,7 @@ export const template: (
                         size: IconSizeTokens.XL,
                         align: IconAlignmentTokens.left,
                     },
-                  },
-                 
+                  }, 
             ]
         }
     },
@@ -303,9 +301,15 @@ export const dashboardMF: PageType<any> = {
     onLoad: async () => {
         const response = await fetchUserDetails();
         console.log(response);
-        const availableCreditAmount: number =  response.linkedCredits[0]?.actualLoanAmount | 0;
-        const userData = response.linkedCredits;
-        return Promise.resolve(template(availableCreditAmount,userData));
+        const availableCreditAmount: number =   _.get(response, "linkedCredits[0].availableCreditAmount", 0);
+        const actualLoanAmount: number = _.get(response, "linkedCredits[0].actualLoanAmount", 0)
+        let isRepayment = false;
+        if(availableCreditAmount>0 || actualLoanAmount >0){
+            isRepayment = true;
+        }else{
+            isRepayment = false;
+        }
+        return Promise.resolve(template(availableCreditAmount,actualLoanAmount,isRepayment));
     },
     
     actions: {

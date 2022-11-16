@@ -8,7 +8,7 @@ export enum ACTION {
 
 
 export type CreditPayload = {
-  value: creditData[];
+  value: number;
   widgetId: string;
 };
 
