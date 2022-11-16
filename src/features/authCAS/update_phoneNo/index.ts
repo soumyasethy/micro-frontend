@@ -8,9 +8,11 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  ButtonBaseProps,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  FontSizeTokens,
   InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
@@ -42,9 +44,10 @@ export const template: TemplateSchema = {
   },
   datastore: <Datastore>{
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
-    continue: <ButtonProps & WidgetProps>{
+    continue: <ButtonBaseProps & WidgetProps>{
       label: "Confirm",
-      type: ButtonTypeTokens.LargeOutline,
+      fontSize: FontSizeTokens.MD,
+      // type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.EDIT_MOBILE_NUMBER,
@@ -56,18 +59,19 @@ export const template: TemplateSchema = {
       },
     },
     input: <TextInputProps & WidgetProps>{
+      regex: "^[0-9]*$",
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
       title: "Mobile Number",
       charLimit: 10,
       placeholder: "Enter mobile number",
-      keyboardType: KeyboardTypeToken.phone,
+      keyboardType: KeyboardTypeToken.numberPad,
       action: {
         type: ACTION.PHONE_NUMBER_ONCHANGE,
         payload: <UpdateMobileNumber>{ value: "", targetWidgetId: "input" },
         routeId: ROUTE.UPDATE_PHONE_NUMBER,
       },
-      caption: { error: "Enter a valid 10 digit mobile number" },
+      caption: { error: "Enter a 10 digit mobile number" },
       errorAction: {
         type: ACTION.DISABLE_CONTINUE,
         routeId: ROUTE.UPDATE_PHONE_NUMBER,
@@ -80,7 +84,7 @@ export const template: TemplateSchema = {
       },
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
-    space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
   },
 };
 
