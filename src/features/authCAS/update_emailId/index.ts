@@ -80,7 +80,7 @@ export const template: TemplateSchema = {
       },
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
-    space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
   },
 };
 
