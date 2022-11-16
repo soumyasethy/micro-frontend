@@ -92,14 +92,14 @@ export const template: (
         },
       },
       title: <TypographyProps>{
-        label: "Verify PAN",
+        label: "Verify your PAN",
         fontSize: FontSizeTokens.XL,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
       },
       subTitle: <TypographyProps>{
-        label: "PAN is used to check your approved limit",
+        label: "PAN is used to get your investment details",
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.SM,
       },
@@ -109,8 +109,8 @@ export const template: (
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
         charLimit: 10,
-        title: "PAN Number",
-        placeholder: "Enter PAN number",
+        title: "PAN",
+        placeholder: "Enter PAN",
         keyboardType: KeyboardTypeToken.email,
         action: {
           type: ACTION.ENTER_PAN,
