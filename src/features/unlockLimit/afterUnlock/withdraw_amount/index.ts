@@ -32,8 +32,12 @@ import {
     ACTION,
 } from "./types";
 import { getOtp, goBack, } from "./action";
+import { AvailableCASItem } from "../../unlock_limit/types";
 
-export const template: TemplateSchema = {
+export const template: (
+    availableCreditAmount: number
+  ) => TemplateSchema = (availableCreditAmount) => {
+    return {
     layout: <Layout>{
         id: ROUTE.WITHDRAW_AMOUNT,
         type: LAYOUTS.LIST,
@@ -79,7 +83,7 @@ export const template: TemplateSchema = {
             type: InputTypeToken.DEFAULT,
             title: "Enter amount",
             state: InputStateToken.DEFAULT,
-            limitLabel: "out of ₹30,000",
+            limitLabel: "out of "+`${availableCreditAmount}`,
             caption: { success: "", error: "" },
             action: {
                 type: ACTION.WITHDRAW_AMOUNT,
@@ -151,9 +155,15 @@ export const template: TemplateSchema = {
         }
     },
 };
+};
 
 export const withdraw_amountMF: PageType<any> = {
-    onLoad: async () => Promise.resolve(template),
+    onLoad: async ({}, { availableCreditAmount}) => {
+        return Promise.resolve(template(availableCreditAmount));
+    },
+    // onLoad: async ({}, { stepResponseObject }) => {
+    //     return Promise.resolve(template(stepResponseObject as StepResponseObject));
+    //   },
     actions: {
         [ACTION.WITHDRAW_AMOUNT]: getOtp,
         [ACTION.GO_BACK]: goBack,

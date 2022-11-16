@@ -18,7 +18,9 @@ export const withdrawNow: ActionFunction<CreditPayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  await navigate(ROUTE.WITHDRAW_AMOUNT);
+  await navigate(ROUTE.WITHDRAW_AMOUNT, {
+    availableCreditAmount: action.payload.value,
+  });
 };
 
 export const repayment: ActionFunction<CreditPayload> = async (
