@@ -27,7 +27,7 @@ export const template: TemplateSchema = {
   datastore: <Datastore>{
     verify: <VerificationCardProps & WidgetProps>{
       iconName: IconTokens.Camera,
-      icon: { name: IconTokens.Camera, size: IconSizeTokens.LG },
+      icon: { name: IconTokens.Camera, size: IconSizeTokens.XXXXL },
       buttonText: "Open Camera",
       buttonType: VerificationCardButtonTypeToken.FULL,
       label: "Take photo",

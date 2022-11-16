@@ -21,13 +21,8 @@ export const GoBackAction: ActionFunction<
 export const NavSearchIfscBranchInfoAction: ActionFunction<
   NavSearchIfscBranchInfoActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  console.warn(
-    "**** NavSearchIfscBranchInfoAction Action Triggered ****",
-    action
-  );
   const pool = { ...bankRepo.ALLBANKS, ...bankRepo.POPULAR };
   const bankCode = getKeyByValue(pool, action.payload.value);
-  console.warn("bankCode->", bankCode);
   await navigate(ROUTE.BANK_SELECT, { bankCode });
 };
 
@@ -36,7 +31,6 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.warn("**** Search Action Triggered ****", action.payload);
   await setDatastore(action.routeId, "gridItem", <GridImageItemProps>{
     type: GridItemTypeTokens.HORIZONTAl_VERITICAL,
     title: "Popular banks",
@@ -61,10 +55,9 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
     title: "",
     other: "",
     data: [
-      ...Object.values(dataSearchMap).map((name) => ({
-        label: name,
-        image:
-          "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+      ...Object.keys(dataSearchMap).map((key) => ({
+        label: dataPool[key],
+        image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
       })),
     ],
     otherItem: [],

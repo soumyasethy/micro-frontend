@@ -35,7 +35,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { GoBackAction, PhotoVerifyAction, RetakePhoto } from "./actions";
-import { stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
 
 export const template: (
   stepper: StepperItem[],
@@ -105,7 +105,7 @@ export const template: (
     },
     previewImage: <ImageProps>{
       uri: `data:image/gif;base64,${photo}`,
-      size: ImageSizeTokens.XXXL,
+      size: ImageSizeTokens.XXXXL,
       aspectRatio: AspectRatioToken.A1_1,
     },
     retake: <ButtonProps & WidgetProps>{
@@ -140,7 +140,7 @@ export const template: (
 
 export const kycAfterCameraMF: PageType<any> = {
   onLoad: async (_, { photo }) => {
-    const stepper: StepperItem[] = await stepperRepo();
+    const stepper: StepperItem[] = await horizontalStepperRepo();
     return Promise.resolve(template(stepper, photo));
   },
 
@@ -149,4 +149,5 @@ export const kycAfterCameraMF: PageType<any> = {
     [ACTION.PHOTO_RETAKE]: RetakePhoto,
     [ACTION.GO_BACK]: GoBackAction,
   },
+  clearPrevious: true,
 };

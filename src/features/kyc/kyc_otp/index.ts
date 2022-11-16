@@ -4,7 +4,8 @@ import {
   LAYOUTS,
   PageType,
   POSITION,
-  TemplateSchema, WidgetProps,
+  TemplateSchema,
+  WidgetProps,
 } from "@voltmoney/types";
 import {
   ColorTokens,
@@ -14,6 +15,7 @@ import {
   HeaderTypeTokens,
   InputStateToken,
   InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StepperItem,
@@ -25,8 +27,8 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
-import {GoBackAction, onChangeAadhar, toggleCTA, triggerCTA} from "./actions";
-import { stepperRepo } from "../../../configs/utils";
+import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
+import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
@@ -52,7 +54,7 @@ export const template: (
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
         "Volt Protects your financial information with Bank Grade Security",
-      title: "Bank Verification",
+      title: "KYC Verification",
       type: HeaderTypeTokens.verification,
       stepperProps: <StepperProps>{
         type: StepperTypeTokens.HORIZONTAL,
@@ -85,6 +87,7 @@ export const template: (
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
       charLimit: 6,
+      keyboardType: KeyboardTypeToken.numberPad,
       caption: { error: "Please enter a valid 12 digit number" },
       action: {
         type: ACTION.TRIGGER_CTA,
@@ -107,7 +110,7 @@ export const template: (
 
 export const kycAadharOTPVerifyMF: PageType<any> = {
   onLoad: async () => {
-    const stepper: StepperItem[] = await stepperRepo();
+    const stepper: StepperItem[] = await horizontalStepperRepo();
     const mobileNumber = (await SharedPropsService.getUser())
       .linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     return Promise.resolve(template(stepper, mobileNumber));
@@ -119,4 +122,5 @@ export const kycAadharOTPVerifyMF: PageType<any> = {
     [ACTION.AADHAR_NUMBER]: onChangeAadhar,
     [ACTION.GO_BACK]: GoBackAction,
   },
+  clearPrevious: true,
 };

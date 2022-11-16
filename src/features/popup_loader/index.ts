@@ -47,13 +47,13 @@ const _applyType = (
 };
 
 export const template: (alertProps: AlertProps) => TemplateSchema = ({
-  title = "",
-  message = "",
-  subTitle = "",
-  iconName = "",
-  primary = "",
-  ctaLabel = null,
-  ctaAction = null,
+  title,
+  message,
+  subTitle,
+  iconName,
+  primary,
+  ctaLabel,
+  ctaAction,
   type,
 }) => ({
   layout: <Layout>{
@@ -74,12 +74,16 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
       type: _applyType(type),
       iconName: (iconName as IconTokens) || IconTokens.Alert,
       buttonText: ctaLabel,
-      action: {
-        type: ACTION.CLOSE_POPUP,
-        routeId: ROUTE.ALERT_PAGE,
-        payload: {},
-      },
-      buttonType: VerificationCardButtonTypeToken.FULL,
+      action: ctaAction
+        ? ctaAction
+        : {
+            type: ACTION.CLOSE_POPUP,
+            routeId: ROUTE.ALERT_PAGE,
+            payload: {},
+          },
+      buttonType: primary
+        ? VerificationCardButtonTypeToken.FULL
+        : VerificationCardButtonTypeToken.OUTLINE,
     },
     stack: <StackProps>{
       type: StackType.row,

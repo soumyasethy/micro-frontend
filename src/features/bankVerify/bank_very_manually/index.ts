@@ -105,7 +105,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       ],
     },
     leadIcon: <ImageProps>{
-      uri: "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+      uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
       size: ImageSizeTokens.XXS,
     },
     leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
@@ -158,6 +158,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       state: InputStateToken.DISABLED,
       title: "Branch or IFSC",
       placeholder: "Search",
+      keyboardType: KeyboardTypeToken.email,
       value: "",
       caption: { success: "", error: "" },
       width: TextInputTypeToken.FULL,

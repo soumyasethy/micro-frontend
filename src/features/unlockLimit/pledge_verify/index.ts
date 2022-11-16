@@ -33,7 +33,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, OtpPledgePayload } from "./types";
-import { goBack, verifyOTP } from "./actions";
+import { goBack, NavigateNext, verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
 import { sendOtp } from "../pledge_confirmation/actions";
 //import { OtpPayload } from "../pledge_confirmation/types";
@@ -153,5 +153,7 @@ export const pledgeVerifyMF: PageType<any> = {
     [ACTION.PLEDGE_VERIFY]: verifyOTP,
     [ACTION.RESEND_OTP_NUMBER]: sendOtp,
     [ACTION.GO_BACK]: goBack,
+    [ACTION.NAV_NEXT]: NavigateNext,
   },
+  clearPrevious: true,
 };

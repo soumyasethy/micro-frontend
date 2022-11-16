@@ -16,6 +16,7 @@ import {
   HeaderTypeTokens,
   ImageProps,
   InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -57,7 +58,7 @@ const popularBankItem = (
       ],
     },
     [`bank_logo_${id}`]: <ImageProps>{
-      uri: "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+      uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${id}.svg`,
     },
     [`bank_space_${id}`]: <SpaceProps>{ size: SizeTypeTokens.MD },
     [`bank_name_${id}`]: <TypographyProps>{ label: label },
@@ -111,6 +112,7 @@ export const template: (
         placeholder: "Search by bank name",
         type: InputTypeToken.DEFAULT,
         caption: { default: "", success: "", error: "" },
+        keyboardType: KeyboardTypeToken.default,
         action: {
           type: ACTION.SEARCH_BANK,
           routeId: ROUTE.BANK_VERIFY_MANUALLY,
@@ -124,17 +126,15 @@ export const template: (
       gridItem: <GridImageItemProps & WidgetProps>{
         type: GridItemTypeTokens.HORIZONTAl_VERITICAL,
         data: [
-          ...Object.values(BanksRepo.POPULAR).map((name) => ({
-            label: name,
-            image:
-              "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+          ...Object.keys(BanksRepo.POPULAR).map((key) => ({
+            label: BanksRepo.POPULAR[key],
+            image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
           })),
         ],
         otherItem: [
-          ...Object.values(BanksRepo.ALLBANKS).map((name) => ({
-            label: name,
-            image:
-              "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+          ...Object.keys(BanksRepo.ALLBANKS).map((key) => ({
+            label: BanksRepo.ALLBANKS[key],
+            image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
           })),
         ],
         title: "Popular banks",

@@ -31,10 +31,6 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   );
 
   if (_.get(response, "data.status") === "SUCCESS") {
-    const currentStepId = _.get(
-      response,
-      "data.updatedApplicationObj.currentStepId"
-    );
     await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
       state: InputStateToken.SUCCESS,
     });
@@ -53,7 +49,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         type: PAGE_ACTION.NAV_NEXT,
         routeId: ROUTE.PLEDGE_VERIFY,
         payload: <NavigationNext>{
-          stepId: currentStepId,
+          stepId: _.get(response, "data.updatedApplicationObj.currentStepId"),
         },
       },
     });
@@ -74,8 +70,9 @@ export const NavigateNext: ActionFunction<NavigationNext> = async (
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
+  // if (action.payload.stepId) await navigate(action.payload.stepId);
   const user: User = await SharedPropsService.getUser();
-  user.linkedApplications[0].currentStepId = action.payload.stepId;
+  user.linkedApplications[0].currentStepId = ROUTE.KYC_AADHAAR_VERIFICATION;
   await SharedPropsService.setUser(user);
-  navigate(ROUTE.KYC_STEPPER, { currentStepId: action.payload.stepId });
+  navigate(ROUTE.KYC_STEPPER, {});
 };

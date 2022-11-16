@@ -18,6 +18,7 @@ import {
   HeaderTypeTokens,
   InputStateToken,
   InputTypeToken,
+  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StepperItem,
@@ -31,7 +32,7 @@ import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
 import { AadharInitPayload } from "../kyc_init/types";
-import { stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
@@ -62,7 +63,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         subTitle:
           "Volt Protects your financial information with Bank Grade Security",
-        title: "Bank Verification",
+        title: "KYC Verification",
         type: HeaderTypeTokens.verification,
         stepperProps: <StepperProps>{
           data: stepper,
@@ -95,6 +96,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         title: "Enter Aadhaar number",
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
+        keyboardType: KeyboardTypeToken.numberPad,
         charLimit: 12,
         caption: { error: "Please enter a valid 12 digit number" },
         action: {
@@ -139,7 +141,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
 
 export const kycAadharVerifyMF: PageType<any> = {
   onLoad: async () => {
-    const stepper: StepperItem[] = await stepperRepo();
+    const stepper: StepperItem[] = await horizontalStepperRepo();
     return Promise.resolve(template(stepper));
   },
   actions: {

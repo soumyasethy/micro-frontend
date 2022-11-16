@@ -57,7 +57,6 @@ export const template: TemplateSchema = {
       {
         id: "continue",
         type: WIDGET.BUTTON,
-        position: POSITION.ABSOLUTE_BOTTOM
       },
       { id: "space5", type: WIDGET.SPACE, position: POSITION.ABSOLUTE_BOTTOM },
       { id: "stackText", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
@@ -98,7 +97,7 @@ export const template: TemplateSchema = {
       title: "Mobile Number",
       charLimit: 10,
       placeholder: "Enter mobile number",
-      keyboardType: KeyboardTypeToken.numberPad,
+      keyboardType: KeyboardTypeToken.phone,
       action: {
         type: ACTION.PHONE_NUMBER,
         payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },

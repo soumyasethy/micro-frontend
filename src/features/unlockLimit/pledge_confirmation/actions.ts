@@ -2,12 +2,15 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { OtpPayload } from "./types";
 import { ButtonProps } from "@voltmoney/schema";
-import { PledgeCreateRepo } from "../unlock_limit/repo";
+import SharedPropsService from "../../../SharedPropsService";
+import { getAppHeader } from "../../../configs/config";
+import { api } from "../../../configs/api";
+import _ from "lodash";
 
 export const sendOtp: ActionFunction<OtpPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, handleError }
+  { network, navigate, setDatastore, handleError }
 ): Promise<any> => {
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     loading: true,
@@ -19,26 +22,33 @@ export const sendOtp: ActionFunction<OtpPayload> = async (
       assetRepositoryCams.push({
         ...item,
         is_pledged: true,
-        // pledgedUnits: item.totalAvailableUnits,
       });
     } else if (item.assetRepository === "KARVY") {
       assetRepositoryKFIN.push({
         ...item,
         is_pledged: true,
-        // pledgedUnits: item.totalAvailableUnits,
       });
     }
   });
 
-  const response = await PledgeCreateRepo("KARVY", assetRepositoryKFIN);
+  const response = await network.post(
+    api.pledgeCreate,
+    {
+      applicationId: (
+        await SharedPropsService.getUser()
+      ).linkedApplications[0].applicationId,
+      assetRepository: "KARVY",
+      portfolioItemList: assetRepositoryKFIN,
+    },
+    { headers: await getAppHeader() }
+  );
+  if (_.get(response, "data.status") === "SUCCESS") {
+    await navigate(ROUTE.PLEDGE_VERIFY, { assetRepository: "KARVY" });
+  }
+
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     loading: false,
   });
-  await handleError(response, {
-    failed: "Something went wrong",
-    ctaLabel: "Go Back",
-  });
-  await navigate(ROUTE.PLEDGE_VERIFY, { assetRepository: "KARVY" });
 };
 
 export const goBack: ActionFunction<any> = async (

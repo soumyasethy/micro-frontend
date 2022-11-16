@@ -59,7 +59,7 @@ export const template: (
         data: [
           {
             id: "total_cash_imit",
-            title: "Total Cash Limit",
+            title: "Total cash limit",
             amount: `${stepResponseObject.availableCreditAmount}`,
           },
           ...Object.keys(
@@ -73,7 +73,7 @@ export const template: (
           }),
           {
             id: "total_charges",
-            title: "Total Charges",
+            title: "Total charges",
             amount: `${stepResponseObject.processingFees || 0}`,
           },
         ],
@@ -99,12 +99,6 @@ export const template: (
 
 export const pledgeConfirmationMF: PageType<any> = {
   onLoad: async ({}, { stepResponseObject }) => {
-    // const updateAvailableCASMapX =
-    //   await SharedPropsService.getAvailableCASMap();
-    // const selectedCAS: AvailableCASItem[] = [];
-    // Object.keys(updateAvailableCASMapX).forEach((key) => {
-    //   selectedCAS.push(updateAvailableCASMapX[key]);
-    // });
     return Promise.resolve(template(stepResponseObject as StepResponseObject));
   },
   actions: {

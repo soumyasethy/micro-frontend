@@ -1,18 +1,23 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import {
+  ButtonProps,
+  ButtonTypeTokens,
+  StepperStateToken,
+} from "@voltmoney/schema";
 import {
   ACTION as ACTION_CURRENT,
   BAVVerifyActionPayload,
 } from "../bank_verify/types";
-import { postBankRepo } from "../bank_verify/repo";
 import {
-  ACTION,
   InputNumberActionPayload,
   NavigationSearchIFSCActionPayload,
 } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
+import { User } from "../../login/otp_verify/types";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -65,29 +70,43 @@ export const BavVerifyManualAction: ActionFunction<
 > = async (
   action,
   _datastore,
-  { setDatastore, handleError, showPopup, goBack }
+  { setDatastore, network, showPopup, goBack }
 ): Promise<any> => {
-  await showPopup({
-    title: "Depositing Rs 1",
-    subTitle: "We’re doing this to verify your account.",
-    type: "LOADING",
-  });
-
+  // await showPopup({
+  //   title: "Depositing Rs 1",
+  //   subTitle: "We’re doing this to verify your account.",
+  //   type: "LOADING",
+  // });
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  const response = await postBankRepo(
-    (
-      await SharedPropsService.getUser()
-    ).linkedApplications[0].applicationId,
-    bankAccountNumber,
-    bankIfsc
+
+  const applicationId = (await SharedPropsService.getUser())
+    .linkedApplications[0].applicationId;
+  const response = await network.post(
+    api.bavVerify,
+    {
+      applicationId,
+      bankAccountDetails: {
+        bankAccountNumber,
+        bankIfscCode: bankIfsc,
+      },
+    },
+    { headers: await getAppHeader() }
   );
-  await setDatastore(action.routeId, "continue", <ButtonProps>{
-    loading: false,
-  });
-  await goBack();
-  if (_.get(response, "updatedApplicationObj.currentStepId")) {
+
+  if (
+    _.get(
+      response,
+      "data.updatedApplicationObj.currentStepId",
+      "NOT_COMPLETED"
+    ) === null
+  ) {
+    const user: User = await SharedPropsService.getUser();
+    user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
+      StepperStateToken.COMPLETED;
+    await SharedPropsService.setUser(user);
+
     await showPopup({
       type: "SUCCESS",
       title: "Account verified successfully!",
@@ -97,23 +116,17 @@ export const BavVerifyManualAction: ActionFunction<
         type: ACTION_CURRENT.GO_NEXT,
         routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
         payload: {
-          currentStepId: _.get(response, "updatedApplicationObj.currentStepId"),
+          currentStepId: _.get(
+            response,
+            "data.updatedApplicationObj.currentStepId"
+          ),
         },
       },
     });
-  } else {
-    await showPopup({
-      type: "FAILED",
-      title: "Verification failed!",
-      subTitle: "We couldn't verify the account. Edit bank details & try again",
-      ctaLabel: "Edit details",
-      ctaAction: {
-        type: ACTION_CURRENT.GO_BACK,
-        routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
-        payload: {},
-      },
-    });
   }
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: false,
+  });
 };
 export const ChangeBankGoBackAction: ActionFunction<any> = async (
   action,

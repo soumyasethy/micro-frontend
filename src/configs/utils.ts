@@ -35,6 +35,94 @@ export const clearAllData = async () => {
     .then(() => console.warn("Clear data"));
 };
 
+export const horizontalStepperRepo = async () => {
+  let KYC_VERIFICATION: StepperStateToken;
+  let message = "We’re processing. Check after sometime.";
+  const user = await SharedPropsService.getUser();
+
+  if (
+    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+      "COMPLETED" ||
+      user.linkedApplications[0].stepStatusMap.KYC_CKYC === "COMPLETED") &&
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+      "COMPLETED" &&
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY === "COMPLETED"
+  ) {
+    KYC_VERIFICATION = StepperStateToken.COMPLETED;
+  } else if (
+    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+      "PENDING_MANUAL_VERIFICATION" ||
+      user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
+        "PENDING_MANUAL_VERIFICATION") &&
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+      "PENDING_MANUAL_VERIFICATION" &&
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
+      "PENDING_MANUAL_VERIFICATION"
+  ) {
+    KYC_VERIFICATION = StepperStateToken.PENDING_MANUAL_VERIFICATION;
+  } else {
+    KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
+  }
+
+  const data: StepperItem[] = [
+    {
+      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+      step: "1",
+      title: "Verify KYC",
+      subTitle: "lorme ipsum doler smit en",
+      status: KYC_VERIFICATION,
+      message:
+        KYC_VERIFICATION === StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+    {
+      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+      step: "2",
+      title: "Bank Details",
+      subTitle: "lorme ipsum doler smit en",
+      status:
+        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
+      message:
+        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d72",
+      step: "3",
+      title: "Repayment",
+      subTitle: "lorme ipsum doler smit en",
+      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      message:
+        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+        StepperStateToken.COMPLETED
+          ? ""
+          : user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+            StepperStateToken.IN_PROGRESS
+          ? message
+          : "",
+    },
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d74",
+      step: "4",
+      title: "Agreement",
+      subTitle: "lorme ipsum doler smit en",
+      status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
+      message:
+        user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+        StepperStateToken.COMPLETED
+          ? ""
+          : user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+            StepperStateToken.IN_PROGRESS
+          ? message
+          : "",
+    },
+  ];
+  return data;
+};
+
 export const stepperRepo = async () => {
   let KYC_VERIFICATION: StepperStateToken;
   let message = "We’re processing. Check after sometime.";
