@@ -51,7 +51,7 @@ import {
   ToggleSelectAction,
 } from "./actions";
 import { fetchBankRepo } from "./repo";
-import { stepperRepo } from "../../../configs/utils";
+import {horizontalStepperRepo, stepperRepo} from "../../../configs/utils";
 
 export const template: (
   banks: {
@@ -280,7 +280,7 @@ export const bankVerifyMF: PageType<any> = {
   onLoad: async () => {
     const response = await fetchBankRepo();
     const banks = response.stepResponseObject;
-    const stepper: StepperItem[] = await stepperRepo();
+    const stepper: StepperItem[] = await horizontalStepperRepo();
     const templateX = await template(banks, stepper);
 
     return Promise.resolve(templateX);

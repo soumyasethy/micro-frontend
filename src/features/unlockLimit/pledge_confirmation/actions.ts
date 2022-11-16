@@ -10,7 +10,7 @@ import _ from "lodash";
 export const sendOtp: ActionFunction<OtpPayload> = async (
   action,
   _datastore,
-  { network, navigate, setDatastore, handleError }
+  { network, navigate, setDatastore }
 ): Promise<any> => {
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     loading: true,

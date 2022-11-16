@@ -9,6 +9,7 @@ import {
   SearchPortfolioPayload,
 } from "./types";
 import {
+  ButtonProps,
   CtaCardProps,
   IconTokens,
   ListItemDataProps,
@@ -47,6 +48,9 @@ export const TriggerCTA: ActionFunction<CtaPayload> = async (
   _datastore,
   { setDatastore, ...props }
 ): Promise<any> => {
+  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+    isLoading: true,
+  });
   const availableCASMap = await SharedPropsService.getAvailableCASMap();
   const updatedList: AvailableCASItem[] = [];
   Object.keys(availableCASMap).forEach((key) => {
@@ -65,6 +69,9 @@ export const TriggerCTA: ActionFunction<CtaPayload> = async (
     routeId: ROUTE.PLEDGE_CONFIRMATION,
   };
   await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
+  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+    isLoading: false,
+  });
 };
 
 export const goBack: ActionFunction<OtpPayload> = async (

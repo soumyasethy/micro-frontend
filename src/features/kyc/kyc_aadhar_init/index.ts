@@ -32,7 +32,7 @@ import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
 import { AadharInitPayload } from "../kyc_init/types";
-import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo } from "../../../configs/utils";
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
