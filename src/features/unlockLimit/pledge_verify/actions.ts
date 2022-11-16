@@ -1,29 +1,63 @@
 import { ActionFunction } from "@voltmoney/types";
-import { OtpPledgePayload } from "./types";
-import { AuthPledgeRepo } from "./repo";
-import { nextStepId } from "../../../configs/utils";
+import { ACTION as PAGE_ACTION, OtpPledgePayload } from "./types";
+import SharedPropsService from "../../../SharedPropsService";
+import _ from "lodash";
+import { ROUTE } from "../../../routes";
+import { NavigationNext } from "../../kyc/kyc_init/types";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
+import { InputStateToken, TextInputProps } from "@voltmoney/schema";
+import { User } from "../../login/otp_verify/types";
 
 export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   action,
   _datastore,
-  { handleError, navigate }
+  { setDatastore, showPopup, network, goBack }
 ): Promise<any> => {
-  console.log("verify otp");
   if (action.payload.value.length !== 6) return;
-  const response = await AuthPledgeRepo(
-    action.payload.assetRepository,
-    action.payload.value
+  await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
+    state: InputStateToken.LOADING,
+  });
+  const response = await network.post(
+    api.authPledge,
+    {
+      applicationId: (
+        await SharedPropsService.getUser()
+      ).linkedApplications[0].applicationId,
+      assetRepository: action.payload.assetRepository,
+      otp: action.payload.value,
+    },
+    { headers: await getAppHeader() }
   );
-  console.warn("AuthPledgeRepo", response);
-  if (response) {
-    await handleError(response, {
-      success: "Rs 30000 unlocked successfully!",
-      failed: "Failed",
+
+  if (_.get(response, "data.status") === "SUCCESS") {
+    const currentStepId = _.get(
+      response,
+      "data.updatedApplicationObj.currentStepId"
+    );
+    await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
+      state: InputStateToken.SUCCESS,
+    });
+    await goBack();
+    await showPopup({
+      title: `Rs ${_.get(
+        response,
+        "data.stepResponseObject.approvedCreditAmount",
+        0
+      )} unlocked successfully!`,
+      subTitle: "You will be redirected to next step in few seconds",
+      type: "SUCCESS",
+      ctaLabel: "Continue",
+      primary: true,
+      ctaAction: {
+        type: PAGE_ACTION.NAV_NEXT,
+        routeId: ROUTE.PLEDGE_VERIFY,
+        payload: <NavigationNext>{
+          stepId: currentStepId,
+        },
+      },
     });
   }
-  const currentStepId = response.updatedApplicationObj.currentStepId;
-  const routeObj = await nextStepId(currentStepId);
-  await navigate(routeObj.routeId, routeObj.params);
 };
 
 export const goBack: ActionFunction<OtpPledgePayload> = async (
@@ -32,4 +66,16 @@ export const goBack: ActionFunction<OtpPledgePayload> = async (
   { goBack }
 ): Promise<any> => {
   goBack();
+};
+
+export const NavigateNext: ActionFunction<NavigationNext> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  await goBack();
+  const user: User = await SharedPropsService.getUser();
+  user.linkedApplications[0].currentStepId = action.payload.stepId;
+  await SharedPropsService.setUser(user);
+  navigate(ROUTE.KYC_STEPPER, { currentStepId: action.payload.stepId });
 };
