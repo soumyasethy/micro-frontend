@@ -30,7 +30,6 @@ import {
   fetchMyPortfolio,
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
-import { StoreKey } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (

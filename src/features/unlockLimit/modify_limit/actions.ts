@@ -10,6 +10,7 @@ import {
 import { getTotalLimit } from "../portfolio/actions";
 import { ACTION as PLEDGE_CONFIRM_ACTIONS } from "../pledge_confirmation/types";
 import { sendOtp } from "../pledge_confirmation/actions";
+import { ButtonProps } from "@voltmoney/schema";
 
 let amount: number = 0;
 const getUpdateAvailableCAS = (
@@ -73,6 +74,9 @@ export const ConfirmCTA: ActionFunction<AssetsPayload> = async (
   _datastore,
   { setDatastore, ...props }
 ): Promise<any> => {
+  await setDatastore(ROUTE.MODIFY_LIMIT, "otpItem", <ButtonProps>{
+    loading: true,
+  });
   const stepResponseObject = action.payload.stepResponseObject;
   stepResponseObject.availableCAS.forEach((item, index) => {
     stepResponseObject.availableCAS[index].pledgedUnits =
@@ -88,11 +92,14 @@ export const ConfirmCTA: ActionFunction<AssetsPayload> = async (
     type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
     payload: {
       value: stepResponseObject,
-      widgetId: "continue",
+      widgetId: "otpItem",
     },
     routeId: ROUTE.PLEDGE_CONFIRMATION,
   };
   await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
+  await setDatastore(ROUTE.MODIFY_LIMIT, "otpItem", <ButtonProps>{
+    loading: false,
+  });
 };
 
 export const goBack: ActionFunction<AssetsPayload> = async (

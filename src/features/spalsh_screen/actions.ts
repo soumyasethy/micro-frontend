@@ -15,11 +15,15 @@ export const SplashAction: ActionFunction<any> = async (
     try {
       const user: User = await fetchUserDetails();
       if (Object.keys(user).length > 0) {
-        const nextRoute = await nextStepId(
-          user.linkedApplications[0].currentStepId
-        );
-        // await navigate(nextRoute.routeId, nextRoute.params);
-        await navigate(ROUTE.KYC_DIGILOCKER, {});
+
+        if (user.linkedApplications[0].applicationState === "COMPLETED") {
+          await navigate(ROUTE.DASHBOARD);
+        } else {
+          const nextRoute = await nextStepId(
+            user.linkedApplications[0].currentStepId
+          );
+          await navigate(nextRoute.routeId, nextRoute.params);
+        }
       } else {
         await clearAllData();
         await navigate(ROUTE.PHONE_NUMBER);

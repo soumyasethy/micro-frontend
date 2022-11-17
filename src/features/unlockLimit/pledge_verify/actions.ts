@@ -70,9 +70,10 @@ export const NavigateNext: ActionFunction<NavigationNext> = async (
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
-  // if (action.payload.stepId) await navigate(action.payload.stepId);
-  const user: User = await SharedPropsService.getUser();
-  user.linkedApplications[0].currentStepId = ROUTE.KYC_AADHAAR_VERIFICATION;
-  await SharedPropsService.setUser(user);
-  navigate(ROUTE.KYC_STEPPER, {});
+  if (action.payload.stepId) {
+    const user: User = await SharedPropsService.getUser();
+    user.linkedApplications[0].currentStepId = action.payload.stepId;
+    await SharedPropsService.setUser(user);
+    navigate(ROUTE.KYC_STEPPER, {});
+  }
 };

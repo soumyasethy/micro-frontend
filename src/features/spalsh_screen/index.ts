@@ -56,7 +56,10 @@ const template: TemplateSchema = {
 };
 
 export const splashScreenMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async (_, { theme }) => {
+    console.warn("splashScreenMF theme route props", theme);
+    return Promise.resolve(template);
+  },
   actions: {
     [ACTION.AUTH_NAV]: SplashAction,
   },
