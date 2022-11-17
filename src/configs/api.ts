@@ -27,4 +27,5 @@ export const api = {
   pledgeCreate:`${config.baseUrl}/app/borrower/application/pledge/create`,
   authPledge: `${config.baseUrl}/app/borrower/application/pledge/authPledge`,
   mandateLink: `${config.baseUrl}/app/borrower/application/mandate/link/`,
+  mandateStatus: `${config.baseUrl}/app/borrower/application/mandate/status/`,
 };

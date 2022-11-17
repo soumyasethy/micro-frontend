@@ -10,7 +10,6 @@ import {
 import {
     HeaderProps,
     HeaderTypeTokens,
-    StepperItem,
     WebViewProps,
     WIDGET,
 } from "@voltmoney/schema";
@@ -18,7 +17,8 @@ import { ROUTE } from "../../../routes";
 import {
     ACTION
 } from "./types";
-import { horizontalStepperRepo } from "../../../configs/utils";
+import { getPolingData, GoNext } from "./actions";
+import { polingDataRepo } from "./repo";
 //import { goBack, verifyOTP } from "./action";
 
 
@@ -30,7 +30,6 @@ export const template: (urlData: string) => TemplateSchema = (
         type: LAYOUTS.LIST,
         widgets: [
             { id: "headerStack",type: WIDGET.HEADER,position:POSITION.FIXED_TOP},
-           
            { id: "headItem",type: WIDGET.WEB_VIEW},
            
         ],
@@ -48,19 +47,20 @@ export const template: (urlData: string) => TemplateSchema = (
             },
         },
         headItem: <WebViewProps>{
-            uri:'https://app.voltmoney.in/'
+            uri:`${urlData}`
         },
     },
 });
 
 export const loanWebViewMF: PageType<any> = {
 
-    onLoad: async ({}, { urlData}) => {
+    onLoad: async ({}, { response,urlData}) => {
+         const responseX = response ? response :  getPolingData();
         return Promise.resolve(template(urlData));
     },
 
     actions: {
-        // [ACTION.REPAYMENT]: verifyOTP,
+         [ACTION.LOAN_WEBVIEW]: GoNext,
         // [ACTION.GO_BACK]: goBack,
     },
 };

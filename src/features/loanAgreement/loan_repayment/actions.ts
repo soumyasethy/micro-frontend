@@ -14,4 +14,12 @@ export const authenticateRepayment: ActionFunction<LimitPayload> = async (
   });
 };
 
+export const goBack: ActionFunction<LimitPayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage ,goBack}
+): Promise<any> => {
+  goBack();
+};
+
 

@@ -44,11 +44,12 @@ import {
 import { horizontalStepperRepo } from "../../../configs/utils";
 import { fetchPledgeLimitRepo } from "../../unlockLimit/unlock_limit/repo";
 import { fetchLinkRepo } from "./repo";
+import { authenticateRepayment, goBack } from "./actions";
 //import { goBack, verifyOTP } from "./action";
 
 
-export const template: (stepper: StepperItem[]) => TemplateSchema = (
-    stepper
+export const template: (stepper: StepperItem[],urlData:string) => TemplateSchema = (
+    stepper,urlData
   ) => ({
 // export const template: (
 // ) => TemplateSchema = () => ({
@@ -152,7 +153,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
             action: {
                 type: ACTION.REPAYMENT,
                 payload: <{}>{
-                    value: "",
+                    value: urlData,
                     widgetId: "input",
                     isResend: false,
                 },
@@ -192,12 +193,12 @@ export const loanRepaymentMF: PageType<any> = {
     onLoad: async ({}, { response }) => {
         const stepper: StepperItem[] = await horizontalStepperRepo();
         const responseX = response ? response : await fetchLinkRepo();
-        console.log("Link"+responseX);
-        return Promise.resolve(template(stepper))
+        const urlData = responseX.stepResponseObject;
+        return Promise.resolve(template(stepper,urlData))
     },
 
     actions: {
-        // [ACTION.REPAYMENT]: authenticateRepayment,
-        // [ACTION.GO_BACK]: goBack,
+         [ACTION.REPAYMENT]: authenticateRepayment,
+         [ACTION.GO_BACK]: goBack,
     },
 };
