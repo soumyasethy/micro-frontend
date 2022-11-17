@@ -24,6 +24,7 @@ import {
   StackAlignItems,
   StackJustifyContent,
   StackProps,
+  StackType,
   StepperItem,
   StepperProps,
   StepperTypeTokens,
@@ -53,6 +54,9 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         type: WIDGET.BUTTON,
       },
       { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      {id: 'space2', type: WIDGET.SPACE},
+      {id: "tcText" , type: WIDGET.TEXT},
+      {id: 'bottomStack', type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM},
     ],
   },
   datastore: <Datastore>{
@@ -90,8 +94,8 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A1_1,
       borderRadius: BorderRadiusTokens.BR5,
-      size: ImageSizeTokens.XXL,
-      uri: "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+      size: ImageSizeTokens.XXXL,
+      uri: "https://volt-images.s3.ap-south-1.amazonaws.com/kyc_documents.svg",
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Authenticate Aadhaar",
@@ -105,6 +109,29 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         },
       },
     },
+    space2: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
+    tcText: <TypographyProps>{
+      label: "By proceeding further, I hereby authorize Volt to pull my documents from Digilocker.",
+      fontWeight: "400",
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.XS,
+    },
+    bottomStack: <StackProps>{
+      type: StackType.row,
+      justifyContent: StackJustifyContent.center,
+      alignItems: StackAlignItems.center,
+      widgetItems: [{ id: "image2", type: WIDGET.IMAGE }, { id: "space3", type: WIDGET.SPACE }, { id: "tcText2", type: WIDGET.TEXT }],
+    },
+    image2: <ImageProps>{
+      aspectRatio: AspectRatioToken.A1_1,
+      borderRadius: BorderRadiusTokens.BR0,
+      size: ImageSizeTokens.XXS,
+      uri: "https://volt-images.s3.ap-south-1.amazonaws.com/digilocker.svg",
+    },
+    space3: <SpaceProps>{ size: SizeTypeTokens.XS },
+    tcText2: <TypographyProps>{
+      label: "Powered by Digilocker",
+    }
   },
 });
 export const kycDigiLockerMF: PageType<any> = {
