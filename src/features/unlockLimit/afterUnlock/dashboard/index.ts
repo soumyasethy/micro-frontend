@@ -344,4 +344,5 @@ export const dashboardMF: PageType<any> = {
     [ACTION.REPAYMENT]: repayment,
     [ACTION.MENU]: goBack,
   },
+  bgColor: "#F3F5FC",
 };

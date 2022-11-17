@@ -29,7 +29,7 @@ import { stepperRepo } from "../../../configs/utils";
 
 export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   layout: <Layout>{
-    id: ROUTE.TEST_PAGE,
+    id: ROUTE.KYC_STEPPER,
     type: LAYOUTS.LIST,
     widgets: [
       {id: "space0", type: WIDGET.SPACE},
@@ -46,7 +46,7 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
     },
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A16_9,
-      borderRadius: BorderRadiusTokens.BR1,
+      borderRadius: BorderRadiusTokens.BR0,
       size: ImageSizeTokens.FULL,
       uri: "https://volt-images.s3.ap-south-1.amazonaws.com/stepper.svg",
     },

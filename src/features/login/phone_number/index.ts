@@ -26,6 +26,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  TermsTextProps,
   TextInputProps,
   TypographyProps,
   WIDGET,
@@ -59,10 +60,21 @@ export const template: TemplateSchema = {
         type: WIDGET.BUTTON,
       },
       { id: "space5", type: WIDGET.SPACE, position: POSITION.ABSOLUTE_BOTTOM },
-      { id: "stackText", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
+      // { id: "stackText", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
+      {
+        id: "tc_text",
+        type: WIDGET.TERMS_TEXT,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      },
     ],
   },
   datastore: <Datastore>{
+    tc_text: <TermsTextProps>{
+      label:
+        "By proceeding, I accept T&Cs, Privacy Policy and Authorize to obtain my cKYC & credit report.",
+      title: "T&Cs, Privacy Policy",
+      subTitle: "Authorize",
+    },
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
       label: "Continue",
@@ -166,11 +178,11 @@ export const template: TemplateSchema = {
       type: StackType.row,
       alignItems: StackAlignItems.center,
       widgetItems: [
-        {id: "text1", type: WIDGET.TEXT},
-        {id: "text2", type: WIDGET.TEXT},
-        {id: "text3", type: WIDGET.TEXT},
-        {id: "text4", type: WIDGET.TEXT},
-      ]
+        { id: "text1", type: WIDGET.TEXT },
+        { id: "text2", type: WIDGET.TEXT },
+        { id: "text3", type: WIDGET.TEXT },
+        { id: "text4", type: WIDGET.TEXT },
+      ],
     },
     text1: <TypographyProps>{
       label: "By proceeding, I accept ",

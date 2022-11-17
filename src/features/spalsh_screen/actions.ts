@@ -15,7 +15,6 @@ export const SplashAction: ActionFunction<any> = async (
     try {
       const user: User = await fetchUserDetails();
       if (Object.keys(user).length > 0) {
-
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
         } else {
