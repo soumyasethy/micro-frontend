@@ -26,4 +26,5 @@ export const api = {
   pledgeLimit:`${config.baseUrl}/app/borrower/application/pledge/limit/`,
   pledgeCreate:`${config.baseUrl}/app/borrower/application/pledge/create`,
   authPledge: `${config.baseUrl}/app/borrower/application/pledge/authPledge`,
+  mandateLink: `${config.baseUrl}/app/borrower/application/mandate/link/`,
 };
