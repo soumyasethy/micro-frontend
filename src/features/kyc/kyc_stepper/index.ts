@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -28,22 +29,26 @@ import { stepperRepo } from "../../../configs/utils";
 
 export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   layout: <Layout>{
-    id: ROUTE.TEST_PAGE,
+    id: ROUTE.KYC_STEPPER,
     type: LAYOUTS.LIST,
     widgets: [
+      {id: "space0", type: WIDGET.SPACE},
       { id: "image", type: WIDGET.IMAGE },
       { id: "space", type: WIDGET.SPACE },
       { id: "stepper", type: WIDGET.STEPPER },
       { id: "space2", type: WIDGET.SPACE },
-      { id: "continue", type: WIDGET.BUTTON },
+      { id: "continue", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },
     ],
   },
   datastore: <Datastore>{
+    space0: <SpaceProps>{
+      size: SizeTypeTokens.XXXXL,
+    },
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A16_9,
-      borderRadius: BorderRadiusTokens.BR1,
+      borderRadius: BorderRadiusTokens.BR0,
       size: ImageSizeTokens.FULL,
-      uri: "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+      uri: "https://volt-images.s3.ap-south-1.amazonaws.com/stepper.svg",
     },
     space: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },

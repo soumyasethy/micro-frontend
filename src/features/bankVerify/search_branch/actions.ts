@@ -13,6 +13,7 @@ import {
   DividerProps,
   DividerSizeTokens,
   FontSizeTokens,
+  HeaderProps,
   InputStateToken,
   SizeTypeTokens,
   SpaceProps,
@@ -102,7 +103,7 @@ const widgetItemDs = (index: number, ifscCode: string, address: string) => {
 export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
   action,
   _datastore,
-  { appendWidgets, removeWidgets }
+  { appendWidgets, removeWidgets, setDatastore }
 ): Promise<any> => {
   const bankCode = action.payload.bankCode || bankCodeX; //HDFC
   let searchLength: number = 3;

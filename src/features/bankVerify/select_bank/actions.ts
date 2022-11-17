@@ -4,7 +4,11 @@ import {
   SearchActionPayload,
 } from "./types";
 import { BanksRepo } from "./repo";
-import { GridImageItemProps, GridItemTypeTokens } from "@voltmoney/schema";
+import {
+  GridImageItemProps,
+  GridItemTypeTokens,
+  HeaderProps,
+} from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 
 let bankRepo = BanksRepo;
@@ -23,7 +27,10 @@ export const NavSearchIfscBranchInfoAction: ActionFunction<
 > = async (action, _datastore, { navigate }): Promise<any> => {
   const pool = { ...bankRepo.ALLBANKS, ...bankRepo.POPULAR };
   const bankCode = getKeyByValue(pool, action.payload.value);
-  await navigate(ROUTE.BANK_SELECT, { bankCode });
+  await navigate(ROUTE.BANK_SELECT, {
+    bankCode,
+    bankName: action.payload.value,
+  });
 };
 
 export const SearchAction: ActionFunction<SearchActionPayload> = async (
@@ -31,6 +38,9 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
+  await setDatastore(action.routeId, "header", <HeaderProps>{
+    title: "Search bank",
+  });
   await setDatastore(action.routeId, "gridItem", <GridImageItemProps>{
     type: GridItemTypeTokens.HORIZONTAl_VERITICAL,
     title: "Popular banks",
@@ -58,6 +68,7 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
       ...Object.keys(dataSearchMap).map((key) => ({
         label: dataPool[key],
         image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
+        defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
       })),
     ],
     otherItem: [],

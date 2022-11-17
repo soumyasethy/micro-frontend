@@ -5,4 +5,8 @@ export enum ACTION {
   GO_BACK = "GO_BACK",
 }
 export type IFSCCodePayload = { ifscCode: string };
-export type IFSCSearchActionPayload = { bankCode: string; value: string };
+export type IFSCSearchActionPayload = {
+  bankCode: string;
+  value: string;
+  bankName: string;
+};

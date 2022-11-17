@@ -39,7 +39,10 @@ import {
 import _ from "lodash";
 
 export let bankCodeX = "";
-export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
+export const template: (
+  bankCode: string,
+  bankName: string
+) => TemplateSchema = (bankCode, bankName) => ({
   layout: <Layout>{
     id: ROUTE.BANK_BRANCH_SEARCH,
     type: LAYOUTS.LIST,
@@ -49,21 +52,13 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
         type: WIDGET.HEADER,
         position: POSITION.FIXED_TOP,
       },
-      // {
-      //   id: "space",
-      //   type: WIDGET.SPACE /*position: POSITION.FIXED_TOP*/,
-      // },
-      // {
-      //   id: "dividerHeader",
-      //   type: WIDGET.DIVIDER /*position: POSITION.FIXED_TOP*/,
-      // },
       {
         id: "dividerSpace",
-        type: WIDGET.SPACE /*position: POSITION.FIXED_TOP*/,
+        type: WIDGET.SPACE,
       },
       {
         id: "listItemStack",
-        type: WIDGET.STACK /*position: POSITION.FIXED_TOP*/,
+        type: WIDGET.STACK,
       },
     ],
   },
@@ -71,7 +66,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     header: <HeaderProps & WidgetProps>{
       isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
-      title: "Select your bank",
+      title: "Search IFSC or Branch",
       action: {
         type: ACTION.GO_BACK,
         routeId: ROUTE.BANK_BRANCH_SEARCH,
@@ -86,7 +81,6 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     dividerHeader: <DividerProps>{
       size: DividerSizeTokens.SM,
       color: ColorTokens.Grey_Milk_1,
-      // margin: { horizontal: -SizeTypeTokens.XXL },
     },
     headerStack: <StackProps>{
       type: StackType.row,
@@ -110,6 +104,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
         routeId: ROUTE.BANK_BRANCH_SEARCH,
         payload: <IFSCSearchActionPayload>{
           bankCode: `${bankCode}`,
+          bankName: `${bankName}`,
           value: "",
         },
       },
@@ -124,9 +119,9 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
 });
 
 export const bankSearchBranchMF: PageType<any> = {
-  onLoad: async ({}, { bankCode }) => {
+  onLoad: async ({}, { bankCode, bankName }) => {
     bankCodeX = bankCode;
-    return Promise.resolve(template(bankCode));
+    return Promise.resolve(template(bankCode, bankName));
   },
   actions: {
     [ACTION.ON_SELECT_IFSC]: OnSelectIFSCAction,

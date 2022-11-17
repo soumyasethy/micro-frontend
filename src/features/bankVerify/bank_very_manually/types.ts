@@ -6,5 +6,8 @@ export enum ACTION {
   TOGGLE_CTA = "TOGGLE_CTA",
   CHANGE_BANK_GO_BACK = "CHANGE_BANK_GO_BACK",
 }
-export type NavigationSearchIFSCActionPayload = { bankCode: string };
+export type NavigationSearchIFSCActionPayload = {
+  bankCode: string;
+  bankName: string;
+};
 export type InputNumberActionPayload = { value: string };

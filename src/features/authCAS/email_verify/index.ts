@@ -8,6 +8,7 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  ButtonBaseProps,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -96,15 +97,19 @@ export const template: (applicationId: string) => TemplateSchema = (
     //   type: ButtonTypeTokens.LargeOutline,
     //   width: ButtonWidthTypeToken.FULL,
     // },
-    email: <ButtonProps & WidgetProps>{
+    email: <ButtonBaseProps & WidgetProps>{
       label: "Continue with other email",
-      type: ButtonTypeTokens.LargeGhost,
+      bgColor: ColorTokens.Transparent,
+			labelColor: ColorTokens.Blue_700,
+      fontSize: FontSizeTokens.MD,
       width: ButtonWidthTypeToken.FULL,
       icon: {
         name: IconTokens.Email,
         size: IconSizeTokens.LG,
         align: IconAlignmentTokens.left,
       },
+      paddingVertical:SizeTypeTokens.MD,
+			paddingHorizontal:SizeTypeTokens.MD,
       action: {
         type: ACTIONS.OTHER_EMAIL,
         routeId: ROUTE.EMAIL_VERIFY,

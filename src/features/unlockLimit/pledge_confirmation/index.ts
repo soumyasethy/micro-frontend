@@ -80,7 +80,7 @@ export const template: (
       },
       buttonSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
       continue: <ButtonProps & WidgetProps>{
-        label: "Confirm & Get OTP",
+        label: "Confirm & get OTP",
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
