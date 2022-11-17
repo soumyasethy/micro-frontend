@@ -28,19 +28,18 @@ export const NavigationSearchIFSCAction: ActionFunction<
   console.warn("**** NavigationSearchIFSCAction Triggered ****", action);
   await navigate(ROUTE.BANK_BRANCH_SEARCH, {
     bankCode: action.payload.bankCode,
+    bankName: action.payload.bankName,
   });
 };
 export const onChangeAccountNumber: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
-  console.warn("**** onChangeAccountNumber Action Triggered ****", action);
   bankAccountNumber = action.payload.value;
   await ToggleCTA(action, _datastore, props);
 };
 export const onChangeIFSCNumber: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
-  console.warn("**** onChangeIFSCNumber Action Triggered ****", action);
   bankIfsc = action.payload.value;
   await ToggleCTA(action, _datastore, props);
 };
@@ -50,7 +49,6 @@ export const ToggleCTA: ActionFunction<any> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.warn("**** ToggleCTA Action Triggered ****", action);
   if (bankAccountNumber && bankIfsc)
     await setDatastore(action.routeId, action.payload.targetWidgetId, <
       ButtonProps

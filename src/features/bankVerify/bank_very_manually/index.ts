@@ -51,7 +51,10 @@ import {
 } from "./actions";
 import { BAVVerifyActionPayload } from "../bank_verify/types";
 
-export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
+export const template: (
+  bankCode: string,
+  bankName: string
+) => TemplateSchema = (bankCode, bankName) => ({
   layout: <Layout>{
     id: ROUTE.BANK_SELECT,
     type: LAYOUTS.LIST,
@@ -77,7 +80,7 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     header: <HeaderProps & WidgetProps>{
       isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
-      title: "Select your bank",
+      title: "Enter account details",
       action: {
         type: ACTION.CHANGE_BANK_GO_BACK,
         routeId: ROUTE.BANK_SELECT,
@@ -106,11 +109,12 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
     },
     leadIcon: <ImageProps>{
       uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
-      size: ImageSizeTokens.XXS,
+      defaultUri:`https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
+      size: ImageSizeTokens.MD,
     },
-    leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+    leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
     bankName: <TypographyProps>{
-      label: bankCode,
+      label: bankName,
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XL,
       fontWeight: "600",
@@ -149,7 +153,10 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       action: {
         type: ACTION.NAVIGATION_SEARCH_IFSC,
         routeId: ROUTE.BANK_SELECT,
-        payload: <NavigationSearchIFSCActionPayload>{ bankCode: bankCode },
+        payload: <NavigationSearchIFSCActionPayload>{
+          bankCode: bankCode,
+          bankName,
+        },
       },
     },
     IFSCInput: <TextInputProps & WidgetProps>{
@@ -170,7 +177,10 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
       onPressAction: {
         type: ACTION.NAVIGATION_SEARCH_IFSC,
         routeId: ROUTE.BANK_SELECT,
-        payload: <NavigationSearchIFSCActionPayload>{ bankCode: bankCode },
+        payload: <NavigationSearchIFSCActionPayload>{
+          bankCode: bankCode,
+          bankName,
+        },
       },
     },
     continue: <ButtonProps & WidgetProps>{
@@ -189,9 +199,9 @@ export const template: (bankCode: string) => TemplateSchema = (bankCode) => ({
 });
 
 export const bankSelectMF: PageType<any> = {
-  onLoad: async ({}, { bankCode }) => {
+  onLoad: async ({}, { bankCode, bankName }) => {
     console.warn("addBankManuallyMF OnLoad bankCode->", bankCode);
-    return Promise.resolve(template(bankCode));
+    return Promise.resolve(template(bankCode, bankName));
   },
   actions: {
     [ACTION.NAVIGATION_SEARCH_IFSC]: NavigationSearchIFSCAction,

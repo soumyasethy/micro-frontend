@@ -129,12 +129,14 @@ export const template: (
           ...Object.keys(BanksRepo.POPULAR).map((key) => ({
             label: BanksRepo.POPULAR[key],
             image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
+            defaultUri:`https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
           })),
         ],
         otherItem: [
           ...Object.keys(BanksRepo.ALLBANKS).map((key) => ({
             label: BanksRepo.ALLBANKS[key],
             image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
+            defaultUri:`https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
           })),
         ],
         title: "Popular banks",
