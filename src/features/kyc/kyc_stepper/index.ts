@@ -32,12 +32,16 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
     id: ROUTE.KYC_STEPPER,
     type: LAYOUTS.LIST,
     widgets: [
-      {id: "space0", type: WIDGET.SPACE},
-      { id: "image", type: WIDGET.IMAGE },
+      { id: "space0", type: WIDGET.SPACE },
+      { id: "image", type: WIDGET.IMAGE, padding: { horizontal: 0 } },
       { id: "space", type: WIDGET.SPACE },
       { id: "stepper", type: WIDGET.STEPPER },
       { id: "space2", type: WIDGET.SPACE },
-      { id: "continue", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },
+      {
+        id: "continue",
+        type: WIDGET.BUTTON,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      },
     ],
   },
   datastore: <Datastore>{
