@@ -9,7 +9,7 @@ export const fetchLinkRepo = async () => {
   };
   const applicationId = (await SharedPropsService.getUser())
     .linkedApplications[0].applicationId;
-  return await fetch(`${api.mandateLink}${applicationId}`, requestOptions)
+  return await fetch(`${api.agreementLink}${applicationId}`, requestOptions)
     .then((response) => response.json())
     .catch((error) => console.log("error", error));
 };

@@ -46,22 +46,27 @@ import { horizontalStepperRepo } from "../../../configs/utils";
 import { fetchPledgeLimitRepo } from "../../unlockLimit/unlock_limit/repo";
 import { fetchLinkRepo } from "./repo";
 import { authenticateRepayment, goBack } from "./actions";
+//import { goBack, verifyOTP } from "./action";
 
 
 export const template: (stepper: StepperItem[],urlData:string) => TemplateSchema = (
     stepper,urlData
   ) => ({
+// export const template: (
+// ) => TemplateSchema = () => ({
     layout: <Layout>{
         id: ROUTE.LOAN_REPAYMENT,
         type: LAYOUTS.LIST,
         widgets: [
             { id: "headerStack",type: WIDGET.HEADER,position:POSITION.FIXED_TOP},
             { id: "headerSpace", type: WIDGET.SPACE },
+           // { id: "contentStack",type: WIDGET.STACK},
            { id: "headItem",type: WIDGET.TEXT},
             { id: "headSpace", type: WIDGET.SPACE },
             { id: "contentItem",type: WIDGET.TEXT},
             { id: "contentSpace", type: WIDGET.SPACE },
             { id: "iconStack",type: WIDGET.STACK},
+            
             { id: "iconSpace", type: WIDGET.SPACE },
             {id: "btnData", type: WIDGET.STACK,position: POSITION.ABSOLUTE_BOTTOM}
         ],
@@ -69,7 +74,7 @@ export const template: (stepper: StepperItem[],urlData:string) => TemplateSchema
     datastore: <Datastore>{
         headerStack: <HeaderProps & WidgetProps>{
             leadIcon: "https://reactnative.dev/img/tiny_logo.png",
-            title: "Repayment",
+            title: "Loan Agreement",
             type: HeaderTypeTokens.verification,
             stepperProps: <StepperProps>{
               type: StepperTypeTokens.HORIZONTAL,
@@ -82,8 +87,23 @@ export const template: (stepper: StepperItem[],urlData:string) => TemplateSchema
             },
         },
         headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
+        // contentStack: <StackProps & WidgetProps>{
+        //     type: StackType.row,
+        //     alignItems: StackAlignItems.center,
+        //     justifyContent: StackJustifyContent.flexStart,
+        //     widgetItems: [
+        //       { id: "subTitle", type: WIDGET.TEXT },
+        //       { id: "subTitle2", type: WIDGET.TEXT },
+        //       { id: "editNumber", type: WIDGET.TEXT },
+        //     ],
+        //     action: {
+        //     //   type: ACTIONS.GO_BACK,
+        //     //   payload: {},
+        //     //   routeId: ROUTE.OTP_VERIFY,
+        //     },
+        // },
         headItem: <TypographyProps>{
-            label: "E-mandate registration",
+            label: "Lorem ipsum",
             fontSize: FontSizeTokens.MD,
             color: ColorTokens.Grey_Night,
             fontFamily: FontFamilyTokens.Poppins,
@@ -104,15 +124,20 @@ export const template: (stepper: StepperItem[],urlData:string) => TemplateSchema
             alignItems: StackAlignItems.center,
             widgetItems: [
                 { id: "upsideSpace", type: WIDGET.SPACE },
+                { id: "upsideSpace1", type: WIDGET.SPACE },
+               // { id: "iconcontent", type: WIDGET.ICON },
                 { id: "iconcontent", type: WIDGET.SHIMMERICON },
                 { id: "downsideSpace", type: WIDGET.SPACE },
+                { id: "downsideSpace1", type: WIDGET.SPACE },
             ]
         },
         upsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+        upsideSpace1: <SpaceProps>{ size: SizeTypeTokens.MD },
         iconcontent:<ShimmerIconProps>{
-            name: "Notebook"
+            name:"ContractFile",
         },
         downsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+        downsideSpace1: <SpaceProps>{ size: SizeTypeTokens.MD },
         iconSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
         btnData:<StackProps>{
             type: StackType.column,
@@ -125,7 +150,7 @@ export const template: (stepper: StepperItem[],urlData:string) => TemplateSchema
             ]
         },
         btnItem: <ButtonProps & WidgetProps>{
-            label: "Authenticate repayment",
+            label: "Proceed to agreement",
             type: ButtonTypeTokens.LargeFilled,
             labelColor: ColorTokens.White,
             width: ButtonWidthTypeToken.FULL,
@@ -136,7 +161,7 @@ export const template: (stepper: StepperItem[],urlData:string) => TemplateSchema
                     widgetId: "input",
                     isResend: false,
                 },
-                routeId: ROUTE.LOAN_REPAYMENT,
+                routeId: ROUTE.LOAN_AGREEMENT,
             },
         },
         btnSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
@@ -167,7 +192,7 @@ export const template: (stepper: StepperItem[],urlData:string) => TemplateSchema
     },
 });
 
-export const loanRepaymentMF: PageType<any> = {
+export const loanAgreementMF: PageType<any> = {
 
     onLoad: async ({}, { response }) => {
         const stepper: StepperItem[] = await horizontalStepperRepo();
