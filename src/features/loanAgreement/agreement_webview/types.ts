@@ -1,5 +1,5 @@
 export enum ACTION {
-    LOAN_WEBVIEW = "LOAN_WEBVIEW",
+    AGREEMENT_WEBVIEW = "AGREEMENT_WEBVIEW",
     GO_BACK = "GO_BACK",
     GO_NEXT = "GO_NEXT",
   }

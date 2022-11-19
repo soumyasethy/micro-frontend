@@ -9,7 +9,7 @@ export const authenticateRepayment: ActionFunction<LimitPayload> = async (
   { navigate }
 ): Promise<any> => {
  
-  await navigate(ROUTE.LOAN_WEBVIEW, {
+  await navigate(ROUTE.AGREEMENT_WEBVIEW, {
     urlData: action.payload.value,
   });
 };
