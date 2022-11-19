@@ -43,6 +43,7 @@ import { withdrawalSuccessMF } from "./features/unlockLimit/afterUnlock/withdraw
 import { repaymentMF } from "./features/unlockLimit/afterUnlock/repayment";
 import { loanRepaymentMF } from "./features/loanAgreement/loan_repayment";
 import { loanWebViewMF } from "./features/loanAgreement/loan_webView";
+import { loanAutoPayMF } from "./features/loanAgreement/loan_autopay";
 import { agreementWebViewMF } from "./features/loanAgreement/agreement_webview";
 import { loanAgreementMF } from "./features/loanAgreement/loan_agreement";
 
@@ -90,6 +91,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.REPAYMENT]: repaymentMF,
   [ROUTE.LOAN_REPAYMENT]: loanRepaymentMF,
   [ROUTE.LOAN_WEBVIEW]: loanWebViewMF,
+  [ROUTE.LOAN_AUTOPAY]: loanAutoPayMF,
   [ROUTE.LOAN_AGREEMENT]: loanAgreementMF,
   [ROUTE.AGREEMENT_WEBVIEW]: agreementWebViewMF,
 };
