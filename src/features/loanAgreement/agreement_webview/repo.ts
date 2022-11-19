@@ -12,7 +12,7 @@ export const polingDataRepo = async () => {
 
 
     const getApiLoad = () => {
-         fetch(`${api.mandateStatus}${applicationId}`, requestOptions)
+         fetch(`${api.agreementStatus}${applicationId}`, requestOptions)
         .then((response) => response.json())
         .catch((error) => console.log("error", error));
     }
