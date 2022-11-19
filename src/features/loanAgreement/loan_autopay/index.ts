@@ -9,21 +9,16 @@ import {
 } from "@voltmoney/types";
 import {
     BorderRadiusTokens,
-    ButtonProps,
-    ButtonTypeTokens,
-    ButtonWidthTypeToken,
     ColorTokens,
     FontFamilyTokens,
     FontSizeTokens,
     HeaderProps,
     HeaderTypeTokens,
-    IconAlignmentTokens,
     IconProps,
     IconSizeTokens,
     IconTokens,
-    InputStateToken,
-    InputTypeToken,
-    KeyboardTypeToken,
+    MessageAlignType,
+    MessageProps,
     ProgressIndicatorProps,
     ProgressIndicatorTypeTokens,
     ShimmerIconProps,
@@ -35,10 +30,10 @@ import {
     StackJustifyContent,
     StackProps,
     StackType,
+    StackWidth,
     StepperItem,
     StepperProps,
     StepperTypeTokens,
-    TextInputProps,
     TypographyProps,
     WIDGET,
 } from "@voltmoney/schema";
@@ -47,16 +42,12 @@ import {
     ACTION
 } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
-import { fetchPledgeLimitRepo } from "../../unlockLimit/unlock_limit/repo";
-import { fetchLinkRepo } from "./repo";
-//import { goBack, verifyOTP } from "./action";
+import { getStatusData } from "./actions";
 
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
     stepper
 ) => ({
-    // export const template: (
-    // ) => TemplateSchema = () => ({
     layout: <Layout>{
         id: ROUTE.LOAN_REPAYMENT,
         type: LAYOUTS.LIST,
@@ -64,14 +55,20 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
             { id: "headerStack", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
             { id: "headerSpace", type: WIDGET.SPACE },
             { id: "headerSpace1", type: WIDGET.SPACE },
-             { id: "iconStack",type: WIDGET.STACK},
-           
+            { id: "iconStack", type: WIDGET.STACK },
+
             { id: "iconSpace", type: WIDGET.SPACE },
             { id: "progressItem", type: WIDGET.PROGRESSINDICATOR },
             { id: "progressSpace", type: WIDGET.SPACE },
             { id: "contentStack", type: WIDGET.STACK },
             { id: "contentSpace", type: WIDGET.SPACE },
-            { id: "infoStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
+            { id: "infoStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM,
+            padding:{
+                all:0,
+                left:0,
+                right:0
+            }    
+        },
         ],
     },
     datastore: <Datastore>{
@@ -101,9 +98,9 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
             ]
         },
         iconItem: <ShimmerIconProps>{
-            icon:<IconProps>{
-                name:IconTokens.FreeBook,
-                size:IconSizeTokens.XXXXXXXXL
+            icon: <IconProps>{
+                name: IconTokens.FreeBook,
+                size: IconSizeTokens.XXXXXXXXL
             },
             name: 'Freebook',
             size: ShimmerIconSizeTokens.XXXXXL,
@@ -112,7 +109,6 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         },
         iconSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
         progressItem: <ProgressIndicatorProps>{
-            size: 3,
             activeIndex: 1,
             type: ProgressIndicatorTypeTokens.LINEAR
         },
@@ -127,7 +123,6 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
                 { id: "description", type: WIDGET.TEXT },
             ]
         },
-      
         titleItem: <TypographyProps>{
             label: "Generating AutoPay link",
             color: ColorTokens.Grey_Night,
@@ -144,38 +139,42 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
             fontWeight: "400",
         },
         contentSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
-       
-        
         infoStack: <StackProps>{
             type: StackType.row,
-            justifyContent: StackJustifyContent.center,
+            width:StackWidth.FULL,
+            height:StackHeight.CONTENT,
+             justifyContent: StackJustifyContent.center,
             alignItems: StackAlignItems.center,
             widgetItems: [
-                { id: "secureText", type: WIDGET.TEXT },
+                { id: "secureText", type: WIDGET.MESSAGE },
             ]
         },
-        
-        secureText: <TypographyProps>{
-            label: "Do not leave at this step",
-            color: ColorTokens.Grey_Charcoal,
-            fontSize: FontSizeTokens.XXS,
-            fontFamily: FontFamilyTokens.Inter,
-            fontWeight: "400",
+
+        secureText: <MessageProps>{
+            label: 'Do not leave at this step',
+            labelColor: ColorTokens.Grey_Charcoal,
+            bgColor: ColorTokens.Primary_02,
+            alignText: MessageAlignType.CENTER
+
         },
     },
 });
 
 export const loanAutoPayMF: PageType<any> = {
 
-    onLoad: async ({ }, { response }) => {
+    onLoad: async ({ ...props }, { response }) => {
         const stepper: StepperItem[] = await horizontalStepperRepo();
-        const responseX = response ? response : await fetchLinkRepo();
+        const responseX = response ? response : await getStatusData({
+            type: '',
+            routeId: ROUTE.LOAN_AUTOPAY,
+            payload: {},
+        }, {}, props);
         console.log("Link" + responseX);
         return Promise.resolve(template(stepper))
     },
 
     actions: {
-        // [ACTION.REPAYMENT]: authenticateRepayment,
+        //  [ACTION.AUTOPAY]: authenticateRepayment,
         // [ACTION.GO_BACK]: goBack,
     },
 };

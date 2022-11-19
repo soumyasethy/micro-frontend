@@ -1,5 +1,5 @@
 export enum ACTION {
-    REPAYMENT = "REPAYMENT",
+    AUTOPAY = "AUTOPAY",
     GO_BACK = "GO_BACK",
   }
   export type TestActionPayload = {};
