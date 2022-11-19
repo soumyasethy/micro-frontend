@@ -43,6 +43,7 @@ import { withdrawalSuccessMF } from "./features/unlockLimit/afterUnlock/withdraw
 import { repaymentMF } from "./features/unlockLimit/afterUnlock/repayment";
 import { loanRepaymentMF } from "./features/loanAgreement/loan_repayment";
 import { loanWebViewMF } from "./features/loanAgreement/loan_webView";
+import { loanAutoPayMF } from "./features/loanAgreement/loan_autopay";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -88,4 +89,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.REPAYMENT]: repaymentMF,
   [ROUTE.LOAN_REPAYMENT]: loanRepaymentMF,
   [ROUTE.LOAN_WEBVIEW]: loanWebViewMF,
+  [ROUTE.LOAN_AUTOPAY]: loanAutoPayMF,
 };
