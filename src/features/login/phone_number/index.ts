@@ -108,7 +108,7 @@ export const template: TemplateSchema = {
       title: "Mobile Number",
       charLimit: 10,
       placeholder: "Enter mobile number",
-      keyboardType: KeyboardTypeToken.numberPad,
+      keyboardType: KeyboardTypeToken.numeric,
       action: {
         type: ACTION.PHONE_NUMBER,
         payload: <PhoneNumberPayload>{ value: "", widgetId: "input" },
