@@ -145,7 +145,9 @@ export const checkLimitMF: PageType<any> = {
       panNumber || user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber =
       mobileNumber || user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId = email || user.linkedBorrowerAccounts[0].accountHolderEmail;
+    const emailId = `${
+      email || user.linkedBorrowerAccounts[0].accountHolderEmail
+    }`.toLowerCase();
     if (!applicationId) {
       applicationId = applicationId || user.linkedApplications[0].applicationId;
     }

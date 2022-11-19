@@ -36,7 +36,6 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { kycSummaryInitRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
 import { ACTION } from "./types";
 import {
@@ -45,8 +44,8 @@ import {
   ToggleKYCSummaryCTA,
   verifyKycSummary,
 } from "./actions";
-import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
-import { NavigationNext, ToggleKYCVerifyCTA } from "../kyc_init/types";
+import { horizontalStepperRepo } from "../../../configs/utils";
+import { ToggleKYCVerifyCTA } from "../kyc_init/types";
 import moment from "moment";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -118,6 +117,7 @@ export const template: (
     addressItem: <ListItemProps>{
       leadIconName: IconTokens.Location,
       subTitle: address,
+      subTitleLineHeight: 24,
       title: "Address",
     },
     spaceAddress: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
@@ -132,6 +132,7 @@ export const template: (
       ],
     },
     tcRadio: <RadioProps & WidgetProps>{
+      isChecked: true,
       size: IconSizeTokens.MD,
       actionChecked: {
         type: ACTION.TOGGLE_CTA,
@@ -154,7 +155,7 @@ export const template: (
     tcSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     continue: <ButtonProps & WidgetProps>{
       label: "Confirm",
-      type: ButtonTypeTokens.LargeOutline,
+      type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.NAV_TO_BANK_ADD,

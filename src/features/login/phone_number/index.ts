@@ -59,12 +59,11 @@ export const template: TemplateSchema = {
         id: "continue",
         type: WIDGET.BUTTON,
       },
-      { id: "space5", type: WIDGET.SPACE, position: POSITION.ABSOLUTE_BOTTOM },
+      { id: "space5", type: WIDGET.SPACE },
       // { id: "stackText", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
       {
         id: "tc_text",
         type: WIDGET.TERMS_TEXT,
-        position: POSITION.ABSOLUTE_BOTTOM,
       },
     ],
   },

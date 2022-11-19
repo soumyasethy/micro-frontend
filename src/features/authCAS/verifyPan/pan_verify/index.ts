@@ -111,7 +111,8 @@ export const template: (
         charLimit: 10,
         title: "PAN",
         placeholder: "Enter PAN",
-        keyboardType: KeyboardTypeToken.email,
+        keyboardType: KeyboardTypeToken.default,
+        isUpperCase: true,
         action: {
           type: ACTION.ENTER_PAN,
           payload: <InputPayload>{ value: "", widgetId: "input" },

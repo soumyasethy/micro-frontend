@@ -21,6 +21,7 @@ export const template: TemplateSchema = {
   },
   datastore: <Datastore>{
     camera: <CameraPickerProps & WidgetProps>{
+      isShowVideo: true,
       action: {
         type: ACTION.CAMERA_ACTION,
         routeId: ROUTE.CAMERA_CAPTURE,
