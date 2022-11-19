@@ -24,8 +24,9 @@ import { ACTION, UpdateEmailIdPayload } from "./types";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { emailOnChange, updateEmailId } from "./actions";
 import { toggleCTA } from "../../login/phone_number/actions";
+import SharedPropsService from "../../../SharedPropsService";
 
-export const template: TemplateSchema = {
+export const template: (email: String) => TemplateSchema = (email) => ({
   layout: <Layout>{
     id: ROUTE.UPDATE_EMAIL_ID,
     type: LAYOUTS.MODAL,
@@ -56,6 +57,9 @@ export const template: TemplateSchema = {
       },
     },
     input: <TextInputProps & WidgetProps>{
+      value: email,
+      isLowerCase: true,
+      clearEnabled: true,
       type: InputTypeToken.EMAIL,
       state: InputStateToken.DEFAULT,
       title: "Email Id",
@@ -82,10 +86,16 @@ export const template: TemplateSchema = {
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
   },
-};
+});
 
 export const updateEmailMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async () => {
+    const prevEmail = `${
+      (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
+        .accountHolderEmail
+    }`;
+    return Promise.resolve(template(prevEmail));
+  },
   actions: {
     [ACTION.UPDATE_EMAIL_ID]: updateEmailId,
     [ACTION.EMAIL_NUMBER_ONCHANGE]: emailOnChange,

@@ -19,7 +19,7 @@ import {
     IconSizeTokens,
     IconTokens,
     InputStateToken,
-    InputTypeToken,
+    InputTypeToken, KeyboardTypeToken,
     MessageProps,
     SizeTypeTokens,
     SpaceProps,
@@ -83,7 +83,7 @@ export const template: (
             type: InputTypeToken.DEFAULT,
             title: "Enter amount",
             state: InputStateToken.DEFAULT,
-            limitLabel: "out of "+`${availableCreditAmount}`,
+            limitLabel: "out of "+`${availableCreditAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ','),
             caption: { success: "", error: "" },
             action: {
                 type: ACTION.WITHDRAW_AMOUNT,
@@ -108,6 +108,7 @@ export const template: (
         },
         amountSpace:<SpaceProps>{ size: SizeTypeTokens.XXXL },
         interestItem: <TextInputProps & WidgetProps>{
+            keyboardType: KeyboardTypeToken.decimalPad,
             placeholder: "",
             type: InputTypeToken.DEFAULT,
             title: "Monthly Interest",
