@@ -131,11 +131,11 @@ export const ToggleSelectAction: ActionFunction<
         trailTitle: `${
           action.payload.selectedMap.hasOwnProperty(i) &&
           action.payload.selectedMap[i]
-            ? getTotalLimit(
+            ? `₹${getTotalLimit(
                 [updateAvailableCASMapX[key]],
                 stepResponseObject.isinNAVMap,
                 stepResponseObject.isinLTVMap
-              )
+              )}`
             : 0
         }`, //"₹4,000",
         trailSubTitle: `/ ₹${getTotalLimit(

@@ -5,15 +5,12 @@ import { ROUTE } from "../../../../routes";
 import {
   ButtonProps,
   ButtonTypeTokens,
-  IconTokens,
   InputStateToken,
   TextInputProps,
 } from "@voltmoney/schema";
 import SharedPropsService from "../../../../SharedPropsService";
-import { defaultHeaders, getAppHeader } from "../../../../configs/config";
+import { getAppHeader } from "../../../../configs/config";
 import moment from "moment";
-import { showBottomSheet } from "../../../../configs/utils";
-import { ACTION } from "../../../kyc/kyc_otp/types";
 import { EnableDisableCTA } from "../../../login/phone_number/types";
 
 let pan: string = "";

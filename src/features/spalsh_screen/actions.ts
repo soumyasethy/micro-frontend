@@ -21,21 +21,18 @@ export const SplashAction: ActionFunction<any> = async (
           const nextRoute = await nextStepId(
             user.linkedApplications[0].currentStepId
           );
-           await navigate(nextRoute.routeId, nextRoute.params);
-        //  await navigate(ROUTE.LOAN_REPAYMENT);
+          await navigate(nextRoute.routeId, nextRoute.params);
+          // await navigate(ROUTE.KYC_SUMMARY);
         }
       } else {
         await clearAllData();
         await navigate(ROUTE.PHONE_NUMBER);
-
       }
     } catch (e) {
       await clearAllData();
       await navigate(ROUTE.PHONE_NUMBER);
-
     }
   } else {
     await navigate(ROUTE.PHONE_NUMBER);
-
   }
 };

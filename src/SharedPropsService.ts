@@ -64,7 +64,6 @@ async function getToken() {
   }
   const token = await AsyncStorage.getItem(StoreKey.accessToken);
   _globalProps.access_token = token;
-  console.warn("token------>", token);
   if (token) return token;
 
   return null;

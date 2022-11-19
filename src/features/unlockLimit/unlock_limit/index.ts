@@ -80,7 +80,7 @@ export const template: (
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
       title: "Approved Cash Limit",
-      subTitle: `${availableCreditAmount}`,
+      subTitle: `${availableCreditAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ','),
       chipText: "How?",
       type: "default",
     },

@@ -26,8 +26,9 @@ import { ACTION, UpdateMobileNumber } from "./types";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { updateMobileNumber, phoneOnChange } from "./actions";
 import { toggleCTA } from "../../login/phone_number/actions";
+import SharedPropsService from "../../../SharedPropsService";
 
-export const template: TemplateSchema = {
+export const template: (prevMob: string) => TemplateSchema = (prevMob) => ({
   layout: <Layout>{
     id: ROUTE.UPDATE_PHONE_NUMBER,
     type: LAYOUTS.MODAL,
@@ -59,7 +60,9 @@ export const template: TemplateSchema = {
       },
     },
     input: <TextInputProps & WidgetProps>{
+      value: prevMob,
       regex: "^[0-9]*$",
+      clearEnabled: true,
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
       title: "Mobile Number",
@@ -86,10 +89,15 @@ export const template: TemplateSchema = {
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
   },
-};
+});
 
 export const updateMobileNumberMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async () => {
+    const prevMob = `${(
+      await SharedPropsService.getUser()
+    ).linkedBorrowerAccounts[0].accountHolderPhoneNumber.replace("+91", "")}`;
+    return Promise.resolve(template(prevMob));
+  },
   actions: {
     [ACTION.EDIT_MOBILE_NUMBER]: updateMobileNumber,
     [ACTION.PHONE_NUMBER_ONCHANGE]: phoneOnChange,

@@ -44,27 +44,28 @@ import { fetchUserDetails } from "./repo";
 export const template: (
   availableCreditAmount: number,
   actualLoanAmount: number,
-  isRepayment: boolean
+  repaymentAmount: number
 ) => TemplateSchema = (
   availableCreditAmount,
   actualLoanAmount,
-  isRepayment
+  repaymentAmount
 ) => {
-  const _generateRepaymentDS = isRepayment
-    ? {
-        repaymentCard: <CardProps>{
-          bgColor: ColorTokens.White,
-          body: {
-            widgetItems: [
-              {
-                id: "repaymentItem",
-                type: WIDGET.REPAYMENT,
-              },
-            ],
+  const _generateRepaymentDS =
+    repaymentAmount > 0
+      ? {
+          repaymentCard: <CardProps>{
+            bgColor: ColorTokens.White,
+            body: {
+              widgetItems: [
+                {
+                  id: "repaymentItem",
+                  type: WIDGET.REPAYMENT,
+                },
+              ],
+            },
           },
-        },
-      }
-    : {};
+        }
+      : {};
   return {
     layout: <Layout>{
       id: ROUTE.DASHBOARD,
@@ -107,7 +108,7 @@ export const template: (
         justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
           { id: "title", type: WIDGET.TEXT },
-          { id: "leadIcon", type: WIDGET.BUTTON },
+          // { id: "leadIcon", type: WIDGET.BUTTON },
         ],
       },
       title: <TypographyProps>{
@@ -185,8 +186,8 @@ export const template: (
       space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       amountItem: <AmountCardProps>{
         title: "Available cash",
-        subTitle: `${actualLoanAmount}`,
-        subscriptTitle: "out of ₹ " + `${availableCreditAmount}`,
+        subTitle: `${actualLoanAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ','),
+        subscriptTitle: "out of ₹ " + `${availableCreditAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ','),
         progressLabel: `${(
           (availableCreditAmount * 100) /
           actualLoanAmount
@@ -214,7 +215,7 @@ export const template: (
       repaymentItem: <RepaymentProps>{
         title: "Repayment",
         message: "Outstanding amount",
-        amount: "5,000",
+        amount: `${repaymentAmount}`,
         btnText: "Flexi Pay",
         action: {
           type: ACTION.REPAYMENT,
@@ -332,10 +333,10 @@ export const dashboardMF: PageType<any> = {
       "linkedCredits[0].actualLoanAmount",
       0
     );
-    let isRepayment = actualLoanAmount - availableCreditAmount > 0;
+    let repaymentAmount = actualLoanAmount - availableCreditAmount;
 
     return Promise.resolve(
-      template(availableCreditAmount, actualLoanAmount, isRepayment)
+      template(availableCreditAmount, actualLoanAmount, repaymentAmount)
     );
   },
 

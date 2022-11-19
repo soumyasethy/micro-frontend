@@ -2,8 +2,9 @@ import { ActionFunction } from "@voltmoney/types";
 import { getAppHeader } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
-import { ButtonProps } from "@voltmoney/schema";
+import { ButtonProps, CameraPickerProps } from "@voltmoney/schema";
 import { AadharInitPayload } from "../kyc_init/types";
+import { ROUTE } from "../../../routes";
 
 export const PhotoVerifyAction: ActionFunction<any> = async (
   action,
@@ -35,8 +36,11 @@ export const PhotoVerifyAction: ActionFunction<any> = async (
 export const RetakePhoto: ActionFunction<any> = async (
   action,
   _datastore,
-  { goBack }
+  { setDatastore, goBack }
 ): Promise<any> => {
+  await setDatastore(ROUTE.CAMERA_CAPTURE, "camera", <CameraPickerProps>{
+    isShowVideo: true,
+  });
   await goBack();
 };
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
