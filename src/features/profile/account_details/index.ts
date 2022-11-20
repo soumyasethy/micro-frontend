@@ -10,7 +10,10 @@ import _ from "lodash";
 import {
     AspectRatioToken,
     BorderRadiusTokens,
+    CardProps,
     ColorTokens,
+    DividerProps,
+    DividerSizeTokens,
     FontFamilyTokens,
     FontSizeTokens,
     HeaderProps,
@@ -29,7 +32,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, AccountPayload } from "./types";
-import { goBack} from "./actions";
+import { goBack } from "./actions";
 export const template: (
 ) => TemplateSchema = (
     ) => {
@@ -40,14 +43,14 @@ export const template: (
                 type: LAYOUTS.LIST,
                 widgets: [
                     { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-                    { id: "list1", type: WIDGET.LIST_ITEM },
-                    { id: "list2", type: WIDGET.LIST_ITEM },
-                    { id: "list3", type: WIDGET.LIST_ITEM },
-                    { id: "list4", type: WIDGET.LIST_ITEM },
-                    { id: "categoryList", type: WIDGET.TEXT },
-                    { id: "headStack", type: WIDGET.STACK },
-                    { id: "list5", type: WIDGET.LIST_ITEM },
-                    { id: "list6", type: WIDGET.LIST_ITEM },
+                    {
+                        id: "cardContent", type: WIDGET.CARD,padding: {
+                            horizontal: 0,
+                            vertical:0,
+                            all: 0,
+                          },
+                    },
+
                 ],
             },
             datastore: <Datastore>{
@@ -64,6 +67,27 @@ export const template: (
                             isResend: false
                         },
                         routeId: ROUTE.ACCOUNT_DETAILS,
+                    },
+                },
+                cardContent: <CardProps>{
+                    bgColor: ColorTokens.Grey_Milk,
+                    flex:1,
+                    body: {
+                        widgetItems: [
+                            { id: "list1", type: WIDGET.LIST_ITEM },
+                            { id: "list2", type: WIDGET.LIST_ITEM },
+                            { id: "list3", type: WIDGET.LIST_ITEM },
+                            { id: "list4", type: WIDGET.LIST_ITEM },
+                            { id: "space1", type: WIDGET.SPACE },
+                            { id: "categoryList", type: WIDGET.TEXT },
+                            { id: "space2", type: WIDGET.SPACE },
+                            { id: "headStack", type: WIDGET.STACK },
+                            { id: "space3", type: WIDGET.SPACE },
+                            { id: "devider1", type: WIDGET.DIVIDER },
+                            { id: "space4", type: WIDGET.SPACE },
+                            { id: "list5", type: WIDGET.LIST_ITEM },
+                            { id: "list6", type: WIDGET.LIST_ITEM },
+                        ],
                     },
                 },
                 list1: <ListItemProps>{
@@ -87,9 +111,10 @@ export const template: (
                 list4: <ListItemProps>{
                     title: 'PAN Number',
                     subTitle: 'BFTPB2772K',
-                    leadIconName: IconTokens.Page,
+                    leadIconName: IconTokens.CreditCard,
                     onPress: () => { },
                 },
+                space1: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
                 categoryList: <TypographyProps>{
                     label: "Bank details",
                     color: ColorTokens.Grey_Charcoal,
@@ -97,10 +122,11 @@ export const template: (
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "400",
                 },
+                space2: <SpaceProps>{ size: SizeTypeTokens.LG },
                 headStack: <StackProps>{
                     type: StackType.row,
-                     justifyContent: StackJustifyContent.flexStart,
-                     alignItems: StackAlignItems.flexStart,
+                    justifyContent: StackJustifyContent.flexStart,
+                    alignItems: StackAlignItems.center,
                     widgetItems: [
                         { id: "imageItem", type: WIDGET.IMAGE },
                         { id: "space0", type: WIDGET.SPACE },
@@ -122,16 +148,23 @@ export const template: (
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "700",
                 },
+                space3: <SpaceProps>{ size: SizeTypeTokens.LG },
+                divider1:<DividerProps>{
+                    size: DividerSizeTokens.SM,
+                    margin: {
+                        vertical: SizeTypeTokens.SM,
+                        horizontal: SizeTypeTokens.SM,
+                    },
+                },
+                space4: <SpaceProps>{ size: SizeTypeTokens.LG },
                 list5: <ListItemProps>{
                     title: 'IFSC',
                     subTitle: 'HDFC0000675',
-                    leadIconName: IconTokens.Page,
                     onPress: () => { },
                 },
                 list6: <ListItemProps>{
                     title: 'Account number',
                     subTitle: '05001 42345 38421',
-                    leadIconName: IconTokens.Page,
                     onPress: () => { },
                 },
             },
@@ -140,14 +173,14 @@ export const template: (
 
 export const accountDetailsMF: PageType<any> = {
     onLoad: async () => {
-       
+
         return Promise.resolve(
             template()
         );
     },
 
     actions: {
-       // [ACTION.ACCOUNT_DETAILS]: accountDetails,
+        // [ACTION.ACCOUNT_DETAILS]: accountDetails,
         [ACTION.BACK_BUTTON]: goBack
     },
     bgColor: "#F3F5FC",

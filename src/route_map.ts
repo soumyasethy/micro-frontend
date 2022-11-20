@@ -47,6 +47,7 @@ import { loanAutoPayMF } from "./features/loanAgreement/loan_autopay";
 import { agreementWebViewMF } from "./features/loanAgreement/agreement_webview";
 import { loanAgreementMF } from "./features/loanAgreement/loan_agreement";
 import { accountDetailsMF } from "./features/profile/account_details";
+import { contactUsMF } from "./features/profile/contact_us";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -96,4 +97,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.LOAN_AGREEMENT]: loanAgreementMF,
   [ROUTE.AGREEMENT_WEBVIEW]: agreementWebViewMF,
   [ROUTE.ACCOUNT_DETAILS]: accountDetailsMF,
+  [ROUTE.CONTACT_US]: contactUsMF,
 };
