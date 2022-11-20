@@ -93,13 +93,7 @@ export const BavVerifyManualAction: ActionFunction<
     { headers: await getAppHeader() }
   );
 
-  if (
-    _.get(
-      response,
-      "data.updatedApplicationObj.currentStepId",
-      "NOT_COMPLETED"
-    ) === null
-  ) {
+  if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
     const user: User = await SharedPropsService.getUser();
     user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
       StepperStateToken.COMPLETED;

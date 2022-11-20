@@ -38,9 +38,10 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../../routes";
-import { ACTION, CreditPayload, creditData } from "./types";
-import { goBack, withdrawNow, repayment } from "./actions";
+import { ACTION, CreditPayload } from "./types";
+import { goBack, repayment, withdrawNow } from "./actions";
 import { fetchUserDetails } from "./repo";
+
 export const template: (
   availableCreditAmount: number,
   actualLoanAmount: number,
@@ -72,12 +73,11 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         {
-          id: "header",
-          type: WIDGET.STACK,
+          id: "card",
+          type: WIDGET.CARD,
           position: POSITION.FIXED_TOP,
           padding: {
-            horizontal: 50,
-            top: 10,
+            horizontal: 16,
           },
         },
         {
@@ -93,19 +93,22 @@ export const template: (
           type: WIDGET.CARD,
           position: POSITION.ABSOLUTE_BOTTOM,
           padding: {
-            horizontal: 0,
             vertical: 0,
-            all: 0,
+            horizontal: 0,
           },
         },
       ],
     },
     datastore: <Datastore>{
+      card: <CardProps>{
+        bgColor: ColorTokens.White,
+        body: { widgetItems: [{ id: "header", type: WIDGET.STACK }] },
+      },
       header: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,
-        padding: PaddingSizeTokens.MD,
         justifyContent: StackJustifyContent.spaceBetween,
+        padding: PaddingSizeTokens.LG,
         widgetItems: [
           { id: "title", type: WIDGET.TEXT },
           // { id: "leadIcon", type: WIDGET.BUTTON },
@@ -186,8 +189,16 @@ export const template: (
       space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       amountItem: <AmountCardProps>{
         title: "Available cash",
-        subTitle: `${actualLoanAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ','),
-        subscriptTitle: "out of ₹ " + `${availableCreditAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ','),
+        subTitle: `${actualLoanAmount}`.replace(
+          /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+          ","
+        ),
+        subscriptTitle:
+          "out of ₹ " +
+          `${availableCreditAmount}`.replace(
+            /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+            ","
+          ),
         progressLabel: `${(
           (availableCreditAmount * 100) /
           actualLoanAmount
