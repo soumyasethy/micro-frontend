@@ -66,13 +66,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
     { headers: await getAppHeader() }
   );
 
-  if (
-    _.get(
-      response,
-      "data.updatedApplicationObj.applicationState",
-      "NOT_COMPLETED"
-    ) === "COMPLETED"
-  ) {
+  if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
     const user: User = await SharedPropsService.getUser();
     user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
       StepperStateToken.COMPLETED;
@@ -117,5 +111,5 @@ export const GoNext: ActionFunction<any> = async (
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
-  await navigate(ROUTE.DASHBOARD);
+  await navigate(ROUTE.LOAN_AUTOPAY);
 };

@@ -1,64 +1,82 @@
 import { ActionFunction } from "@voltmoney/types";
-import { polingDataRepo } from "./repo";
-import { ACTION, TestActionPayload } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
-import _ from "lodash";
-import { getAppHeader } from "../../../configs/config";
+import { defaultHeaders } from "../../../configs/config";
+import { IconTokens } from "@voltmoney/schema";
+import { ACTION } from "../loan_webView/types";
 
-export const getPolingData: ActionFunction<any> = async (
+export const AgreementStatusAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, setDatastore, showPopup, network }
+  { navigate, goBack, showPopup }
 ): Promise<any> => {
-
   const applicationId = (await SharedPropsService.getUser())
     .linkedApplications[0].applicationId;
-
   const getApiLoad = async () => {
-    await network.get(
-      `${api.agreementStatus}${applicationId}`,
-      { headers: await getAppHeader() }
-    );
-  }
-
-  const getLoaderStatus = () => {
-    setInterval(getApiLoad, 10000);
-  }
-
-  const response = getLoaderStatus();
-
-  if (
-    _.get(
-      response,
-      "data.status",
-      "NOT_COMPLETED"
-    ) === "SUCCESS"
-  ) {
-
-    navigate(ROUTE.LOAN_AGREEMENT);
-    await showPopup({
-      type: "SUCCESS",
-      title: "Agreement submitted!",
-      subTitle: "Congratulations! Your loan application is created successfully.",
-      ctaLabel: "Withdraw now",
-      ctaAction: action
-    });
-  } 
+    await fetch(`${api.agreementStatus}${applicationId}`, {
+      headers: await defaultHeaders(),
+    })
+      .then((response) => response.json())
+      .then(async (response) => {
+        console.warn("AgreementStatusAction", response);
+        /// handle response
+        if (response.stepResponseObject === "Success") {
+          clearInterval(timerRef);
+          await goBack();
+          await showPopup({
+            type: "SUCCESS",
+            title: "Agreement submitted!",
+            subTitle:
+              "Congratulations! Your loan application is created successfully.",
+            ctaLabel: "Go to dashboard",
+            ctaAction: action,
+          });
+        } else if (response.stepResponseObject === "Failed") {
+          clearInterval(timerRef);
+          await goBack();
+          await navigate(ROUTE.ALERT_PAGE, {
+            alertProps: {
+              iconName: IconTokens.Failed,
+              title: "Agreement submit failed!",
+              subTitle: "Please try again",
+              type: "DEFAULT",
+              ctaLabel: "Continue to try again",
+              primary: true,
+              ctaAction: {
+                type: ACTION.GO_LOAN_AUTO_PAY,
+                routeId: ROUTE.LOAN_WEBVIEW,
+                payload: {},
+              },
+            },
+          });
+        }
+      });
+  };
+  const timerRef = setInterval(() => {
+    getApiLoad();
+  }, 5000);
 };
 
-export const GoNext: ActionFunction<any> = async (
+export const GoNextSuccess: ActionFunction<any> = async (
   action,
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await navigate(ROUTE.LOAN_REPAYMENT);
+  await goBack();
+  await navigate(ROUTE.DASHBOARD);
+};
+export const GoNextFailed: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { goBack }
+): Promise<any> => {
+  await goBack();
 };
 export const GoBack: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, goBack }
+  { goBack }
 ): Promise<any> => {
   goBack();
 };

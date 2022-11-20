@@ -43,7 +43,6 @@ const getUpdateAvailableCAS = (
         newItem,
         item
       );
-      break;
     }
   }
 
