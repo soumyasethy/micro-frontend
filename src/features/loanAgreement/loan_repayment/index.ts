@@ -68,7 +68,7 @@ export const template: (
   datastore: <Datastore>{
     headerStack: <HeaderProps & WidgetProps>{
       // leadIcon: `${url}`,
-      title: "Repayment",
+      title: "Setup AutoPay",
       type: HeaderTypeTokens.verification,
       stepperProps: <StepperProps>{
         type: StepperTypeTokens.HORIZONTAL,
@@ -82,7 +82,7 @@ export const template: (
     },
     headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
     headItem: <TypographyProps>{
-      label: "E-mandate registration",
+      label: "Link bank account for AutoPay",
       fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
@@ -91,7 +91,7 @@ export const template: (
     headSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     contentItem: <TypographyProps>{
       label:
-        "This registration is required to ensure monthly auto debit of interest from your account.",
+        "Hassle-free repayment of interest charges at the start of every month.",
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
@@ -132,7 +132,7 @@ export const template: (
       ],
     },
     btnItem: <ButtonProps & WidgetProps>{
-      label: "Authenticate repayment",
+      label: "Continue",
       type: ButtonTypeTokens.LargeFilled,
       labelColor: ColorTokens.White,
       width: ButtonWidthTypeToken.FULL,
@@ -161,7 +161,7 @@ export const template: (
       size: SizeTypeTokens.LG,
     },
     secureText: <TypographyProps>{
-      label: "Your data is secure with Volt",
+      label: "AutoPay is safe & secure",
       color: ColorTokens.Secondary_100,
       fontSize: FontSizeTokens.XXS,
       fontFamily: FontFamilyTokens.Inter,

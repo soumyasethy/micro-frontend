@@ -42,6 +42,19 @@ export const getTotalLimit = (
   });
   return Math.round(sum * 100) / 100;
 };
+export const getActualLimit = (
+  availableCAS: AvailableCASItem[],
+  isinNavMap: IsinNAVMap,
+  isinLTVMap: IsinLTVMap
+) => {
+  let sum = 0;
+  availableCAS.forEach((item) => {
+    sum =
+      sum +
+      item.totalAvailableUnits * isinNavMap[item.isinNo] * isinLTVMap[item.isinNo];
+  });
+  return Math.round(sum * 100) / 100;
+};
 
 export const TriggerCTA: ActionFunction<CtaPayload> = async (
   action,

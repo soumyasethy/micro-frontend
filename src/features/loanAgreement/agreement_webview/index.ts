@@ -39,7 +39,7 @@ export const template: (urlData: string) => TemplateSchema = (urlData) => ({
   datastore: <Datastore>{
     headerStack: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
-      title: "Loan agreement",
+      title: "Review Agreement",
       isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
       action: {

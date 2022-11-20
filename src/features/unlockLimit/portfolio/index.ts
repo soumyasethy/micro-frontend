@@ -39,7 +39,9 @@ import {
   ToggleSelectAction,
   getTotalLimit,
   EditItem,
-  SearchPortfolio, ClearSearchPortfolio,
+  SearchPortfolio,
+  ClearSearchPortfolio,
+  getActualLimit,
 } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
@@ -61,7 +63,7 @@ export const template: (
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
         )}`, //"₹4,000",
-        trailSubTitle: `/ ₹${getTotalLimit(
+        trailSubTitle: `/ ₹${getActualLimit(
           [availableCASItem],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap

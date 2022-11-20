@@ -43,6 +43,8 @@ export const verifyKycSummary: ActionFunction<any> = async (
       StepperStateToken.COMPLETED;
     user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION =
       StepperStateToken.COMPLETED;
+    user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
+      StepperStateToken.IN_PROGRESS;
     await SharedPropsService.setUser(user);
 
     await showPopup({

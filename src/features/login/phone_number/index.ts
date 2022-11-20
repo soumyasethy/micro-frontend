@@ -3,7 +3,6 @@ import {
   Layout,
   LAYOUTS,
   PageType,
-  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -69,10 +68,15 @@ export const template: TemplateSchema = {
   },
   datastore: <Datastore>{
     tc_text: <TermsTextProps>{
-      label:
-        "By proceeding, I accept T&Cs, Privacy Policy and Authorize to obtain my cKYC & credit report.",
-      title: "T&Cs, Privacy Policy",
-      subTitle: "Authorize",
+      html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
+	  By proceeding, I accept  <span style='color:#1434CB;' >T&Cs, Privacy Policy</span>and<span style="color:#1434CB"; > Authorize</span> to obtain my cKYC & credit report.
+	  </p>`,
+      /*** UnComment for Orange Terms and Condition text **/
+      // tc_text: <TermsTextProps>{
+      //   html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
+      // By proceeding, I accept  <span style='color:#e64e1f;' >T&Cs, Privacy Policy</span>and<span style="color:#e64e1f"; > Authorize</span> to Obtain my cKYC & credit report.
+      // </p>`,
+      // },
     },
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
@@ -142,6 +146,7 @@ export const template: TemplateSchema = {
       ],
     },
     radio: <RadioProps>{
+      color: ColorTokens.Primary_100,
       isChecked: true,
       size: IconSizeTokens.MD,
       actionChecked: {

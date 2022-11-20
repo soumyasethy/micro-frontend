@@ -19,7 +19,6 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, GoNextType } from "./types";
 import { GoNext, NavLoanAutoPay, PollMandateStatus } from "./actions";
-import { polingDataRepo } from "./repo";
 
 export const template: (urlData: string) => TemplateSchema = (urlData) => ({
   layout: <Layout>{
@@ -39,7 +38,7 @@ export const template: (urlData: string) => TemplateSchema = (urlData) => ({
   datastore: <Datastore>{
     headerStack: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
-      title: "Repayment",
+      title: "Setup AutoPay",
       isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
       action: {

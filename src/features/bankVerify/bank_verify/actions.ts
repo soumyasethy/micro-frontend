@@ -1,5 +1,9 @@
 import { ActionFunction } from "@voltmoney/types";
-import { BAVVerifyActionPayload, ToggleActionPayload } from "./types";
+import {
+  ACTION as ACTION_CURRENT,
+  BAVVerifyActionPayload,
+  ToggleActionPayload,
+} from "./types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -10,11 +14,11 @@ import {
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { AadharInitPayload } from "../../kyc/kyc_init/types";
-import { ACTION as ACTION_CURRENT } from "./types";
 import _ from "lodash";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import { User } from "../../login/otp_verify/types";
+
 let selectedWidget = undefined;
 let ifscCode = undefined;
 let bankAccountNumber = undefined;
@@ -111,5 +115,11 @@ export const GoNext: ActionFunction<any> = async (
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
+  const user: User = await SharedPropsService.getUser();
+  user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
+    StepperStateToken.COMPLETED;
+  user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
+    StepperStateToken.IN_PROGRESS;
+  await SharedPropsService.setUser(user);
   await navigate(ROUTE.LOAN_AUTOPAY);
 };

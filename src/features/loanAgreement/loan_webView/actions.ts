@@ -4,8 +4,8 @@ import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { defaultHeaders } from "../../../configs/config";
 import { ACTION, GoNextType } from "./types";
-import { IconTokens } from "@voltmoney/schema";
-import { nextStepId } from "../../../configs/utils";
+import { IconTokens, StepperStateToken } from "@voltmoney/schema";
+import { User } from "../../login/otp_verify/types";
 
 export const PollMandateStatus: ActionFunction<any> = async (
   action,
@@ -26,6 +26,12 @@ export const PollMandateStatus: ActionFunction<any> = async (
         console.log("PollMandateStatus response", response);
         /// handle response
         if (response.stepResponseObject === "Finished") {
+          const user: User = await SharedPropsService.getUser();
+          user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
+            StepperStateToken.COMPLETED;
+          user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
+            StepperStateToken.IN_PROGRESS;
+          await SharedPropsService.setUser(user);
           clearInterval(timer);
           navigate(ROUTE.LOAN_REPAYMENT);
           showPopup({

@@ -3,8 +3,9 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { defaultHeaders } from "../../../configs/config";
-import { IconTokens } from "@voltmoney/schema";
+import { IconTokens, StepperStateToken } from "@voltmoney/schema";
 import { ACTION } from "../loan_webView/types";
+import { User } from "../../login/otp_verify/types";
 
 export const AgreementStatusAction: ActionFunction<any> = async (
   action,
@@ -23,6 +24,10 @@ export const AgreementStatusAction: ActionFunction<any> = async (
         /// handle response
         if (response.stepResponseObject === "Success") {
           clearInterval(timerRef);
+          const user: User = await SharedPropsService.getUser();
+          user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
+            StepperStateToken.COMPLETED;
+          await SharedPropsService.setUser(user);
           await goBack();
           await showPopup({
             type: "SUCCESS",

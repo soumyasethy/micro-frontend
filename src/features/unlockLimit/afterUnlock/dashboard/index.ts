@@ -292,6 +292,7 @@ export const template: (
               name: IconTokens.Chart,
               size: IconSizeTokens.XL,
               align: IconAlignmentTokens.left,
+              color: ColorTokens.Primary_100,
             },
           },
           {

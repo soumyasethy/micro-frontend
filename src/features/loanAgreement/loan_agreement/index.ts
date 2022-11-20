@@ -17,43 +17,33 @@ import {
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
-  IconAlignmentTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
-  InputStateToken,
-  InputTypeToken,
-  KeyboardTypeToken,
   ShimmerIconProps,
   ShimmerIconSizeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
-  StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
   StepperItem,
   StepperProps,
   StepperTypeTokens,
-  TextInputProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
-import { fetchPledgeLimitRepo } from "../../unlockLimit/unlock_limit/repo";
 import { fetchLinkRepo } from "./repo";
 import { authenticateRepayment, goBack } from "./actions";
-//import { goBack, verifyOTP } from "./action";
 
 export const template: (
   stepper: StepperItem[],
   urlData: string
 ) => TemplateSchema = (stepper, urlData) => ({
-  // export const template: (
-  // ) => TemplateSchema = () => ({
   layout: <Layout>{
     id: ROUTE.LOAN_REPAYMENT,
     type: LAYOUTS.LIST,
@@ -66,7 +56,6 @@ export const template: (
       { id: "contentItem", type: WIDGET.TEXT },
       { id: "contentSpace", type: WIDGET.SPACE },
       { id: "iconStack", type: WIDGET.STACK },
-
       { id: "iconSpace", type: WIDGET.SPACE },
       { id: "btnData", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
     ],
@@ -74,7 +63,7 @@ export const template: (
   datastore: <Datastore>{
     headerStack: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
-      title: "Loan Agreement",
+      title: "Review Agreement",
       type: HeaderTypeTokens.verification,
       stepperProps: <StepperProps>{
         type: StepperTypeTokens.HORIZONTAL,
@@ -87,23 +76,8 @@ export const template: (
       },
     },
     headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
-    // contentStack: <StackProps & WidgetProps>{
-    //     type: StackType.row,
-    //     alignItems: StackAlignItems.center,
-    //     justifyContent: StackJustifyContent.flexStart,
-    //     widgetItems: [
-    //       { id: "subTitle", type: WIDGET.TEXT },
-    //       { id: "subTitle2", type: WIDGET.TEXT },
-    //       { id: "editNumber", type: WIDGET.TEXT },
-    //     ],
-    //     action: {
-    //     //   type: ACTIONS.GO_BACK,
-    //     //   payload: {},
-    //     //   routeId: ROUTE.OTP_VERIFY,
-    //     },
-    // },
     headItem: <TypographyProps>{
-      label: "Lorem ipsum",
+      label: "Review agreement",
       fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
@@ -153,12 +127,12 @@ export const template: (
       alignItems: StackAlignItems.center,
       widgetItems: [
         { id: "btnItem", type: WIDGET.BUTTON },
-        { id: "btnSpace", type: WIDGET.SPACE },
-        { id: "disclaimerStack", type: WIDGET.STACK },
+        // { id: "btnSpace", type: WIDGET.SPACE },
+        // { id: "disclaimerStack", type: WIDGET.STACK },
       ],
     },
     btnItem: <ButtonProps & WidgetProps>{
-      label: "Proceed to agreement",
+      label: "Continue",
       type: ButtonTypeTokens.LargeFilled,
       labelColor: ColorTokens.White,
       width: ButtonWidthTypeToken.FULL,
