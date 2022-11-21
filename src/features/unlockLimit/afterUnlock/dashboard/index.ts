@@ -334,7 +334,6 @@ export const template: (
 export const dashboardMF: PageType<any> = {
   onLoad: async () => {
     const response = await fetchUserDetails();
-    console.log(response);
     const availableCreditAmount: number = _.get(
       response,
       "linkedCredits[0].availableCreditAmount",
