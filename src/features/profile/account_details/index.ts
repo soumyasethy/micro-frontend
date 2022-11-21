@@ -10,7 +10,6 @@ import _ from "lodash";
 import {
     AspectRatioToken,
     BorderRadiusTokens,
-    CardProps,
     ColorTokens,
     DividerProps,
     DividerSizeTokens,
@@ -36,20 +35,25 @@ import { goBack } from "./actions";
 export const template: (
 ) => TemplateSchema = (
     ) => {
-
         return {
             layout: <Layout>{
                 id: ROUTE.ACCOUNT_DETAILS,
                 type: LAYOUTS.LIST,
                 widgets: [
                     { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-                    {
-                        id: "cardContent", type: WIDGET.CARD,padding: {
-                            horizontal: 0,
-                            vertical:0,
-                            all: 0,
-                          },
-                    },
+                    { id: "list1", type: WIDGET.LIST_ITEM },
+                    { id: "list2", type: WIDGET.LIST_ITEM },
+                    { id: "list3", type: WIDGET.LIST_ITEM },
+                    { id: "list4", type: WIDGET.LIST_ITEM },
+                    { id: "space1", type: WIDGET.SPACE },
+                    { id: "categoryList", type: WIDGET.TEXT },
+                    { id: "space2", type: WIDGET.SPACE },
+                    { id: "headStack", type: WIDGET.STACK },
+                    { id: "space3", type: WIDGET.SPACE },
+                    { id: "devider1", type: WIDGET.DIVIDER },
+                    { id: "space4", type: WIDGET.SPACE },
+                    { id: "list5", type: WIDGET.LIST_ITEM },
+                    { id: "list6", type: WIDGET.LIST_ITEM },
 
                 ],
             },
@@ -67,27 +71,6 @@ export const template: (
                             isResend: false
                         },
                         routeId: ROUTE.ACCOUNT_DETAILS,
-                    },
-                },
-                cardContent: <CardProps>{
-                    bgColor: ColorTokens.Grey_Milk,
-                    flex:1,
-                    body: {
-                        widgetItems: [
-                            { id: "list1", type: WIDGET.LIST_ITEM },
-                            { id: "list2", type: WIDGET.LIST_ITEM },
-                            { id: "list3", type: WIDGET.LIST_ITEM },
-                            { id: "list4", type: WIDGET.LIST_ITEM },
-                            { id: "space1", type: WIDGET.SPACE },
-                            { id: "categoryList", type: WIDGET.TEXT },
-                            { id: "space2", type: WIDGET.SPACE },
-                            { id: "headStack", type: WIDGET.STACK },
-                            { id: "space3", type: WIDGET.SPACE },
-                            { id: "devider1", type: WIDGET.DIVIDER },
-                            { id: "space4", type: WIDGET.SPACE },
-                            { id: "list5", type: WIDGET.LIST_ITEM },
-                            { id: "list6", type: WIDGET.LIST_ITEM },
-                        ],
                     },
                 },
                 list1: <ListItemProps>{
@@ -149,7 +132,7 @@ export const template: (
                     fontWeight: "700",
                 },
                 space3: <SpaceProps>{ size: SizeTypeTokens.LG },
-                divider1:<DividerProps>{
+                divider1: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     margin: {
                         vertical: SizeTypeTokens.SM,
@@ -183,5 +166,5 @@ export const accountDetailsMF: PageType<any> = {
         // [ACTION.ACCOUNT_DETAILS]: accountDetails,
         [ACTION.BACK_BUTTON]: goBack
     },
-    bgColor: "#F3F5FC",
+    bgColor: "#FFFFFF",
 };
