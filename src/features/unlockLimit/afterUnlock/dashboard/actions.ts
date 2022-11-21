@@ -1,42 +1,33 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../../routes";
-import {
-  CreditPayload
-} from "./types";
-import {
-  ButtonProps,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
-import { api } from "../../../../configs/api";
-import { defaultAuthHeaders } from "../../../../configs/config";
-
-let phoneNumber: string = "";
+import { CreditPayload, RepaymentPayload } from "./types";
 
 export const withdrawNow: ActionFunction<CreditPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
   await navigate(ROUTE.WITHDRAW_AMOUNT, {
     availableCreditAmount: action.payload.value,
   });
 };
 
-export const repayment: ActionFunction<CreditPayload> = async (
+export const repayment: ActionFunction<RepaymentPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
   console.warn("**** Go Repayment****");
-  await navigate(ROUTE.REPAYMENT);
+  await navigate(ROUTE.REPAYMENT, {
+    repaymentAmount: action.payload.repaymentAmount,
+  });
 };
 
 export const goBack: ActionFunction<CreditPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { goBack }
 ): Promise<any> => {
   console.warn("**** Go Back****");
+  await goBack();
 };
-

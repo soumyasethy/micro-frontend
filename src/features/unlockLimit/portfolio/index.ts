@@ -8,9 +8,6 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
-  ButtonProps,
-  ButtonTypeTokens,
-  ButtonWidthTypeToken,
   CtaCardProps,
   HeaderProps,
   IconTokens,

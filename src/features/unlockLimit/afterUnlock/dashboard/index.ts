@@ -38,18 +38,22 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../../routes";
-import { ACTION, CreditPayload } from "./types";
+import { ACTION, CreditPayload, RepaymentPayload } from "./types";
 import { goBack, repayment, withdrawNow } from "./actions";
 import { fetchUserDetails } from "./repo";
+import { User } from "../../../login/otp_verify/types";
+import SharedPropsService from "../../../../SharedPropsService";
 
 export const template: (
   availableCreditAmount: number,
   actualLoanAmount: number,
-  repaymentAmount: number
+  repaymentAmount: number,
+  isPendingDisbursalApproval: boolean
 ) => TemplateSchema = (
   availableCreditAmount,
   actualLoanAmount,
-  repaymentAmount
+  repaymentAmount,
+  isPendingDisbursalApproval
 ) => {
   const _generateRepaymentDS =
     repaymentAmount > 0
@@ -149,8 +153,12 @@ export const template: (
         bgColor: ColorTokens.Primary_05,
         body: {
           widgetItems: [
-            // { id: "message", type: WIDGET.MESSAGE },
-            // { id: "space0", type: WIDGET.SPACE },
+            ...(isPendingDisbursalApproval
+              ? [
+                  { id: "message", type: WIDGET.MESSAGE },
+                  { id: "space0", type: WIDGET.SPACE },
+                ]
+              : []),
             { id: "amountItem", type: WIDGET.AMOUNTCARD },
             { id: "cardSpace", type: WIDGET.SPACE },
             { id: "continue", type: WIDGET.BUTTON },
@@ -189,13 +197,13 @@ export const template: (
       space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       amountItem: <AmountCardProps>{
         title: "Available cash",
-        subTitle: `${actualLoanAmount}`.replace(
+        subTitle: `${availableCreditAmount}`.replace(
           /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
           ","
         ),
         subscriptTitle:
           "out of ₹ " +
-          `${availableCreditAmount}`.replace(
+          `${actualLoanAmount}`.replace(
             /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
             ","
           ),
@@ -226,14 +234,15 @@ export const template: (
       repaymentItem: <RepaymentProps>{
         title: "Repayment",
         message: "Outstanding amount",
-        amount: `${repaymentAmount}`,
+        amount: `${repaymentAmount}`.replace(
+          /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+          ","
+        ),
         btnText: "Flexi Pay",
         action: {
           type: ACTION.REPAYMENT,
-          payload: <{}>{
-            value: "",
-            widgetId: "input",
-            isResend: false,
+          payload: <RepaymentPayload>{
+            repaymentAmount: `${repaymentAmount}`,
           },
           routeId: ROUTE.DASHBOARD,
         },
@@ -333,21 +342,29 @@ export const template: (
 
 export const dashboardMF: PageType<any> = {
   onLoad: async () => {
-    const response = await fetchUserDetails();
+    const user: User = await fetchUserDetails();
     const availableCreditAmount: number = _.get(
-      response,
+      user,
       "linkedCredits[0].availableCreditAmount",
       0
     );
     const actualLoanAmount: number = _.get(
-      response,
+      user,
       "linkedCredits[0].actualLoanAmount",
       0
     );
+    await SharedPropsService.setUser(user);
     let repaymentAmount = actualLoanAmount - availableCreditAmount;
+    let isPendingDisbursalApproval =
+      user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_APPROVAL";
 
     return Promise.resolve(
-      template(availableCreditAmount, actualLoanAmount, repaymentAmount)
+      template(
+        availableCreditAmount,
+        actualLoanAmount,
+        repaymentAmount,
+        isPendingDisbursalApproval
+      )
     );
   },
 
@@ -357,4 +374,5 @@ export const dashboardMF: PageType<any> = {
     [ACTION.MENU]: goBack,
   },
   bgColor: "#F3F5FC",
+  clearPrevious: true,
 };
