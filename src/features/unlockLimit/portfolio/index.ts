@@ -50,7 +50,7 @@ export const template: (
 
   let dataUI: ListItemDataProps[] = [
     ...stepResponseObject.availableCAS.map((availableCASItem, index) => {
-      selectedItemMap[index] = true;
+      selectedItemMap[index] = availableCASItem.pledgedUnits > 0;
       return {
         label: availableCASItem.schemeName, //"Axis Long Term Equity Mutual Funds",
         info: "",
@@ -59,12 +59,12 @@ export const template: (
           [availableCASItem],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`, //"₹4,000",
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","), //"₹4,000",
         trailSubTitle: `/ ₹${getActualLimit(
           [availableCASItem],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`,
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         action: "edit",
         trailIconAction: {
           type: ACTION.EDIT_ITEM,
@@ -156,7 +156,7 @@ export const template: (
           stepResponseObject.availableCAS,
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`,
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         actionLabel: "Confirm & get OTP",
         action: {
           type: ACTION.PORTFOLIO,
@@ -181,4 +181,5 @@ export const portfolioMF: PageType<any> = {
     [ACTION.TOGGLE_ITEM]: ToggleSelectAction,
     [ACTION.EDIT_ITEM]: EditItem,
   },
+  clearPrevious: true,
 };

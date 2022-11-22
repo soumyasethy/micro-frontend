@@ -11,6 +11,7 @@ import { getTotalLimit } from "../portfolio/actions";
 import { ACTION as PLEDGE_CONFIRM_ACTIONS } from "../pledge_confirmation/types";
 import { sendOtp } from "../pledge_confirmation/actions";
 import { ButtonProps } from "@voltmoney/schema";
+import SharedPropsService from "../../../SharedPropsService";
 
 let amount: number = 0;
 const getUpdateAvailableCAS = (
@@ -55,16 +56,38 @@ const getUpdateAvailableCAS = (
 export const SelectAssets: ActionFunction<AssetsPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
+  if (amount !== 0) {
+  }
+  const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = {};
-  action.payload.stepResponseObject.availableCAS.map((item, index) => {
-    let key = `${item.isinNo}-${item.folioNo}`;
-    item.pledgedUnits = item.totalAvailableUnits;
-    updateAvailableCASMap[key] = item;
-  });
+
+  if (amount > 0) {
+    stepResponseObject.availableCAS.forEach((item, index) => {
+      stepResponseObject.availableCAS[index].pledgedUnits =
+        item.totalAvailableUnits;
+    });
+    stepResponseObject.availableCAS = getUpdateAvailableCAS(
+      amount,
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
+    );
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      updateAvailableCASMap[key] = item;
+    });
+  } else {
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      item.pledgedUnits = item.totalAvailableUnits;
+      updateAvailableCASMap[key] = item;
+    });
+  }
+  await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   await navigate(ROUTE.PORTFOLIO, {
-    stepResponseObject: action.payload.stepResponseObject,
+    stepResponseObject: stepResponseObject,
     updateAvailableCASMap,
   });
 };
@@ -114,5 +137,10 @@ export const EnterAmountAction: ActionFunction<AssetsPayload> = async (
   _datastore,
   _
 ): Promise<any> => {
-  amount = parseFloat(action.payload.value);
+  if (action.payload.value === "") {
+    amount = 0;
+  } else {
+    amount = parseFloat(action.payload.value);
+  }
+  console.warn("EnterAmountAction", amount);
 };
