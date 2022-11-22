@@ -21,7 +21,6 @@ import {
   FontFamilyTokens,
   FontSizeTokens,
   IconAlignmentTokens,
-  IconProps,
   IconSizeTokens,
   IconTokens,
   MessageProps,
@@ -34,6 +33,9 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
+  TagProps,
+  TagTypeTokens,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -84,8 +86,27 @@ export const template: (
             horizontal: 16,
           },
         },
+        ...(isPendingDisbursalApproval
+          ? [
+              {
+                id: "message",
+                type: WIDGET.MESSAGE,
+                position: POSITION.FIXED_TOP,
+                padding: {
+                  horizontal: 16,
+                },
+              },
+            ]
+          : []),
         {
           id: "cardItem",
+          type: WIDGET.CARD,
+          padding: {
+            horizontal: 0,
+          },
+        },
+        {
+          id: "promoCard",
           type: WIDGET.CARD,
           padding: {
             horizontal: 0,
@@ -95,10 +116,11 @@ export const template: (
         {
           id: "cardNav",
           type: WIDGET.CARD,
-          position: POSITION.ABSOLUTE_BOTTOM,
+          position: POSITION.STICKY_BOTTOM,
           padding: {
-            vertical: 0,
-            horizontal: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
           },
         },
       ],
@@ -107,17 +129,44 @@ export const template: (
       card: <CardProps>{
         bgColor: ColorTokens.White,
         body: { widgetItems: [{ id: "header", type: WIDGET.STACK }] },
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
       },
       header: <StackProps>{
+        width: StackWidth.FULL,
         type: StackType.row,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
         padding: PaddingSizeTokens.LG,
         widgetItems: [
           { id: "title", type: WIDGET.TEXT },
-          // { id: "leadIcon", type: WIDGET.BUTTON },
+          { id: "headerRight", type: WIDGET.STACK },
         ],
       },
+      headerRight: <StackProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.flexEnd,
+        padding: PaddingSizeTokens.LG,
+        widgetItems: [
+          { id: "contactUs", type: WIDGET.TAG },
+          { id: "contactUsSpace", type: WIDGET.SPACE },
+          { id: "leadIcon", type: WIDGET.BUTTON },
+        ],
+      },
+      contactUs: <TagProps>{
+        icon: {
+          align: IconAlignmentTokens.left,
+          name: IconTokens.Support,
+          size: IconSizeTokens.XL,
+        },
+        label: "Contact us",
+        labelColor: ColorTokens.Primary_100,
+        type: TagTypeTokens.DEFAULT,
+        bgColor: ColorTokens.Primary_05,
+      },
+
+      contactUsSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
       title: <TypographyProps>{
         label: "My Account",
         fontSize: FontSizeTokens.MD,
@@ -153,48 +202,37 @@ export const template: (
         bgColor: ColorTokens.Primary_05,
         body: {
           widgetItems: [
-            ...(isPendingDisbursalApproval
-              ? [
-                  { id: "message", type: WIDGET.MESSAGE },
-                  { id: "space0", type: WIDGET.SPACE },
-                ]
-              : []),
             { id: "amountItem", type: WIDGET.AMOUNTCARD },
             { id: "cardSpace", type: WIDGET.SPACE },
             { id: "continue", type: WIDGET.BUTTON },
             { id: "continueSpace", type: WIDGET.SPACE },
-            {
-              id: "repaymentCard",
-              type: WIDGET.CARD,
-              padding: {
-                horizontal: 0,
-                all: 0,
-              },
-            },
-            { id: "repaymentSpace", type: WIDGET.SPACE },
-            {
-              id: "promoCard",
-              type: WIDGET.CARD,
-              padding: {
-                horizontal: 0,
-                all: 0,
-              },
-            },
+            ...(repaymentAmount > 0
+              ? [
+                  {
+                    id: "repaymentCard",
+                    type: WIDGET.CARD,
+                    padding: {
+                      horizontal: 0,
+                      all: 0,
+                    },
+                  },
+                  { id: "repaymentSpace", type: WIDGET.SPACE },
+                ]
+              : []),
           ],
         },
       },
       message: <MessageProps>{
         label:
-          "We Couldnt find a portfolio match your details. Please Review & Try Again",
+          "Your verification is in progress. Meanwhile you can’t withdraw the amount",
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.System_Warning_BG,
-        actionIcon: <IconProps>{
-          name: IconTokens.Cancel,
-          size: IconSizeTokens.MD,
-          color: ColorTokens.Grey_Night,
-        },
+        // actionIcon: <IconProps>{
+        //   name: IconTokens.Cancel,
+        //   size: IconSizeTokens.MD,
+        //   color: ColorTokens.Grey_Night,
+        // },
       },
-      space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       amountItem: <AmountCardProps>{
         title: "Available cash",
         subTitle: `${availableCreditAmount}`.replace(
@@ -214,11 +252,10 @@ export const template: (
         warning: "Recommended to use as per limit",
         chipText: "",
         type: AmountCardTypeTokens.wallet,
-        // progressFillPercentage: `${(
-        //   (availableCreditAmount * 100) /
-        //   actualLoanAmount
-        // ).toFixed(2)}%`,
-        progressFillPercentage: `60%`,
+        progressFillPercentage: `${(
+          (availableCreditAmount * 100) /
+          actualLoanAmount
+        ).toFixed(2)}%`,
       },
       cardSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       continue: <ButtonProps & WidgetProps>{
@@ -236,7 +273,7 @@ export const template: (
           routeId: ROUTE.DASHBOARD,
         },
       },
-      continueSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       ..._generateRepaymentDS,
       repaymentItem: <RepaymentProps>{
         title: "Repayment",
@@ -313,7 +350,7 @@ export const template: (
           },
           {
             id: "2",
-            title: "Transaction",
+            title: "Transactions",
             status: BottomTabStateToken.NOT_SELECTED,
             icon: {
               name: IconTokens.RuppeFile,
@@ -323,10 +360,10 @@ export const template: (
           },
           {
             id: "3",
-            title: "Protfolio",
+            title: "Manage Limit",
             status: BottomTabStateToken.NOT_SELECTED,
             icon: {
-              name: IconTokens.Square,
+              name: IconTokens.ManageLimit,
               size: IconSizeTokens.XL,
               align: IconAlignmentTokens.left,
             },

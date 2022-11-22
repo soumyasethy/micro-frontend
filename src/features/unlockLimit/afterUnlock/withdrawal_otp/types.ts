@@ -7,4 +7,5 @@ export enum ACTION {
 export type DisbursementOTPPayload = {
   value: string;
   disbursalAmount?:string;
+  accountNumber?:string;
 };

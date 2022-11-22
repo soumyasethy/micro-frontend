@@ -23,6 +23,7 @@ export const DisbursalVerifyAction: ActionFunction<
     if (response) {
       await navigate(ROUTE.WITHDRAWAL_SUCCESS, {
         disbursalAmount: action.payload.disbursalAmount,
+        accountNumber: action.payload.accountNumber,
       });
     }
   }

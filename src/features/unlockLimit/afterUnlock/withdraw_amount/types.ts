@@ -11,4 +11,5 @@ export type AmountPayload = {
 
 export type CreateDisbursementRequestPayload = {
   disbursalAmount: number;
+  accountNumber: string;
 };

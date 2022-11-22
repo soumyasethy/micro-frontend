@@ -33,9 +33,16 @@ import { ROUTE } from "../../../../routes";
 import { ACTION, DisbursementOTPPayload } from "./types";
 import { goBack, DisbursalVerifyAction } from "./action";
 import { CreateDisbursementRequest } from "../withdraw_amount/action";
+import SharedPropsService from "../../../../SharedPropsService";
 
-export const template: (disbursalAmount: string) => TemplateSchema = (
-  disbursalAmount: string
+export const template: (
+  disbursalAmount: string,
+  mobileNumber: string,
+  accountNumber: string
+) => TemplateSchema = (
+  disbursalAmount: string,
+  mobileNumber: string,
+  accountNumber: string
 ) => ({
   layout: <Layout>{
     id: ROUTE.WITHDRAWAL_OTP,
@@ -95,7 +102,13 @@ export const template: (disbursalAmount: string) => TemplateSchema = (
     },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     subTitle: <TypographyProps>{
-      label: "A 4-digit OTP was sent on 982*******90 ",
+      label: `A 4-digit OTP was sent on ${mobileNumber.substring(
+        0,
+        4
+      )}*******${mobileNumber.substring(
+        mobileNumber.length - 3,
+        mobileNumber.length - 1
+      )}`,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
@@ -112,6 +125,7 @@ export const template: (disbursalAmount: string) => TemplateSchema = (
         payload: <DisbursementOTPPayload>{
           value: "",
           disbursalAmount,
+          accountNumber,
         },
         routeId: ROUTE.WITHDRAWAL_OTP,
       },
@@ -133,8 +147,12 @@ export const template: (disbursalAmount: string) => TemplateSchema = (
 });
 
 export const withdrawalOtpMF: PageType<any> = {
-  onLoad: async (_, { disbursalAmount }) => {
-    return Promise.resolve(template(disbursalAmount));
+  onLoad: async (_, { disbursalAmount, accountNumber }) => {
+    const mobileNumber = (await SharedPropsService.getUser())
+      .linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    return Promise.resolve(
+      template(disbursalAmount, mobileNumber.replace("+91", ""), accountNumber)
+    );
   },
 
   actions: {
