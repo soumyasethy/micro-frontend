@@ -175,13 +175,11 @@ export const withdraw_amountMF: PageType<any> = {
     const response = await network.get(`${api.userProfile}${accountId}`, {
       headers: await getAppHeader(),
     });
-    console.warn("withdraw_amountMF", response);
     const accountNumber = _.get(
       response,
       "data.bankDetails.accountNumber",
       null
     );
-    console.warn("accountNumber", accountNumber);
     return Promise.resolve(template(availableCreditAmount, accountNumber));
   },
 

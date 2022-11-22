@@ -78,7 +78,6 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
   _datastore,
   { setDatastore, appendWidgets, removeWidgets }
 ): Promise<any> => {
-  console.warn("**** OnAmountChange called ****", action);
   disbursalAmount = parseFloat(action.payload.value);
   const currentApplicableInterestRate = (await SharedPropsService.getUser())
     .linkedCredits[0].currentApplicableInterestRate;
@@ -87,10 +86,10 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
       ((disbursalAmount * currentApplicableInterestRate) / 1200) * 100
     ) / 100;
   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "interestItem", <TextInputProps>{
-    value: `${monthlyInterest || 0}`.replace(
+    value: `${monthlyInterest || 0}` /*.replace(
       /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
       ","
-    ),
+    )*/,
   });
   const user: User = await SharedPropsService.getUser();
   const actualLoanAmount = user.linkedCredits[0].actualLoanAmount;
@@ -99,18 +98,6 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
   const recommendedAmount = 0.9 * actualLoanAmount;
   const currentRecommendedAmount = recommendedAmount - alreadyWithdrawAmount;
   if (disbursalAmount > currentRecommendedAmount) {
-    // await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountMessage", <MessageProps>{
-    //   label: "Recommended to use 90% of the limit",
-    //   actionText: "Confirm",
-    //   icon: <IconProps>{
-    //     name: IconTokens.Info,
-    //     size: IconSizeTokens.SM,
-    //     color: ColorTokens.Grey_Charcoal,
-    //   },
-    //   labelColor: ColorTokens.Grey_Charcoal,
-    //   bgColor: ColorTokens.Grey_Milk_1,
-    // });
-
     await appendWidgets(
       ROUTE.WITHDRAW_AMOUNT,
       {
@@ -128,10 +115,10 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
             type: ACTION.SET_RECOMENDED_AMOUNT,
             routeId: ROUTE.WITHDRAW_AMOUNT,
             payload: <AmountPayload>{
-              value: `${recommendedAmount}`.replace(
+              value: `${recommendedAmount}`/*.replace(
                 /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
                 ","
-              ),
+              )*/,
             },
           },
         },
