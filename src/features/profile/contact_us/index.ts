@@ -92,8 +92,20 @@ export const template: (
                     },
                 },
                 list1: <ListItemProps>{
-                    title: 'WhatsApp',
-                    subTitle: 'Ask your queries anytime',
+                    customTitle:<TypographyProps>{
+                        label:"WhatsApp",
+                        color:ColorTokens.Grey_Night,
+                        fontWeight:"600",
+                        fontSize:FontSizeTokens.SM
+                    },
+                    customSubTitle:<TypographyProps>{
+                        label:"Ask your queries anytime",
+                        color:ColorTokens.Grey_Charcoal,
+                        fontWeight:"400",
+                        fontSize:FontSizeTokens.XS
+                    },
+                    isDivider:false,
+                    title:"WhatsApp",
                     leadIconName: IconTokens.Whatsapp,
                     onPress: () => { },
                 },
@@ -149,8 +161,21 @@ export const template: (
                     },
                 },
                 list2: <ListItemProps>{
+                    customTitle:<TypographyProps>{
+                        label:"Call",
+                        color:ColorTokens.Grey_Night,
+                        fontWeight:"600",
+                        fontSize:FontSizeTokens.SM
+                    },
+                    customSubTitle:<TypographyProps>{
+                        label:"Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM",
+                        color:ColorTokens.Grey_Charcoal,
+                        fontWeight:"400",
+                        fontSize:FontSizeTokens.XS
+                    },
+                    isDivider:false,
                     title: 'Call',
-                    subTitle: 'Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM',
+                   // subTitle: 'Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM',
                     leadIconName: IconTokens.Phone,
                     onPress: () => { },
                 },
@@ -206,6 +231,19 @@ export const template: (
                     },
                 },
                 list3: <ListItemProps>{
+                    customTitle:<TypographyProps>{
+                        label:"Email",
+                        color:ColorTokens.Grey_Night,
+                        fontWeight:"600",
+                        fontSize:FontSizeTokens.SM
+                    },
+                    customSubTitle:<TypographyProps>{
+                        label:"Email us at help@voltmoney.in",
+                        color:ColorTokens.Grey_Charcoal,
+                        fontWeight:"400",
+                        fontSize:FontSizeTokens.XS
+                    },
+                    isDivider:false,
                     title: 'Email',
                     subTitle: 'Email us at help@voltmoney.in',
                     leadIconName: IconTokens.Email,

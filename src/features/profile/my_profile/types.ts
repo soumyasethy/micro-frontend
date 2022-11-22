@@ -15,7 +15,7 @@ export enum ACTION {
   };
 
   export type ProfileDetails={
-    bankData:BankDetails[]
+    bankDetails:BankDetails
     emailId: string,
     name: string,
     panNumber: string,

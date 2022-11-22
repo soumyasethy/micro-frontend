@@ -77,13 +77,13 @@ export const template: (
                 },
                 list1: <ListItemProps>{
                     title: 'Name',
-                    subTitle: 'Lalit Bihani',
+                    subTitle: `${profileData.name}`,
                     leadIconName: IconTokens.User,
                     onPress: () => { },
                 },
                 list2: <ListItemProps>{
                     title: 'Mobile Number',
-                    subTitle: '9820167854',
+                    subTitle: `${profileData.phoneNumber}`,
                     leadIconName: IconTokens.Phone,
                     onPress: () => { },
                 },
@@ -95,7 +95,7 @@ export const template: (
                 },
                 list4: <ListItemProps>{
                     title: 'PAN Number',
-                    subTitle: 'BFTPB2772K',
+                    subTitle: `${profileData.panNumber}`,
                     leadIconName: IconTokens.CreditCard,
                     onPress: () => { },
                 },
@@ -119,15 +119,15 @@ export const template: (
                     ]
                 },
                 imageItem: <ImageProps>{
-                    uri: 'https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50',
+                    uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${profileData.bankDetails.bankCode}.svg`,
                     size: ImageSizeTokens.SM,
                     aspectRatio: AspectRatioToken.A1_1,
                     borderRadius: BorderRadiusTokens.BR5,
                     padding: SizeTypeTokens.SM,
                 },
-                space0: <SpaceProps>{ size: SizeTypeTokens.XL },
+                space0: <SpaceProps>{ size: SizeTypeTokens.LG },
                 textItem: <TypographyProps>{
-                    label: "HDFC Bank",
+                    label: `${profileData.bankDetails.bankName}`,
                     color: ColorTokens.Grey_Night,
                     fontSize: FontSizeTokens.MD,
                     fontFamily: FontFamilyTokens.Inter,
@@ -144,12 +144,12 @@ export const template: (
                 space4: <SpaceProps>{ size: SizeTypeTokens.LG },
                 list5: <ListItemProps>{
                     title: 'IFSC',
-                    subTitle: 'HDFC0000675',
+                    subTitle: `${profileData.bankDetails.ifscCode}`,
                     onPress: () => { },
                 },
                 list6: <ListItemProps>{
                     title: 'Account number',
-                    subTitle: '05001 42345 38421',
+                    subTitle: `${profileData.bankDetails.accountNumber}`,
                     onPress: () => { },
                 },
             },
@@ -158,7 +158,7 @@ export const template: (
 
 export const accountDetailsMF: PageType<any> = {
     onLoad: async ({}, { profileData }) => {
-
+        console.log("response",profileData)
         return Promise.resolve(
             template(profileData as ProfileDetails)
         );

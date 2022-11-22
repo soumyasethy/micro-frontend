@@ -13,15 +13,6 @@ import { defaultAuthHeaders } from "../../../configs/config";
 
 let phoneNumber: string = "";
 
-
-export const faqDetails: ActionFunction<ProfilePayload> = async (
-  action,
-  _datastore,
-  { navigate, setDatastore, asyncStorage }
-): Promise<any> => {
-  await( navigate(ROUTE.FAQ_DETAILS));
-};
-
 export const accountDetails: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,

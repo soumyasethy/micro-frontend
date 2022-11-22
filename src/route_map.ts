@@ -51,6 +51,7 @@ import { contactUsMF } from "./features/profile/contact_us";
 import { myProfileMF } from "./features/profile/my_profile";
 import { faqMF } from "./features/profile/faq";
 import { aboutUsMF } from "./features/profile/about_us";
+import { faqDetailsMF } from "./features/profile/faq_details";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -104,4 +105,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.MY_PROFILE]: myProfileMF,
   [ROUTE.FAQ]: faqMF,
   [ROUTE.ABOUTUS]: aboutUsMF,
+  [ROUTE.FAQ_DETAILS]: faqDetailsMF,
 };

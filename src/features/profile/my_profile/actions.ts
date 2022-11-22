@@ -52,6 +52,7 @@ export const aboutDetails: ActionFunction<ProfilePayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
+  console.log("abou page");
   await navigate(ROUTE.ABOUTUS)
 };
 

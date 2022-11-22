@@ -33,7 +33,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { goBack } from "./actions";
+import { faqDetails, goBack } from "./actions";
 export const template: (
 ) => TemplateSchema = (
     ) => {
@@ -157,6 +157,7 @@ export const template: (
                     body: {
                         widgetItems: [
                             { id: "startDetails", type: WIDGET.STACK },
+                            { id: "startSpace", type: WIDGET.SPACE },
                             { id: "startDivider", type: WIDGET.DIVIDER },
                         ]
                     }
@@ -208,15 +209,16 @@ export const template: (
                         color: ColorTokens.Grey_Charcoal
                     },
                     action: {
-                        type: ACTION.PROFILE,
+                        type: ACTION.FAQ,
                         payload: <{}>{
                           value: "",
                           widgetId: "continue",
                           isResend: false,
                         },
-                        routeId: ROUTE.MY_PROFILE,
+                        routeId: ROUTE.FAQ,
                       },
                 },
+                startSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
                 startDivider: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
@@ -230,6 +232,7 @@ export const template: (
                     body: {
                         widgetItems: [
                             { id: "withdrawalDetails", type: WIDGET.STACK },
+                            { id: "withdrawalSpace", type: WIDGET.SPACE },
                             { id: "withdrawalDivider", type: WIDGET.DIVIDER },
                         ]
                     }
@@ -286,6 +289,7 @@ export const template: (
                         routeId: ROUTE.MY_PROFILE,
                       },
                 },
+                withdrawalSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
                 withdrawalDivider: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
@@ -299,6 +303,7 @@ export const template: (
                     body: {
                         widgetItems: [
                             { id: "kycDetails", type: WIDGET.STACK },
+                            { id: "kycSpace", type: WIDGET.SPACE },
                             { id: "kycDivider", type: WIDGET.DIVIDER },
                         ]
                     }
@@ -355,6 +360,7 @@ export const template: (
                         routeId: ROUTE.MY_PROFILE,
                       },
                 },
+                kycSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
                 kycDivider: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
@@ -363,194 +369,6 @@ export const template: (
                         horizontal: SizeTypeTokens.SM,
                     },
                 },
-                // detailScreen: <StackProps>{
-                //     type: StackType.column,
-                //     bgColor: ColorTokens.Grey_Milk,
-                //     flex: 1,
-                //     width: StackWidth.FULL,
-                //     height: StackHeight.FULL,
-                //     alignItems: StackAlignItems.center,
-                //     widgetItems: [
-                //         { id: "accountDetails", type: WIDGET.STACK },
-                //         { id: "accountSpace1", type: WIDGET.SPACE },
-                //         { id: "accountDivider", type: WIDGET.DIVIDER },
-                //         { id: "accountSpace2", type: WIDGET.SPACE },
-                //         { id: "faqDetails", type: WIDGET.STACK },
-                //         { id: "faqSpace1", type: WIDGET.SPACE },
-                //         { id: "faqDivider", type: WIDGET.DIVIDER },
-                //         { id: "faqSpace2", type: WIDGET.SPACE },
-                //         { id: "contactDetails", type: WIDGET.STACK },
-                //         { id: "contactSpace1", type: WIDGET.SPACE },
-                //         { id: "contactDivider", type: WIDGET.DIVIDER },
-                //         { id: "contactSpace2", type: WIDGET.SPACE },
-                //     ]
-
-                // },
-                // accountDetails: <StackProps>{
-                //     type: StackType.row,
-                //     width: StackWidth.FULL,
-                //     widgetItems: [
-                //         { id: "infoItems", type: WIDGET.STACK },
-                //         { id: "cta", type: WIDGET.STACK }
-                //     ]
-                // },
-                // infoItems: <StackProps>{
-                //     type: StackType.row,
-                //     flex: 1,
-                //     alignItems: StackAlignItems.center,
-                //     justifyContent: StackJustifyContent.flexStart,
-                //     widgetItems: [
-                        
-                //         { id: "title", type: WIDGET.TEXT }
-                //     ]
-                // },
-               
-
-                // title: <TypographyProps>{
-                //     label: "Getting started",
-                //     color: ColorTokens.Grey_Night,
-                //     numberOfLines: 1,
-                //     fontSize: FontSizeTokens.SM,
-                //     fontFamily: FontFamilyTokens.Inter,
-                //     fontWeight: "500",
-                // },
-                // cta: <StackProps>{
-                //     type: StackType.row,
-                //     alignItems: StackAlignItems.flexEnd,
-                //     justifyContent: StackJustifyContent.flexEnd,
-                //     widgetItems: [
-                //         { id: "cta1", type: WIDGET.BUTTON },
-                //     ]
-                // },
-                // cta1: <ButtonProps>{
-                //     type: ButtonTypeTokens.MediumGhost,
-                //     width: ButtonWidthTypeToken.CONTENT,
-                //     icon: <IconProps>{
-                //         name: IconTokens.ChervonDownRight,
-                //         size: IconSizeTokens.MD,
-                //         color: ColorTokens.Grey_Charcoal
-                //     }
-                // },
-                // accountSpace1:<SpaceProps>{size:SizeTypeTokens.XL},
-                // accountDivider: <DividerProps>{
-                //     size: DividerSizeTokens.SM,
-                //     color: ColorTokens.Grey_Chalk,
-                //     margin: {
-                //         vertical: SizeTypeTokens.SM,
-                //         horizontal: SizeTypeTokens.SM,
-                //     },
-                // },
-                // accountSpace2:<SpaceProps>{size:SizeTypeTokens.XL},
-                // faqDetails: <StackProps>{
-                //     type: StackType.row,
-                //     width: StackWidth.FULL,
-                //     widgetItems: [
-                //         { id: "faqItems", type: WIDGET.STACK },
-                //         { id: "ctaFaq", type: WIDGET.STACK }
-                //     ]
-                // },
-                // faqItems: <StackProps>{
-                //     type: StackType.row,
-                //     flex: 1,
-                //     alignItems: StackAlignItems.center,
-                //     justifyContent: StackJustifyContent.flexStart,
-                //     widgetItems: [
-                       
-                //         { id: "titleFaq", type: WIDGET.TEXT }
-                //     ]
-                // },
-               
-
-                // titleFaq: <TypographyProps>{
-                //     label: "Withdrawal request",
-                //     color: ColorTokens.Grey_Night,
-                //     numberOfLines: 1,
-                //     fontSize: FontSizeTokens.SM,
-                //     fontFamily: FontFamilyTokens.Inter,
-                //     fontWeight: "500",
-                // },
-                // ctaFaq: <StackProps>{
-                //     type: StackType.row,
-                //     alignItems: StackAlignItems.flexEnd,
-                //     justifyContent: StackJustifyContent.flexEnd,
-                //     widgetItems: [
-                //         { id: "cta1Faq", type: WIDGET.BUTTON },
-                //     ]
-                // },
-                // cta1Faq: <ButtonProps>{
-                //     type: ButtonTypeTokens.MediumGhost,
-                //     width: ButtonWidthTypeToken.CONTENT,
-                //     icon: <IconProps>{
-                //         name: IconTokens.ChervonDownRight,
-                //         size: IconSizeTokens.SM,
-                //         color: ColorTokens.Grey_Charcoal
-                //     }
-                // },
-                // faqSpace1:<SpaceProps>{size:SizeTypeTokens.XL},
-                // faqDivider: <DividerProps>{
-                //     size: DividerSizeTokens.SM,
-                //     color: ColorTokens.Grey_Chalk,
-                //     margin: {
-                //         vertical: SizeTypeTokens.SM,
-                //         horizontal: SizeTypeTokens.SM,
-                //     },
-                // },
-                // faqSpace2:<SpaceProps>{size:SizeTypeTokens.XL},
-                // contactDetails: <StackProps>{
-                //     type: StackType.row,
-                //     width: StackWidth.FULL,
-                //     widgetItems: [
-                //         { id: "contactItems", type: WIDGET.STACK },
-                //         { id: "ctaContact", type: WIDGET.STACK }
-                //     ]
-                // },
-                // contactItems: <StackProps>{
-                //     type: StackType.row,
-                //     flex: 1,
-                //     alignItems: StackAlignItems.center,
-                //     justifyContent: StackJustifyContent.flexStart,
-                //     widgetItems: [
-                       
-                //         { id: "contactTitle", type: WIDGET.TEXT }
-                //     ]
-                // },
-                
-
-                // contactTitle: <TypographyProps>{
-                //     label: "KYC verification",
-                //     color: ColorTokens.Grey_Night,
-                //     numberOfLines: 1,
-                //     fontSize: FontSizeTokens.SM,
-                //     fontFamily: FontFamilyTokens.Inter,
-                //     fontWeight: "500",
-                // },
-                // ctaContact: <StackProps>{
-                //     type: StackType.row,
-                //     alignItems: StackAlignItems.flexEnd,
-                //     justifyContent: StackJustifyContent.flexEnd,
-                //     widgetItems: [
-                //         { id: "cta1Contact", type: WIDGET.BUTTON },
-                //     ]
-                // },
-                // cta1Contact: <ButtonProps>{
-                //     type: ButtonTypeTokens.MediumGhost,
-                //     width: ButtonWidthTypeToken.CONTENT,
-                //     icon: <IconProps>{
-                //         name: IconTokens.ChervonDownRight,
-                //         size: IconSizeTokens.SM,
-                //         color: ColorTokens.Grey_Charcoal
-                //     }
-                // },
-                // contactSpace1:<SpaceProps>{size:SizeTypeTokens.XL},
-                // contactDivider: <DividerProps>{
-                //     size: DividerSizeTokens.SM,
-                //     color: ColorTokens.Grey_Chalk,
-                //     margin: {
-                //         vertical: SizeTypeTokens.SM,
-                //         horizontal: SizeTypeTokens.SM,
-                //     },
-                // },
-                // contactSpace2:<SpaceProps>{size:SizeTypeTokens.XL},
                
             },
         };
@@ -565,7 +383,7 @@ export const faqMF: PageType<any> = {
     },
 
     actions: {
-        // [ACTION.ACCOUNT_DETAILS]: accountDetails,
+         [ACTION.FAQ]: faqDetails,
         [ACTION.BACK_BUTTON]: goBack
     },
     bgColor: "#FFFFFF",
