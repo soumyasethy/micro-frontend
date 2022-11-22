@@ -1,22 +1,37 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../../routes";
-import { OtpPledgePayload } from "./types";
+import { DisbursementOTPPayload } from "./types";
+import { api } from "../../../../configs/api";
+import { getAppHeader } from "../../../../configs/config";
+import SharedPropsService from "../../../../SharedPropsService";
 
-
-export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
-  action,
-  _datastore,
-  { navigate, setDatastore, asyncStorage, showPopup, handleError }
-): Promise<any> => {
-
-
-  await navigate(ROUTE.WITHDRAWAL_SUCCESS);
+export const DisbursalVerifyAction: ActionFunction<
+  DisbursementOTPPayload
+> = async (action, _datastore, { navigate, network }): Promise<any> => {
+  if (`${action.payload.value}`.length > 3) {
+    const response = await network.post(
+      api.lmsDisbursalVerify,
+      {
+        otp: action.payload.value,
+        phoneNo: (
+          await SharedPropsService.getUser()
+        ).linkedBorrowerAccounts[0].accountHolderPhoneNumber,
+      },
+      { headers: await getAppHeader() }
+    );
+    console.warn("DisbursalVerifyAction", response);
+    if (response) {
+      await navigate(ROUTE.WITHDRAWAL_SUCCESS, {
+        disbursalAmount: action.payload.disbursalAmount,
+      });
+    }
+  }
 };
 
-export const goBack: ActionFunction<OtpPledgePayload> = async (
+export const goBack: ActionFunction<DisbursementOTPPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage,goBack }
+  { goBack }
 ): Promise<any> => {
   goBack();
 };

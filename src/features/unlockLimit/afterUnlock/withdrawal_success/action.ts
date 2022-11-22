@@ -1,21 +1,19 @@
 import { ActionFunction } from "@voltmoney/types";
 import { OtpPledgePayload } from "./types";
+import { ROUTE } from "../../../../routes";
 
-
-export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
+export const Done: ActionFunction<OtpPledgePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage, showPopup, handleError }
+  { navigate }
 ): Promise<any> => {
-
-
-  // await navigate(ROUTE.);
+  await navigate(ROUTE.DASHBOARD);
 };
 
 export const goBack: ActionFunction<OtpPledgePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage,goBack }
+  { goBack }
 ): Promise<any> => {
   goBack();
 };

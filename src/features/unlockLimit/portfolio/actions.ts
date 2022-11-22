@@ -9,7 +9,6 @@ import {
   SearchPortfolioPayload,
 } from "./types";
 import {
-  ButtonProps,
   CtaCardProps,
   IconTokens,
   ListItemDataProps,
@@ -39,6 +38,21 @@ export const getTotalLimit = (
     sum =
       sum +
       item.pledgedUnits * isinNavMap[item.isinNo] * isinLTVMap[item.isinNo];
+  });
+  return Math.round(sum * 100) / 100;
+};
+export const getActualLimit = (
+  availableCAS: AvailableCASItem[],
+  isinNavMap: IsinNAVMap,
+  isinLTVMap: IsinLTVMap
+) => {
+  let sum = 0;
+  availableCAS.forEach((item) => {
+    sum =
+      sum +
+      item.totalAvailableUnits *
+        isinNavMap[item.isinNo] *
+        isinLTVMap[item.isinNo];
   });
   return Math.round(sum * 100) / 100;
 };
@@ -96,7 +110,7 @@ export const EditItem: ActionFunction<EditItemPayload> = async (
 
 export const ToggleSelectAction: ActionFunction<
   PortfolioTogglePayload
-> = async (action, _datastore, { setDatastore, ...props }): Promise<any> => {
+> = async (action, _datastore, { setDatastore }): Promise<any> => {
   const updateAvailableCASMapX = await SharedPropsService.getAvailableCASMap();
   const stepResponseObject = action.payload.stepResponseObject;
   const availableCASItem =
@@ -135,10 +149,10 @@ export const ToggleSelectAction: ActionFunction<
                 [updateAvailableCASMapX[key]],
                 stepResponseObject.isinNAVMap,
                 stepResponseObject.isinLTVMap
-              )}`
+              )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",")
             : 0
         }`, //"₹4,000",
-        trailSubTitle: `/ ₹${getTotalLimit(
+        trailSubTitle: `/ ₹${getActualLimit(
           [
             {
               ...availableCASItem,
@@ -147,7 +161,7 @@ export const ToggleSelectAction: ActionFunction<
           ],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`,
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         action: "edit",
         trailIconAction: {
           type: ACTION.EDIT_ITEM,
@@ -172,7 +186,7 @@ export const ToggleSelectAction: ActionFunction<
   });
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMapX);
   await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    info: `${totalAmount}`,
+    info: `${totalAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
   });
 };
 

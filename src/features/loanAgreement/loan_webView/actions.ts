@@ -2,91 +2,92 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
-import _ from "lodash";
-import { getAppHeader } from "../../../configs/config";
+import { defaultHeaders } from "../../../configs/config";
+import { ACTION, GoNextType } from "./types";
+import { IconTokens, StepperStateToken } from "@voltmoney/schema";
+import { User } from "../../login/otp_verify/types";
 
-
-
-export const tryapp: ActionFunction<any> = async (
+export const PollMandateStatus: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, setDatastore, network, showPopup }
+  { navigate, showPopup }
 ): Promise<any> => {
   const applicationId = (await SharedPropsService.getUser())
     .linkedApplications[0].applicationId;
-  setInterval(() => {
-    const getApiLoad = async () => {
-      await network.get(
-        `${api.mandateStatus}${applicationId}`,
-        { headers: await getAppHeader() }
-      ).then(response => {
-        console.log('response.status: ', response.status);
-        if (response.status == '200') {
-          console.log("success",action)
+  const getApiLoad = async () => {
+    await fetch(`${api.mandateStatus}${applicationId}`, {
+      headers: await defaultHeaders(),
+    })
+      .then((response) => {
+        console.log("Loan WebView response status", response.status);
+        return response.json();
+      })
+      .then(async (response) => {
+        console.log("PollMandateStatus response", response);
+        /// handle response
+        if (response.stepResponseObject === "Finished") {
+          const user: User = await SharedPropsService.getUser();
+          user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
+            StepperStateToken.COMPLETED;
+          user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
+            StepperStateToken.IN_PROGRESS;
+          await SharedPropsService.setUser(user);
+          clearInterval(timer);
           navigate(ROUTE.LOAN_REPAYMENT);
           showPopup({
             type: "SUCCESS",
             title: "E-mandate successful!",
             subTitle: "Your autopay request has been submitted successfully.",
             ctaLabel: "Proceed to loan agreement",
-            ctaAction: action
+            ctaAction: {
+              ...action,
+              payload: <GoNextType>{
+                ...action.payload,
+                currentStepId: response.updatedApplicationObj.currentStepId,
+              },
+            },
           });
-        }else{
-          console.log("error");
+        } else if (response.stepResponseObject === "Failed") {
+          clearInterval(timer);
+          await navigate(ROUTE.ALERT_PAGE, {
+            alertProps: {
+              iconName: IconTokens.Failed,
+              title: "AutoPay setup failed!",
+              subTitle:
+                "Bank account must be linked for AutoPay. Please try again.",
+              type: "DEFAULT",
+              ctaLabel: "Continue to try again",
+              primary: true,
+              ctaAction: {
+                type: ACTION.GO_LOAN_AUTO_PAY,
+                routeId: ROUTE.LOAN_WEBVIEW,
+                payload: {},
+              },
+            },
+          });
         }
-      })
-    }
-
+      });
+  };
+  const timer = setInterval(() => {
+    getApiLoad();
   }, 5000);
-}
-
-
-// export const getPolingData: ActionFunction<any> = async (
-//   action,
-//   _datastore,
-//   { navigate, setDatastore, network, showPopup }
-// ): Promise<any> => {
-
-//   const applicationId = (await SharedPropsService.getUser())
-//     .linkedApplications[0].applicationId;
-
-//   const getApiLoad = async () => {
-//     await network.get(
-//       `${api.mandateStatus}${applicationId}`,
-//       { headers: await getAppHeader() }
-//     );
-//   }
-
-//   const getLoaderStatus = async () => {
-//     setInterval(getApiLoad, 10000);
-//   }
-
-//   const response = await getLoaderStatus();
-
-//   if (
-//     _.get(
-//       response,
-//       "data.status",
-//       "NOT_COMPLETED"
-//     ) === "SUCCESS"
-//   ) {
-//     navigate(ROUTE.LOAN_REPAYMENT);
-//     showPopup({
-//       type: "SUCCESS",
-//       title: "E-mandate successful!",
-//       subTitle: "Your autopay request has been submitted successfully.",
-//       ctaLabel: "Proceed to loan agreement",
-//       ctaAction: action
-//     });
-//   } else {
-//     console.log("response" + response)
-//   }
-// };
-
-export const GoNext: ActionFunction<any> = async (
+};
+export const GoNext: ActionFunction<GoNextType> = async (
   action,
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
+  await goBack();
+  // const route = await nextStepId(action.payload.currentStepId);
+  // console.warn("GoNext", action.payload.currentStepId, route);
+  // await navigate(route.routeId, route.params);
   await navigate(ROUTE.LOAN_AGREEMENT);
+};
+export const NavLoanAutoPay: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  await goBack();
+  await navigate(ROUTE.LOAN_AUTOPAY);
 };

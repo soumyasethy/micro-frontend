@@ -9,27 +9,26 @@ import {
 } from "@voltmoney/types";
 import {
   AmountCardProps,
-  ButtonBaseProps,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   CardProps,
   ColorTokens,
-  FontFamilyTokens,
-  FontSizeTokens,
   HeaderProps,
   IconAlignmentTokens,
-  IconProps,
-  IconSizeTokens,
   IconTokens,
   PromoCardProps,
   SizeTypeTokens,
   SpaceProps,
-  TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import {ACTION, AvailableCASItem, LimitPayload, StepResponseObject} from "./types";
+import {
+  ACTION,
+  AvailableCASItem,
+  LimitPayload,
+  StepResponseObject,
+} from "./types";
 import { continueLimit, modifyLimit } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 
@@ -80,7 +79,10 @@ export const template: (
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
       title: "Approved Cash Limit",
-      subTitle: `${availableCreditAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ','),
+      subTitle: `${availableCreditAmount}`.replace(
+        /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+        ","
+      ),
       chipText: "How?",
       type: "default",
     },
@@ -89,7 +91,7 @@ export const template: (
       bgColor: ColorTokens.Grey_Milk,
       padding: {
         left: SizeTypeTokens.XXXL,
-        right: SizeTypeTokens.XXXL
+        right: SizeTypeTokens.XXXL,
       },
       body: {
         widgetItems: [

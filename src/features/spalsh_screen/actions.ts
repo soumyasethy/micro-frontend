@@ -14,6 +14,7 @@ export const SplashAction: ActionFunction<any> = async (
   if (accessToken) {
     try {
       const user: User = await fetchUserDetails();
+      // return navigate(ROUTE.WITHDRAW_AMOUNT)
       if (Object.keys(user).length > 0) {
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
@@ -21,7 +22,6 @@ export const SplashAction: ActionFunction<any> = async (
           const nextRoute = await nextStepId(
             user.linkedApplications[0].currentStepId
           );
-
           await navigate(nextRoute.routeId, nextRoute.params);
          //  await navigate(ROUTE.MY_PROFILE);
 

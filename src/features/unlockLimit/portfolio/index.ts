@@ -8,9 +8,6 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
-  ButtonProps,
-  ButtonTypeTokens,
-  ButtonWidthTypeToken,
   CtaCardProps,
   HeaderProps,
   IconTokens,
@@ -39,7 +36,9 @@ import {
   ToggleSelectAction,
   getTotalLimit,
   EditItem,
-  SearchPortfolio, ClearSearchPortfolio,
+  SearchPortfolio,
+  ClearSearchPortfolio,
+  getActualLimit,
 } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
@@ -51,7 +50,7 @@ export const template: (
 
   let dataUI: ListItemDataProps[] = [
     ...stepResponseObject.availableCAS.map((availableCASItem, index) => {
-      selectedItemMap[index] = true;
+      selectedItemMap[index] = availableCASItem.pledgedUnits > 0;
       return {
         label: availableCASItem.schemeName, //"Axis Long Term Equity Mutual Funds",
         info: "",
@@ -60,12 +59,12 @@ export const template: (
           [availableCASItem],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`, //"₹4,000",
-        trailSubTitle: `/ ₹${getTotalLimit(
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","), //"₹4,000",
+        trailSubTitle: `/ ₹${getActualLimit(
           [availableCASItem],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`,
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         action: "edit",
         trailIconAction: {
           type: ACTION.EDIT_ITEM,
@@ -157,7 +156,7 @@ export const template: (
           stepResponseObject.availableCAS,
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`,
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         actionLabel: "Confirm & get OTP",
         action: {
           type: ACTION.PORTFOLIO,
@@ -182,4 +181,5 @@ export const portfolioMF: PageType<any> = {
     [ACTION.TOGGLE_ITEM]: ToggleSelectAction,
     [ACTION.EDIT_ITEM]: EditItem,
   },
+  clearPrevious: true,
 };

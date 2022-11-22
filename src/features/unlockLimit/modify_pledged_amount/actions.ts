@@ -7,7 +7,7 @@ import {
   ListItemDataProps,
   ListProps,
 } from "@voltmoney/schema";
-import { getTotalLimit } from "../portfolio/actions";
+import { getActualLimit, getTotalLimit } from "../portfolio/actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { ACTION, EditItemPayload } from "../portfolio/types";
 import { AvailableCASItem } from "../unlock_limit/types";
@@ -19,11 +19,11 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
   _datastore,
   { setDatastore, goBack }
 ): Promise<any> => {
+  const updateAvailableCASMapX = await SharedPropsService.getAvailableCASMap();
   const stepResponseObject = action.payload.stepResponseObject;
   const availableCASItem =
-    action.payload.stepResponseObject.availableCAS[action.payload.index];
+    stepResponseObject.availableCAS[action.payload.index];
   let key = `${availableCASItem.isinNo}-${availableCASItem.folioNo}`;
-  const updateAvailableCASMapX = await SharedPropsService.getAvailableCASMap();
 
   let pledgedUnitsCalculated: number =
     amount /
@@ -33,11 +33,9 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
   if (_.get(action, "payload.amount", false) || amount === 0) {
     pledgedUnitsCalculated = 0;
   }
+  updateAvailableCASMapX[key].pledgedUnits = pledgedUnitsCalculated;
 
-  updateAvailableCASMapX[key] = {
-    ...updateAvailableCASMapX[key],
-    pledgedUnits: pledgedUnitsCalculated,
-  };
+  await SharedPropsService.setAvailableCASMap(updateAvailableCASMapX);
 
   const selectedCAS: AvailableCASItem[] = [];
   Object.keys(updateAvailableCASMapX).forEach((key) => {
@@ -60,13 +58,13 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
           action.payload.selectedMap.hasOwnProperty(i) &&
           action.payload.selectedMap[i]
             ? getTotalLimit(
-                [availableCASItem],
+                [updateAvailableCASMapX[key]],
                 stepResponseObject.isinNAVMap,
                 stepResponseObject.isinLTVMap
               )
             : 0
         }`, //"₹4,000",
-        trailSubTitle: `/ ₹${getTotalLimit(
+        trailSubTitle: `/ ₹${getActualLimit(
           [
             {
               ...availableCASItem,
@@ -104,6 +102,13 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMapX);
   await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
     info: `${totalAmount}`,
+  });
+
+  action.payload.selectedMap[action.payload.index] =
+    availableCASItem.pledgedUnits > 0;
+  await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps>{
+    data: filteredList,
+    selectedMap: { ...action.payload.selectedMap },
   });
   await goBack();
 };
