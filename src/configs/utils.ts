@@ -77,6 +77,20 @@ export const horizontalStepperRepo = async () => {
     MANDATE_SETUP = StepperStateToken.COMPLETED;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.NOT_STARTED ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.NOT_STARTED
+  ) {
+    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.IN_PROGRESS ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.IN_PROGRESS
+  ) {
+    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION
@@ -187,6 +201,38 @@ export const stepperRepo = async () => {
   } else {
     KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
   }
+  let MANDATE_SETUP: StepperStateToken;
+  if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.COMPLETED ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.COMPLETED
+  ) {
+    MANDATE_SETUP = StepperStateToken.COMPLETED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.NOT_STARTED ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.NOT_STARTED
+  ) {
+    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.IN_PROGRESS ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.IN_PROGRESS
+  ) {
+    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION
+  ) {
+    MANDATE_SETUP = StepperStateToken.PENDING_MANUAL_VERIFICATION;
+  } else {
+    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
+  }
 
   const data: StepperItem[] = [
     {
@@ -213,18 +259,17 @@ export const stepperRepo = async () => {
           ? message
           : "",
     },
+
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
       title: "Repayment",
       subTitle: "Link your bank account for auto repayment",
-      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      status: MANDATE_SETUP,
       message:
-        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-        StepperStateToken.COMPLETED
+        MANDATE_SETUP === StepperStateToken.COMPLETED
           ? ""
-          : user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-            StepperStateToken.IN_PROGRESS
+          : MANDATE_SETUP === StepperStateToken.IN_PROGRESS
           ? message
           : "",
     },
