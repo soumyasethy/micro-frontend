@@ -1,6 +1,10 @@
-import { ActionFunction } from "@voltmoney/types";
+import { ActionFunction, WidgetProps } from "@voltmoney/types";
 import { ROUTE } from "../../../../routes";
-import { AmountPayload, CreateDisbursementRequestPayload } from "./types";
+import {
+  ACTION,
+  AmountPayload,
+  CreateDisbursementRequestPayload,
+} from "./types";
 import { api } from "../../../../configs/api";
 import { getAppHeader } from "../../../../configs/config";
 import SharedPropsService from "../../../../SharedPropsService";
@@ -10,7 +14,10 @@ import {
   IconSizeTokens,
   IconTokens,
   MessageProps,
+  SizeTypeTokens,
+  SpaceProps,
   TextInputProps,
+  WIDGET,
 } from "@voltmoney/schema";
 import { User } from "../../../login/otp_verify/types";
 
@@ -54,10 +61,19 @@ export const goBack: ActionFunction<AmountPayload> = async (
 ): Promise<any> => {
   await goBack();
 };
-export const OnAmountChange: ActionFunction<AmountPayload> = async (
+export const SetRecommendedAmount: ActionFunction<AmountPayload> = async (
   action,
   _datastore,
   { setDatastore }
+): Promise<any> => {
+  await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountItem", <TextInputProps>{
+    value: action.payload.value,
+  });
+};
+export const OnAmountChange: ActionFunction<AmountPayload> = async (
+  action,
+  _datastore,
+  { setDatastore, appendWidgets, removeWidgets }
 ): Promise<any> => {
   disbursalAmount = parseFloat(action.payload.value);
   const currentApplicableInterestRate = (await SharedPropsService.getUser())
@@ -90,7 +106,39 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
       labelColor: ColorTokens.Grey_Charcoal,
       bgColor: ColorTokens.Grey_Milk_1,
     });
+
+    await appendWidgets(
+      ROUTE.WITHDRAW_AMOUNT,
+      {
+        amountMessage: <MessageProps & WidgetProps>{
+          label: "Recommended to use 90% of the limit" + recommendedAmount,
+          actionText: "Confirm",
+          icon: <IconProps>{
+            name: IconTokens.Info,
+            size: IconSizeTokens.SM,
+            color: ColorTokens.Grey_Charcoal,
+          },
+          labelColor: ColorTokens.Grey_Charcoal,
+          bgColor: ColorTokens.Grey_Milk_1,
+          action: {
+            type: ACTION.SET_RECOMENDED_AMOUNT,
+            routeId: ROUTE.WITHDRAW_AMOUNT,
+            payload: <AmountPayload>{ value: `${recommendedAmount}` },
+          },
+        },
+        amountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      },
+      [
+        { id: "amountMessage", type: WIDGET.MESSAGE },
+        { id: "amountSpace", type: WIDGET.SPACE },
+      ],
+      "amountMsgSpace"
+    );
   } else {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountMessage", null);
+    await removeWidgets(ROUTE.WITHDRAW_AMOUNT, [
+      { id: "amountMessage", type: WIDGET.MESSAGE },
+      { id: "amountSpace", type: WIDGET.SPACE },
+    ]);
   }
 };

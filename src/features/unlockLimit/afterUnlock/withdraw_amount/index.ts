@@ -34,7 +34,7 @@ import {
   AmountPayload,
   CreateDisbursementRequestPayload,
 } from "./types";
-import { CreateDisbursementRequest, goBack, OnAmountChange } from "./action";
+import {CreateDisbursementRequest, goBack, OnAmountChange, SetRecommendedAmount} from "./action";
 
 export const template: (availableCreditAmount: number) => TemplateSchema = (
   availableCreditAmount
@@ -48,8 +48,8 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
         { id: "headerSpace", type: WIDGET.SPACE },
         { id: "amountItem", type: WIDGET.INPUT },
         { id: "amountMsgSpace", type: WIDGET.SPACE },
-        { id: "amountMessage", type: WIDGET.MESSAGE },
-        { id: "amountSpace", type: WIDGET.SPACE },
+        // { id: "amountMessage", type: WIDGET.MESSAGE },
+        // { id: "amountSpace", type: WIDGET.SPACE },
         { id: "interestItem", type: WIDGET.INPUT },
         { id: "interestMessage", type: WIDGET.TEXT },
         { id: "inputSpace", type: WIDGET.SPACE },
@@ -110,7 +110,7 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
       //   labelColor: ColorTokens.Grey_Charcoal,
       //   bgColor: ColorTokens.Grey_Milk_1,
       // },
-      amountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      // amountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       interestItem: <TextInputProps & WidgetProps>{
         isFocus: false,
         value: `0`,
@@ -160,6 +160,7 @@ export const withdraw_amountMF: PageType<any> = {
   actions: {
     [ACTION.WITHDRAW_AMOUNT]: CreateDisbursementRequest,
     [ACTION.ON_AMOUNT_CHANGE]: OnAmountChange,
+    [ACTION.SET_RECOMENDED_AMOUNT]: SetRecommendedAmount,
     [ACTION.GO_BACK]: goBack,
   },
   clearPrevious: true,
