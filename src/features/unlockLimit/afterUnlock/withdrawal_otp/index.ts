@@ -106,8 +106,8 @@ export const template: (
         0,
         4
       )}*******${mobileNumber.substring(
-        mobileNumber.length - 3,
-        mobileNumber.length - 1
+        mobileNumber.length - 2,
+        mobileNumber.length
       )}`,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
@@ -160,4 +160,5 @@ export const withdrawalOtpMF: PageType<any> = {
     [ACTION.RESEND_WITHDRAWAL_OTP]: CreateDisbursementRequest,
     [ACTION.GO_BACK]: goBack,
   },
+  clearPrevious: true,
 };

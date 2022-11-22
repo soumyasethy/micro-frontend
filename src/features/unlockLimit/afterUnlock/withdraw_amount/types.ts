@@ -7,6 +7,7 @@ export enum ACTION {
 
 export type AmountPayload = {
   value: string;
+  availableCreditAmount:string
 };
 
 export type CreateDisbursementRequestPayload = {

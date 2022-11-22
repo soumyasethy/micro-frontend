@@ -9,6 +9,8 @@ import { api } from "../../../../configs/api";
 import { getAppHeader } from "../../../../configs/config";
 import SharedPropsService from "../../../../SharedPropsService";
 import {
+  ButtonProps,
+  ButtonTypeTokens,
   ColorTokens,
   IconProps,
   IconSizeTokens,
@@ -78,7 +80,19 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
   _datastore,
   { setDatastore, appendWidgets, removeWidgets }
 ): Promise<any> => {
+  if (action.payload.value.length > 0) {
+    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    });
+  } else {
+    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeOutline,
+    });
+  }
+
   disbursalAmount = parseFloat(action.payload.value);
+  console.warn("***** disbursalAmount *****", disbursalAmount);
+
   const currentApplicableInterestRate = (await SharedPropsService.getUser())
     .linkedCredits[0].currentApplicableInterestRate;
   const monthlyInterest =
@@ -115,7 +129,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
             type: ACTION.SET_RECOMENDED_AMOUNT,
             routeId: ROUTE.WITHDRAW_AMOUNT,
             payload: <AmountPayload>{
-              value: `${recommendedAmount}`/*.replace(
+              value: `${recommendedAmount}` /*.replace(
                 /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
                 ","
               )*/,
@@ -130,11 +144,17 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
       ],
       "amountMsgSpace"
     );
+    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeOutline,
+    });
   } else {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountMessage", null);
     await removeWidgets(ROUTE.WITHDRAW_AMOUNT, [
       { id: "amountMessage", type: WIDGET.MESSAGE },
       { id: "amountSpace", type: WIDGET.SPACE },
     ]);
+    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    });
   }
 };

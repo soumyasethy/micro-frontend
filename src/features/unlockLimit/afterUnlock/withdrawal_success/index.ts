@@ -166,4 +166,5 @@ export const withdrawalSuccessMF: PageType<any> = {
     [ACTION.WITHDRAWAL_SUCCESS]: Done,
     [ACTION.GO_BACK]: goBack,
   },
+  clearPrevious: true,
 };

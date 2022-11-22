@@ -142,7 +142,7 @@ export const template: (
       inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       continue: <ButtonProps & WidgetProps>{
         label: "Confirm & get OTP",
-        type: ButtonTypeTokens.LargeFilled,
+        type: ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.WITHDRAW_AMOUNT,

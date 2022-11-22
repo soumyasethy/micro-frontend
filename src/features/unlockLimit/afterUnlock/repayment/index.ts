@@ -21,6 +21,7 @@ import {
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
+  IconTokens,
   ImageProps,
   ImageSizeTokens,
   ListItemProps,
@@ -44,11 +45,15 @@ import { User } from "../../../login/otp_verify/types";
 export const template: (
   repaymentAmount: string,
   bankAccountNumber: string,
-  bankIfscCode: string
+  bankIfscCode: string,
+  bankName: string,
+  bankCode: string
 ) => TemplateSchema = (
   repaymentAmount,
   bankAccountNumber: string,
-  bankIfscCode: string
+  bankIfscCode: string,
+  bankName: string,
+  bankCode: string
 ) => ({
   layout: <Layout>{
     id: ROUTE.REPAYMENT,
@@ -145,7 +150,7 @@ export const template: (
       ],
     },
     leadItem: <ImageProps>{
-      uri: "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
+      uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
       size: ImageSizeTokens.SM,
       aspectRatio: AspectRatioToken.A1_1,
       borderRadius: BorderRadiusTokens.BR5,
@@ -153,7 +158,7 @@ export const template: (
     },
     space: <SpaceProps>{ size: SizeTypeTokens.SM },
     data: <TypographyProps>{
-      label: "HDFC Bank",
+      label: `${bankName}`,
       fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Inter,
@@ -170,15 +175,15 @@ export const template: (
     listItem1: <ListItemProps>{
       title: "IFSC",
       subTitle: `${bankIfscCode}`,
-      // trailIconName: IconTokens.Copy,
       trailLabel: "Copy",
+      trailIconName: IconTokens.Copy,
       onPress: () => {},
     },
     listItem2: <ListItemProps>{
       title: "Account number",
       subTitle: `${bankAccountNumber}`,
-      // trailIconName: IconTokens.Copy,
       trailLabel: "Copy",
+      trailIconName: IconTokens.Copy,
       onPress: () => {},
     },
     listSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
@@ -209,16 +214,15 @@ export const repaymentMF: PageType<any> = {
         headers: await getAppHeader(),
       }
     );
-    const { bankAccountNumber, bankIfscCode } = response.data;
-
-    console.warn("repaymentMF response", response);
+    const { bankName, bankCode, accountNumber, ifscCode } = response.data;
 
     return Promise.resolve(
-      template(repaymentAmount, bankAccountNumber, bankIfscCode)
+      template(repaymentAmount, accountNumber, ifscCode, bankName, bankCode)
     );
   },
   actions: {
     [ACTION.REPAYMENT]: repayment,
     [ACTION.GO_BACK]: goBack,
   },
+  clearPrevious: true,
 };
