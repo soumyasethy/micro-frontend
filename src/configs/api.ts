@@ -30,5 +30,6 @@ export const api = {
   mandateStatus: `${config.baseUrl}/app/borrower/application/mandate/status/`,
   agreementLink: `${config.baseUrl}/app/borrower/application/agreement/link/`,
   agreementStatus: `${config.baseUrl}/app/borrower/application/agreement/status/`,
-  approvalCheck: `${config.baseUrl}/app/borrower/application/approval/check/`
+  approvalCheck: `${config.baseUrl}/app/borrower/application/approval/check/`,
+  userProfile: `${config.baseUrl}/app/borrower/userProfile/`
 };

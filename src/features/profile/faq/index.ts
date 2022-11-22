@@ -48,7 +48,7 @@ export const template: (
                     },
                     {
                         id: "detailScreen", type: WIDGET.STACK, padding: {
-                            left: 10, right: 0
+                            left: 16, right: 16
                         }
                     },
                     // {
@@ -92,8 +92,8 @@ export const template: (
                     ]
                 },
                 icon: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
-                    width: ButtonWidthTypeToken.CONTENT,
+                    type: ButtonTypeTokens.SmallGhost,
+                   // width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChevronDown,
                         size: IconSizeTokens.SM,
@@ -126,6 +126,7 @@ export const template: (
                     ]
                 },
                 contactBlock: <ButtonProps>{
+                    labelColor:ColorTokens.Primary_100,
                     label:"Contact us",
                     type: ButtonTypeTokens.MediumOutline,
                     width: ButtonWidthTypeToken.CONTENT,
@@ -199,8 +200,8 @@ export const template: (
                     ]
                 },
                 cta1: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
-                    width: ButtonWidthTypeToken.CONTENT,
+                    type: ButtonTypeTokens.SmallGhost,
+                   // width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChervonDownRight,
                         size: IconSizeTokens.MD,
@@ -268,8 +269,8 @@ export const template: (
                     ]
                 },
                 cta1Withdrawal: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
-                    width: ButtonWidthTypeToken.CONTENT,
+                    type: ButtonTypeTokens.SmallGhost,
+                  //  width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChervonDownRight,
                         size: IconSizeTokens.SM,
@@ -337,8 +338,8 @@ export const template: (
                     ]
                 },
                 cta1kyc: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
-                    width: ButtonWidthTypeToken.CONTENT,
+                    type: ButtonTypeTokens.SmallGhost,
+                 //   width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChervonDownRight,
                         size: IconSizeTokens.SM,

@@ -35,14 +35,22 @@ import {
     WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, ProfilePayload } from "./types";
-import { accountDetails, contactDetails, faqDetails, goBack } from "./actions";
+import { ACTION, ProfileDetails, ProfilePayload } from "./types";
+import { aboutDetails, accountDetails, contactDetails, faqDetails, goBack, logout } from "./actions";
 import { AccountPayload } from "../account_details/types";
-export const template: (
-) => TemplateSchema = (
-    ) => {
+import { fetchUserProfileRepo } from "./repo";
 
-        return {
+export const template: (
+    userName: string,
+    profileData: ProfileDetails
+  ) => TemplateSchema = (
+    userName,profileData
+  ) => ({
+// export const template: (
+// ) => TemplateSchema = (
+//     ) => {
+
+        // return {
             layout: <Layout>{
                 id: ROUTE.MY_PROFILE,
                 type: LAYOUTS.LIST,
@@ -50,17 +58,16 @@ export const template: (
                     {
                         id: "header", type: WIDGET.CARD, position: POSITION.FIXED_TOP
                     },
+                    
                     {
                         id: "detailScreen", type: WIDGET.STACK, padding: {
-                            left: 10, right: 0
+                            left: 16, right: 16
                         }
                     },
                     {
                         id: "bottomStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM,
                         padding:{
-                            all:0,
-                            horizontal:0,
-                            vertical:0
+                            left: 16, right: 16
                         }
                     },
                 ],
@@ -104,7 +111,7 @@ export const template: (
                 },
                 space0: <SpaceProps>{ size: SizeTypeTokens.LG },
                 nameElement: <TypographyProps>{
-                    label: "Lalit Bihani",
+                    label: `${userName}`,
                     color: ColorTokens.Grey_Night,
                     fontSize: FontSizeTokens.MD,
                     fontFamily: FontFamilyTokens.Inter,
@@ -119,8 +126,8 @@ export const template: (
                     ]
                 },
                 cancelBlock: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
-                    width: ButtonWidthTypeToken.CONTENT,
+                    type: ButtonTypeTokens.SmallGhost,
+                    //width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.Cancel,
                         size: IconSizeTokens.MD,
@@ -131,10 +138,11 @@ export const template: (
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
                     margin: {
-                        vertical: SizeTypeTokens.SM,
+                        vertical: SizeTypeTokens.XS,
                         horizontal: SizeTypeTokens.SM,
                     },
                 },
+              
                 detailScreen: <StackProps>{
                     widgetItems: [
                         { id: "accountCard", type: WIDGET.CARD },
@@ -158,7 +166,7 @@ export const template: (
                     flex: 1,
                     widgetItems: [
                         { id: "infoItems", type: WIDGET.STACK },
-                        { id: "cta", type: WIDGET.STACK }
+                       { id: "cta", type: WIDGET.STACK }
                     ]
                 },
                 infoItems: <StackProps>{
@@ -200,17 +208,17 @@ export const template: (
                     ]
                 },
                 cta1: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
-                    width: ButtonWidthTypeToken.CONTENT,
+                    type: ButtonTypeTokens.SmallGhost,
+                   // width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChervonDownRight,
                         size: IconSizeTokens.MD,
-                        color: ColorTokens.Grey_Charcoal
+                        color: ColorTokens.Grey_Night
                     },
                     action: {
                         type: ACTION.PROFILE,
-                        payload: <{}>{
-                          value: "",
+                        payload: <ProfilePayload>{
+                          value: profileData,
                           widgetId: "continue",
                           isResend: false,
                         },
@@ -279,12 +287,12 @@ export const template: (
                     ]
                 },
                 cta1Faq: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
-                    width: ButtonWidthTypeToken.CONTENT,
+                    type: ButtonTypeTokens.SmallGhost,
+                  //  width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChervonDownRight,
                         size: IconSizeTokens.SM,
-                        color: ColorTokens.Grey_Charcoal
+                        color: ColorTokens.Grey_Night
                     },
                     action: {
                         type: ACTION.FAQ,
@@ -358,12 +366,12 @@ export const template: (
                     ]
                 },
                 cta1Contact: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
-                    width: ButtonWidthTypeToken.CONTENT,
+                    type: ButtonTypeTokens.SmallGhost,
+                   // width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChervonDownRight,
                         size: IconSizeTokens.SM,
-                        color: ColorTokens.Grey_Charcoal
+                        color: ColorTokens.Grey_Night
                     },
                     action: {
                         type: ACTION.CONTACT_US,
@@ -397,7 +405,16 @@ export const template: (
                             { id: "aboutUsDetails", type: WIDGET.STACK },
                             { id: "aboutUsDivider", type: WIDGET.DIVIDER },
                         ]
-                    }
+                    },
+                    action: {
+                        type: ACTION.ABOUT,
+                        payload: <{}>{
+                          value: "",
+                          widgetId: "continue",
+                          isResend: false,
+                        },
+                        routeId: ROUTE.MY_PROFILE,
+                      },
                 },
                 aboutUsDetails: <StackProps>{
                     type: StackType.row,
@@ -405,6 +422,7 @@ export const template: (
                     flex: 1,
                     widgetItems: [
                         { id: "aboutUsItems", type: WIDGET.STACK },
+                        { id: "aboutUsSpace0", type: WIDGET.SPACE },
                       //  { id: "aboutUsCta", type: WIDGET.STACK }
                     ]
                 },
@@ -436,11 +454,14 @@ export const template: (
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "500",
                 },
+                aboutUsSpace0: <SpaceProps>{
+                    size: SizeTypeTokens.MD
+                },
                 aboutUsDivider: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
                     margin: {
-                        vertical: SizeTypeTokens.SM,
+                        vertical: SizeTypeTokens.XS,
                         horizontal: SizeTypeTokens.SM,
                     },
                 },
@@ -449,8 +470,18 @@ export const template: (
                     body: {
                         widgetItems: [
                             { id: "logoutDetails", type: WIDGET.STACK }
-                        ]
-                    }
+                        ],
+                      
+                    },
+                    action: {
+                        type: ACTION.LOGOUT,
+                        payload: <{}>{
+                          value: "",
+                          widgetId: "continue",
+                          isResend: false,
+                        },
+                        routeId: ROUTE.MY_PROFILE,
+                      },
                 },
                 logoutDetails: <StackProps>{
                     type: StackType.row,
@@ -490,22 +521,27 @@ export const template: (
                 },
                 
             },
-        };
-    };
+     //   };
+    });
 
 export const myProfileMF: PageType<any> = {
-    onLoad: async () => {
-
+    onLoad: async ({}, { response }) => {
+        const responseX = response ? response : await fetchUserProfileRepo();
+        const userName: string =
+          responseX.name;
+        const profileData = responseX;
         return Promise.resolve(
-            template()
-        );
+            template(userName,profileData)
+          );
     },
 
     actions: {
         [ACTION.PROFILE]: accountDetails,
         [ACTION.CONTACT_US]: contactDetails,
         [ACTION.FAQ]: faqDetails,
-        [ACTION.BACK_BUTTON]: goBack
+        [ACTION.BACK_BUTTON]: goBack,
+        [ACTION.LOGOUT]: logout,
+        [ACTION.ABOUT]: aboutDetails
     },
     bgColor: "#FFFFFF",
 };

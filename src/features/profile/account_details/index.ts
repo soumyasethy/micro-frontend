@@ -32,8 +32,10 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, AccountPayload } from "./types";
 import { goBack } from "./actions";
+import { ProfileDetails } from "../my_profile/types";
 export const template: (
-) => TemplateSchema = (
+    profileData: ProfileDetails
+) => TemplateSchema = (profileData
     ) => {
         return {
             layout: <Layout>{
@@ -76,7 +78,7 @@ export const template: (
                 list1: <ListItemProps>{
                     title: 'Name',
                     subTitle: 'Lalit Bihani',
-                    leadIconName: IconTokens.Account,
+                    leadIconName: IconTokens.User,
                     onPress: () => { },
                 },
                 list2: <ListItemProps>{
@@ -155,10 +157,10 @@ export const template: (
     };
 
 export const accountDetailsMF: PageType<any> = {
-    onLoad: async () => {
+    onLoad: async ({}, { profileData }) => {
 
         return Promise.resolve(
-            template()
+            template(profileData as ProfileDetails)
         );
     },
 

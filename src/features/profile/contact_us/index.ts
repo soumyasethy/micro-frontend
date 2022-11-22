@@ -15,8 +15,10 @@ import {
     FontFamilyTokens,
     FontSizeTokens,
     HeaderProps,
+    IconTokens,
     ImageProps,
     ImageSizeTokens,
+    ListItemProps,
     ShadowTypeTokens,
     SizeTypeTokens,
     SpaceProps,
@@ -84,49 +86,56 @@ export const template: (
                     shadow:ShadowTypeTokens.E2,
                     body: {
                         widgetItems: [
-                            { id: "imageOrder", type: WIDGET.STACK },
+                            { id: "list1", type: WIDGET.LIST_ITEM },
+                          //  { id: "imageOrder", type: WIDGET.STACK },
                         ],
                     },
                 },
-                imageOrder: <StackProps>{
-                    type: StackType.row,
-                    widgetItems: [
-                        { id: "imageItem", type: WIDGET.IMAGE },
-                        { id: "space3", type: WIDGET.SPACE },
-                        { id: "textItem", type: WIDGET.STACK }
-                    ]
+                list1: <ListItemProps>{
+                    title: 'WhatsApp',
+                    subTitle: 'Ask your queries anytime',
+                    leadIconName: IconTokens.Whatsapp,
+                    onPress: () => { },
                 },
-                imageItem: <ImageProps>{
-                    uri: 'https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50',
-                    size: ImageSizeTokens.SM,
-                    aspectRatio: AspectRatioToken.A1_1,
-                    borderRadius: BorderRadiusTokens.BR5,
-                    padding: SizeTypeTokens.SM,
-                },
-                space3: <SpaceProps>{ size: SizeTypeTokens.MD },
-                textItem: <StackProps>{
-                    type: StackType.column,
-                    widgetItems: [
-                        { id: "text1", type: WIDGET.TEXT },
-                        { id: "space4", type: WIDGET.SPACE },
-                        { id: "text2", type: WIDGET.TEXT }
-                    ]
-                },
-                text1: <TypographyProps>{
-                    label: "WhatsApp",
-                    color: ColorTokens.Grey_Night,
-                    fontSize: FontSizeTokens.SM,
-                    fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "600",
-                },
-                space4: <SpaceProps>{ size: SizeTypeTokens.XS },
-                text2: <TypographyProps>{
-                    label: "Ask your queries anytime",
-                    color: ColorTokens.Grey_Charcoal,
-                    fontSize: FontSizeTokens.XS,
-                    fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "400",
-                },
+                // imageOrder: <StackProps>{
+                //     type: StackType.row,
+                //     widgetItems: [
+                //         { id: "imageItem", type: WIDGET.IMAGE },
+                //         { id: "space3", type: WIDGET.SPACE },
+                //         { id: "textItem", type: WIDGET.STACK }
+                //     ]
+                // },
+                // imageItem: <ImageProps>{
+                //     uri: 'https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50',
+                //     size: ImageSizeTokens.SM,
+                //     aspectRatio: AspectRatioToken.A1_1,
+                //     borderRadius: BorderRadiusTokens.BR5,
+                //     padding: SizeTypeTokens.SM,
+                // },
+                // space3: <SpaceProps>{ size: SizeTypeTokens.MD },
+                // textItem: <StackProps>{
+                //     type: StackType.column,
+                //     widgetItems: [
+                //         { id: "text1", type: WIDGET.TEXT },
+                //         { id: "space4", type: WIDGET.SPACE },
+                //         { id: "text2", type: WIDGET.TEXT }
+                //     ]
+                // },
+                // text1: <TypographyProps>{
+                //     label: "WhatsApp",
+                //     color: ColorTokens.Grey_Night,
+                //     fontSize: FontSizeTokens.SM,
+                //     fontFamily: FontFamilyTokens.Inter,
+                //     fontWeight: "600",
+                // },
+                // space4: <SpaceProps>{ size: SizeTypeTokens.XS },
+                // text2: <TypographyProps>{
+                //     label: "Ask your queries anytime",
+                //     color: ColorTokens.Grey_Charcoal,
+                //     fontSize: FontSizeTokens.XS,
+                //     fontFamily: FontFamilyTokens.Inter,
+                //     fontWeight: "400",
+                // },
                 space1: <SpaceProps>{ size: SizeTypeTokens.XL },
                 callCard: <CardProps>{
                     bgColor: ColorTokens.White,
@@ -134,99 +143,113 @@ export const template: (
                     shadow:ShadowTypeTokens.E2,
                     body: {
                         widgetItems: [
-                            { id: "imageOrder1", type: WIDGET.STACK },
+                           // { id: "imageOrder1", type: WIDGET.STACK },
+                            { id: "list2", type: WIDGET.LIST_ITEM },
                         ],
                     },
                 },
-                imageOrder1: <StackProps>{
-                    type: StackType.row,
-                    widgetItems: [
-                        { id: "imageItem1", type: WIDGET.IMAGE },
-                        { id: "space5", type: WIDGET.SPACE },
-                        { id: "textItem1", type: WIDGET.STACK }
-                    ]
+                list2: <ListItemProps>{
+                    title: 'Call',
+                    subTitle: 'Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM',
+                    leadIconName: IconTokens.Phone,
+                    onPress: () => { },
                 },
-                imageItem1: <ImageProps>{
-                    uri: 'https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50',
-                    size: ImageSizeTokens.SM,
-                    aspectRatio: AspectRatioToken.A1_1,
-                    borderRadius: BorderRadiusTokens.BR5,
-                    padding: SizeTypeTokens.SM,
-                },
-                space5: <SpaceProps>{ size: SizeTypeTokens.MD },
-                textItem1: <StackProps>{
-                    type: StackType.column,
-                    widgetItems: [
-                        { id: "text3", type: WIDGET.TEXT },
-                        { id: "space6", type: WIDGET.SPACE },
-                        { id: "text4", type: WIDGET.TEXT }
-                    ]
-                },
-                text3: <TypographyProps>{
-                    label: "Call",
-                    color: ColorTokens.Grey_Night,
-                    fontSize: FontSizeTokens.SM,
-                    fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "600",
-                },
-                space6: <SpaceProps>{ size: SizeTypeTokens.XS },
-                text4: <TypographyProps>{
-                    label: "Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM",
-                    color: ColorTokens.Grey_Charcoal,
-                    fontSize: FontSizeTokens.XS,
-                    fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "400",
-                },
-                space2: <SpaceProps>{ size: SizeTypeTokens.MD },
+                // imageOrder1: <StackProps>{
+                //     type: StackType.row,
+                //     widgetItems: [
+                //         { id: "imageItem1", type: WIDGET.IMAGE },
+                //         { id: "space5", type: WIDGET.SPACE },
+                //         { id: "textItem1", type: WIDGET.STACK }
+                //     ]
+                // },
+                // imageItem1: <ImageProps>{
+                //     uri: 'https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50',
+                //     size: ImageSizeTokens.SM,
+                //     aspectRatio: AspectRatioToken.A1_1,
+                //     borderRadius: BorderRadiusTokens.BR5,
+                //     padding: SizeTypeTokens.SM,
+                // },
+                // space5: <SpaceProps>{ size: SizeTypeTokens.MD },
+                // textItem1: <StackProps>{
+                //     type: StackType.column,
+                //     widgetItems: [
+                //         { id: "text3", type: WIDGET.TEXT },
+                //         { id: "space6", type: WIDGET.SPACE },
+                //         { id: "text4", type: WIDGET.TEXT }
+                //     ]
+                // },
+                // text3: <TypographyProps>{
+                //     label: "Call",
+                //     color: ColorTokens.Grey_Night,
+                //     fontSize: FontSizeTokens.SM,
+                //     fontFamily: FontFamilyTokens.Inter,
+                //     fontWeight: "600",
+                // },
+                // space6: <SpaceProps>{ size: SizeTypeTokens.XS },
+                // text4: <TypographyProps>{
+                //     label: "Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM",
+                //     color: ColorTokens.Grey_Charcoal,
+                //     fontSize: FontSizeTokens.XS,
+                //     fontFamily: FontFamilyTokens.Inter,
+                //     fontWeight: "400",
+                // },
+                space2: <SpaceProps>{ size: SizeTypeTokens.XL },
                 emailCard: <CardProps>{
                     bgColor: ColorTokens.White,
                     borderRadius:BorderRadiusTokens.BR2,
                     shadow:ShadowTypeTokens.E2,
                     body: {
                         widgetItems: [
-                            { id: "imageOrder2", type: WIDGET.STACK },
+                            { id: "list3", type: WIDGET.LIST_ITEM },
+                           // { id: "imageOrder2", type: WIDGET.STACK },
                         ],
                     },
                 },
-                imageOrder2: <StackProps>{
-                    type: StackType.row,
-                    widgetItems: [
-                        { id: "imageItem2", type: WIDGET.IMAGE },
-                        { id: "space7", type: WIDGET.SPACE },
-                        { id: "textItem2", type: WIDGET.STACK }
-                    ]
+                list3: <ListItemProps>{
+                    title: 'Email',
+                    subTitle: 'Email us at help@voltmoney.in',
+                    leadIconName: IconTokens.Email,
+                    onPress: () => { },
                 },
-                imageItem2: <ImageProps>{
-                    uri: 'https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50',
-                    size: ImageSizeTokens.SM,
-                    aspectRatio: AspectRatioToken.A1_1,
-                    borderRadius: BorderRadiusTokens.BR5,
-                    padding: SizeTypeTokens.SM,
-                },
-                space7: <SpaceProps>{ size: SizeTypeTokens.MD },
-                textItem2: <StackProps>{
-                    type: StackType.column,
-                    widgetItems: [
-                        { id: "text5", type: WIDGET.TEXT },
-                        { id: "space8", type: WIDGET.SPACE },
-                        { id: "text6", type: WIDGET.TEXT }
-                    ]
-                },
-                text5: <TypographyProps>{
-                    label: "Email",
-                    color: ColorTokens.Grey_Night,
-                    fontSize: FontSizeTokens.SM,
-                    fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "600",
-                },
-                space8: <SpaceProps>{ size: SizeTypeTokens.XS },
-                text6: <TypographyProps>{
-                    label: "Email us at help@voltmoney.in",
-                    color: ColorTokens.Grey_Charcoal,
-                    fontSize: FontSizeTokens.XS,
-                    fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "400",
-                }
+                // imageOrder2: <StackProps>{
+                //     type: StackType.row,
+                //     widgetItems: [
+                //         { id: "imageItem2", type: WIDGET.IMAGE },
+                //         { id: "space7", type: WIDGET.SPACE },
+                //         { id: "textItem2", type: WIDGET.STACK }
+                //     ]
+                // },
+                // imageItem2: <ImageProps>{
+                //     uri: 'https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50',
+                //     size: ImageSizeTokens.SM,
+                //     aspectRatio: AspectRatioToken.A1_1,
+                //     borderRadius: BorderRadiusTokens.BR5,
+                //     padding: SizeTypeTokens.SM,
+                // },
+                // space7: <SpaceProps>{ size: SizeTypeTokens.MD },
+                // textItem2: <StackProps>{
+                //     type: StackType.column,
+                //     widgetItems: [
+                //         { id: "text5", type: WIDGET.TEXT },
+                //         { id: "space8", type: WIDGET.SPACE },
+                //         { id: "text6", type: WIDGET.TEXT }
+                //     ]
+                // },
+                // text5: <TypographyProps>{
+                //     label: "Email",
+                //     color: ColorTokens.Grey_Night,
+                //     fontSize: FontSizeTokens.SM,
+                //     fontFamily: FontFamilyTokens.Inter,
+                //     fontWeight: "600",
+                // },
+                // space8: <SpaceProps>{ size: SizeTypeTokens.XS },
+                // text6: <TypographyProps>{
+                //     label: "Email us at help@voltmoney.in",
+                //     color: ColorTokens.Grey_Charcoal,
+                //     fontSize: FontSizeTokens.XS,
+                //     fontFamily: FontFamilyTokens.Inter,
+                //     fontWeight: "400",
+                // }
             },
         };
     };
@@ -243,5 +266,5 @@ export const contactUsMF: PageType<any> = {
         // [ACTION.ACCOUNT_DETAILS]: accountDetails,
         [ACTION.BACK_BUTTON]: goBack
     },
-    bgColor: "#F3F5FC",
+    bgColor: "#FFFFFF",
 };

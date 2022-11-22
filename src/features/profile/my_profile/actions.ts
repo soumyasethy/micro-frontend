@@ -13,12 +13,22 @@ import { defaultAuthHeaders } from "../../../configs/config";
 
 let phoneNumber: string = "";
 
+// export const userProfile: ActionFunction<ProfilePayload> = async (
+//   action,
+//   _datastore,
+//   { navigate, setDatastore, asyncStorage }
+// ): Promise<any> => {
+//  await navigate(ROUTE.ACCOUNT_DETAILS)
+// };
+
 export const accountDetails: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
- await navigate(ROUTE.ACCOUNT_DETAILS)
+ await navigate(ROUTE.ACCOUNT_DETAILS,{
+  profileData: action.payload.value,
+ })
 };
 
 export const contactDetails: ActionFunction<ProfilePayload> = async (
@@ -37,6 +47,21 @@ export const faqDetails: ActionFunction<ProfilePayload> = async (
   await navigate(ROUTE.FAQ)
 };
 
+export const aboutDetails: ActionFunction<ProfilePayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage }
+): Promise<any> => {
+  await navigate(ROUTE.ABOUTUS)
+};
+
+export const logout: ActionFunction<ProfilePayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage }
+): Promise<any> => {
+  
+};
 
 export const goBack: ActionFunction<ProfilePayload> = async (
   action,

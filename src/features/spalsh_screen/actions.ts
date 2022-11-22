@@ -23,7 +23,7 @@ export const SplashAction: ActionFunction<any> = async (
           );
 
           await navigate(nextRoute.routeId, nextRoute.params);
-          // await navigate(ROUTE.KYC_SUMMARY);
+         //  await navigate(ROUTE.MY_PROFILE);
 
         }
       } else {
