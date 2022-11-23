@@ -11,6 +11,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  CarousalProps,
   IconAlignmentTokens,
   IconProps,
   IconSizeTokens,
@@ -52,8 +53,24 @@ export const template: TemplateSchema = {
       size: IconSizeTokens.XXXL,
     },
     space2: <SpaceProps>{ size: SizeTypeTokens.XXL },
-    carousal: <WidgetProps>{
-      action: {},
+    carousal: <CarousalProps & WidgetProps>{
+      data: [
+        {
+          id: "1",
+          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard1.svg",
+          text: "Unlock cash from mutual fund savings in 5 mins",
+        },
+        {
+          id: "2",
+          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard2.svg",
+          text: "Withdraw only what you need, and repay flexibly",
+        },
+        {
+          id: "3",
+          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard3.svg",
+          text: "Let your savings grow",
+        },
+      ],
     },
     button: <ButtonProps>{
       label: "Get started",
