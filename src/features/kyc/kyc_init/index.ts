@@ -60,7 +60,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     ],
   },
   datastore: <Datastore>{
-    topSpace: <SpaceProps>{ size: SizeTypeTokens.M },
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     header: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
