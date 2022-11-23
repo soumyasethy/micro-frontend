@@ -15,22 +15,15 @@ import {
   DividerSizeTokens,
   FontFamilyTokens,
   FontSizeTokens,
-  IconAlignmentTokens,
-  IconSizeTokens,
-  IconTokens,
   InfoProps,
   InfoStateTokens,
   InfoTypeTokens,
-  InputStateToken,
-  InputTypeToken,
-  KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
   StackJustifyContent,
   StackProps,
   StackType,
-  TextInputProps,
   TypographyProps,
   VerificationCardButtonTypeToken,
   VerificationCardProps,
@@ -38,12 +31,14 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../../routes";
-import { ACTION, OtpPledgePayload } from "./types";
+import { ACTION } from "./types";
 import { goBack, Done } from "./action";
+import moment from "moment";
 
-export const template: (disbursalAmount: string) => TemplateSchema = (
-  disbursalAmount: string
-) => ({
+export const template: (
+  disbursalAmount: string,
+  accountNumber: string
+) => TemplateSchema = (disbursalAmount: string, accountNumber: string) => ({
   layout: <Layout>{
     id: ROUTE.WITHDRAWAL_SUCCESS,
     type: LAYOUTS.MODAL,
@@ -93,11 +88,15 @@ export const template: (disbursalAmount: string) => TemplateSchema = (
       widgetItems: [{ id: "amount", type: WIDGET.TEXT }],
     },
     amount: <TypographyProps>{
-      label: `₹${disbursalAmount}`,
+      label: `₹${disbursalAmount}`.replace(
+        /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+        ","
+      ),
       fontSize: FontSizeTokens.XXL,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "700",
+      lineHeight: 32,
     },
     amountSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
     timeStack: <StackProps>{
@@ -107,11 +106,14 @@ export const template: (disbursalAmount: string) => TemplateSchema = (
       widgetItems: [{ id: "time", type: WIDGET.TEXT }],
     },
     time: <TypographyProps>{
-      label: "Oct 26, 2022  •  04:08 PM",
+      label: `${moment(new Date()).format("MMM DD YYYY")}  •  ${moment(
+        new Date()
+      ).format("hh:mm A")}`,
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
+      lineHeight: 18,
     },
     timeSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     messageStack: <StackProps>{
@@ -121,8 +123,10 @@ export const template: (disbursalAmount: string) => TemplateSchema = (
       widgetItems: [{ id: "message", type: WIDGET.TEXT }],
     },
     message: <TypographyProps>{
-      label:
-        "We’re processing your withdrawal request. It should be deposited in XXXX 0802 account in next 2-3 hours.",
+      label: `We’re processing your withdrawal request. It should be deposited in XXXX ${accountNumber.substring(
+        accountNumber.length - 4,
+        accountNumber.length
+      )} account in next 2-3 hours.`,
       fontSize: FontSizeTokens.XXS,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
@@ -144,10 +148,8 @@ export const template: (disbursalAmount: string) => TemplateSchema = (
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.WITHDRAWAL_SUCCESS,
-        payload: <{}>{
+        payload: {
           value: "",
-          widgetId: "input",
-          isResend: false,
         },
         routeId: ROUTE.WITHDRAWAL_SUCCESS,
       },
@@ -156,12 +158,13 @@ export const template: (disbursalAmount: string) => TemplateSchema = (
 });
 
 export const withdrawalSuccessMF: PageType<any> = {
-  onLoad: async (_, { disbursalAmount }) => {
-    return Promise.resolve(template(disbursalAmount));
+  onLoad: async (_, { disbursalAmount, accountNumber }) => {
+    return Promise.resolve(template(disbursalAmount, accountNumber));
   },
 
   actions: {
     [ACTION.WITHDRAWAL_SUCCESS]: Done,
     [ACTION.GO_BACK]: goBack,
   },
+  clearPrevious: true,
 };

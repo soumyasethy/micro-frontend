@@ -10,7 +10,7 @@ import _ from "lodash";
 export const login: ActionFunction<LoginAction & OTPPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage, network, ...props }
+  { navigate, setDatastore, network }
 ): Promise<any> => {
   if (action.payload.value.length !== 4) return;
   await setDatastore(action.routeId, action.payload.widgetId, <TextInputProps>{

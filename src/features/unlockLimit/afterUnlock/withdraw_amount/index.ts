@@ -34,18 +34,29 @@ import {
   AmountPayload,
   CreateDisbursementRequestPayload,
 } from "./types";
-import {CreateDisbursementRequest, goBack, OnAmountChange, SetRecommendedAmount} from "./action";
+import {
+  CreateDisbursementRequest,
+  goBack,
+  OnAmountChange,
+  SetRecommendedAmount,
+} from "./action";
+import { api } from "../../../../configs/api";
+import { getAppHeader } from "../../../../configs/config";
+import { User } from "../../../login/otp_verify/types";
+import SharedPropsService from "../../../../SharedPropsService";
+import _ from "lodash";
 
-export const template: (availableCreditAmount: number) => TemplateSchema = (
-  availableCreditAmount
-) => {
+export const template: (
+  availableCreditAmount: number,
+  accountNumber: string
+) => TemplateSchema = (availableCreditAmount, accountNumber) => {
   return {
     layout: <Layout>{
       id: ROUTE.WITHDRAW_AMOUNT,
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-        { id: "headerSpace", type: WIDGET.SPACE },
+        // { id: "headerSpace", type: WIDGET.SPACE },
         { id: "amountItem", type: WIDGET.INPUT },
         { id: "amountMsgSpace", type: WIDGET.SPACE },
         // { id: "amountMessage", type: WIDGET.MESSAGE },
@@ -131,17 +142,22 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
       inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       continue: <ButtonProps & WidgetProps>{
         label: "Confirm & get OTP",
-        type: ButtonTypeTokens.LargeFilled,
+        type: ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.WITHDRAW_AMOUNT,
-          payload: <CreateDisbursementRequestPayload>{},
+          payload: <CreateDisbursementRequestPayload>{
+            accountNumber,
+          },
           routeId: ROUTE.WITHDRAW_AMOUNT,
         },
       },
       messageSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       messageItem: <TypographyProps>{
-        label: "Amount will be transferred to your bank account XXXX 0802",
+        label: `Amount will be transferred to your bank account XXXX ${accountNumber.substring(
+          accountNumber.length - 4,
+          accountNumber.length
+        )}`,
         fontSize: FontSizeTokens.XS,
         numberOfLines: 3,
         color: ColorTokens.Grey_Charcoal,
@@ -153,8 +169,18 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
 };
 
 export const withdraw_amountMF: PageType<any> = {
-  onLoad: async ({}, { availableCreditAmount }) => {
-    return Promise.resolve(template(availableCreditAmount));
+  onLoad: async ({ network }, { availableCreditAmount }) => {
+    const user: User = await SharedPropsService.getUser();
+    const accountId = await user.linkedBorrowerAccounts[0].accountId;
+    const response = await network.get(`${api.userProfile}${accountId}`, {
+      headers: await getAppHeader(),
+    });
+    const accountNumber = _.get(
+      response,
+      "data.bankDetails.accountNumber",
+      null
+    );
+    return Promise.resolve(template(availableCreditAmount, accountNumber));
   },
 
   actions: {

@@ -319,7 +319,10 @@ export const nextStepId = async (
   currentStepId: string
 ): Promise<{ routeId: string; params: object }> => {
   const user: User = await SharedPropsService.getUser();
-  if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
+
+  if (user.linkedApplications[0].applicationState === "COMPLETED") {
+    return { routeId: ROUTE.DASHBOARD, params: {} };
+  } else if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
     return {
       routeId: ROUTE.EMAIL_VERIFY,
       params: {
