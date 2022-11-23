@@ -363,7 +363,7 @@ export const template: (
                         color: ColorTokens.Grey_Charcoal
                     },
                     action: {
-                        type: ACTION.PROFILE,
+                        type: ACTION.FAQ,
                         payload: <FaqPayload>{
                           value: "KYC verification",
                           widgetId: "continue"
