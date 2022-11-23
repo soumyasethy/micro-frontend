@@ -25,6 +25,7 @@ import {
 import { ROUTE } from "../../../routes";
 import {
   ACTION,
+  CtaPayload,
   EditItemPayload,
   OtpPayload,
   PortfolioTogglePayload,
@@ -157,10 +158,10 @@ export const template: (
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
         )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
-        actionLabel: "Confirm & get OTP",
+        actionLabel: "Continue",
         action: {
           type: ACTION.PORTFOLIO,
-          payload: {},
+          payload: <CtaPayload>{ value: stepResponseObject },
           routeId: ROUTE.PORTFOLIO,
         },
       },

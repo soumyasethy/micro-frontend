@@ -60,32 +60,37 @@ export const getActualLimit = (
 export const TriggerCTA: ActionFunction<CtaPayload> = async (
   action,
   _datastore,
-  { setDatastore, ...props }
+  { setDatastore, navigate, ...props }
 ): Promise<any> => {
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    isLoading: true,
-  });
+  // await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+  //   isLoading: true,
+  // });
   const availableCASMap = await SharedPropsService.getAvailableCASMap();
   const updatedList: AvailableCASItem[] = [];
   Object.keys(availableCASMap).forEach((key) => {
     const updatedItem = availableCASMap[key];
     updatedList.push(updatedItem);
   });
-  const verifyAction = {
-    type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
-    payload: <CTAPayload>{
-      value: {
-        ...action.payload.value,
-        availableCAS: [...updatedList],
-      },
-      widgetId: "continue",
-    },
-    routeId: ROUTE.PLEDGE_CONFIRMATION,
+  const stepResponseObject = {
+    ...action.payload.value,
+    availableCAS: [...updatedList],
   };
-  await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    isLoading: false,
-  });
+  navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
+  // const verifyAction = {
+  //   type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
+  //   payload: <CTAPayload>{
+  //     value: {
+  //       ...action.payload.value,
+  //       availableCAS: [...updatedList],
+  //     },
+  //     widgetId: "continue",
+  //   },
+  //   routeId: ROUTE.PLEDGE_CONFIRMATION,
+  // };
+  // await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
+  // await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+  //   isLoading: false,
+  // });
 };
 
 export const goBack: ActionFunction<OtpPayload> = async (
