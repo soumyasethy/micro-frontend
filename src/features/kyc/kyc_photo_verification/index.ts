@@ -99,7 +99,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
     subTitle: <TypographyProps>{
-      label: "Note: This will help to verify your identity",
+      label: "We will use this this to verify your identity",
       fontWeight: "400",
       fontFamily: FontFamilyTokens.Inter,
       fontSize: FontSizeTokens.MD,
@@ -120,7 +120,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       aspectRatio: AspectRatioToken.A1_1,
       borderRadius: BorderRadiusTokens.BR5,
       size: ImageSizeTokens.XXXL,
-      uri: "https://volt-images.s3.ap-south-1.amazonaws.com/kyc_documents.svg",
+      uri: "https://volt-images.s3.ap-south-1.amazonaws.com/camera_placeholder.svg",
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Open Camera",

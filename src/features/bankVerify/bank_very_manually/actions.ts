@@ -25,7 +25,6 @@ let bankIfsc = "";
 export const NavigationSearchIFSCAction: ActionFunction<
   NavigationSearchIFSCActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  console.warn("**** NavigationSearchIFSCAction Triggered ****", action);
   await navigate(ROUTE.BANK_BRANCH_SEARCH, {
     bankCode: action.payload.bankCode,
     bankName: action.payload.bankName,
@@ -40,6 +39,7 @@ export const onChangeAccountNumber: ActionFunction<
 export const onChangeIFSCNumber: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
+  console.warn("onChangeIFSCNumber auto triggered", action);
   bankIfsc = action.payload.value;
   await ToggleCTA(action, _datastore, props);
 };
@@ -49,18 +49,25 @@ export const ToggleCTA: ActionFunction<any> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  if (bankAccountNumber && bankIfsc)
+  console.warn(
+    "bankAccountNumber->",
+    bankAccountNumber,
+    " bankIfsc->",
+    bankIfsc
+  );
+  if (bankAccountNumber && bankIfsc) {
     await setDatastore(action.routeId, action.payload.targetWidgetId, <
       ButtonProps
     >{
       type: ButtonTypeTokens.LargeFilled,
     });
-  else
+  } else {
     await setDatastore(action.routeId, action.payload.targetWidgetId, <
       ButtonProps
     >{
       type: ButtonTypeTokens.LargeOutline,
     });
+  }
 };
 
 export const BavVerifyManualAction: ActionFunction<
@@ -68,7 +75,7 @@ export const BavVerifyManualAction: ActionFunction<
 > = async (
   action,
   _datastore,
-  { setDatastore, network, showPopup, goBack }
+  { setDatastore, network, showPopup }
 ): Promise<any> => {
   // await showPopup({
   //   title: "Depositing Rs 1",

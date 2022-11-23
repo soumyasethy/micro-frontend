@@ -11,6 +11,7 @@ import { getTotalLimit } from "../portfolio/actions";
 import { ACTION as PLEDGE_CONFIRM_ACTIONS } from "../pledge_confirmation/types";
 import { sendOtp } from "../pledge_confirmation/actions";
 import { ButtonProps } from "@voltmoney/schema";
+import SharedPropsService from "../../../SharedPropsService";
 
 let amount: number = 0;
 const getUpdateAvailableCAS = (
@@ -55,27 +56,49 @@ const getUpdateAvailableCAS = (
 export const SelectAssets: ActionFunction<AssetsPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
+  if (amount !== 0) {
+  }
+  const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = {};
-  action.payload.stepResponseObject.availableCAS.map((item, index) => {
-    let key = `${item.isinNo}-${item.folioNo}`;
-    item.pledgedUnits = item.totalAvailableUnits;
-    updateAvailableCASMap[key] = item;
-  });
+
+  if (amount > 0) {
+    stepResponseObject.availableCAS.forEach((item, index) => {
+      stepResponseObject.availableCAS[index].pledgedUnits =
+        item.totalAvailableUnits;
+    });
+    stepResponseObject.availableCAS = getUpdateAvailableCAS(
+      amount,
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
+    );
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      updateAvailableCASMap[key] = item;
+    });
+  } else {
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      item.pledgedUnits = item.totalAvailableUnits;
+      updateAvailableCASMap[key] = item;
+    });
+  }
+  await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   await navigate(ROUTE.PORTFOLIO, {
-    stepResponseObject: action.payload.stepResponseObject,
+    stepResponseObject: stepResponseObject,
     updateAvailableCASMap,
   });
 };
 export const ConfirmCTA: ActionFunction<AssetsPayload> = async (
   action,
   _datastore,
-  { setDatastore, ...props }
+  { setDatastore, navigate, ...props }
 ): Promise<any> => {
-  await setDatastore(ROUTE.MODIFY_LIMIT, "otpItem", <ButtonProps>{
-    loading: true,
-  });
+  // await setDatastore(ROUTE.MODIFY_LIMIT, "otpItem", <ButtonProps>{
+  //   loading: true,
+  // });
   const stepResponseObject = action.payload.stepResponseObject;
   stepResponseObject.availableCAS.forEach((item, index) => {
     stepResponseObject.availableCAS[index].pledgedUnits =
@@ -87,18 +110,19 @@ export const ConfirmCTA: ActionFunction<AssetsPayload> = async (
     stepResponseObject.isinNAVMap,
     stepResponseObject.isinLTVMap
   );
-  const verifyAction = {
-    type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
-    payload: {
-      value: stepResponseObject,
-      widgetId: "otpItem",
-    },
-    routeId: ROUTE.PLEDGE_CONFIRMATION,
-  };
-  await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
-  await setDatastore(ROUTE.MODIFY_LIMIT, "otpItem", <ButtonProps>{
-    loading: false,
-  });
+  navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
+  // const verifyAction = {
+  //   type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
+  //   payload: {
+  //     value: stepResponseObject,
+  //     widgetId: "otpItem",
+  //   },
+  //   routeId: ROUTE.PLEDGE_CONFIRMATION,
+  // };
+  // await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
+  // await setDatastore(ROUTE.MODIFY_LIMIT, "otpItem", <ButtonProps>{
+  //   loading: false,
+  // });
 };
 
 export const goBack: ActionFunction<AssetsPayload> = async (
@@ -114,5 +138,10 @@ export const EnterAmountAction: ActionFunction<AssetsPayload> = async (
   _datastore,
   _
 ): Promise<any> => {
-  amount = parseFloat(action.payload.value);
+  if (action.payload.value === "") {
+    amount = 0;
+  } else {
+    amount = parseFloat(action.payload.value);
+  }
+  console.warn("EnterAmountAction", amount);
 };

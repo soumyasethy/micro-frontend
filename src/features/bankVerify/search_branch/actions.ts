@@ -103,7 +103,7 @@ const widgetItemDs = (index: number, ifscCode: string, address: string) => {
 export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
   action,
   _datastore,
-  { appendWidgets, removeWidgets, setDatastore }
+  { appendWidgets, removeWidgets }
 ): Promise<any> => {
   const bankCode = action.payload.bankCode || bankCodeX; //HDFC
   let searchLength: number = 3;

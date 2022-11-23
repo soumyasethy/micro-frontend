@@ -129,7 +129,7 @@ export const template: (
         color: ColorTokens.Primary_100
       },
       otpItem: <ButtonProps & WidgetProps>{
-        label: "Confirm & get OTP",
+        label: "Continue",
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {

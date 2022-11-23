@@ -70,17 +70,36 @@ export const horizontalStepperRepo = async () => {
 
   if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-    StepperStateToken.COMPLETED
+      StepperStateToken.COMPLETED ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.COMPLETED
   ) {
     MANDATE_SETUP = StepperStateToken.COMPLETED;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-    StepperStateToken.PENDING_MANUAL_VERIFICATION
+      StepperStateToken.NOT_STARTED ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.NOT_STARTED
+  ) {
+    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.IN_PROGRESS ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.IN_PROGRESS
+  ) {
+    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION
   ) {
     MANDATE_SETUP = StepperStateToken.PENDING_MANUAL_VERIFICATION;
   } else {
     MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
   }
+
   if (
     user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
     StepperStateToken.COMPLETED
@@ -99,7 +118,7 @@ export const horizontalStepperRepo = async () => {
     {
       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
       step: "1",
-      title: "Verify KYC",
+      title: "KYC",
       subTitle: "",
       status: KYC_VERIFICATION,
       message:
@@ -110,7 +129,7 @@ export const horizontalStepperRepo = async () => {
     {
       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
       step: "2",
-      title: "Bank Details",
+      title: "Bank account",
       subTitle: "",
       status:
         user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
@@ -123,15 +142,13 @@ export const horizontalStepperRepo = async () => {
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
-      title: "Repayment",
+      title: "AutoPay",
       subTitle: "",
-      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      status: MANDATE_SETUP,
       message:
-        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-        StepperStateToken.COMPLETED
+        MANDATE_SETUP === StepperStateToken.COMPLETED
           ? ""
-          : user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-            StepperStateToken.IN_PROGRESS
+          : MANDATE_SETUP === StepperStateToken.IN_PROGRESS
           ? message
           : "",
     },
@@ -184,6 +201,38 @@ export const stepperRepo = async () => {
   } else {
     KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
   }
+  let MANDATE_SETUP: StepperStateToken;
+  if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.COMPLETED ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.COMPLETED
+  ) {
+    MANDATE_SETUP = StepperStateToken.COMPLETED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.NOT_STARTED ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.NOT_STARTED
+  ) {
+    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.IN_PROGRESS ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.IN_PROGRESS
+  ) {
+    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION
+  ) {
+    MANDATE_SETUP = StepperStateToken.PENDING_MANUAL_VERIFICATION;
+  } else {
+    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
+  }
 
   const data: StepperItem[] = [
     {
@@ -210,18 +259,17 @@ export const stepperRepo = async () => {
           ? message
           : "",
     },
+
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
       title: "Repayment",
       subTitle: "Link your bank account for auto repayment",
-      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      status: MANDATE_SETUP,
       message:
-        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-        StepperStateToken.COMPLETED
+        MANDATE_SETUP === StepperStateToken.COMPLETED
           ? ""
-          : user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-            StepperStateToken.IN_PROGRESS
+          : MANDATE_SETUP === StepperStateToken.IN_PROGRESS
           ? message
           : "",
     },
@@ -257,7 +305,10 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     return { routeId: ROUTE.KYC_SUMMARY, params: {} };
   } else if (currentStepId === ROUTE.BANK_ACCOUNT_VERIFICATION) {
     return { routeId: ROUTE.BANK_ACCOUNT_VERIFICATION, params: {} };
-  } else if (currentStepId === "MANDATE_SETUP") {
+  } else if (
+    currentStepId === "MANDATE_SETUP" ||
+    currentStepId === "CREDIT_APPROVAL"
+  ) {
     return { routeId: ROUTE.LOAN_AUTOPAY, params: {} };
   } else if (currentStepId === "AGREEMENT_SIGN") {
     return { routeId: ROUTE.LOAN_AGREEMENT, params: {} };
@@ -268,7 +319,10 @@ export const nextStepId = async (
   currentStepId: string
 ): Promise<{ routeId: string; params: object }> => {
   const user: User = await SharedPropsService.getUser();
-  if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
+
+  if (user.linkedApplications[0].applicationState === "COMPLETED") {
+    return { routeId: ROUTE.DASHBOARD, params: {} };
+  } else if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
     return {
       routeId: ROUTE.EMAIL_VERIFY,
       params: {
@@ -317,7 +371,10 @@ export const nextStepId = async (
       return { routeId: ROUTE.KYC_STEPPER, params: {} };
     } else if (currentStepId === ROUTE.KYC_SUMMARY) {
       return { routeId: ROUTE.KYC_SUMMARY, params: {} };
-    } else if (currentStepId === "MANDATE_SETUP") {
+    } else if (
+      currentStepId === "MANDATE_SETUP" ||
+      currentStepId === "CREDIT_APPROVAL"
+    ) {
       return { routeId: ROUTE.LOAN_AUTOPAY, params: {} };
     } else if (currentStepId === "AGREEMENT_SIGN") {
       return { routeId: ROUTE.LOAN_AGREEMENT, params: {} };

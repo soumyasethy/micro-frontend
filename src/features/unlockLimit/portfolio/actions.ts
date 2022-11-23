@@ -9,7 +9,6 @@ import {
   SearchPortfolioPayload,
 } from "./types";
 import {
-  ButtonProps,
   CtaCardProps,
   IconTokens,
   ListItemDataProps,
@@ -51,7 +50,9 @@ export const getActualLimit = (
   availableCAS.forEach((item) => {
     sum =
       sum +
-      item.totalAvailableUnits * isinNavMap[item.isinNo] * isinLTVMap[item.isinNo];
+      item.totalAvailableUnits *
+        isinNavMap[item.isinNo] *
+        isinLTVMap[item.isinNo];
   });
   return Math.round(sum * 100) / 100;
 };
@@ -59,32 +60,37 @@ export const getActualLimit = (
 export const TriggerCTA: ActionFunction<CtaPayload> = async (
   action,
   _datastore,
-  { setDatastore, ...props }
+  { setDatastore, navigate, ...props }
 ): Promise<any> => {
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    isLoading: true,
-  });
+  // await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+  //   isLoading: true,
+  // });
   const availableCASMap = await SharedPropsService.getAvailableCASMap();
   const updatedList: AvailableCASItem[] = [];
   Object.keys(availableCASMap).forEach((key) => {
     const updatedItem = availableCASMap[key];
     updatedList.push(updatedItem);
   });
-  const verifyAction = {
-    type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
-    payload: <CTAPayload>{
-      value: {
-        ...action.payload.value,
-        availableCAS: [...updatedList],
-      },
-      widgetId: "continue",
-    },
-    routeId: ROUTE.PLEDGE_CONFIRMATION,
+  const stepResponseObject = {
+    ...action.payload.value,
+    availableCAS: [...updatedList],
   };
-  await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    isLoading: false,
-  });
+  navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
+  // const verifyAction = {
+  //   type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
+  //   payload: <CTAPayload>{
+  //     value: {
+  //       ...action.payload.value,
+  //       availableCAS: [...updatedList],
+  //     },
+  //     widgetId: "continue",
+  //   },
+  //   routeId: ROUTE.PLEDGE_CONFIRMATION,
+  // };
+  // await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
+  // await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+  //   isLoading: false,
+  // });
 };
 
 export const goBack: ActionFunction<OtpPayload> = async (
@@ -109,7 +115,7 @@ export const EditItem: ActionFunction<EditItemPayload> = async (
 
 export const ToggleSelectAction: ActionFunction<
   PortfolioTogglePayload
-> = async (action, _datastore, { setDatastore, ...props }): Promise<any> => {
+> = async (action, _datastore, { setDatastore }): Promise<any> => {
   const updateAvailableCASMapX = await SharedPropsService.getAvailableCASMap();
   const stepResponseObject = action.payload.stepResponseObject;
   const availableCASItem =
@@ -148,10 +154,10 @@ export const ToggleSelectAction: ActionFunction<
                 [updateAvailableCASMapX[key]],
                 stepResponseObject.isinNAVMap,
                 stepResponseObject.isinLTVMap
-              )}`
+              )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",")
             : 0
         }`, //"₹4,000",
-        trailSubTitle: `/ ₹${getTotalLimit(
+        trailSubTitle: `/ ₹${getActualLimit(
           [
             {
               ...availableCASItem,
@@ -160,7 +166,7 @@ export const ToggleSelectAction: ActionFunction<
           ],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`,
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         action: "edit",
         trailIconAction: {
           type: ACTION.EDIT_ITEM,
@@ -185,7 +191,7 @@ export const ToggleSelectAction: ActionFunction<
   });
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMapX);
   await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    info: `${totalAmount}`,
+    info: `${totalAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
   });
 };
 

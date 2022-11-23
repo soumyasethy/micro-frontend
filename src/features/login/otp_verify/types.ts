@@ -34,7 +34,35 @@ export interface User {
   linkedPartnerAccounts?: any[];
   linkedPlatformAccounts?: LinkedPlatformAccount[];
   linkedApplications?: LinkedApplication[];
-  linkedCredits?: any[];
+  linkedCredits?: LinkedCreditItem[];
+}
+export interface LinkedCreditItem {
+  creditId: string;
+  lenderCreditId: string;
+  applicationId: string;
+  accountId: string;
+  creditStatus: string;
+  marginCallStatus: string;
+  originalStartDate: number;
+  currentTermStartDate: number;
+  tenureInDays: number;
+  renewalDate: number;
+  totalValueOfAssetsPledged: number;
+  approvedCreditAmount: number;
+  actualLoanAmount: number;
+  availableCreditAmount: number;
+  processingCharges: number;
+  processingChargeDetails: string;
+  currentApplicableInterestRate: number;
+  outstandingInterestDue: any;
+  chargesDue: any;
+  penalInterestDue: any;
+  creditType: string;
+  platformAccountId: string;
+  partnerAccountId: null;
+  lendingPartnerId: string;
+  createdOn: number;
+  lastUpdatedOn: number;
 }
 
 export interface LinkedApplication {

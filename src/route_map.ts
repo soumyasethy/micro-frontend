@@ -46,6 +46,12 @@ import { loanWebViewMF } from "./features/loanAgreement/loan_webView";
 import { loanAutoPayMF } from "./features/loanAgreement/loan_autopay";
 import { agreementWebViewMF } from "./features/loanAgreement/agreement_webview";
 import { loanAgreementMF } from "./features/loanAgreement/loan_agreement";
+import { accountDetailsMF } from "./features/profile/account_details";
+import { contactUsMF } from "./features/profile/contact_us";
+import { myProfileMF } from "./features/profile/my_profile";
+import { faqMF } from "./features/profile/faq";
+import { aboutUsMF } from "./features/profile/about_us";
+import { faqDetailsMF } from "./features/profile/faq_details";
 import { carousalPageMF } from "./features/carousal/";
 
 export const ROUTE_MAP: RouteMap = {
@@ -95,5 +101,11 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.LOAN_AUTOPAY]: loanAutoPayMF,
   [ROUTE.LOAN_AGREEMENT]: loanAgreementMF,
   [ROUTE.AGREEMENT_WEBVIEW]: agreementWebViewMF,
+  [ROUTE.ACCOUNT_DETAILS]: accountDetailsMF,
+  [ROUTE.CONTACT_US]: contactUsMF,
+  [ROUTE.MY_PROFILE]: myProfileMF,
+  [ROUTE.FAQ]: faqMF,
+  [ROUTE.ABOUTUS]: aboutUsMF,
+  [ROUTE.FAQ_DETAILS]: faqDetailsMF,
   [ROUTE.CAROUSAL_PAGE]: carousalPageMF,
 };
