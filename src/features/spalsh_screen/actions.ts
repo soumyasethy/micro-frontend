@@ -23,6 +23,8 @@ export const SplashAction: ActionFunction<any> = async (
             user.linkedApplications[0].currentStepId
           );
           await navigate(nextRoute.routeId, nextRoute.params);
+         //  await navigate(ROUTE.MY_PROFILE);
+
         }
       } else {
         await clearAllData();

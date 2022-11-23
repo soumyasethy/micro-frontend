@@ -31,8 +31,8 @@ export const api = {
   agreementLink: `${config.baseUrl}/app/borrower/application/agreement/link/`,
   agreementStatus: `${config.baseUrl}/app/borrower/application/agreement/status/`,
   approvalCheck: `${config.baseUrl}/app/borrower/application/approval/check/`,
+  userProfile: `${config.baseUrl}/app/borrower/userProfile/`,
   lmsDisbursal: `${config.baseUrl}/app/borrower/lms/disbursal/`,
   lmsDisbursalVerify: `${config.baseUrl}/app/borrower/lms/disbursal/verifyOTP`,
-  repaymentBankAccountDetails: `${config.baseUrl}/app/borrower/lms/repaymentBankAccountDetails/`,
-  userProfile: `${config.baseUrl}/app/borrower/userProfile/`,
+  repaymentBankAccountDetails: `${config.baseUrl}/app/borrower/lms/repaymentBankAccountDetails/`
 };

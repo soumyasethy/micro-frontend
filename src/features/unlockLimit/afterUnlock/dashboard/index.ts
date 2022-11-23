@@ -41,7 +41,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../../routes";
 import { ACTION, CreditPayload, RepaymentPayload } from "./types";
-import { goBack, repayment, withdrawNow } from "./actions";
+import { goBack, profile, repayment, withdrawNow } from "./actions";
 import { fetchUserDetails } from "./repo";
 import { User } from "../../../login/otp_verify/types";
 import SharedPropsService from "../../../../SharedPropsService";
@@ -140,6 +140,7 @@ export const template: (
         padding: PaddingSizeTokens.LG,
         widgetItems: [
           { id: "title", type: WIDGET.TEXT },
+          // { id: "leadIcon", type: WIDGET.BUTTON },
           { id: "headerRight", type: WIDGET.STACK },
         ],
       },
@@ -416,6 +417,7 @@ export const dashboardMF: PageType<any> = {
     [ACTION.DASHBOARD]: withdrawNow,
     [ACTION.REPAYMENT]: repayment,
     [ACTION.MENU]: goBack,
+    [ACTION.PROFILE]: profile,
   },
   bgColor: "#F3F5FC",
   clearPrevious: true,
