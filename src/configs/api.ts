@@ -2,6 +2,7 @@ export const config = {
   baseUrl: "https://api.voltmoney.in",
 };
 export const StoreKey = {
+  isLoadedFirstTime: "is_Loaded_First_Time",
   accessToken: "access_token",
   refreshToken: "refresh_token",
   userContext: "user_context",
