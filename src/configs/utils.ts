@@ -118,7 +118,7 @@ export const horizontalStepperRepo = async () => {
     {
       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
       step: "1",
-      title: "Verify KYC",
+      title: "KYC",
       subTitle: "",
       status: KYC_VERIFICATION,
       message:
@@ -129,7 +129,7 @@ export const horizontalStepperRepo = async () => {
     {
       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
       step: "2",
-      title: "Bank Details",
+      title: "Bank account",
       subTitle: "",
       status:
         user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
@@ -142,7 +142,7 @@ export const horizontalStepperRepo = async () => {
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
-      title: "Repayment",
+      title: "AutoPay",
       subTitle: "",
       status: MANDATE_SETUP,
       message:

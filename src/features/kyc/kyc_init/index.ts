@@ -44,7 +44,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     type: LAYOUTS.LIST,
     widgets: [
       { id: "topSpace", type: WIDGET.SPACE },
-      { id: "space1", type: WIDGET.SPACE },
+      //{ id: "space1", type: WIDGET.SPACE },
       { id: "title", type: WIDGET.TEXT },
       { id: "spaceTitle", type: WIDGET.SPACE },
       { id: "stackImage", type: WIDGET.STACK },
@@ -53,14 +53,14 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         id: "continue",
         type: WIDGET.BUTTON,
       },
-      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      {id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
       {id: 'space2', type: WIDGET.SPACE},
       {id: "tcText" , type: WIDGET.TEXT},
-      {id: 'bottomStack', type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM},
+      {id: 'bottomSection', type: WIDGET.STACK, position: POSITION.STICKY_BOTTOM},
     ],
   },
   datastore: <Datastore>{
-    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     header: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
@@ -77,7 +77,6 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         payload: {},
       },
     },
-    space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     title: <TypographyProps>{
       label: "Fetch document from Digilocker",
       fontWeight: "700",
@@ -131,6 +130,19 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     space3: <SpaceProps>{ size: SizeTypeTokens.XS },
     tcText2: <TypographyProps>{
       label: "Powered by Digilocker",
+    },
+    bottomSpace: <SpaceProps> { size: SizeTypeTokens.LG },
+    bottomSection: <StackProps> {
+      type: StackType.column,
+      justifyContent: StackJustifyContent.center,
+      alignItems: StackAlignItems.center,
+      widgetItems: [{
+        id: "bottomStack",
+        type: WIDGET.STACK,
+      }, {
+        id: "bottomSpace",
+        type: WIDGET.SPACE
+      }]
     }
   },
 });
