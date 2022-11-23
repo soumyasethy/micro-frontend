@@ -12,6 +12,7 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   CarousalProps,
+  ColorTokens,
   IconAlignmentTokens,
   IconProps,
   IconSizeTokens,
@@ -71,6 +72,7 @@ export const template: TemplateSchema = {
           text: "Let your savings grow",
         },
       ],
+      textColor: ColorTokens.Black,
     },
     button: <ButtonProps>{
       label: "Get started",
