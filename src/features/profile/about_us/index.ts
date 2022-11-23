@@ -40,7 +40,7 @@ export const template: (
 
         return {
             layout: <Layout>{
-                id: ROUTE.FAQ,
+                id: ROUTE.ABOUTUS,
                 type: LAYOUTS.LIST,
                 widgets: [
                     {
@@ -48,7 +48,7 @@ export const template: (
                     },
                     {
                         id: "detailScreen", type: WIDGET.STACK, padding: {
-                            left: 10, right: 0
+                            left: 16, right: 16,
                         }
                     },
                 
@@ -85,6 +85,7 @@ export const template: (
                     body: {
                         widgetItems: [
                             { id: "startDetails", type: WIDGET.STACK },
+                            { id: "startSpace", type: WIDGET.SPACE },
                             { id: "startDivider", type: WIDGET.DIVIDER },
                         ]
                     }
@@ -113,7 +114,7 @@ export const template: (
                
 
                 iconName: <IconProps>{
-                    name: IconTokens.PDF,
+                    name: IconTokens.File,
                     color: ColorTokens.Grey_Night,
                     size: IconSizeTokens.LG
                 },
@@ -140,7 +141,7 @@ export const template: (
                     ]
                 },
                 cta1: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
+                    type: ButtonTypeTokens.SmallGhost,
                     width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChervonDownRight,
@@ -157,6 +158,9 @@ export const template: (
                         routeId: ROUTE.MY_PROFILE,
                       },
                 },
+                startSpace: <SpaceProps>{
+                    size: SizeTypeTokens.XL
+                },
                 startDivider: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
@@ -170,6 +174,7 @@ export const template: (
                     body: {
                         widgetItems: [
                             { id: "privacyDetails", type: WIDGET.STACK },
+                            { id: "privacySpaces", type: WIDGET.SPACE },
                             { id: "privacyDivider", type: WIDGET.DIVIDER },
                         ]
                     }
@@ -194,7 +199,7 @@ export const template: (
                     ]
                 },
                 privacyName: <IconProps>{
-                    name: IconTokens.Lock,
+                    name: IconTokens.Locked,
                     color: ColorTokens.Grey_Night,
                     size: IconSizeTokens.LG
                 },
@@ -218,7 +223,7 @@ export const template: (
                     ]
                 },
                 cta1privacy: <ButtonProps>{
-                    type: ButtonTypeTokens.MediumGhost,
+                    type: ButtonTypeTokens.SmallGhost,
                     width: ButtonWidthTypeToken.CONTENT,
                     icon: <IconProps>{
                         name: IconTokens.ChervonDownRight,
@@ -235,6 +240,9 @@ export const template: (
                         routeId: ROUTE.MY_PROFILE,
                       },
                 },
+                privacySpaces: <SpaceProps>{
+                    size: SizeTypeTokens.XL
+                },
                 privacyDivider: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
@@ -250,7 +258,6 @@ export const template: (
 
 export const aboutUsMF: PageType<any> = {
     onLoad: async () => {
-
         return Promise.resolve(
             template()
         );

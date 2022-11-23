@@ -17,6 +17,7 @@ import {
     DividerSizeTokens,
     FontFamilyTokens,
     FontSizeTokens,
+    IconAlignmentTokens,
     IconProps,
     IconSizeTokens,
     IconTokens,
@@ -28,11 +29,13 @@ import {
     StackProps,
     StackType,
     StackWidth,
+    TagProps,
+    TagTypeTokens,
     TypographyProps,
     WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
+import { ACTION, FaqPayload } from "./types";
 import { faqDetails, goBack } from "./actions";
 export const template: (
 ) => TemplateSchema = (
@@ -122,20 +125,31 @@ export const template: (
                     alignItems: StackAlignItems.center,
                     justifyContent: StackJustifyContent.flexEnd,
                     widgetItems: [
-                        { id: "contactBlock", type: WIDGET.BUTTON }
+                        { id: "contactBlock", type: WIDGET.TAG }
                     ]
                 },
-                contactBlock: <ButtonProps>{
-                    labelColor:ColorTokens.Primary_100,
-                    label:"Contact us",
-                    type: ButtonTypeTokens.MediumOutline,
-                    width: ButtonWidthTypeToken.CONTENT,
-                    icon: <IconProps>{
-                        name: IconTokens.HeadPhone,
-                        size: IconSizeTokens.SM,
-                        color: ColorTokens.Grey_Charcoal
-                    }
-                },
+                contactBlock: <TagProps>{
+                    icon: {
+                      align: IconAlignmentTokens.left,
+                      name: IconTokens.Support,
+                      size: IconSizeTokens.XL,
+                    },
+                    label: "Contact us",
+                    labelColor: ColorTokens.Primary_100,
+                    type: TagTypeTokens.DEFAULT,
+                    bgColor: ColorTokens.Primary_05,
+                  },
+                // contactBlock: <ButtonProps>{
+                //     labelColor:ColorTokens.Primary_100,
+                //     label:"Contact us",
+                //     type: ButtonTypeTokens.MediumOutline,
+                //     width: ButtonWidthTypeToken.CONTENT,
+                //     icon: <IconProps>{
+                //         name: IconTokens.HeadPhone,
+                //         size: IconSizeTokens.SM,
+                //         color: ColorTokens.Grey_Charcoal
+                //     }
+                // },
                 divider: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
@@ -210,10 +224,9 @@ export const template: (
                     },
                     action: {
                         type: ACTION.FAQ,
-                        payload: <{}>{
-                          value: "",
-                          widgetId: "continue",
-                          isResend: false,
+                        payload: <FaqPayload>{
+                          value: "Getting started",
+                          widgetId: "continue"
                         },
                         routeId: ROUTE.FAQ,
                       },
@@ -281,12 +294,11 @@ export const template: (
                     },
                     action: {
                         type: ACTION.FAQ,
-                        payload: <{}>{
-                          value: "",
-                          widgetId: "continue",
-                          isResend: false,
+                        payload: <FaqPayload>{
+                          value: "Withdrawal request",
+                          widgetId: "continue"
                         },
-                        routeId: ROUTE.MY_PROFILE,
+                        routeId: ROUTE.FAQ,
                       },
                 },
                 withdrawalSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
@@ -352,12 +364,11 @@ export const template: (
                     },
                     action: {
                         type: ACTION.PROFILE,
-                        payload: <{}>{
-                          value: "",
-                          widgetId: "continue",
-                          isResend: false,
+                        payload: <FaqPayload>{
+                          value: "KYC verification",
+                          widgetId: "continue"
                         },
-                        routeId: ROUTE.MY_PROFILE,
+                        routeId: ROUTE.FAQ,
                       },
                 },
                 kycSpace: <SpaceProps>{ size: SizeTypeTokens.XL },

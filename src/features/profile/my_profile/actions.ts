@@ -10,6 +10,7 @@ import {
 } from "@voltmoney/schema";
 import { api } from "../../../configs/api";
 import { defaultAuthHeaders } from "../../../configs/config";
+import { clearAllData } from "../../../configs/utils";
 
 let phoneNumber: string = "";
 
@@ -59,9 +60,11 @@ export const aboutDetails: ActionFunction<ProfilePayload> = async (
 export const logout: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate, setDatastore }
 ): Promise<any> => {
-  
+  console.log("Here");
+  //await clearAllData();
+  //await navigate(ROUTE.PHONE_NUMBER);
 };
 
 export const goBack: ActionFunction<ProfilePayload> = async (

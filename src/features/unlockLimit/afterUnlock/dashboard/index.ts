@@ -140,7 +140,7 @@ export const template: (
         padding: PaddingSizeTokens.LG,
         widgetItems: [
           { id: "title", type: WIDGET.TEXT },
-           { id: "leadIcon", type: WIDGET.BUTTON },
+          // { id: "leadIcon", type: WIDGET.BUTTON },
           { id: "headerRight", type: WIDGET.STACK },
         ],
       },

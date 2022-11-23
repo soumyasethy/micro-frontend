@@ -5,8 +5,8 @@ export enum ACTION {
   }
   
   
-  export type ProfilePayload = {
-    value: number;
+  export type FaqPayload = {
+    value: string;
     widgetId: string;
   };
   

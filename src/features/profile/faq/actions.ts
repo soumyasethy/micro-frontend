@@ -1,28 +1,19 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import {
-  ProfilePayload
-} from "./types";
-import {
-  ButtonProps,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
-import { api } from "../../../configs/api";
-import { defaultAuthHeaders } from "../../../configs/config";
-
-let phoneNumber: string = "";
+import { FaqPayload } from "./types";
 
 
-export const faqDetails: ActionFunction<ProfilePayload> = async (
+export const faqDetails: ActionFunction<FaqPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  await( navigate(ROUTE.FAQ_DETAILS));
+  await( navigate(ROUTE.FAQ_DETAILS,{
+    title:action.payload.value
+  }));
 };
 
-export const accountDetails: ActionFunction<ProfilePayload> = async (
+export const accountDetails: ActionFunction<FaqPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
@@ -31,7 +22,7 @@ export const accountDetails: ActionFunction<ProfilePayload> = async (
 };
 
 
-export const goBack: ActionFunction<ProfilePayload> = async (
+export const goBack: ActionFunction<FaqPayload> = async (
   action,
   _datastore,
   {goBack }

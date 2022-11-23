@@ -18,6 +18,7 @@ import {
     DividerSizeTokens,
     FontFamilyTokens,
     FontSizeTokens,
+    IconAlignmentTokens,
     IconProps,
     IconSizeTokens,
     IconTokens,
@@ -29,6 +30,8 @@ import {
     StackProps,
     StackType,
     StackWidth,
+    TagProps,
+    TagTypeTokens,
     TypographyProps,
     WIDGET,
 } from "@voltmoney/schema";
@@ -36,9 +39,9 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack } from "./actions";
 export const template: (
-) => TemplateSchema = (
+    title: string
+) => TemplateSchema = (title
     ) => {
-
         return {
             layout: <Layout>{
                 id: ROUTE.FAQ,
@@ -47,6 +50,7 @@ export const template: (
                     {
                         id: "header", type: WIDGET.CARD, position: POSITION.FIXED_TOP
                     },
+
                     {
                         id: "detailScreen", type: WIDGET.STACK, padding: {
                             left: 16, right: 16
@@ -123,20 +127,31 @@ export const template: (
                     alignItems: StackAlignItems.center,
                     justifyContent: StackJustifyContent.flexEnd,
                     widgetItems: [
-                        { id: "contactBlock", type: WIDGET.BUTTON }
+                        { id: "contactBlock", type: WIDGET.TAG }
                     ]
                 },
-                contactBlock: <ButtonProps>{
-                    labelColor:ColorTokens.Primary_100,
-                    label:"Contact us",
-                    type: ButtonTypeTokens.MediumOutline,
-                    width: ButtonWidthTypeToken.CONTENT,
-                    icon: <IconProps>{
-                        name: IconTokens.HeadPhone,
-                        size: IconSizeTokens.SM,
-                        color: ColorTokens.Grey_Charcoal
-                    }
-                },
+                contactBlock: <TagProps>{
+                    icon: {
+                      align: IconAlignmentTokens.left,
+                      name: IconTokens.Support,
+                      size: IconSizeTokens.XL,
+                    },
+                    label: "Contact us",
+                    labelColor: ColorTokens.Primary_100,
+                    type: TagTypeTokens.DEFAULT,
+                    bgColor: ColorTokens.Primary_05,
+                  },
+                // contactBlock: <ButtonProps>{
+                //     labelColor:ColorTokens.Primary_100,
+                //     label:"Contact us",
+                //     type: ButtonTypeTokens.MediumOutline,
+                //     width: ButtonWidthTypeToken.CONTENT,
+                //     icon: <IconProps>{
+                //         name: IconTokens.HeadPhone,
+                //         size: IconSizeTokens.SM,
+                //         color: ColorTokens.Grey_Charcoal
+                //     }
+                // },
                 divider: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color: ColorTokens.Grey_Chalk,
@@ -147,11 +162,21 @@ export const template: (
                 },
                 detailScreen: <StackProps>{
                     widgetItems: [
+                        { id: "titleData", type: WIDGET.TEXT,padding:{
+                            left:0,right:0
+                        } },
                         { id: "Card1", type: WIDGET.CARD,padding:{
                             left:0,right:0
                         } }
                     ]
 
+                },
+                titleData: <TypographyProps>{
+                    label: `${title}`,
+                    color: ColorTokens.Grey_Charcoal,
+                    fontSize: FontSizeTokens.XS,
+                    fontFamily: FontFamilyTokens.Inter,
+                    fontWeight: "600",
                 },
                 Card1: <CardProps>{
                     bgColor: ColorTokens.White,
@@ -191,10 +216,10 @@ export const template: (
     };
 
 export const faqDetailsMF: PageType<any> = {
-    onLoad: async () => {
+    onLoad: async ({},{ title }) => {
 
         return Promise.resolve(
-            template()
+            template(title)
         );
     },
 

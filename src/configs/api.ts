@@ -34,6 +34,5 @@ export const api = {
   userProfile: `${config.baseUrl}/app/borrower/userProfile/`,
   lmsDisbursal: `${config.baseUrl}/app/borrower/lms/disbursal/`,
   lmsDisbursalVerify: `${config.baseUrl}/app/borrower/lms/disbursal/verifyOTP`,
-  repaymentBankAccountDetails: `${config.baseUrl}/app/borrower/lms/repaymentBankAccountDetails/`,
-  userProfile: `${config.baseUrl}/app/borrower/userProfile/`,
+  repaymentBankAccountDetails: `${config.baseUrl}/app/borrower/lms/repaymentBankAccountDetails/`
 };
