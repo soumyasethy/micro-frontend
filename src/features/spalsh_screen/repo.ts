@@ -17,3 +17,5 @@ export const fetchUserDetails: () => Promise<User> = async () => {
   await SharedPropsService.setUser(user);
   return Promise.resolve(user);
 };
+
+

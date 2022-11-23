@@ -4,39 +4,43 @@ import { clearAllData, nextStepId } from "../../configs/utils";
 import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
 import { fetchUserDetails } from "./repo";
+// import { checkIfOnboardingIsSeen } from "../carousal/repo";
+import SharedPropsService from "../../SharedPropsService";
 
 export const SplashAction: ActionFunction<any> = async (
   action,
   _datastore,
   { navigate, asyncStorage }
 ): Promise<any> => {
-  const accessToken = await asyncStorage.get(StoreKey.accessToken);
-  if (accessToken) {
-    try {
-      const user: User = await fetchUserDetails();
-      // Test code block
-      return navigate(ROUTE.KYC_DIGILOCKER)
-      //
-      if (Object.keys(user).length > 0) {
-        if (user.linkedApplications[0].applicationState === "COMPLETED") {
-          await navigate(ROUTE.DASHBOARD);
+  // navigate(ROUTE.CAROUSAL_PAGE);
+  const isSeen = await SharedPropsService.getOnboarding();
+  if (isSeen) {
+    const accessToken = await asyncStorage.get(StoreKey.accessToken);
+    if (accessToken) {
+      try {
+        const user: User = await fetchUserDetails();
+        // return await navigate(ROUTE.KYC_SUMMARY);
+        if (Object.keys(user).length > 0) {
+          if (user.linkedApplications[0].applicationState === "COMPLETED") {
+            await navigate(ROUTE.DASHBOARD);
+          } else {
+            const nextRoute = await nextStepId(
+              user.linkedApplications[0].currentStepId
+            );
+            await navigate(nextRoute.routeId, nextRoute.params);
+          }
         } else {
-          const nextRoute = await nextStepId(
-            user.linkedApplications[0].currentStepId
-          );
-          await navigate(nextRoute.routeId, nextRoute.params);
-         //  await navigate(ROUTE.MY_PROFILE);
-
+          await clearAllData();
+          await navigate(ROUTE.PHONE_NUMBER);
         }
-      } else {
+      } catch (e) {
         await clearAllData();
         await navigate(ROUTE.PHONE_NUMBER);
       }
-    } catch (e) {
-      await clearAllData();
+    } else {
       await navigate(ROUTE.PHONE_NUMBER);
     }
   } else {
-    await navigate(ROUTE.PHONE_NUMBER);
+    await navigate(ROUTE.CAROUSAL_PAGE);
   }
 };
