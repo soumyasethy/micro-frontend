@@ -4,6 +4,7 @@ export enum ACTION {
   WITHDRAW = "WITHDRAW",
   REPAYMENT = "REPAYMENT",
   MENU = "MENU",
+  CONTACT_US = "CONTACT_US",
 }
 
 export type CreditPayload = {

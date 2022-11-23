@@ -12,12 +12,19 @@ export const withdrawNow: ActionFunction<CreditPayload> = async (
   });
 };
 
-export const profile: ActionFunction<CreditPayload> = async (
+export const OpenProfile: ActionFunction<CreditPayload> = async (
   action,
   _datastore,
   { navigate }
 ): Promise<any> => {
   await navigate(ROUTE.MY_PROFILE);
+};
+export const OpenContactUS: ActionFunction<CreditPayload> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  await navigate(ROUTE.CONTACT_US);
 };
 
 export const repayment: ActionFunction<RepaymentPayload> = async (

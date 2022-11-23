@@ -41,7 +41,13 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../../routes";
 import { ACTION, CreditPayload, RepaymentPayload } from "./types";
-import { goBack, profile, repayment, withdrawNow } from "./actions";
+import {
+  goBack,
+  OpenContactUS,
+  OpenProfile,
+  repayment,
+  withdrawNow,
+} from "./actions";
 import { fetchUserDetails } from "./repo";
 import { User } from "../../../login/otp_verify/types";
 import SharedPropsService from "../../../../SharedPropsService";
@@ -155,7 +161,7 @@ export const template: (
           { id: "leadIcon", type: WIDGET.BUTTON },
         ],
       },
-      contactUs: <TagProps>{
+      contactUs: <TagProps & WidgetProps>{
         icon: {
           align: IconAlignmentTokens.left,
           name: IconTokens.Support,
@@ -165,6 +171,11 @@ export const template: (
         labelColor: ColorTokens.Primary_100,
         type: TagTypeTokens.DEFAULT,
         bgColor: ColorTokens.Primary_05,
+        action: {
+          type: ACTION.CONTACT_US,
+          routeId: ROUTE.DASHBOARD,
+          payload: {},
+        },
       },
 
       contactUsSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
@@ -191,11 +202,7 @@ export const template: (
         },
         action: {
           type: ACTION.PROFILE,
-          payload: <{}>{
-            value: "",
-            widgetId: "input",
-            isResend: false,
-          },
+          payload: {},
           routeId: ROUTE.DASHBOARD,
         },
       },
@@ -417,7 +424,8 @@ export const dashboardMF: PageType<any> = {
     [ACTION.DASHBOARD]: withdrawNow,
     [ACTION.REPAYMENT]: repayment,
     [ACTION.MENU]: goBack,
-    [ACTION.PROFILE]: profile,
+    [ACTION.PROFILE]: OpenProfile,
+    [ACTION.CONTACT_US]: OpenContactUS,
   },
   bgColor: "#F3F5FC",
   clearPrevious: true,

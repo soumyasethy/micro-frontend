@@ -1,8 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import {
-  ProfilePayload
-} from "./types";
+import { ProfilePayload } from "./types";
 import {
   ButtonProps,
   InputStateToken,
@@ -27,9 +25,9 @@ export const accountDetails: ActionFunction<ProfilePayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
- await navigate(ROUTE.ACCOUNT_DETAILS,{
-  profileData: action.payload.value,
- })
+  await navigate(ROUTE.ACCOUNT_DETAILS, {
+    profileData: action.payload.value,
+  });
 };
 
 export const contactDetails: ActionFunction<ProfilePayload> = async (
@@ -37,7 +35,7 @@ export const contactDetails: ActionFunction<ProfilePayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  await navigate(ROUTE.CONTACT_US)
+  await navigate(ROUTE.CONTACT_US);
 };
 
 export const faqDetails: ActionFunction<ProfilePayload> = async (
@@ -45,7 +43,7 @@ export const faqDetails: ActionFunction<ProfilePayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
-  await navigate(ROUTE.FAQ)
+  await navigate(ROUTE.FAQ);
 };
 
 export const aboutDetails: ActionFunction<ProfilePayload> = async (
@@ -54,7 +52,7 @@ export const aboutDetails: ActionFunction<ProfilePayload> = async (
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
   console.log("abou page");
-  await navigate(ROUTE.ABOUTUS)
+  await navigate(ROUTE.ABOUTUS);
 };
 
 export const logout: ActionFunction<ProfilePayload> = async (
@@ -62,16 +60,14 @@ export const logout: ActionFunction<ProfilePayload> = async (
   _datastore,
   { navigate, setDatastore }
 ): Promise<any> => {
-  console.log("Here");
-  //await clearAllData();
-  //await navigate(ROUTE.PHONE_NUMBER);
+  await clearAllData();
+  await navigate(ROUTE.PHONE_NUMBER);
 };
 
 export const goBack: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
-  {goBack }
+  { goBack }
 ): Promise<any> => {
   goBack();
 };
-
