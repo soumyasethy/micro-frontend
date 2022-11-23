@@ -24,12 +24,16 @@ export const api = {
   bankInfoSearch: `${config.baseUrl}/util/bankInfo/search/`,
   photoInit: `${config.baseUrl}/app/borrower/application/kyc/photo/init`,
   photoVerify: `${config.baseUrl}/app/borrower/application/kyc/photo/verify`,
-  pledgeLimit:`${config.baseUrl}/app/borrower/application/pledge/limit/`,
-  pledgeCreate:`${config.baseUrl}/app/borrower/application/pledge/create`,
+  pledgeLimit: `${config.baseUrl}/app/borrower/application/pledge/limit/`,
+  pledgeCreate: `${config.baseUrl}/app/borrower/application/pledge/create`,
   authPledge: `${config.baseUrl}/app/borrower/application/pledge/authPledge`,
   mandateLink: `${config.baseUrl}/app/borrower/application/mandate/link/`,
   mandateStatus: `${config.baseUrl}/app/borrower/application/mandate/status/`,
   agreementLink: `${config.baseUrl}/app/borrower/application/agreement/link/`,
   agreementStatus: `${config.baseUrl}/app/borrower/application/agreement/status/`,
-  approvalCheck: `${config.baseUrl}/app/borrower/application/approval/check/`
+  approvalCheck: `${config.baseUrl}/app/borrower/application/approval/check/`,
+  userProfile: `${config.baseUrl}/app/borrower/userProfile/`,
+  lmsDisbursal: `${config.baseUrl}/app/borrower/lms/disbursal/`,
+  lmsDisbursalVerify: `${config.baseUrl}/app/borrower/lms/disbursal/verifyOTP`,
+  repaymentBankAccountDetails: `${config.baseUrl}/app/borrower/lms/repaymentBankAccountDetails/`
 };

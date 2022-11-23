@@ -2,10 +2,10 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
-import { defaultHeaders } from "../../../configs/config";
+import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import { ProgressIndicatorProps } from "@voltmoney/schema";
 import { ACTION } from "./types";
-let timer = undefined;
+
 export const GetMandateLink: ActionFunction<any> = async (
   action,
   _datastore,
@@ -21,22 +21,28 @@ export const GetMandateLink: ActionFunction<any> = async (
     headers: await defaultHeaders(),
   };
 
-  return await fetch(`${api.mandateLink}${applicationId}`, requestOptions)
-    .then((response) => {
-      console.log("GetMandateLink response status", response.status);
-      if (response.status === 200) {
-        clearInterval(timer);
-        setDatastore(action.routeId, "progressItem", <ProgressIndicatorProps>{
-          count: 100,
-        });
-        return response.json();
-      }
-    })
-    .then((response) => {
-      console.log("GetMandateLink response" + JSON.stringify(response));
-      navigate(ROUTE.LOAN_REPAYMENT, { url: `${response.stepResponseObject}` });
-    })
-    .catch((error) => console.log("error", error));
+  const apiPollerRef = setInterval(
+    () =>
+      fetch(`${api.mandateLink}${applicationId}`, requestOptions)
+        .then((response) => {
+          if (response.status === 200) {
+            clearInterval(apiPollerRef);
+            setDatastore(action.routeId, "progressItem", <
+              ProgressIndicatorProps
+            >{
+              count: 100,
+            });
+            return response.json();
+          }
+        })
+        .then((response) => {
+          navigate(ROUTE.LOAN_REPAYMENT, {
+            url: `${response.stepResponseObject}`,
+          });
+        })
+        .catch((error) => console.log("error", error)),
+    APP_CONFIG.POLLING_INTERVAL
+  );
 };
 
 export const GoBack: ActionFunction<any> = async (
@@ -51,11 +57,9 @@ export const MandateLinkPoll: ActionFunction<any> = async (
   _datastore,
   props
 ): Promise<any> => {
-  timer = setInterval(async () => {
-    await GetMandateLink(
-      { type: ACTION.AUTOPAY, routeId: ROUTE.LOAN_AUTOPAY, payload: {} },
-      {},
-      props
-    );
-  }, 2000);
+  await GetMandateLink(
+    { type: ACTION.AUTOPAY, routeId: ROUTE.LOAN_AUTOPAY, payload: {} },
+    {},
+    props
+  );
 };

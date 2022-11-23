@@ -109,7 +109,7 @@ export const template: (
     },
     leadIcon: <ImageProps>{
       uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
-      defaultUri:`https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
+      defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
       size: ImageSizeTokens.MD,
     },
     leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
@@ -164,7 +164,7 @@ export const template: (
       type: InputTypeToken.DEFAULT,
       state: InputStateToken.DISABLED,
       title: "Branch or IFSC",
-      placeholder: "Search",
+      placeholder: "Search by branch or IFSC",
       keyboardType: KeyboardTypeToken.email,
       value: "",
       caption: { success: "", error: "" },
@@ -211,5 +211,5 @@ export const bankSelectMF: PageType<any> = {
     [ACTION.TRIGGER_CTA]: BavVerifyManualAction,
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };

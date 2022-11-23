@@ -85,8 +85,7 @@ export const template: (
     },
     headSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     contentItem: <TypographyProps>{
-      label:
-        "This registration is required to ensure monthly auto debit of interest from your account.",
+      label: "Verify and confirm the usage terms & charges",
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,

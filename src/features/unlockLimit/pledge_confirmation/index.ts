@@ -22,10 +22,16 @@ import { ACTION, OtpPayload } from "./types";
 import { sendOtp, goBack } from "./actions";
 import _ from "lodash";
 import { StepResponseObject } from "../unlock_limit/types";
+import { getTotalLimit } from "../portfolio/actions";
 
 export const template: (
   stepResponseObject: StepResponseObject
 ) => TemplateSchema = (stepResponseObject) => {
+  const totalAmount = getTotalLimit(
+    stepResponseObject.availableCAS,
+    stepResponseObject.isinNAVMap,
+    stepResponseObject.isinLTVMap
+  );
   return {
     layout: <Layout>{
       id: ROUTE.PLEDGE_CONFIRMATION,
@@ -60,7 +66,10 @@ export const template: (
           {
             id: "total_cash_imit",
             title: "Total cash limit",
-            amount: `${stepResponseObject.availableCreditAmount}`,
+            amount: `${totalAmount}`.replace(
+              /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+              ","
+            ),
           },
           ...Object.keys(
             _.get(stepResponseObject, "processingFeesBreakUp", {})
@@ -68,13 +77,18 @@ export const template: (
             return {
               id: `processingFeesBreakUp_${index}`,
               title: key,
-              amount: `${stepResponseObject.processingFeesBreakUp[key] || 0}`,
+              amount: `${
+                stepResponseObject.processingFeesBreakUp[key] || 0
+              }`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
             };
           }),
           {
             id: "total_charges",
             title: "Total charges",
-            amount: `${stepResponseObject.processingFees || 0}`,
+            amount: `${stepResponseObject.processingFees || 0}`.replace(
+              /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+              ","
+            ),
           },
         ],
       },
@@ -105,4 +119,5 @@ export const pledgeConfirmationMF: PageType<any> = {
     [ACTION.PLEDGE_CONFIRMATION]: sendOtp,
     [ACTION.BACK_BUTTON]: goBack,
   },
+  clearPrevious: true,
 };

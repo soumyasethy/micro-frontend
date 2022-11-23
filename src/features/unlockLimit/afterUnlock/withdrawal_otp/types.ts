@@ -1,14 +1,11 @@
 export enum ACTION {
-    WITHDRAWAL_OTP = "WITHDRAWAL_OTP",
-    GO_BACK = "GO_BACK"
-  }
+  WITHDRAWAL_OTP = "WITHDRAWAL_OTP",
+  RESEND_WITHDRAWAL_OTP = "RESEND_WITHDRAWAL_OTP",
+  GO_BACK = "GO_BACK",
+}
 
-  export type OtpPledgePayload = {
-    value: string;
-    widgetId: string;
-    isResend?: boolean;
-  };
-
-  
-
-  
+export type DisbursementOTPPayload = {
+  value: string;
+  disbursalAmount?:string;
+  accountNumber?:string;
+};

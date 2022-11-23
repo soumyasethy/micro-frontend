@@ -1,12 +1,16 @@
 export enum ACTION {
-    WITHDRAW_AMOUNT = "WITHDRAW_AMOUNT",
-    GO_BACK="GO_BACK"
-  }
+  WITHDRAW_AMOUNT = "WITHDRAW_AMOUNT",
+  ON_AMOUNT_CHANGE = "ON_AMOUNT_CHANGE",
+  SET_RECOMENDED_AMOUNT = "SET_RECOMENDED_AMOUNT",
+  GO_BACK = "GO_BACK",
+}
 
-  
-  export type AssetsPayload = {
-    value: string;
-    widgetId: string;
-  };
+export type AmountPayload = {
+  value: string;
+  availableCreditAmount:string
+};
 
-  
+export type CreateDisbursementRequestPayload = {
+  disbursalAmount: number;
+  accountNumber: string;
+};
