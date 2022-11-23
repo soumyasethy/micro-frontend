@@ -1,6 +1,6 @@
 import SharedPropsService from "../SharedPropsService";
 
-export const __isTest__ = true;
+export const __isTest__ = false;
 export const __isMock__ = false;
 
 export const defaultAuthHeaders = () => {
