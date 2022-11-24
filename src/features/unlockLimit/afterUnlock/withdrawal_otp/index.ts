@@ -105,7 +105,7 @@ export const template: (
       label: `A 4-digit OTP was sent on ${mobileNumber.substring(
         0,
         4
-      )}*******${mobileNumber.substring(
+      )}*****${mobileNumber.substring(
         mobileNumber.length - 2,
         mobileNumber.length
       )}`,

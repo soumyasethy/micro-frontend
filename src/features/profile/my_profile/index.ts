@@ -9,24 +9,23 @@ import {
 } from "@voltmoney/types";
 import {
   ActiveStateTokens,
-  AvatarProps,
   AvatarSizeTokens,
   AvatarTypeTokens,
   BorderRadiusTokens,
   ButtonProps,
   ButtonTypeTokens,
-  ButtonWidthTypeToken,
   CardProps,
   ColorTokens,
   DividerProps,
   DividerSizeTokens,
   FontFamilyTokens,
   FontSizeTokens,
-  IconAlignmentTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
-  PaddingSizeTokens,
+  ListItemProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -34,8 +33,6 @@ import {
   StackProps,
   StackType,
   StackWidth,
-  TagProps,
-  TagTypeTokens,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -61,153 +58,97 @@ export const template: (
     type: LAYOUTS.LIST,
     widgets: [
       {
-        id: "card",
-        type: WIDGET.CARD,
-        position: POSITION.FIXED_TOP,
-        padding: {},
+        id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP,
+   
       },
-      // { id: "divider", type: WIDGET.DIVIDER },
-      { id: "accountCard", type: WIDGET.CARD },
-      { id: "faqCard", type: WIDGET.CARD },
-      { id: "contactCard", type: WIDGET.CARD },
-      // {
-      //   id: "detailScreen",
-      //   type: WIDGET.STACK,
-      //   padding: {
-      //     // left: 16,
-      //     // right: 16,
-      //     // horizontal: 16,
-      //   },
-      // },
       {
-        id: "bottomStack",
-        type: WIDGET.STACK,
+        id: "accountCard", type: WIDGET.CARD
+ 
+      },
+      {
+        id: "faqCard", type: WIDGET.CARD
+ 
+      },
+      {
+        id: "contactCard", type: WIDGET.CARD,
+   
+      },
+
+      {
+        id: "bottomCard1", type: WIDGET.CARD,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      
+      },
+      {
+        id: "bottomCard3", type: WIDGET.CARD,
         position: POSITION.ABSOLUTE_BOTTOM,
         padding: {
-          left: 16,
-          right: 16,
-        },
+            horizontal: 0,
+            all: 0,
+          },
+      },
+      {
+        id: "bottomCard2", type: WIDGET.CARD,
+        position: POSITION.ABSOLUTE_BOTTOM,
+       
       },
     ],
   },
   datastore: <Datastore>{
-    card: <CardProps>{
-      bgColor: ColorTokens.White,
-      body: {
-        widgetItems: [
-          { id: "header", type: WIDGET.STACK },
-          { id: "headerDown", type: WIDGET.SPACE },
-          { id: "divider", type: WIDGET.DIVIDER }
-        ],
+    header: <HeaderProps>{
+      title: `${userName}`,
+      rightItem: {
+        uri: 'https://reactnative.dev/img/tiny_logo.png',
+        initialLetter: `${initialUserLetter}`,
+        type: AvatarTypeTokens.SINGLE,
+        size: AvatarSizeTokens.LG,
+        borderWidth: 1,
+        borderColor: ColorTokens.Primary_100,
+        borderRadius: BorderRadiusTokens.BR5,
+        active: ActiveStateTokens.INACTIVE,
       },
-      // alignItems: StackAlignItems.center,
-      // justifyContent: StackJustifyContent.spaceBetween,
-    },
-    header: <StackProps>{
-      width: StackWidth.FULL,
-      type: StackType.row,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.flexStart,
-      // padding: PaddingSizeTokens.LG,
-      widgetItems: [
-        { id: "avatar", type: WIDGET.AVATAR },
-        { id: "space0", type: WIDGET.SPACE },
-        { id: "titles", type: WIDGET.TEXT },
-        { id: "space01", type: WIDGET.SPACE },
-        { id: "headerRight", type: WIDGET.STACK },
-      ],
-    },
-    avatar: <AvatarProps>{
-      initialLetter: `${initialUserLetter}`,
-      uri: "https://reactnative.dev/img/tiny_logo.png",
-      type: AvatarTypeTokens.SINGLE,
-      size: AvatarSizeTokens.LG,
-      // borderWidth: 1,
-      borderColor: ColorTokens.Primary_100,
-      borderRadius: BorderRadiusTokens.BR5,
-      active: ActiveStateTokens.INACTIVE,
-    },
-    space0: <SpaceProps>{ size: SizeTypeTokens.LG },
-    titles: <TypographyProps>{
-      label: `${userName}`,
-      fontSize: FontSizeTokens.MD,
-      numberOfLines: 1,
-      color: ColorTokens.Grey_Night,
-      fontFamily: FontFamilyTokens.Poppins,
-      fontWeight: "700",
-    },
-    space01: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
-    headerRight: <StackProps>{
-      type: StackType.row,
-      alignItems: StackAlignItems.flexEnd,
-      justifyContent: StackJustifyContent.flexEnd,
-      widgetItems: [{ id: "leadIcon", type: WIDGET.BUTTON }],
-    },
-    leadIcon: <ButtonProps & WidgetProps>{
-      label: "",
-      type: ButtonTypeTokens.SmallGhost,
-      width: ButtonWidthTypeToken.CONTENT,
-      stack: <StackProps>{
-        type: StackType.row,
-        alignItems: StackAlignItems.flexStart,
-        justifyContent: StackJustifyContent.flexStart,
+      isBackButton: false,
+      leftIcon: {
+      	name: IconTokens.Cross,
+      	size: IconSizeTokens.XL,
+      	color: ColorTokens.Grey_Charcoal
       },
-      icon: {
-        name: IconTokens.Cancel,
-        align: IconAlignmentTokens.right,
-        size: IconSizeTokens.XXXXL,
-      },
+      type:HeaderTypeTokens.HEADERCTA,
       action: {
         type: ACTION.BACK_BUTTON,
         payload: <{}>{
           value: "",
-          widgetId: "input",
+          widgetId: "continue",
           isResend: false,
         },
         routeId: ROUTE.MY_PROFILE,
       },
     },
-    // contactUs: <TagProps>{
-    //   icon: {
-    //     align: IconAlignmentTokens.left,
-    //     name: IconTokens.Support,
-    //     size: IconSizeTokens.XL,
-    //   },
-    //   label: "Contact us",
-    //   labelColor: ColorTokens.Primary_100,
-    //   type: TagTypeTokens.DEFAULT,
-    //   bgColor: ColorTokens.Primary_05,
-    // },
-
-    // contactUsSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
-
-
-    headerDown: <SpaceProps>{ size: SizeTypeTokens.XL },
-    divider: <DividerProps>{
-      size: DividerSizeTokens.SM,
-      color: ColorTokens.Grey_Chalk,
-      margin: {
-        vertical: SizeTypeTokens.XS,
-        horizontal: SizeTypeTokens.SM,
+    list1: <ListItemProps>{
+      customTitle: <TypographyProps>{
+        label: "Account details",
+        color: ColorTokens.Grey_Night,
+        numberOfLines: 1,
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "500",
       },
+      leadIconName: IconTokens.Person,
+      trailIconName: IconTokens.ChevronDown,
+      onPress: () => { },
     },
-    // detailScreen: <StackProps>{
-    //   widgetItems: [
-    //     { id: "accountCard", type: WIDGET.CARD },
-    //     { id: "faqCard", type: WIDGET.CARD },
-    //     { id: "contactCard", type: WIDGET.CARD },
-    //   ],
-    // },
     accountCard: <CardProps>{
       bgColor: ColorTokens.White,
       body: {
         widgetItems: [
+          // { id: "accountDetailsCTA", type: WIDGET.STACK }
           { id: "accountDetails", type: WIDGET.STACK },
           { id: "accountSpace", type: WIDGET.SPACE },
           { id: "accountDivider", type: WIDGET.DIVIDER },
         ],
       },
     },
+
     accountDetails: <StackProps>{
       type: StackType.row,
       width: StackWidth.FULL,
@@ -216,6 +157,7 @@ export const template: (
         { id: "infoItems", type: WIDGET.STACK },
         { id: "cta", type: WIDGET.STACK },
       ],
+
     },
     infoItems: <StackProps>{
       type: StackType.row,
@@ -227,6 +169,15 @@ export const template: (
         { id: "infoSpace", type: WIDGET.SPACE },
         { id: "title", type: WIDGET.TEXT },
       ],
+      action: {
+        type: ACTION.PROFILE,
+        payload: <ProfilePayload>{
+          value: profileData,
+          widgetId: "continue",
+          isResend: false,
+        },
+        routeId: ROUTE.MY_PROFILE,
+      },
     },
     iconName: <IconProps>{
       name: IconTokens.Person,
@@ -247,9 +198,8 @@ export const template: (
     },
     cta: <StackProps>{
       type: StackType.row,
-      flex: 1,
       width: StackWidth.FULL,
-      alignItems: StackAlignItems.center,
+      alignItems: StackAlignItems.flexEnd,
       justifyContent: StackJustifyContent.flexEnd,
       widgetItems: [{ id: "cta1", type: WIDGET.BUTTON }],
     },
@@ -259,7 +209,7 @@ export const template: (
       icon: <IconProps>{
         name: IconTokens.ChervonDownRight,
         size: IconSizeTokens.MD,
-        color: ColorTokens.Grey_Night,
+        color: ColorTokens.Grey_Charcoal,
       },
       action: {
         type: ACTION.PROFILE,
@@ -299,6 +249,11 @@ export const template: (
         { id: "faqItems", type: WIDGET.STACK },
         { id: "ctaFaq", type: WIDGET.STACK },
       ],
+      action: {
+        type: ACTION.FAQ,
+        payload: {},
+        routeId: ROUTE.MY_PROFILE,
+      },
     },
     faqItems: <StackProps>{
       type: StackType.row,
@@ -310,11 +265,7 @@ export const template: (
         { id: "faqSpace", type: WIDGET.SPACE },
         { id: "titleFaq", type: WIDGET.TEXT },
       ],
-      action: {
-        type: ACTION.FAQ,
-        payload: {},
-        routeId: ROUTE.MY_PROFILE,
-      },
+
     },
     iconFaq: <IconProps>{
       name: IconTokens.Question,
@@ -355,224 +306,359 @@ export const template: (
           isResend: false,
         },
         routeId: ROUTE.MY_PROFILE,
-        }
-      },
-      faqsSpace: <SpaceProps>{
-        size: SizeTypeTokens.XL,
-      },
-      faqDivider: <DividerProps>{
-        size: DividerSizeTokens.SM,
-        color: ColorTokens.Grey_Chalk,
-        margin: {
-          vertical: SizeTypeTokens.SM,
-          horizontal: SizeTypeTokens.SM,
-        },
-      },
-      contactCard: <CardProps>{
-        bgColor: ColorTokens.White,
-        body: {
-          widgetItems: [
-            { id: "contactDetails", type: WIDGET.STACK },
-            { id: "contactsSpace", type: WIDGET.SPACE },
-            { id: "contactDivider", type: WIDGET.DIVIDER },
-          ],
-        },
-      },
-      contactDetails: <StackProps>{
-        type: StackType.row,
-        width: StackWidth.FULL,
-        widgetItems: [
-          { id: "contactItems", type: WIDGET.STACK },
-          { id: "ctaContact", type: WIDGET.STACK },
-        ],
-        action: {
-          type: ACTION.CONTACT_US,
-          payload: <{}>{
-            value: "",
-            widgetId: "continue",
-            isResend: false,
-          },
-          routeId: ROUTE.MY_PROFILE,
-        },
-      },
-      contactItems: <StackProps>{
-        type: StackType.row,
-        flex: 1,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.flexStart,
-        widgetItems: [
-          { id: "contactName", type: WIDGET.ICON },
-          { id: "contactSpace", type: WIDGET.SPACE },
-          { id: "contactTitle", type: WIDGET.TEXT },
-        ],
-      },
-      contactName: <IconProps>{
-        name: IconTokens.HeadPhone,
-        color: ColorTokens.Black,
-        size: IconSizeTokens.MD,
-      },
-      contactSpace: <SpaceProps>{
-        size: SizeTypeTokens.LG,
-      },
-
-      contactTitle: <TypographyProps>{
-        label: "Contact Us",
-        color: ColorTokens.Grey_Night,
-        numberOfLines: 1,
-        fontSize: FontSizeTokens.SM,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "500",
-      },
-      ctaContact: <StackProps>{
-        type: StackType.row,
-        alignItems: StackAlignItems.flexEnd,
-        justifyContent: StackJustifyContent.flexEnd,
-        widgetItems: [{ id: "cta1Contact", type: WIDGET.BUTTON }],
-      },
-      cta1Contact: <ButtonProps>{
-        type: ButtonTypeTokens.SmallGhost,
-        // width: ButtonWidthTypeToken.CONTENT,
-        icon: <IconProps>{
-          name: IconTokens.ChervonDownRight,
-          size: IconSizeTokens.SM,
-          color: ColorTokens.Grey_Night,
-        },
-      },
-      contactsSpace: <SpaceProps>{
-        size: SizeTypeTokens.XL,
-      },
-      contactDivider: <DividerProps>{
-        size: DividerSizeTokens.SM,
-        color: ColorTokens.Grey_Chalk,
-        margin: {
-          vertical: SizeTypeTokens.SM,
-          horizontal: SizeTypeTokens.SM,
-        },
-      },
-      bottomStack: <StackProps>{
-        widgetItems: [
-          { id: "aboutUsCard", type: WIDGET.CARD },
-          { id: "logoutCard", type: WIDGET.CARD },
-        ],
-      },
-      aboutUsCard: <CardProps & WidgetProps>{
-        bgColor: ColorTokens.White,
-        body: {
-          widgetItems: [
-            { id: "aboutUsDetails", type: WIDGET.STACK },
-            { id: "aboutUsSpace1", type: WIDGET.SPACE },
-            { id: "aboutUsDivider", type: WIDGET.DIVIDER },
-          ],
-        },
-        action: {
-          type: ACTION.ABOUT,
-          payload: {},
-          routeId: ROUTE.MY_PROFILE,
-        },
-      },
-      aboutUsDetails: <StackProps>{
-        type: StackType.row,
-        width: StackWidth.FULL,
-        flex: 1,
-        widgetItems: [
-          { id: "aboutUsItems", type: WIDGET.STACK },
-          { id: "aboutUsSpace0", type: WIDGET.SPACE },
-          //  { id: "aboutUsCta", type: WIDGET.STACK }
-        ],
-      },
-      aboutUsItems: <StackProps>{
-        type: StackType.row,
-        width: StackWidth.FULL,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.flexStart,
-        widgetItems: [
-          { id: "aboutUsIconName", type: WIDGET.ICON },
-          { id: "aboutUsSpace", type: WIDGET.SPACE },
-          { id: "aboutUsTitle", type: WIDGET.TEXT },
-        ],
-        action: {
-          type: ACTION.ABOUT,
-          payload: {},
-          routeId: ROUTE.MY_PROFILE,
-        },
-      },
-      aboutUsIconName: <IconProps>{
-        name: IconTokens.Volt,
-        color: ColorTokens.Primary_100,
-        size: IconSizeTokens.LG,
-      },
-      aboutUsSpace: <SpaceProps>{
-        size: SizeTypeTokens.LG,
-      },
-
-      aboutUsTitle: <TypographyProps>{
-        label: "About Us",
-        color: ColorTokens.Grey_Night,
-        numberOfLines: 1,
-        fontSize: FontSizeTokens.SM,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "500",
-      },
-      aboutUsSpace0: <SpaceProps>{
-        size: SizeTypeTokens.MD,
-      },
-      aboutUsSpace1: <SpaceProps>{
-        size: SizeTypeTokens.XL,
-      },
-      aboutUsDivider: <DividerProps>{
-        size: DividerSizeTokens.SM,
-        color: ColorTokens.Grey_Chalk,
-        margin: {
-          vertical: SizeTypeTokens.XS,
-          horizontal: SizeTypeTokens.SM,
-        },
-      },
-      logoutCard: <CardProps>{
-        bgColor: ColorTokens.White,
-        body: {
-          widgetItems: [{ id: "logoutDetails", type: WIDGET.STACK }],
-        },
-      },
-      logoutDetails: <StackProps>{
-        type: StackType.row,
-        width: StackWidth.FULL,
-        widgetItems: [{ id: "logoutItems", type: WIDGET.STACK }],
-        action: {
-          type: ACTION.LOGOUT,
-          payload: {},
-          routeId: ROUTE.MY_PROFILE,
-        },
-      },
-      logoutItems: <StackProps>{
-        type: StackType.row,
-        flex: 1,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.flexStart,
-        widgetItems: [
-          { id: "iconlogout", type: WIDGET.ICON },
-          { id: "logoutSpace", type: WIDGET.SPACE },
-          { id: "titlelogout", type: WIDGET.TEXT },
-        ],
-      },
-      iconlogout: <IconProps>{
-        name: IconTokens.Logout,
-        color: ColorTokens.Black,
-        size: IconSizeTokens.MD,
-      },
-      logoutSpace: <SpaceProps>{
-        size: SizeTypeTokens.LG,
-      },
-
-      titlelogout: <TypographyProps>{
-        label: "Logout",
-        color: ColorTokens.Grey_Night,
-        numberOfLines: 1,
-        fontSize: FontSizeTokens.SM,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "500",
+      }
+    },
+    faqsSpace: <SpaceProps>{
+      size: SizeTypeTokens.XL,
+    },
+    faqDivider: <DividerProps>{
+      size: DividerSizeTokens.SM,
+      color: ColorTokens.Grey_Chalk,
+      margin: {
+        vertical: SizeTypeTokens.SM,
+        horizontal: SizeTypeTokens.SM,
       },
     },
-  });
+    contactCard: <CardProps>{
+      bgColor: ColorTokens.White,
+      body: {
+        widgetItems: [
+          { id: "contactDetails", type: WIDGET.STACK },
+          { id: "contactsSpace", type: WIDGET.SPACE },
+          { id: "contactDivider", type: WIDGET.DIVIDER },
+        ],
+      },
+    },
+    contactDetails: <StackProps>{
+      type: StackType.row,
+      width: StackWidth.FULL,
+      widgetItems: [
+        { id: "contactItems", type: WIDGET.STACK },
+        { id: "ctaContact", type: WIDGET.STACK },
+      ],
+      action: {
+        type: ACTION.CONTACT_US,
+        payload: <{}>{
+          value: "",
+          widgetId: "continue",
+          isResend: false,
+        },
+        routeId: ROUTE.MY_PROFILE,
+      },
+    },
+    contactItems: <StackProps>{
+      type: StackType.row,
+      flex: 1,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.flexStart,
+      widgetItems: [
+        { id: "contactName", type: WIDGET.ICON },
+        { id: "contactSpace", type: WIDGET.SPACE },
+        { id: "contactTitle", type: WIDGET.TEXT },
+      ],
+    },
+    contactName: <IconProps>{
+      name: IconTokens.HeadPhone,
+      color: ColorTokens.Black,
+      size: IconSizeTokens.MD,
+    },
+    contactSpace: <SpaceProps>{
+      size: SizeTypeTokens.LG,
+    },
+
+    contactTitle: <TypographyProps>{
+      label: "Contact Us",
+      color: ColorTokens.Grey_Night,
+      numberOfLines: 1,
+      fontSize: FontSizeTokens.SM,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
+    },
+    ctaContact: <StackProps>{
+      type: StackType.row,
+      alignItems: StackAlignItems.flexEnd,
+      justifyContent: StackJustifyContent.flexEnd,
+      widgetItems: [{ id: "cta1Contact", type: WIDGET.BUTTON }],
+    },
+    cta1Contact: <ButtonProps>{
+      type: ButtonTypeTokens.SmallGhost,
+      // width: ButtonWidthTypeToken.CONTENT,
+      icon: <IconProps>{
+        name: IconTokens.ChervonDownRight,
+        size: IconSizeTokens.SM,
+        color: ColorTokens.Grey_Night,
+      },
+    },
+    contactsSpace: <SpaceProps>{
+      size: SizeTypeTokens.XL,
+    },
+    contactDivider: <DividerProps>{
+      size: DividerSizeTokens.SM,
+      color: ColorTokens.Grey_Chalk,
+      margin: {
+        vertical: SizeTypeTokens.SM,
+        horizontal: SizeTypeTokens.SM,
+      },
+    },
+
+
+    bottomCard1: <CardProps>{
+      bgColor: ColorTokens.White,
+      body: {
+        widgetItems: [
+          { id: "bottomCard1Details", type: WIDGET.STACK },
+          // { id: "bottomCard1sSpace", type: WIDGET.SPACE },
+          // { id: "bottomCard1Divider", type: WIDGET.DIVIDER },
+        ],
+      },
+    },
+    bottomCard1Details: <StackProps>{
+      type: StackType.row,
+      width: StackWidth.FULL,
+      widgetItems: [
+        { id: "bottomCard1Items", type: WIDGET.STACK },
+        { id: "ctabottomCard1", type: WIDGET.STACK },
+      ],
+      action: {
+        type: ACTION.ABOUT,
+        payload: <{}>{
+          value: "",
+          widgetId: "continue",
+          isResend: false,
+        },
+        routeId: ROUTE.MY_PROFILE,
+      },
+    },
+    bottomCard1Items: <StackProps>{
+      type: StackType.row,
+      flex: 1,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.flexStart,
+      widgetItems: [
+        { id: "bottomCard1Name", type: WIDGET.ICON },
+        { id: "bottomCard1Space", type: WIDGET.SPACE },
+        { id: "bottomCard1Title", type: WIDGET.TEXT },
+      ],
+    },
+    bottomCard1Name: <IconProps>{
+      name: IconTokens.Volt,
+      color: ColorTokens.Primary_100,
+      size: IconSizeTokens.MD,
+    },
+    bottomCard1Space: <SpaceProps>{
+      size: SizeTypeTokens.LG,
+    },
+
+    bottomCard1Title: <TypographyProps>{
+      label: "About Us",
+      color: ColorTokens.Grey_Night,
+      numberOfLines: 1,
+      fontSize: FontSizeTokens.SM,
+      lineHeight:24,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
+    },
+    
+    // bottomCard1sSpace: <SpaceProps>{
+    //   size: SizeTypeTokens.LG,
+    // },
+    bottomCard3: <CardProps>{
+      bgColor: ColorTokens.White,
+      body: {
+        widgetItems: [
+         // { id: "bottomCard1Details", type: WIDGET.STACK },
+          // { id: "bottomCard1sSpace", type: WIDGET.SPACE },
+           { id: "bottomCard1Divider", type: WIDGET.DIVIDER },
+        ],
+      },
+    },
+    bottomCard1Divider: <DividerProps>{
+      size: DividerSizeTokens.SM,
+      color: ColorTokens.Grey_Chalk,
+      margin: {
+        vertical: SizeTypeTokens.SM,
+        horizontal: SizeTypeTokens.NONE,
+      },
+    },
+
+    bottomCard2: <CardProps>{
+      bgColor: ColorTokens.White,
+      body: {
+        widgetItems: [
+          { id: "bottomCard2Details", type: WIDGET.STACK }
+        ],
+      },
+    },
+    bottomCard2Details: <StackProps>{
+      type: StackType.row,
+      width: StackWidth.FULL,
+      widgetItems: [
+        { id: "bottomCard2Items", type: WIDGET.STACK },
+      ],
+      action: {
+        type: ACTION.LOGOUT,
+        payload: <{}>{
+          value: "",
+          widgetId: "continue",
+          isResend: false,
+        },
+        routeId: ROUTE.MY_PROFILE,
+      },
+    },
+    bottomCard2Items: <StackProps>{
+      type: StackType.row,
+      flex: 1,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.flexStart,
+      widgetItems: [
+        { id: "bottomCard2Name", type: WIDGET.ICON },
+        { id: "bottomCard2Space", type: WIDGET.SPACE },
+        { id: "bottomCard2Title", type: WIDGET.TEXT },
+      ],
+    },
+    bottomCard2Name: <IconProps>{
+      name: IconTokens.Logout,
+      color: ColorTokens.Primary_100,
+      size: IconSizeTokens.SM,
+    },
+    bottomCard2Space: <SpaceProps>{
+      size: SizeTypeTokens.LG,
+    },
+
+    bottomCard2Title: <TypographyProps>{
+      label: "Logout",
+      color: ColorTokens.Primary_100,
+      numberOfLines: 1,
+      fontSize: FontSizeTokens.SM,
+      lineHeight:24,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "600",
+    },
+
+    bottomStack: <StackProps>{
+      widgetItems: [
+        { id: "aboutUsCard", type: WIDGET.CARD },
+        { id: "logoutCard", type: WIDGET.CARD },
+      ],
+    },
+    aboutUsCard: <CardProps & WidgetProps>{
+      bgColor: ColorTokens.White,
+      body: {
+        widgetItems: [
+          { id: "aboutUsDetails", type: WIDGET.STACK },
+          { id: "aboutUsSpace1", type: WIDGET.SPACE },
+          { id: "aboutUsDivider", type: WIDGET.DIVIDER },
+        ],
+      },
+      action: {
+        type: ACTION.ABOUT,
+        payload: {},
+        routeId: ROUTE.MY_PROFILE,
+      },
+    },
+    aboutUsDetails: <StackProps>{
+      type: StackType.row,
+      width: StackWidth.FULL,
+      flex: 1,
+      widgetItems: [
+        { id: "aboutUsItems", type: WIDGET.STACK },
+        { id: "aboutUsSpace0", type: WIDGET.SPACE },
+        //  { id: "aboutUsCta", type: WIDGET.STACK }
+      ],
+    },
+    aboutUsItems: <StackProps>{
+      type: StackType.row,
+      width: StackWidth.FULL,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.flexStart,
+      widgetItems: [
+        { id: "aboutUsIconName", type: WIDGET.ICON },
+        { id: "aboutUsSpace", type: WIDGET.SPACE },
+        { id: "aboutUsTitle", type: WIDGET.TEXT },
+      ],
+      action: {
+        type: ACTION.ABOUT,
+        payload: {},
+        routeId: ROUTE.MY_PROFILE,
+      },
+    },
+    aboutUsIconName: <IconProps>{
+      name: IconTokens.Volt,
+      color: ColorTokens.Primary_100,
+      size: IconSizeTokens.LG,
+    },
+    aboutUsSpace: <SpaceProps>{
+      size: SizeTypeTokens.LG,
+    },
+
+    aboutUsTitle: <TypographyProps>{
+      label: "About Us",
+      color: ColorTokens.Grey_Night,
+      numberOfLines: 1,
+      fontSize: FontSizeTokens.SM,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
+    },
+    aboutUsSpace0: <SpaceProps>{
+      size: SizeTypeTokens.MD,
+    },
+    aboutUsSpace1: <SpaceProps>{
+      size: SizeTypeTokens.XL,
+    },
+    aboutUsDivider: <DividerProps>{
+      size: DividerSizeTokens.SM,
+      color: ColorTokens.Grey_Chalk,
+      margin: {
+        vertical: SizeTypeTokens.XS,
+        horizontal: SizeTypeTokens.SM,
+      },
+    },
+    logoutCard: <CardProps>{
+      bgColor: ColorTokens.White,
+      body: {
+        widgetItems: [{ id: "logoutDetails", type: WIDGET.STACK }],
+      },
+    },
+    logoutDetails: <StackProps>{
+      type: StackType.row,
+      width: StackWidth.FULL,
+      widgetItems: [{ id: "logoutItems", type: WIDGET.STACK }],
+      action: {
+        type: ACTION.LOGOUT,
+        payload: {},
+        routeId: ROUTE.MY_PROFILE,
+      },
+    },
+    logoutItems: <StackProps>{
+      type: StackType.row,
+      flex: 1,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.flexStart,
+      widgetItems: [
+        { id: "iconlogout", type: WIDGET.ICON },
+        { id: "logoutSpace", type: WIDGET.SPACE },
+        { id: "titlelogout", type: WIDGET.TEXT },
+      ],
+    },
+    iconlogout: <IconProps>{
+      name: IconTokens.Logout,
+      color: ColorTokens.Black,
+      size: IconSizeTokens.MD,
+    },
+    logoutSpace: <SpaceProps>{
+      size: SizeTypeTokens.LG,
+    },
+
+    titlelogout: <TypographyProps>{
+      label: "Logout",
+      color: ColorTokens.Grey_Night,
+      numberOfLines: 1,
+      fontSize: FontSizeTokens.SM,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
+    },
+  },
+});
 
 export const myProfileMF: PageType<any> = {
   onLoad: async ({ }, { response }) => {

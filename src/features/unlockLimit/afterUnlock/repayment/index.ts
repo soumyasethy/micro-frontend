@@ -121,10 +121,10 @@ export const template: (
         "Enjoy flexible repayments. Pay partially or the complete amount in just one go.",
       type: AmountCardTypeTokens.MESSAGE,
     },
-    amountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    amountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     headStack: <TypographyProps>{
       label: "Bank account details",
-      fontSize: FontSizeTokens.XXL,
+      fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
@@ -138,7 +138,7 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
-    messageSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    messageSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
     bankStack: <StackProps>{
       type: StackType.row,
       alignItems: StackAlignItems.center,
@@ -156,7 +156,7 @@ export const template: (
       borderRadius: BorderRadiusTokens.BR5,
       padding: SizeTypeTokens.SM,
     },
-    space: <SpaceProps>{ size: SizeTypeTokens.SM },
+    space: <SpaceProps>{ size: SizeTypeTokens.MD },
     data: <TypographyProps>{
       label: `${bankName}`,
       fontSize: FontSizeTokens.MD,
@@ -177,6 +177,7 @@ export const template: (
       subTitle: `${bankIfscCode}`,
       trailLabel: "Copy",
       trailIconName: IconTokens.Copy,
+      isDivider:true,
       onPress: () => {},
     },
     listItem2: <ListItemProps>{

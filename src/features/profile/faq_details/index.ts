@@ -9,35 +9,23 @@ import {
 import _ from "lodash";
 import {
     AccordionProps,
-    ButtonProps,
-    ButtonTypeTokens,
-    ButtonWidthTypeToken,
     CardProps,
     ColorTokens,
-    DividerProps,
-    DividerSizeTokens,
     FontFamilyTokens,
     FontSizeTokens,
+    HeaderProps,
+    HeaderTypeTokens,
     IconAlignmentTokens,
-    IconProps,
     IconSizeTokens,
     IconTokens,
-    SizeTypeTokens,
-    SpaceProps,
-    StackAlignItems,
-    StackHeight,
-    StackJustifyContent,
     StackProps,
-    StackType,
-    StackWidth,
-    TagProps,
     TagTypeTokens,
     TypographyProps,
     WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { goBack } from "./actions";
+import { contact, goBack } from "./actions";
 export const template: (
     title: string
 ) => TemplateSchema = (title
@@ -48,62 +36,18 @@ export const template: (
                 type: LAYOUTS.LIST,
                 widgets: [
                     {
-                        id: "header", type: WIDGET.CARD, position: POSITION.FIXED_TOP
+                        id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP
                     },
-
                     {
                         id: "detailScreen", type: WIDGET.STACK, padding: {
                             left: 16, right: 16
                         }
                     },
-                    // {
-                    //     id: "detailScreen", type: WIDGET.STACK, padding: {
-                    //         horizontal: 24,
-                    //         vertical: 0
-                    //     }
-                    // },
-                
-
-
                 ],
             },
             datastore: <Datastore>{
-                header: <CardProps>{
-                    bgColor: ColorTokens.White,
-                    body: {
-                        widgetItems: [
-                            { id: "profileBlock", type: WIDGET.STACK },
-                            { id: "divider", type: WIDGET.DIVIDER },
-                        ]
-                    }
-                },
-                profileBlock: <StackProps>{
-                    type: StackType.row,
-                    alignItems: StackAlignItems.center,
-                    justifyContent: StackJustifyContent.spaceBetween,
-                    widgetItems: [
-                        { id: "profileBlock1", type: WIDGET.STACK },
-                        { id: "headerStack", type: WIDGET.STACK },
-                    ]
-                },
-                profileBlock1: <StackProps>{
-                    type: StackType.row,
-                    alignItems: StackAlignItems.center,
-                    justifyContent: StackJustifyContent.flexStart,
-                    widgetItems: [
-                        { id: "icon", type: WIDGET.BUTTON },
-                        { id: "space0", type: WIDGET.SPACE },
-                        { id: "nameElement", type: WIDGET.TEXT }
-                    ]
-                },
-                icon: <ButtonProps>{
-                    type: ButtonTypeTokens.SmallGhost,
-                   // width: ButtonWidthTypeToken.CONTENT,
-                    icon: <IconProps>{
-                        name: IconTokens.ChevronDown,
-                        size: IconSizeTokens.SM,
-                        color: ColorTokens.Grey_Charcoal
-                    },
+                header: <HeaderProps>{
+                    title: "FAQ’s",
                     action: {
                         type: ACTION.BACK_BUTTON,
                         payload: <{}>{
@@ -111,55 +55,32 @@ export const template: (
                           widgetId: "continue",
                           isResend: false,
                         },
-                        routeId: ROUTE.FAQ,
+                        routeId: ROUTE.FAQ_DETAILS,
                       },
-                },
-                space0: <SpaceProps>{ size: SizeTypeTokens.LG },
-                nameElement: <TypographyProps>{
-                    label: "FAQ’s",
-                    color: ColorTokens.Grey_Night,
-                    fontSize: FontSizeTokens.MD,
-                    fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "600",
-                },
-                headerStack: <StackProps>{
-                    type: StackType.row,
-                    alignItems: StackAlignItems.center,
-                    justifyContent: StackJustifyContent.flexEnd,
-                    widgetItems: [
-                        { id: "contactBlock", type: WIDGET.TAG }
-                    ]
-                },
-                contactBlock: <TagProps>{
-                    icon: {
-                      align: IconAlignmentTokens.left,
-                      name: IconTokens.Support,
-                      size: IconSizeTokens.XL,
+                      leftAction: {
+                        type: ACTION.CONTACT,
+                        payload: <{}>{
+                          value: "",
+                          widgetId: "continue",
+                          isResend: false,
+                        },
+                        routeId: ROUTE.FAQ_DETAILS,
+                      },
+                    isBackButton: true,
+                    type:HeaderTypeTokens.HEADERCTA,
+                    leftCta: "Contact Us",
+                    leftProps: {
+                      label: 'Contact Us',
+                      type: TagTypeTokens.SECONDARY,
+                      labelColor: ColorTokens.Primary_100,
+                      icon: {
+                        name: IconTokens.HeadPhone,
+                        size: IconSizeTokens.MD,
+                        align: IconAlignmentTokens.left,
+                        color:ColorTokens.Primary_100
+                      },
                     },
-                    label: "Contact us",
-                    labelColor: ColorTokens.Primary_100,
-                    type: TagTypeTokens.DEFAULT,
-                    bgColor: ColorTokens.Primary_05,
                   },
-                // contactBlock: <ButtonProps>{
-                //     labelColor:ColorTokens.Primary_100,
-                //     label:"Contact us",
-                //     type: ButtonTypeTokens.MediumOutline,
-                //     width: ButtonWidthTypeToken.CONTENT,
-                //     icon: <IconProps>{
-                //         name: IconTokens.HeadPhone,
-                //         size: IconSizeTokens.SM,
-                //         color: ColorTokens.Grey_Charcoal
-                //     }
-                // },
-                divider: <DividerProps>{
-                    size: DividerSizeTokens.SM,
-                    color: ColorTokens.Grey_Chalk,
-                    margin: {
-                        vertical: SizeTypeTokens.SM,
-                        horizontal: SizeTypeTokens.SM,
-                    },
-                },
                 detailScreen: <StackProps>{
                     widgetItems: [
                         { id: "titleData", type: WIDGET.TEXT,padding:{
@@ -224,8 +145,8 @@ export const faqDetailsMF: PageType<any> = {
     },
 
     actions: {
-        // [ACTION.ACCOUNT_DETAILS]: accountDetails,
-        [ACTION.BACK_BUTTON]: goBack
+        [ACTION.BACK_BUTTON]: goBack,
+        [ACTION.CONTACT]: contact
     },
     bgColor: "#FFFFFF",
 };
