@@ -41,13 +41,19 @@ export const template: (applicationId: string) => TemplateSchema = (
   layout: <Layout>{
     id: ROUTE.EMAIL_VERIFY,
     type: LAYOUTS.LIST,
-    widgets: [{ id: "stack_root", type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER, }],
+    widgets: [
+      {
+        id: "stack_root",
+        type: WIDGET.STACK,
+        position: POSITION.ABSOLUTE_CENTER,
+      },
+    ],
   },
   datastore: <Datastore>{
     stack_root: <StackProps>{
       type: StackType.column,
       height: StackHeight.FULL,
-      flexWrap: StackFlexWrap.wrap, 
+      flexWrap: StackFlexWrap.wrap,
       justifyContent: StackJustifyContent.spaceAround,
       alignItems: StackAlignItems.flexStart,
       widgetItems: [
@@ -100,7 +106,7 @@ export const template: (applicationId: string) => TemplateSchema = (
     email: <ButtonBaseProps & WidgetProps>{
       label: "Continue with other email",
       bgColor: ColorTokens.Transparent,
-			labelColor: ColorTokens.Blue_700,
+      labelColor: ColorTokens.Blue_700,
       fontSize: FontSizeTokens.MD,
       width: ButtonWidthTypeToken.FULL,
       icon: {
@@ -108,8 +114,8 @@ export const template: (applicationId: string) => TemplateSchema = (
         size: IconSizeTokens.LG,
         align: IconAlignmentTokens.left,
       },
-      paddingVertical:SizeTypeTokens.MD,
-			paddingHorizontal:SizeTypeTokens.MD,
+      paddingVertical: SizeTypeTokens.MD,
+      paddingHorizontal: SizeTypeTokens.MD,
       action: {
         type: ACTIONS.OTHER_EMAIL,
         routeId: ROUTE.EMAIL_VERIFY,
@@ -130,4 +136,5 @@ export const emailVerifyMF: PageType<any> = {
     [ACTIONS.GOOGLE_LOGIN]: loginGoogle,
     [ACTIONS.OTHER_EMAIL]: otherEmail,
   },
+  clearPrevious: true,
 };

@@ -79,8 +79,9 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         label: "Instant KYC",
         color: ColorTokens.Grey_Night,
         fontSize: FontSizeTokens.MD,
-        fontFamily: FontFamilyTokens.Inter,
+        fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
+        lineHeight: 12,
       },
       spaceSubTitle: <SpaceProps>{ size: SizeTypeTokens.MD },
       spaceInput: <SpaceProps>{ size: SizeTypeTokens.XL },
@@ -91,6 +92,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
+        lineHeight: 24,
       },
       input: <TextInputProps>{
         title: "Enter Aadhaar number",
@@ -134,7 +136,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
           },
         },
       },
-      spaceContinue: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      spaceContinue: <SpaceProps>{ size: SizeTypeTokens.MD },
     },
   };
 };

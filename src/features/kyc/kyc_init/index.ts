@@ -13,6 +13,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
@@ -44,7 +45,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     type: LAYOUTS.LIST,
     widgets: [
       { id: "topSpace", type: WIDGET.SPACE },
-      { id: "space1", type: WIDGET.SPACE },
+      //{ id: "space1", type: WIDGET.SPACE },
       { id: "title", type: WIDGET.TEXT },
       { id: "spaceTitle", type: WIDGET.SPACE },
       { id: "stackImage", type: WIDGET.STACK },
@@ -53,14 +54,14 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         id: "continue",
         type: WIDGET.BUTTON,
       },
-      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      {id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
       {id: 'space2', type: WIDGET.SPACE},
       {id: "tcText" , type: WIDGET.TEXT},
-      {id: 'bottomStack', type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM},
+      {id: 'bottomSection', type: WIDGET.STACK, position: POSITION.STICKY_BOTTOM},
     ],
   },
   datastore: <Datastore>{
-    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     header: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
@@ -77,14 +78,13 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         payload: {},
       },
     },
-    space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     title: <TypographyProps>{
       label: "Fetch document from Digilocker",
       fontWeight: "700",
       fontFamily: FontFamilyTokens.Poppins,
       fontSize: FontSizeTokens.MD,
     },
-    spaceTitle: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
+    spaceTitle: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     spaceImage: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     stackImage: <StackProps>{
       justifyContent: StackJustifyContent.center,
@@ -109,12 +109,14 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         },
       },
     },
-    space2: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
+    space2: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     tcText: <TypographyProps>{
       label: "By proceeding further, I hereby authorize Volt to pull my documents from Digilocker.",
       fontWeight: "400",
       fontFamily: FontFamilyTokens.Inter,
-      fontSize: FontSizeTokens.XS,
+      fontSize: FontSizeTokens.XXS,
+      lineHeight: 16,
+      color: ColorTokens.Grey_Charcoal
     },
     bottomStack: <StackProps>{
       type: StackType.row,
@@ -131,6 +133,22 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     space3: <SpaceProps>{ size: SizeTypeTokens.XS },
     tcText2: <TypographyProps>{
       label: "Powered by Digilocker",
+      fontSize: FontSizeTokens.XXS,
+      color: ColorTokens.Grey_Charcoal,
+      lineHeight: 16,
+    },
+    bottomSpace: <SpaceProps> { size: SizeTypeTokens.LG },
+    bottomSection: <StackProps> {
+      type: StackType.column,
+      justifyContent: StackJustifyContent.center,
+      alignItems: StackAlignItems.center,
+      widgetItems: [{
+        id: "bottomStack",
+        type: WIDGET.STACK,
+      }, {
+        id: "bottomSpace",
+        type: WIDGET.SPACE
+      }]
     }
   },
 });

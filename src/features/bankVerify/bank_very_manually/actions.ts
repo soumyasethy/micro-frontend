@@ -2,6 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
+  IconTokens,
   StepperStateToken,
 } from "@voltmoney/schema";
 import {
@@ -25,7 +26,6 @@ let bankIfsc = "";
 export const NavigationSearchIFSCAction: ActionFunction<
   NavigationSearchIFSCActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  console.warn("**** NavigationSearchIFSCAction Triggered ****", action);
   await navigate(ROUTE.BANK_BRANCH_SEARCH, {
     bankCode: action.payload.bankCode,
     bankName: action.payload.bankName,
@@ -40,6 +40,7 @@ export const onChangeAccountNumber: ActionFunction<
 export const onChangeIFSCNumber: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
+  console.warn("onChangeIFSCNumber auto triggered", action);
   bankIfsc = action.payload.value;
   await ToggleCTA(action, _datastore, props);
 };
@@ -49,18 +50,25 @@ export const ToggleCTA: ActionFunction<any> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  if (bankAccountNumber && bankIfsc)
+  console.warn(
+    "bankAccountNumber->",
+    bankAccountNumber,
+    " bankIfsc->",
+    bankIfsc
+  );
+  if (bankAccountNumber && bankIfsc) {
     await setDatastore(action.routeId, action.payload.targetWidgetId, <
       ButtonProps
     >{
       type: ButtonTypeTokens.LargeFilled,
     });
-  else
+  } else {
     await setDatastore(action.routeId, action.payload.targetWidgetId, <
       ButtonProps
     >{
       type: ButtonTypeTokens.LargeOutline,
     });
+  }
 };
 
 export const BavVerifyManualAction: ActionFunction<
@@ -70,13 +78,14 @@ export const BavVerifyManualAction: ActionFunction<
   _datastore,
   { setDatastore, network, showPopup, goBack }
 ): Promise<any> => {
-  // await showPopup({
-  //   title: "Depositing Rs 1",
-  //   subTitle: "We’re doing this to verify your account.",
-  //   type: "LOADING",
-  // });
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
+  });
+  await showPopup({
+    title: "Depositing Rs 1",
+    subTitle: "We’re doing this to verify your account.",
+    type: "LOADING",
+    iconName: IconTokens.Coin,
   });
 
   const applicationId = (await SharedPropsService.getUser())
@@ -90,7 +99,11 @@ export const BavVerifyManualAction: ActionFunction<
         bankIfscCode: bankIfsc,
       },
     },
-    { headers: await getAppHeader() }
+    { headers: await getAppHeader() },
+    async () => {
+      //dismiss modal -> Depositing Rs 1
+      await goBack();
+    }
   );
 
   if (_.get(response, "data.updatedApplicationObj.currentStepId")) {

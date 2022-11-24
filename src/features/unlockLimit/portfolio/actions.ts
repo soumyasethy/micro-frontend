@@ -18,12 +18,12 @@ import {
   AvailableCASItem,
   IsinLTVMap,
   IsinNAVMap,
+  StepResponseObject,
 } from "../unlock_limit/types";
-import { sendOtp } from "../pledge_confirmation/actions";
-import { ACTION as PLEDGE_CONFIRM_ACTIONS } from "../pledge_confirmation/types";
-import { OtpPayload as CTAPayload } from "../pledge_confirmation/types";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 let portfolioSearchKeyword = "";
 let listBeforeSearchUI = [];
@@ -60,32 +60,22 @@ export const getActualLimit = (
 export const TriggerCTA: ActionFunction<CtaPayload> = async (
   action,
   _datastore,
-  { setDatastore, ...props }
+  { setDatastore, navigate, network }
 ): Promise<any> => {
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    isLoading: true,
-  });
+  // await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+  //   isLoading: true,
+  // });
   const availableCASMap = await SharedPropsService.getAvailableCASMap();
   const updatedList: AvailableCASItem[] = [];
   Object.keys(availableCASMap).forEach((key) => {
     const updatedItem = availableCASMap[key];
     updatedList.push(updatedItem);
   });
-  const verifyAction = {
-    type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
-    payload: <CTAPayload>{
-      value: {
-        ...action.payload.value,
-        availableCAS: [...updatedList],
-      },
-      widgetId: "continue",
-    },
-    routeId: ROUTE.PLEDGE_CONFIRMATION,
+  const stepResponseObject: StepResponseObject = {
+    ...action.payload.value,
+    availableCAS: [...updatedList],
   };
-  await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    isLoading: false,
-  });
+  navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
 };
 
 export const goBack: ActionFunction<OtpPayload> = async (

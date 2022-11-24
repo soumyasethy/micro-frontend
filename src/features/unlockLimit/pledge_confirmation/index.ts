@@ -21,11 +21,23 @@ import { ROUTE } from "../../../routes";
 import { ACTION, OtpPayload } from "./types";
 import { sendOtp, goBack } from "./actions";
 import _ from "lodash";
-import { StepResponseObject } from "../unlock_limit/types";
+import { AvailableCASItem, StepResponseObject } from "../unlock_limit/types";
+import { getTotalLimit } from "../portfolio/actions";
+import SharedPropsService from "../../../SharedPropsService";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 export const template: (
+  totalAmount: number,
+  totalCharges: number,
+  processingFeesBreakUp: { [key in string]: number },
   stepResponseObject: StepResponseObject
-) => TemplateSchema = (stepResponseObject) => {
+) => TemplateSchema = (
+  totalAmount = 0,
+  totalCharges = 0,
+  processingFeesBreakUp = {},
+  stepResponseObject
+) => {
   return {
     layout: <Layout>{
       id: ROUTE.PLEDGE_CONFIRMATION,
@@ -60,21 +72,28 @@ export const template: (
           {
             id: "total_cash_imit",
             title: "Total cash limit",
-            amount: `${stepResponseObject.availableCreditAmount}`,
+            amount: `${totalAmount}`.replace(
+              /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+              ","
+            ),
           },
-          ...Object.keys(
-            _.get(stepResponseObject, "processingFeesBreakUp", {})
-          ).map((key, index) => {
+          ...Object.keys(processingFeesBreakUp).map((key, index) => {
             return {
               id: `processingFeesBreakUp_${index}`,
               title: key,
-              amount: `${stepResponseObject.processingFeesBreakUp[key] || 0}`,
+              amount: `${processingFeesBreakUp[key] || 0}`.replace(
+                /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+                ","
+              ),
             };
           }),
           {
             id: "total_charges",
             title: "Total charges",
-            amount: `${stepResponseObject.processingFees || 0}`,
+            amount: `${totalCharges}`.replace(
+              /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+              ","
+            ),
           },
         ],
       },
@@ -98,11 +117,57 @@ export const template: (
 };
 
 export const pledgeConfirmationMF: PageType<any> = {
-  onLoad: async ({}, { stepResponseObject }) => {
-    return Promise.resolve(template(stepResponseObject as StepResponseObject));
+  onLoad: async ({ network }, { stepResponseObject }) => {
+    /// Pledging
+    const mutualFundPortfolioItems: AvailableCASItem[] = (
+      stepResponseObject as StepResponseObject
+    ).availableCAS;
+    mutualFundPortfolioItems.forEach((_item, index) => {
+      mutualFundPortfolioItems[index].is_pledged = _item.pledgedUnits > 0;
+    });
+
+    const applicationId = (await SharedPropsService.getUser())
+      .linkedApplications[0].applicationId;
+
+    /// fetch processing fee
+    const response = await network.post(
+      api.processingCharges,
+      {
+        applicationId: applicationId,
+        mutualFundPortfolioItems,
+      },
+      { headers: await getAppHeader() }
+    );
+
+    const processingFeesBreakUp = _.get(
+      response,
+      "data.stepResponseObject.processingChargesBreakup",
+      {}
+    );
+    const totalCharges = _.get(
+      response,
+      "data.stepResponseObject.totalCharges",
+      0
+    );
+
+    const totalAmount = getTotalLimit(
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
+    );
+
+    return Promise.resolve(
+      template(
+        totalAmount,
+        totalCharges,
+        processingFeesBreakUp,
+        stepResponseObject as StepResponseObject
+      )
+    );
   },
   actions: {
     [ACTION.PLEDGE_CONFIRMATION]: sendOtp,
     [ACTION.BACK_BUTTON]: goBack,
   },
+  clearPrevious: true,
 };

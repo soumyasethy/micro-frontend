@@ -2,7 +2,6 @@ import SharedPropsService from "../SharedPropsService";
 
 export const __isTest__ = false;
 export const __isMock__ = false;
-
 export const defaultAuthHeaders = () => {
   const headers = new Headers();
   headers.append("X-EntityType", "BORROWER");
@@ -39,3 +38,7 @@ export const getAppHeader = async () => ({
   Authorization: `Bearer ${await SharedPropsService.getToken()}`,
   "Content-Type": "application/json",
 });
+
+export const APP_CONFIG = {
+  POLLING_INTERVAL: 5000,
+};

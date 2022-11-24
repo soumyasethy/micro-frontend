@@ -11,8 +11,8 @@ export const fetchUserDetails: () => Promise<User> = async () => {
     headers: await defaultHeaders(),
     body: raw,
   };
-  user = await fetch(api.userContext, requestOptions).then((response) =>
-    response.json()
+  user = await fetch(api.userContext, requestOptions).then(
+    async (response) => await response.json()
   );
   await SharedPropsService.setUser(user);
   return Promise.resolve(user);

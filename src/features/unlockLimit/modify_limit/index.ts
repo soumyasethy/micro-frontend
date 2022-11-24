@@ -1,4 +1,12 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -23,11 +31,11 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION, AssetsPayload} from "./types";
-import {ConfirmCTA, EnterAmountAction, goBack, SelectAssets} from "./actions";
-import {StepResponseObject} from "../unlock_limit/types";
-import {getTotalLimit} from "../portfolio/actions";
+import { ROUTE } from "../../../routes";
+import { ACTION, AssetsPayload } from "./types";
+import { ConfirmCTA, EnterAmountAction, goBack, SelectAssets } from "./actions";
+import { StepResponseObject } from "../unlock_limit/types";
+import { getTotalLimit } from "../portfolio/actions";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -85,6 +93,9 @@ export const template: (
         title: "Enter amount",
         state: InputStateToken.DEFAULT,
         limit: totalAmount,
+        limitLabel:
+          "out of " +
+          `${totalAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         caption: { success: "", error: "" },
         action: {
           type: ACTION.ENTER_AMOUNT,
@@ -126,10 +137,10 @@ export const template: (
         name: IconTokens.ChervonDownRight,
         align: IconAlignmentTokens.right,
         size: IconSizeTokens.XL,
-        color: ColorTokens.Primary_100
+        color: ColorTokens.Primary_100,
       },
       otpItem: <ButtonProps & WidgetProps>{
-        label: "Confirm & get OTP",
+        label: "Continue",
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {

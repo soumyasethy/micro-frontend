@@ -51,6 +51,8 @@ import {
 import { fetchUserDetails } from "./repo";
 import { User } from "../../../login/otp_verify/types";
 import SharedPropsService from "../../../../SharedPropsService";
+import { api } from "../../../../configs/api";
+import { getAppHeader } from "../../../../configs/config";
 
 export const template: (
   availableCreditAmount: number,
@@ -426,8 +428,13 @@ export const template: (
 };
 
 export const dashboardMF: PageType<any> = {
-  onLoad: async () => {
-    const user: User = await fetchUserDetails();
+  onLoad: async ({ network }) => {
+    const userContextResponse = await network.post(
+      api.userContext,
+      {},
+      { headers: await getAppHeader() }
+    );
+    const user: User = userContextResponse.data;
     const availableCreditAmount: number = _.get(
       user,
       "linkedCredits[0].availableCreditAmount",

@@ -2,7 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
-import { defaultHeaders } from "../../../configs/config";
+import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import { ACTION, GoNextType } from "./types";
 import { IconTokens, StepperStateToken } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
@@ -70,7 +70,7 @@ export const PollMandateStatus: ActionFunction<any> = async (
   };
   const timer = setInterval(() => {
     getApiLoad();
-  }, 5000);
+  }, APP_CONFIG.POLLING_INTERVAL);
 };
 export const GoNext: ActionFunction<GoNextType> = async (
   action,

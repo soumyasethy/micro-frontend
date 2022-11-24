@@ -29,6 +29,7 @@ export const showBottomSheet = ({
     },
   };
 };
+/*** don't call this  ****/
 export const clearAllData = async () => {
   await AsyncStorage.getAllKeys()
     .then((keys) => AsyncStorage.multiRemove(keys))
@@ -118,7 +119,7 @@ export const horizontalStepperRepo = async () => {
     {
       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
       step: "1",
-      title: "Verify KYC",
+      title: "KYC",
       subTitle: "",
       status: KYC_VERIFICATION,
       message:
@@ -129,7 +130,7 @@ export const horizontalStepperRepo = async () => {
     {
       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
       step: "2",
-      title: "Bank Details",
+      title: "Bank account",
       subTitle: "",
       status:
         user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
@@ -142,7 +143,7 @@ export const horizontalStepperRepo = async () => {
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
-      title: "Repayment",
+      title: "AutoPay",
       subTitle: "",
       status: MANDATE_SETUP,
       message:
@@ -366,21 +367,14 @@ export const nextStepId = async (
       currentStepId === "KYC_SUMMARY" ||
       currentStepId === "BANK_ACCOUNT_VERIFICATION" ||
       currentStepId === "MANDATE_SETUP" ||
+      currentStepId === "CREDIT_APPROVAL" ||
       currentStepId === "AGREEMENT_SIGN"
     ) {
       return { routeId: ROUTE.KYC_STEPPER, params: {} };
-    } else if (currentStepId === ROUTE.KYC_SUMMARY) {
-      return { routeId: ROUTE.KYC_SUMMARY, params: {} };
-    } else if (
-      currentStepId === "MANDATE_SETUP" ||
-      currentStepId === "CREDIT_APPROVAL"
-    ) {
-      return { routeId: ROUTE.LOAN_AUTOPAY, params: {} };
-    } else if (currentStepId === "AGREEMENT_SIGN") {
-      return { routeId: ROUTE.LOAN_AGREEMENT, params: {} };
     }
   }
 };
+
 export const debounce = (callback, wait) => {
   let timeoutId = null;
   return (...args) => {

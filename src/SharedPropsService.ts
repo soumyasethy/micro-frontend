@@ -79,6 +79,18 @@ async function getAvailableCASMap() {
   return _globalProps.availableAuthCasMap;
 }
 
+async function setOnboarding(boolean: boolean) {
+  // isOnboardingSeen.seen = boolean;
+  await AsyncStorage.setItem(
+    StoreKey.isLoadedFirstTime,
+    JSON.stringify(boolean)
+  );
+}
+
+async function getOnboarding() {
+  return await AsyncStorage.getItem(StoreKey.isLoadedFirstTime);
+}
+
 export default {
   setGlobalProps,
   getPropsValue,
@@ -87,5 +99,7 @@ export default {
   setToken,
   getToken,
   setAvailableCASMap,
-  getAvailableCASMap
+  getAvailableCASMap,
+  setOnboarding,
+  getOnboarding,
 };

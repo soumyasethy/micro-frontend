@@ -15,13 +15,9 @@ import {
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
-  IconProps,
-  IconSizeTokens,
-  IconTokens,
   InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
-  MessageProps,
   SizeTypeTokens,
   SpaceProps,
   TextInputProps,
@@ -94,6 +90,7 @@ export const template: (
         type: InputTypeToken.DEFAULT,
         title: "Enter amount",
         state: InputStateToken.DEFAULT,
+        limit: availableCreditAmount,
         limitLabel:
           "out of " +
           `${availableCreditAmount}`.replace(

@@ -49,7 +49,7 @@ export const template: (
     ],
   },
   datastore: <Datastore>{
-    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     header: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
@@ -70,17 +70,19 @@ export const template: (
       label: "Instant KYC",
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.MD,
-      fontFamily: FontFamilyTokens.Inter,
+      fontFamily: FontFamilyTokens.Poppins,
+      lineHeight: 24,
       fontWeight: "700",
     },
     spaceSubTitle: <SpaceProps>{ size: SizeTypeTokens.MD },
     spaceInput: <SpaceProps>{ size: SizeTypeTokens.XL },
     subTitle: <TypographyProps>{
-      label: `UIDAI has sent a temporary OTP to your mobile ending in ${mobileNumber}(valid for 10mins).`,
+      label: `UIDAI has sent a temporary OTP to your mobile ending in ******${mobileNumber}(valid for 10mins).`,
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
+      lineHeight: 24,
     },
     input: <TextInputProps>{
       title: "Enter Aadhaar number",

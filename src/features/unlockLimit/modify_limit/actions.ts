@@ -8,9 +8,6 @@ import {
   IsinNAVMap,
 } from "../unlock_limit/types";
 import { getTotalLimit } from "../portfolio/actions";
-import { ACTION as PLEDGE_CONFIRM_ACTIONS } from "../pledge_confirmation/types";
-import { sendOtp } from "../pledge_confirmation/actions";
-import { ButtonProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 
 let amount: number = 0;
@@ -94,11 +91,8 @@ export const SelectAssets: ActionFunction<AssetsPayload> = async (
 export const ConfirmCTA: ActionFunction<AssetsPayload> = async (
   action,
   _datastore,
-  { setDatastore, ...props }
+  { navigate }
 ): Promise<any> => {
-  await setDatastore(ROUTE.MODIFY_LIMIT, "otpItem", <ButtonProps>{
-    loading: true,
-  });
   const stepResponseObject = action.payload.stepResponseObject;
   stepResponseObject.availableCAS.forEach((item, index) => {
     stepResponseObject.availableCAS[index].pledgedUnits =
@@ -110,18 +104,7 @@ export const ConfirmCTA: ActionFunction<AssetsPayload> = async (
     stepResponseObject.isinNAVMap,
     stepResponseObject.isinLTVMap
   );
-  const verifyAction = {
-    type: PLEDGE_CONFIRM_ACTIONS.PLEDGE_CONFIRMATION,
-    payload: {
-      value: stepResponseObject,
-      widgetId: "otpItem",
-    },
-    routeId: ROUTE.PLEDGE_CONFIRMATION,
-  };
-  await sendOtp(verifyAction, _datastore, { setDatastore, ...props });
-  await setDatastore(ROUTE.MODIFY_LIMIT, "otpItem", <ButtonProps>{
-    loading: false,
-  });
+  navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
 };
 
 export const goBack: ActionFunction<AssetsPayload> = async (

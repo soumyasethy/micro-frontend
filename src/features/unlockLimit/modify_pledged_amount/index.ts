@@ -111,6 +111,13 @@ export const template: (
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
         ),
+        limitLabel:
+          "out of " +
+          `${getTotalLimit(
+            [stepResponseObject.availableCAS[index]],
+            stepResponseObject.isinNAVMap,
+            stepResponseObject.isinLTVMap
+          )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         caption: { success: "", error: "" },
         keyboardType: KeyboardTypeToken.decimalPad,
         action: {

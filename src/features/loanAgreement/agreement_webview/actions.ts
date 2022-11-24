@@ -2,7 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
-import { defaultHeaders } from "../../../configs/config";
+import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import { IconTokens, StepperStateToken } from "@voltmoney/schema";
 import { ACTION } from "../loan_webView/types";
 import { User } from "../../login/otp_verify/types";
@@ -60,7 +60,7 @@ export const AgreementStatusAction: ActionFunction<any> = async (
   };
   const timerRef = setInterval(() => {
     getApiLoad();
-  }, 5000);
+  }, APP_CONFIG.POLLING_INTERVAL);
 };
 
 export const GoNextSuccess: ActionFunction<any> = async (

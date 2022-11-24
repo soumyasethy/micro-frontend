@@ -1,7 +1,9 @@
 export const config = {
   baseUrl: "https://api.voltmoney.in",
+  stageBaseUrl: "https://api.staging.voltmoney.in",
 };
 export const StoreKey = {
+  isLoadedFirstTime: "is_Loaded_First_Time",
   accessToken: "access_token",
   refreshToken: "refresh_token",
   userContext: "user_context",
@@ -34,5 +36,6 @@ export const api = {
   userProfile: `${config.baseUrl}/app/borrower/userProfile/`,
   lmsDisbursal: `${config.baseUrl}/app/borrower/lms/disbursal/`,
   lmsDisbursalVerify: `${config.baseUrl}/app/borrower/lms/disbursal/verifyOTP`,
-  repaymentBankAccountDetails: `${config.baseUrl}/app/borrower/lms/repaymentBankAccountDetails/`
+  repaymentBankAccountDetails: `${config.baseUrl}/app/borrower/lms/repaymentBankAccountDetails/`,
+  processingCharges: `${config.baseUrl}/app/borrower/application/pledge/processingCharges`,
 };
