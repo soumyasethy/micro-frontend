@@ -72,7 +72,7 @@ export const template: (
                       type: TagTypeTokens.SECONDARY,
                       labelColor: ColorTokens.Primary_100,
                       icon: {
-                        name: IconTokens.HeadPhone,
+                        name: IconTokens.Support,
                         size: IconSizeTokens.MD,
                         align: IconAlignmentTokens.left,
                         color:ColorTokens.Primary_100

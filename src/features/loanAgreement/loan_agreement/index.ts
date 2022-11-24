@@ -45,7 +45,7 @@ export const template: (
   urlData: string
 ) => TemplateSchema = (stepper, urlData) => ({
   layout: <Layout>{
-    id: ROUTE.LOAN_REPAYMENT,
+    id: ROUTE.LOAN_AGREEMENT,
     type: LAYOUTS.LIST,
     widgets: [
       { id: "headerStack", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },

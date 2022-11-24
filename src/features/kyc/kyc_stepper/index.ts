@@ -13,6 +13,8 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  FontFamilyTokens,
+  FontSizeTokens,
   ImageProps,
   ImageSizeTokens,
   SizeTypeTokens,
@@ -20,6 +22,7 @@ import {
   StepperItem,
   StepperProps,
   StepperTypeTokens,
+  TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
@@ -33,7 +36,9 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
     type: LAYOUTS.LIST,
     widgets: [
       { id: "space0", type: WIDGET.SPACE },
-      { id: "image", type: WIDGET.IMAGE, padding: { horizontal: 0 } },
+      { id: "title", type: WIDGET.TEXT},
+      { id: "space1", type: WIDGET.SPACE },
+      { id: "image", type: WIDGET.IMAGE},
       { id: "space", type: WIDGET.SPACE },
       { id: "stepper", type: WIDGET.STEPPER },
       { id: "space2", type: WIDGET.SPACE },
@@ -46,7 +51,16 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   },
   datastore: <Datastore>{
     space0: <SpaceProps>{
-      size: SizeTypeTokens.XXXXL,
+      size: SizeTypeTokens.XS,
+    },
+    title: <TypographyProps> {
+      label: "Withdraw in 4 steps",
+      fontFamily: FontFamilyTokens.Poppins,
+      fontSize: FontSizeTokens.MD,
+      fontWeight: "700"
+    },
+    space1: <SpaceProps>{
+      size: SizeTypeTokens.XL,
     },
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A16_9,
@@ -54,7 +68,7 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
       size: ImageSizeTokens.FULL,
       uri: "https://volt-images.s3.ap-south-1.amazonaws.com/stepper.svg",
     },
-    space: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
+    space: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     stepper: <StepperProps & WidgetProps>{
       type: StepperTypeTokens.VERTICAL,
