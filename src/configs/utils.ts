@@ -240,7 +240,7 @@ export const stepperRepo = async () => {
       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
       step: "1",
       title: "KYC Verification",
-      subTitle: "Verify Aadhaar to confirm your identity",
+      subTitle: "Verify Aadhaar & other details to complete KYC",
       status: KYC_VERIFICATION,
       message:
         KYC_VERIFICATION === StepperStateToken.PENDING_MANUAL_VERIFICATION
@@ -250,7 +250,7 @@ export const stepperRepo = async () => {
     {
       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
       step: "2",
-      title: "Bank account verification",
+      title: "Verify Bank Account ",
       subTitle: "Provide bank account for receiving money",
       status:
         user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
@@ -264,8 +264,8 @@ export const stepperRepo = async () => {
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       step: "3",
-      title: "Repayment",
-      subTitle: "Link your bank account for auto repayment",
+      title: "Setup AutoPay",
+      subTitle: "Link your account for hassle-free repayments",
       status: MANDATE_SETUP,
       message:
         MANDATE_SETUP === StepperStateToken.COMPLETED
@@ -277,8 +277,8 @@ export const stepperRepo = async () => {
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d74",
       step: "4",
-      title: "Loan agreement",
-      subTitle: "Review the key terms and confirm",
+      title: "Review Agreement",
+      subTitle: "Verify the key usage terms and confirm",
       status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
       message:
         user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
