@@ -39,7 +39,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION, AmountPayload, ModifyAmountPayload } from "./types";
 import { EditAmountAction, ModifyAmountAction, goBack } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
-import { getTotalLimit } from "../portfolio/actions";
+import { getActualLimit, getTotalLimit } from "../portfolio/actions";
 
 export const template: (
   index: number,
@@ -109,14 +109,14 @@ export const template: (
         state: InputStateToken.DEFAULT,
         placeholder: "",
         title: "Enter amount",
-        limit: getTotalLimit(
+        limit: getActualLimit(
           [stepResponseObject.availableCAS[index]],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
         ),
         limitLabel:
           "out of " +
-          `${getTotalLimit(
+          `${getActualLimit(
             [stepResponseObject.availableCAS[index]],
             stepResponseObject.isinNAVMap,
             stepResponseObject.isinLTVMap
