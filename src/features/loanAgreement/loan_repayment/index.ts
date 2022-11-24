@@ -80,10 +80,11 @@ export const template: (
         payload: {},
       },
     },
-    headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
+     headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
     headItem: <TypographyProps>{
       label: "Link bank account for AutoPay",
       fontSize: FontSizeTokens.MD,
+      lineHeight:24,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
@@ -111,10 +112,10 @@ export const template: (
     upsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     iconcontent: <ShimmerIconProps>{
       icon: <IconProps>{
-        name: IconTokens.Notebook,
+        name: IconTokens.Group74508,
         size: IconSizeTokens.XXXXXXXXL,
       },
-      name: "Freebook",
+      name: "Group74508",
       size: ShimmerIconSizeTokens.XXXXXL,
       borderRadius: BorderRadiusTokens.BR0,
       padding: SizeTypeTokens.SM,
@@ -142,7 +143,7 @@ export const template: (
         routeId: ROUTE.LOAN_REPAYMENT,
       },
     },
-    btnSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    btnSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     disclaimerStack: <StackProps>{
       type: StackType.row,
       justifyContent: StackJustifyContent.center,
