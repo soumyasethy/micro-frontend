@@ -119,3 +119,13 @@ export const EditAmountAction: ActionFunction<AmountPayload> = async (
 ): Promise<any> => {
   amount = parseFloat(action.payload.value);
 };
+
+export const goBack: ActionFunction<AmountPayload> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  console.warn("goBack called");
+  // await navigate(ROUTE.MODIFY_PLEDGED_AMOUNT);
+  await goBack();
+};

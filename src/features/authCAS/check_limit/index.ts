@@ -69,7 +69,9 @@ export const template: (
         numberOfLines: 1,
       },
       subTitle: <TypographyProps>{
-        label: "PAN is used to check your approved limit",
+        label: "Cash limit is calculated using your MF portfolio",
+        numberOfLines: 1,
+        fontFamily: FontFamilyTokens.Inter,
         color: ColorTokens.Grey_Charcoal,
         fontWeight: "400",
         fontSize: FontSizeTokens.SM,
@@ -82,6 +84,7 @@ export const template: (
         subTitle: panNumber,
         leadIconName: IconTokens.CreditCard,
         trailIconName: IconTokens.Edit,
+        subTitleLineHeight: 24,
         action: {
           routeId: ROUTE.MF_FETCH_PORTFOLIO,
           type: ACTION.EDIT_PAN,
@@ -97,6 +100,7 @@ export const template: (
         subTitle: phoneNumber,
         leadIconName: IconTokens.Phone,
         trailIconName: IconTokens.Edit,
+        subTitleLineHeight: 24,
         action: {
           type: ACTION.EDIT_MOBILE_NUMBER,
           routeId: ROUTE.MF_FETCH_PORTFOLIO,
@@ -108,6 +112,7 @@ export const template: (
         subTitle: emailId,
         leadIconName: IconTokens.Email,
         trailIconName: IconTokens.Edit,
+        subTitleLineHeight: 24,
         action: {
           type: ACTION.EDIT_EMAIL,
           routeId: ROUTE.MF_FETCH_PORTFOLIO,
@@ -116,6 +121,7 @@ export const template: (
       },
       fetchCTA: <ButtonProps & WidgetProps>{
         label: "Get my portfolio",
+        fontFamily: FontFamilyTokens.Poppins,
         width: ButtonWidthTypeToken.FULL,
         type: ButtonTypeTokens.LargeFilled,
         action: {

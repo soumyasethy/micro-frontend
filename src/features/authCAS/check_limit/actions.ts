@@ -3,7 +3,7 @@ import { FetchPortfolioPayload, PanEditPayload } from "./types";
 import { api } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
-import { ButtonProps } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import { getAppHeader } from "../../../configs/config";
 let hasChangedInDetails = false;
@@ -54,6 +54,8 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   }
 ): Promise<any> => {
   await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
+    label: "",
+    type: ButtonTypeTokens.LargeOutline,
     loading: true,
   });
 
@@ -88,6 +90,8 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
     })
     .finally(async () => {
       await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
+        label: "Get my portfolio",
+        type: ButtonTypeTokens.LargeFilled,
         loading: false,
       });
     });

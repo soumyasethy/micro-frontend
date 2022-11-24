@@ -11,6 +11,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  FontFamilyTokens,
   InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
@@ -45,6 +46,7 @@ export const template: (email: String) => TemplateSchema = (email) => ({
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
       label: "Confirm",
+      fontFamily: FontFamilyTokens.Poppins,
       type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {

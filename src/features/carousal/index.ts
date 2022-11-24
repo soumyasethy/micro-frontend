@@ -13,6 +13,7 @@ import {
   ButtonWidthTypeToken,
   CarousalProps,
   ColorTokens,
+  FontFamilyTokens,
   IconAlignmentTokens,
   IconProps,
   IconSizeTokens,
@@ -58,23 +59,24 @@ export const template: TemplateSchema = {
       data: [
         {
           id: "1",
-          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard1.svg",
+          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard-test.svg",
           text: "Unlock cash from mutual fund savings in 5 mins",
         },
         {
           id: "2",
-          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard2.svg",
+          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard-test.svg",
           text: "Withdraw only what you need, and repay flexibly",
         },
         {
           id: "3",
-          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard3.svg",
-          text: "Let your savings grow",
+          image: "https://volt-images.s3.ap-south-1.amazonaws.com/onboard-test.svg",
+          text: "Save more earn more, let your savings grow",
         },
       ],
       textColor: ColorTokens.Black,
     },
     button: <ButtonProps>{
+      fontFamily: FontFamilyTokens.Poppins,
       label: "Get started",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,

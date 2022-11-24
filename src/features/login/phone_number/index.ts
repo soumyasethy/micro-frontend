@@ -7,6 +7,8 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  BorderRadiusTokens,
+  ButtonBaseProps,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -59,7 +61,6 @@ export const template: TemplateSchema = {
         type: WIDGET.BUTTON,
       },
       { id: "space5", type: WIDGET.SPACE },
-      // { id: "stackText", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
       {
         id: "tc_text",
         type: WIDGET.TERMS_TEXT,
@@ -69,7 +70,7 @@ export const template: TemplateSchema = {
   datastore: <Datastore>{
     tc_text: <TermsTextProps>{
       html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
-      By proceeding, I accept  <span style='color:#1434CB;' >T&Cs, Privacy Policy</span>and<span style="color:#1434CB"; > Authorize</span> to obtain my cKYC & credit report.
+      By proceeding, I accept  <span style='color:#1434CB;' >T&Cs, Privacy Policy </span>and<span style="color:#1434CB"; > Authorize</span> to <br>obtain my KYC & bureau information.
       </p>`,
       /*** UnComment for Orange Terms and Condition text **/
       // html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
@@ -78,6 +79,7 @@ export const template: TemplateSchema = {
     },
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
+      fontFamily: FontFamilyTokens.Poppins,
       label: "Continue",
       type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
@@ -96,12 +98,14 @@ export const template: TemplateSchema = {
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
-      fontWeight: "700",
+      fontWeight: "600",
     },
     subTitle: <TypographyProps>{
       label: "We’ll send an OTP to verify this number",
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "400",
     },
     input: <TextInputProps & WidgetProps>{
       regex: "^[0-9]*$",
@@ -129,10 +133,10 @@ export const template: TemplateSchema = {
       },
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
-    space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    space3: <SpaceProps>{ size: SizeTypeTokens.MD },
+    space2: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+    space3: <SpaceProps>{ size: SizeTypeTokens.LG },
     space4: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    whatsapp_space: <SpaceProps>{ size: SizeTypeTokens.XS },
+    whatsapp_space: <SpaceProps>{ size: SizeTypeTokens.SM },
     whatsappStack: <StackProps & WidgetProps>{
       type: StackType.row,
       alignItems: StackAlignItems.center,
@@ -165,62 +169,7 @@ export const template: TemplateSchema = {
       fontSize: FontSizeTokens.XXS,
       color: ColorTokens.Grey_Night,
     },
-    space5: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    stackText: <StackProps & WidgetProps>{
-      flexWrap: StackFlexWrap.wrap,
-      type: StackType.column,
-      alignItems: StackAlignItems.flexStart,
-      justifyContent: StackJustifyContent.flexStart,
-      widgetItems: [
-        { id: "stack2", type: WIDGET.STACK },
-        { id: "text5", type: WIDGET.TEXT },
-      ],
-    },
-    stack2: <StackProps & WidgetProps>{
-      type: StackType.row,
-      alignItems: StackAlignItems.center,
-      widgetItems: [
-        { id: "text1", type: WIDGET.TEXT },
-        { id: "text2", type: WIDGET.TEXT },
-        { id: "text3", type: WIDGET.TEXT },
-        { id: "text4", type: WIDGET.TEXT },
-      ],
-    },
-    text1: <TypographyProps>{
-      label: "By proceeding, I accept ",
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Black,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
-    },
-    text2: <TypographyProps>{
-      label: "T&Cs, Privacy Policy ",
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Blue_700,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
-    },
-    text3: <TypographyProps>{
-      label: "and ",
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Black,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
-    },
-    text4: <TypographyProps>{
-      label: "Authorize ",
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Blue_700,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
-    },
-    text5: <TypographyProps>{
-      label: "to obtain my cKYC & credit report.",
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Black,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
-    },
+    space5: <SpaceProps>{ size: SizeTypeTokens.XL },
   },
 };
 

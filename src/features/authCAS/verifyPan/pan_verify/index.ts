@@ -61,7 +61,6 @@ export const template: (
         { id: "space5", type: WIDGET.SPACE },
         { id: "calendarInput", type: WIDGET.INPUT },
         { id: "space3", type: WIDGET.SPACE },
-        { id: "whatsappStack", type: WIDGET.STACK },
         {
           id: "space4",
           type: WIDGET.SPACE,
@@ -78,6 +77,7 @@ export const template: (
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
       continue: <ButtonProps & WidgetProps>{
         label: "Continue",
+        fontFamily: FontFamilyTokens.Poppins,
         type: ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
         action: {
@@ -101,6 +101,8 @@ export const template: (
       subTitle: <TypographyProps>{
         label: "PAN is used to get your investment details",
         color: ColorTokens.Grey_Charcoal,
+        fontWeight: "400",
+        fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.SM,
       },
       input: <TextInputProps & WidgetProps>{
@@ -173,10 +175,10 @@ export const template: (
         },
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.SM },
-      space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      space2: <SpaceProps>{ size: SizeTypeTokens.Size32 },
       space5: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-      space3: <SpaceProps>{ size: SizeTypeTokens.LG },
-      space4: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      space4: <SpaceProps>{ size: SizeTypeTokens.Size32 },
       disclaimerStack: <StackProps>{
         type: StackType.row,
         justifyContent: StackJustifyContent.center,
@@ -196,13 +198,15 @@ export const template: (
       },
       disclaimerText: <TypographyProps>{
         fontSize: FontSizeTokens.XXS,
-        label: "Don’t worry your data is secured with Volt",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "500",
+        label: "Your data is secure with Volt",
         color: ColorTokens.System_Happy,
       },
       disclaimerSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
       disclaimerIcon: <IconProps>{
         name: IconTokens.Secure,
-        size: IconSizeTokens.XXS,
+        size: IconSizeTokens.XS,
         color: ColorTokens.System_Happy,
       },
     },

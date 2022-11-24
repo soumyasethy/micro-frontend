@@ -11,6 +11,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  FontFamilyTokens,
   HeaderProps,
   LineItemCardProps,
   SizeTypeTokens,
@@ -56,7 +57,7 @@ export const template: (
     },
     datastore: <Datastore>{
       header: <HeaderProps>{
-        title: "Pledge Confirmation",
+        title: "Pledge confirmation",
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         isBackButton: true,
         type: "DEFAULT",
@@ -72,7 +73,7 @@ export const template: (
           {
             id: "total_cash_imit",
             title: "Total cash limit",
-            amount: `${totalAmount}`.replace(
+            amount: `₹${totalAmount}`.replace(
               /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
               ","
             ),
@@ -99,6 +100,7 @@ export const template: (
       },
       buttonSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
       continue: <ButtonProps & WidgetProps>{
+        fontFamily: FontFamilyTokens.Poppins,
         label: "Confirm & get OTP",
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,

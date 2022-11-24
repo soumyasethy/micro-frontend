@@ -70,8 +70,9 @@ export const template: (
       },
       title_space: <SpaceProps>{ size: SizeTypeTokens.XL },
       confirm: <ButtonProps & WidgetProps>{
-        label: `Yes, this is me!`,
-        type: ButtonTypeTokens.LargeFilled,
+        label: `I confirm, this is me`,
+        fontSize: FontSizeTokens.SM,
+        type: ButtonTypeTokens.MediumFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.CONFIRM_PAN,
@@ -99,6 +100,8 @@ export const template: (
       },
       wrong1: <TypographyProps>{
         label: "Not you? ",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
         fontSize: FontSizeTokens.SM,
         color: ColorTokens.Grey_Night,
       },

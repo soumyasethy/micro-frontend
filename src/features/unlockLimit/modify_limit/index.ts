@@ -12,6 +12,7 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
   IconAlignmentTokens,
@@ -85,7 +86,7 @@ export const template: (
           routeId: ROUTE.MODIFY_LIMIT,
         },
       },
-      space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       inputItem: <TextInputProps & WidgetProps>{
         placeholder: "",
         type: InputTypeToken.DEFAULT,
@@ -106,7 +107,7 @@ export const template: (
           },
         },
       },
-      inputSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
+      inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
       selectAssetForPledge: <StackProps & WidgetProps>{
         type: StackType.row,
         alignItems: StackAlignItems.flexStart,
@@ -140,7 +141,8 @@ export const template: (
         color: ColorTokens.Primary_100,
       },
       otpItem: <ButtonProps & WidgetProps>{
-        label: "Continue",
+        label: "Confirm & get OTP",
+        fontFamily: FontFamilyTokens.Poppins,
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
