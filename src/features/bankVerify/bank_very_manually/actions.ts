@@ -2,6 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
+  IconTokens,
   StepperStateToken,
 } from "@voltmoney/schema";
 import {
@@ -75,15 +76,16 @@ export const BavVerifyManualAction: ActionFunction<
 > = async (
   action,
   _datastore,
-  { setDatastore, network, showPopup }
+  { setDatastore, network, showPopup, goBack }
 ): Promise<any> => {
-  // await showPopup({
-  //   title: "Depositing Rs 1",
-  //   subTitle: "We’re doing this to verify your account.",
-  //   type: "LOADING",
-  // });
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
+  });
+  await showPopup({
+    title: "Depositing Rs 1",
+    subTitle: "We’re doing this to verify your account.",
+    type: "LOADING",
+    iconName: IconTokens.Coin,
   });
 
   const applicationId = (await SharedPropsService.getUser())
@@ -97,7 +99,11 @@ export const BavVerifyManualAction: ActionFunction<
         bankIfscCode: bankIfsc,
       },
     },
-    { headers: await getAppHeader() }
+    { headers: await getAppHeader() },
+    async () => {
+      //dismiss modal -> Depositing Rs 1
+      await goBack();
+    }
   );
 
   if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
