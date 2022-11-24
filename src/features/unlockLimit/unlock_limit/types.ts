@@ -26,8 +26,8 @@ export type AvailableCASItem = {
   schemeType: string;
   totalAvailableUnits: number;
   fetchedOn: any;
-  is_pledged: any;
-  is_pledged_confirmed: any;
+  is_pledged: boolean;
+  is_pledged_confirmed: boolean;
   pledgedUnits: any;
   pledgedOn: any;
   pledgeReferenceNo: any;
