@@ -13,6 +13,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
@@ -83,7 +84,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       fontFamily: FontFamilyTokens.Poppins,
       fontSize: FontSizeTokens.MD,
     },
-    spaceTitle: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
+    spaceTitle: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     spaceImage: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     stackImage: <StackProps>{
       justifyContent: StackJustifyContent.center,
@@ -108,12 +109,14 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         },
       },
     },
-    space2: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
+    space2: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     tcText: <TypographyProps>{
       label: "By proceeding further, I hereby authorize Volt to pull my documents from Digilocker.",
       fontWeight: "400",
       fontFamily: FontFamilyTokens.Inter,
-      fontSize: FontSizeTokens.XS,
+      fontSize: FontSizeTokens.XXS,
+      lineHeight: 16,
+      color: ColorTokens.Grey_Charcoal
     },
     bottomStack: <StackProps>{
       type: StackType.row,
@@ -130,6 +133,9 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     space3: <SpaceProps>{ size: SizeTypeTokens.XS },
     tcText2: <TypographyProps>{
       label: "Powered by Digilocker",
+      fontSize: FontSizeTokens.XXS,
+      color: ColorTokens.Grey_Charcoal,
+      lineHeight: 16,
     },
     bottomSpace: <SpaceProps> { size: SizeTypeTokens.LG },
     bottomSection: <StackProps> {
