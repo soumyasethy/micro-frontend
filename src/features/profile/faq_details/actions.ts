@@ -21,6 +21,14 @@ export const accountDetails: ActionFunction<ProfilePayload> = async (
  
 };
 
+export const contact: ActionFunction<ProfilePayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage }
+): Promise<any> => {
+  await navigate(ROUTE.CONTACT_US);
+};
+
 
 export const goBack: ActionFunction<ProfilePayload> = async (
   action,

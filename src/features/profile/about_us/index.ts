@@ -207,7 +207,7 @@ export const template: (
                     size: SizeTypeTokens.LG
                 },
                 titleprivacy: <TypographyProps>{
-                    label: "privacy request",
+                    label: "Privacy policy",
                     color: ColorTokens.Grey_Night,
                     numberOfLines: 1,
                     fontSize: FontSizeTokens.SM,

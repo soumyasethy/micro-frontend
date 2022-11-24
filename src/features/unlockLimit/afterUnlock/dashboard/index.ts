@@ -63,16 +63,35 @@ export const template: (
   repaymentAmount,
   isPendingDisbursalApproval
 ) => {
-  const _generateRepaymentDS =
+  // const _generateRepaymentDS =
+  //   repaymentAmount > 0
+  //     ? {
+  //         repaymentCard: <CardProps>{
+  //           bgColor: ColorTokens.White,
+  //           body: {
+  //             widgetItems: [
+  //               {
+  //                 id: "repaymentItem",
+  //                 type: WIDGET.REPAYMENT,
+                 
+  //               },
+  //             ],
+  //           },
+  //         },
+  //       }
+  //     : {};
+
+      const _generateRepaymentDS =
     repaymentAmount > 0
       ? {
-          repaymentCard: <CardProps>{
+          repaymentStickyCard: <CardProps>{
             bgColor: ColorTokens.White,
             body: {
               widgetItems: [
                 {
                   id: "repaymentItem",
                   type: WIDGET.REPAYMENT,
+                 
                 },
               ],
             },
@@ -111,6 +130,19 @@ export const template: (
             horizontal: 0,
           },
         },
+        ...(repaymentAmount > 0
+          ? [
+              {
+                id: "repaymentStickyCard",
+                type: WIDGET.CARD,
+                padding: {
+                  horizontal: 0,
+                  all: 0,
+                },
+              },
+              { id: "repaymentSpace", type: WIDGET.SPACE },
+            ]
+          : []),
         {
           id: "promoCard",
           type: WIDGET.CARD,
@@ -283,6 +315,7 @@ export const template: (
       },
       continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       ..._generateRepaymentDS,
+     
       repaymentItem: <RepaymentProps>{
         title: "Repayment",
         message: "Outstanding amount",

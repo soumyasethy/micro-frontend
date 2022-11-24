@@ -80,15 +80,23 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
   _datastore,
   { setDatastore, appendWidgets, removeWidgets }
 ): Promise<any> => {
+  const user: User = await SharedPropsService.getUser();
+  const actualLoanAmount = user.linkedCredits[0].actualLoanAmount;
+  const availableCreditAmount = user.linkedCredits[0].availableCreditAmount;
+  const alreadyWithdrawAmount = actualLoanAmount - availableCreditAmount;
+  const recommendedAmount = 0.9 * actualLoanAmount;
+  const currentRecommendedAmount = recommendedAmount - alreadyWithdrawAmount;
+
   if (action.payload.value.length > 0) {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     });
-  } else {
-    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
-      type: ButtonTypeTokens.LargeOutline,
-    });
   }
+  //  else{
+  //   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+  //     type: ButtonTypeTokens.LargeOutline,
+  //   });
+  // }
 
   disbursalAmount = parseFloat(action.payload.value);
   console.warn("***** disbursalAmount *****", disbursalAmount);
@@ -105,12 +113,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
       ","
     )*/,
   });
-  const user: User = await SharedPropsService.getUser();
-  const actualLoanAmount = user.linkedCredits[0].actualLoanAmount;
-  const availableCreditAmount = user.linkedCredits[0].availableCreditAmount;
-  const alreadyWithdrawAmount = actualLoanAmount - availableCreditAmount;
-  const recommendedAmount = 0.9 * actualLoanAmount;
-  const currentRecommendedAmount = recommendedAmount - alreadyWithdrawAmount;
+  
   if (disbursalAmount > currentRecommendedAmount) {
     await appendWidgets(
       ROUTE.WITHDRAW_AMOUNT,

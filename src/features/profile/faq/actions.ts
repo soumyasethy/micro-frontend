@@ -13,6 +13,14 @@ export const faqDetails: ActionFunction<FaqPayload> = async (
   }));
 };
 
+export const contact: ActionFunction<FaqPayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage }
+): Promise<any> => {
+  await( navigate(ROUTE.CONTACT_US));
+};
+
 export const accountDetails: ActionFunction<FaqPayload> = async (
   action,
   _datastore,

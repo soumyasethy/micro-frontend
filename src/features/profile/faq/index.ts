@@ -17,6 +17,8 @@ import {
     DividerSizeTokens,
     FontFamilyTokens,
     FontSizeTokens,
+    HeaderProps,
+    HeaderTypeTokens,
     IconAlignmentTokens,
     IconProps,
     IconSizeTokens,
@@ -35,8 +37,8 @@ import {
     WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, FaqPayload } from "./types";
-import { faqDetails, goBack } from "./actions";
+import { ACTION, FaqPayload, KYCPayload, WithdrawalPayload } from "./types";
+import { contact, faqDetails, goBack } from "./actions";
 export const template: (
 ) => TemplateSchema = (
     ) => {
@@ -47,61 +49,36 @@ export const template: (
                 type: LAYOUTS.LIST,
                 widgets: [
                     {
-                        id: "header", type: WIDGET.CARD, position: POSITION.FIXED_TOP
+                        id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP
                     },
-                    {
-                        id: "detailScreen", type: WIDGET.STACK, padding: {
-                            left: 16, right: 16
-                        }
+                    { id: "Card1", type: WIDGET.CARD
                     },
-                    // {
-                    //     id: "detailScreen", type: WIDGET.STACK, padding: {
-                    //         horizontal: 24,
-                    //         vertical: 0
-                    //     }
-                    // },
-                
+                      { id: "Card2", type: WIDGET.CARD
+                    },
+                    { id: "Card3", type: WIDGET.CARD
+                     }
 
 
                 ],
             },
             datastore: <Datastore>{
-                header: <CardProps>{
-                    bgColor: ColorTokens.White,
-                    body: {
-                        widgetItems: [
-                            { id: "profileBlock", type: WIDGET.STACK },
-                            { id: "divider", type: WIDGET.DIVIDER },
-                        ]
-                    }
-                },
-                profileBlock: <StackProps>{
-                    type: StackType.row,
-                    alignItems: StackAlignItems.center,
-                    justifyContent: StackJustifyContent.spaceBetween,
-                    widgetItems: [
-                        { id: "profileBlock1", type: WIDGET.STACK },
-                        { id: "headerStack", type: WIDGET.STACK },
-                    ]
-                },
-                profileBlock1: <StackProps>{
-                    type: StackType.row,
-                    alignItems: StackAlignItems.center,
-                    justifyContent: StackJustifyContent.flexStart,
-                    widgetItems: [
-                        { id: "icon", type: WIDGET.BUTTON },
-                        { id: "space0", type: WIDGET.SPACE },
-                        { id: "nameElement", type: WIDGET.TEXT }
-                    ]
-                },
-                icon: <ButtonProps>{
-                    type: ButtonTypeTokens.SmallGhost,
-                   // width: ButtonWidthTypeToken.CONTENT,
-                    icon: <IconProps>{
-                        name: IconTokens.ChevronDown,
-                        size: IconSizeTokens.SM,
-                        color: ColorTokens.Grey_Charcoal
+                header: <HeaderProps>{
+                    title: "FAQ’s",
+                    isBackButton: true,
+                    type:HeaderTypeTokens.HEADERCTA,
+                    leftCta: "Contact Us",
+                    leftProps: {
+                      label: 'Contact Us',
+                      type: TagTypeTokens.SECONDARY,
+                      labelColor: ColorTokens.Primary_100,
+                      icon: {
+                        name: IconTokens.HeadPhone,
+                        size: IconSizeTokens.MD,
+                        align: IconAlignmentTokens.left,
+                        color:ColorTokens.Primary_100
+                      },
                     },
+                   
                     action: {
                         type: ACTION.BACK_BUTTON,
                         payload: <{}>{
@@ -111,61 +88,16 @@ export const template: (
                         },
                         routeId: ROUTE.FAQ,
                       },
-                },
-                space0: <SpaceProps>{ size: SizeTypeTokens.LG },
-                nameElement: <TypographyProps>{
-                    label: "FAQ’s",
-                    color: ColorTokens.Grey_Night,
-                    fontSize: FontSizeTokens.MD,
-                    fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "600",
-                },
-                headerStack: <StackProps>{
-                    type: StackType.row,
-                    alignItems: StackAlignItems.center,
-                    justifyContent: StackJustifyContent.flexEnd,
-                    widgetItems: [
-                        { id: "contactBlock", type: WIDGET.TAG }
-                    ]
-                },
-                contactBlock: <TagProps>{
-                    icon: {
-                      align: IconAlignmentTokens.left,
-                      name: IconTokens.Support,
-                      size: IconSizeTokens.XL,
-                    },
-                    label: "Contact us",
-                    labelColor: ColorTokens.Primary_100,
-                    type: TagTypeTokens.DEFAULT,
-                    bgColor: ColorTokens.Primary_05,
+                      leftAction: {
+                        type: ACTION.CONTACT,
+                        payload: <{}>{
+                          value: "",
+                          widgetId: "continue",
+                          isResend: false,
+                        },
+                        routeId: ROUTE.FAQ,
+                      },
                   },
-                // contactBlock: <ButtonProps>{
-                //     labelColor:ColorTokens.Primary_100,
-                //     label:"Contact us",
-                //     type: ButtonTypeTokens.MediumOutline,
-                //     width: ButtonWidthTypeToken.CONTENT,
-                //     icon: <IconProps>{
-                //         name: IconTokens.HeadPhone,
-                //         size: IconSizeTokens.SM,
-                //         color: ColorTokens.Grey_Charcoal
-                //     }
-                // },
-                divider: <DividerProps>{
-                    size: DividerSizeTokens.SM,
-                    color: ColorTokens.Grey_Chalk,
-                    margin: {
-                        vertical: SizeTypeTokens.SM,
-                        horizontal: SizeTypeTokens.SM,
-                    },
-                },
-                detailScreen: <StackProps>{
-                    widgetItems: [
-                        { id: "Card1", type: WIDGET.CARD },
-                        { id: "Card2", type: WIDGET.CARD },
-                        { id: "Card3", type: WIDGET.CARD }
-                    ]
-
-                },
                 Card1: <CardProps>{
                     bgColor: ColorTokens.White,
                     body: {
@@ -183,7 +115,15 @@ export const template: (
                     widgetItems: [
                         { id: "infoItems", type: WIDGET.STACK },
                         { id: "cta", type: WIDGET.STACK }
-                    ]
+                    ],
+                    action: {
+                        type: ACTION.FAQ,
+                        payload: <FaqPayload>{
+                          value: "Getting started",
+                          widgetId: "continue"
+                        },
+                        routeId: ROUTE.FAQ,
+                      },
                 },
                 infoItems: <StackProps>{
                     type: StackType.row,
@@ -200,7 +140,7 @@ export const template: (
                     label: "Getting started",
                     color: ColorTokens.Grey_Night,
                     numberOfLines: 1,
-                    fontSize: FontSizeTokens.SM,
+                    fontSize: FontSizeTokens.XS,
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "500",
                 },
@@ -256,7 +196,15 @@ export const template: (
                     widgetItems: [
                         { id: "withdrawalItems", type: WIDGET.STACK },
                         { id: "ctaWithdrawal", type: WIDGET.STACK }
-                    ]
+                    ],
+                    action: {
+                        type: ACTION.FAQ,
+                        payload: <WithdrawalPayload>{
+                          value: "Withdrawal request",
+                          widgetId: "continue"
+                        },
+                        routeId: ROUTE.FAQ,
+                      },
                 },
                 withdrawalItems: <StackProps>{
                     type: StackType.row,
@@ -272,7 +220,7 @@ export const template: (
                     label: "Withdrawal request",
                     color: ColorTokens.Grey_Night,
                     numberOfLines: 1,
-                    fontSize: FontSizeTokens.SM,
+                    fontSize: FontSizeTokens.XS,
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "500",
                 },
@@ -326,7 +274,15 @@ export const template: (
                     widgetItems: [
                         { id: "kycItems", type: WIDGET.STACK },
                         { id: "ctakyc", type: WIDGET.STACK }
-                    ]
+                    ],
+                    action: {
+                        type: ACTION.FAQ,
+                        payload: <FaqPayload>{
+                          value: "KYC verification",
+                          widgetId: "continue"
+                        },
+                        routeId: ROUTE.FAQ,
+                      },
                 },
                 kycItems: <StackProps>{
                     type: StackType.row,
@@ -342,7 +298,7 @@ export const template: (
                     label: "KYC verification",
                     color: ColorTokens.Grey_Night,
                     numberOfLines: 1,
-                    fontSize: FontSizeTokens.SM,
+                    fontSize: FontSizeTokens.XS,
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "500",
                 },
@@ -364,7 +320,7 @@ export const template: (
                     },
                     action: {
                         type: ACTION.FAQ,
-                        payload: <FaqPayload>{
+                        payload: <KYCPayload>{
                           value: "KYC verification",
                           widgetId: "continue"
                         },
@@ -395,6 +351,7 @@ export const faqMF: PageType<any> = {
 
     actions: {
          [ACTION.FAQ]: faqDetails,
+         [ACTION.CONTACT]: contact,
         [ACTION.BACK_BUTTON]: goBack
     },
     bgColor: "#FFFFFF",
