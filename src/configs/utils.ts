@@ -367,21 +367,14 @@ export const nextStepId = async (
       currentStepId === "KYC_SUMMARY" ||
       currentStepId === "BANK_ACCOUNT_VERIFICATION" ||
       currentStepId === "MANDATE_SETUP" ||
+      currentStepId === "CREDIT_APPROVAL" ||
       currentStepId === "AGREEMENT_SIGN"
     ) {
       return { routeId: ROUTE.KYC_STEPPER, params: {} };
-    } else if (currentStepId === ROUTE.KYC_SUMMARY) {
-      return { routeId: ROUTE.KYC_SUMMARY, params: {} };
-    } else if (
-      currentStepId === "MANDATE_SETUP" ||
-      currentStepId === "CREDIT_APPROVAL"
-    ) {
-      return { routeId: ROUTE.LOAN_AUTOPAY, params: {} };
-    } else if (currentStepId === "AGREEMENT_SIGN") {
-      return { routeId: ROUTE.LOAN_AGREEMENT, params: {} };
     }
   }
 };
+
 export const debounce = (callback, wait) => {
   let timeoutId = null;
   return (...args) => {

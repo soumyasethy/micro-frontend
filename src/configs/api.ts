@@ -1,5 +1,6 @@
 export const config = {
   baseUrl: "https://api.voltmoney.in",
+  stageBaseUrl: "https://api.staging.voltmoney.in",
 };
 export const StoreKey = {
   isLoadedFirstTime: "is_Loaded_First_Time",
