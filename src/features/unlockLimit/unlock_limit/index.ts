@@ -183,7 +183,7 @@ export const template: (
 export const unlockLimitMF: PageType<any> = {
   onLoad: async ({}, { response }) => {
     console.info(" unlockLimitMF response", response);
-    const responseX = response ? response : await fetchPledgeLimitRepo();
+    const responseX = response ? response.data : await fetchPledgeLimitRepo();
     const availableCreditAmount: number =
       responseX.stepResponseObject.availableCreditAmount || 0;
     const availableCAS: AvailableCASItem[] =
