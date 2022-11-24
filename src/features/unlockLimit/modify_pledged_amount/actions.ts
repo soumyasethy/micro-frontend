@@ -24,13 +24,13 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
   const availableCASItem =
     stepResponseObject.availableCAS[action.payload.index];
   let key = `${availableCASItem.isinNo}-${availableCASItem.folioNo}`;
-
+  //Core Calculation Part
   let pledgedUnitsCalculated: number =
     amount /
     (stepResponseObject.isinNAVMap[updateAvailableCASMapX[key].isinNo] *
       stepResponseObject.isinLTVMap[updateAvailableCASMapX[key].isinNo]);
 
-  if (_.get(action, "payload.amount", false) || amount === 0) {
+  if (amount === 0) {
     pledgedUnitsCalculated = 0;
   }
   updateAvailableCASMapX[key].pledgedUnits = pledgedUnitsCalculated;
@@ -48,40 +48,35 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
   );
 
   const updatedListUI = [
-    ...selectedCAS.map((availableCASItem, i) => {
+    ...selectedCAS.map((item, i) => {
       let key = `${stepResponseObject.availableCAS[i].isinNo}-${stepResponseObject.availableCAS[i].folioNo}`;
       return <ListItemDataProps>{
-        label: availableCASItem.schemeName, //"Axis Long Term Equity Mutual Funds",
+        label: item.schemeName, //"Axis Long Term Equity Mutual Funds",
         info: "",
         trailIcon: { name: IconTokens.Edit },
-        trailTitle: `${
+        trailTitle:
           action.payload.selectedMap.hasOwnProperty(i) &&
           action.payload.selectedMap[i]
-            ? getTotalLimit(
+            ? `₹${getTotalLimit(
                 [updateAvailableCASMapX[key]],
                 stepResponseObject.isinNAVMap,
                 stepResponseObject.isinLTVMap
-              )
-            : 0
-        }`, //"₹4,000",
+              )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",")
+            : "₹0",
+        //"₹4,000",
         trailSubTitle: `/ ₹${getActualLimit(
-          [
-            {
-              ...availableCASItem,
-              pledgedUnits: availableCASItem.totalAvailableUnits,
-            },
-          ],
+          [item],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
-        )}`,
+        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         action: "edit",
         trailIconAction: {
           type: ACTION.EDIT_ITEM,
           routeId: ROUTE.PORTFOLIO,
           payload: <EditItemPayload>{
-            value: 0,
+            value: action.payload.index,
             stepResponseObject,
-            selectedMap: {},
+            selectedMap: action.payload.selectedMap,
           },
         },
       };

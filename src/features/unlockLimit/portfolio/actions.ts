@@ -22,8 +22,6 @@ import {
 } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
-import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
 
 let portfolioSearchKeyword = "";
 let listBeforeSearchUI = [];
@@ -60,11 +58,8 @@ export const getActualLimit = (
 export const TriggerCTA: ActionFunction<CtaPayload> = async (
   action,
   _datastore,
-  { setDatastore, navigate, network }
+  { navigate }
 ): Promise<any> => {
-  // await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-  //   isLoading: true,
-  // });
   const availableCASMap = await SharedPropsService.getAvailableCASMap();
   const updatedList: AvailableCASItem[] = [];
   Object.keys(availableCASMap).forEach((key) => {
@@ -101,15 +96,17 @@ export const EditItem: ActionFunction<EditItemPayload> = async (
 export const ToggleSelectAction: ActionFunction<
   PortfolioTogglePayload
 > = async (action, _datastore, { setDatastore }): Promise<any> => {
+  console.warn("ToggleSelectAction", action);
   const updateAvailableCASMapX = await SharedPropsService.getAvailableCASMap();
   const stepResponseObject = action.payload.stepResponseObject;
   const availableCASItem =
     action.payload.stepResponseObject.availableCAS[action.payload.value];
+
   let key = `${availableCASItem.isinNo}-${availableCASItem.folioNo}`;
 
   let pledgedUnitsCalculated: number = 0;
   if (action.payload.selectedMap[action.payload.value] === true) {
-    pledgedUnitsCalculated = availableCASItem.totalAvailableUnits;
+    pledgedUnitsCalculated = updateAvailableCASMapX[key].totalAvailableUnits;
   }
   updateAvailableCASMapX[key] = {
     ...updateAvailableCASMapX[key],
@@ -126,13 +123,13 @@ export const ToggleSelectAction: ActionFunction<
     stepResponseObject.isinLTVMap
   );
   const updatedListUI = [
-    ...selectedCAS.map((availableCASItem, i) => {
+    ...selectedCAS.map((item, i) => {
       let key = `${stepResponseObject.availableCAS[i].isinNo}-${stepResponseObject.availableCAS[i].folioNo}`;
       return <ListItemDataProps>{
-        label: availableCASItem.schemeName, //"Axis Long Term Equity Mutual Funds",
+        label: item.schemeName, //"Axis Long Term Equity Mutual Funds",
         info: "",
         trailIcon: { name: IconTokens.Edit },
-        trailTitle: `${
+        trailTitle:
           action.payload.selectedMap.hasOwnProperty(i) &&
           action.payload.selectedMap[i]
             ? `₹${getTotalLimit(
@@ -140,15 +137,9 @@ export const ToggleSelectAction: ActionFunction<
                 stepResponseObject.isinNAVMap,
                 stepResponseObject.isinLTVMap
               )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",")
-            : 0
-        }`, //"₹4,000",
+            : "₹0", //"₹4,000",
         trailSubTitle: `/ ₹${getActualLimit(
-          [
-            {
-              ...availableCASItem,
-              pledgedUnits: availableCASItem.totalAvailableUnits,
-            },
-          ],
+          [item],
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
         )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
@@ -157,9 +148,9 @@ export const ToggleSelectAction: ActionFunction<
           type: ACTION.EDIT_ITEM,
           routeId: ROUTE.PORTFOLIO,
           payload: <EditItemPayload>{
-            value: 0,
+            value: action.payload.value,
             stepResponseObject,
-            selectedMap: {},
+            selectedMap: action.payload.selectedMap,
           },
         },
       };
@@ -176,7 +167,7 @@ export const ToggleSelectAction: ActionFunction<
   });
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMapX);
   await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    info: `${totalAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
+    info: `₹${totalAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
   });
 };
 
