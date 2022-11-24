@@ -194,6 +194,7 @@ export const template: (
         "By proceeding, I confirm that my current address is same as permanent address as shown above.",
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XS,
+      lineHeight: 16,
     },
     tcSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     continue: <ButtonProps & WidgetProps>{
