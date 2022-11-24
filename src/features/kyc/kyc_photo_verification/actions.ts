@@ -12,8 +12,7 @@ export const CameraConfirmAction: ActionFunction<any> = async (
 export const GoBackAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, goBack }
+  { goBack }
 ): Promise<any> => {
   await goBack();
-  await navigate(ROUTE.CAMERA_CAPTURE);
 };
