@@ -9,6 +9,7 @@ import {
 } from "@voltmoney/types";
 import {
   AspectRatioToken,
+  BorderRadiusTokens,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -16,6 +17,9 @@ import {
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
+  IconProps,
+  IconSizeTokens,
+  IconTokens,
   ImageProps,
   ImageSizeTokens,
   SizeTypeTokens,
@@ -46,9 +50,8 @@ export const template: (
     type: LAYOUTS.LIST,
     widgets: [
       { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-      { id: "space1", type: WIDGET.SPACE },
       { id: "topSpace", type: WIDGET.SPACE },
-      { id: "stack", type: WIDGET.STACK },
+      { id: "stack", type: WIDGET.STACK, },
       {
         id: "stackBottom",
         type: WIDGET.STACK,
@@ -57,8 +60,7 @@ export const template: (
     ],
   },
   datastore: <Datastore>{
-    space1: <SpaceProps>{ size: SizeTypeTokens.SM },
-    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL},
     header: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
@@ -76,10 +78,8 @@ export const template: (
       },
     },
     stack: <StackProps>{
-      height: StackHeight.FULL,
-      width: StackWidth.FULL,
       type: StackType.column,
-      justifyContent: StackJustifyContent.spaceBetween,
+      justifyContent: StackJustifyContent.center,
       alignItems: StackAlignItems.center,
       widgetItems: [
         { id: "previewImage", type: WIDGET.IMAGE },
@@ -88,8 +88,6 @@ export const template: (
       ],
     },
     stackBottom: <StackProps>{
-      height: StackHeight.FULL,
-      width: StackWidth.FULL,
       type: StackType.column,
       justifyContent: StackJustifyContent.spaceBetween,
       alignItems: StackAlignItems.center,
@@ -98,15 +96,16 @@ export const template: (
         { id: "space2", type: WIDGET.SPACE },
         { id: "disclaimerSpace", type: WIDGET.SPACE },
         {
-          id: "disclaimer",
-          type: WIDGET.TEXT,
-        },
+          id: "disclaimerStack",
+          type: WIDGET.STACK
+        }
       ],
     },
     previewImage: <ImageProps>{
       uri: `data:image/gif;base64,${photo}`,
       size: ImageSizeTokens.XXXXL,
       aspectRatio: AspectRatioToken.A1_1,
+      borderRadius: BorderRadiusTokens.BR2,
     },
     retake: <ButtonProps & WidgetProps>{
       label: "Retake",
@@ -118,7 +117,6 @@ export const template: (
       },
     },
     space: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
-    space2: <SpaceProps>{ size: SizeTypeTokens.LG },
     continue: <ButtonProps & WidgetProps>{
       width: ButtonWidthTypeToken.FULL,
       label: "Continue to verify Aadhar",
@@ -129,7 +127,21 @@ export const template: (
         payload: {},
       },
     },
-    disclaimerSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+    disclaimerStack: <StackProps> {
+      type: StackType.row,
+      widgetItems: [
+        { id: "image2", type: WIDGET.ICON },
+        { id: "space3", type: WIDGET.SPACE },
+        { id: "disclaimer", type: WIDGET.TEXT },
+      ]
+    },
+    image2: <IconProps>{
+      name: IconTokens.Secure,
+      size: IconSizeTokens.MD,
+      color: ColorTokens.Secondary_100,
+    },
+    space3: <SpaceProps>{ size: SizeTypeTokens.MD },
+    disclaimerSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
     disclaimer: <TypographyProps>{
       label: "Don’t worry your data is secured with Volt",
       color: ColorTokens.Secondary_100,
