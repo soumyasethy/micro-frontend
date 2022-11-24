@@ -2,7 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import { LoginAction, OTPPayload, User } from "./types";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import { clearAllData, nextStepId } from "../../../configs/utils";
+import { nextStepId } from "../../../configs/utils";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import _ from "lodash";
@@ -16,8 +16,6 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
   await setDatastore(action.routeId, action.payload.widgetId, <TextInputProps>{
     state: InputStateToken.LOADING,
   });
-  await clearAllData();
-
   const loginResponse = await network.post(api.verifyOtp, {
     otp: action.payload.value,
     phoneNo: action.payload.username,

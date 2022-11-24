@@ -1,29 +1,13 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { ProfilePayload } from "./types";
-import {
-  ButtonProps,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
-import { api } from "../../../configs/api";
-import { defaultAuthHeaders } from "../../../configs/config";
-import { clearAllData } from "../../../configs/utils";
-
-let phoneNumber: string = "";
-
-// export const userProfile: ActionFunction<ProfilePayload> = async (
-//   action,
-//   _datastore,
-//   { navigate, setDatastore, asyncStorage }
-// ): Promise<any> => {
-//  await navigate(ROUTE.ACCOUNT_DETAILS)
-// };
+import { StoreKey } from "../../../configs/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const accountDetails: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
   await navigate(ROUTE.ACCOUNT_DETAILS, {
     profileData: action.payload.value,
@@ -33,7 +17,7 @@ export const accountDetails: ActionFunction<ProfilePayload> = async (
 export const contactDetails: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
   await navigate(ROUTE.CONTACT_US);
 };
@@ -41,7 +25,7 @@ export const contactDetails: ActionFunction<ProfilePayload> = async (
 export const faqDetails: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
   await navigate(ROUTE.FAQ);
 };
@@ -49,7 +33,7 @@ export const faqDetails: ActionFunction<ProfilePayload> = async (
 export const aboutDetails: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate }
 ): Promise<any> => {
   console.log("abou page");
   await navigate(ROUTE.ABOUTUS);
@@ -58,9 +42,9 @@ export const aboutDetails: ActionFunction<ProfilePayload> = async (
 export const logout: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore }
+  { navigate }
 ): Promise<any> => {
-  await clearAllData();
+  await AsyncStorage.removeItem(StoreKey.accessToken);
   await navigate(ROUTE.PHONE_NUMBER);
 };
 

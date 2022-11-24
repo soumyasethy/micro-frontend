@@ -29,6 +29,7 @@ export const showBottomSheet = ({
     },
   };
 };
+/*** don't call this  ****/
 export const clearAllData = async () => {
   await AsyncStorage.getAllKeys()
     .then((keys) => AsyncStorage.multiRemove(keys))
