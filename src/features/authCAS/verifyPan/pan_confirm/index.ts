@@ -72,7 +72,7 @@ export const template: (
       confirm: <ButtonProps & WidgetProps>{
         label: `I confirm, this is me`,
         fontSize: FontSizeTokens.SM,
-        type: ButtonTypeTokens.MediumFilled,
+        type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.CONFIRM_PAN,
