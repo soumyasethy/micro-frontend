@@ -9,6 +9,7 @@ import {
 } from "@voltmoney/types";
 import {
   BorderRadiusTokens,
+  CardProps,
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
@@ -19,6 +20,7 @@ import {
   IconTokens,
   MessageAlignType,
   MessageProps,
+  MessageTypeTokens,
   ProgressIndicatorProps,
   ProgressIndicatorTypeTokens,
   ShimmerIconProps,
@@ -46,7 +48,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
 ) => ({
   layout: <Layout>{
-    id: ROUTE.LOAN_REPAYMENT,
+    id: ROUTE.LOAN_AUTOPAY,
     type: LAYOUTS.LIST,
     widgets: [
       { id: "headerStack", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
@@ -59,16 +61,36 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       { id: "progressSpace", type: WIDGET.SPACE },
       { id: "contentStack", type: WIDGET.STACK },
       { id: "contentSpace", type: WIDGET.SPACE },
-      {
-        id: "infoStack",
-        type: WIDGET.STACK,
-        position: POSITION.ABSOLUTE_BOTTOM,
+      { id: "secureText", type: WIDGET.MESSAGE,
+      position: POSITION.STICKY_BOTTOM,
         padding: {
-          all: 0,
-          left: 0,
-          right: 0,
-        },
-      },
+              all: 0,
+              left: 0,
+              right: 0,
+              horizontal:0
+            },
+    
+    }
+      // {
+      //   id: "bottomCard", type: WIDGET.CARD,
+      //   position: POSITION.ABSOLUTE_BOTTOM,
+      //   padding: {
+      //         all: 0,
+      //         left: 0,
+      //         right: 0,
+      //         horizontal:0
+      //       },
+      // },
+      // {
+      //   id: "infoStack",
+      //   type: WIDGET.STACK,
+      //   position: POSITION.ABSOLUTE_BOTTOM,
+      //   padding: {
+      //     all: 0,
+      //     left: 0,
+      //     right: 0,
+      //   },
+      // },
     ],
   },
   datastore: <Datastore>{
@@ -125,6 +147,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       label: "Generating AutoPay link",
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.SM,
+      lineHeight:24,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
     },
@@ -133,18 +156,32 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       label: "We’re verifying your details. It may take up to 60 seconds",
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.XS,
+      lineHeight:18,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
     contentSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
-    infoStack: <StackProps>{
-      type: StackType.row,
-      width: StackWidth.FULL,
-      height: StackHeight.CONTENT,
-      justifyContent: StackJustifyContent.center,
-      alignItems: StackAlignItems.center,
-      widgetItems: [{ id: "secureText", type: WIDGET.MESSAGE }],
+    bottomCard: <CardProps>{
+      bgColor: ColorTokens.White,
+      body: {
+        widgetItems: [
+          { id: "secureText", type: WIDGET.MESSAGE }
+          // {
+          //     id: "infoStack",
+          //     type: WIDGET.STACK,
+          //   },
+        //  { id: "bottomCard2Details", type: WIDGET.STACK }
+        ],
+      },
     },
+    // infoStack: <StackProps>{
+    //   type: StackType.row,
+    //   width: StackWidth.FULL,
+    //  // height: StackHeight.CONTENT,
+    //   // justifyContent: StackJustifyContent.center,
+    //   // alignItems: StackAlignItems.center,
+    //   widgetItems: [{ id: "secureText", type: WIDGET.MESSAGE }],
+    // },
 
     secureText: <MessageProps>{
       label: "Do not leave at this step",
