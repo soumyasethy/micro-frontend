@@ -72,24 +72,31 @@ export const template: (
         fontWeight: "700",
       },
       subTitleStack: <StackProps & WidgetProps>{
-        type: StackType.row,
-        alignItems: StackAlignItems.center,
+        type: StackType.column,
+        alignItems: StackAlignItems.flexStart,
         justifyContent: StackJustifyContent.flexStart,
         widgetItems: [
           { id: "subTitle", type: WIDGET.TEXT },
+          { id: "subTitleSpace", type: WIDGET.SPACE },
           { id: "subTitle2", type: WIDGET.TEXT },
-        ]
+        ],
       },
       subTitle: <TypographyProps>{
-        label: `A 6-digit OTP was sent on `,
+        label: `Karvy depository has sent an OTP to `,
         color: ColorTokens.Grey_Charcoal,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
         fontSize: FontSizeTokens.SM,
       },
+      subTitleSpace: <SpaceProps>{
+        size: SizeTypeTokens.SM,
+      },
       subTitle2: <TypographyProps>{
-        label: `${phoneNumber}`.substring(3).slice(0,3) + "*****" + `${phoneNumber}`.substring(3).slice(-2),
+        label: `${phoneNumber}`.substring(3), //.substring(3).slice(0,3) + "*****" + `${phoneNumber}`.substring(3).slice(-2)
         color: ColorTokens.Grey_Charcoal,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
         fontSize: FontSizeTokens.SM,
-        fontWeight: "bold",
       },
       input: <TextInputProps & TextInputOtpProps & WidgetProps>{
         title: "Enter OTP",

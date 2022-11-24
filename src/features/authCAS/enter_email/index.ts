@@ -14,6 +14,9 @@ import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  IconProps,
+  IconSizeTokens,
+  IconTokens,
   InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
@@ -25,7 +28,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, ContinuePayload, EmailPayload } from "./types";
-import { saveEmailId, textOnChange } from "./actions";
+import { goBack, saveEmailId, textOnChange } from "./actions";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { toggleCTA } from "../../login/phone_number/actions";
 import SharedPropsService from "../../../SharedPropsService";
@@ -44,20 +47,19 @@ export const template: (applicationId: string) => TemplateSchema = (
           position: POSITION.FIXED_BOTTOM,
         },
         { id: "space0", type: WIDGET.SPACE },
-        { id: "title", type: WIDGET.TEXT },
+        { id: "backButton", type: WIDGET.ICON },
         { id: "space1", type: WIDGET.SPACE },
-        { id: "subTitle", type: WIDGET.TEXT },
+        { id: "title", type: WIDGET.TEXT },
         { id: "space2", type: WIDGET.SPACE },
         { id: "input", type: WIDGET.INPUT },
         { id: "space3", type: WIDGET.SPACE },
-        { id: "whatsappStack", type: WIDGET.STACK },
-        { id: "space4", type: WIDGET.SPACE },
       ],
     },
     datastore: <Datastore>{
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
       continue: <ButtonProps & WidgetProps>{
         label: "Continue",
+        fontFamily: FontFamilyTokens.Poppins,
         type: ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
         action: {
@@ -77,12 +79,12 @@ export const template: (applicationId: string) => TemplateSchema = (
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
       },
-      subTitle: <TypographyProps>{
-        label: "We need email linked with your investments",
-        color: ColorTokens.Grey_Charcoal,
-        fontSize: FontSizeTokens.SM,
-        numberOfLines: 1,
-      },
+      // subTitle: <TypographyProps>{
+      //   label: "We need email linked with your investments",
+      //   color: ColorTokens.Grey_Charcoal,
+      //   fontSize: FontSizeTokens.SM,
+      //   numberOfLines: 1,
+      // },
       input: <TextInputProps & WidgetProps>{
         regex: "^^[a-zA-Z0-9._{|}-]*@[a-zA-Z0-9]+.^[A-Za-z]+${2,}$",
         isLowerCase: true,
@@ -115,10 +117,18 @@ export const template: (applicationId: string) => TemplateSchema = (
           },
         },
       },
-      space1: <SpaceProps>{ size: SizeTypeTokens.SM },
-      space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-      space3: <SpaceProps>{ size: SizeTypeTokens.LG },
-      space4: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      space1: <SpaceProps>{ size: SizeTypeTokens.LG },
+      space2: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+      space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      backButton: <IconProps & WidgetProps>{
+        name: IconTokens.ChevronDown,
+        size: IconSizeTokens.XL,
+        color: ColorTokens.Grey_Night,
+        action: {
+          type: ACTION.BACK,
+          routeId: ROUTE.ENTER_EMAIL,
+        },
+      },
     },
   };
 };
@@ -130,6 +140,7 @@ export const emailMF: PageType<any> = {
     return Promise.resolve(template(applicationId));
   },
   actions: {
+    [ACTION.BACK]: goBack,
     [ACTION.CONTINUE]: saveEmailId,
     [ACTION.ENTER_EMAIL]: textOnChange,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,

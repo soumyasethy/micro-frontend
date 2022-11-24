@@ -114,7 +114,7 @@ export const template: (
           routeId: ROUTE.PORTFOLIO,
         },
       },
-      space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       inputItem: <TextInputProps & WidgetProps>{
         type: InputTypeToken.SEARCH,
         state: InputStateToken.DEFAULT,
@@ -158,7 +158,7 @@ export const template: (
           stepResponseObject.isinNAVMap,
           stepResponseObject.isinLTVMap
         )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
-        actionLabel: "Continue",
+        actionLabel: "Confirm and get OTP",
         action: {
           type: ACTION.PORTFOLIO,
           payload: <CtaPayload>{ value: stepResponseObject },

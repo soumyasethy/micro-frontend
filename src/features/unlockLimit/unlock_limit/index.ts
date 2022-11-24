@@ -14,8 +14,10 @@ import {
   ButtonWidthTypeToken,
   CardProps,
   ColorTokens,
+  FontFamilyTokens,
   HeaderProps,
   IconAlignmentTokens,
+  IconSizeTokens,
   IconTokens,
   PromoCardProps,
   SizeTypeTokens,
@@ -73,7 +75,7 @@ export const template: (
       title: "Unlock limit",
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       isBackButton: false,
-      trailIcon: "Account",
+      trailIcon: "",
       type: "DEFAULT",
     },
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
@@ -104,6 +106,8 @@ export const template: (
     },
     unlockItem: <ButtonProps & WidgetProps>{
       label: "Unlock Limit",
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: SizeTypeTokens.LG,
       type: ButtonTypeTokens.LargeFilled,
       icon: {
         name: IconTokens.Lock,
@@ -128,6 +132,7 @@ export const template: (
       icon: {
         name: IconTokens.ChervonDownRight,
         align: IconAlignmentTokens.right,
+        size: IconSizeTokens.XL,
       },
       action: {
         type: ACTION.MODIFY_LIMIT,
@@ -164,7 +169,7 @@ export const template: (
         },
         {
           id: "58694a0f-3da1-471f-bd96-145571e29d72",
-          title: "Limit Top-up, No Paper Work",
+          title: "Limit Top-up, no paperwork",
           subTitle: "Pay interest only on the borrow amount",
           image:
             "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAOuSURBVHgBlVVdiBtVFP7uzcxssm6SadaudjWS+AObrSIt9cm/rlWXotIHoaCgFMQXfVlfKtpWC32oCtLYUvAH7GMriIqwyrKW1rrUF6Gt7o+0uJvuuu1uaJppOplkfm/vhM1kEia72Q9C7rn3nO8799yTE4I1wCbHH3BC9Hd3bcAYimR25rAO0LUcTLAE/0q5HwnSmcrMrymsA6sKHBmZk7/8bmDrciFSWNlKaWr32N73pt8aGbmQqvuxy6dfs6dPz9kzv33VykGCiLP7rj4VouQQX2537XSyjJ1PX/POv/65F7PXJchRe/SD1/OMAS97GTvkUbL5uam6LbSSH/tofh8cHPKLKyWxyefFbWVcmnUw/ITyEvPtM8Ms21X1Eb6cCrzB0QPzJ/jGnlbR+/o07Hp+EavB0bQaGw1HYNns1a7HXvih6QbH9i98zHPYExSckA2sBdrd3TBERLz9Wub75x8CYQfbBd9/r4aOwF+DVTSF3i6/rf8znvEEKCXfrha3aWMVncDRdZ69KNOenmcFge5194SjBxa3MGY/ExggUiTCOsJddif8vP5h1G/iGMZyTYAxZxdpbVZuF9NRFB+Oo7eyiHXBceCUVZCu8PvW9Hg/DRG21X9uxiUsPHkPCgMyHIHgYqwfN51w5wKUgkZjIJLEl6E0dRjbVLtViMB4PA79lT44CakhyChOaoNYLwgjEzojb1BenoQjS6gM93GBGM+AIBZtdv7PknFOT3ZEbFoEZy9Gl8jkje2RzFBO0LdtmDQHow/6ncQQ0MPbWvV151g1jc3iDfTSSlvyhbyI78/KWCoK/+7I7q51BjUz0bkgZ1dA9E2IChNwSssEEusmxeifcRz/8W4sFwXeIyRXP6Pc+gltEO9ptv2l0qohXMtHcHXxLpwcTeKPvxu/ZErYWH0txP7HX6UkFDDIrQJCm1KxWRNTFxoPVTYtb807PPfpkcFTnti7Q0QlFj5EGwSVauJWv2e70/SW0ZhVhJBv/PHeT+zwFXYGK/O/FRZ/roLCnQ2GxBUFck71zhQ+HkqG6WX/WXYw7Y/1/tGkKt7k6eSCBNxSbVB1JCeWmshLPHM/OX/QodbYpiFxeIalEMIvfNdrFzdr6ZICcUZtCizpBpSV0nDiy5xo+JNsJreqQEPIPshb4Z1Q3tjYdf4mqNp4RNNhKFarqNq1Nlf4gP7CgpHNZrcoQVyBAi4+P15IikulHbynd9uMDFQsO62ZJie28jzsPI88ZzL9RDviOu4A5zhsmkEc0QAAAAAASUVORK5CYII=",

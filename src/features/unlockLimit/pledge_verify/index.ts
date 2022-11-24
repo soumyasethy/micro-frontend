@@ -51,7 +51,7 @@ export const template: (
         type: WIDGET.STACK,
       },
       { id: "titleSpace", type: WIDGET.SPACE },
-      { id: "subTitle", type: WIDGET.TEXT },
+      { id: "subTitleStack", type: WIDGET.STACK },
       { id: "subTitleSpace", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
       { id: "inputSpace", type: WIDGET.SPACE },
@@ -99,12 +99,31 @@ export const template: (
       },
     },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
+    subTitleStack: <StackProps & WidgetProps>{
+      type: StackType.row,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.flexStart,
+      widgetItems: [
+        { id: "subTitle", type: WIDGET.TEXT },
+        { id: "subTitle2", type: WIDGET.TEXT },
+      ],
+    },
     subTitle: <TypographyProps>{
-      label: "A 6-digit OTP was sent on " + `${phoneNumber}`,
+      label: `A 4-digit OTP was sent on `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
+    },
+    subTitle2: <TypographyProps>{
+      label:
+        `${phoneNumber}`.substring(3).substring(0, 3) +
+        "*****" +
+        `${phoneNumber}`.substring(3).slice(-2),
+      color: ColorTokens.Grey_Charcoal,
+      fontSize: FontSizeTokens.SM,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "600",
     },
     subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     input: <TextInputProps & WidgetProps>{

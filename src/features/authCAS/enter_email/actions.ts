@@ -42,3 +42,12 @@ export const textOnChange: ActionFunction<EmailPayload> = async (
   console.warn("**** update email ****", action.payload.value);
   emailId = action.payload.value;
 };
+
+export const goBack: ActionFunction<any> = async (
+  action,
+  _datastore,
+  {navigate},
+): Promise<any> => {
+  console.warn("**** go back ****");
+  navigate(ROUTE.EMAIL_VERIFY);
+};
