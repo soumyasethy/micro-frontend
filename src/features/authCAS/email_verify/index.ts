@@ -57,7 +57,7 @@ export const template: (applicationId: string) => TemplateSchema = (
       justifyContent: StackJustifyContent.spaceAround,
       alignItems: StackAlignItems.flexStart,
       widgetItems: [
-        { id: "space0", type: WIDGET.SPACE },
+        // { id: "space0", type: WIDGET.SPACE },
         { id: "title", type: WIDGET.TEXT },
         { id: "titleSpace", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
@@ -70,8 +70,8 @@ export const template: (applicationId: string) => TemplateSchema = (
         { id: "space3", type: WIDGET.SPACE },
       ],
     },
-    space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
-    subSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+    // space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+    subSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
     back: <ButtonProps>{
       type: ButtonTypeTokens.IconGhost,
@@ -82,11 +82,13 @@ export const template: (applicationId: string) => TemplateSchema = (
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
-      fontWeight: "700",
+      fontWeight: "600",
     },
     subTitle: <TypographyProps>{
       label: "We need email linked with your investments",
-      fontSize: FontSizeTokens.MD,
+      fontSize: FontSizeTokens.SM,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "400",
       color: ColorTokens.Grey_Charcoal,
       numberOfLines: 1,
     },
@@ -106,8 +108,8 @@ export const template: (applicationId: string) => TemplateSchema = (
     email: <ButtonBaseProps & WidgetProps>{
       label: "Continue with other email",
       bgColor: ColorTokens.Transparent,
-      labelColor: ColorTokens.Blue_700,
-      fontSize: FontSizeTokens.MD,
+      labelColor: ColorTokens.Primary_100,
+      fontSize: FontSizeTokens.SM,
       width: ButtonWidthTypeToken.FULL,
       icon: {
         name: IconTokens.Email,
@@ -124,7 +126,7 @@ export const template: (applicationId: string) => TemplateSchema = (
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
     space2: <SpaceProps>{ size: SizeTypeTokens.XXL },
-    space3: <SpaceProps>{ size: SizeTypeTokens.XXL },
+    // space3: <SpaceProps>{ size: SizeTypeTokens.XXL },
   },
 });
 

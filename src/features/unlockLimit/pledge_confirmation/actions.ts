@@ -1,7 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { OtpPayload } from "./types";
-import { ButtonProps } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import { getAppHeader } from "../../../configs/config";
 import { api } from "../../../configs/api";
@@ -13,6 +13,8 @@ export const sendOtp: ActionFunction<OtpPayload> = async (
   { network, navigate, setDatastore }
 ): Promise<any> => {
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+    label: "",
+    type: ButtonTypeTokens.LargeOutline,
     loading: true,
   });
   const assetRepositoryCams = [];
@@ -47,6 +49,8 @@ export const sendOtp: ActionFunction<OtpPayload> = async (
   }
 
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+    label: "Confirm & get OTP",
+    type: ButtonTypeTokens.LargeFilled,
     loading: false,
   });
 };

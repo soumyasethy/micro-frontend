@@ -37,7 +37,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, AmountPayload, ModifyAmountPayload } from "./types";
-import { EditAmountAction, ModifyAmountAction } from "./actions";
+import { EditAmountAction, ModifyAmountAction, goBack } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import { getTotalLimit } from "../portfolio/actions";
 
@@ -73,26 +73,29 @@ export const template: (
       headerStack: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.spaceBetween,
+        justifyContent: StackJustifyContent.flexEnd,
         widgetItems: [
-          { id: "imageItem", type: WIDGET.IMAGE },
+          // { id: "imageItem", type: WIDGET.IMAGE },
           { id: "trailIcon", type: WIDGET.ICON },
         ],
       },
-
-      imageItem: <ImageProps>{
-        uri: "https://images.unsplash.com/photo-1652680882466-e83b0cccab34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2153&q=50",
-        size: ImageSizeTokens.XS,
-        aspectRatio: AspectRatioToken.A1_1,
-        borderRadius: BorderRadiusTokens.BR1,
-        padding: SizeTypeTokens.SM,
-      },
-      trailIcon: <IconProps>{
+      // imageItem: <ImageProps>{
+      //   uri: stepResponseObject.availableCAS[index].schemeName,
+      //   size: ImageSizeTokens.XS,
+      //   aspectRatio: AspectRatioToken.A1_1,
+      //   borderRadius: BorderRadiusTokens.BR1,
+      //   padding: SizeTypeTokens.SM,
+      // },
+      trailIcon: <IconProps & WidgetProps>{
         name: IconTokens.Cancel,
-        size: IconSizeTokens.MD,
+        size: IconSizeTokens.XXXXL,
         color: ColorTokens.Grey_Night,
+        action: {
+          type: ACTION.GO_BACK,
+          routeId: ROUTE.MODIFY_PLEDGED_AMOUNT,
+        },
       },
-      titleSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
+      titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
       subTitle: <TypographyProps>{
         label: stepResponseObject.availableCAS[index].schemeName,
         fontSize: FontSizeTokens.LG,
@@ -100,7 +103,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
       },
-      subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+      subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       input: <TextInputProps & WidgetProps>{
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
@@ -122,7 +125,8 @@ export const template: (
       inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       continue: <ButtonProps & WidgetProps>{
         label: "Update amount",
-        type: ButtonTypeTokens.MediumFilled,
+        fontFamily: FontFamilyTokens.Inter,
+        type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.MODIFY_PLEDGED_AMOUNT,
@@ -151,6 +155,7 @@ export const modifyPledgeMF: PageType<any> = {
   actions: {
     [ACTION.MODIFY_PLEDGED_AMOUNT]: ModifyAmountAction,
     [ACTION.EDIT_AMOUNT]: EditAmountAction,
+    [ACTION.GO_BACK]: goBack,
   },
   clearPrevious: true,
 };

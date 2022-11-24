@@ -3,6 +3,7 @@ export enum ACTION {
   CONTINUE = "CONTINUE",
   DISABLE_CONTINUE = "DISABLE_CONTINUE",
   ENABLE_CONTINUE = "ENABLE_CONTINUE",
+  BACK = "BACK",
 }
 export type EmailPayload = {
   value: string;

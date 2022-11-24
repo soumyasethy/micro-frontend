@@ -1,9 +1,18 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
   IconAlignmentTokens,
@@ -23,11 +32,11 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION, AssetsPayload} from "./types";
-import {ConfirmCTA, EnterAmountAction, goBack, SelectAssets} from "./actions";
-import {StepResponseObject} from "../unlock_limit/types";
-import {getTotalLimit} from "../portfolio/actions";
+import { ROUTE } from "../../../routes";
+import { ACTION, AssetsPayload } from "./types";
+import { ConfirmCTA, EnterAmountAction, goBack, SelectAssets } from "./actions";
+import { StepResponseObject } from "../unlock_limit/types";
+import { getTotalLimit } from "../portfolio/actions";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -77,7 +86,7 @@ export const template: (
           routeId: ROUTE.MODIFY_LIMIT,
         },
       },
-      space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       inputItem: <TextInputProps & WidgetProps>{
         placeholder: "",
         type: InputTypeToken.DEFAULT,
@@ -95,7 +104,7 @@ export const template: (
           },
         },
       },
-      inputSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
+      inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
       selectAssetForPledge: <StackProps & WidgetProps>{
         type: StackType.row,
         alignItems: StackAlignItems.flexStart,
@@ -126,10 +135,11 @@ export const template: (
         name: IconTokens.ChervonDownRight,
         align: IconAlignmentTokens.right,
         size: IconSizeTokens.XL,
-        color: ColorTokens.Primary_100
+        color: ColorTokens.Primary_100,
       },
       otpItem: <ButtonProps & WidgetProps>{
-        label: "Continue",
+        label: "Confirm & get OTP",
+        fontFamily: FontFamilyTokens.Poppins,
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {

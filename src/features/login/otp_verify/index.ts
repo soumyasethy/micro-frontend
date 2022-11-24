@@ -43,7 +43,7 @@ export const template: (
       id: ROUTE.OTP_VERIFY,
       type: LAYOUTS.LIST,
       widgets: [
-        {id: "space0", type: WIDGET.SPACE},
+        { id: "space0", type: WIDGET.SPACE },
         { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitleStack", type: WIDGET.STACK },
@@ -61,7 +61,7 @@ export const template: (
         fontSize: FontSizeTokens.XL,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
-        fontWeight: "700",
+        fontWeight: "600",
       },
       subTitleStack: <StackProps & WidgetProps>{
         type: StackType.row,
@@ -82,18 +82,22 @@ export const template: (
         label: `We’ve sent an OTP to `,
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
       },
       subTitle2: <TypographyProps>{
         label: `${phone_number}`.substring(3),
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.SM,
-        fontWeight: "bold",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
       },
       editNumber: <TypographyProps>{
-        label: ` Edit`,
+        label: `  Edit`,
         color: ColorTokens.Primary_100,
         fontSize: FontSizeTokens.SM,
-        fontWeight: "bold",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
       },
       input: <TextInputProps & TextInputOtpProps & WidgetProps>{
         title: "Enter OTP",
@@ -123,7 +127,7 @@ export const template: (
         },
       },
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
-      space1: <SpaceProps>{ size: SizeTypeTokens.MD },
+      space1: <SpaceProps>{ size: SizeTypeTokens.SM },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     },
   };

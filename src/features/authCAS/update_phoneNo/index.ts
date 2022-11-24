@@ -12,6 +12,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  FontFamilyTokens,
   FontSizeTokens,
   InputStateToken,
   InputTypeToken,
@@ -45,10 +46,10 @@ export const template: (prevMob: string) => TemplateSchema = (prevMob) => ({
   },
   datastore: <Datastore>{
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
-    continue: <ButtonBaseProps & WidgetProps>{
+    continue: <ButtonProps & WidgetProps>{
       label: "Confirm",
-      fontSize: FontSizeTokens.MD,
-      // type: ButtonTypeTokens.LargeOutline,
+      fontFamily: FontFamilyTokens.Poppins,
+      type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.EDIT_MOBILE_NUMBER,
