@@ -323,13 +323,6 @@ export const nextStepId = async (
 
   if (user.linkedApplications[0].applicationState === "COMPLETED") {
     return { routeId: ROUTE.DASHBOARD, params: {} };
-  } else if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
-    return {
-      routeId: ROUTE.EMAIL_VERIFY,
-      params: {
-        applicationId: user.linkedBorrowerAccounts[0].accountId,
-      },
-    };
   }
 
   ///check if any application IN_PROGRESS
@@ -337,6 +330,14 @@ export const nextStepId = async (
     currentStepId ||
     user.linkedApplications[0].applicationState === "IN_PROGRESS"
   ) {
+    if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
+      return {
+        routeId: ROUTE.EMAIL_VERIFY,
+        params: {
+          applicationId: user.linkedBorrowerAccounts[0].accountId,
+        },
+      };
+    }
     if (currentStepId === ROUTE.KYC_PAN_VERIFICATION) {
       return {
         routeId: ROUTE.KYC_PAN_VERIFICATION,

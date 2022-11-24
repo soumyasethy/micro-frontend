@@ -41,9 +41,9 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     });
     await goBack();
 
-    if (_.get(response, "updatedApplicationObj.currentStepId", false)) {
+    if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
       const nextRoute = await nextStepId(
-        response.updatedApplicationObj.currentStepId
+        response.data.updatedApplicationObj.currentStepId
       );
       nextRoute.params = { ...nextRoute.params, response };
       await navigate(nextRoute.routeId, nextRoute.params);
