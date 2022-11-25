@@ -78,13 +78,6 @@ export const horizontalStepperRepo = async () => {
     MANDATE_SETUP = StepperStateToken.COMPLETED;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.NOT_STARTED ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.NOT_STARTED
-  ) {
-    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
       StepperStateToken.IN_PROGRESS ||
     user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
       StepperStateToken.IN_PROGRESS
@@ -97,6 +90,13 @@ export const horizontalStepperRepo = async () => {
       StepperStateToken.PENDING_MANUAL_VERIFICATION
   ) {
     MANDATE_SETUP = StepperStateToken.PENDING_MANUAL_VERIFICATION;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.NOT_STARTED ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.NOT_STARTED
+  ) {
+    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
   } else {
     MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
   }
@@ -384,6 +384,28 @@ export const debounce = (callback, wait) => {
       return await callback.apply(null, args);
     }, wait);
   };
+};
+
+export const stopCamera = () => {
+  const video = document.querySelector("video");
+  const mediaStream = video.srcObject;
+  if ("getTracks" in mediaStream) {
+    const tracks = mediaStream.getTracks();
+    tracks[0].stop();
+    tracks.forEach((track) => track.stop());
+  }
+};
+
+export const maskSensitiveDetails = (str: string, start: number, end: number) => {
+  // if length is 13 then start = 4 and end = 9
+  let maskedString = "";
+  const len = str.length;
+    const iterate = len-end;
+    const lastDigit = str.substring(iterate);
+    for(let i= 0; i < iterate; i++){
+       maskedString += "*";
+    }
+  return maskedString+lastDigit;
 };
 
 export const maskString = (str: string, start: number, end: number) => {

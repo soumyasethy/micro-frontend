@@ -17,8 +17,15 @@ import {
   FontSizeTokens,
   ImageProps,
   ImageSizeTokens,
+  ResizeModeToken,
   SizeTypeTokens,
   SpaceProps,
+  StackAlignItems,
+  StackHeight,
+  StackJustifyContent,
+  StackProps,
+  StackType,
+  StackWidth,
   StepperItem,
   StepperProps,
   StepperTypeTokens,
@@ -36,9 +43,9 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
     type: LAYOUTS.LIST,
     widgets: [
       { id: "space0", type: WIDGET.SPACE },
-      { id: "title", type: WIDGET.TEXT},
+      { id: "title", type: WIDGET.TEXT },
       { id: "space1", type: WIDGET.SPACE },
-      { id: "image", type: WIDGET.IMAGE},
+      { id: "image", type: WIDGET.IMAGE },
       { id: "space", type: WIDGET.SPACE },
       { id: "stepper", type: WIDGET.STEPPER },
       { id: "space2", type: WIDGET.SPACE },
@@ -53,19 +60,19 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
     space0: <SpaceProps>{
       size: SizeTypeTokens.XS,
     },
-    title: <TypographyProps> {
+    title: <TypographyProps>{
       label: "Withdraw in 4 steps",
       fontFamily: FontFamilyTokens.Poppins,
       fontSize: FontSizeTokens.MD,
-      fontWeight: "700"
+      fontWeight: "700",
     },
     space1: <SpaceProps>{
       size: SizeTypeTokens.XL,
     },
     image: <ImageProps>{
-      aspectRatio: AspectRatioToken.A16_9,
-      borderRadius: BorderRadiusTokens.BR0,
       size: ImageSizeTokens.FULL,
+      resizeMode: ResizeModeToken.COVER,
+      aspectRatio: AspectRatioToken.A2_1,
       uri: "https://volt-images.s3.ap-south-1.amazonaws.com/stepper.svg",
     },
     space: <SpaceProps>{ size: SizeTypeTokens.XXXL },
@@ -78,6 +85,9 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
       label: "Start",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.MD,
+      lineHeight: SizeTypeTokens.XXL,
       action: {
         type: ACTION.GO_TO_AADHAR_INIT,
         routeId: ROUTE.KYC_STEPPER,
@@ -94,4 +104,5 @@ export const kycStepperMF: PageType<any> = {
   actions: {
     [ACTION.GO_TO_AADHAR_INIT]: Go_Next_Action,
   },
+  clearPrevious: true,
 };

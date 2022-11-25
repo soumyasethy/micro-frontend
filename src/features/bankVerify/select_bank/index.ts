@@ -38,48 +38,13 @@ import {
   NavSearchIfscBranchInfoAction,
   GoBackAction,
 } from "./actions";
-import { BanksRepo } from "./repo";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
-const popularBankItem = (
-  id: string,
-  label: string,
-  type: "COLUMN" | "ROW"
-) => ({
-  widgetItem: { id: `popular_bank_item_${id}`, type: WIDGET.STACK },
-  datastore: <Datastore>{
-    [`popular_bank_item_${id}`]: <StackProps>{
-      type: type ? type : StackType.column,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.center,
-      widgetItems: [
-        { id: `bank_logo_${id}`, type: WIDGET.IMAGE },
-        { id: `bank_space_${id}`, type: WIDGET.SPACE },
-        { id: `bank_name_${id}`, type: WIDGET.TEXT },
-      ],
-    },
-    [`bank_logo_${id}`]: <ImageProps>{
-      uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${id}.svg`,
-    },
-    [`bank_space_${id}`]: <SpaceProps>{ size: SizeTypeTokens.MD },
-    [`bank_name_${id}`]: <TypographyProps>{ label: label },
-  },
-});
-
-export const template: (
-  popularBanks: {
-    widgetItem: WidgetItem;
-    datastore: Datastore;
-  }[],
-  populatDS: Object,
-  allOtherBanks: {
-    widgetItem: { id: string; type: WIDGET };
-    datastore: Datastore;
-  }[]
-) => Promise<TemplateSchema> = async (
-  popularBanks,
-  populatDS,
-  allOtherBanks
-) => {
+export const template: (BanksRepo: {
+  ALLBANKS: { [key in string]: string };
+  POPULAR: { [key in string]: string };
+}) => Promise<TemplateSchema> = async (BanksRepo) => {
   return {
     layout: <Layout>{
       id: ROUTE.BANK_VERIFY_MANUALLY,
@@ -90,9 +55,7 @@ export const template: (
           type: WIDGET.HEADER,
           position: POSITION.FIXED_TOP,
         },
-        // { id: "space1", type: WIDGET.SPACE },
         { id: "searchInput", type: WIDGET.INPUT },
-        // { id: "searchInputSpace", type: WIDGET.SPACE },
         { id: "gridItem", type: WIDGET.GRIDITEM },
       ],
     },
@@ -109,6 +72,7 @@ export const template: (
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       searchInput: <TextInputProps & WidgetProps>{
+        title: "",
         placeholder: "Search by bank name",
         type: InputTypeToken.DEFAULT,
         caption: { default: "", success: "", error: "" },
@@ -129,14 +93,14 @@ export const template: (
           ...Object.keys(BanksRepo.POPULAR).map((key) => ({
             label: BanksRepo.POPULAR[key],
             image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
-            defaultUri:`https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
+            defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
           })),
         ],
         otherItem: [
           ...Object.keys(BanksRepo.ALLBANKS).map((key) => ({
             label: BanksRepo.ALLBANKS[key],
             image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
-            defaultUri:`https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
+            defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
           })),
         ],
         title: "Popular banks",
@@ -146,7 +110,10 @@ export const template: (
         action: {
           type: ACTION.NAV_IFSC_SEARCH_BRANCH_INFO,
           routeId: ROUTE.BANK_VERIFY_MANUALLY,
-          payload: <NavSearchIfscBranchInfoActionPayload>{ value: "" },
+          payload: <NavSearchIfscBranchInfoActionPayload>{
+            value: "",
+            bankRepo: BanksRepo,
+          },
         },
       },
     },
@@ -154,28 +121,13 @@ export const template: (
 };
 
 export const bankVerifyManuallyMF: PageType<any> = {
-  onLoad: async () => {
-    let populatDS = {};
-    const popularBanks: {
-      widgetItem: WidgetItem;
-      datastore: Datastore;
-    }[] = Object.keys(BanksRepo.POPULAR).map((keys) => {
-      return popularBankItem(keys, BanksRepo.POPULAR[keys], "COLUMN");
+  onLoad: async ({ network }) => {
+    const response = await network.get(api.banks, {
+      headers: await getAppHeader(),
     });
+    const BanksRepo = response.data;
 
-    popularBanks.map((item) => {
-      populatDS = { ...populatDS, ...item.datastore };
-    });
-    const allOtherBanks: {
-      widgetItem: { id: string; type: WIDGET };
-      datastore: Datastore;
-    }[] = Object.keys(BanksRepo.ALLBANKS).map((keys) =>
-      popularBankItem(keys, BanksRepo.ALLBANKS[keys], "ROW")
-    );
-    allOtherBanks.map((item) => {
-      populatDS = { ...populatDS, ...item.datastore };
-    });
-    const templateX = await template(popularBanks, populatDS, allOtherBanks);
+    const templateX = await template(BanksRepo);
     return Promise.resolve(templateX);
   },
   actions: {

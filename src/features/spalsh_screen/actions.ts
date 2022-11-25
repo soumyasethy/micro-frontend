@@ -24,7 +24,9 @@ export const SplashAction: ActionFunction<any> = async (
         const user: User = userContextResponse.data;
         await SharedPropsService.setUser(user);
 
-        
+        /****
+         * ADD YOUR CUSTOM ROUTE TO NAVIGATE
+         * ****/
 
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);

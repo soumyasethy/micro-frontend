@@ -107,12 +107,17 @@ export const BavVerifyManualAction: ActionFunction<
   );
 
   if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
+    await goBack();
     const user: User = await SharedPropsService.getUser();
     user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
       StepperStateToken.COMPLETED;
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
+      StepperStateToken.IN_PROGRESS;
     await SharedPropsService.setUser(user);
 
     await showPopup({
+      autoTriggerTimerInMilliseconds: 2000,
+      isAutoTriggerCta: true,
       type: "SUCCESS",
       title: "Account verified successfully!",
       subTitle: "You will be redirected to next step in few seconds",
@@ -128,7 +133,26 @@ export const BavVerifyManualAction: ActionFunction<
         },
       },
     });
-  }
+  } /* else if (_.get(response, "data.stepResponseObject")) {
+    await showPopup({
+      autoTriggerTimerInMilliseconds: 2000,
+      isAutoTriggerCta: true,
+      type: "IN_PROGRESS",
+      title: "Account verified successfully!",
+      subTitle: "You will be redirected to next step in few seconds",
+      ctaLabel: "Continue",
+      ctaAction: {
+        type: ACTION_CURRENT.GO_NEXT,
+        routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
+        payload: {
+          currentStepId: _.get(
+            response,
+            "data.updatedApplicationObj.currentStepId"
+          ),
+        },
+      },
+    });
+  }*/
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });

@@ -33,6 +33,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION, AccountPayload } from "./types";
 import { goBack } from "./actions";
 import { ProfileDetails } from "../my_profile/types";
+import { maskSensitiveDetails } from "../../../configs/utils";
 export const template: (
     profileData: ProfileDetails
 ) => TemplateSchema = (profileData
@@ -50,12 +51,18 @@ export const template: (
                     { id: "space1", type: WIDGET.SPACE },
                     { id: "categoryList", type: WIDGET.TEXT },
                     { id: "space2", type: WIDGET.SPACE },
-                    { id: "headStack", type: WIDGET.STACK },
+                    { id: "headStack", type: WIDGET.STACK,padding:{
+                        horizontal:10,left:10,right:10,all:10
+                    } },
                     { id: "space3", type: WIDGET.SPACE },
                     { id: "divider1", type: WIDGET.DIVIDER },
                     { id: "space4", type: WIDGET.SPACE },
-                    { id: "list5", type: WIDGET.LIST_ITEM },
-                    { id: "list6", type: WIDGET.LIST_ITEM },
+                    { id: "list5", type: WIDGET.LIST_ITEM,padding:{
+                        horizontal:4,left:4,right:4
+                    }  },
+                    { id: "list6", type: WIDGET.LIST_ITEM,padding:{
+                        horizontal:4,left:4,right:4
+                    }  },
 
                 ],
             },
@@ -91,14 +98,15 @@ export const template: (
                 },
                 list3: <ListItemProps>{
                     title: 'Email ID',
-                    subTitle: 'lalit@voltmoney.in',
+                    subTitle:  `${profileData.emailId}`,
                     isDivider:true,
                     leadIconName: IconTokens.Email,
                     onPress: () => { },
                 },
                 list4: <ListItemProps>{
                     title: 'PAN Number',
-                    subTitle: `${profileData.panNumber}`,
+                    subTitle: maskSensitiveDetails(`${profileData.panNumber}`,0,4),
+                   // '*******'+`${profileData.panNumber}`.substring(6),
                     isDivider:false,
                     leadIconName: IconTokens.CreditCard,
                     onPress: () => { },
@@ -129,13 +137,13 @@ export const template: (
                     borderRadius: BorderRadiusTokens.BR5,
                     padding: SizeTypeTokens.SM,
                 },
-                space0: <SpaceProps>{ size: SizeTypeTokens.LG },
+                space0: <SpaceProps>{ size: SizeTypeTokens.MD },
                 textItem: <TypographyProps>{
                     label: `${profileData.bankDetails.bankName}`,
                     color: ColorTokens.Grey_Night,
                     fontSize: FontSizeTokens.MD,
                     fontFamily: FontFamilyTokens.Inter,
-                    fontWeight: "700",
+                    fontWeight: '700',
                 },
                 space3: <SpaceProps>{ size: SizeTypeTokens.MD },
                 divider1: <DividerProps>{
@@ -155,7 +163,8 @@ export const template: (
                 },
                 list6: <ListItemProps>{
                     title: 'Account number',
-                    subTitle: `${profileData.bankDetails.accountNumber}`,
+                    subTitle: maskSensitiveDetails(`${profileData.bankDetails.accountNumber}`,0,4),
+                   // '*******'+`${profileData.bankDetails.accountNumber}`.substring(8),
                     isDivider:false,
                     onPress: () => { },
                 },
@@ -165,7 +174,6 @@ export const template: (
 
 export const accountDetailsMF: PageType<any> = {
     onLoad: async ({}, { profileData }) => {
-        console.log("response",profileData)
         return Promise.resolve(
             template(profileData as ProfileDetails)
         );

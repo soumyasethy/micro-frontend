@@ -5,11 +5,12 @@ import SharedPropsService from "../../../SharedPropsService";
 import { ButtonProps, CameraPickerProps } from "@voltmoney/schema";
 import { AadharInitPayload } from "../kyc_init/types";
 import { ROUTE } from "../../../routes";
+import { stopCamera } from "../../../configs/utils";
 
 export const PhotoVerifyAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { network, navigate, setDatastore, showPopup }
+  { network, navigate, setDatastore }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
@@ -25,7 +26,10 @@ export const PhotoVerifyAction: ActionFunction<any> = async (
       { headers: await getAppHeader() }
     )
     .then(async (response) => {
-      await navigate(response.data.updatedApplicationObj.currentStepId);
+      if (response.status === 200) {
+        stopCamera();
+        await navigate(response.data.updatedApplicationObj.currentStepId);
+      }
     })
     .finally(async () => {
       await setDatastore(action.routeId, "continue", <ButtonProps>{

@@ -4,9 +4,8 @@ import { ROUTE } from "../../../routes";
 export const CameraConfirmAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, goBack }
+  { navigate }
 ): Promise<any> => {
-  await goBack();
   await navigate(ROUTE.CAMERA_CAPTURE);
 };
 export const GoBackAction: ActionFunction<any> = async (

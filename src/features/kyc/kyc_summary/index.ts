@@ -16,6 +16,7 @@ import {
   ColorTokens,
   DividerProps,
   DividerSizeTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
@@ -201,6 +202,10 @@ export const template: (
       label: "Confirm",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.MD,
+      lineHeight: SizeTypeTokens.XXL,
+      fontWeight: "700",
       action: {
         type: ACTION.NAV_TO_BANK_ADD,
         routeId: ROUTE.KYC_SUMMARY,

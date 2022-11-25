@@ -122,11 +122,6 @@ export const template: (
         { id: "spaceContinue", type: WIDGET.SPACE },
         { id: "continue", type: WIDGET.BUTTON },
         { id: "spaceImage", type: WIDGET.SPACE },
-        {
-          id: "commonStack",
-          type: WIDGET.STACK,
-          position: POSITION.ABSOLUTE_BOTTOM,
-        },
       ],
     },
     datastore: <Datastore>{
@@ -220,27 +215,6 @@ export const template: (
         },
       },
       spaceImage: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-      commonStack: <StackProps & WidgetProps>{
-        type: StackType.column,
-        justifyContent: StackJustifyContent.center,
-        alignItems: StackAlignItems.center,
-        widgetItems: [
-          { id: "imageStack", type: WIDGET.STACK },
-          { id: "spaceCertificate", type: WIDGET.SPACE },
-          { id: "certifiedStack", type: WIDGET.STACK },
-        ],
-      },
-
-      imageStack: <StackProps & WidgetProps>{
-        type: StackType.row,
-        justifyContent: StackJustifyContent.center,
-        alignItems: StackAlignItems.center,
-        widgetItems: [
-          { id: "image1", type: WIDGET.IMAGE },
-          { id: "spaceImg", type: WIDGET.SPACE },
-          { id: "image2", type: WIDGET.IMAGE },
-        ],
-      },
       image1: <ImageProps>{
         uri: "data:image/png;base64,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",
         size: ImageSizeTokens.SM,
@@ -255,20 +229,6 @@ export const template: (
         aspectRatio: AspectRatioToken.A1_1,
         borderRadius: BorderRadiusTokens.BR0,
         padding: SizeTypeTokens.SM,
-      },
-      spaceCertificate: <SpaceProps>{ size: SizeTypeTokens.XL },
-      certifiedStack: <StackProps & WidgetProps>{
-        type: StackType.row,
-        justifyContent: StackJustifyContent.center,
-        alignItems: StackAlignItems.center,
-        widgetItems: [{ id: "certText", type: WIDGET.TEXT }],
-      },
-      certText: <TypographyProps>{
-        label: "We are PCI-DSS  v3.2.1 and ISO/IEC 27001-2013 certified",
-        color: ColorTokens.Grey_Charcoal,
-        fontSize: FontSizeTokens.XXS,
-        fontWeight: "400",
-        fontFamily: FontFamilyTokens.Inter,
       },
     },
   };

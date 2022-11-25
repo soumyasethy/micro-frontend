@@ -3,46 +3,54 @@ import { ROUTE } from "../../../routes";
 import { photoInitRepo } from "./repo";
 import { CameraPayload } from "./types";
 import { CameraPickerProps } from "@voltmoney/schema";
+import { stopCamera } from "../../../configs/utils";
+import { User } from "../../login/otp_verify/types";
+import SharedPropsService from "../../../SharedPropsService";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 let imageUploadUrl = "";
 export const CameraAction: ActionFunction<CameraPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore }
+  { navigate, setDatastore, network }
 ): Promise<any> => {
-  const video = document.querySelector("video");
-  const mediaStream = video.srcObject;
-  if ("getTracks" in mediaStream) {
-    const tracks = mediaStream.getTracks();
-    tracks[0].stop();
-    tracks.forEach((track) => track.stop());
-  }
-
   let base64Image: string = action.payload.value;
   base64Image = base64Image.replace(/^data:image\/[a-z]+;base64,/, "");
-  imageUploadUrl = await photoInitRepo();
-  const headers = new Headers({ "Content-Type": "image/jpeg" });
-  try {
-    const response = await fetch(imageUploadUrl, {
-      method: "PUT",
-      headers: headers,
-      body: base64Image,
+  const user: User = await SharedPropsService.getUser();
+
+  const imageUploadResponse = await network.post(
+    api.photoInit,
+    {
+      applicationId: user.linkedApplications[0].applicationId,
+      imageName: `${user.linkedApplications[0].applicationId}_${user.linkedBorrowerAccounts[0].accountHolderPhoneNumber}.txt`,
+      imageType: "image/jpeg",
+    },
+    { headers: await getAppHeader() }
+  );
+  if (imageUploadResponse.status === 200) {
+    imageUploadUrl = imageUploadResponse.data.stepResponseObject;
+  }
+  if (!imageUploadUrl) return;
+  const response = await network.put(imageUploadUrl, base64Image, {
+    headers: { "Content-Type": "image/jpeg" },
+  });
+  if (response.status === 200) {
+    await setDatastore(ROUTE.CAMERA_CAPTURE, "camera", <CameraPickerProps>{
+      isShowVideo: false,
     });
-    if (response) {
-      await setDatastore(ROUTE.CAMERA_CAPTURE, "camera", <CameraPickerProps>{
-        isShowVideo: false,
-      });
-      await navigate(ROUTE.KYC_AFTER_CAMERA, { photo: base64Image });
-    }
-  } catch (e) {
-    console.warn("CameraAction Error ->", e);
+    await navigate(ROUTE.KYC_AFTER_CAMERA, { photo: base64Image });
   }
 };
 
 export const CancelCameraAction: ActionFunction<CameraPayload> = async (
   action,
   _datastore,
-  { goBack }
+  { goBack, setDatastore }
 ): Promise<any> => {
+  await setDatastore(ROUTE.CAMERA_CAPTURE, "camera", <CameraPickerProps>{
+    isShowVideo: false,
+  });
+  stopCamera();
   await goBack();
 };
