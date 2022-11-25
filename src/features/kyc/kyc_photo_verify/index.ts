@@ -26,11 +26,9 @@ import {
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
-  StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
-  StackWidth,
   StepperItem,
   StepperProps,
   StepperTypeTokens,
@@ -40,7 +38,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { GoBackAction, PhotoVerifyAction, RetakePhoto } from "./actions";
-import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo } from "../../../configs/utils";
 
 export const template: (
   stepper: StepperItem[],
@@ -52,7 +50,7 @@ export const template: (
     widgets: [
       { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
       { id: "topSpace", type: WIDGET.SPACE },
-      { id: "stack", type: WIDGET.STACK, },
+      { id: "stack", type: WIDGET.STACK },
       {
         id: "stackBottom",
         type: WIDGET.STACK,
@@ -61,7 +59,7 @@ export const template: (
     ],
   },
   datastore: <Datastore>{
-    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL},
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     header: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:
@@ -98,8 +96,8 @@ export const template: (
         { id: "disclaimerSpace", type: WIDGET.SPACE },
         {
           id: "disclaimerStack",
-          type: WIDGET.STACK
-        }
+          type: WIDGET.STACK,
+        },
       ],
     },
     previewImage: <ImageProps>{
@@ -132,13 +130,13 @@ export const template: (
         payload: {},
       },
     },
-    disclaimerStack: <StackProps> {
+    disclaimerStack: <StackProps>{
       type: StackType.row,
       widgetItems: [
         { id: "image2", type: WIDGET.ICON },
         { id: "space3", type: WIDGET.SPACE },
         { id: "disclaimer", type: WIDGET.TEXT },
-      ]
+      ],
     },
     image2: <IconProps>{
       name: IconTokens.Secure,

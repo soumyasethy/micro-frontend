@@ -91,3 +91,11 @@ export const NavLoanAutoPay: ActionFunction<any> = async (
   await goBack();
   await navigate(ROUTE.LOAN_AUTOPAY);
 };
+
+export const goBack: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  await goBack();
+};

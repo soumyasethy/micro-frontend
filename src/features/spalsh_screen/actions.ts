@@ -24,8 +24,6 @@ export const SplashAction: ActionFunction<any> = async (
         const user: User = userContextResponse.data;
         await SharedPropsService.setUser(user);
 
-        
-
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
         } else {

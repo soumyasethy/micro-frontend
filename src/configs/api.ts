@@ -1,10 +1,8 @@
 export const config = {
-  // baseUrl: "https://api.voltmoney.in",
-  // stageBaseUrl: "https://api.staging.voltmoney.in",
 
-  //Dont push//
-  stageBaseUrl: "https://api.voltmoney.in",
-  baseUrl: "https://api.staging.voltmoney.in",
+baseUrl: "https://api.voltmoney.in",
+stageBaseUrl: "https://api.staging.voltmoney.in",
+
 };
 export const StoreKey = {
   isLoadedFirstTime: "is_Loaded_First_Time",
@@ -24,6 +22,7 @@ export const api = {
   aadharVerify: `${config.baseUrl}/app/borrower/application/kyc/aadhaar/verify`,
   kycSummaryInit: `${config.baseUrl}/app/borrower/application/kyc/summary/init/`,
   kycSummaryVerify: `${config.baseUrl}/app/borrower/application/kyc/summary/verify/`,
+  banks: `${config.baseUrl}/util/bankInfo/banks`,
   bav: `${config.baseUrl}/app/borrower/application/bav/`,
   bavVerify: `${config.baseUrl}/app/borrower/application/bav/verify`,
   bankInfoSearch: `${config.baseUrl}/util/bankInfo/search/`,
