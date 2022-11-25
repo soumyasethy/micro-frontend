@@ -36,6 +36,11 @@ import { ACTION, OtpPledgePayload } from "./types";
 import { goBack, NavigateNext, verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
 import { sendOtp } from "../pledge_confirmation/actions";
+import { maskString } from "../../../configs/utils";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+} from "../../../configs/config";
 //import { OtpPayload } from "../pledge_confirmation/types";
 export const template: (
   phoneNumber: string,
@@ -109,17 +114,16 @@ export const template: (
       ],
     },
     subTitle: <TypographyProps>{
-      label: `A 4-digit OTP was sent on `,
+      label: `A ${
+        AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
+      }-digit OTP was sent on `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
     subTitle2: <TypographyProps>{
-      label:
-        `${phoneNumber}`.substring(3).substring(0, 3) +
-        "*****" +
-        `${phoneNumber}`.substring(3).slice(-2),
+      label: maskString(phoneNumber, 3, 7),
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
@@ -129,7 +133,7 @@ export const template: (
     input: <TextInputProps & WidgetProps>{
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
-      charLimit: 6,
+      charLimit: AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
       keyboardType: KeyboardTypeToken.numberPad,
       action: {
         type: ACTION.PLEDGE_VERIFY,

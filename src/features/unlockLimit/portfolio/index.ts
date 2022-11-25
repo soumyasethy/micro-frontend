@@ -43,6 +43,7 @@ import {
 } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
+import { addCommasToNumber } from "../../../configs/utils";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -153,11 +154,15 @@ export const template: (
       listSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
       totalItem: <CtaCardProps>{
         label: "Total credit limit",
-        info: `₹${getTotalLimit(
-          stepResponseObject.availableCAS,
-          stepResponseObject.isinNAVMap,
-          stepResponseObject.isinLTVMap
-        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
+        info:
+          "₹" +
+          addCommasToNumber(
+            getTotalLimit(
+              stepResponseObject.availableCAS,
+              stepResponseObject.isinNAVMap,
+              stepResponseObject.isinLTVMap
+            )
+          ),
         actionLabel: "Confirm and get OTP",
         action: {
           type: ACTION.PORTFOLIO,

@@ -82,7 +82,7 @@ export const template: (
             return {
               id: `processingFeesBreakUp_${index}`,
               title: key,
-              amount: `${processingFeesBreakUp[key] || 0}`.replace(
+              amount: `₹${processingFeesBreakUp[key] || 0}`.replace(
                 /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
                 ","
               ),
@@ -91,7 +91,7 @@ export const template: (
           {
             id: "total_charges",
             title: "Total charges",
-            amount: `${totalCharges}`.replace(
+            amount: `₹${totalCharges}`.replace(
               /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
               ","
             ),

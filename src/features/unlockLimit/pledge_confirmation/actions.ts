@@ -3,7 +3,11 @@ import { ROUTE } from "../../../routes";
 import { OtpPayload } from "./types";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import { getAppHeader } from "../../../configs/config";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+  getAppHeader,
+} from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
 
@@ -17,20 +21,12 @@ export const sendOtp: ActionFunction<OtpPayload> = async (
     type: ButtonTypeTokens.LargeOutline,
     loading: true,
   });
-  const assetRepositoryCams = [];
-  const assetRepositoryKFIN = [];
+  AssetRepositoryMap[AssetRepositoryType.DEFAULT].LIST = [];
   action.payload.value.availableCAS.map((item) => {
-    if (item.assetRepository === "CAMS") {
-      assetRepositoryCams.push({
-        ...item,
-        is_pledged: true,
-      });
-    } else if (item.assetRepository === "KARVY") {
-      assetRepositoryKFIN.push({
-        ...item,
-        is_pledged: true,
-      });
-    }
+    AssetRepositoryMap[item.assetRepository.toUpperCase()].LIST.push({
+      ...item,
+      is_pledged: true,
+    });
   });
 
   const response = await network.post(
@@ -39,13 +35,15 @@ export const sendOtp: ActionFunction<OtpPayload> = async (
       applicationId: (
         await SharedPropsService.getUser()
       ).linkedApplications[0].applicationId,
-      assetRepository: "KARVY",
-      portfolioItemList: assetRepositoryKFIN,
+      assetRepository: AssetRepositoryType.DEFAULT,
+      portfolioItemList: AssetRepositoryMap[AssetRepositoryType.DEFAULT].LIST,
     },
     { headers: await getAppHeader() }
   );
   if (_.get(response, "data.status") === "SUCCESS") {
-    await navigate(ROUTE.PLEDGE_VERIFY, { assetRepository: "KARVY" });
+    await navigate(ROUTE.PLEDGE_VERIFY, {
+      assetRepository: AssetRepositoryMap[AssetRepositoryType.DEFAULT].NAME,
+    });
   }
 
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{

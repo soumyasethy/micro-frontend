@@ -22,6 +22,8 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
   { network, asyncStorage, setDatastore, navigate, handleError, ...props }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
+    label: "",
+    type: ButtonTypeTokens.LargeOutline,
     loading: true,
   });
 
@@ -37,6 +39,8 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
     )
     .then(async (response) => {
       await setDatastore(action.routeId, "continue", <ButtonProps>{
+        label: "Continue",
+        type: ButtonTypeTokens.LargeFilled,
         loading: false,
       });
       if (response?.data.stepResponseObject?.fullName) {
@@ -60,6 +64,7 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
     })
     .catch(async (error) => {
       await setDatastore(action.routeId, "continue", <ButtonProps>{
+        label: "Continue",
         type: ButtonTypeTokens.LargeOutline,
         loading: false,
       });
@@ -67,6 +72,13 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
         state: InputStateToken.ERROR,
       });
     });
+  // .finally(() => {
+  //   setDatastore(action.routeId, "continue", <ButtonProps>{
+  //     label: "Continue",
+  //     type: ButtonTypeTokens.LargeFilled,
+  //     loading: false,
+  //   });
+  // });
 };
 export const PanOnChange: ActionFunction<InputPayload> = async (
   action,

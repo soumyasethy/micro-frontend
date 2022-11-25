@@ -37,6 +37,7 @@ import { ACTION, AssetsPayload } from "./types";
 import { ConfirmCTA, EnterAmountAction, goBack, SelectAssets } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import { getTotalLimit } from "../portfolio/actions";
+import { addCommasToNumber } from "../../../configs/utils";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -94,9 +95,7 @@ export const template: (
         title: "Enter amount",
         state: InputStateToken.DEFAULT,
         limit: totalAmount,
-        limitLabel:
-          "out of " +
-          `${totalAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
+        limitLabel: "out of " + addCommasToNumber(totalAmount),
         caption: { success: "", error: "" },
         action: {
           type: ACTION.ENTER_AMOUNT,

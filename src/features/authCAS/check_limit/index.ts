@@ -31,6 +31,7 @@ import {
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
+import { AssetRepositoryType } from "../../../configs/config";
 
 export const template: (
   applicationId: string,
@@ -97,7 +98,7 @@ export const template: (
       },
       mobileItem: <ListItemProps & WidgetProps>{
         title: "Mobile Number",
-        subTitle: phoneNumber,
+        subTitle: `${phoneNumber}`.substring(3),
         leadIconName: IconTokens.Phone,
         trailIconName: IconTokens.Edit,
         subTitleLineHeight: 24,
@@ -108,7 +109,7 @@ export const template: (
         },
       },
       emailItem: <ListItemProps & WidgetProps>{
-        title: "Email ID",
+        title: "Email",
         subTitle: emailId,
         leadIconName: IconTokens.Email,
         trailIconName: IconTokens.Edit,
@@ -133,7 +134,7 @@ export const template: (
             phoneNumber,
             panNumber,
             // assetRepository: "CAMS",
-            assetRepository: "KARVY",
+            assetRepository: AssetRepositoryType.DEFAULT,
           },
         },
       },

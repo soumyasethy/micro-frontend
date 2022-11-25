@@ -9,9 +9,11 @@ import {
 import {
   ButtonProps,
   ButtonTypeTokens,
+  ButtonWidthTypeToken,
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  IconAlignmentTokens,
   IconSizeTokens,
   IconTokens,
   InputStateToken,
@@ -30,9 +32,13 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
-import { authCAS } from "./actions";
+import { authCAS, goBack } from "./actions";
 import { FetchPortfolioPayload } from "../check_limit/types";
 import { fetchMyPortfolio } from "../check_limit/actions";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+} from "../../../configs/config";
 
 export const template: (
   applicationId: string,
@@ -52,7 +58,11 @@ export const template: (
       id: ROUTE.OTP_AUTH_CAS,
       type: LAYOUTS.MODAL,
       widgets: [
-        { id: "title", type: WIDGET.TEXT },
+        {
+          id: "headerStack",
+          type: WIDGET.STACK,
+        },
+        // { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitleStack", type: WIDGET.STACK },
         { id: "space2", type: WIDGET.SPACE },
@@ -60,16 +70,45 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
-      back: <ButtonProps>{
-        type: ButtonTypeTokens.IconGhost,
-        icon: { name: IconTokens.Back, size: IconSizeTokens.XL },
+      headerStack: <StackProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        widgetItems: [
+          { id: "title", type: WIDGET.TEXT },
+          { id: "leadIcon", type: WIDGET.BUTTON },
+        ],
       },
       title: <TypographyProps>{
         label: "Enter OTP",
         fontSize: FontSizeTokens.XL,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
-        fontWeight: "700",
+        fontWeight: "600",
+      },
+      leadIcon: <ButtonProps & WidgetProps>{
+        label: "",
+        type: ButtonTypeTokens.SmallGhost,
+        width: ButtonWidthTypeToken.CONTENT,
+        stack: <StackProps>{
+          type: StackType.row,
+          alignItems: StackAlignItems.flexStart,
+          justifyContent: StackJustifyContent.flexStart,
+        },
+        icon: {
+          name: IconTokens.Cancel,
+          align: IconAlignmentTokens.right,
+          size: IconSizeTokens.XXXXL,
+        },
+        action: {
+          type: ACTIONS.GO_BACK,
+          payload: <{}>{
+            value: "",
+            widgetId: "input",
+            isResend: false,
+          },
+          routeId: ROUTE.OTP_AUTH_CAS,
+        },
       },
       subTitleStack: <StackProps & WidgetProps>{
         type: StackType.column,
@@ -82,7 +121,9 @@ export const template: (
         ],
       },
       subTitle: <TypographyProps>{
-        label: `Karvy depository has sent an OTP to `,
+        label: `${
+          AssetRepositoryMap[AssetRepositoryType.DEFAULT].NAME
+        } depository has sent an OTP to `,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
@@ -103,21 +144,21 @@ export const template: (
         type: InputTypeToken.OTP,
         state: InputStateToken.DEFAULT,
         keyboardType: KeyboardTypeToken.numberPad,
-        charLimit: 6,
+        charLimit: AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
         action: {
           type: ACTIONS.AUTH_CAS,
           routeId: ROUTE.OTP_AUTH_CAS,
           payload: <AuthCASPayload>{
             value: "",
             applicationId,
-            assetRepository,
+            assetRepository: AssetRepositoryType.DEFAULT,
           },
         },
         otpAction: {
           type: ACTIONS.RESEND_OTP_AUTH_CAS,
           payload: <FetchPortfolioPayload>{
             applicationId,
-            assetRepository,
+            assetRepository: AssetRepositoryType.DEFAULT,
             emailId,
             panNumber,
             phoneNumber,
@@ -143,6 +184,7 @@ export const otpVerifyAuthCASMF: PageType<any> = {
   actions: {
     [ACTIONS.AUTH_CAS]: authCAS,
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
+    [ACTIONS.GO_BACK]: goBack,
   },
   clearPrevious: true,
 };
