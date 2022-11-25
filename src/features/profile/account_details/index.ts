@@ -33,6 +33,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION, AccountPayload } from "./types";
 import { goBack } from "./actions";
 import { ProfileDetails } from "../my_profile/types";
+import { maskSensitiveDetails } from "../../../configs/utils";
 export const template: (
     profileData: ProfileDetails
 ) => TemplateSchema = (profileData
@@ -104,7 +105,8 @@ export const template: (
                 },
                 list4: <ListItemProps>{
                     title: 'PAN Number',
-                    subTitle: '*******'+`${profileData.panNumber}`.substring(6),
+                    subTitle: maskSensitiveDetails(`${profileData.panNumber}`,0,4),
+                   // '*******'+`${profileData.panNumber}`.substring(6),
                     isDivider:false,
                     leadIconName: IconTokens.CreditCard,
                     onPress: () => { },
@@ -161,7 +163,8 @@ export const template: (
                 },
                 list6: <ListItemProps>{
                     title: 'Account number',
-                    subTitle: '*******'+`${profileData.bankDetails.accountNumber}`.substring(8),
+                    subTitle: maskSensitiveDetails(`${profileData.bankDetails.accountNumber}`,0,4),
+                   // '*******'+`${profileData.bankDetails.accountNumber}`.substring(8),
                     isDivider:false,
                     onPress: () => { },
                 },

@@ -395,3 +395,15 @@ export const stopCamera = () => {
     tracks.forEach((track) => track.stop());
   }
 };
+
+export const maskSensitiveDetails = (str: string, start: number, end: number) => {
+  // if length is 13 then start = 4 and end = 9
+  let maskedString = "";
+  const len = str.length;
+    const iterate = len-end;
+    const lastDigit = str.substring(iterate);
+    for(let i= 0; i < iterate; i++){
+       maskedString += "*";
+    }
+  return maskedString+lastDigit;
+};
