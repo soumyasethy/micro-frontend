@@ -132,6 +132,7 @@ export const template: (
       inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       continue: <ButtonProps & WidgetProps>{
         label: "Update amount",
+        fontSize: FontSizeTokens.SM,
         fontFamily: FontFamilyTokens.Inter,
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
