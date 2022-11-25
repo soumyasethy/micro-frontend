@@ -24,7 +24,7 @@ export const SplashAction: ActionFunction<any> = async (
         const user: User = userContextResponse.data;
         await SharedPropsService.setUser(user);
 
-        
+        return navigate(ROUTE.BANK_ACCOUNT_VERIFICATION)
 
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);

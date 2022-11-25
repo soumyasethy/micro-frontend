@@ -14,4 +14,6 @@ export type AlertNavProps = {
   primary?: boolean;
   ctaAction?: Action<any>;
   type?: "SUCCESS" | "FAILED" | "IN_PROGRESS" | "LOADING" | "DEFAULT";
+  isAutoTriggerCta?: boolean;
+  autoTriggerTimerInMilliseconds?: number;
 };

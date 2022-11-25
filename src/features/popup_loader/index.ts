@@ -55,6 +55,8 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
   ctaLabel,
   ctaAction,
   type,
+  isAutoTriggerCta = false,
+  autoTriggerTimerInMilliseconds,
 }) => ({
   layout: <Layout>{
     id: ROUTE.ALERT_PAGE,
@@ -68,6 +70,8 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
   datastore: <Datastore>{
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     alert: <VerificationCardProps & WidgetProps>{
+      isAutoTriggerCta,
+      autoTriggerTimerInMilliseconds,
       iconColor: ColorTokens.Primary_100,
       label: title || "",
       message: subTitle || "",
@@ -116,6 +120,8 @@ const alertPropsX: AlertNavProps = {
     payload: { hello: "world" },
   },
   type: "DEFAULT",
+  isAutoTriggerCta: false,
+  autoTriggerTimerInMilliseconds: 2000,
 };
 
 export const alertMF: PageType<any> = {

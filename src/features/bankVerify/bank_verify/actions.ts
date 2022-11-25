@@ -76,6 +76,8 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
       StepperStateToken.COMPLETED;
     await SharedPropsService.setUser(user);
     await showPopup({
+      autoTriggerTimerInMilliseconds: 2000,
+      isAutoTriggerCta: true,
       type: "SUCCESS",
       title: "Account verified successfully!",
       subTitle: "You will be redirected to next step in few seconds",

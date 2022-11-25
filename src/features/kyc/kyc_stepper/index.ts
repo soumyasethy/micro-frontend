@@ -36,9 +36,9 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
     type: LAYOUTS.LIST,
     widgets: [
       { id: "space0", type: WIDGET.SPACE },
-      { id: "title", type: WIDGET.TEXT},
+      { id: "title", type: WIDGET.TEXT },
       { id: "space1", type: WIDGET.SPACE },
-      { id: "image", type: WIDGET.IMAGE},
+      { id: "image", type: WIDGET.IMAGE },
       { id: "space", type: WIDGET.SPACE },
       { id: "stepper", type: WIDGET.STEPPER },
       { id: "space2", type: WIDGET.SPACE },
@@ -53,11 +53,11 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
     space0: <SpaceProps>{
       size: SizeTypeTokens.XS,
     },
-    title: <TypographyProps> {
+    title: <TypographyProps>{
       label: "Withdraw in 4 steps",
       fontFamily: FontFamilyTokens.Poppins,
       fontSize: FontSizeTokens.MD,
-      fontWeight: "700"
+      fontWeight: "700",
     },
     space1: <SpaceProps>{
       size: SizeTypeTokens.XL,
@@ -94,4 +94,5 @@ export const kycStepperMF: PageType<any> = {
   actions: {
     [ACTION.GO_TO_AADHAR_INIT]: Go_Next_Action,
   },
+  clearPrevious: true,
 };

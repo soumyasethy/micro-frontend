@@ -168,4 +168,5 @@ export const cameraOpenMF: PageType<any> = {
     [ACTION.CAMERA_ACTION]: CameraConfirmAction,
     [ACTION.GO_BACK]: GoBackAction,
   },
+  clearPrevious: true,
 };

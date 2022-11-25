@@ -106,6 +106,7 @@ export const template: (
           bankCode: `${bankCode}`,
           bankName: `${bankName}`,
           value: "",
+
         },
       },
       clearAction: {

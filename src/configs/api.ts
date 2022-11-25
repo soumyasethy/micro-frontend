@@ -20,6 +20,7 @@ export const api = {
   aadharVerify: `${config.baseUrl}/app/borrower/application/kyc/aadhaar/verify`,
   kycSummaryInit: `${config.baseUrl}/app/borrower/application/kyc/summary/init/`,
   kycSummaryVerify: `${config.baseUrl}/app/borrower/application/kyc/summary/verify/`,
+  banks: `${config.baseUrl}/util/bankInfo/banks`,
   bav: `${config.baseUrl}/app/borrower/application/bav/`,
   bavVerify: `${config.baseUrl}/app/borrower/application/bav/verify`,
   bankInfoSearch: `${config.baseUrl}/util/bankInfo/search/`,
