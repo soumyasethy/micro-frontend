@@ -23,7 +23,6 @@ export const SplashAction: ActionFunction<any> = async (
       if (userContextResponse.status === 200) {
         const user: User = userContextResponse.data;
         await SharedPropsService.setUser(user);
-        return navigate(ROUTE.KYC_PHOTO_VERIFICATION);
 
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
