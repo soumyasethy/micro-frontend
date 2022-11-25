@@ -58,12 +58,13 @@ export const template: (
   availableCreditAmount: number,
   actualLoanAmount: number,
   repaymentAmount: number,
-  isPendingDisbursalApproval: boolean
+  isPendingDisbursalApproval: boolean,
+  amountPercentage: number
 ) => TemplateSchema = (
   availableCreditAmount,
   actualLoanAmount,
   repaymentAmount,
-  isPendingDisbursalApproval
+  isPendingDisbursalApproval,
 ) => {
   // const _generateRepaymentDS =
   //   repaymentAmount > 0
@@ -287,10 +288,7 @@ export const template: (
             /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
             ","
           ),
-        progressLabel: `${(
-          (availableCreditAmount * 100) /
-          actualLoanAmount
-        ).toFixed(2)} % of total limit available`,
+        progressLabel: `${((availableCreditAmount/actualLoanAmount)*100).toFixed(2)}`+ '% of total limit available',
         warning: "Recommended to use as per limit",
         chipText: "",
         type: AmountCardTypeTokens.wallet,
@@ -449,13 +447,17 @@ export const dashboardMF: PageType<any> = {
     let repaymentAmount = actualLoanAmount - availableCreditAmount;
     let isPendingDisbursalApproval =
       user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_APPROVAL";
+     
+    let amountPercentage =  Math.round((availableCreditAmount * 100) /actualLoanAmount);
+      console.log("amountPercentage",amountPercentage);
 
     return Promise.resolve(
       template(
         availableCreditAmount,
         actualLoanAmount,
         repaymentAmount,
-        isPendingDisbursalApproval
+        isPendingDisbursalApproval,
+        amountPercentage
       )
     );
   },
