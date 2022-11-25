@@ -71,7 +71,7 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
     },
     image: <ImageProps>{
       size: ImageSizeTokens.FULL,
-      resizeMode: ResizeModeToken.CONTAIN,
+      resizeMode: ResizeModeToken.COVER,
       aspectRatio: AspectRatioToken.A2_1,
       uri: "https://volt-images.s3.ap-south-1.amazonaws.com/stepper.svg",
     },
