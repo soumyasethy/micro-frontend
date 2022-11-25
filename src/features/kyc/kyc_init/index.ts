@@ -101,6 +101,10 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       label: "Authenticate Aadhaar",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.MD,
+      lineHeight: SizeTypeTokens.XXL,
+      fontWeight: "700",
       action: {
         type: ACTION.AADHAR_INIT,
         routeId: ROUTE.KYC_DIGILOCKER,
