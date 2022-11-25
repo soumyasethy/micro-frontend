@@ -69,7 +69,7 @@ export const goBack: ActionFunction<AmountPayload> = async (
 export const SetRecommendedAmount: ActionFunction<AmountPayload> = async (
   action,
   _datastore,
-  { setDatastore, ...props }
+  { setDatastore, removeWidgets }
 ): Promise<any> => {
   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountItem", <TextInputProps>{
     value: action.payload.value,
@@ -77,32 +77,37 @@ export const SetRecommendedAmount: ActionFunction<AmountPayload> = async (
   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
     type: ButtonTypeTokens.LargeFilled,
   });
+
+  await removeWidgets(ROUTE.WITHDRAW_AMOUNT, [
+    { id: "amountMessage", type: WIDGET.MESSAGE },
+    { id: "amountSpace", type: WIDGET.SPACE },
+  ]);
 };
 export const OnAmountChange: ActionFunction<AmountPayload> = async (
   action,
   _datastore,
   { setDatastore, appendWidgets, removeWidgets }
 ): Promise<any> => {
+  disbursalAmount = parseFloat(action.payload.value);
+
   const user: User = await SharedPropsService.getUser();
-  const actualLoanAmount = user.linkedCredits[0].actualLoanAmount;
+  // const actualLoanAmount = user.linkedCredits[0].actualLoanAmount;
   const availableCreditAmount = user.linkedCredits[0].availableCreditAmount;
-  const alreadyWithdrawAmount = actualLoanAmount - availableCreditAmount;
-  const recommendedAmount = 0.9 * actualLoanAmount;
-  const currentRecommendedAmount = recommendedAmount - alreadyWithdrawAmount;
+  // const alreadyWithdrawAmount = actualLoanAmount - availableCreditAmount;
+  const recommendedAmount = 0.9 * availableCreditAmount;
+  // const currentRecommendedAmount = Math.abs(
+  //   recommendedAmount - alreadyWithdrawAmount
+  // );
 
   if (action.payload.value.length > 0) {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     });
+  } else {
+    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeOutline,
+    });
   }
-  //  else{
-  //   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
-  //     type: ButtonTypeTokens.LargeOutline,
-  //   });
-  // }
-
-  disbursalAmount = parseFloat(action.payload.value);
-  console.warn("***** disbursalAmount *****", disbursalAmount);
 
   const currentApplicableInterestRate = (await SharedPropsService.getUser())
     .linkedCredits[0].currentApplicableInterestRate;
@@ -116,8 +121,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
       ","
     )*/,
   });
-  
-  if (disbursalAmount > currentRecommendedAmount) {
+  if (disbursalAmount > recommendedAmount) {
     await appendWidgets(
       ROUTE.WITHDRAW_AMOUNT,
       {
@@ -135,10 +139,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
             type: ACTION.SET_RECOMENDED_AMOUNT,
             routeId: ROUTE.WITHDRAW_AMOUNT,
             payload: <AmountPayload>{
-              value: `${recommendedAmount}` /*.replace(
-                /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
-                ","
-              )*/,
+              value: `${recommendedAmount}`,
             },
           },
         },
@@ -150,17 +151,11 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
       ],
       "amountMsgSpace"
     );
-    // await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
-    //   type: ButtonTypeTokens.LargeOutline,
-    // });
   } else {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountMessage", null);
     await removeWidgets(ROUTE.WITHDRAW_AMOUNT, [
       { id: "amountMessage", type: WIDGET.MESSAGE },
       { id: "amountSpace", type: WIDGET.SPACE },
     ]);
-    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
-      type: ButtonTypeTokens.LargeFilled,
-    });
   }
 };
