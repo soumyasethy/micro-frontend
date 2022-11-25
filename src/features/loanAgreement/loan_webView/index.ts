@@ -18,7 +18,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, GoNextType } from "./types";
-import { GoNext, NavLoanAutoPay, PollMandateStatus } from "./actions";
+import { goBack, GoNext, NavLoanAutoPay, PollMandateStatus } from "./actions";
 
 export const template: (urlData: string) => TemplateSchema = (urlData) => ({
   layout: <Layout>{
@@ -76,5 +76,6 @@ export const loanWebViewMF: PageType<any> = {
   actions: {
     [ACTION.LOAN_WEBVIEW]: GoNext,
     [ACTION.GO_LOAN_AUTO_PAY]: NavLoanAutoPay,
+    [ACTION.GO_BACK] : goBack
   },
 };

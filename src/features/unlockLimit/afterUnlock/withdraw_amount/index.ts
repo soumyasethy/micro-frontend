@@ -70,7 +70,7 @@ export const template: (
     },
     datastore: <Datastore>{
       header: <HeaderProps>{
-        title: "Withdraw Amount",
+        title: "Withdraw amount",
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         isBackButton: true,
         type: "DEFAULT",

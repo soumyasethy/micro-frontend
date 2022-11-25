@@ -74,6 +74,9 @@ export const SetRecommendedAmount: ActionFunction<AmountPayload> = async (
   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountItem", <TextInputProps>{
     value: action.payload.value,
   });
+  await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+    type: ButtonTypeTokens.LargeFilled,
+  });
 };
 export const OnAmountChange: ActionFunction<AmountPayload> = async (
   action,
@@ -147,9 +150,9 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
       ],
       "amountMsgSpace"
     );
-    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
-      type: ButtonTypeTokens.LargeOutline,
-    });
+    // await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+    //   type: ButtonTypeTokens.LargeOutline,
+    // });
   } else {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountMessage", null);
     await removeWidgets(ROUTE.WITHDRAW_AMOUNT, [
