@@ -5,7 +5,11 @@ import _ from "lodash";
 import { ROUTE } from "../../../routes";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+  getAppHeader,
+} from "../../../configs/config";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
 
@@ -14,7 +18,11 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   _datastore,
   { setDatastore, showPopup, network, goBack }
 ): Promise<any> => {
-  if (action.payload.value.length !== 6) return;
+  if (
+    action.payload.value.length !==
+    AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
+  )
+    return;
   await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
     state: InputStateToken.LOADING,
   });
@@ -24,7 +32,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
       applicationId: (
         await SharedPropsService.getUser()
       ).linkedApplications[0].applicationId,
-      assetRepository: action.payload.assetRepository,
+      assetRepository: AssetRepositoryType.DEFAULT,
       otp: action.payload.value,
     },
     { headers: await getAppHeader() }
