@@ -385,3 +385,35 @@ export const debounce = (callback, wait) => {
     }, wait);
   };
 };
+
+export const maskString = (str: string, start: number, end: number) => {
+  // if length is 13 then start = 4 and end = 9
+  let maskedString = "";
+  if (str.startsWith("+91")) {
+    str = str.substring(3);
+  }
+  for (let i = 0; i < str.length; i++) {
+    if (i >= start && i <= end) {
+      maskedString += "*";
+    } else {
+      maskedString += str[i];
+    }
+  }
+  return maskedString;
+};
+
+export const addCommasToNumber = (num: number) => {
+  return num.toString().replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",");
+};
+
+// export const pledgeConfirmCheckIfRupeeSign = (charges: string) => {
+//   // remove all white spaces
+//   charges = charges.replace(/\s/g, "");
+//   if (charges.startsWith("₹")) {
+//     charges = charges;
+//   } else {
+//     // add rupee sign
+//     charges = "₹" + charges;
+//   }
+//   return charges;
+// };

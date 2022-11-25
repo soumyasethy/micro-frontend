@@ -1,5 +1,5 @@
 export const config = {
-  baseUrl: "https://api.voltmoney.in",
+  baseUrl: "https://api.staging.voltmoney.in",
   stageBaseUrl: "https://api.staging.voltmoney.in",
 };
 export const StoreKey = {

@@ -58,6 +58,7 @@ export const template: (applicationId: string) => TemplateSchema = (
     datastore: <Datastore>{
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
       continue: <ButtonProps & WidgetProps>{
+        fontSize: FontSizeTokens.MD,
         label: "Continue",
         fontFamily: FontFamilyTokens.Poppins,
         type: ButtonTypeTokens.LargeOutline,
@@ -122,7 +123,7 @@ export const template: (applicationId: string) => TemplateSchema = (
       space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       backButton: <IconProps & WidgetProps>{
         name: IconTokens.ChevronDown,
-        size: IconSizeTokens.XL,
+        size: IconSizeTokens.XXL,
         color: ColorTokens.Grey_Night,
         action: {
           type: ACTION.BACK,

@@ -76,6 +76,7 @@ export const template: (
     datastore: <Datastore>{
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
       continue: <ButtonProps & WidgetProps>{
+        fontSize: FontSizeTokens.MD,
         label: "Continue",
         fontFamily: FontFamilyTokens.Poppins,
         type: ButtonTypeTokens.LargeOutline,
@@ -207,7 +208,7 @@ export const template: (
       disclaimerIcon: <IconProps>{
         name: IconTokens.Secure,
         size: IconSizeTokens.XS,
-        color: ColorTokens.System_Happy,
+        color: ColorTokens.Secondary_100,
       },
     },
   };

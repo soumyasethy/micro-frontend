@@ -42,3 +42,23 @@ export const getAppHeader = async () => ({
 export const APP_CONFIG = {
   POLLING_INTERVAL: 5000,
 };
+
+export enum AssetRepositoryType {
+  CAMS = "CAMS",
+  KARVY = "KARVY",
+  DEFAULT = "KARVY",
+}
+export const AssetRepositoryMap = {
+  [AssetRepositoryType.CAMS]: {
+    value: AssetRepositoryType.CAMS,
+    NAME: "Cams",
+    OTP_LENGTH: 5,
+    LIST: [],
+  },
+  [AssetRepositoryType.KARVY]: {
+    VALUE: AssetRepositoryType.KARVY,
+    NAME: "karvy",
+    OTP_LENGTH: 6,
+    LIST: [],
+  },
+};

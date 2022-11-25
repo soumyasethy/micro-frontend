@@ -79,6 +79,7 @@ export const template: TemplateSchema = {
     },
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
+      fontSize: FontSizeTokens.MD,
       fontFamily: FontFamilyTokens.Poppins,
       label: "Continue",
       type: ButtonTypeTokens.LargeOutline,
@@ -169,7 +170,7 @@ export const template: TemplateSchema = {
       fontSize: FontSizeTokens.XXS,
       color: ColorTokens.Grey_Night,
     },
-    space5: <SpaceProps>{ size: SizeTypeTokens.XL },
+    space5: <SpaceProps>{ size: SizeTypeTokens.Size32 },
   },
 };
 
