@@ -78,6 +78,9 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
       label: "Start",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.MD,
+      lineHeight: SizeTypeTokens.XXL,
       action: {
         type: ACTION.GO_TO_AADHAR_INIT,
         routeId: ROUTE.KYC_STEPPER,

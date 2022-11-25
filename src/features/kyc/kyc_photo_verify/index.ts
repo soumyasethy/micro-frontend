@@ -14,6 +14,7 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
@@ -119,6 +120,10 @@ export const template: (
       width: ButtonWidthTypeToken.FULL,
       label: "Continue to verify Aadhar",
       type: ButtonTypeTokens.LargeFilled,
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.MD,
+      lineHeight: SizeTypeTokens.XXL,
+      fontWeight: "700",
       action: {
         type: ACTION.PHOTO_VERIFY,
         routeId: ROUTE.KYC_AFTER_CAMERA,

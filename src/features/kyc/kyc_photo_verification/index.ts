@@ -126,6 +126,10 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       label: "Open Camera",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.MD,
+      lineHeight: SizeTypeTokens.XXL,
+      fontWeight: "700",
       action: {
         type: ACTION.CAMERA_ACTION,
         routeId: ROUTE.KYC_PHOTO_VERIFICATION,

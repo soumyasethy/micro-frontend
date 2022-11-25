@@ -127,6 +127,10 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         type: ButtonTypeTokens.LargeOutline,
         label: "Proceed",
         width: ButtonWidthTypeToken.FULL,
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.MD,
+        lineHeight: SizeTypeTokens.XXL,
+        fontWeight: "700",
         action: {
           type: ACTION.TRIGGER_CTA,
           routeId: ROUTE.KYC_AADHAAR_VERIFICATION,

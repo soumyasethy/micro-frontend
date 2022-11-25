@@ -72,6 +72,7 @@ export const template: (BanksRepo: {
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       searchInput: <TextInputProps & WidgetProps>{
+        title: "",
         placeholder: "Search by bank name",
         type: InputTypeToken.DEFAULT,
         caption: { default: "", success: "", error: "" },
