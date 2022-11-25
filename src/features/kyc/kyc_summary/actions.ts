@@ -48,6 +48,8 @@ export const verifyKycSummary: ActionFunction<any> = async (
     await SharedPropsService.setUser(user);
 
     await showPopup({
+      autoTriggerTimerInMilliseconds: 2000,
+      isAutoTriggerCta: true,
       title: "KYC done successfully!",
       subTitle: "You will be redirected to next step in few seconds",
       type: "SUCCESS",

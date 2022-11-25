@@ -43,15 +43,7 @@ export const editEmailId: ActionFunction<PanEditPayload> = async (
 export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   action,
   _datastore,
-  {
-    network,
-    navigate,
-    asyncStorage,
-    setDatastore,
-    handleError,
-    showPopup,
-    ...props
-  }
+  { network, navigate, setDatastore }
 ): Promise<any> => {
   await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
     label: "",

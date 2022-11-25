@@ -10,7 +10,7 @@ import { stopCamera } from "../../../configs/utils";
 export const PhotoVerifyAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { network, navigate, setDatastore, showPopup }
+  { network, navigate, setDatastore }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,

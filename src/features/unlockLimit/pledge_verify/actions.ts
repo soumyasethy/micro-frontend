@@ -36,6 +36,8 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     });
     await goBack();
     await showPopup({
+      autoTriggerTimerInMilliseconds: 2000,
+      isAutoTriggerCta: true,
       title: `Rs ${_.get(
         response,
         "data.stepResponseObject.approvedCreditAmount",
