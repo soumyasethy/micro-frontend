@@ -42,7 +42,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
-import { MandateLinkPoll, GetMandateLink } from "./actions";
+import { MandateLinkPoll, GetMandateLink, goBack } from "./actions";
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
@@ -105,7 +105,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       },
       action: {
         type: ACTION.GO_BACK,
-        routeId: ROUTE.LOAN_REPAYMENT,
+        routeId: ROUTE.LOAN_AUTOPAY,
         payload: {},
       },
     },
@@ -206,7 +206,7 @@ export const loanAutoPayMF: PageType<any> = {
   actions: {
     [ACTION.POLL]: MandateLinkPoll,
     //  [ACTION.AUTOPAY]: authenticateRepayment,
-    // [ACTION.GO_BACK]: goBack,
+     [ACTION.GO_BACK]: goBack,
   },
   clearPrevious: true,
 };

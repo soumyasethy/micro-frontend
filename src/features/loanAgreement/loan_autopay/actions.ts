@@ -45,7 +45,7 @@ export const GetMandateLink: ActionFunction<any> = async (
   );
 };
 
-export const GoBack: ActionFunction<any> = async (
+export const goBack: ActionFunction<any> = async (
   action,
   _datastore,
   { goBack }
