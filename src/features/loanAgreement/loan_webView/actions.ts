@@ -36,9 +36,9 @@ export const PollMandateStatus: ActionFunction<any> = async (
           navigate(ROUTE.LOAN_REPAYMENT);
           showPopup({
             type: "SUCCESS",
-            title: "E-mandate successful!",
-            subTitle: "Your autopay request has been submitted successfully.",
-            ctaLabel: "Proceed to loan agreement",
+            title: "AutoPay setup successful!",
+            subTitle: "Interest charges will be paid automatically every month.",
+            ctaLabel: "Proceed to review agreement",
             ctaAction: {
               ...action,
               payload: <GoNextType>{
@@ -53,8 +53,7 @@ export const PollMandateStatus: ActionFunction<any> = async (
             alertProps: {
               iconName: IconTokens.Failed,
               title: "AutoPay setup failed!",
-              subTitle:
-                "Bank account must be linked for AutoPay. Please try again.",
+              subTitle: "Bank account must be linked for AutoPay. Please try again.",
               type: "DEFAULT",
               ctaLabel: "Continue to try again",
               primary: true,
