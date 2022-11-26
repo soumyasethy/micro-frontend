@@ -43,7 +43,10 @@ import {
 } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
-import { addCommasToNumber } from "../../../configs/utils";
+import {
+  addCommasToNumber,
+  roundDownToNearestHundred,
+} from "../../../configs/utils";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -57,15 +60,19 @@ export const template: (
         label: availableCASItem.schemeName, //"Axis Long Term Equity Mutual Funds",
         info: "",
         trailIcon: { name: IconTokens.CheckedSquare },
-        trailTitle: `₹${getTotalLimit(
-          [availableCASItem],
-          stepResponseObject.isinNAVMap,
-          stepResponseObject.isinLTVMap
+        trailTitle: `₹ ${roundDownToNearestHundred(
+          getTotalLimit(
+            [availableCASItem],
+            stepResponseObject.isinNAVMap,
+            stepResponseObject.isinLTVMap
+          )
         )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","), //"₹4,000",
-        trailSubTitle: `/ ₹${getActualLimit(
-          [availableCASItem],
-          stepResponseObject.isinNAVMap,
-          stepResponseObject.isinLTVMap
+        trailSubTitle: `/ ₹ ${roundDownToNearestHundred(
+          getActualLimit(
+            [availableCASItem],
+            stepResponseObject.isinNAVMap,
+            stepResponseObject.isinLTVMap
+          )
         )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         action: "edit",
         trailIconAction: {
@@ -87,7 +94,7 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-        { id: "space0", type: WIDGET.SPACE },
+        // { id: "space0", type: WIDGET.SPACE },
         { id: "inputItem", type: WIDGET.INPUT },
         { id: "inputSpace", type: WIDGET.SPACE },
         { id: "listItem", type: WIDGET.LIST },
@@ -115,7 +122,7 @@ export const template: (
           routeId: ROUTE.PORTFOLIO,
         },
       },
-      space0: <SpaceProps>{ size: SizeTypeTokens.XL },
+      // space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       inputItem: <TextInputProps & WidgetProps>{
         type: InputTypeToken.SEARCH,
         state: InputStateToken.DEFAULT,
@@ -154,15 +161,15 @@ export const template: (
       listSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
       totalItem: <CtaCardProps>{
         label: "Total credit limit",
-        info:
-          "₹" +
-          addCommasToNumber(
+        info: addCommasToNumber(
+          roundDownToNearestHundred(
             getTotalLimit(
               stepResponseObject.availableCAS,
               stepResponseObject.isinNAVMap,
               stepResponseObject.isinLTVMap
             )
-          ),
+          )
+        ),
         actionLabel: "Confirm and get OTP",
         action: {
           type: ACTION.PORTFOLIO,
