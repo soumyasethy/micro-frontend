@@ -54,7 +54,7 @@ export const template: (urlData: string) => TemplateSchema = (urlData) => ({
     },
     headItem: <WebViewProps>{
       uri: `${urlData}`,
-      // uri: "https://reactnative.dev/",
+      isOpenInNewTab: true,
     },
   },
 });
@@ -76,6 +76,6 @@ export const loanWebViewMF: PageType<any> = {
   actions: {
     [ACTION.LOAN_WEBVIEW]: GoNext,
     [ACTION.GO_LOAN_AUTO_PAY]: NavLoanAutoPay,
-    [ACTION.GO_BACK] : goBack
+    [ACTION.GO_BACK]: goBack,
   },
 };

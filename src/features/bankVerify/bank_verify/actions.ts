@@ -104,12 +104,12 @@ export const AddAccountNavAction: ActionFunction<
 > = async (action, _datastore, { navigate }): Promise<any> => {
   navigate(ROUTE.BANK_VERIFY_MANUALLY);
 };
-export const GoBackAction: ActionFunction<AadharInitPayload> = async (
+export const GoBackAction: ActionFunction<{}> = async (
   action,
   _datastore,
-  { goBack }
+  { navigate }
 ): Promise<any> => {
-  await goBack();
+  await navigate(ROUTE.KYC_STEPPER);
 };
 export const GoNext: ActionFunction<any> = async (
   action,

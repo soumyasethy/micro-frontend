@@ -288,14 +288,14 @@ export const template: (
             /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
             ","
           ),
-        progressLabel: `${((availableCreditAmount/actualLoanAmount)*100).toFixed(2)}`+ '% of total limit available',
+        progressLabel: `${((availableCreditAmount/actualLoanAmount)*100)}`+ '% of total limit available',
         warning: "Recommended to use as per limit",
         chipText: "",
         type: AmountCardTypeTokens.wallet,
         progressFillPercentage: `${(
           (availableCreditAmount * 100) /
           actualLoanAmount
-        ).toFixed(2)}%`,
+        )}%`,
       },
       cardSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       continue: <ButtonProps & WidgetProps>{
