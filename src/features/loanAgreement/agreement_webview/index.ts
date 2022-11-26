@@ -24,8 +24,6 @@ import {
   GoBack,
   GoNextFailed,
 } from "./actions";
-import { polingDataRepo } from "./repo";
-//import { goBack, verifyOTP } from "./action";
 
 export const template: (urlData: string) => TemplateSchema = (urlData) => ({
   layout: <Layout>{
@@ -56,6 +54,7 @@ export const template: (urlData: string) => TemplateSchema = (urlData) => ({
     },
     headItem: <WebViewProps>{
       uri: `${urlData}`,
+      isOpenInNewTab:true
     },
   },
 });
