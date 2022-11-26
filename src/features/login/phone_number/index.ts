@@ -70,7 +70,7 @@ export const template: TemplateSchema = {
   datastore: <Datastore>{
     tc_text: <TermsTextProps>{
       html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
-      By proceeding, I accept  <span style='color:#1434CB;' >T&Cs, Privacy Policy </span>and<span style="color:#1434CB"; > Authorize</span> to <br>obtain my KYC & bureau information.
+      By proceeding, I accept  <span style='color:#1434CB;' >T&Cs, Privacy Policy </span>and<span style="color:#1434CB"; > Authorize</span> to obtain my KYC & bureau information.
       </p>`,
       /*** UnComment for Orange Terms and Condition text **/
       // html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>

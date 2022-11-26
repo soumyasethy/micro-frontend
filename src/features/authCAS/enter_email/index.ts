@@ -89,7 +89,7 @@ export const template: (applicationId: string) => TemplateSchema = (
       input: <TextInputProps & WidgetProps>{
         regex: "^^[a-zA-Z0-9._{|}-]*@[a-zA-Z0-9]+.^[A-Za-z]+${2,}$",
         isLowerCase: true,
-        clearEnabled: true,
+        clearEnabled: false,
         type: InputTypeToken.EMAIL,
         state: InputStateToken.DEFAULT,
         title: "Email",

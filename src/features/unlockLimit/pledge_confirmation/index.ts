@@ -27,6 +27,7 @@ import { getTotalLimit } from "../portfolio/actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import { roundDownToNearestHundred } from "../../../configs/utils";
 
 export const template: (
   totalAmount: number,
@@ -73,7 +74,7 @@ export const template: (
           {
             id: "total_cash_imit",
             title: "Total cash limit",
-            amount: `₹${totalAmount}`.replace(
+            amount: `₹ ${roundDownToNearestHundred(totalAmount)}`.replace(
               /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
               ","
             ),
@@ -82,16 +83,15 @@ export const template: (
             return {
               id: `processingFeesBreakUp_${index}`,
               title: key,
-              amount: `₹${processingFeesBreakUp[key] || 0}`.replace(
-                /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
-                ","
-              ),
+              amount: `₹ ${roundDownToNearestHundred(
+                processingFeesBreakUp[key] || 0
+              )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
             };
           }),
           {
             id: "total_charges",
             title: "Total charges",
-            amount: `₹${totalCharges}`.replace(
+            amount: `₹ ${roundDownToNearestHundred(totalCharges)}`.replace(
               /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
               ","
             ),

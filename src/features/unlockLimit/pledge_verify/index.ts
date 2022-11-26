@@ -123,7 +123,7 @@ export const template: (
       fontWeight: "400",
     },
     subTitle2: <TypographyProps>{
-      label: maskString(phoneNumber, 3, 7),
+      label: phoneNumber.substring(3),
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,

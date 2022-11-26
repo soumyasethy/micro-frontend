@@ -21,7 +21,7 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
 
   console.warn("action", action);
   await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.targetWidgetId, {
-    subTitle: phoneNumber,
+    subTitle: phoneNumber.substring(3),
   });
   await goBack();
 };

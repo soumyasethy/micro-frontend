@@ -37,7 +37,10 @@ import { ACTION, AssetsPayload } from "./types";
 import { ConfirmCTA, EnterAmountAction, goBack, SelectAssets } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import { getTotalLimit } from "../portfolio/actions";
-import { addCommasToNumber } from "../../../configs/utils";
+import {
+  addCommasToNumber,
+  roundDownToNearestHundred,
+} from "../../../configs/utils";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -59,7 +62,7 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-        { id: "space0", type: WIDGET.SPACE },
+        // { id: "space0", type: WIDGET.SPACE },
         { id: "inputItem", type: WIDGET.INPUT },
         { id: "inputSpace", type: WIDGET.SPACE },
         { id: "selectAssetForPledge", type: WIDGET.STACK },
@@ -87,7 +90,7 @@ export const template: (
           routeId: ROUTE.MODIFY_LIMIT,
         },
       },
-      space0: <SpaceProps>{ size: SizeTypeTokens.XL },
+      // space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       inputItem: <TextInputProps & WidgetProps>{
         placeholder: "",
         type: InputTypeToken.DEFAULT,
@@ -95,7 +98,9 @@ export const template: (
         title: "Enter amount",
         state: InputStateToken.DEFAULT,
         limit: totalAmount,
-        limitLabel: "out of " + addCommasToNumber(totalAmount),
+        limitLabel:
+          "out of ₹ " +
+          addCommasToNumber(roundDownToNearestHundred(totalAmount)),
         caption: { success: "", error: "" },
         action: {
           type: ACTION.ENTER_AMOUNT,

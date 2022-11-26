@@ -33,6 +33,7 @@ import {
 } from "./types";
 import { continueLimit, modifyLimit } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
+import { roundDownToNearestHundred } from "../../../configs/utils";
 
 let sourceX = "";
 export const template: (
@@ -80,12 +81,12 @@ export const template: (
     },
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
-      title: "Approved Cash Limit",
-      subTitle: `${availableCreditAmount}`.replace(
+      title: "Approved cash limit",
+      subTitle: `${roundDownToNearestHundred(availableCreditAmount)}`.replace(
         /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
         ","
       ),
-      chipText: "How?",
+      chipText: "",
       type: "default",
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.LG },
@@ -127,6 +128,7 @@ export const template: (
     space2: <SpaceProps>{ size: SizeTypeTokens.XL },
     modifyItem: <ButtonProps & WidgetProps>{
       label: "Modify Limit",
+      fontFamily: FontFamilyTokens.Inter,
       type: ButtonTypeTokens.LargeGhost,
       width: ButtonWidthTypeToken.FULL,
       icon: {

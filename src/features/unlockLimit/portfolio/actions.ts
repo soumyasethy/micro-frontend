@@ -22,6 +22,7 @@ import {
 } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
+import { roundDownToNearestHundred } from "../../../configs/utils";
 
 let portfolioSearchKeyword = "";
 let listBeforeSearchUI = [];
@@ -132,16 +133,20 @@ export const ToggleSelectAction: ActionFunction<
         trailTitle:
           action.payload.selectedMap.hasOwnProperty(i) &&
           action.payload.selectedMap[i]
-            ? `₹${getTotalLimit(
-                [updateAvailableCASMapX[key]],
-                stepResponseObject.isinNAVMap,
-                stepResponseObject.isinLTVMap
+            ? `₹ ${roundDownToNearestHundred(
+                getTotalLimit(
+                  [updateAvailableCASMapX[key]],
+                  stepResponseObject.isinNAVMap,
+                  stepResponseObject.isinLTVMap
+                )
               )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",")
-            : "₹0", //"₹4,000",
-        trailSubTitle: `/ ₹${getActualLimit(
-          [item],
-          stepResponseObject.isinNAVMap,
-          stepResponseObject.isinLTVMap
+            : "₹ 0", //"₹4,000",
+        trailSubTitle: `/ ₹ ${roundDownToNearestHundred(
+          getActualLimit(
+            [item],
+            stepResponseObject.isinNAVMap,
+            stepResponseObject.isinLTVMap
+          )
         )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         action: "edit",
         trailIconAction: {
@@ -167,7 +172,10 @@ export const ToggleSelectAction: ActionFunction<
   });
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMapX);
   await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    info: `₹${totalAmount}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
+    info: `${roundDownToNearestHundred(totalAmount)}`.replace(
+      /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+      ","
+    ),
   });
 };
 

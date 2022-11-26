@@ -12,6 +12,10 @@ import SharedPropsService from "../../../SharedPropsService";
 import { ACTION, EditItemPayload } from "../portfolio/types";
 import { AvailableCASItem } from "../unlock_limit/types";
 import _ from "lodash";
+import {
+  addCommasToNumber,
+  roundDownToNearestHundred,
+} from "../../../configs/utils";
 let amount: number = 0;
 
 export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
@@ -41,10 +45,12 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
   Object.keys(updateAvailableCASMapX).forEach((key) => {
     selectedCAS.push(updateAvailableCASMapX[key]);
   });
-  const totalAmount = getTotalLimit(
-    selectedCAS,
-    stepResponseObject.isinNAVMap,
-    stepResponseObject.isinLTVMap
+  const totalAmount = roundDownToNearestHundred(
+    getTotalLimit(
+      selectedCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
+    )
   );
 
   const updatedListUI = [
@@ -54,20 +60,23 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
         label: item.schemeName, //"Axis Long Term Equity Mutual Funds",
         info: "",
         trailIcon: { name: IconTokens.Edit },
-        trailTitle:
-          action.payload.selectedMap.hasOwnProperty(i) &&
-          action.payload.selectedMap[i]
-            ? `₹${getTotalLimit(
+        trailTitle: action.payload.selectedMap.hasOwnProperty(i)
+          ? // && action.payload.selectedMap[i]
+            `₹ ${roundDownToNearestHundred(
+              getTotalLimit(
                 [updateAvailableCASMapX[key]],
                 stepResponseObject.isinNAVMap,
                 stepResponseObject.isinLTVMap
-              )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",")
-            : "₹0",
+              )
+            )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",")
+          : "₹ 0",
         //"₹4,000",
-        trailSubTitle: `/ ₹${getActualLimit(
-          [item],
-          stepResponseObject.isinNAVMap,
-          stepResponseObject.isinLTVMap
+        trailSubTitle: `/ ₹ ${roundDownToNearestHundred(
+          getActualLimit(
+            [item],
+            stepResponseObject.isinNAVMap,
+            stepResponseObject.isinLTVMap
+          )
         )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         action: "edit",
         trailIconAction: {
@@ -94,9 +103,11 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
       [action.payload.index]: amount > 0,
     },
   });
+
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMapX);
   await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    info: `${totalAmount}`,
+    // changed here
+    info: `${addCommasToNumber(roundDownToNearestHundred(totalAmount))}`,
   });
 
   action.payload.selectedMap[action.payload.index] =

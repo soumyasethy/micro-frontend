@@ -95,6 +95,8 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         lineHeight: 24,
       },
       input: <TextInputProps>{
+        placeholder: "0000 0000 0000",
+        regex: "^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$",
         title: "Enter Aadhaar number",
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
