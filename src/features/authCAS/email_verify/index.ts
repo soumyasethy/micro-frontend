@@ -27,6 +27,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
   TextAlignTokens,
   TypographyProps,
   WIDGET,
@@ -52,6 +53,7 @@ export const template: (applicationId: string) => TemplateSchema = (
   datastore: <Datastore>{
     stack_root: <StackProps>{
       type: StackType.column,
+      width: StackWidth.FULL,
       height: StackHeight.FULL,
       flexWrap: StackFlexWrap.wrap,
       justifyContent: StackJustifyContent.spaceAround,
