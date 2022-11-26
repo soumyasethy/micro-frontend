@@ -12,6 +12,10 @@ import {
 } from "../../../configs/config";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
+import {
+  addCommasToNumber,
+  roundDownToNearestHundred,
+} from "../../../configs/utils";
 
 export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   action,
@@ -46,10 +50,10 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     await showPopup({
       autoTriggerTimerInMilliseconds: 2000,
       isAutoTriggerCta: true,
-      title: `Rs ${_.get(
-        response,
-        "data.stepResponseObject.approvedCreditAmount",
-        0
+      title: `₹ ${addCommasToNumber(
+        roundDownToNearestHundred(
+          _.get(response, "data.stepResponseObject.approvedCreditAmount", 0)
+        )
       )} unlocked successfully!`,
       subTitle: "You will be redirected to next step in few seconds",
       type: "SUCCESS",

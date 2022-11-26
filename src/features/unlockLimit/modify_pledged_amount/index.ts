@@ -40,6 +40,7 @@ import { ACTION, AmountPayload, ModifyAmountPayload } from "./types";
 import { EditAmountAction, ModifyAmountAction, goBack } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import { getActualLimit, getTotalLimit } from "../portfolio/actions";
+import { roundDownToNearestHundred } from "../../../configs/utils";
 
 export const template: (
   index: number,
@@ -115,11 +116,13 @@ export const template: (
           stepResponseObject.isinLTVMap
         ),
         limitLabel:
-          "out of " +
-          `${getActualLimit(
-            [stepResponseObject.availableCAS[index]],
-            stepResponseObject.isinNAVMap,
-            stepResponseObject.isinLTVMap
+          "out of ₹ " +
+          `${roundDownToNearestHundred(
+            getActualLimit(
+              [stepResponseObject.availableCAS[index]],
+              stepResponseObject.isinNAVMap,
+              stepResponseObject.isinLTVMap
+            )
           )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         caption: { success: "", error: "" },
         keyboardType: KeyboardTypeToken.decimalPad,
