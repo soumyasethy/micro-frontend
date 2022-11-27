@@ -288,7 +288,7 @@ export const template: (
             /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
             ","
           ),
-        progressLabel: `${((availableCreditAmount/actualLoanAmount)*100)}`+ '% of total limit available',
+        progressLabel: `${Math.trunc(((availableCreditAmount/actualLoanAmount)*100))}`+ '% of total limit available',
         warning: "Recommended to use as per limit",
         chipText: "",
         type: AmountCardTypeTokens.wallet,
