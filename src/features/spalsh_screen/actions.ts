@@ -28,7 +28,7 @@ export const SplashAction: ActionFunction<any> = async (
          * ADD YOUR CUSTOM ROUTE TO NAVIGATE
          * ****/
 
-
+        return navigate(ROUTE.KYC_PHOTO_VERIFICATION);
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
         } else {

@@ -64,7 +64,7 @@ export const template: (
   availableCreditAmount,
   actualLoanAmount,
   repaymentAmount,
-  isPendingDisbursalApproval,
+  isPendingDisbursalApproval
 ) => {
   // const _generateRepaymentDS =
   //   repaymentAmount > 0
@@ -76,7 +76,7 @@ export const template: (
   //               {
   //                 id: "repaymentItem",
   //                 type: WIDGET.REPAYMENT,
-                 
+
   //               },
   //             ],
   //           },
@@ -84,7 +84,7 @@ export const template: (
   //       }
   //     : {};
 
-      const _generateRepaymentDS =
+  const _generateRepaymentDS =
     repaymentAmount > 0
       ? {
           repaymentStickyCard: <CardProps>{
@@ -94,7 +94,6 @@ export const template: (
                 {
                   id: "repaymentItem",
                   type: WIDGET.REPAYMENT,
-                 
                 },
               ],
             },
@@ -288,14 +287,15 @@ export const template: (
             /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
             ","
           ),
-        progressLabel: `${((availableCreditAmount/actualLoanAmount)*100)}`+ '% of total limit available',
+        progressLabel:
+          `${(availableCreditAmount / actualLoanAmount) * 100}` +
+          "% of total limit available",
         warning: "Recommended to use as per limit",
         chipText: "",
         type: AmountCardTypeTokens.wallet,
-        progressFillPercentage: `${(
-          (availableCreditAmount * 100) /
-          actualLoanAmount
-        )}%`,
+        progressFillPercentage: `${
+          (availableCreditAmount * 100) / actualLoanAmount
+        }%`,
       },
       cardSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       continue: <ButtonProps & WidgetProps>{
@@ -315,7 +315,7 @@ export const template: (
       },
       continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       ..._generateRepaymentDS,
-     
+
       repaymentItem: <RepaymentProps>{
         title: "Repayment",
         message: "Outstanding amount",
@@ -426,6 +426,7 @@ export const template: (
 };
 
 export const dashboardMF: PageType<any> = {
+  loading: [{ id: "loader", type: WIDGET.LOTTIE }],
   onLoad: async ({ network }) => {
     const userContextResponse = await network.post(
       api.userContext,
@@ -447,9 +448,10 @@ export const dashboardMF: PageType<any> = {
     let repaymentAmount = actualLoanAmount - availableCreditAmount;
     let isPendingDisbursalApproval =
       user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_APPROVAL";
-     
-    let amountPercentage =  Math.round((availableCreditAmount * 100) /actualLoanAmount);
-      console.log("amountPercentage",amountPercentage);
+
+    let amountPercentage = Math.round(
+      (availableCreditAmount * 100) / actualLoanAmount
+    );
 
     return Promise.resolve(
       template(

@@ -11,6 +11,8 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  CalendarProps,
+  CalendarStateToken,
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
@@ -32,7 +34,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../../routes";
 import { ACTION, ContinuePayload, InputPayload } from "./types";
-import { CalendarOnChange, PanOnChange, verifyPan, toggleCTA } from "./actions";
+import { CalendarOnChange, PanOnChange, toggleCTA, verifyPan } from "./actions";
 import { EnableDisableCTA } from "../../../login/phone_number/types";
 import { User } from "../../../login/otp_verify/types";
 import SharedPropsService from "../../../../SharedPropsService";
@@ -59,7 +61,8 @@ export const template: (
         { id: "space2", type: WIDGET.SPACE },
         { id: "input", type: WIDGET.INPUT },
         { id: "space5", type: WIDGET.SPACE },
-        { id: "calendarInput", type: WIDGET.INPUT },
+        // { id: "calendarInput", type: WIDGET.INPUT },
+        { id: "calendarPicker", type: WIDGET.CALENDAR_PICKER },
         { id: "space3", type: WIDGET.SPACE },
         {
           id: "space4",
@@ -140,6 +143,22 @@ export const template: (
             value: true,
             targetWidgetId: "continue",
           },
+        },
+      },
+      calendarPicker: <CalendarProps & WidgetProps>{
+        year: { title: "Year", value: "", placeholder: "YYYY" },
+        month: { title: "Month", value: "", placeholder: "MM" },
+        date: { title: "Date", value: "", placeholder: "DD" },
+        state: CalendarStateToken.DEFAULT,
+        caption: {
+          success: "",
+          error: "Please select a proper date",
+          default: "Date of birth as per PAN",
+        },
+        action: {
+          type: ACTION.ENTER_DOB,
+          payload: <InputPayload>{ value: "", widgetId: "calendarInput" },
+          routeId: ROUTE.KYC_PAN_VERIFICATION,
         },
       },
       calendarInput: <TextInputProps & WidgetProps>{
