@@ -36,16 +36,17 @@ export const ToggleSelectAction: ActionFunction<ToggleActionPayload> = async (
     selectedWidget = undefined;
     ifscCode = undefined;
     bankAccountNumber = undefined;
+  } else {
+    await setDatastore(action.routeId, action.payload.targetWidgetId, <
+      SelectiveListItemProps
+    >{ state: SelectiveListItemStateTokens.SELECTED });
+    await setDatastore(action.routeId, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    });
+    selectedWidget = action.payload.targetWidgetId;
+    ifscCode = action.payload.bankIfscCode;
+    bankAccountNumber = action.payload.bankAccountNumber;
   }
-  await setDatastore(action.routeId, action.payload.targetWidgetId, <
-    SelectiveListItemProps
-  >{ state: SelectiveListItemStateTokens.SELECTED });
-  await setDatastore(action.routeId, "continue", <ButtonProps>{
-    type: ButtonTypeTokens.LargeFilled,
-  });
-  selectedWidget = action.payload.targetWidgetId;
-  ifscCode = action.payload.bankIfscCode;
-  bankAccountNumber = action.payload.bankAccountNumber;
 };
 
 export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
