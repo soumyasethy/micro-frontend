@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ContinuePayload, InputPayload } from "./types";
+import { ACTION, ContinuePayload, InputPayload } from "./types";
 import { api } from "../../../../configs/api";
 import { ROUTE } from "../../../../routes";
 import {
@@ -90,10 +90,36 @@ export const PanOnChange: ActionFunction<InputPayload> = async (
 export const CalendarOnChange: ActionFunction<InputPayload> = async (
   action,
   _datastore,
-  {}
+  { ...props }
 ): Promise<any> => {
   dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
-  console.warn("**** update dob epoch ****", dob);
+  if (dob) {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.KYC_PAN_VERIFICATION,
+        payload: <EnableDisableCTA>{
+          value: true,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  } else {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.KYC_PAN_VERIFICATION,
+        payload: <EnableDisableCTA>{
+          value: false,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  }
 };
 
 export const toggleCTA: ActionFunction<EnableDisableCTA> = async (

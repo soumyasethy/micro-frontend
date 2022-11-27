@@ -24,6 +24,7 @@ import {
   IconTokens,
   ImageProps,
   ImageSizeTokens,
+  PaddingSizeTokens,
   SelectiveListItemProps,
   SelectiveListItemStateTokens,
   SelectiveListItemTypeTokens,
@@ -50,7 +51,7 @@ import {
   ToggleSelectAction,
 } from "./actions";
 import { fetchBankRepo } from "./repo";
-import { horizontalStepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo, maskBankAccountNumber } from "../../../configs/utils";
 
 export const template: (
   banks: {
@@ -71,7 +72,7 @@ export const template: (
       [`listItem${index}`]: <SelectiveListItemProps & WidgetProps>{
         type: SelectiveListItemTypeTokens.list,
         state: SelectiveListItemStateTokens.NOT_SELECTED,
-        subTitle: accountNo,
+        subTitle: maskBankAccountNumber(accountNo),
         title: name,
         imageUrl: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${ifscCode.substring(
           0,
@@ -119,8 +120,7 @@ export const template: (
         { id: "titleSpace", type: WIDGET.SPACE },
         ...buildUI(),
         { id: "spaceContinue", type: WIDGET.SPACE },
-        { id: "continue", type: WIDGET.BUTTON },
-        { id: "spaceImage", type: WIDGET.SPACE },
+        { id: "continue", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM},
       ],
     },
     datastore: <Datastore>{
@@ -142,7 +142,6 @@ export const template: (
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       titleStack: <StackProps>{
-        width: StackWidth.FULL,
         type: StackType.row,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
@@ -154,7 +153,6 @@ export const template: (
       addAccountStack: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.flexStart,
         widgetItems: [
           { id: "icon", type: WIDGET.ICON },
           { id: "iconSpace", type: WIDGET.SPACE },

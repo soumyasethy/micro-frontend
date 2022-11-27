@@ -28,7 +28,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
-import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo, maskString } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
@@ -77,7 +77,11 @@ export const template: (
     spaceSubTitle: <SpaceProps>{ size: SizeTypeTokens.MD },
     spaceInput: <SpaceProps>{ size: SizeTypeTokens.XL },
     subTitle: <TypographyProps>{
-      label: `UIDAI has sent a temporary OTP to your mobile ending in ******${mobileNumber}(valid for 10mins).`,
+      label: `UIDAI has sent a temporary OTP to your mobile ending in ${maskString(
+        mobileNumber,
+        0,
+        5
+      )}(valid for 10mins).`,
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
