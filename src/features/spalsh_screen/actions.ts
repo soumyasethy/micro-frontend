@@ -41,6 +41,6 @@ export const SplashAction: ActionFunction<any> = async (
       await navigate(ROUTE.PHONE_NUMBER);
     }
   } else {
-    await navigate(ROUTE.CAROUSAL_PAGE);
+    await navigate(ROUTE.LANDING_PAGE);
   }
 };

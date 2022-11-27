@@ -3,7 +3,7 @@ export const BASE_URL = {
   PRODUCTION: "https://api.voltmoney.in",
 };
 export const config = {
-  URL: BASE_URL.PRODUCTION,
+  URL: BASE_URL.STAGING,
 };
 export const StoreKey = {
   isLoadedFirstTime: "is_Loaded_First_Time",
