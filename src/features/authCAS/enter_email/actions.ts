@@ -1,36 +1,53 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ContinuePayload, EmailPayload } from "./types";
 import { ButtonProps } from "@voltmoney/schema";
-import { saveAttribute } from "./repo";
 import { nextStepId } from "../../../configs/utils";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 import { ROUTE } from "../../../routes";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 let emailId: string = "";
 
 export const saveEmailId: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { setDatastore, navigate, ...props }
+  { network, setDatastore, navigate }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  const updatedUser: User = await saveAttribute(
-    action.payload.applicationId,
-    "EMAIL",
-    action.payload.value || emailId
+  const applicationId = (await SharedPropsService.getUser())
+    .linkedBorrowerAccounts[0].accountId;
+  const response = await network.patch(
+    `${api.accountAttributes}${applicationId}`,
+    {
+      secureDataAttributeDetailsMap: {
+        ["EMAIL"]: {
+          secureDataAttributeDetails: {
+            value: action.payload.value || emailId,
+            sources: ["SELF"],
+            verified: true,
+            verificationSources: [`web`],
+            collectedOn: `${Date.now()}`,
+            verifiedOn: `${Date.now()}`,
+          },
+          isPrimary: true,
+        },
+      },
+    },
+    { headers: await getAppHeader() }
   );
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: false,
+  });
+  const updatedUser: User = response.data;
   if (updatedUser) {
     await SharedPropsService.setUser(updatedUser);
-    await setDatastore(action.routeId, "continue", <ButtonProps>{
-      loading: false,
-    });
     const route = await nextStepId(
       updatedUser.linkedApplications[0].currentStepId
     );
-    console.warn("route saveEmail id", route, updatedUser);
     await navigate(route.routeId, route.params);
   }
 };
@@ -39,15 +56,13 @@ export const textOnChange: ActionFunction<EmailPayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** update email ****", action.payload.value);
   emailId = action.payload.value;
 };
 
 export const goBack: ActionFunction<any> = async (
   action,
   _datastore,
-  {navigate},
+  { navigate }
 ): Promise<any> => {
-  console.warn("**** go back ****");
   navigate(ROUTE.EMAIL_VERIFY);
 };
