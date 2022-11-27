@@ -71,30 +71,22 @@ export const horizontalStepperRepo = async () => {
 
   if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.COMPLETED ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.COMPLETED
+    StepperStateToken.COMPLETED
   ) {
     MANDATE_SETUP = StepperStateToken.COMPLETED;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.IN_PROGRESS ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.IN_PROGRESS
+    StepperStateToken.IN_PROGRESS
   ) {
     MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION
+    StepperStateToken.PENDING_MANUAL_VERIFICATION
   ) {
     MANDATE_SETUP = StepperStateToken.PENDING_MANUAL_VERIFICATION;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.NOT_STARTED ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.NOT_STARTED
+    StepperStateToken.NOT_STARTED
   ) {
     MANDATE_SETUP = StepperStateToken.NOT_STARTED;
   } else {

@@ -36,7 +36,6 @@ import {
   StackWidth,
   StepperItem,
   StepperProps,
-  StepperStateToken,
   StepperTypeTokens,
   TypographyProps,
   WIDGET,
@@ -51,7 +50,7 @@ import {
   ToggleSelectAction,
 } from "./actions";
 import { fetchBankRepo } from "./repo";
-import { horizontalStepperRepo, stepperRepo } from "../../../configs/utils";
+import { horizontalStepperRepo } from "../../../configs/utils";
 
 export const template: (
   banks: {
@@ -250,4 +249,5 @@ export const bankVerifyMF: PageType<any> = {
     [ACTION.GO_BACK]: GoBackAction,
     [ACTION.GO_NEXT]: GoNext,
   },
+  clearPrevious: true,
 };

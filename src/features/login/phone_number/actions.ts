@@ -12,7 +12,7 @@ import {
   TextInputProps,
 } from "@voltmoney/schema";
 import { api } from "../../../configs/api";
-import { defaultAuthHeaders } from "../../../configs/config";
+import { getAuthHeaders } from "../../../configs/config";
 
 let phoneNumber: string = "";
 let isWhatsAppEnabled: boolean = false;
@@ -34,58 +34,35 @@ export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
 export const sendOtp: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore }
+  { navigate, setDatastore, network }
 ): Promise<any> => {
   phoneNumber = phoneNumber.includes("+91") ? phoneNumber : `+91${phoneNumber}`;
-  await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
-    loading: true,
-  });
-
-  const requestOptions = {
-    method: "GET",
-    headers: defaultAuthHeaders(),
-  };
 
   if (phoneNumber.length === 13) {
-    await fetch(`${api.login}${phoneNumber}`, requestOptions)
-      .then((response) => response.json())
-      .then(async (result) => {
-        if (action.payload.isResend) return;
-        console.log(result);
-        if (result.status === "success") {
-          await setDatastore(action.routeId, action.payload.widgetId, <
-            ButtonProps
-          >{
-            loading: false,
-          });
-          await navigate(ROUTE.OTP_VERIFY, {
-            phone_number: phoneNumber,
-          });
-          await setDatastore(action.routeId, "input", <TextInputProps>{
-            state: InputStateToken.SUCCESS,
-          });
-        } else {
-          await setDatastore(action.routeId, action.payload.widgetId, <
-            ButtonProps
-          >{
-            loading: false,
-          });
-          await setDatastore(action.routeId, "input", <TextInputProps>{
-            state: InputStateToken.ERROR,
-          });
-        }
-      })
-      .catch(async (error) => {
-        console.warn("error", error);
-        await setDatastore(action.routeId, action.payload.widgetId, <
-          ButtonProps
-        >{
-          loading: false,
-        });
-        await setDatastore(action.routeId, "input", <TextInputProps>{
-          state: InputStateToken.ERROR,
-        });
+    await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+      loading: true,
+    });
+    const response = await network.get(`${api.login}${phoneNumber}`, {
+      headers: getAuthHeaders(),
+    });
+    if (response.status === 200) {
+      await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+        loading: false,
       });
+      await navigate(ROUTE.OTP_VERIFY, {
+        phone_number: phoneNumber,
+      });
+      await setDatastore(action.routeId, "input", <TextInputProps>{
+        state: InputStateToken.SUCCESS,
+      });
+    } else {
+      await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
+        loading: false,
+      });
+      await setDatastore(action.routeId, "input", <TextInputProps>{
+        state: InputStateToken.ERROR,
+      });
+    }
   } else {
     await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
       loading: false,

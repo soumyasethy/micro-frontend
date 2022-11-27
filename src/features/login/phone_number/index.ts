@@ -7,8 +7,6 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
-  BorderRadiusTokens,
-  ButtonBaseProps,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -23,7 +21,6 @@ import {
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
-  StackFlexWrap,
   StackJustifyContent,
   StackProps,
   StackType,

@@ -21,10 +21,7 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
     phoneNo: action.payload.username,
   });
 
-  if (
-    _.get(loginResponse, "data.status", "") === "success" &&
-    loginResponse.data.jwt
-  ) {
+  if (_.get(loginResponse, "status") === 200) {
     await SharedPropsService.setToken(loginResponse.data.jwt);
     await setDatastore(action.routeId, action.payload.widgetId, <
       TextInputProps
