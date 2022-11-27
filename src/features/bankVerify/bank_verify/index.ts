@@ -120,8 +120,7 @@ export const template: (
         { id: "titleSpace", type: WIDGET.SPACE },
         ...buildUI(),
         { id: "spaceContinue", type: WIDGET.SPACE },
-        { id: "continue", type: WIDGET.BUTTON },
-        { id: "spaceImage", type: WIDGET.SPACE },
+        { id: "continue", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM},
       ],
     },
     datastore: <Datastore>{
