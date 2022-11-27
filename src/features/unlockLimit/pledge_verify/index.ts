@@ -3,7 +3,6 @@ import {
   Layout,
   LAYOUTS,
   PageType,
-  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -15,7 +14,6 @@ import {
   FontFamilyTokens,
   FontSizeTokens,
   IconAlignmentTokens,
-  IconProps,
   IconSizeTokens,
   IconTokens,
   InputStateToken,
@@ -36,17 +34,14 @@ import { ACTION, OtpPledgePayload } from "./types";
 import { goBack, NavigateNext, verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
 import { sendOtp } from "../pledge_confirmation/actions";
-import { maskString } from "../../../configs/utils";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
 } from "../../../configs/config";
-//import { OtpPayload } from "../pledge_confirmation/types";
 export const template: (
   phoneNumber: string,
   assetRepository: string
 ) => TemplateSchema = (phoneNumber, assetRepository) => ({
-  //export const template: TemplateSchema = {
   layout: <Layout>{
     id: ROUTE.PLEDGE_VERIFY,
     type: LAYOUTS.MODAL,

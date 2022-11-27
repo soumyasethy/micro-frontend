@@ -5,7 +5,6 @@ import {
   PageType,
   POSITION,
   TemplateSchema,
-  WidgetItem,
   WidgetProps,
 } from "@voltmoney/types";
 import {
@@ -14,17 +13,11 @@ import {
   GridItemTypeTokens,
   HeaderProps,
   HeaderTypeTokens,
-  ImageProps,
   InputTypeToken,
   KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
-  StackAlignItems,
-  StackJustifyContent,
-  StackProps,
-  StackType,
   TextInputProps,
-  TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
@@ -81,6 +74,7 @@ export const template: (BanksRepo: {
           type: ACTION.SEARCH_BANK,
           routeId: ROUTE.BANK_VERIFY_MANUALLY,
           payload: <SearchActionPayload>{
+            bankRepo: BanksRepo,
             value: "",
             targetWidgetId: "gridItem",
           },

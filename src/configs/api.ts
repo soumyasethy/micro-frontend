@@ -42,4 +42,5 @@ export const api = {
   lmsDisbursalVerify: `${config.URL}/app/borrower/lms/disbursal/verifyOTP`,
   repaymentBankAccountDetails: `${config.URL}/app/borrower/lms/repaymentBankAccountDetails/`,
   processingCharges: `${config.URL}/app/borrower/application/pledge/processingCharges`,
+  borrowerApplication: `${config.URL}/app/borrower/application/`,
 };

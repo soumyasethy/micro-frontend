@@ -6,11 +6,12 @@ import { ROUTE } from "../../../routes";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import { api } from "../../../configs/api";
 import {
+  APP_CONFIG,
   AssetRepositoryMap,
   AssetRepositoryType,
   getAppHeader,
 } from "../../../configs/config";
-import { InputStateToken, TextInputProps } from "@voltmoney/schema";
+import { IconTokens, InputStateToken, TextInputProps } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
 import {
   addCommasToNumber,
@@ -25,8 +26,9 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   if (
     action.payload.value.length !==
     AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
-  )
+  ) {
     return;
+  }
   await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
     state: InputStateToken.LOADING,
   });
@@ -47,26 +49,92 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
       state: InputStateToken.SUCCESS,
     });
     await goBack();
-    await showPopup({
-      autoTriggerTimerInMilliseconds: 2000,
-      isAutoTriggerCta: true,
-      title: `₹ ${addCommasToNumber(
-        roundDownToNearestHundred(
-          _.get(response, "data.stepResponseObject.approvedCreditAmount", 0)
-        )
-      )} unlocked successfully!`,
-      subTitle: "You will be redirected to next step in few seconds",
-      type: "SUCCESS",
-      ctaLabel: "Continue",
-      primary: true,
-      ctaAction: {
-        type: PAGE_ACTION.NAV_NEXT,
-        routeId: ROUTE.PLEDGE_VERIFY,
-        payload: <NavigationNext>{
-          stepId: _.get(response, "data.updatedApplicationObj.currentStepId"),
+    if (
+      _.get(
+        response,
+        "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+      ) === "COMPLETED"
+    ) {
+      await showPopup({
+        autoTriggerTimerInMilliseconds: 2000,
+        isAutoTriggerCta: true,
+        title: `₹ ${addCommasToNumber(
+          roundDownToNearestHundred(
+            _.get(response, "data.stepResponseObject.approvedCreditAmount", 0)
+          )
+        )} unlocked successfully!`,
+        subTitle: "You will be redirected to next step in few seconds",
+        type: "SUCCESS",
+        ctaLabel: "Continue",
+        primary: true,
+        ctaAction: {
+          type: PAGE_ACTION.NAV_NEXT,
+          routeId: ROUTE.PLEDGE_VERIFY,
+          payload: <NavigationNext>{
+            stepId: _.get(response, "data.updatedApplicationObj.currentStepId"),
+          },
         },
-      },
-    });
+      });
+    }
+    if (
+      _.get(
+        response,
+        "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+      ) === "PENDING_CALLBACK"
+    ) {
+      await showPopup({
+        title: `Pledging...`,
+        subTitle: "Please wait while we confirm your pledge with depository.",
+        type: "DEFAULT",
+        iconName: IconTokens.Volt,
+      });
+      const applicationId = (await SharedPropsService.getUser())
+        .linkedApplications[0].applicationId;
+
+      /***** Starting Polling to check status of MF_PLEDGE_PORTFOLIO *****/
+      const PollerRef = setInterval(async () => {
+        const mfPledgeStatusResponse = await network.get(
+          `${api.borrowerApplication}${applicationId}`,
+          { headers: await getAppHeader() }
+        );
+        if (
+          _.get(
+            mfPledgeStatusResponse,
+            "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+          ) === "COMPLETED"
+        ) {
+          clearInterval(PollerRef);
+          await goBack();
+          await showPopup({
+            autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
+            isAutoTriggerCta: true,
+            title: `₹ ${addCommasToNumber(
+              roundDownToNearestHundred(
+                _.get(
+                  response,
+                  "data.stepResponseObject.approvedCreditAmount",
+                  0
+                )
+              )
+            )} unlocked successfully!`,
+            subTitle: "You will be redirected to next step in few seconds",
+            type: "SUCCESS",
+            ctaLabel: "Continue",
+            primary: true,
+            ctaAction: {
+              type: PAGE_ACTION.NAV_NEXT,
+              routeId: ROUTE.PLEDGE_VERIFY,
+              payload: <NavigationNext>{
+                stepId: _.get(
+                  response,
+                  "data.updatedApplicationObj.currentStepId"
+                ),
+              },
+            },
+          });
+        }
+      }, APP_CONFIG.POLLING_INTERVAL);
+    }
   }
 };
 

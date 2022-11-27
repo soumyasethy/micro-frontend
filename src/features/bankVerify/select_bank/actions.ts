@@ -22,11 +22,11 @@ export const GoBackAction: ActionFunction<
 export const NavSearchIfscBranchInfoAction: ActionFunction<
   NavSearchIfscBranchInfoActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  const pool = {
+  const banksMap = {
     ...action.payload.bankRepo.ALLBANKS,
     ...action.payload.bankRepo.POPULAR,
   };
-  const bankCode = getKeyByValue(pool, action.payload.value);
+  const bankCode = getKeyByValue(banksMap, action.payload.value);
   await navigate(ROUTE.BANK_SELECT, {
     bankCode,
     bankName: action.payload.value,
