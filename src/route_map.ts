@@ -54,6 +54,7 @@ import { aboutUsMF } from "./features/profile/about_us";
 import { faqDetailsMF } from "./features/profile/faq_details";
 import { carousalPageMF } from "./features/carousal/";
 import { landingPageMF } from "./features/landing";
+import { privacyPolicyMF } from "./features/privacy_policy";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -110,4 +111,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.FAQ_DETAILS]: faqDetailsMF,
   [ROUTE.CAROUSAL_PAGE]: carousalPageMF,
   [ROUTE.LANDING_PAGE]: landingPageMF,
+  [ROUTE.PRIVACY_POLICY]: privacyPolicyMF,
 };

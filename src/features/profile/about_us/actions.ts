@@ -1,8 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import {
-  ProfilePayload
-} from "./types";
+import { ProfilePayload } from "./types";
 import {
   ButtonProps,
   InputStateToken,
@@ -17,16 +15,20 @@ export const accountDetails: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, asyncStorage }
-): Promise<any> => {
- 
-};
-
+): Promise<any> => {};
 
 export const goBack: ActionFunction<ProfilePayload> = async (
   action,
   _datastore,
-  {goBack }
+  { goBack }
 ): Promise<any> => {
   goBack();
 };
 
+export const goToPrivacy: ActionFunction<ProfilePayload> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  navigate(ROUTE.PRIVACY_POLICY);
+};
