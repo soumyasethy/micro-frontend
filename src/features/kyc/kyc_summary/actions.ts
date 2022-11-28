@@ -53,7 +53,7 @@ export const verifyKycSummary: ActionFunction<any> = async (
       title: "KYC done successfully!",
       subTitle: "You will be redirected to next step in few seconds",
       type: "SUCCESS",
-      ctaLabel: "Proceed to verify bank account",
+      ctaLabel: "Continue",
       primary: true,
       ctaAction: {
         type: ACTION.NAVIGATION_NEXT,

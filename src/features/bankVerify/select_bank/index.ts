@@ -38,9 +38,10 @@ export const template: (BanksRepo: {
   ALLBANKS: { [key in string]: string };
   POPULAR: { [key in string]: string };
 }) => Promise<TemplateSchema> = async (BanksRepo) => {
+  console.warn("****** Bank Repo template ******", BanksRepo);
   return {
     layout: <Layout>{
-      id: ROUTE.BANK_VERIFY_MANUALLY,
+      id: ROUTE.BANK_SELECT,
       type: LAYOUTS.LIST,
       widgets: [
         {
@@ -59,7 +60,7 @@ export const template: (BanksRepo: {
         title: "Select your bank",
         action: {
           type: ACTION.GO_BACK,
-          routeId: ROUTE.BANK_VERIFY_MANUALLY,
+          routeId: ROUTE.BANK_SELECT,
           payload: {},
         },
       },
@@ -72,7 +73,7 @@ export const template: (BanksRepo: {
         keyboardType: KeyboardTypeToken.default,
         action: {
           type: ACTION.SEARCH_BANK,
-          routeId: ROUTE.BANK_VERIFY_MANUALLY,
+          routeId: ROUTE.BANK_SELECT,
           payload: <SearchActionPayload>{
             bankRepo: BanksRepo,
             value: "",
@@ -103,7 +104,7 @@ export const template: (BanksRepo: {
         borderColor: ColorTokens.Grey_Milk_1,
         action: {
           type: ACTION.NAV_IFSC_SEARCH_BRANCH_INFO,
-          routeId: ROUTE.BANK_VERIFY_MANUALLY,
+          routeId: ROUTE.BANK_SELECT,
           payload: <NavSearchIfscBranchInfoActionPayload>{
             value: "",
             bankRepo: BanksRepo,
@@ -114,13 +115,12 @@ export const template: (BanksRepo: {
   };
 };
 
-export const bankVerifyManuallyMF: PageType<any> = {
+export const bankSelectMF: PageType<any> = {
   onLoad: async ({ network }) => {
     const response = await network.get(api.banks, {
       headers: await getAppHeader(),
     });
     const BanksRepo = response.data;
-
     const templateX = await template(BanksRepo);
     return Promise.resolve(templateX);
   },

@@ -14,7 +14,6 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
-  FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
@@ -24,7 +23,6 @@ import {
   IconTokens,
   ImageProps,
   ImageSizeTokens,
-  PaddingSizeTokens,
   SelectiveListItemProps,
   SelectiveListItemStateTokens,
   SelectiveListItemTypeTokens,
@@ -34,7 +32,6 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
-  StackWidth,
   StepperItem,
   StepperProps,
   StepperTypeTokens,
@@ -51,7 +48,13 @@ import {
   ToggleSelectAction,
 } from "./actions";
 import { fetchBankRepo } from "./repo";
-import { horizontalStepperRepo, maskBankAccountNumber } from "../../../configs/utils";
+import {
+  horizontalStepperRepo,
+  maskBankAccountNumber,
+} from "../../../configs/utils";
+import SharedPropsService from "../../../SharedPropsService";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 export const template: (
   banks: {
@@ -120,7 +123,11 @@ export const template: (
         { id: "titleSpace", type: WIDGET.SPACE },
         ...buildUI(),
         { id: "spaceContinue", type: WIDGET.SPACE },
-        { id: "continue", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM},
+        {
+          id: "continue",
+          type: WIDGET.BUTTON,
+          position: POSITION.ABSOLUTE_BOTTOM,
+        },
       ],
     },
     datastore: <Datastore>{
@@ -231,9 +238,16 @@ export const template: (
   };
 };
 
-export const bankVerifyMF: PageType<any> = {
-  onLoad: async () => {
-    const response = await fetchBankRepo();
+export const bankAccountVerifyMF: PageType<any> = {
+  onLoad: async ({ network }) => {
+    const applicationId = (await SharedPropsService.getUser())
+      .linkedApplications[0].applicationId;
+
+    const responseX = await network.get(`${api.bav}${applicationId}`, {
+      headers: await getAppHeader(),
+    });
+
+    const response = responseX.data;
     const banks = response.stepResponseObject;
     const stepper: StepperItem[] = await horizontalStepperRepo();
     const templateX = await template(banks, stepper);

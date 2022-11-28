@@ -34,13 +34,13 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack, repayment } from "./actions";
-import { api } from "../../../../configs/api";
-import { getAppHeader } from "../../../../configs/config";
-import SharedPropsService from "../../../../SharedPropsService";
-import { User } from "../../../login/otp_verify/types";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
+import { User } from "../../login/otp_verify/types";
 
 export const template: (
   repaymentAmount: string,

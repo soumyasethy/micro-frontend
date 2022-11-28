@@ -24,7 +24,7 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import {
   ACTION,
   AmountPayload,
@@ -36,10 +36,10 @@ import {
   OnAmountChange,
   SetRecommendedAmount,
 } from "./action";
-import { api } from "../../../../configs/api";
-import { getAppHeader } from "../../../../configs/config";
-import { User } from "../../../login/otp_verify/types";
-import SharedPropsService from "../../../../SharedPropsService";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
+import { User } from "../../login/otp_verify/types";
+import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 
 export const template: (

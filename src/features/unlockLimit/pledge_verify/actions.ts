@@ -11,7 +11,11 @@ import {
   AssetRepositoryType,
   getAppHeader,
 } from "../../../configs/config";
-import { IconTokens, InputStateToken, TextInputProps } from "@voltmoney/schema";
+import {
+  IconTokens,
+  InputStateToken,
+  TextInputProps,
+} from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
 import {
   addCommasToNumber,
@@ -48,7 +52,15 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
       state: InputStateToken.SUCCESS,
     });
+    const user: User = await SharedPropsService.getUser();
+    const applicationId = user.linkedApplications[0].applicationId;
     await goBack();
+    user.linkedApplications[0].stepStatusMap.MF_PLEDGING = _.get(
+      response,
+      "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+    );
+    await SharedPropsService.setUser(user);
+
     if (
       _.get(
         response,
@@ -56,7 +68,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
       ) === "COMPLETED"
     ) {
       await showPopup({
-        autoTriggerTimerInMilliseconds: 2000,
+        autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
         isAutoTriggerCta: true,
         title: `₹ ${addCommasToNumber(
           roundDownToNearestHundred(
@@ -88,8 +100,6 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         type: "DEFAULT",
         iconName: IconTokens.Volt,
       });
-      const applicationId = (await SharedPropsService.getUser())
-        .linkedApplications[0].applicationId;
 
       /***** Starting Polling to check status of MF_PLEDGE_PORTFOLIO *****/
       const PollerRef = setInterval(async () => {
@@ -97,6 +107,11 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
           `${api.borrowerApplication}${applicationId}`,
           { headers: await getAppHeader() }
         );
+        user.linkedApplications[0].stepStatusMap.MF_PLEDGING = _.get(
+          mfPledgeStatusResponse,
+          "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+        );
+        await SharedPropsService.setUser(user);
         if (
           _.get(
             mfPledgeStatusResponse,

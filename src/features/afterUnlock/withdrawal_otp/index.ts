@@ -29,11 +29,11 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import { ACTION, DisbursementOTPPayload } from "./types";
 import { goBack, DisbursalVerifyAction } from "./action";
 import { CreateDisbursementRequest } from "../withdraw_amount/action";
-import SharedPropsService from "../../../../SharedPropsService";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   disbursalAmount: string,

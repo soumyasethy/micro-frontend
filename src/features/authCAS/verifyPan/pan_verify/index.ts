@@ -38,6 +38,7 @@ import { CalendarOnChange, PanOnChange, toggleCTA, verifyPan } from "./actions";
 import { EnableDisableCTA } from "../../../login/phone_number/types";
 import { User } from "../../../login/otp_verify/types";
 import SharedPropsService from "../../../../SharedPropsService";
+import { RegexConfig } from "../../../../configs/config";
 
 export const template: (
   applicationId: string,
@@ -110,7 +111,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       input: <TextInputProps & WidgetProps>{
-        regex: "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",
+        regex: RegexConfig.PAN,
         value: prefilledPanNumber,
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,

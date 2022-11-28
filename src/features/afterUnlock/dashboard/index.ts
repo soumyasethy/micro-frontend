@@ -39,7 +39,7 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import { ACTION, CreditPayload, RepaymentPayload } from "./types";
 import {
   goBack,
@@ -49,10 +49,10 @@ import {
   withdrawNow,
 } from "./actions";
 import { fetchUserDetails } from "./repo";
-import { User } from "../../../login/otp_verify/types";
-import SharedPropsService from "../../../../SharedPropsService";
-import { api } from "../../../../configs/api";
-import { getAppHeader } from "../../../../configs/config";
+import { User } from "../../login/otp_verify/types";
+import SharedPropsService from "../../../SharedPropsService";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 export const template: (
   availableCreditAmount: number,

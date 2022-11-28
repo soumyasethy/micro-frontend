@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import { CreditPayload, RepaymentPayload } from "./types";
 
 export const withdrawNow: ActionFunction<CreditPayload> = async (

@@ -62,3 +62,10 @@ export const AssetRepositoryMap = {
     LIST: [],
   },
 };
+
+export enum RegexConfig {
+  EMAIL = "^^[a-zA-Z0-9._{|}-]*@[a-zA-Z0-9]+.^[A-Za-z]+${2,}$",
+  MOBILE = "^[0-9]*$",
+  PAN = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",
+  AADHAR = "^[2-9]{1}[0-9]{11}$",
+}
