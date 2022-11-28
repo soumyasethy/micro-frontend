@@ -32,6 +32,7 @@ import { goBack, saveEmailId, textOnChange } from "./actions";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { toggleCTA } from "../../login/phone_number/actions";
 import SharedPropsService from "../../../SharedPropsService";
+import { RegexConfig } from "../../../configs/config";
 
 export const template: (applicationId: string) => TemplateSchema = (
   applicationId
@@ -87,7 +88,7 @@ export const template: (applicationId: string) => TemplateSchema = (
       //   numberOfLines: 1,
       // },
       input: <TextInputProps & WidgetProps>{
-        regex: "^^[a-zA-Z0-9._{|}-]*@[a-zA-Z0-9]+.^[A-Za-z]+${2,}$",
+        regex: RegexConfig.EMAIL,
         isLowerCase: true,
         clearEnabled: false,
         type: InputTypeToken.EMAIL,

@@ -33,6 +33,7 @@ import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
 import { AadharInitPayload } from "../kyc_init/types";
 import { horizontalStepperRepo } from "../../../configs/utils";
+import { RegexConfig } from "../../../configs/config";
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
@@ -96,7 +97,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       },
       input: <TextInputProps>{
         placeholder: "0000 0000 0000",
-        regex: "^[2-9]{1}[0-9]{11}$",
+        regex: RegexConfig.AADHAR,
         title: "Enter Aadhaar number",
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,

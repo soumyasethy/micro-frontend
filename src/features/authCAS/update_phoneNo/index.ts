@@ -28,6 +28,7 @@ import { EnableDisableCTA } from "../../login/phone_number/types";
 import { updateMobileNumber, phoneOnChange } from "./actions";
 import { toggleCTA } from "../../login/phone_number/actions";
 import SharedPropsService from "../../../SharedPropsService";
+import { RegexConfig } from "../../../configs/config";
 
 export const template: (prevMob: string) => TemplateSchema = (prevMob) => ({
   layout: <Layout>{
@@ -62,7 +63,7 @@ export const template: (prevMob: string) => TemplateSchema = (prevMob) => ({
     },
     input: <TextInputProps & WidgetProps>{
       value: prevMob,
-      regex: "^[0-9]*$",
+      regex: RegexConfig.MOBILE,
       clearEnabled: true,
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
