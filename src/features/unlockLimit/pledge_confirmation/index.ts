@@ -14,15 +14,17 @@ import {
   ButtonWidthTypeToken,
   CardProps,
   ColorTokens,
+  DividerProps,
+  DividerSizeTokens,
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
-  LineItemCardProps,
   ListItemProps,
-  PaddingSizeTokens,
   ShadowTypeTokens,
   SizeTypeTokens,
   SpaceProps,
+  StackAlignItems,
+  StackJustifyContent,
   StackProps,
   StackType,
   StackWidth,
@@ -51,210 +53,406 @@ export const template: (
   processingFeesBreakUp = {},
   stepResponseObject
 ) => {
-  return {
-    layout: <Layout>{
-      id: ROUTE.PLEDGE_CONFIRMATION,
-      type: LAYOUTS.LIST,
-      widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-       // { id: "space0", type: WIDGET.SPACE },
-        { id: "cardItem", type: WIDGET.CARD },
-        { id: "space1", type: WIDGET.SPACE },
-        { id: "list1", type: WIDGET.LIST_ITEM },
-        { id: "list2", type: WIDGET.LIST_ITEM },
-        { id: "list3", type: WIDGET.LIST_ITEM },
-        { id: "list4", type: WIDGET.LIST_ITEM },
-        { id: "buttonSpace", type: WIDGET.SPACE },
-        {
-          id: "continue",
-          type: WIDGET.BUTTON,
-          position: POSITION.ABSOLUTE_BOTTOM,
+    const listItemLayout = Object.keys(processingFeesBreakUp).map((key, index) => {
+      return (
+        { id: `list_${index}`, type: WIDGET.LIST_ITEM
+        ,padding:{
+          left:0,
+        } 
+      }
+      )
+    });
+
+
+    const listLayoutDs = {}
+    Object.keys(processingFeesBreakUp).forEach((key, index) => {
+
+      listLayoutDs[`list_${index}`] = <ListItemProps>{
+        customTitle: <TypographyProps>{
+          label: `${key}`,
+          color: ColorTokens.Grey_Night,
+          fontWeight: "400",
+          fontSize: FontSizeTokens.SM,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 24
         },
-      ],
-    },
-    datastore: <Datastore>{
-      header: <HeaderProps>{
-        title: "Confirm pledge",
-        leadIcon: "https://reactnative.dev/img/tiny_logo.png",
-        isBackButton: true,
-        type: "DEFAULT",
-        action: {
-          type: ACTION.BACK_BUTTON,
-          payload: {},
-          routeId: ROUTE.PLEDGE_CONFIRMATION,
+
+        isDivider: true,
+        trailLabel: <TypographyProps>{
+          label: `₹ ${roundDownToNearestHundred(
+            processingFeesBreakUp[key] || 0
+          )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
+          color: ColorTokens.Grey_Night,
+          fontWeight: "600",
+          subTitle: "",
+          fontSize: FontSizeTokens.SM,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 24
         },
-      },
-     // space0: <SpaceProps>{ size: SizeTypeTokens.XL },
-      cardItem: <CardProps>{
-        shadow:ShadowTypeTokens.E1,
-        bgColor: ColorTokens.Primary_05,
-        padding:{
-          horizontal: SizeTypeTokens.XL,
-          vertical: SizeTypeTokens.XL
-        },
-        borderRadius:BorderRadiusTokens.BR3,
-        body: {
-          widgetItems: [
-            { id: "totalText", type: WIDGET.TEXT },
-            { id: "totalSpace", type: WIDGET.SPACE },
-            { id: "amountStack", type: WIDGET.STACK }
-            //{ id: "amountText", type: WIDGET.TEXT }
-          ],
-        },
-      },
-      totalText:<TypographyProps>{
-        label: "Total credit limit",
-        color: ColorTokens.Grey_Charcoal,
-        fontWeight: "400",
-        fontSize: FontSizeTokens.XS,
-        fontFamily:FontFamilyTokens.Inter,
-        lineHeight:18
-      },
-      totalSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
-      amountStack:<StackProps & WidgetProps>{
-        type:StackType.row,
-        width:StackWidth.FULL,
-        widgetItems: [
-          { id: "amountSymbol", type: WIDGET.TEXT },
-          { id: "amountText", type: WIDGET.TEXT },
+        onPress: () => { },
+      };
+      return listLayoutDs;
+
+    });
+
+    return {
+      layout: <Layout>{
+        id: ROUTE.PLEDGE_CONFIRMATION,
+        type: LAYOUTS.LIST,
+        widgets: [
+          { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+          { id: "cardItem", type: WIDGET.CARD },
+          { id: "space1", type: WIDGET.SPACE },
+          ...listItemLayout,
+          {
+            id: "interestBlock", type: WIDGET.CARD,
+            padding: {
+              left: 16, right: 16
+            }
+          },
+          {
+            id: "interestDivider", type: WIDGET.DIVIDER, padding: {
+              left: 16, right: 16,
+            }
+          },
+          {
+            id: "autoPayBlock", type: WIDGET.CARD,
+            padding: {
+              left: 16, right: 16
+            }
+          },
+          {
+            id: "autoPayDivider", type: WIDGET.DIVIDER, padding: {
+              left: 16, right: 16,
+            }
+          },
+          {
+            id: "tenureBlock", type: WIDGET.CARD,
+            padding: {
+              left: 16, right: 16
+            }
+          },
+          {
+            id: "tenureDivider", type: WIDGET.DIVIDER, padding: {
+              left: 16, right: 16
+            }
+          },
+          {
+            id: "continue",
+            type: WIDGET.BUTTON,
+            position: POSITION.ABSOLUTE_BOTTOM,
+          },
         ],
       },
-      amountSymbol:<TypographyProps>{
-        label: "₹",
-        color: ColorTokens.Grey_Night,
-        fontWeight: "700",
-        fontSize: FontSizeTokens.XXL,
-        fontFamily:FontFamilyTokens.Inter,
-        lineHeight:32
-      },
-      amountText:<TypographyProps>{
-        label: `${totalAmount}`.replace(
-          /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
-          ","
-        ),
-        color: ColorTokens.Grey_Night,
-        fontWeight: "700",
-        fontSize: FontSizeTokens.XXL,
-        fontFamily:FontFamilyTokens.Poppins,
-        lineHeight:32
-      },
-      space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
-      list1:<ListItemProps>{
-        customTitle:<TypographyProps>{
-          label: "Processing fee",
-          color: ColorTokens.Grey_Night,
-          fontWeight: "400",
-          subTitle:"",
-          fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:24
+      datastore: <Datastore>{
+        header: <HeaderProps>{
+          title: "Confirm pledge",
+          leadIcon: "https://reactnative.dev/img/tiny_logo.png",
+          isBackButton: true,
+          type: "DEFAULT",
+          action: {
+            type: ACTION.BACK_BUTTON,
+            payload: {},
+            routeId: ROUTE.PLEDGE_CONFIRMATION,
+          },
         },
-        isDivider:true,
-        trailLabel:<TypographyProps>{
-          label: "₹967",
-          color: ColorTokens.Grey_Night,
-          fontWeight: "600",
-          subTitle:"",
-          fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:24
+        cardItem: <CardProps>{
+          shadow: ShadowTypeTokens.E1,
+          bgColor: ColorTokens.Primary_05,
+          padding: {
+            horizontal: SizeTypeTokens.XL,
+            vertical: SizeTypeTokens.XL
+          },
+          borderRadius: BorderRadiusTokens.BR3,
+          body: {
+            widgetItems: [
+              { id: "totalText", type: WIDGET.TEXT },
+              { id: "totalSpace", type: WIDGET.SPACE },
+              { id: "amountStack", type: WIDGET.STACK }
+            ],
+          },
         },
-        onPress: () => { },
-      },
-      list2:<ListItemProps>{
-        customTitle:<TypographyProps>{
-          label: "Interest per ₹10,000",
-          color: ColorTokens.Grey_Night,
-          fontWeight: "400",
-          fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:24
-        },
-        customSubTitle:<TypographyProps>{
-          label: "Charged as per usage @10%",
+        totalText: <TypographyProps>{
+          label: "Total credit limit",
           color: ColorTokens.Grey_Charcoal,
           fontWeight: "400",
-          fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:18
+          fontSize: FontSizeTokens.XS,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 18
         },
-        isDivider:true,
-        trailLabel:<TypographyProps>{
-          label: "₹84/month",
+        totalSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
+        amountStack: <StackProps & WidgetProps>{
+          type: StackType.row,
+          width: StackWidth.FULL,
+          widgetItems: [
+            { id: "amountSymbol", type: WIDGET.TEXT },
+            { id: "amountText", type: WIDGET.TEXT },
+          ],
+        },
+        amountSymbol: <TypographyProps>{
+          label: "₹",
           color: ColorTokens.Grey_Night,
-          fontWeight: "600",
-          subTitle:"",
-          fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:24
+          fontWeight: "700",
+          fontSize: FontSizeTokens.XXL,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 32
         },
-        onPress: () => { },
-      },
-      list3:<ListItemProps>{
-        customTitle:<TypographyProps>{
-          label: "Interest AutoPay",
+        amountText: <TypographyProps>{
+          label: `${totalAmount}`.replace(
+            /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+            ","
+          ),
+          color: ColorTokens.Grey_Night,
+          fontWeight: "700",
+          fontSize: FontSizeTokens.XXL,
+          fontFamily: FontFamilyTokens.Poppins,
+          lineHeight: 32
+        },
+        space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
+        ...listLayoutDs,
+        interestBlock: <CardProps>{
+          padding:{
+            top:SizeTypeTokens.XL,
+            bottom:SizeTypeTokens.MD,
+            left:SizeTypeTokens.XS,
+            right:SizeTypeTokens.XS
+          },
+          bgColor: ColorTokens.White,
+          body: {
+            widgetItems: [
+              { id: "interestItem", type: WIDGET.STACK },
+              { id: "endSpace", type: WIDGET.SPACE },
+            ],
+          },
+
+        },
+        interestItem: <StackProps & WidgetProps>{
+          type: StackType.row,
+          widgetItems: [
+            { id: "keyInterest", type: WIDGET.STACK },
+            { id: "valueInterest", type: WIDGET.STACK }
+          ],
+        },
+        keyInterest: <StackProps & WidgetProps>{
+          type: StackType.column,
+          alignItems: StackAlignItems.flexStart,
+          justifyContent: StackJustifyContent.flexStart,
+          widgetItems: [
+            { id: "title", type: WIDGET.TEXT },
+            { id: "titleSpace", type: WIDGET.SPACE },
+            { id: "subTitle", type: WIDGET.TEXT },
+          ],
+        },
+        title: <TypographyProps>{
+          label: 'Interest per ₹10,000',
           color: ColorTokens.Grey_Night,
           fontWeight: "400",
-          subTitle:"",
           fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:24
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 24
+        },
+        titleSpace: <SpaceProps>{
+          size: SizeTypeTokens.XS
+        },
+        subTitle: <TypographyProps>{
+          label: `Charged as per usage @ ${stepResponseObject.interestRate}%`,
+          color: ColorTokens.Grey_Charcoal,
+          fontWeight: "400",
+          fontSize: FontSizeTokens.XS,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 18
+        },
+        valueInterest: <StackProps & WidgetProps>{
+          // type: StackType.column,
+          alignItems: StackAlignItems.flexEnd,
+          justifyContent: StackJustifyContent.flexEnd,
+          widgetItems: [
+            { id: "valueItem", type: WIDGET.TEXT }
+          ],
+        },
+        valueItem: <TypographyProps>{
+          label: `₹${(10000 * stepResponseObject.interestRate / 100)}/month`,
+          color: ColorTokens.Grey_Night,
+          fontWeight: "600",
+          fontSize: FontSizeTokens.SM,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 24
+        },
+        endSpace: <SpaceProps>{
+          size: SizeTypeTokens.MD
+        },
+        interestDivider: <DividerProps>{
+          size: DividerSizeTokens.SM,
+          margin: {
+            vertical: SizeTypeTokens.SM,
+            horizontal: SizeTypeTokens.SM,
+          },
+          color: ColorTokens.Grey_Milk_1,
+        },
+        autoPayBlock: <CardProps>{
+          bgColor: ColorTokens.White,
+          padding:{
+            top:SizeTypeTokens.XL,
+            bottom:SizeTypeTokens.XL,
+            left:SizeTypeTokens.XS,
+            right:SizeTypeTokens.XS
+          },
+          body: {
+            widgetItems: [
+              { id: "autoPayItem", type: WIDGET.STACK },
+              { id: "autoPaySpace", type: WIDGET.SPACE },
+            ],
+          },
+
+        },
+        autoPayItem: <StackProps & WidgetProps>{
+          type: StackType.row,
+          //  width: StackWidth.CONTENT,
+
+          widgetItems: [
+            { id: "autoPayInterest", type: WIDGET.STACK },
+            { id: "autoPayValueInterest", type: WIDGET.STACK },
+            // { id: "endSpace", type: WIDGET.SPACE },
+            // { id: "divider", type: WIDGET.DIVIDER },
+          ],
+        },
+        autoPayInterest: <StackProps & WidgetProps>{
+          type: StackType.column,
+          alignItems: StackAlignItems.flexStart,
+          justifyContent: StackJustifyContent.flexStart,
+          widgetItems: [
+            { id: "autoPayTitle", type: WIDGET.TEXT }
+          ],
+        },
+        autoPayTitle: <TypographyProps>{
+          label: 'Interest AutoPay',
+          color: ColorTokens.Grey_Night,
+          fontWeight: "400",
+          fontSize: FontSizeTokens.SM,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 24
+        },
+        // autoPaySpace: <SpaceProps>{
+        //   size: SizeTypeTokens.XS
+        // },
+
+        autoPayValueInterest: <StackProps & WidgetProps>{
+          // type: StackType.column,
+          alignItems: StackAlignItems.flexEnd,
+          justifyContent: StackJustifyContent.flexEnd,
+          widgetItems: [
+            { id: "autoPayValueItem", type: WIDGET.TEXT }
+          ],
+        },
+        autoPayValueItem: <TypographyProps>{
+          label: '7th of every month',
+          color: ColorTokens.Grey_Night,
+          fontWeight: "600",
+          fontSize: FontSizeTokens.SM,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 24
+        },
+        autoPayDivider: <DividerProps>{
+          size: DividerSizeTokens.SM,
+          margin: {
+            vertical: SizeTypeTokens.SM,
+            horizontal: SizeTypeTokens.SM,
+          },
+          color: ColorTokens.Grey_Milk_1,
+        },
+
+        tenureBlock: <CardProps>{
+          bgColor: ColorTokens.White,
+          padding:{
+            top:SizeTypeTokens.XL,
+            bottom:SizeTypeTokens.XL,
+            left:SizeTypeTokens.XS,
+            right:SizeTypeTokens.XS
+          },
+          body: {
+            widgetItems: [
+              { id: "tenureItem", type: WIDGET.STACK },
+              { id: "tenureSpace", type: WIDGET.SPACE },
+            ],
+          },
+
+        },
+        tenureItem: <StackProps & WidgetProps>{
+          type: StackType.row,
+          //  width: StackWidth.CONTENT,
+
+          widgetItems: [
+            { id: "tenureInterest", type: WIDGET.STACK },
+            { id: "tenureValueInterest", type: WIDGET.STACK },
+            // { id: "endSpace", type: WIDGET.SPACE },
+            // { id: "divider", type: WIDGET.DIVIDER },
+          ],
+        },
+        tenureInterest: <StackProps & WidgetProps>{
+          type: StackType.column,
+          alignItems: StackAlignItems.flexStart,
+          justifyContent: StackJustifyContent.flexStart,
+          widgetItems: [
+            { id: "tenureTitle", type: WIDGET.TEXT }
+          ],
+        },
+        tenureTitle: <TypographyProps>{
+          label: 'Duration',
+          color: ColorTokens.Grey_Night,
+          fontWeight: "400",
+          fontSize: FontSizeTokens.SM,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 24
+        },
+      
+
+        tenureValueInterest: <StackProps & WidgetProps>{
+          // type: StackType.column,
+          alignItems: StackAlignItems.flexEnd,
+          justifyContent: StackJustifyContent.flexEnd,
+          widgetItems: [
+            { id: "tenureValueItem", type: WIDGET.TEXT }
+          ],
+        },
+        tenureValueItem: <TypographyProps>{
+          label: `${stepResponseObject.loanTenureInMonths} months`,
+          color: ColorTokens.Grey_Night,
+          fontWeight: "600",
+          fontSize: FontSizeTokens.SM,
+          fontFamily: FontFamilyTokens.Inter,
+          lineHeight: 24
+        },
+        tenureSpace: <SpaceProps>{
+          size: SizeTypeTokens.XS
+        },
+        tenureDiv: <DividerProps>{
+          size: DividerSizeTokens.SM,
+          margin: {
+            vertical: SizeTypeTokens.SM,
+            horizontal: SizeTypeTokens.SM,
+          },
+          color: ColorTokens.Grey_Milk_1,
         },
        
-        isDivider:true,
-        trailLabel:<TypographyProps>{
-          label: "7th of every month",
-          color: ColorTokens.Grey_Night,
-          fontWeight: "600",
-          subTitle:"",
-          fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:24
-        },
-        onPress: () => { },
-      },
-      list4:<ListItemProps>{
-        customTitle:<TypographyProps>{
-          label: "Duration",
-          color: ColorTokens.Grey_Night,
-          fontWeight: "400",
-          subTitle:"",
-          fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:24
-        },
-        
-        isDivider:false,
-        trailLabel:<TypographyProps>{
-          label: "12 months",
-          color: ColorTokens.Grey_Night,
-          fontWeight: "600",
-          subTitle:"",
-          fontSize: FontSizeTokens.SM,
-          fontFamily:FontFamilyTokens.Inter,
-          lineHeight:24
-        },
-        onPress: () => { },
-      },
-      buttonSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
-      continue: <ButtonProps & WidgetProps>{
-        fontFamily: FontFamilyTokens.Poppins,
-        label: "Confirm & get OTP",
-        type: ButtonTypeTokens.LargeFilled,
-        width: ButtonWidthTypeToken.FULL,
-        action: {
-          type: ACTION.PLEDGE_CONFIRMATION,
-          payload: <OtpPayload>{
-            value: stepResponseObject,
-            widgetId: "continue",
-            isResend: false,
+        buttonSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
+        continue: <ButtonProps & WidgetProps>{
+          fontFamily: FontFamilyTokens.Poppins,
+          label: "Confirm & get OTP",
+          type: ButtonTypeTokens.LargeFilled,
+          width: ButtonWidthTypeToken.FULL,
+          action: {
+            type: ACTION.PLEDGE_CONFIRMATION,
+            payload: <OtpPayload>{
+              value: stepResponseObject,
+              widgetId: "continue",
+              isResend: false,
+            },
+            routeId: ROUTE.PLEDGE_CONFIRMATION,
           },
-          routeId: ROUTE.PLEDGE_CONFIRMATION,
         },
       },
-    },
+    };
   };
-};
 
 export const pledgeConfirmationMF: PageType<any> = {
   onLoad: async ({ network }, { stepResponseObject }) => {
