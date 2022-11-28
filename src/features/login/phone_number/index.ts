@@ -38,6 +38,7 @@ import {
   WhatsAppEnabledPayload,
 } from "./types";
 import { sendOtp, textOnChange, toggleCTA, whatsappToggle } from "./actions";
+import { RegexConfig } from "../../../configs/config";
 
 export const template: TemplateSchema = {
   layout: <Layout>{
@@ -106,7 +107,7 @@ export const template: TemplateSchema = {
       fontWeight: "400",
     },
     input: <TextInputProps & WidgetProps>{
-      regex: "^[0-9]*$",
+      regex: RegexConfig.MOBILE,
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
       title: "Mobile Number",
