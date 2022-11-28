@@ -8,7 +8,7 @@ import {
 import {
   ACTION as ACTION_CURRENT,
   BAVVerifyActionPayload,
-} from "../bank_verify/types";
+} from "../bank_account_verification/types";
 import {
   InputNumberActionPayload,
   NavigationSearchIFSCActionPayload,
@@ -26,7 +26,7 @@ let bankIfsc = "";
 export const NavigationSearchIFSCAction: ActionFunction<
   NavigationSearchIFSCActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  await navigate(ROUTE.BANK_BRANCH_SEARCH, {
+  await navigate(ROUTE.BANK_SEARCH_BRANCH, {
     bankCode: action.payload.bankCode,
     bankName: action.payload.bankName,
   });
@@ -40,7 +40,6 @@ export const onChangeAccountNumber: ActionFunction<
 export const onChangeIFSCNumber: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
-  console.warn("onChangeIFSCNumber auto triggered", action);
   bankIfsc = action.payload.value;
   await ToggleCTA(action, _datastore, props);
 };
@@ -50,12 +49,6 @@ export const ToggleCTA: ActionFunction<any> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.warn(
-    "bankAccountNumber->",
-    bankAccountNumber,
-    " bankIfsc->",
-    bankIfsc
-  );
   if (bankAccountNumber && bankIfsc) {
     await setDatastore(action.routeId, action.payload.targetWidgetId, <
       ButtonProps

@@ -13,7 +13,6 @@ import {
   DividerProps,
   DividerSizeTokens,
   FontSizeTokens,
-  HeaderProps,
   InputStateToken,
   SizeTypeTokens,
   SpaceProps,
@@ -35,14 +34,14 @@ export const clearAction: ActionFunction<IFSCCodePayload> = async (
   _datastore,
   { removeWidgets }
 ): Promise<any> => {
-  await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
+  await removeWidgets(ROUTE.BANK_SEARCH_BRANCH, widgetItems);
 };
 export const GoBackAction: ActionFunction<IFSCCodePayload> = async (
   action,
   _datastore,
   { removeWidgets, goBack }
 ): Promise<any> => {
-  await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
+  await removeWidgets(ROUTE.BANK_SEARCH_BRANCH, widgetItems);
   await goBack();
 };
 export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
@@ -50,12 +49,11 @@ export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   _datastore,
   { setDatastore, goBack }
 ): Promise<any> => {
-  console.warn("**** OnSelectIFSCAction Action Triggered ****", action);
-  await setDatastore(ROUTE.BANK_SELECT, "IFSCInput", <TextInputProps>{
+  await setDatastore(ROUTE.BANK_ACCOUNT_ADD, "IFSCInput", <TextInputProps>{
     state: InputStateToken.DISABLED,
     value: action.payload.ifscCode,
   });
-  await setDatastore(ROUTE.BANK_SELECT, "continue", <ButtonProps>{
+  await setDatastore(ROUTE.BANK_ACCOUNT_ADD, "continue", <ButtonProps>{
     type: ButtonTypeTokens.LargeFilled,
   });
   await goBack();
@@ -76,7 +74,7 @@ const widgetItemDs = (index: number, ifscCode: string, address: string) => {
       ],
       action: {
         type: ACTION.ON_SELECT_IFSC,
-        routeId: ROUTE.BANK_BRANCH_SEARCH,
+        routeId: ROUTE.BANK_SEARCH_BRANCH,
         payload: <IFSCCodePayload>{ ifscCode: ifscCode },
       },
     },
@@ -111,7 +109,7 @@ export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
   if (action.payload.value.length < searchLength) return;
 
   if (widgetItems.length > 0)
-    await removeWidgets(ROUTE.BANK_BRANCH_SEARCH, widgetItems);
+    await removeWidgets(ROUTE.BANK_SEARCH_BRANCH, widgetItems);
 
   const response = await IFSCSearchActionRepo(bankCode, action.payload.value);
 
@@ -135,7 +133,7 @@ export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
     };
   });
 
-  await appendWidgets(ROUTE.BANK_BRANCH_SEARCH, { ...dataStore }, [
+  await appendWidgets(ROUTE.BANK_SEARCH_BRANCH, { ...dataStore }, [
     ...widgetItems,
   ]);
 };

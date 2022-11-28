@@ -44,7 +44,7 @@ export const template: (
   bankName: string
 ) => TemplateSchema = (bankCode, bankName) => ({
   layout: <Layout>{
-    id: ROUTE.BANK_BRANCH_SEARCH,
+    id: ROUTE.BANK_SEARCH_BRANCH,
     type: LAYOUTS.LIST,
     widgets: [
       {
@@ -69,7 +69,7 @@ export const template: (
       title: "Search IFSC or Branch",
       action: {
         type: ACTION.GO_BACK,
-        routeId: ROUTE.BANK_BRANCH_SEARCH,
+        routeId: ROUTE.BANK_SEARCH_BRANCH,
         payload: {},
       },
       widgetItem: {
@@ -101,7 +101,7 @@ export const template: (
       caption: { success: "", error: "" },
       action: {
         type: ACTION.SEARCH_IFSC_ACTION,
-        routeId: ROUTE.BANK_BRANCH_SEARCH,
+        routeId: ROUTE.BANK_SEARCH_BRANCH,
         payload: <IFSCSearchActionPayload>{
           bankCode: `${bankCode}`,
           bankName: `${bankName}`,
@@ -110,7 +110,7 @@ export const template: (
       },
       clearAction: {
         type: ACTION.CLEAR_SEARCH,
-        routeId: ROUTE.BANK_BRANCH_SEARCH,
+        routeId: ROUTE.BANK_SEARCH_BRANCH,
         payload: {},
       },
     },

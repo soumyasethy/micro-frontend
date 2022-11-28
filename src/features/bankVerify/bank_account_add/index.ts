@@ -49,14 +49,14 @@ import {
   onChangeIFSCNumber,
   ToggleCTA,
 } from "./actions";
-import { BAVVerifyActionPayload } from "../bank_verify/types";
+import { BAVVerifyActionPayload } from "../bank_account_verification/types";
 
 export const template: (
   bankCode: string,
   bankName: string
 ) => TemplateSchema = (bankCode, bankName) => ({
   layout: <Layout>{
-    id: ROUTE.BANK_SELECT,
+    id: ROUTE.BANK_ACCOUNT_ADD,
     type: LAYOUTS.LIST,
     widgets: [
       {
@@ -83,7 +83,7 @@ export const template: (
       title: "Enter account details",
       action: {
         type: ACTION.CHANGE_BANK_GO_BACK,
-        routeId: ROUTE.BANK_SELECT,
+        routeId: ROUTE.BANK_ACCOUNT_ADD,
         payload: {},
       },
     },
@@ -124,7 +124,7 @@ export const template: (
       size: IconSizeTokens.XXL,
       action: {
         type: ACTION.CHANGE_BANK_GO_BACK,
-        routeId: ROUTE.BANK_SELECT,
+        routeId: ROUTE.BANK_ACCOUNT_ADD,
         payload: {},
       },
     },
@@ -140,7 +140,7 @@ export const template: (
       action: {
         type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
         payload: <InputNumberActionPayload>{ value: "" },
-        routeId: ROUTE.BANK_SELECT,
+        routeId: ROUTE.BANK_ACCOUNT_ADD,
       },
     },
     IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
@@ -152,7 +152,7 @@ export const template: (
       widgetItems: [{ id: "IFSCInput", type: WIDGET.INPUT }],
       action: {
         type: ACTION.NAVIGATION_SEARCH_IFSC,
-        routeId: ROUTE.BANK_SELECT,
+        routeId: ROUTE.BANK_ACCOUNT_ADD,
         payload: <NavigationSearchIFSCActionPayload>{
           bankCode: bankCode,
           bankName,
@@ -172,11 +172,11 @@ export const template: (
       action: {
         type: ACTION.ONCHANGE_IFSC_NUMBER,
         payload: <InputNumberActionPayload>{ value: "" },
-        routeId: ROUTE.BANK_SELECT,
+        routeId: ROUTE.BANK_ACCOUNT_ADD,
       },
       onPressAction: {
         type: ACTION.NAVIGATION_SEARCH_IFSC,
-        routeId: ROUTE.BANK_SELECT,
+        routeId: ROUTE.BANK_ACCOUNT_ADD,
         payload: <NavigationSearchIFSCActionPayload>{
           bankCode: bankCode,
           bankName,
@@ -189,7 +189,7 @@ export const template: (
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.TRIGGER_CTA,
-        routeId: ROUTE.BANK_SELECT,
+        routeId: ROUTE.BANK_ACCOUNT_ADD,
         payload: <BAVVerifyActionPayload>{
           applicationId: "",
         },
@@ -198,9 +198,9 @@ export const template: (
   },
 });
 
-export const bankSelectMF: PageType<any> = {
+export const bankAccountAddMF: PageType<any> = {
   onLoad: async ({}, { bankCode, bankName }) => {
-    console.warn("addBankManuallyMF OnLoad bankCode->", bankCode);
+    console.warn("bankAccountAddMF OnLoad bankCode->", bankCode);
     return Promise.resolve(template(bankCode, bankName));
   },
   actions: {

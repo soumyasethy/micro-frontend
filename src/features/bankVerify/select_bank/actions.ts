@@ -1,5 +1,6 @@
-import { ActionFunction } from "@voltmoney/types";
+import { ActionFunction, WidgetProps } from "@voltmoney/types";
 import {
+  ACTION,
   NavSearchIfscBranchInfoActionPayload,
   SearchActionPayload,
 } from "./types";
@@ -27,7 +28,7 @@ export const NavSearchIfscBranchInfoAction: ActionFunction<
     ...action.payload.bankRepo.POPULAR,
   };
   const bankCode = getKeyByValue(banksMap, action.payload.value);
-  await navigate(ROUTE.BANK_SELECT, {
+  await navigate(ROUTE.BANK_ACCOUNT_ADD, {
     bankCode,
     bankName: action.payload.value,
   });
@@ -48,32 +49,43 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
     data: [],
     otherItem: [],
   });
-
   const dataSearchMap = {};
-  const dataPool = {
+  const allBankMap = {
     ...action.payload.bankRepo.POPULAR,
     ...action.payload.bankRepo.ALLBANKS,
   };
-  Object.keys(dataPool).filter((item) => {
+  Object.keys(allBankMap).filter((item) => {
     if (
       item.toLowerCase().includes(action.payload.value.toLowerCase()) ||
-      dataPool[item].toLowerCase().includes(action.payload.value.toLowerCase())
+      allBankMap[item]
+        .toLowerCase()
+        .includes(action.payload.value.toLowerCase())
     ) {
       dataSearchMap[item] = action.payload.bankRepo.ALLBANKS[item];
     }
   });
 
-  await setDatastore(action.routeId, "gridItem", <GridImageItemProps>{
+  await setDatastore(action.routeId, "gridItem", <
+    GridImageItemProps & WidgetProps
+  >{
     type: GridItemTypeTokens.VERITICAL,
     title: "",
     other: "",
     data: [
       ...Object.keys(dataSearchMap).map((key) => ({
-        label: dataPool[key],
+        label: allBankMap[key],
         image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
         defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
       })),
     ],
     otherItem: [],
+    action: {
+      type: ACTION.NAV_IFSC_SEARCH_BRANCH_INFO,
+      routeId: ROUTE.BANK_SELECT,
+      payload: <NavSearchIfscBranchInfoActionPayload>{
+        value: action.payload.value,
+        bankRepo: action.payload.bankRepo,
+      },
+    },
   });
 };

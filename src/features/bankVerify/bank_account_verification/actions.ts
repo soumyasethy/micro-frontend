@@ -13,7 +13,6 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
-import { AadharInitPayload } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -103,7 +102,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
 export const AddAccountNavAction: ActionFunction<
   BAVVerifyActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  navigate(ROUTE.BANK_VERIFY_MANUALLY);
+  navigate(ROUTE.BANK_SELECT);
 };
 export const GoBackAction: ActionFunction<{}> = async (
   action,

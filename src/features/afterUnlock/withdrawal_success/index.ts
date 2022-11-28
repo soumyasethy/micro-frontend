@@ -30,7 +30,7 @@ import {
   VerificationCardTypeTokens,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack, Done } from "./action";
 import moment from "moment";

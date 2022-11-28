@@ -22,7 +22,7 @@ export const AgreementStatusAction: ActionFunction<any> = async (
       .then(async (response) => {
         console.warn("AgreementStatusAction", response);
         /// handle response
-        if (response.stepResponseObject === "Success") {
+        if (response.stepResponseObject.toLowerCase() === "success") {
           clearInterval(timerRef);
           const user: User = await SharedPropsService.getUser();
           user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
@@ -37,7 +37,7 @@ export const AgreementStatusAction: ActionFunction<any> = async (
             ctaLabel: "Go to dashboard",
             ctaAction: action,
           });
-        } else if (response.stepResponseObject === "Failed") {
+        } else if (response.stepResponseObject.toLowerCase() === "failed") {
           clearInterval(timerRef);
           await goBack();
           await navigate(ROUTE.ALERT_PAGE, {

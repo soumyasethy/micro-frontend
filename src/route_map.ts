@@ -14,10 +14,10 @@ import { verificationFailedMF } from "./features/authCAS/verification_failed";
 import { testPageMF } from "./features/test_page";
 import { kycAadharVerifyMF } from "./features/kyc/kyc_aadhar_init";
 import { kycAadharOTPVerifyMF } from "./features/kyc/kyc_otp";
-import { bankVerifyMF } from "./features/bankVerify/bank_verify";
-import { bankVerifyManuallyMF } from "./features/bankVerify/select_bank";
-import { bankSelectMF } from "./features/bankVerify/bank_very_manually";
-import { bankSearchBranchMF } from "./features/bankVerify/search_branch";
+import { bankAccountVerifyMF } from "./features/bankVerify/bank_account_verification";
+import { bankSelectMF } from "./features/bankVerify/select_bank";
+import { bankAccountAddMF } from "./features/bankVerify/bank_account_add";
+import { bankSearchBranchMF } from "./features/bankVerify/bank_search_branch";
 import { kycSummaryMf } from "./features/kyc/kyc_summary";
 import { kycStepperMF } from "./features/kyc/kyc_stepper";
 import { kycAfterCameraMF } from "./features/kyc/kyc_photo_verify";
@@ -36,11 +36,11 @@ import { modifyLimitMF } from "./features/unlockLimit/modify_limit";
 import { portfolioMF } from "./features/unlockLimit/portfolio";
 import { pledgeAmountMF } from "./features/unlockLimit/pledged_amount";
 import { modifyPledgeMF } from "./features/unlockLimit/modify_pledged_amount";
-import { dashboardMF } from "./features/unlockLimit/afterUnlock/dashboard";
-import { withdraw_amountMF } from "./features/unlockLimit/afterUnlock/withdraw_amount";
-import { withdrawalOtpMF } from "./features/unlockLimit/afterUnlock/withdrawal_otp";
-import { withdrawalSuccessMF } from "./features/unlockLimit/afterUnlock/withdrawal_success";
-import { repaymentMF } from "./features/unlockLimit/afterUnlock/repayment";
+import { dashboardMF } from "./features/afterUnlock/dashboard";
+import { withdraw_amountMF } from "./features/afterUnlock/withdraw_amount";
+import { withdrawalOtpMF } from "./features/afterUnlock/withdrawal_otp";
+import { withdrawalSuccessMF } from "./features/afterUnlock/withdrawal_success";
+import { repaymentMF } from "./features/afterUnlock/repayment";
 import { loanRepaymentMF } from "./features/loanAgreement/loan_repayment";
 import { loanWebViewMF } from "./features/loanAgreement/loan_webView";
 import { loanAutoPayMF } from "./features/loanAgreement/loan_autopay";
@@ -70,10 +70,10 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.TEST_PAGE]: testPageMF,
   [ROUTE.KYC_AADHAAR_VERIFICATION]: kycAadharVerifyMF,
   [ROUTE.KYC_AADHAAR_VERIFICATION_OTP]: kycAadharOTPVerifyMF,
-  [ROUTE.BANK_ACCOUNT_VERIFICATION]: bankVerifyMF,
-  [ROUTE.BANK_VERIFY_MANUALLY]: bankVerifyManuallyMF,
+  [ROUTE.BANK_ACCOUNT_VERIFICATION]: bankAccountVerifyMF,
   [ROUTE.BANK_SELECT]: bankSelectMF,
-  [ROUTE.BANK_BRANCH_SEARCH]: bankSearchBranchMF,
+  [ROUTE.BANK_ACCOUNT_ADD]: bankAccountAddMF,
+  [ROUTE.BANK_SEARCH_BRANCH]: bankSearchBranchMF,
   [ROUTE.KYC_SUMMARY]: kycSummaryMf,
   [ROUTE.KYC_STEPPER]: kycStepperMF,
   [ROUTE.KYC_AFTER_CAMERA]: kycAfterCameraMF,

@@ -1,13 +1,13 @@
 import { ActionFunction, WidgetProps } from "@voltmoney/types";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import {
   ACTION,
   AmountPayload,
   CreateDisbursementRequestPayload,
 } from "./types";
-import { api } from "../../../../configs/api";
-import { getAppHeader } from "../../../../configs/config";
-import SharedPropsService from "../../../../SharedPropsService";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -21,7 +21,7 @@ import {
   TextInputProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { User } from "../../../login/otp_verify/types";
+import { User } from "../../login/otp_verify/types";
 
 let disbursalAmount: number = 0;
 export const CreateDisbursementRequest: ActionFunction<

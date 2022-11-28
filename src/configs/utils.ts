@@ -437,14 +437,14 @@ export const addCommasToNumber = (num: number) => {
 // };
 
 export const roundDownToNearestHundred = (num: number) => {
-  return Math.round(num / 100) * 100;
+  return Math.floor(num / 100) * 100;
 };
 
 export const maskBankAccountNumber = (accountNo: string) => {
   if(accountNo.length > 4) {
     let showString = accountNo.slice(accountNo.length-4)
     let maskString = "";
-    var index = accountNo.length-4;
+    let index = accountNo.length - 4;
     while(index>0) {
       maskString += "X"
       index--;

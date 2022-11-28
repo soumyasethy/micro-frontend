@@ -25,7 +25,7 @@ export const PollMandateStatus: ActionFunction<any> = async (
       .then(async (response) => {
         console.log("PollMandateStatus response", response);
         /// handle response
-        if (response.stepResponseObject === "Finished") {
+        if (response.stepResponseObject.toLowerCase() === "finished") {
           const user: User = await SharedPropsService.getUser();
           user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
             StepperStateToken.COMPLETED;
@@ -47,7 +47,7 @@ export const PollMandateStatus: ActionFunction<any> = async (
               },
             },
           });
-        } else if (response.stepResponseObject === "Failed") {
+        } else if (response.stepResponseObject.toLowerCase() === "failed") {
           clearInterval(timer);
           await navigate(ROUTE.ALERT_PAGE, {
             alertProps: {

@@ -1,5 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import {
   AssetsPayload
 } from "./types";
@@ -8,8 +8,8 @@ import {
   InputStateToken,
   TextInputProps,
 } from "@voltmoney/schema";
-import { api } from "../../../../configs/api";
-import { defaultAuthHeaders } from "../../../../configs/config";
+import { api } from "../../../configs/api";
+import { defaultAuthHeaders } from "../../../configs/config";
 
 export const repayment: ActionFunction<AssetsPayload> = async (
   action,

@@ -1,7 +1,7 @@
-import { User } from "../../../login/otp_verify/types";
-import SharedPropsService from "../../../../SharedPropsService";
-import { defaultHeaders } from "../../../../configs/config";
-import { api } from "../../../../configs/api";
+import { User } from "../../login/otp_verify/types";
+import SharedPropsService from "../../../SharedPropsService";
+import { defaultHeaders } from "../../../configs/config";
+import { api } from "../../../configs/api";
 
 export const fetchUserDetails: () => Promise<User> = async () => {
   let user: User = {};

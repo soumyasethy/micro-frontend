@@ -1,9 +1,9 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ROUTE } from "../../../../routes";
+import { ROUTE } from "../../../routes";
 import { DisbursementOTPPayload } from "./types";
-import { api } from "../../../../configs/api";
-import { getAppHeader } from "../../../../configs/config";
-import SharedPropsService from "../../../../SharedPropsService";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const DisbursalVerifyAction: ActionFunction<
   DisbursementOTPPayload
