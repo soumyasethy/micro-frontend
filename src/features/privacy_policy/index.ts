@@ -52,7 +52,7 @@ export const template: TemplateSchema = {
       widgetItems: [{ id: "webview", type: WIDGET.WEB_VIEW }],
     },
     webview: <WebViewProps>{
-      uri: "https://voltmoney.in/privacy.html",
+      uri: "https://staging.voltmoney.in/privacy.html",
       isOpenInNewTab: false,
     },
   },
