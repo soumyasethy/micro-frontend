@@ -91,6 +91,7 @@ export const template: (
         title: "Enter amount",
         state: InputStateToken.DEFAULT,
         limit: availableCreditAmount,
+        keyboardType: KeyboardTypeToken.numberPad,
         limitLabel:
           "out of " +
           `${availableCreditAmount}`.replace(
