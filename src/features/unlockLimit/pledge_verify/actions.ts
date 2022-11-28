@@ -134,10 +134,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
               type: PAGE_ACTION.NAV_NEXT,
               routeId: ROUTE.PLEDGE_VERIFY,
               payload: <NavigationNext>{
-                stepId: _.get(
-                  response,
-                  "data.updatedApplicationObj.currentStepId"
-                ),
+                stepId: _.get(mfPledgeStatusResponse, "data.currentStepId"),
               },
             },
           });
