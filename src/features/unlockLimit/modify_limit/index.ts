@@ -94,9 +94,9 @@ export const template: (
       inputItem: <TextInputProps & WidgetProps>{
         placeholder: "",
         type: InputTypeToken.DEFAULT,
-        keyboardType: KeyboardTypeToken.decimalPad,
         title: "Enter amount",
         state: InputStateToken.DEFAULT,
+        keyboardType: KeyboardTypeToken.numberPad,
         limit: totalAmount,
         limitLabel:
           "out of ₹ " +

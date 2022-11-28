@@ -70,7 +70,7 @@ export const template: (prevMob: string) => TemplateSchema = (prevMob) => ({
       title: "Mobile Number",
       charLimit: 10,
       placeholder: "Enter mobile number",
-      keyboardType: KeyboardTypeToken.numeric,
+      keyboardType: KeyboardTypeToken.numberPad,
       action: {
         type: ACTION.PHONE_NUMBER_ONCHANGE,
         payload: <UpdateMobileNumber>{ value: "", targetWidgetId: "input" },
