@@ -102,7 +102,10 @@ export const template: (
         {
           id: "totalItem",
           type: WIDGET.CTACARD,
-          position: POSITION.ABSOLUTE_BOTTOM,
+          position: POSITION.STICKY_BOTTOM,
+          padding:{
+            left:0,right:0,horizontal:0
+          }
         },
       ],
     },
