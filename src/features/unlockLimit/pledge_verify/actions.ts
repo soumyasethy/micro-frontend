@@ -11,11 +11,7 @@ import {
   AssetRepositoryType,
   getAppHeader,
 } from "../../../configs/config";
-import {
-  IconTokens,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
+import { IconTokens, InputStateToken, TextInputProps } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
 import {
   addCommasToNumber,
@@ -55,9 +51,10 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     const user: User = await SharedPropsService.getUser();
     const applicationId = user.linkedApplications[0].applicationId;
     await goBack();
-    user.linkedApplications[0].stepStatusMap.MF_PLEDGING = _.get(
+    user.linkedApplications[0] = _.get(
       response,
-      "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+      "data.updatedApplicationObj",
+      user.linkedApplications[0]
     );
     await SharedPropsService.setUser(user);
 
@@ -107,10 +104,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
           `${api.borrowerApplication}${applicationId}`,
           { headers: await getAppHeader() }
         );
-        user.linkedApplications[0].stepStatusMap.MF_PLEDGING = _.get(
-          mfPledgeStatusResponse,
-          "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-        );
+        user.linkedApplications[0] = _.get(mfPledgeStatusResponse, "data");
         await SharedPropsService.setUser(user);
         if (
           _.get(
