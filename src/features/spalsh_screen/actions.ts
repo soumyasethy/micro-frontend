@@ -11,7 +11,7 @@ export const SplashAction: ActionFunction<any> = async (
   _datastore,
   { network, navigate, asyncStorage }
 ): Promise<any> => {
-  const isSeen = await SharedPropsService.getOnboarding();
+  // const isSeen = await SharedPropsService.getOnboarding();
   // if (isSeen) {
     const accessToken = await asyncStorage.get(StoreKey.accessToken);
     if (accessToken) {
