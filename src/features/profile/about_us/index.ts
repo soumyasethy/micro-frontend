@@ -164,7 +164,7 @@ export const template: () => TemplateSchema = () => {
           horizontal: SizeTypeTokens.SM,
         },
       },
-      Card2: <CardProps>{
+      Card2: <CardProps & WidgetProps>{
         bgColor: ColorTokens.White,
         body: {
           widgetItems: [
@@ -172,6 +172,10 @@ export const template: () => TemplateSchema = () => {
             { id: "privacySpaces", type: WIDGET.SPACE },
             { id: "privacyDivider", type: WIDGET.DIVIDER },
           ],
+        },
+        action: {
+          payload: {},
+          type: ACTION.GO_TO_PRIVACY,
         },
       },
       privacyDetails: <StackProps>{
@@ -213,7 +217,7 @@ export const template: () => TemplateSchema = () => {
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "500",
       },
-      ctaprivacy: <StackProps>{
+      ctaprivacy: <StackProps & WidgetProps>{
         type: StackType.row,
         alignItems: StackAlignItems.flexEnd,
         justifyContent: StackJustifyContent.flexEnd,
