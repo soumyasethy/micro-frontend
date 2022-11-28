@@ -157,7 +157,7 @@ export const template: (
         {
           id: "cardNav",
           type: WIDGET.CARD,
-          position: POSITION.STICKY_BOTTOM,
+          position: POSITION.ABSOLUTE_BOTTOM,
           padding: {
             bottom: 0,
             left: 0,
