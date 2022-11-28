@@ -168,7 +168,7 @@ export const template: (
         state: InputStateToken.DEFAULT,
         title: "Date of birth",
         placeholder: "Enter date of birth",
-        keyboardType: KeyboardTypeToken.default,
+        keyboardType: KeyboardTypeToken.numberPad,
         action: {
           type: ACTION.ENTER_DOB,
           payload: <InputPayload>{ value: "", widgetId: "calendarInput" },
