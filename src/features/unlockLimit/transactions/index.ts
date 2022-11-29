@@ -25,6 +25,7 @@ import {
     InputStateToken,
     InputTypeToken,
     KeyboardTypeToken,
+    ShadowTypeTokens,
     SizeTypeTokens,
     SpaceProps,
     StackAlignItems,
@@ -38,9 +39,10 @@ import {
 import { ROUTE } from "../../../routes";
 import {
     ACTION,
+    NavPayload,
     transactionPayload,
 } from "./types";
-import { emailStatement } from "./actions";
+import { emailStatement, navigation } from "./actions";
 
 export const template: TemplateSchema = {
     layout: <Layout>{
@@ -62,19 +64,9 @@ export const template: TemplateSchema = {
             { id: "toInput", type: WIDGET.INPUT },
             { id: "toInputSpace", type: WIDGET.SPACE },
             { id: "continue", type: WIDGET.BUTTON },
-            {
-                id: "bottomNav",
-                type: WIDGET.BOTTOMTAB,
-                position: POSITION.STICKY_BOTTOM,
-                padding: {
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                },
-              },
             // {
-            //     id: "cardNav",
-            //     type: WIDGET.CARD,
+            //     id: "bottomNav",
+            //     type: WIDGET.BOTTOMTAB,
             //     position: POSITION.STICKY_BOTTOM,
             //     padding: {
             //       bottom: 0,
@@ -82,6 +74,16 @@ export const template: TemplateSchema = {
             //       right: 0,
             //     },
             //   },
+            {
+                id: "cardNav",
+                type: WIDGET.CARD,
+                position: POSITION.STICKY_BOTTOM,
+                padding: {
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                },
+              },
 
 
         ],
@@ -113,7 +115,7 @@ export const template: TemplateSchema = {
             fontWeight: "400",
         },
         
-        subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+        subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
         input: <TextInputProps & WidgetProps>{
             type: InputTypeToken.CALENDAR,
             state: InputStateToken.DEFAULT,
@@ -158,6 +160,11 @@ export const template: TemplateSchema = {
             },
         },
         cardNav: <CardProps>{
+          shadow:ShadowTypeTokens.E6,
+          padding:{
+            top:SizeTypeTokens.Size10,
+            bottom:SizeTypeTokens.MD
+          },
             bgColor: ColorTokens.White,
             body: {
               widgetItems: [
@@ -169,6 +176,13 @@ export const template: TemplateSchema = {
             },
           },
           bottomNav: <BottomTabProps>{
+            action: {
+              type: ACTION.NAVIGATION,
+              payload: <NavPayload>{
+                value: 'dashboard',
+              },
+              routeId: ROUTE.TRANSACTIONS,
+            },
             data: [
               {
                 id: "1",
@@ -221,5 +235,6 @@ export const transactionsMF: PageType<any> = {
     onLoad: async () => Promise.resolve(template),
     actions: {
         [ACTION.TRANSACTION]: emailStatement,
+        [ACTION.NAVIGATION]: navigation,
     },
 };

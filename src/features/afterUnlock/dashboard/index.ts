@@ -27,6 +27,7 @@ import {
   PaddingSizeTokens,
   PromoCardProps,
   RepaymentProps,
+  ShadowTypeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -40,9 +41,10 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, CreditPayload, RepaymentPayload } from "./types";
+import { ACTION, CreditPayload, NavPayload, RepaymentPayload } from "./types";
 import {
   goBack,
+  navigate,
   OpenContactUS,
   OpenProfile,
   repayment,
@@ -157,7 +159,7 @@ export const template: (
         {
           id: "cardNav",
           type: WIDGET.CARD,
-          position: POSITION.ABSOLUTE_BOTTOM,
+          position: POSITION.STICKY_BOTTOM,
           padding: {
             bottom: 0,
             left: 0,
@@ -323,7 +325,7 @@ export const template: (
           /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
           ","
         ),
-        btnText: "Flexi Pay",
+        btnText: "Flexi pay",
         action: {
           type: ACTION.REPAYMENT,
           payload: <RepaymentPayload>{
@@ -366,6 +368,11 @@ export const template: (
         heading: "Why Volt?",
       },
       cardNav: <CardProps>{
+        padding:{
+          top:SizeTypeTokens.Size10,
+          bottom:SizeTypeTokens.MD
+        },
+        shadow:ShadowTypeTokens.E6,
         bgColor: ColorTokens.White,
         body: {
           widgetItems: [
@@ -377,6 +384,13 @@ export const template: (
         },
       },
       bottomNav: <BottomTabProps>{
+        action: {
+          type: ACTION.TRANSACTION,
+          payload: <NavPayload>{
+            value: 'transaction',
+          },
+          routeId: ROUTE.DASHBOARD,
+        },
         data: [
           {
             id: "1",
@@ -468,6 +482,7 @@ export const dashboardMF: PageType<any> = {
     [ACTION.MENU]: goBack,
     [ACTION.PROFILE]: OpenProfile,
     [ACTION.CONTACT_US]: OpenContactUS,
+    [ACTION.TRANSACTION]: navigate,
   },
   bgColor: "#F3F5FC",
   clearPrevious: true,

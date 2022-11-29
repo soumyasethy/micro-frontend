@@ -1,6 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { transactionPayload } from "./types";
+import { NavPayload, transactionPayload } from "./types";
 
 export const emailStatement: ActionFunction<transactionPayload> = async (
   action,
@@ -8,4 +8,15 @@ export const emailStatement: ActionFunction<transactionPayload> = async (
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
   console.warn("****Email data****");
+};
+
+export const navigation: ActionFunction<NavPayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage }
+): Promise<any> => {
+  if(action.payload.value === 'dashboard'){
+    await navigate(ROUTE.DASHBOARD);
+  }
+ 
 };

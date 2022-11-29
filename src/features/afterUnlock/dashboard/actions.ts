@@ -1,6 +1,17 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { CreditPayload, RepaymentPayload } from "./types";
+import { CreditPayload, NavPayload, RepaymentPayload } from "./types";
+
+export const navigate: ActionFunction<NavPayload> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  if(action.payload.value === 'transaction'){
+    await navigate(ROUTE.TRANSACTIONS);
+  }
+  
+};
 
 export const withdrawNow: ActionFunction<CreditPayload> = async (
   action,

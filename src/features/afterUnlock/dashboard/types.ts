@@ -5,7 +5,12 @@ export enum ACTION {
   REPAYMENT = "REPAYMENT",
   MENU = "MENU",
   CONTACT_US = "CONTACT_US",
+  TRANSACTION = "TRANSACTION",
 }
+
+export type NavPayload = {
+  value: string;
+};
 
 export type CreditPayload = {
   value: number;
