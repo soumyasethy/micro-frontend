@@ -198,7 +198,7 @@ export const template: (
           lineHeight: 32
         },
         amountText: <TypographyProps>{
-          label: `${totalAmount}`.replace(
+          label: `${roundDownToNearestHundred(totalAmount)}`.replace(
             /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
             ","
           ),
@@ -271,7 +271,7 @@ export const template: (
           ],
         },
         valueItem: <TypographyProps>{
-          label: `₹${(10000 * stepResponseObject.interestRate / 100)}/month`,
+          label: `₹${(100 * stepResponseObject.interestRate / 12)}/month`,
           color: ColorTokens.Grey_Night,
           fontWeight: "600",
           fontSize: FontSizeTokens.SM,
@@ -345,7 +345,7 @@ export const template: (
           ],
         },
         autoPayValueItem: <TypographyProps>{
-          label: '7th of every month',
+          label: '5th of every month',
           color: ColorTokens.Grey_Night,
           fontWeight: "600",
           fontSize: FontSizeTokens.SM,
