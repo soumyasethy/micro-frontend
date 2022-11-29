@@ -48,17 +48,13 @@ export const template: (
                 id: ROUTE.FAQ,
                 type: LAYOUTS.LIST,
                 widgets: [
-                    {
-                        id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP
-                    },
-                    { id: "Card1", type: WIDGET.CARD
-                    },
-                      { id: "Card2", type: WIDGET.CARD
-                    },
-                    { id: "Card3", type: WIDGET.CARD
-                     }
-
-
+                    { id: "space0", type: WIDGET.SPACE },
+                    { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP},
+                    { id: "Card1", type: WIDGET.CARD, padding: { left: 16, right: 16 }},
+                    { id: "space1", type: WIDGET.SPACE },
+                    { id: "Card2", type: WIDGET.CARD, padding: { left: 16, right: 16 }},
+                    { id: "space2", type: WIDGET.SPACE },
+                    { id: "Card3", type: WIDGET.CARD, padding: { left: 16, right: 16 }}
                 ],
             },
             datastore: <Datastore>{
@@ -98,8 +94,14 @@ export const template: (
                         routeId: ROUTE.FAQ,
                       },
                   },
+                space0: <SpaceProps> { size: SizeTypeTokens.SM },
+                space1: <SpaceProps> { size: SizeTypeTokens.LG },
+                space2: <SpaceProps> { size: SizeTypeTokens.LG },
                 Card1: <CardProps>{
                     bgColor: ColorTokens.White,
+                    padding: {
+                        vertical: SizeTypeTokens.NONE,
+                    },
                     body: {
                         widgetItems: [
                             { id: "startDetails", type: WIDGET.STACK },
@@ -111,6 +113,7 @@ export const template: (
                 startDetails: <StackProps>{
                     type: StackType.row,
                     width: StackWidth.FULL,
+                    alignItems: StackAlignItems.center,
                     flex: 1,
                     widgetItems: [
                         { id: "infoItems", type: WIDGET.STACK },
@@ -141,6 +144,7 @@ export const template: (
                     color: ColorTokens.Grey_Night,
                     numberOfLines: 1,
                     fontSize: FontSizeTokens.XS,
+                    lineHeight: 18,
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "500",
                 },
@@ -182,6 +186,9 @@ export const template: (
                 },
                 Card2: <CardProps>{
                     bgColor: ColorTokens.White,
+                    padding: {
+                        vertical: SizeTypeTokens.NONE,
+                    },
                     body: {
                         widgetItems: [
                             { id: "withdrawalDetails", type: WIDGET.STACK },
@@ -193,6 +200,7 @@ export const template: (
                 withdrawalDetails: <StackProps>{
                     type: StackType.row,
                     width: StackWidth.FULL,
+                    alignItems: StackAlignItems.center,
                     widgetItems: [
                         { id: "withdrawalItems", type: WIDGET.STACK },
                         { id: "ctaWithdrawal", type: WIDGET.STACK }
@@ -221,6 +229,7 @@ export const template: (
                     color: ColorTokens.Grey_Night,
                     numberOfLines: 1,
                     fontSize: FontSizeTokens.XS,
+                    lineHeight: 18,
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "500",
                 },
@@ -260,6 +269,9 @@ export const template: (
                 },
                 Card3: <CardProps>{
                     bgColor: ColorTokens.White,
+                    padding: {
+                        vertical: SizeTypeTokens.NONE,
+                    },
                     body: {
                         widgetItems: [
                             { id: "kycDetails", type: WIDGET.STACK },
@@ -271,6 +283,7 @@ export const template: (
                 kycDetails: <StackProps>{
                     type: StackType.row,
                     width: StackWidth.FULL,
+                    alignItems: StackAlignItems.center,
                     widgetItems: [
                         { id: "kycItems", type: WIDGET.STACK },
                         { id: "ctakyc", type: WIDGET.STACK }
@@ -299,6 +312,7 @@ export const template: (
                     color: ColorTokens.Grey_Night,
                     numberOfLines: 1,
                     fontSize: FontSizeTokens.XS,
+                    lineHeight: 18,
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "500",
                 },
