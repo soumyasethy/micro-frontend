@@ -43,26 +43,21 @@ export const template: (
                 id: ROUTE.ACCOUNT_DETAILS,
                 type: LAYOUTS.LIST,
                 widgets: [
-                    { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-                    { id: "list1", type: WIDGET.LIST_ITEM },
-                    { id: "list2", type: WIDGET.LIST_ITEM },
-                    { id: "list3", type: WIDGET.LIST_ITEM },
-                    { id: "list4", type: WIDGET.LIST_ITEM },
+                    { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP, },
+                    { id: "list1", type: WIDGET.LIST_ITEM,  padding: { left: 16, right: 16 }},
+                    { id: "list2", type: WIDGET.LIST_ITEM,  padding: { left: 16, right: 16 } },
+                    { id: "list3", type: WIDGET.LIST_ITEM,  padding: { left: 16, right: 16 } },
+                    { id: "list4", type: WIDGET.LIST_ITEM,  padding: { left: 16, right: 16 } },
                     { id: "space1", type: WIDGET.SPACE },
-                    { id: "categoryList", type: WIDGET.TEXT },
+                    { id: "categoryList", type: WIDGET.TEXT, padding: { left: 16, right: 16 }},
                     { id: "space2", type: WIDGET.SPACE },
                     { id: "headStack", type: WIDGET.STACK,padding:{
                         horizontal:10,left:10,right:10,all:10
                     } },
                     { id: "space3", type: WIDGET.SPACE },
-                    { id: "divider1", type: WIDGET.DIVIDER },
-                    { id: "space4", type: WIDGET.SPACE },
-                    { id: "list5", type: WIDGET.LIST_ITEM,padding:{
-                        horizontal:4,left:4,right:4
-                    }  },
-                    { id: "list6", type: WIDGET.LIST_ITEM,padding:{
-                        horizontal:4,left:4,right:4
-                    }  },
+                    { id: "divider1", type: WIDGET.DIVIDER, margin: {top:0, bottom: 0}, padding: { left: 16, right: 16 }},
+                    { id: "list5", type: WIDGET.LIST_ITEM, padding: { left: 16, right: 16 }},
+                    { id: "list6", type: WIDGET.LIST_ITEM, padding: { left: 16, right: 16 }},
 
                 ],
             },
@@ -82,10 +77,12 @@ export const template: (
                         routeId: ROUTE.ACCOUNT_DETAILS,
                     },
                 },
-                list1: <ListItemProps>{
+                list1: <ListItemProps & TypographyProps>{
                     title: 'Name',
                     subTitle: `${profileData.name}`,
                     isDivider:true,
+                    titleLineHeight: 18,
+                    subTitleLineHeight: 24,
                     leadIconName: IconTokens.User,
                     onPress: () => { },
                 },
@@ -93,6 +90,8 @@ export const template: (
                     title: 'Mobile Number',
                     subTitle: `${profileData.phoneNumber}`,
                     isDivider:true,
+                    titleLineHeight: 18,
+                    subTitleLineHeight: 24,
                     leadIconName: IconTokens.Phone,
                     onPress: () => { },
                 },
@@ -100,6 +99,8 @@ export const template: (
                     title: 'Email ID',
                     subTitle:  `${profileData.emailId}`,
                     isDivider:true,
+                    titleLineHeight: 18,
+                    subTitleLineHeight: 24,
                     leadIconName: IconTokens.Email,
                     onPress: () => { },
                 },
@@ -108,6 +109,8 @@ export const template: (
                     subTitle: maskSensitiveDetails(`${profileData.panNumber}`,0,4),
                    // '*******'+`${profileData.panNumber}`.substring(6),
                     isDivider:false,
+                    titleLineHeight: 18,
+                    subTitleLineHeight: 24,
                     leadIconName: IconTokens.CreditCard,
                     onPress: () => { },
                 },
@@ -119,7 +122,7 @@ export const template: (
                     fontFamily: FontFamilyTokens.Inter,
                     fontWeight: "400",
                 },
-                space2: <SpaceProps>{ size: SizeTypeTokens.LG },
+                space2: <SpaceProps>{ size: SizeTypeTokens.XS },
                 headStack: <StackProps>{
                     type: StackType.row,
                     justifyContent: StackJustifyContent.flexStart,
@@ -132,7 +135,7 @@ export const template: (
                 },
                 imageItem: <ImageProps>{
                     uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${profileData.bankDetails.bankCode}.svg`,
-                    size: ImageSizeTokens.SM,
+                    size: ImageSizeTokens.Size_40,
                     aspectRatio: AspectRatioToken.A1_1,
                     borderRadius: BorderRadiusTokens.BR5,
                     padding: SizeTypeTokens.SM,
@@ -149,20 +152,19 @@ export const template: (
                 divider1: <DividerProps>{
                     size: DividerSizeTokens.SM,
                     color:ColorTokens.Grey_Milk_1,
-                    margin: {
-                        vertical: SizeTypeTokens.SM,
-                        horizontal: SizeTypeTokens.SM,
-                    },
                 },
-                space4: <SpaceProps>{ size: SizeTypeTokens.MD },
                 list5: <ListItemProps>{
                     title: 'IFSC',
                     subTitle: `${profileData.bankDetails.ifscCode}`,
                     isDivider:true,
+                    titleLineHeight: 18,
+                    subTitleLineHeight: 24,
                     onPress: () => { },
                 },
                 list6: <ListItemProps>{
                     title: 'Account number',
+                    titleLineHeight: 18,
+                    subTitleLineHeight: 24,
                     subTitle: maskSensitiveDetails(`${profileData.bankDetails.accountNumber}`,0,4),
                    // '*******'+`${profileData.bankDetails.accountNumber}`.substring(8),
                     isDivider:false,
