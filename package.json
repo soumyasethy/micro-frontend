@@ -1,6 +1,6 @@
 {
   "name": "@voltmoney/micro-frontend",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "description": "Business Logic for Volt App for Web and Mobile",
   "author": "soumyasethy <soumya.sethy@voltmoney.in>",
   "homepage": "https://github.com/VOLTMoney/micro-frontend#readme",
@@ -31,8 +31,8 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@voltmoney/schema": "^0.0.22",
-    "@voltmoney/types": "^1.0.18",
+    "@voltmoney/schema": "^0.0.26",
+    "@voltmoney/types": "^1.0.19",
     "@react-native-google-signin/google-signin": "^8.0.0",
     "@react-native-async-storage/async-storage": "^1.17.7",
     "react-google-login": "^5.2.2",

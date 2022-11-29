@@ -125,7 +125,7 @@ export const template: (
             )
           )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
         caption: { success: "", error: "" },
-        keyboardType: KeyboardTypeToken.decimalPad,
+        keyboardType: KeyboardTypeToken.numberPad,
         action: {
           type: ACTION.EDIT_AMOUNT,
           payload: <AmountPayload>{ value: "" },

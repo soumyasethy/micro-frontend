@@ -118,7 +118,7 @@ export const template: (
     space: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     continue: <ButtonProps & WidgetProps>{
       width: ButtonWidthTypeToken.FULL,
-      label: "Continue to verify Aadhar",
+      label: "Continue",
       type: ButtonTypeTokens.LargeFilled,
       fontFamily: FontFamilyTokens.Inter,
       fontSize: FontSizeTokens.MD,

@@ -11,11 +11,7 @@ import {
   AssetRepositoryType,
   getAppHeader,
 } from "../../../configs/config";
-import {
-  IconTokens,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
+import { IconTokens, InputStateToken, TextInputProps } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
 import {
   addCommasToNumber,
@@ -36,7 +32,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
     state: InputStateToken.LOADING,
   });
-  const response = await network.post(
+  const authPledgeResponse = await network.post(
     api.authPledge,
     {
       applicationId: (
@@ -48,22 +44,23 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     { headers: await getAppHeader() }
   );
 
-  if (_.get(response, "data.status") === "SUCCESS") {
+  if (_.get(authPledgeResponse, "data.status") === "SUCCESS") {
     await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
       state: InputStateToken.SUCCESS,
     });
     const user: User = await SharedPropsService.getUser();
     const applicationId = user.linkedApplications[0].applicationId;
     await goBack();
-    user.linkedApplications[0].stepStatusMap.MF_PLEDGING = _.get(
-      response,
-      "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+    user.linkedApplications[0] = _.get(
+      authPledgeResponse,
+      "data.updatedApplicationObj",
+      user.linkedApplications[0]
     );
     await SharedPropsService.setUser(user);
 
     if (
       _.get(
-        response,
+        authPledgeResponse,
         "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
       ) === "COMPLETED"
     ) {
@@ -72,7 +69,11 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         isAutoTriggerCta: true,
         title: `₹ ${addCommasToNumber(
           roundDownToNearestHundred(
-            _.get(response, "data.stepResponseObject.approvedCreditAmount", 0)
+            _.get(
+              authPledgeResponse,
+              "data.stepResponseObject.approvedCreditAmount",
+              0
+            )
           )
         )} unlocked successfully!`,
         subTitle: "You will be redirected to next step in few seconds",
@@ -83,14 +84,17 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
           type: PAGE_ACTION.NAV_NEXT,
           routeId: ROUTE.PLEDGE_VERIFY,
           payload: <NavigationNext>{
-            stepId: _.get(response, "data.updatedApplicationObj.currentStepId"),
+            stepId: _.get(
+              authPledgeResponse,
+              "data.updatedApplicationObj.currentStepId"
+            ),
           },
         },
       });
     }
     if (
       _.get(
-        response,
+        authPledgeResponse,
         "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
       ) === "PENDING_CALLBACK"
     ) {
@@ -107,16 +111,15 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
           `${api.borrowerApplication}${applicationId}`,
           { headers: await getAppHeader() }
         );
-        user.linkedApplications[0].stepStatusMap.MF_PLEDGING = _.get(
-          mfPledgeStatusResponse,
-          "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-        );
+        user.linkedApplications[0] = _.get(mfPledgeStatusResponse, "data");
         await SharedPropsService.setUser(user);
         if (
           _.get(
             mfPledgeStatusResponse,
             "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-          ) === "COMPLETED"
+          ) === "COMPLETED" &&
+          _.get(mfPledgeStatusResponse, "data.currentStepId") !==
+            "MF_PLEDGE_PORTFOLIO"
         ) {
           clearInterval(PollerRef);
           await goBack();
@@ -126,7 +129,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
             title: `₹ ${addCommasToNumber(
               roundDownToNearestHundred(
                 _.get(
-                  response,
+                  authPledgeResponse,
                   "data.stepResponseObject.approvedCreditAmount",
                   0
                 )
@@ -140,10 +143,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
               type: PAGE_ACTION.NAV_NEXT,
               routeId: ROUTE.PLEDGE_VERIFY,
               payload: <NavigationNext>{
-                stepId: _.get(
-                  response,
-                  "data.updatedApplicationObj.currentStepId"
-                ),
+                stepId: _.get(mfPledgeStatusResponse, "data.currentStepId"),
               },
             },
           });

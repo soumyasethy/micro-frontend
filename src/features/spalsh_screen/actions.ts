@@ -11,8 +11,8 @@ export const SplashAction: ActionFunction<any> = async (
   _datastore,
   { network, navigate, asyncStorage }
 ): Promise<any> => {
-  const isSeen = await SharedPropsService.getOnboarding();
-  if (isSeen) {
+  // const isSeen = await SharedPropsService.getOnboarding();
+  // if (isSeen) {
     const accessToken = await asyncStorage.get(StoreKey.accessToken);
     if (accessToken) {
       const userContextResponse = await network.post(
@@ -42,7 +42,7 @@ export const SplashAction: ActionFunction<any> = async (
     } else {
       await navigate(ROUTE.PHONE_NUMBER);
     }
-  } else {
-    await navigate(ROUTE.LANDING_PAGE);
-  }
+  // } else {
+  //   await navigate(ROUTE.LANDING_PAGE);
+  // }
 };
