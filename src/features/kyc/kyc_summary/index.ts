@@ -139,7 +139,7 @@ export const template: (
       color: ColorTokens.Secondary_100,
       fontSize: FontSizeTokens.XS,
     },
-    sbSpace1: <SpaceProps>{ size: SizeTypeTokens.MD },
+    sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
     sbspace2: <SpaceProps>{ size: SizeTypeTokens.MD },
     space1: <SpaceProps>{ size: SizeTypeTokens.MD },
     image: <ImageProps>{
