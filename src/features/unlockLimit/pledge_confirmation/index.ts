@@ -79,7 +79,7 @@ export const template: (
 
         isDivider: true,
         trailLabel: <TypographyProps>{
-          label: `₹ ${roundDownToNearestHundred(
+          label: `₹${roundDownToNearestHundred(
             processingFeesBreakUp[key] || 0
           )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
           color: ColorTokens.Grey_Night,
