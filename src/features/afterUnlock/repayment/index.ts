@@ -70,19 +70,22 @@ export const template: (
       { id: "headSpace", type: WIDGET.SPACE },
       { id: "messageStack", type: WIDGET.TEXT },
       { id: "messageSpace", type: WIDGET.SPACE },
-      { id: "bankStack", type: WIDGET.STACK,padding:{
-        horizontal:10,left:10,right:10,all:10
-      } },
+      {
+        id: "bankStack", type: WIDGET.STACK, padding: {
+          horizontal: 10, left: 10, right: 10, all: 10
+        }
+      },
       { id: "divider", type: WIDGET.DIVIDER },
-    //   {id:"tryStack",type:WIDGET.STACK,padding:{
-    //     horizontal:16,left:16,right:16
-    // } },
-      { id: "listItem1", type: WIDGET.LIST_ITEM,padding:{
-        horizontal:4,left:4,right:16
-    }  },
-      { id: "listItem2", type: WIDGET.LIST_ITEM,padding:{
-        horizontal:4,left:4,right:18
-    }  },
+      {
+        id: "listItem1", type: WIDGET.LIST_ITEM, padding: {
+          horizontal: 4, left: 4, right: 16
+        }
+      },
+      {
+        id: "listItem2", type: WIDGET.LIST_ITEM, padding: {
+          horizontal: 4, left: 4, right: 18
+        }
+      },
       { id: "listSpace", type: WIDGET.SPACE },
       {
         id: "continue",
@@ -130,12 +133,13 @@ export const template: (
         "Enjoy flexible repayments. Pay partially or the complete amount in just one go.",
       type: AmountCardTypeTokens.MESSAGE,
     },
-    amountSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+    amountSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
     headStack: <TypographyProps>{
       label: "Bank account details",
       fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
+      lineHeight:24,
       fontWeight: "700",
     },
     headSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
@@ -144,6 +148,7 @@ export const template: (
         "Add this account as beneficiary to repay principal via NEFT/IMPS. Transfer should happen from the the same account.",
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
+      lineHeight:18,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
@@ -169,6 +174,7 @@ export const template: (
     data: <TypographyProps>{
       label: `${bankName}`,
       fontSize: FontSizeTokens.MD,
+      lineHeight:24,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "700",
@@ -176,59 +182,40 @@ export const template: (
     divider: <DividerProps>{
       size: DividerSizeTokens.SM,
       margin: {
-        vertical: SizeTypeTokens.MD,
+        vertical: SizeTypeTokens.SM,
         horizontal: SizeTypeTokens.MD,
       },
       color: ColorTokens.Grey_Milk_1,
     },
-    tryStack: <StackProps>{
-      type: StackType.row,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.flexStart,
-      widgetItems: [
-        { id: "leadItem2", type: WIDGET.STACK },
-        { id: "leadItem3", type: WIDGET.STACK },
-      ],
-    },
-    leadItem2: <StackProps>{
-      type: StackType.column,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.flexStart,
-      widgetItems: [
-        { id: "leadItem4", type: WIDGET.TEXT },
-        { id: "leadItem5", type: WIDGET.TEXT },
-      ],
-    },
-    leadItem4: <TypographyProps>{
-      label:
-        "IFSC",
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Grey_Charcoal,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
-    },
-    leadItem5: <TypographyProps>{
-      label:
-        "IFSC",
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Grey_Charcoal,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
-    },
+   
     listItem1: <ListItemProps>{
       title: "IFSC",
       subTitle: `${bankIfscCode}`,
-      trailLabel: "Copy",
+      trailLabel: <TypographyProps>{
+        label: "Copy",
+        fontSize: FontSizeTokens.XS,
+        color: ColorTokens.Primary_100,
+        fontFamily: FontFamilyTokens.Inter,
+        lineHeight:18,
+        fontWeight: "500",
+      },
       trailIconName: IconTokens.Copy,
-      isDivider:true,
-      onPress: () => {},
+      isDivider: true,
+      onPress: () => { },
     },
     listItem2: <ListItemProps>{
       title: "Account number",
       subTitle: `${bankAccountNumber}`,
-      trailLabel: "Copy",
+      trailLabel: <TypographyProps>{
+        label: "Copy",
+        fontSize: FontSizeTokens.XS,
+        color: ColorTokens.Primary_100,
+        fontFamily: FontFamilyTokens.Inter,
+        lineHeight:18,
+        fontWeight: "500",
+      },
       trailIconName: IconTokens.Copy,
-      onPress: () => {},
+      onPress: () => { },
     },
     listSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
     continue: <ButtonProps & WidgetProps>{
