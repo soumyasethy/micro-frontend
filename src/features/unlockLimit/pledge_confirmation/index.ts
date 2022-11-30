@@ -57,7 +57,7 @@ export const template: (
       return (
         { id: `list_${index}`, type: WIDGET.LIST_ITEM
         ,padding:{
-          left:0,
+         // left:0,
         } 
       }
       )
