@@ -3,13 +3,10 @@ import {
   Layout,
   LAYOUTS,
   PageType,
-  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
 import {
-  AspectRatioToken,
-  BorderRadiusTokens,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -19,12 +16,9 @@ import {
   IconProps,
   IconSizeTokens,
   IconTokens,
-  ImageProps,
-  ImageSizeTokens,
   InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
-  ListItemDataProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -75,18 +69,8 @@ export const template: (
         type: StackType.row,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.flexEnd,
-        widgetItems: [
-          // { id: "imageItem", type: WIDGET.IMAGE },
-          { id: "trailIcon", type: WIDGET.ICON },
-        ],
+        widgetItems: [{ id: "trailIcon", type: WIDGET.ICON }],
       },
-      // imageItem: <ImageProps>{
-      //   uri: stepResponseObject.availableCAS[index].schemeName,
-      //   size: ImageSizeTokens.XS,
-      //   aspectRatio: AspectRatioToken.A1_1,
-      //   borderRadius: BorderRadiusTokens.BR1,
-      //   padding: SizeTypeTokens.SM,
-      // },
       trailIcon: <IconProps & WidgetProps>{
         name: IconTokens.Cancel,
         size: IconSizeTokens.XXXXL,
@@ -156,7 +140,7 @@ export const template: (
 
 export const modifyPledgeMF: PageType<any> = {
   onLoad: async (
-    {},
+    _,
     { index, stepResponseObject, selectedMap, portfolioSearchKeyword }
   ) => {
     return Promise.resolve(

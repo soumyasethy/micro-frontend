@@ -29,7 +29,6 @@ function getPropsValue(key?: string) {
 }
 async function setUser(props: User) {
   _globalProps.user = await props;
-  // await AsyncStorage.setItem(StoreKey.userContext, JSON.stringify(props));
 }
 
 async function getUser() {
@@ -39,15 +38,6 @@ async function getUser() {
   if (Object.values(_globalProps.user).length > 0) {
     return _globalProps.user;
   }
-  try {
-    const user: User = await JSON.parse(
-      await AsyncStorage.getItem(StoreKey.userContext)
-    );
-    if (user) return user;
-  } catch (e) {
-    return null;
-  }
-
   return null;
 }
 async function setToken(access_token: string) {

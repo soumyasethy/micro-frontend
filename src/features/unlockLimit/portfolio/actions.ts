@@ -1,19 +1,13 @@
-import { ActionFunction } from "@voltmoney/types";
+import { ActionFunction, WidgetProps } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import {
-  ACTION,
   CtaPayload,
   EditItemPayload,
   OtpPayload,
   PortfolioTogglePayload,
   SearchPortfolioPayload,
 } from "./types";
-import {
-  CtaCardProps,
-  IconTokens,
-  ListItemDataProps,
-  ListProps,
-} from "@voltmoney/schema";
+import { CtaCardProps, ListProps } from "@voltmoney/schema";
 import {
   AvailableCASItem,
   IsinLTVMap,
@@ -22,7 +16,7 @@ import {
 } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
-import { roundDownToNearestHundred } from "../../../configs/utils";
+import { portfolioListDatastoreBuilder, togglePortfolio } from "./utils";
 
 let portfolioSearchKeyword = "";
 let listBeforeSearchUI = [];
@@ -97,85 +91,20 @@ export const EditItem: ActionFunction<EditItemPayload> = async (
 export const ToggleSelectAction: ActionFunction<
   PortfolioTogglePayload
 > = async (action, _datastore, { setDatastore }): Promise<any> => {
-  console.warn("ToggleSelectAction", action);
-  const updateAvailableCASMapX = await SharedPropsService.getAvailableCASMap();
-  const stepResponseObject = action.payload.stepResponseObject;
-  const availableCASItem =
-    action.payload.stepResponseObject.availableCAS[action.payload.value];
-
-  let key = `${availableCASItem.isinNo}-${availableCASItem.folioNo}`;
-
-  let pledgedUnitsCalculated: number = 0;
-  if (action.payload.selectedMap[action.payload.value] === true) {
-    pledgedUnitsCalculated = updateAvailableCASMapX[key].totalAvailableUnits;
-  }
-  updateAvailableCASMapX[key] = {
-    ...updateAvailableCASMapX[key],
-    pledgedUnits: pledgedUnitsCalculated,
-  };
-
-  const selectedCAS: AvailableCASItem[] = [];
-  Object.keys(updateAvailableCASMapX).forEach((key) => {
-    selectedCAS.push(updateAvailableCASMapX[key]);
-  });
-  const totalAmount = getTotalLimit(
-    selectedCAS,
-    stepResponseObject.isinNAVMap,
-    stepResponseObject.isinLTVMap
+  await togglePortfolio(
+    action.payload.value,
+    action.payload.selectedMap[action.payload.value],
+    action.payload.stepResponseObject
   );
-  const updatedListUI = [
-    ...selectedCAS.map((item, i) => {
-      let key = `${stepResponseObject.availableCAS[i].isinNo}-${stepResponseObject.availableCAS[i].folioNo}`;
-      return <ListItemDataProps>{
-        label: item.schemeName, //"Axis Long Term Equity Mutual Funds",
-        info: "",
-        trailIcon: { name: IconTokens.Edit },
-        trailTitle:
-          action.payload.selectedMap.hasOwnProperty(i) &&
-          action.payload.selectedMap[i]
-            ? `₹ ${roundDownToNearestHundred(
-                getTotalLimit(
-                  [updateAvailableCASMapX[key]],
-                  stepResponseObject.isinNAVMap,
-                  stepResponseObject.isinLTVMap
-                )
-              )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",")
-            : "₹ 0", //"₹4,000",
-        trailSubTitle: `/ ₹ ${roundDownToNearestHundred(
-          getActualLimit(
-            [item],
-            stepResponseObject.isinNAVMap,
-            stepResponseObject.isinLTVMap
-          )
-        )}`.replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ","),
-        action: "edit",
-        trailIconAction: {
-          type: ACTION.EDIT_ITEM,
-          routeId: ROUTE.PORTFOLIO,
-          payload: <EditItemPayload>{
-            value: action.payload.value,
-            stepResponseObject,
-            selectedMap: action.payload.selectedMap,
-          },
-        },
-      };
-    }),
-  ];
-  const filteredList = updatedListUI.filter((item) =>
-    JSON.stringify(item.label.toUpperCase()).includes(
-      portfolioSearchKeyword.toUpperCase()
-    )
+  const props = await portfolioListDatastoreBuilder(
+    action.payload.stepResponseObject,
+    portfolioSearchKeyword
   );
-  await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps>{
-    data: filteredList,
-    selectedMap: { ...action.payload.selectedMap },
+  await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps & WidgetProps>{
+    ...props.listItem,
   });
-  await SharedPropsService.setAvailableCASMap(updateAvailableCASMapX);
   await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    info: `${roundDownToNearestHundred(totalAmount)}`.replace(
-      /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
-      ","
-    ),
+    ...props.totalItem,
   });
 };
 

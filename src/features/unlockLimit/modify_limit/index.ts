@@ -62,7 +62,6 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-        // { id: "space0", type: WIDGET.SPACE },
         { id: "inputItem", type: WIDGET.INPUT },
         { id: "inputSpace", type: WIDGET.SPACE },
         { id: "selectAssetForPledge", type: WIDGET.STACK },
@@ -90,7 +89,6 @@ export const template: (
           routeId: ROUTE.MODIFY_LIMIT,
         },
       },
-      // space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       inputItem: <TextInputProps & WidgetProps>{
         placeholder: "",
         type: InputTypeToken.DEFAULT,
@@ -173,4 +171,5 @@ export const modifyLimitMF: PageType<any> = {
     [ACTION.CONFIRM_CTA]: ConfirmCTA,
     [ACTION.BACK_BUTTON]: goBack,
   },
+  clearPrevious: true,
 };
