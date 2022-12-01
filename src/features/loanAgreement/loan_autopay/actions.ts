@@ -5,6 +5,7 @@ import { api } from "../../../configs/api";
 import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import { ProgressIndicatorProps } from "@voltmoney/schema";
 import { ACTION } from "./types";
+import { navigate } from "../../afterUnlock/dashboard/actions";
 
 export const GetMandateLink: ActionFunction<any> = async (
   action,
@@ -48,9 +49,9 @@ export const GetMandateLink: ActionFunction<any> = async (
 export const goBack: ActionFunction<any> = async (
   action,
   _datastore,
-  { goBack }
+  { navigate }
 ): Promise<any> => {
-  goBack();
+  await navigate(ROUTE.KYC_STEPPER, {})
 };
 export const MandateLinkPoll: ActionFunction<any> = async (
   action,
