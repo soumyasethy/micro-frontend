@@ -1,4 +1,4 @@
-import { StepperItem, StepperStateToken } from "@voltmoney/schema";
+import { DropDownItemProps, StepperItem, StepperStateToken } from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
 import { User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
@@ -456,3 +456,10 @@ export const maskBankAccountNumber = (accountNo: string) => {
   }
   return "Account number less than 4 digits";
 };
+
+export const qualificationInputData:Array<DropDownItemProps> = [
+  { label: 'Up to 12', value: 'Up to 12' },
+  { label: 'Diploma', value: 'Diploma' },
+  { label: 'Graduate', value: 'Graduate' },
+  { label: 'Post graduate', value: 'Post graduate' },
+]

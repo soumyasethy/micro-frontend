@@ -23,7 +23,7 @@ export const SplashAction: ActionFunction<any> = async (
     if (userContextResponse.status === 200) {
       const user: User = userContextResponse.data;
       await SharedPropsService.setUser(user);
-      return navigate(ROUTE.KYC_ADDITIONAL_DETAILS);
+      //return navigate(ROUTE.KYC_ADDITIONAL_DETAILS);
       /****
        * ADD YOUR CUSTOM ROUTE TO NAVIGATE
        * ****/
