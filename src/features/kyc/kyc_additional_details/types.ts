@@ -3,21 +3,30 @@ export enum ACTION {
   TOGGLE_CTA = "TOGGLE_CTA",
   DISABLE_CTA = "DISABLE_CTA",
   ENABLE_CTA = "ENABLE_CTA",
-  AADHAR_NUMBER = "AADHAR_NUMBER",
+  INPUT_NAME = "INPUT_NAME",
   GO_BACK = "GO_BACK",
+  SELECT_QUALIFICATION = 'SELECT_QUALIFICATION',
+  STATUS_CHECK = 'STATUS_CHECK',
+  STATUS_UNCHECK = 'STATUS_UNCHECK',
 }
 export type EnableDisableCTA = {
   value: boolean;
   targetWidgetId: string;
 };
+
 export type InputPayload = {
   value: string;
   widgetID: string;
 };
-enum MARITAL_STATUS {
-  DIVORCED = "DIVORCED",
+
+export type MaritalStatusPayload = {
+  value: boolean;
+  targetWidgetId: string,
+}
+
+export enum MARITAL_STATUS {
+  SINGLE = "SINGLE",
   MARRIED = "MARRIED",
-  NOT_MARRIED = "NOT_MARRIED",
 }
 
 export type KycAdditionalDetailsPayload = {

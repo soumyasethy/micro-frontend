@@ -463,3 +463,12 @@ export const qualificationInputData:Array<DropDownItemProps> = [
   { label: 'Graduate', value: 'Graduate' },
   { label: 'Post graduate', value: 'Post graduate' },
 ]
+
+export const getFirstLastName = (FullName:String) => {
+  if(FullName.length>0) {
+    var details:any =[]
+    details=FullName.split(' ');
+    return details;
+  }
+  return ["", ""];
+}

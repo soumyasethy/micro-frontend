@@ -46,8 +46,10 @@ import {
   ACTION,
   EnableDisableCTA,
   KycAdditionalDetailsPayload,
+  MaritalStatusPayload,
+  MARITAL_STATUS,
 } from "./types";
-import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
+import { onSelect, onChangeInput, toggleCTA, triggerCTA } from "./actions";
 import { AadharInitPayload } from "../kyc_init/types";
 import { horizontalStepperRepo, qualificationInputData } from "../../../configs/utils";
 import { getAppHeader, RegexConfig } from "../../../configs/config";
@@ -126,7 +128,7 @@ export const template: (
         charLimit: 12,
         caption: { error: "Please enter first name" },
         action: {
-          type: ACTION.AADHAR_NUMBER,
+          type: ACTION.INPUT_NAME,
           payload: <InputPayload>{ value: "", widgetID: "input" },
           routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
         },
@@ -157,7 +159,7 @@ export const template: (
         charLimit: 12,
         caption: { error: "Please enter last name" },
         action: {
-          type: ACTION.AADHAR_NUMBER,
+          type: ACTION.INPUT_NAME,
           payload: <InputPayload>{ value: "", widgetID: "input" },
           routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
         },
@@ -217,7 +219,12 @@ export const template: (
         size: IconSizeTokens.XL,
         isChecked: false,
         checkedIconName: IconTokens.RadioCircleFilled,
-        notCheckedIconName: IconTokens.RadioCircleNotFilled
+        notCheckedIconName: IconTokens.RadioCircleNotFilled,
+        actionChecked: {
+          type: ACTION.STATUS_CHECK,
+          payload: <MaritalStatusPayload> {value: true, targetWidgetId:"marriedRadio"},
+          routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
+        }
       },
       marriedRadioSpace0: <SpaceProps> { size: SizeTypeTokens.MD },
       marriedRadioLabel: <TypographyProps> {
@@ -236,11 +243,16 @@ export const template: (
           { id: "singleRadioLabel", type: WIDGET.TEXT }
         ]
       },
-      singleRadio: <RadioProps> {
+      singleRadio: <RadioProps & WidgetProps> {
         size: IconSizeTokens.XL,
-        isChecked: false,
+        isChecked: true,
         checkedIconName: IconTokens.RadioCircleFilled,
-        notCheckedIconName: IconTokens.RadioCircleNotFilled
+        notCheckedIconName: IconTokens.RadioCircleNotFilled,
+        actionChecked: {
+          type: ACTION.STATUS_CHECK,
+          payload: <MaritalStatusPayload> {value: true, targetWidgetId:"singleRadio"},
+          routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
+        }
       },
       singleRadioSpace0: <SpaceProps> { size: SizeTypeTokens.MD },
       singleRadioLabel: <TypographyProps> {
@@ -251,14 +263,18 @@ export const template: (
         color: ColorTokens.Grey_Night
       },
       selectQualificationTitleSpace: <SpaceProps> { size: SizeTypeTokens.XL },
-      qualificationInput: <DropDownInputProps> {
+      qualificationInput: <DropDownInputProps & WidgetProps> {
        label: "Select qualification",
        data: qualificationInputData,
-       onSelect: ()=>{}
+       onSelectAction: {
+        type: ACTION.SELECT_QUALIFICATION,
+        payload: <InputPayload> { value: "", widgetID: "qualificationInput" },
+        routeId: ROUTE.KYC_ADDITIONAL_DETAILS
+       }
       },
       selectQualificationInputSpace: <SpaceProps> { size: SizeTypeTokens.LG },
       qualificationInputSpace: <SpaceProps> { size: SizeTypeTokens.XL },
-      fatherNameInput: <TextInputProps & TypographyProps> {
+      fatherNameInput: <TextInputProps & TypographyProps & WidgetProps> {
         title: "Father's name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
@@ -266,6 +282,13 @@ export const template: (
         fontWeight: "400",
         placeholder: "",
         color: ColorTokens.Grey_Night,
+        type: InputTypeToken.DEFAULT,
+        state: InputStateToken.DEFAULT,
+        action: {
+          type: ACTION.INPUT_NAME,
+          payload: <InputPayload>{ value: "", widgetID: "fatherNameInput"},
+          routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
+        },
       },
       motherNameInput: <TextInputProps> {
         title: "Mother's name",
@@ -275,6 +298,11 @@ export const template: (
         fontWeight: "400",
         placeholder: "",
         color: ColorTokens.Grey_Night,
+        action: {
+          type: ACTION.INPUT_NAME,
+          payload: <InputPayload>{ value: "", widgetID: "motherNameInput"},
+          routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
+        },
       },
       motherNameInputSpace: <SpaceProps> { size: SizeTypeTokens.XXXL},
       stackBottom: <StackProps>{
@@ -329,10 +357,10 @@ export const kycAdditionalDetailsMF: PageType<any> = {
     return Promise.resolve(template(stepper, stepResponseObject));
   },
   actions: {
-    //[ACTION.TRIGGER_CTA]: triggerCTA,
-    // [ACTION.ENABLE_CTA]: toggleCTA,
-    // [ACTION.DISABLE_CTA]: toggleCTA,
-    // [ACTION.AADHAR_NUMBER]: onChangeAadhar,
-    // [ACTION.GO_BACK]: GoBackAction,
+    [ACTION.TRIGGER_CTA]: triggerCTA,
+    [ACTION.STATUS_CHECK]: toggleCTA,
+    [ACTION.STATUS_UNCHECK]: toggleCTA,
+    [ACTION.INPUT_NAME]: onChangeInput,
+    [ACTION.SELECT_QUALIFICATION]: onSelect,
   },
 };
