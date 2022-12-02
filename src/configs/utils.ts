@@ -294,6 +294,8 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
   } else if (currentStepId === ROUTE.KYC_PHOTO_VERIFICATION) {
     return { routeId: ROUTE.KYC_PHOTO_VERIFICATION, params: {} };
+  } else if (currentStepId === ROUTE.KYC_ADDITIONAL_DETAILS) {
+    return { routeId: ROUTE.KYC_ADDITIONAL_DETAILS, params: {} };
   } else if (currentStepId === ROUTE.KYC_SUMMARY) {
     return { routeId: ROUTE.KYC_SUMMARY, params: {} };
   } else if (currentStepId === ROUTE.BANK_ACCOUNT_VERIFICATION) {
@@ -357,6 +359,7 @@ export const nextStepId = async (
       currentStepId === "KYC_CKYC" ||
       currentStepId === "KYC_PHOTO_VERIFICATION" ||
       currentStepId === "KYC_AADHAAR_VERIFICATION" ||
+      currentStepId === "KYC_ADDITIONAL_DETAILS" ||
       currentStepId === "KYC_SUMMARY" ||
       currentStepId === "BANK_ACCOUNT_VERIFICATION" ||
       currentStepId === "MANDATE_SETUP" ||
@@ -441,15 +444,15 @@ export const roundDownToNearestHundred = (num: number) => {
 };
 
 export const maskBankAccountNumber = (accountNo: string) => {
-  if(accountNo.length > 4) {
-    let showString = accountNo.slice(accountNo.length-4)
+  if (accountNo.length > 4) {
+    let showString = accountNo.slice(accountNo.length - 4);
     let maskString = "";
     let index = accountNo.length - 4;
-    while(index>0) {
-      maskString += "X"
+    while (index > 0) {
+      maskString += "X";
       index--;
     }
-    return maskString.concat(showString) 
+    return maskString.concat(showString);
   }
   return "Account number less than 4 digits";
-}
+};

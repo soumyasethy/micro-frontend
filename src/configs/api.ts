@@ -60,4 +60,5 @@ export const api = {
   repaymentBankAccountDetails: `${config.URL}/app/borrower/lms/repaymentBankAccountDetails/`,
   processingCharges: `${config.URL}/app/borrower/application/pledge/processingCharges`,
   borrowerApplication: `${config.URL}/app/borrower/application/`,
+  additionalDetails: `${config.URL}/app/borrower/application/additionalDetails/`,
 };

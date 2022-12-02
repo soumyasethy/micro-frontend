@@ -56,6 +56,7 @@ import { carousalPageMF } from "./features/carousal/";
 import { landingPageMF } from "./features/landing";
 import { transactionsMF } from "./features/unlockLimit/transactions";
 import { privacyPolicyMF } from "./features/privacy_policy";
+import {kycAdditionalDetailsMF} from "./features/kyc/kyc_additional_details";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -113,5 +114,6 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.CAROUSAL_PAGE]: carousalPageMF,
   [ROUTE.LANDING_PAGE]: landingPageMF,
   [ROUTE.TRANSACTIONS]: transactionsMF,
-  [ROUTE.PRIVACY_POLICY]: privacyPolicyMF
+  [ROUTE.PRIVACY_POLICY]: privacyPolicyMF,
+  [ROUTE.KYC_ADDITIONAL_DETAILS]: kycAdditionalDetailsMF
 };
