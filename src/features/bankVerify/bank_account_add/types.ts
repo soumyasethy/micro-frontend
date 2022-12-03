@@ -5,6 +5,7 @@ export enum ACTION {
   TRIGGER_CTA = "TRIGGER_CTA",
   TOGGLE_CTA = "TOGGLE_CTA",
   CHANGE_BANK_GO_BACK = "CHANGE_BANK_GO_BACK",
+  NAV_STEPPER = "NAV_STEPPER",
 }
 export type NavigationSearchIFSCActionPayload = {
   bankCode: string;
