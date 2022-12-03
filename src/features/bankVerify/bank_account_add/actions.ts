@@ -10,6 +10,7 @@ import {
   BAVVerifyActionPayload,
 } from "../bank_account_verification/types";
 import {
+  ACTION,
   InputNumberActionPayload,
   NavigationSearchIFSCActionPayload,
 } from "./types";
@@ -17,8 +18,12 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
-import { User } from "../../login/otp_verify/types";
+import { APP_CONFIG, getAppHeader } from "../../../configs/config";
+import { StepStatusMap, User } from "../../login/otp_verify/types";
+import {
+  updateCurrentStepId,
+  updateStepStatusMap,
+} from "../../../configs/utils";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -80,9 +85,9 @@ export const BavVerifyManualAction: ActionFunction<
     type: "LOADING",
     iconName: IconTokens.Coin,
   });
+  const user: User = await SharedPropsService.getUser();
+  const applicationId = user.linkedApplications[0].applicationId;
 
-  const applicationId = (await SharedPropsService.getUser())
-    .linkedApplications[0].applicationId;
   const response = await network.post(
     api.bavVerify,
     {
@@ -98,18 +103,26 @@ export const BavVerifyManualAction: ActionFunction<
       await goBack();
     }
   );
+  const stepStatusMap: StepStatusMap = _.get(
+    response,
+    "data.updatedApplicationObj.stepStatusMap",
+    null
+  );
+  const currentStepId = _.get(
+    response,
+    "data.updatedApplicationObj.currentStepId",
+    null
+  );
 
-  if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
+  if (currentStepId && stepStatusMap) {
+    await updateCurrentStepId(currentStepId);
+    await updateStepStatusMap(stepStatusMap);
     await goBack();
-    const user: User = await SharedPropsService.getUser();
-    user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
-      StepperStateToken.COMPLETED;
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
-      StepperStateToken.IN_PROGRESS;
-    await SharedPropsService.setUser(user);
+  }
 
+  if (stepStatusMap.BANK_ACCOUNT_VERIFICATION === StepperStateToken.COMPLETED) {
     await showPopup({
-      autoTriggerTimerInMilliseconds: 2000,
+      autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
       isAutoTriggerCta: true,
       type: "SUCCESS",
       title: "Account verified successfully!",
@@ -119,33 +132,30 @@ export const BavVerifyManualAction: ActionFunction<
         type: ACTION_CURRENT.GO_NEXT,
         routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
         payload: {
-          currentStepId: _.get(
-            response,
-            "data.updatedApplicationObj.currentStepId"
-          ),
+          currentStepId: currentStepId,
         },
       },
     });
-  } /* else if (_.get(response, "data.stepResponseObject")) {
+  } else if (
+    stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
+    StepperStateToken.PENDING_MANUAL_VERIFICATION
+  ) {
     await showPopup({
-      autoTriggerTimerInMilliseconds: 2000,
-      isAutoTriggerCta: true,
-      type: "IN_PROGRESS",
-      title: "Account verified successfully!",
-      subTitle: "You will be redirected to next step in few seconds",
+      autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
+      isAutoTriggerCta: false,
+      type: "DEFAULT",
+      iconName: IconTokens.InProgress,
+      title: "Verification in progress",
+      subTitle:
+        "It's taking longer than usual to verify the account. We'll automatically try again in some time.",
       ctaLabel: "Continue",
       ctaAction: {
-        type: ACTION_CURRENT.GO_NEXT,
-        routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
-        payload: {
-          currentStepId: _.get(
-            response,
-            "data.updatedApplicationObj.currentStepId"
-          ),
-        },
+        type: ACTION.NAV_STEPPER,
+        routeId: ROUTE.BANK_ACCOUNT_ADD,
+        payload: {},
       },
     });
-  }*/
+  }
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
@@ -156,4 +166,11 @@ export const ChangeBankGoBackAction: ActionFunction<any> = async (
   { goBack }
 ): Promise<any> => {
   await goBack();
+};
+export const GoToStepper: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  await navigate(ROUTE.KYC_STEPPER);
 };

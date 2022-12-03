@@ -94,7 +94,7 @@ export const template: (
         keyboardType: KeyboardTypeToken.numberPad,
         limitLabel:
           "out of " +
-          `${availableCreditAmount}`.replace(
+          `₹${availableCreditAmount}`.replace(
             /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
             ","
           ),

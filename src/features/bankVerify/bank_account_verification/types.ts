@@ -18,3 +18,7 @@ export type ToggleActionPayload = {
   bankAccountNumber: string;
   bankIfscCode: string;
 };
+
+export type NextNavPayload = {
+  currentStepId: string;
+};

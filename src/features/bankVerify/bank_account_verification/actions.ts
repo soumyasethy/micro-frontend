@@ -2,6 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import {
   ACTION as ACTION_CURRENT,
   BAVVerifyActionPayload,
+  NextNavPayload,
   ToggleActionPayload,
 } from "./types";
 import {
@@ -9,14 +10,17 @@ import {
   ButtonTypeTokens,
   SelectiveListItemProps,
   SelectiveListItemStateTokens,
-  StepperStateToken,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
-import { User } from "../../login/otp_verify/types";
+import { StepStatusMap } from "../../login/otp_verify/types";
+import {
+  updateCurrentStepId,
+  updateStepStatusMap,
+} from "../../../configs/utils";
 
 let selectedWidget = undefined;
 let ifscCode = undefined;
@@ -69,12 +73,18 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
     },
     { headers: await getAppHeader() }
   );
+  const currentStepId = _.get(
+    response,
+    "data.updatedApplicationObj.currentStepId"
+  );
+  const stepStatusMap: StepStatusMap = _.get(
+    response,
+    "data.updatedApplicationObj.stepStatusMap"
+  );
+  if (currentStepId && stepStatusMap) {
+    await updateCurrentStepId(currentStepId);
+    await updateStepStatusMap(stepStatusMap);
 
-  if (_.get(response, "data.updatedApplicationObj.currentStepId")) {
-    const user: User = await SharedPropsService.getUser();
-    user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
-      StepperStateToken.COMPLETED;
-    await SharedPropsService.setUser(user);
     await showPopup({
       autoTriggerTimerInMilliseconds: 2000,
       isAutoTriggerCta: true,
@@ -85,7 +95,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
       ctaAction: {
         type: ACTION_CURRENT.GO_NEXT,
         routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
-        payload: {
+        payload: <NextNavPayload>{
           currentStepId: _.get(
             response,
             "data.updatedApplicationObj.currentStepId"
@@ -111,17 +121,11 @@ export const GoBackAction: ActionFunction<{}> = async (
 ): Promise<any> => {
   await navigate(ROUTE.KYC_STEPPER);
 };
-export const GoNext: ActionFunction<any> = async (
+export const GoNext: ActionFunction<NextNavPayload> = async (
   action,
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
-  const user: User = await SharedPropsService.getUser();
-  user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
-    StepperStateToken.COMPLETED;
-  user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
-    StepperStateToken.IN_PROGRESS;
-  await SharedPropsService.setUser(user);
-  await navigate(ROUTE.LOAN_AUTOPAY);
+  await navigate(action.payload.currentStepId);
 };

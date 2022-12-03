@@ -123,7 +123,7 @@ export const template: (applicationId: string) => TemplateSchema = (
       space2: <SpaceProps>{ size: SizeTypeTokens.Size32 },
       space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       backButton: <IconProps & WidgetProps>{
-        name: IconTokens.ChevronDown,
+        name: IconTokens.ChevronLeft,
         size: IconSizeTokens.XXL,
         color: ColorTokens.Grey_Night,
         action: {
