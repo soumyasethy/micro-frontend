@@ -65,7 +65,7 @@ export const template: (
         type: WIDGET.HEADER,
         position: POSITION.FIXED_TOP,
       },
-      { id: "cardStack", type: WIDGET.STACK },
+      { id: "cardStack", type: WIDGET.STACK},
       { id: "accountSpace", type: WIDGET.SPACE },
       { id: "accountInput", type: WIDGET.INPUT },
       { id: "IFSCSpace", type: WIDGET.SPACE },
@@ -112,8 +112,9 @@ export const template: (
       uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
       defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
       size: ImageSizeTokens.MD,
+      padding:SizeTypeTokens.NONE,
     },
-    leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
+    leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     bankName: <TypographyProps>{
       label: bankName,
       color: ColorTokens.Grey_Night,
@@ -212,5 +213,5 @@ export const bankAccountAddMF: PageType<any> = {
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
     [ACTION.NAV_STEPPER]: GoToStepper,
   },
-  clearPrevious: false,
+  clearPrevious: true,
 };
