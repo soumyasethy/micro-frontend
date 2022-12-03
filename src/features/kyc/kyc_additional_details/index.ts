@@ -303,7 +303,6 @@ export const kycAdditionalDetailsMF: PageType<any> = {
       { headers: await getAppHeader() }
     );
 
-    console.warn("Response warn : " + response);
     const stepResponseObject = _.get(response, "data.stepResponseObject", {});
     return Promise.resolve(template(stepper, stepResponseObject));
   },
