@@ -307,6 +307,7 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     currentStepId = (await SharedPropsService.getUser()).linkedApplications[0]
       .currentStepId;
   }
+  console.warn("*** currentStepId ***", currentStepId);
   if (currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION) {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
   } else if (currentStepId === ROUTE.KYC_PHOTO_VERIFICATION) {

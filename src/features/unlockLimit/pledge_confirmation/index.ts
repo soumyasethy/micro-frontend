@@ -40,7 +40,6 @@ import { getTotalLimit } from "../portfolio/actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
-import { roundDownToNearestHundred } from "../../../configs/utils";
 
 export const template: (
   totalAmount: number,
@@ -283,7 +282,9 @@ export const template: (
         widgetItems: [{ id: "valueItem", type: WIDGET.TEXT }],
       },
       valueItem: <TypographyProps>{
-        label: `₹${(100 * stepResponseObject.interestRate) / 12}/month`,
+        label: `₹${
+          Math.ceil(((100 * stepResponseObject.interestRate) / 12) * 100) / 100
+        }/month`,
         color: ColorTokens.Grey_Night,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
