@@ -1,53 +1,90 @@
 import { ActionFunction } from "@voltmoney/types";
-import { EnableDisableCTA } from "../../login/phone_number/types";
-import { ButtonProps, ButtonTypeTokens, RadioProps } from "@voltmoney/schema";
-import { InputPayload, KycAdditionalDetailsPayload, MaritalStatusPayload, MARITAL_STATUS } from "./types";
+import {
+  ButtonProps,
+  ButtonTypeTokens,
+  IconProps,
+  IconTokens,
+} from "@voltmoney/schema";
+import {
+  DropDownPayload,
+  EDUCATION,
+  InputPayload,
+  KycAdditionalDetailsPayload,
+  MARITAL_STATUS,
+  MaritalStatusPayload,
+} from "./types";
 import { AadharInitPayload } from "../kyc_init/types";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import _ from "lodash";
+import { nextStepCredStepper } from "../../../configs/utils";
+import { ROUTE } from "../../../routes";
+import SharedPropsService from "../../../SharedPropsService";
+import { User } from "../../login/otp_verify/types";
 
-let martialStatus:MARITAL_STATUS = MARITAL_STATUS.SINGLE;
+let martialStatus: MARITAL_STATUS = MARITAL_STATUS.SINGLE;
 let fatherName = "";
-let motherName = ""; 
-let qualification = ""
+let motherName = "";
+let qualification: EDUCATION = null;
 
 export const onChangeInput: ActionFunction<InputPayload> = async (
   action,
   _datastore,
-  {}
+  { setDatastore }
 ): Promise<any> => {
-  if(action.payload.widgetID == "fatherNameInput") {
+  if (action.payload.widgetID == "fatherNameInput") {
     fatherName = action.payload.value;
   }
-  if(action.payload.widgetID == "motherNameInput") {
+  if (action.payload.widgetID == "motherNameInput") {
     motherName = action.payload.value;
+  }
+  if (martialStatus && fatherName && motherName && qualification) {
+    await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    });
   }
 };
 
-export const onSelect: ActionFunction<InputPayload> = async (
+export const onSelect: ActionFunction<DropDownPayload> = async (
   action,
   _datastore,
-  {}
+  { setDatastore }
 ): Promise<any> => {
-  qualification = action.payload.value
+  qualification = action.payload.value;
+  if (martialStatus && fatherName && motherName && qualification) {
+    await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    });
+  }
 };
-
 
 export const toggleCTA: ActionFunction<MaritalStatusPayload> = async (
   action,
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.warn("action", action);
-  if(action.payload.targetWidgetId === "singleRadio" && action.payload.value == true) {
-    await setDatastore(action.routeId, action.payload.targetWidgetId, <RadioProps>{ isChecked: true });
-    await setDatastore(action.routeId, "marriedRadio", <RadioProps>{ isChecked: false });
-    martialStatus = MARITAL_STATUS.SINGLE
-  } 
-  if(action.payload.targetWidgetId === "marriedRadio" && action.payload.value == true) {
-    await setDatastore(action.routeId, action.payload.targetWidgetId, <RadioProps>{ isChecked: true });
-    await setDatastore(action.routeId, "singleRadio", <RadioProps>{ isChecked: false });
-    martialStatus = MARITAL_STATUS.MARRIED
+  if (action.payload.value == MARITAL_STATUS.SINGLE) {
+    await setDatastore(action.routeId, "singleRadio", <IconProps>{
+      name: IconTokens.RadioCircleFilled,
+    });
+    await setDatastore(action.routeId, "marriedRadio", <IconProps>{
+      name: IconTokens.RadioCircleNotFilled,
+    });
+    martialStatus = MARITAL_STATUS.SINGLE;
+  } else if (action.payload.value == MARITAL_STATUS.MARRIED) {
+    await setDatastore(action.routeId, "singleRadio", <IconProps>{
+      name: IconTokens.RadioCircleNotFilled,
+    });
+    await setDatastore(action.routeId, "marriedRadio", <IconProps>{
+      name: IconTokens.RadioCircleFilled,
+    });
+    martialStatus = MARITAL_STATUS.MARRIED;
+  }
+
+  if (martialStatus && fatherName && motherName && qualification) {
+    await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    });
   }
 };
 
@@ -59,17 +96,32 @@ export const triggerCTA: ActionFunction<KycAdditionalDetailsPayload> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  console.warn("action", action);
+  const user: User = await SharedPropsService.getUser();
+  const applicationId = user.linkedApplications[0].applicationId;
   const response = await network.post(
-    api.additionalDetails,
-    {...action.payload},
+    `${api.additionalDetails}${applicationId}`,
+    <KycAdditionalDetailsPayload>{
+      maritalStatus: martialStatus,
+      qualification: qualification,
+      fatherFirstName: fatherName,
+      fatherLastName: fatherName,
+      motherFirstName: motherName,
+      motherLastName: motherName,
+    },
     {
       headers: await getAppHeader(),
     }
   );
   await setDatastore(action.routeId, "continue", <ButtonProps>{
-    loading: true,
+    loading: false,
   });
+  const currentStepId = _.get(
+    response,
+    "data.updatedApplicationObj.currentStepId"
+  );
+  if (currentStepId) {
+    await navigate(currentStepId);
+  }
 };
 
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (

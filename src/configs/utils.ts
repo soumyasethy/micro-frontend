@@ -1,9 +1,14 @@
-import { DropDownItemProps, StepperItem, StepperStateToken } from "@voltmoney/schema";
+import {
+  DropDownItemProps,
+  StepperItem,
+  StepperStateToken,
+} from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
 import { User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
+import { EDUCATION } from "../features/kyc/kyc_additional_details/types";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -457,18 +462,18 @@ export const maskBankAccountNumber = (accountNo: string) => {
   return "Account number less than 4 digits";
 };
 
-export const qualificationInputData:Array<DropDownItemProps> = [
-  { label: 'Up to 12', value: 'Up to 12' },
-  { label: 'Diploma', value: 'Diploma' },
-  { label: 'Graduate', value: 'Graduate' },
-  { label: 'Post graduate', value: 'Post graduate' },
-]
+export const qualificationInputData: Array<DropDownItemProps> = [
+  { label: "Up to 12", value: EDUCATION.UP_TO_12 },
+  { label: "Diploma", value: EDUCATION.DIPLOMA },
+  { label: "Graduate", value: EDUCATION.UNDER_GRADUATE },
+  { label: "Post graduate", value: EDUCATION.POST_GRADUATE },
+];
 
-export const getFirstLastName = (FullName:String) => {
-  if(FullName.length>0) {
-    var details:any =[]
-    details=FullName.split(' ');
+export const getFirstLastName = (FullName: String) => {
+  if (FullName.length > 0) {
+    var details: any = [];
+    details = FullName.split(" ");
     return details;
   }
   return ["", ""];
-}
+};

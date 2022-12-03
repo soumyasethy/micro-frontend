@@ -22,12 +22,10 @@ import {
   IconTokens,
   InputStateToken,
   InputTypeToken,
-  KeyboardTypeToken,
   RadioProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
-  StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
@@ -36,23 +34,24 @@ import {
   StepperProps,
   StepperTypeTokens,
   TextInputProps,
-  TextInputTypeToken,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import {
-  InputPayload,
   ACTION,
-  EnableDisableCTA,
+  DropDownPayload,
+  InputPayload,
   KycAdditionalDetailsPayload,
-  MaritalStatusPayload,
   MARITAL_STATUS,
+  MaritalStatusPayload,
 } from "./types";
-import { onSelect, onChangeInput, toggleCTA, triggerCTA } from "./actions";
-import { AadharInitPayload } from "../kyc_init/types";
-import { horizontalStepperRepo, qualificationInputData } from "../../../configs/utils";
-import { getAppHeader, RegexConfig } from "../../../configs/config";
+import { onChangeInput, onSelect, toggleCTA, triggerCTA } from "./actions";
+import {
+  horizontalStepperRepo,
+  qualificationInputData,
+} from "../../../configs/utils";
+import { getAppHeader } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
@@ -71,16 +70,20 @@ export const template: (
         { id: "spaceSubTitle", type: WIDGET.SPACE },
         { id: "martialStatusTitle", type: WIDGET.TEXT },
         { id: "martialStatusSpace", type: WIDGET.SPACE },
-        { id: "martialStatusStack", type: WIDGET.STACK},
+        { id: "martialStatusStack", type: WIDGET.STACK },
         { id: "selectQualificationTitleSpace", type: WIDGET.SPACE },
         { id: "selectQualificationInputSpace", type: WIDGET.SPACE },
-        { id: "qualificationInput", type: WIDGET.DROPDOWN_INPUT},
+        { id: "qualificationInput", type: WIDGET.DROPDOWN_INPUT },
         { id: "qualificationInputSpace", type: WIDGET.SPACE },
         { id: "fatherInputSpace", type: WIDGET.SPACE },
-        { id: "fatherNameInput", type: WIDGET.INPUT},
+        { id: "fatherNameInput", type: WIDGET.INPUT },
         { id: "motherNameInputSpace", type: WIDGET.SPACE },
-        { id: "motherNameInput", type: WIDGET.INPUT},
-        { id: "stackBottom", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM},
+        { id: "motherNameInput", type: WIDGET.INPUT },
+        {
+          id: "stackBottom",
+          type: WIDGET.STACK,
+          position: POSITION.ABSOLUTE_BOTTOM,
+        },
         { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
       ],
     },
@@ -118,68 +121,6 @@ export const template: (
         lineHeight: 24,
       },
       martialStatusSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
-      firstName: <TextInputProps>{
-        placeholder: "First name",
-        regex: RegexConfig.AADHAR,
-        title: "First name",
-        type: InputTypeToken.DEFAULT,
-        state: InputStateToken.DEFAULT,
-        keyboardType: KeyboardTypeToken.numberPad,
-        charLimit: 12,
-        caption: { error: "Please enter first name" },
-        action: {
-          type: ACTION.INPUT_NAME,
-          payload: <InputPayload>{ value: "", widgetID: "input" },
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
-        },
-        errorAction: {
-          type: ACTION.DISABLE_CTA,
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
-          payload: <EnableDisableCTA>{
-            value: false,
-            targetWidgetId: "continue",
-          },
-        },
-        successAction: {
-          type: ACTION.ENABLE_CTA,
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
-          payload: <EnableDisableCTA>{
-            value: true,
-            targetWidgetId: "continue",
-          },
-        },
-      },
-      lastName: <TextInputProps>{
-        placeholder: "Last name",
-        regex: RegexConfig.AADHAR,
-        title: "Last name",
-        type: InputTypeToken.DEFAULT,
-        state: InputStateToken.DEFAULT,
-        keyboardType: KeyboardTypeToken.numberPad,
-        charLimit: 12,
-        caption: { error: "Please enter last name" },
-        action: {
-          type: ACTION.INPUT_NAME,
-          payload: <InputPayload>{ value: "", widgetID: "input" },
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
-        },
-        errorAction: {
-          type: ACTION.DISABLE_CTA,
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
-          payload: <EnableDisableCTA>{
-            value: false,
-            targetWidgetId: "continue",
-          },
-        },
-        successAction: {
-          type: ACTION.ENABLE_CTA,
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
-          payload: <EnableDisableCTA>{
-            value: true,
-            targetWidgetId: "continue",
-          },
-        },
-      },
       continue: <ButtonProps & WidgetProps>{
         type: ButtonTypeTokens.LargeOutline,
         label: "Confirm",
@@ -191,120 +132,128 @@ export const template: (
         action: {
           type: ACTION.TRIGGER_CTA,
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
-          payload: <KycAdditionalDetailsPayload>{ ...stepResponseObject },
+          payload: <KycAdditionalDetailsPayload>{},
         },
       },
       spaceContinue: <SpaceProps>{ size: SizeTypeTokens.MD },
-      martialStatusStack: <StackProps> {
+      martialStatusStack: <StackProps>{
         width: StackWidth.FULL,
         type: StackType.row,
         justifyContent: StackJustifyContent.flexStart,
         widgetItems: [
-          { id: "singleRadioStack", type: WIDGET.STACK},
-          //{ id: "martialStatusSpace0", type: WIDGET.SPACE},
-          { id: "marriedRadioStack", type: WIDGET.STACK}
-        ]
+          { id: "singleRadioStack", type: WIDGET.STACK },
+          { id: "martialStatusSpace0", type: WIDGET.SPACE },
+          { id: "marriedRadioStack", type: WIDGET.STACK },
+        ],
       },
-      martialStatusSpace0: <SpaceProps>{ size: SizeTypeTokens.XXXXXL},
-      marriedRadioStack: <StackProps> {
+      martialStatusSpace0: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
+      marriedRadioStack: <StackProps & WidgetProps>{
         type: StackType.row,
         width: StackWidth.CONTENT,
         widgetItems: [
-          { id: "marriedRadio", type: WIDGET.RADIO },
+          { id: "marriedRadio", type: WIDGET.ICON },
           { id: "marriedRadioSpace0", type: WIDGET.SPACE },
-          { id: "marriedRadioLabel", type: WIDGET.TEXT }
-        ]
-      },
-      marriedRadio: <RadioProps> {
-        size: IconSizeTokens.XL,
-        isChecked: false,
-        checkedIconName: IconTokens.RadioCircleFilled,
-        notCheckedIconName: IconTokens.RadioCircleNotFilled,
-        actionChecked: {
+          { id: "marriedRadioLabel", type: WIDGET.TEXT },
+        ],
+        action: {
           type: ACTION.STATUS_CHECK,
-          payload: <MaritalStatusPayload> {value: true, targetWidgetId:"marriedRadio"},
+          payload: <MaritalStatusPayload>{
+            value: MARITAL_STATUS.MARRIED,
+            targetWidgetId: "marriedRadio",
+          },
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
-        }
+        },
       },
-      marriedRadioSpace0: <SpaceProps> { size: SizeTypeTokens.MD },
-      marriedRadioLabel: <TypographyProps> {
+      marriedRadio: <IconProps>{
+        name: IconTokens.RadioCircleNotFilled,
+        size: IconSizeTokens.XL,
+      },
+
+      marriedRadioSpace0: <SpaceProps>{ size: SizeTypeTokens.MD },
+      marriedRadioLabel: <TypographyProps>{
         label: "Married",
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "500",
         fontSize: FontSizeTokens.SM,
-        color: ColorTokens.Grey_Night
+        color: ColorTokens.Grey_Night,
       },
-      singleRadioStack:  <StackProps> {
+      singleRadioStack: <StackProps>{
         type: StackType.row,
         width: StackWidth.CONTENT,
         widgetItems: [
-          { id: "singleRadio", type: WIDGET.RADIO },
+          { id: "singleRadio", type: WIDGET.ICON },
           { id: "singleRadioSpace0", type: WIDGET.SPACE },
-          { id: "singleRadioLabel", type: WIDGET.TEXT }
-        ]
-      },
-      singleRadio: <RadioProps & WidgetProps> {
-        size: IconSizeTokens.XL,
-        isChecked: true,
-        checkedIconName: IconTokens.RadioCircleFilled,
-        notCheckedIconName: IconTokens.RadioCircleNotFilled,
-        actionChecked: {
+          { id: "singleRadioLabel", type: WIDGET.TEXT },
+        ],
+        action: {
           type: ACTION.STATUS_CHECK,
-          payload: <MaritalStatusPayload> {value: true, targetWidgetId:"singleRadio"},
+          payload: <MaritalStatusPayload>{
+            value: MARITAL_STATUS.SINGLE,
+            targetWidgetId: "singleRadio",
+          },
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
-        }
+        },
       },
-      singleRadioSpace0: <SpaceProps> { size: SizeTypeTokens.MD },
-      singleRadioLabel: <TypographyProps> {
+      singleRadio: <IconProps>{
+        name: IconTokens.RadioCircleNotFilled,
+        size: IconSizeTokens.XL,
+      },
+      singleRadioSpace0: <SpaceProps>{ size: SizeTypeTokens.MD },
+      singleRadioLabel: <TypographyProps>{
         label: "Single",
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "500",
         fontSize: FontSizeTokens.SM,
-        color: ColorTokens.Grey_Night
+        color: ColorTokens.Grey_Night,
       },
-      selectQualificationTitleSpace: <SpaceProps> { size: SizeTypeTokens.XL },
-      qualificationInput: <DropDownInputProps & WidgetProps> {
-       label: "Select qualification",
-       data: qualificationInputData,
-       onSelectAction: {
-        type: ACTION.SELECT_QUALIFICATION,
-        payload: <InputPayload> { value: "", widgetID: "qualificationInput" },
-        routeId: ROUTE.KYC_ADDITIONAL_DETAILS
-       }
+      selectQualificationTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+      qualificationInput: <DropDownInputProps & WidgetProps>{
+        label: "Select qualification",
+        data: qualificationInputData,
+        action: {
+          type: ACTION.SELECT_QUALIFICATION,
+          payload: <DropDownPayload>{
+            value: null,
+            widgetID: "qualificationInput",
+          },
+          routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
+        },
       },
-      selectQualificationInputSpace: <SpaceProps> { size: SizeTypeTokens.LG },
-      qualificationInputSpace: <SpaceProps> { size: SizeTypeTokens.XL },
-      fatherNameInput: <TextInputProps & TypographyProps & WidgetProps> {
+      selectQualificationInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      qualificationInputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+      fatherNameInput: <TextInputProps & TypographyProps & WidgetProps>{
+        isFocus: false,
         title: "Father's name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "",
+        placeholder: "Enter Father's name",
         color: ColorTokens.Grey_Night,
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
         action: {
           type: ACTION.INPUT_NAME,
-          payload: <InputPayload>{ value: "", widgetID: "fatherNameInput"},
+          payload: <InputPayload>{ value: "", widgetID: "fatherNameInput" },
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
         },
       },
-      motherNameInput: <TextInputProps> {
+      motherNameInput: <TextInputProps>{
+        isFocus: false,
         title: "Mother's name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "",
+        placeholder: "Enter Mother's name",
         color: ColorTokens.Grey_Night,
         action: {
           type: ACTION.INPUT_NAME,
-          payload: <InputPayload>{ value: "", widgetID: "motherNameInput"},
+          payload: <InputPayload>{ value: "", widgetID: "motherNameInput" },
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
         },
       },
-      motherNameInputSpace: <SpaceProps> { size: SizeTypeTokens.XXXL},
+      motherNameInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       stackBottom: <StackProps>{
         justifyContent: StackJustifyContent.center,
         alignItems: StackAlignItems.center,
@@ -314,7 +263,7 @@ export const template: (
           { id: "sbSpace1", type: WIDGET.SPACE },
           { id: "sbStack", type: WIDGET.STACK },
           { id: "sbSpace2", type: WIDGET.SPACE },
-        ]
+        ],
       },
       sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
       sbspace2: <SpaceProps>{ size: SizeTypeTokens.MD },
@@ -326,7 +275,7 @@ export const template: (
           { id: "image2", type: WIDGET.ICON },
           { id: "sbpace3", type: WIDGET.SPACE },
           { id: "disclaimer", type: WIDGET.TEXT },
-        ]
+        ],
       },
       image2: <IconProps>{
         name: IconTokens.Secure,
@@ -349,9 +298,11 @@ export const kycAdditionalDetailsMF: PageType<any> = {
     const user = await SharedPropsService.getUser();
     const applicationId = user.linkedApplications[0].applicationId;
 
-    const response = await network.get(`${api.additionalDetails}${applicationId}`,
-    { headers: await getAppHeader() });
-    
+    const response = await network.get(
+      `${api.additionalDetails}${applicationId}`,
+      { headers: await getAppHeader() }
+    );
+
     console.warn("Response warn : " + response);
     const stepResponseObject = _.get(response, "data.stepResponseObject", {});
     return Promise.resolve(template(stepper, stepResponseObject));
