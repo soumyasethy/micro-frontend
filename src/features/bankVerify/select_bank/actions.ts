@@ -27,6 +27,8 @@ export const NavSearchIfscBranchInfoAction: ActionFunction<
     ...action.payload.bankRepo.ALLBANKS,
     ...action.payload.bankRepo.POPULAR,
   };
+  console.log("selct bank name", action.payload.value);
+  console.log("selct bank Code",getKeyByValue(banksMap, action.payload.value));
   const bankCode = getKeyByValue(banksMap, action.payload.value);
   await navigate(ROUTE.BANK_ACCOUNT_ADD, {
     bankCode,
