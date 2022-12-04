@@ -15,9 +15,10 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
+import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import { StepStatusMap } from "../../login/otp_verify/types";
 import {
+  nextStepCredStepper,
   updateCurrentStepId,
   updateStepStatusMap,
 } from "../../../configs/utils";
@@ -86,7 +87,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
     await updateStepStatusMap(stepStatusMap);
 
     await showPopup({
-      autoTriggerTimerInMilliseconds: 2000,
+      autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
       isAutoTriggerCta: true,
       type: "SUCCESS",
       title: "Account verified successfully!",
@@ -127,5 +128,6 @@ export const GoNext: ActionFunction<NextNavPayload> = async (
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
-  await navigate(action.payload.currentStepId);
+  const routeObj = await nextStepCredStepper();
+  await navigate(routeObj.routeId, routeObj.params);
 };

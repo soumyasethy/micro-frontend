@@ -126,7 +126,6 @@ const alertPropsX: AlertNavProps = {
 
 export const alertMF: PageType<any> = {
   onLoad: async ({}, { alertProps }) => {
-    console.warn("alertProps", alertProps);
     return Promise.resolve(template(alertProps));
   },
   actions: {

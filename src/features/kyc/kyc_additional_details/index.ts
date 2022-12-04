@@ -13,6 +13,7 @@ import {
   ButtonWidthTypeToken,
   ColorTokens,
   DropDownInputProps,
+  DropDownItemProps,
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
@@ -22,7 +23,6 @@ import {
   IconTokens,
   InputStateToken,
   InputTypeToken,
-  RadioProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -34,6 +34,7 @@ import {
   StepperProps,
   StepperTypeTokens,
   TextInputProps,
+  TextInputTypeToken,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -41,25 +42,29 @@ import { ROUTE } from "../../../routes";
 import {
   ACTION,
   DropDownPayload,
+  EDUCATION,
   InputPayload,
   KycAdditionalDetailsPayload,
   MARITAL_STATUS,
   MaritalStatusPayload,
 } from "./types";
 import { onChangeInput, onSelect, toggleCTA, triggerCTA } from "./actions";
-import {
-  horizontalStepperRepo,
-  qualificationInputData,
-} from "../../../configs/utils";
+import { horizontalStepperRepo } from "../../../configs/utils";
 import { getAppHeader } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
 
+const qualificationInputData: Array<DropDownItemProps> = [
+  { label: "Up to 12", value: EDUCATION.UP_TO_12 },
+  { label: "Diploma", value: EDUCATION.DIPLOMA },
+  { label: "Graduate", value: EDUCATION.UNDER_GRADUATE },
+  { label: "Post graduate", value: EDUCATION.POST_GRADUATE },
+];
 export const template: (
   stepper: StepperItem[],
   stepResponseObject: { [key in string]: string }
-) => TemplateSchema = (stepper, stepResponseObject) => {
+) => TemplateSchema = (stepper) => {
   return {
     layout: <Layout>{
       id: ROUTE.KYC_ADDITIONAL_DETAILS,
@@ -71,14 +76,18 @@ export const template: (
         { id: "martialStatusTitle", type: WIDGET.TEXT },
         { id: "martialStatusSpace", type: WIDGET.SPACE },
         { id: "martialStatusStack", type: WIDGET.STACK },
-        { id: "selectQualificationTitleSpace", type: WIDGET.SPACE },
-        { id: "selectQualificationInputSpace", type: WIDGET.SPACE },
+        // { id: "selectQualificationTitleSpace", type: WIDGET.SPACE },
+        { id: "qualificationTitle", type: WIDGET.TEXT },
+        { id: "selectQualificationTitleSpace2", type: WIDGET.SPACE },
         { id: "qualificationInput", type: WIDGET.DROPDOWN_INPUT },
         { id: "qualificationInputSpace", type: WIDGET.SPACE },
+        { id: "fatherNameTitle", type: WIDGET.TEXT },
         { id: "fatherInputSpace", type: WIDGET.SPACE },
-        { id: "fatherNameInput", type: WIDGET.INPUT },
+        { id: "fatherNameStack", type: WIDGET.STACK },
         { id: "motherNameInputSpace", type: WIDGET.SPACE },
-        { id: "motherNameInput", type: WIDGET.INPUT },
+        { id: "motherNameTitle", type: WIDGET.TEXT },
+        { id: "motherNameSpace", type: WIDGET.SPACE },
+        { id: "motherNameStack", type: WIDGET.STACK },
         {
           id: "stackBottom",
           type: WIDGET.STACK,
@@ -88,6 +97,7 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      selectQualificationTitleSpace2: <SpaceProps>{ size: SizeTypeTokens.XL },
       topSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       header: <HeaderProps & WidgetProps>{
         title: "KYC Verification",
@@ -120,7 +130,7 @@ export const template: (
         fontWeight: "600",
         lineHeight: 24,
       },
-      martialStatusSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
+      martialStatusSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       continue: <ButtonProps & WidgetProps>{
         type: ButtonTypeTokens.LargeOutline,
         label: "Confirm",
@@ -142,17 +152,17 @@ export const template: (
         justifyContent: StackJustifyContent.flexStart,
         widgetItems: [
           { id: "singleRadioStack", type: WIDGET.STACK },
-          { id: "martialStatusSpace0", type: WIDGET.SPACE },
+          { id: "singleRadioSpace", type: WIDGET.SPACE },
           { id: "marriedRadioStack", type: WIDGET.STACK },
         ],
       },
-      martialStatusSpace0: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
+      singleRadioSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
       marriedRadioStack: <StackProps & WidgetProps>{
         type: StackType.row,
         width: StackWidth.CONTENT,
         widgetItems: [
           { id: "marriedRadio", type: WIDGET.ICON },
-          { id: "marriedRadioSpace0", type: WIDGET.SPACE },
+          { id: "marriedsingleRadioSpace0", type: WIDGET.SPACE },
           { id: "marriedRadioLabel", type: WIDGET.TEXT },
         ],
         action: {
@@ -169,7 +179,7 @@ export const template: (
         size: IconSizeTokens.XL,
       },
 
-      marriedRadioSpace0: <SpaceProps>{ size: SizeTypeTokens.MD },
+      marriedsingleRadioSpace0: <SpaceProps>{ size: SizeTypeTokens.MD },
       marriedRadioLabel: <TypographyProps>{
         label: "Married",
         fontFamily: FontFamilyTokens.Inter,
@@ -182,7 +192,7 @@ export const template: (
         width: StackWidth.CONTENT,
         widgetItems: [
           { id: "singleRadio", type: WIDGET.ICON },
-          { id: "singleRadioSpace0", type: WIDGET.SPACE },
+          { id: "singlesingleRadioSpace0", type: WIDGET.SPACE },
           { id: "singleRadioLabel", type: WIDGET.TEXT },
         ],
         action: {
@@ -198,7 +208,7 @@ export const template: (
         name: IconTokens.RadioCircleNotFilled,
         size: IconSizeTokens.XL,
       },
-      singleRadioSpace0: <SpaceProps>{ size: SizeTypeTokens.MD },
+      singlesingleRadioSpace0: <SpaceProps>{ size: SizeTypeTokens.MD },
       singleRadioLabel: <TypographyProps>{
         label: "Single",
         fontFamily: FontFamilyTokens.Inter,
@@ -206,7 +216,15 @@ export const template: (
         fontSize: FontSizeTokens.SM,
         color: ColorTokens.Grey_Night,
       },
-      selectQualificationTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+      qualificationTitle: <TypographyProps>{
+        label: "Select qualification",
+        fontSize: FontSizeTokens.SM,
+        color: ColorTokens.Grey_Night,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        lineHeight: 24,
+      },
+      selectQualificationTitleSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       qualificationInput: <DropDownInputProps & WidgetProps>{
         label: "Select qualification",
         data: qualificationInputData,
@@ -221,39 +239,124 @@ export const template: (
       },
       selectQualificationInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       qualificationInputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
-      fatherNameInput: <TextInputProps & TypographyProps & WidgetProps>{
+      fatherNameTitle: <TypographyProps>{
+        label: "Father’s name",
+        fontSize: FontSizeTokens.SM,
+        color: ColorTokens.Grey_Night,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        lineHeight: 24,
+      },
+      fatherNameStack: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.FULL,
+        alignItems: StackAlignItems.flexStart,
+        justifyContent: StackJustifyContent.center,
+        widgetItems: [
+          { id: "fatherFirstNameInput", type: WIDGET.INPUT },
+          { id: "fatherInputBetweenSpace", type: WIDGET.SPACE },
+          { id: "fatherLastNameInput", type: WIDGET.INPUT },
+        ],
+      },
+      fatherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      fatherInputBetweenSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      fatherFirstNameInput: <TextInputProps & WidgetProps>{
+        width: TextInputTypeToken.FULL,
         isFocus: false,
-        title: "Father's name",
+        title: "First name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "Enter Father's name",
+        placeholder: "First name",
         color: ColorTokens.Grey_Night,
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
         action: {
           type: ACTION.INPUT_NAME,
-          payload: <InputPayload>{ value: "", widgetID: "fatherNameInput" },
+          payload: <InputPayload>{
+            value: "",
+            widgetID: "fatherFirstNameInput",
+          },
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
         },
       },
-      motherNameInput: <TextInputProps>{
+      fatherLastNameInput: <TextInputProps & WidgetProps>{
+        width: TextInputTypeToken.FULL,
         isFocus: false,
-        title: "Mother's name",
+        title: "Last name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "Enter Mother's name",
+        placeholder: "Last name",
         color: ColorTokens.Grey_Night,
+        type: InputTypeToken.DEFAULT,
+        state: InputStateToken.DEFAULT,
         action: {
           type: ACTION.INPUT_NAME,
-          payload: <InputPayload>{ value: "", widgetID: "motherNameInput" },
+          payload: <InputPayload>{
+            value: "",
+            widgetID: "fatherLastNameInput",
+          },
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
         },
       },
-      motherNameInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      motherNameTitle: <TypographyProps>{
+        label: "Mother’s name",
+        fontSize: FontSizeTokens.SM,
+        color: ColorTokens.Grey_Night,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        lineHeight: 24,
+      },
+      motherNameSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      motherNameStack: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.FULL,
+        alignItems: StackAlignItems.flexStart,
+        justifyContent: StackJustifyContent.center,
+        widgetItems: [
+          { id: "motherFirstNameInput", type: WIDGET.INPUT },
+          { id: "motherInputSpace", type: WIDGET.SPACE },
+          { id: "motherLastNameInput", type: WIDGET.INPUT },
+        ],
+      },
+      motherFirstNameInput: <TextInputProps>{
+        isFocus: false,
+        title: "First name",
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.MD,
+        lineHeight: 24,
+        fontWeight: "400",
+        placeholder: "First name",
+        color: ColorTokens.Grey_Night,
+        action: {
+          type: ACTION.INPUT_NAME,
+          payload: <InputPayload>{
+            value: "",
+            widgetID: "motherFirstNameInput",
+          },
+          routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
+        },
+      },
+      motherInputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+      motherLastNameInput: <TextInputProps>{
+        isFocus: false,
+        title: "Last name",
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.MD,
+        lineHeight: 24,
+        fontWeight: "400",
+        placeholder: "Last name",
+        color: ColorTokens.Grey_Night,
+        action: {
+          type: ACTION.INPUT_NAME,
+          payload: <InputPayload>{ value: "", widgetID: "motherLastNameInput" },
+          routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
+        },
+      },
+      motherNameInputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       stackBottom: <StackProps>{
         justifyContent: StackJustifyContent.center,
         alignItems: StackAlignItems.center,

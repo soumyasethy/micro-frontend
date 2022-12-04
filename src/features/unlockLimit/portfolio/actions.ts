@@ -31,9 +31,11 @@ export const getTotalLimit = (
   availableCAS.forEach((item) => {
     sum =
       sum +
-      item.pledgedUnits * isinNavMap[item.isinNo] * isinLTVMap[item.isinNo];
+      roundDownToNearestHundred(
+        item.pledgedUnits * isinNavMap[item.isinNo] * isinLTVMap[item.isinNo]
+      );
   });
-  return roundDownToNearestHundred(sum);
+  return sum;
 };
 export const getActualLimit = (
   availableCAS: AvailableCASItem[],
@@ -44,11 +46,13 @@ export const getActualLimit = (
   availableCAS.forEach((item) => {
     sum =
       sum +
-      item.totalAvailableUnits *
-        isinNavMap[item.isinNo] *
-        isinLTVMap[item.isinNo];
+      roundDownToNearestHundred(
+        item.totalAvailableUnits *
+          isinNavMap[item.isinNo] *
+          isinLTVMap[item.isinNo]
+      );
   });
-  return roundDownToNearestHundred(sum);
+  return sum;
 };
 
 export const TriggerCTA: ActionFunction<CtaPayload> = async (

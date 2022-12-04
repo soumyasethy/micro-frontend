@@ -17,14 +17,15 @@ import { AadharInitPayload } from "../kyc_init/types";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import _ from "lodash";
-import { nextStepCredStepper } from "../../../configs/utils";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
 
 let martialStatus: MARITAL_STATUS = MARITAL_STATUS.SINGLE;
-let fatherName = "";
-let motherName = "";
+let fatherFirstName = "";
+let fatherLastName = "";
+let motherFirstName = "";
+let motherLastName = "";
 let qualification: EDUCATION = null;
 
 export const onChangeInput: ActionFunction<InputPayload> = async (
@@ -32,17 +33,45 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  if (action.payload.widgetID == "fatherNameInput") {
-    fatherName = action.payload.value;
+  switch (action.payload.widgetID) {
+    case "fatherFirstNameInput": {
+      fatherFirstName = action.payload.value;
+      break;
+    }
+    case "fatherLastNameInput": {
+      fatherLastName = action.payload.value;
+      break;
+    }
+    case "motherFirstNameInput": {
+      motherFirstName = action.payload.value;
+      break;
+    }
+    case "motherLastNameInput": {
+      motherLastName = action.payload.value;
+      break;
+    }
   }
-  if (action.payload.widgetID == "motherNameInput") {
-    motherName = action.payload.value;
-  }
-  if (martialStatus && fatherName && motherName && qualification) {
+
+  if (
+    martialStatus &&
+    fatherFirstName &&
+    fatherLastName &&
+    motherFirstName &&
+    motherLastName &&
+    qualification
+  ) {
     await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     });
   }
+  console.warn({
+    martialStatus,
+    fatherFirstName,
+    fatherLastName,
+    motherFirstName,
+    motherLastName,
+    qualification,
+  });
 };
 
 export const onSelect: ActionFunction<DropDownPayload> = async (
@@ -50,8 +79,24 @@ export const onSelect: ActionFunction<DropDownPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
+  console.warn("onSelect", action);
   qualification = action.payload.value;
-  if (martialStatus && fatherName && motherName && qualification) {
+  console.warn({
+    martialStatus,
+    fatherFirstName,
+    fatherLastName,
+    motherFirstName,
+    motherLastName,
+    qualification,
+  });
+  if (
+    martialStatus &&
+    fatherFirstName &&
+    fatherLastName &&
+    motherFirstName &&
+    motherLastName &&
+    qualification
+  ) {
     await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     });
@@ -80,8 +125,23 @@ export const toggleCTA: ActionFunction<MaritalStatusPayload> = async (
     });
     martialStatus = MARITAL_STATUS.MARRIED;
   }
+  console.warn({
+    martialStatus,
+    fatherFirstName,
+    fatherLastName,
+    motherFirstName,
+    motherLastName,
+    qualification,
+  });
 
-  if (martialStatus && fatherName && motherName && qualification) {
+  if (
+    martialStatus &&
+    fatherFirstName &&
+    fatherLastName &&
+    motherFirstName &&
+    motherLastName &&
+    qualification
+  ) {
     await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     });
@@ -103,10 +163,10 @@ export const triggerCTA: ActionFunction<KycAdditionalDetailsPayload> = async (
     <KycAdditionalDetailsPayload>{
       maritalStatus: martialStatus,
       qualification: qualification,
-      fatherFirstName: fatherName,
-      fatherLastName: fatherName,
-      motherFirstName: motherName,
-      motherLastName: motherName,
+      fatherFirstName: fatherFirstName,
+      fatherLastName: fatherLastName,
+      motherFirstName: motherFirstName,
+      motherLastName: motherLastName,
     },
     {
       headers: await getAppHeader(),

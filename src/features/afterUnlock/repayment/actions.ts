@@ -1,8 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import {
-  AssetsPayload
-} from "./types";
+import { AssetsPayload, CopyToClipboardPayload } from "./types";
 import {
   ButtonProps,
   InputStateToken,
@@ -26,4 +24,10 @@ export const goBack: ActionFunction<AssetsPayload> = async (
 ): Promise<any> => {
   await navigate(ROUTE.DASHBOARD);
 };
-
+export const copyToClipboard: ActionFunction<CopyToClipboardPayload> = async (
+  action,
+  _datastore,
+  { clipboard }
+): Promise<any> => {
+  clipboard.set(action.payload.value);
+};

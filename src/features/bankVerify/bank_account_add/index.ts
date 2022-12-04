@@ -213,5 +213,5 @@ export const bankAccountAddMF: PageType<any> = {
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
     [ACTION.NAV_STEPPER]: GoToStepper,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };

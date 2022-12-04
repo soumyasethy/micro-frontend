@@ -35,12 +35,13 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
-import { goBack, repayment } from "./actions";
+import { ACTION, CopyToClipboardPayload } from "./types";
+import { copyToClipboard, goBack, repayment } from "./actions";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
+import { getBankIconUrl } from "../../../configs/utils";
 
 export const template: (
   repaymentAmount: string,
@@ -71,20 +72,33 @@ export const template: (
       { id: "messageStack", type: WIDGET.TEXT },
       { id: "messageSpace", type: WIDGET.SPACE },
       {
-        id: "bankStack", type: WIDGET.STACK, padding: {
-          horizontal: 10, left: 10, right: 10, all: 10
-        }
+        id: "bankStack",
+        type: WIDGET.STACK,
+        padding: {
+          horizontal: 10,
+          left: 10,
+          right: 10,
+          all: 10,
+        },
       },
       { id: "divider", type: WIDGET.DIVIDER },
       {
-        id: "listItem1", type: WIDGET.LIST_ITEM, padding: {
-          horizontal: 4, left: 4, right: 16
-        }
+        id: "listItem1",
+        type: WIDGET.LIST_ITEM,
+        padding: {
+          horizontal: 4,
+          left: 4,
+          right: 16,
+        },
       },
       {
-        id: "listItem2", type: WIDGET.LIST_ITEM, padding: {
-          horizontal: 4, left: 4, right: 18
-        }
+        id: "listItem2",
+        type: WIDGET.LIST_ITEM,
+        padding: {
+          horizontal: 4,
+          left: 4,
+          right: 18,
+        },
       },
       { id: "listSpace", type: WIDGET.SPACE },
       {
@@ -139,7 +153,7 @@ export const template: (
       fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
-      lineHeight:24,
+      lineHeight: 24,
       fontWeight: "700",
     },
     headSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
@@ -148,7 +162,7 @@ export const template: (
         "Add this account as beneficiary to repay principal via NEFT/IMPS. Transfer should happen from the the same account.",
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
-      lineHeight:18,
+      lineHeight: 18,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
@@ -164,7 +178,7 @@ export const template: (
       ],
     },
     leadItem: <ImageProps>{
-      uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
+      uri: getBankIconUrl(bankCode),
       size: ImageSizeTokens.SM,
       aspectRatio: AspectRatioToken.A1_1,
       borderRadius: BorderRadiusTokens.BR5,
@@ -174,7 +188,7 @@ export const template: (
     data: <TypographyProps>{
       label: `${bankName}`,
       fontSize: FontSizeTokens.MD,
-      lineHeight:24,
+      lineHeight: 24,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "700",
@@ -187,8 +201,8 @@ export const template: (
       },
       color: ColorTokens.Grey_Milk_1,
     },
-   
-    listItem1: <ListItemProps>{
+
+    listItem1: <ListItemProps & WidgetProps>{
       title: "IFSC",
       subTitle: `${bankIfscCode}`,
       trailLabel: <TypographyProps>{
@@ -196,14 +210,18 @@ export const template: (
         fontSize: FontSizeTokens.XS,
         color: ColorTokens.Primary_100,
         fontFamily: FontFamilyTokens.Inter,
-        lineHeight:18,
+        lineHeight: 18,
         fontWeight: "500",
       },
       trailIconName: IconTokens.Copy,
       isDivider: true,
-      onPress: () => { },
+      action: {
+        type: ACTION.COPY,
+        routeId: ROUTE.REPAYMENT,
+        payload: <CopyToClipboardPayload>{ value: `${bankIfscCode}` },
+      },
     },
-    listItem2: <ListItemProps>{
+    listItem2: <ListItemProps & WidgetProps>{
       title: "Account number",
       subTitle: `${bankAccountNumber}`,
       trailLabel: <TypographyProps>{
@@ -211,11 +229,15 @@ export const template: (
         fontSize: FontSizeTokens.XS,
         color: ColorTokens.Primary_100,
         fontFamily: FontFamilyTokens.Inter,
-        lineHeight:18,
+        lineHeight: 18,
         fontWeight: "500",
       },
       trailIconName: IconTokens.Copy,
-      onPress: () => { },
+      action: {
+        type: ACTION.COPY,
+        routeId: ROUTE.REPAYMENT,
+        payload: <CopyToClipboardPayload>{ value: `${bankAccountNumber}` },
+      },
     },
     listSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
     continue: <ButtonProps & WidgetProps>{
@@ -254,6 +276,7 @@ export const repaymentMF: PageType<any> = {
   actions: {
     [ACTION.REPAYMENT]: repayment,
     [ACTION.GO_BACK]: goBack,
+    [ACTION.COPY]: copyToClipboard,
   },
   clearPrevious: true,
 };

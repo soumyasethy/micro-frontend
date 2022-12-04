@@ -22,7 +22,6 @@ const getUpdateAvailableCAS = (
     let item: AvailableCASItem = availableCAS[i];
     let individualAmount = getTotalLimit([item], isinNavMap, isinLTVMap);
     if (amountRequired >= individualAmount) {
-      console.warn("if amountRequired", individualAmount, amountRequired);
       updateAvailableCAS.push(item);
       amountRequired = amountRequired - individualAmount;
     } else {
@@ -33,14 +32,6 @@ const getUpdateAvailableCAS = (
       };
       updateAvailableCAS.push(newItem);
       amountRequired = 0;
-      console.warn(
-        "else amountRequired",
-        individualAmount,
-        amountRequired,
-        ratio,
-        newItem,
-        item
-      );
     }
   }
 

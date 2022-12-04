@@ -1,14 +1,9 @@
-import {
-  DropDownItemProps,
-  StepperItem,
-  StepperStateToken,
-} from "@voltmoney/schema";
+import { StepperItem, StepperStateToken } from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
 import { StepStatusMap, User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
-import { EDUCATION } from "../features/kyc/kyc_additional_details/types";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -34,6 +29,8 @@ export const showBottomSheet = ({
     },
   };
 };
+export const getBankIconUrl = (bankCode) =>
+  `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`;
 
 export const updateStepStatusMap = async (stepStatusMap: StepStatusMap) => {
   const user: User = await SharedPropsService.getUser();
@@ -85,27 +82,34 @@ export const horizontalStepperRepo = async () => {
   } else {
     KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
   }
-
   if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-    StepperStateToken.COMPLETED
+      StepperStateToken.COMPLETED &&
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.COMPLETED
   ) {
     MANDATE_SETUP = StepperStateToken.COMPLETED;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-    StepperStateToken.IN_PROGRESS
+      StepperStateToken.NOT_STARTED &&
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.NOT_STARTED
+  ) {
+    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      StepperStateToken.IN_PROGRESS ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.IN_PROGRESS
   ) {
     MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-    StepperStateToken.PENDING_MANUAL_VERIFICATION
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION
   ) {
     MANDATE_SETUP = StepperStateToken.PENDING_MANUAL_VERIFICATION;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-    StepperStateToken.NOT_STARTED
-  ) {
-    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
   } else {
     MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
   }
@@ -214,14 +218,14 @@ export const stepperRepo = async () => {
   let MANDATE_SETUP: StepperStateToken;
   if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.COMPLETED ||
+      StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
       StepperStateToken.COMPLETED
   ) {
     MANDATE_SETUP = StepperStateToken.COMPLETED;
   } else if (
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.NOT_STARTED ||
+      StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
       StepperStateToken.NOT_STARTED
   ) {
@@ -303,11 +307,15 @@ export const stepperRepo = async () => {
 };
 
 export const nextStepCredStepper = async (currentStepId?: string) => {
+  const user: User = await SharedPropsService.getUser();
   if (!currentStepId) {
-    currentStepId = (await SharedPropsService.getUser()).linkedApplications[0]
-      .currentStepId;
+    currentStepId = user.linkedApplications[0].currentStepId;
   }
-  console.warn("*** currentStepId ***", currentStepId);
+
+  if (user.linkedApplications[0].applicationState === "COMPLETED") {
+    return { routeId: ROUTE.DASHBOARD, params: {} };
+  }
+
   if (currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION) {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
   } else if (currentStepId === ROUTE.KYC_PHOTO_VERIFICATION) {
@@ -445,18 +453,6 @@ export const addCommasToNumber = (num: number) => {
   return num.toString().replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",");
 };
 
-// export const pledgeConfirmCheckIfRupeeSign = (charges: string) => {
-//   // remove all white spaces
-//   charges = charges.replace(/\s/g, "");
-//   if (charges.startsWith("₹")) {
-//     charges = charges;
-//   } else {
-//     // add rupee sign
-//     charges = "₹" + charges;
-//   }
-//   return charges;
-// };
-
 export const roundDownToNearestHundred = (num: number) => {
   return Math.floor(num / 100) * 100;
 };
@@ -473,20 +469,4 @@ export const maskBankAccountNumber = (accountNo: string) => {
     return maskString.concat(showString);
   }
   return "Account number less than 4 digits";
-};
-
-export const qualificationInputData: Array<DropDownItemProps> = [
-  { label: "Up to 12", value: EDUCATION.UP_TO_12 },
-  { label: "Diploma", value: EDUCATION.DIPLOMA },
-  { label: "Graduate", value: EDUCATION.UNDER_GRADUATE },
-  { label: "Post graduate", value: EDUCATION.POST_GRADUATE },
-];
-
-export const getFirstLastName = (FullName: String) => {
-  if (FullName.length > 0) {
-    var details: any = [];
-    details = FullName.split(" ");
-    return details;
-  }
-  return ["", ""];
 };
