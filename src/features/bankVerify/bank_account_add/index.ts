@@ -51,11 +51,13 @@ import {
   ToggleCTA,
 } from "./actions";
 import { BAVVerifyActionPayload } from "../bank_account_verification/types";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   bankCode: string,
-  bankName: string
-) => TemplateSchema = (bankCode, bankName) => ({
+  bankName: string,
+  accountNumber: string
+) => TemplateSchema = (bankCode, bankName, accountNumber) => ({
   layout: <Layout>{
     id: ROUTE.BANK_ACCOUNT_ADD,
     type: LAYOUTS.LIST,
@@ -65,7 +67,7 @@ export const template: (
         type: WIDGET.HEADER,
         position: POSITION.FIXED_TOP,
       },
-      { id: "cardStack", type: WIDGET.STACK},
+      { id: "cardStack", type: WIDGET.STACK },
       { id: "accountSpace", type: WIDGET.SPACE },
       { id: "accountInput", type: WIDGET.INPUT },
       { id: "IFSCSpace", type: WIDGET.SPACE },
@@ -112,7 +114,7 @@ export const template: (
       uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
       defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
       size: ImageSizeTokens.MD,
-      padding:SizeTypeTokens.NONE,
+      padding: SizeTypeTokens.NONE,
     },
     leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     bankName: <TypographyProps>{
@@ -136,12 +138,12 @@ export const template: (
       type: InputTypeToken.DEFAULT,
       title: "Account number",
       placeholder: "Enter account number",
-      value: "",
+      value: `${accountNumber}`,
       caption: { success: "", error: "" },
       keyboardType: KeyboardTypeToken.email,
       action: {
         type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
-        payload: <InputNumberActionPayload>{ value: "" },
+        payload: <InputNumberActionPayload>{ value: accountNumber },
         routeId: ROUTE.BANK_ACCOUNT_ADD,
       },
     },
@@ -187,7 +189,7 @@ export const template: (
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Verify bank",
-      type: ButtonTypeTokens.LargeOutline,
+      type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.TRIGGER_CTA,
@@ -202,7 +204,8 @@ export const template: (
 
 export const bankAccountAddMF: PageType<any> = {
   onLoad: async ({}, { bankCode, bankName }) => {
-    return Promise.resolve(template(bankCode, bankName));
+    const accountNumber = await SharedPropsService.getAccountNumber();
+    return Promise.resolve(template(bankCode, bankName, accountNumber));
   },
   actions: {
     [ACTION.NAVIGATION_SEARCH_IFSC]: NavigationSearchIFSCAction,
@@ -213,5 +216,5 @@ export const bankAccountAddMF: PageType<any> = {
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
     [ACTION.NAV_STEPPER]: GoToStepper,
   },
-  clearPrevious: false,
+  clearPrevious: true,
 };

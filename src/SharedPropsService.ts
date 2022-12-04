@@ -1,5 +1,5 @@
 import { User } from "./features/login/otp_verify/types";
-import { __isMock__, __isTest__ } from "./configs/config";
+import { __isMock__ } from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,14 +9,22 @@ type GlobalProps = {
   user: User;
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
+  accountNumber: string;
 };
 
 let _globalProps: GlobalProps = {
   user: {},
   access_token: "",
   availableAuthCasMap: {},
+  accountNumber: "",
 };
 
+async function setAccountNumber(accountNumber: string) {
+  _globalProps.accountNumber = accountNumber;
+}
+async function getAccountNumber() {
+  return _globalProps.accountNumber;
+}
 async function setGlobalProps(props: GlobalProps) {
   _globalProps = await props;
 }
@@ -92,4 +100,6 @@ export default {
   getAvailableCASMap,
   setOnboarding,
   getOnboarding,
+  getAccountNumber,
+  setAccountNumber
 };

@@ -26,6 +26,7 @@ import {
 } from "@voltmoney/schema";
 import { IFSCSearchActionRepo } from "./repo";
 import { bankCodeX } from "./index";
+import SharedPropsService from "../../../SharedPropsService";
 
 let widgetItems: WidgetItem[] = [];
 
@@ -49,17 +50,28 @@ export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
   _datastore,
   { setDatastore, goBack }
 ): Promise<any> => {
+  await goBack();
   await setDatastore(ROUTE.BANK_ACCOUNT_ADD, "IFSCInput", <TextInputProps>{
     state: InputStateToken.DISABLED,
     value: action.payload.ifscCode,
   });
-  await setDatastore(ROUTE.BANK_ACCOUNT_ADD, "continue", <ButtonProps>{
-    type: ButtonTypeTokens.LargeFilled,
-  });
-  await goBack();
+  const accountNumber = await SharedPropsService.getAccountNumber();
+  if (accountNumber) {
+    await setDatastore(ROUTE.BANK_ACCOUNT_ADD, "accountInput", <TextInputProps>{
+      value: accountNumber,
+    });
+    await setDatastore(ROUTE.BANK_ACCOUNT_ADD, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    });
+  }
 };
 
-const widgetItemDs = (index: number, ifscCode: string, address: string) => {
+const widgetItemDs = (
+  index: number,
+  ifscCode: string,
+  address: string,
+  bankAccountNumber?: string
+) => {
   return {
     [`listItemStack${index}`]: <StackProps & WidgetProps>{
       type: StackType.column,
@@ -75,7 +87,7 @@ const widgetItemDs = (index: number, ifscCode: string, address: string) => {
       action: {
         type: ACTION.ON_SELECT_IFSC,
         routeId: ROUTE.BANK_SEARCH_BRANCH,
-        payload: <IFSCCodePayload>{ ifscCode: ifscCode },
+        payload: <IFSCCodePayload>{ ifscCode: ifscCode, bankAccountNumber },
       },
     },
     [`title${index}`]: <TypographyProps>{
@@ -129,7 +141,12 @@ export const IFSCSearchAction: ActionFunction<IFSCSearchActionPayload> = async (
     });
     dataStore = {
       ...dataStore,
-      ...widgetItemDs(index, bank.bankCode.IFSC, bank.bankCode.ADDRESS),
+      ...widgetItemDs(
+        index,
+        bank.bankCode.IFSC,
+        bank.bankCode.ADDRESS,
+        action.payload.bankAccountNumber
+      ),
     };
   });
 

@@ -30,6 +30,7 @@ import {
   StackType,
   StepperItem,
   StepperProps,
+  StepperStateToken,
   StepperTypeTokens,
   TypographyProps,
   WIDGET,
@@ -39,6 +40,8 @@ import { ACTION } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import { fetchLinkRepo } from "./repo";
 import { authenticateRepayment, goBack } from "./actions";
+import { User } from "../../login/otp_verify/types";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   stepper: StepperItem[],
@@ -175,6 +178,11 @@ export const template: (
 
 export const loanAgreementMF: PageType<any> = {
   onLoad: async () => {
+    const user: User = await SharedPropsService.getUser();
+    user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
+      StepperStateToken.IN_PROGRESS;
+    await SharedPropsService.setUser(user);
+
     const stepper: StepperItem[] = await horizontalStepperRepo();
     const responseX = await fetchLinkRepo();
     const urlData = responseX.stepResponseObject;

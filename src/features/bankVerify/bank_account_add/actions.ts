@@ -34,12 +34,14 @@ export const NavigationSearchIFSCAction: ActionFunction<
   await navigate(ROUTE.BANK_SEARCH_BRANCH, {
     bankCode: action.payload.bankCode,
     bankName: action.payload.bankName,
+    bankAccountNumber,
   });
 };
 export const onChangeAccountNumber: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
   bankAccountNumber = action.payload.value;
+  await SharedPropsService.setAccountNumber(bankAccountNumber);
   await ToggleCTA(action, _datastore, props);
 };
 export const onChangeIFSCNumber: ActionFunction<
@@ -76,6 +78,8 @@ export const BavVerifyManualAction: ActionFunction<
   _datastore,
   { setDatastore, network, showPopup, goBack }
 ): Promise<any> => {
+  console.warn("_datastore", _datastore);
+  if (!bankAccountNumber || !bankIfsc) return;
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });

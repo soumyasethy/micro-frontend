@@ -5,7 +5,6 @@ import { api } from "../../../configs/api";
 import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import { ProgressIndicatorProps } from "@voltmoney/schema";
 import { ACTION } from "./types";
-import { navigate } from "../../afterUnlock/dashboard/actions";
 
 export const GetMandateLink: ActionFunction<any> = async (
   action,

@@ -91,6 +91,7 @@ export interface StepStatusMap {
   KYC_PAN_VERIFICATION?: StepperStateToken;
   AGREEMENT_SIGN?: StepperStateToken;
   BANK_ACCOUNT_VERIFICATION?: StepperStateToken;
+  KYC_ADDITIONAL_DETAILS?: StepperStateToken;
 }
 
 export interface LinkedBorrowerAccount {

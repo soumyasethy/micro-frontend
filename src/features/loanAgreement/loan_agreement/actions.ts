@@ -7,9 +7,10 @@ export const authenticateRepayment: ActionFunction<LimitPayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  await navigate(ROUTE.AGREEMENT_WEBVIEW, {
-    urlData: action.payload.value,
-  });
+  if (action.payload.value)
+    await navigate(ROUTE.AGREEMENT_WEBVIEW, {
+      urlData: action.payload.value,
+    });
 };
 
 export const goBack: ActionFunction<LimitPayload> = async (

@@ -19,25 +19,24 @@ export const PollMandateStatus: ActionFunction<any> = async (
       headers: await defaultHeaders(),
     })
       .then((response) => {
-        console.log("Loan WebView response status", response.status);
+        // console.log("Loan WebView response status", response.status);
         return response.json();
       })
       .then(async (response) => {
-        console.log("PollMandateStatus response", response);
+        // console.log("PollMandateStatus response", response);
         /// handle response
         if (response.stepResponseObject.toLowerCase() === "finished") {
           const user: User = await SharedPropsService.getUser();
-          user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
-            StepperStateToken.COMPLETED;
-          user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
-            StepperStateToken.IN_PROGRESS;
+          user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
+
           clearInterval(timer);
           navigate(ROUTE.LOAN_REPAYMENT);
           showPopup({
             type: "SUCCESS",
             title: "AutoPay setup successful!",
-            subTitle: "Interest charges will be paid automatically every month.",
+            subTitle:
+              "Interest charges will be paid automatically every month.",
             ctaLabel: "Proceed to review agreement",
             ctaAction: {
               ...action,
@@ -53,7 +52,8 @@ export const PollMandateStatus: ActionFunction<any> = async (
             alertProps: {
               iconName: IconTokens.Failed,
               title: "AutoPay setup failed!",
-              subTitle: "Bank account must be linked for AutoPay. Please try again.",
+              subTitle:
+                "Bank account must be linked for AutoPay. Please try again.",
               type: "DEFAULT",
               ctaLabel: "Continue to try again",
               primary: true,

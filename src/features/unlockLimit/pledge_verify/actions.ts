@@ -11,7 +11,12 @@ import {
   AssetRepositoryType,
   getAppHeader,
 } from "../../../configs/config";
-import { IconTokens, InputStateToken, TextInputProps } from "@voltmoney/schema";
+import {
+  IconTokens,
+  InputStateToken,
+  StepperStateToken,
+  TextInputProps,
+} from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
 import {
   addCommasToNumber,
@@ -96,7 +101,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
       _.get(
         authPledgeResponse,
         "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-      ) === "PENDING_CALLBACK"
+      ) === StepperStateToken.PENDING_CALLBACK
     ) {
       await showPopup({
         title: `Pledging...`,

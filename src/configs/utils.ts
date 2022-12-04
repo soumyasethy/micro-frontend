@@ -50,141 +50,6 @@ export const clearAllData = async () => {
     .then(() => console.warn("Clear data"));
 };
 
-export const horizontalStepperRepo = async () => {
-  let KYC_VERIFICATION: StepperStateToken;
-  let MANDATE_SETUP: StepperStateToken;
-  let AGREEMENT_SIGN: StepperStateToken;
-  let message = "We’re processing. Check after sometime.";
-  const user = await SharedPropsService.getUser();
-
-  if (
-    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-      StepperStateToken.COMPLETED ||
-      user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
-        StepperStateToken.COMPLETED) &&
-    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.COMPLETED &&
-    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
-      StepperStateToken.COMPLETED
-  ) {
-    KYC_VERIFICATION = StepperStateToken.COMPLETED;
-  } else if (
-    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
-      user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION) &&
-    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION &&
-    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION
-  ) {
-    KYC_VERIFICATION = StepperStateToken.PENDING_MANUAL_VERIFICATION;
-  } else {
-    KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
-  }
-  if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.COMPLETED &&
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.COMPLETED
-  ) {
-    MANDATE_SETUP = StepperStateToken.COMPLETED;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.NOT_STARTED
-  ) {
-    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.IN_PROGRESS ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.IN_PROGRESS
-  ) {
-    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION
-  ) {
-    MANDATE_SETUP = StepperStateToken.PENDING_MANUAL_VERIFICATION;
-  } else {
-    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
-  }
-
-  if (
-    user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-    StepperStateToken.COMPLETED
-  ) {
-    AGREEMENT_SIGN = StepperStateToken.COMPLETED;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-    StepperStateToken.PENDING_MANUAL_VERIFICATION
-  ) {
-    AGREEMENT_SIGN = StepperStateToken.PENDING_MANUAL_VERIFICATION;
-  } else {
-    AGREEMENT_SIGN = StepperStateToken.IN_PROGRESS;
-  }
-
-  const data: StepperItem[] = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      step: "1",
-      title: "KYC",
-      subTitle: "",
-      status: KYC_VERIFICATION,
-      message:
-        KYC_VERIFICATION === StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      step: "2",
-      title: "Bank account",
-      subTitle: "",
-      status:
-        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
-      message:
-        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      step: "3",
-      title: "AutoPay",
-      subTitle: "",
-      status: MANDATE_SETUP,
-      message:
-        MANDATE_SETUP === StepperStateToken.COMPLETED
-          ? ""
-          : MANDATE_SETUP === StepperStateToken.IN_PROGRESS
-          ? message
-          : "",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d74",
-      step: "4",
-      title: "Agreement",
-      subTitle: "",
-      status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
-      message:
-        user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-        StepperStateToken.COMPLETED
-          ? ""
-          : user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-            StepperStateToken.IN_PROGRESS
-          ? message
-          : "",
-    },
-  ];
-  return data;
-};
-
 export const stepperRepo = async () => {
   let KYC_VERIFICATION: StepperStateToken;
   let message = "We’re processing. Check after sometime.";
@@ -198,54 +63,39 @@ export const stepperRepo = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
       StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
+      StepperStateToken.COMPLETED &&
+    user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
       StepperStateToken.COMPLETED
   ) {
     KYC_VERIFICATION = StepperStateToken.COMPLETED;
   } else if (
-    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
-      user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION) &&
+    user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+      StepperStateToken.NOT_STARTED &&
+    user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
+      StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION &&
+      StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
+      StepperStateToken.NOT_STARTED &&
+    user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
+      StepperStateToken.NOT_STARTED
+  ) {
+    KYC_VERIFICATION = StepperStateToken.NOT_STARTED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION
   ) {
     KYC_VERIFICATION = StepperStateToken.PENDING_MANUAL_VERIFICATION;
   } else {
     KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
-  }
-  let MANDATE_SETUP: StepperStateToken;
-  if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.COMPLETED &&
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.COMPLETED
-  ) {
-    MANDATE_SETUP = StepperStateToken.COMPLETED;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.NOT_STARTED
-  ) {
-    MANDATE_SETUP = StepperStateToken.NOT_STARTED;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.IN_PROGRESS ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.IN_PROGRESS
-  ) {
-    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
-  } else if (
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
-    user.linkedApplications[0].stepStatusMap.CREDIT_APPROVAL ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION
-  ) {
-    MANDATE_SETUP = StepperStateToken.PENDING_MANUAL_VERIFICATION;
-  } else {
-    MANDATE_SETUP = StepperStateToken.IN_PROGRESS;
   }
 
   const data: StepperItem[] = [
@@ -254,6 +104,7 @@ export const stepperRepo = async () => {
       step: "1",
       title: "KYC Verification",
       subTitle: "Verify Aadhaar & other details to complete KYC",
+      horizontalTitle: "KYC",
       status: KYC_VERIFICATION,
       message:
         KYC_VERIFICATION === StepperStateToken.PENDING_MANUAL_VERIFICATION
@@ -265,6 +116,7 @@ export const stepperRepo = async () => {
       step: "2",
       title: "Verify Bank Account ",
       subTitle: "Provide bank account for receiving money",
+      horizontalTitle: "Bank account",
       status:
         user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
       message:
@@ -279,11 +131,11 @@ export const stepperRepo = async () => {
       step: "3",
       title: "Setup AutoPay",
       subTitle: "Link your account for hassle-free repayments",
-      status: MANDATE_SETUP,
+      horizontalTitle: "AutoPay",
+      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
       message:
-        MANDATE_SETUP === StepperStateToken.COMPLETED
-          ? ""
-          : MANDATE_SETUP === StepperStateToken.IN_PROGRESS
+        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
           ? message
           : "",
     },
@@ -292,19 +144,18 @@ export const stepperRepo = async () => {
       step: "4",
       title: "Review Agreement",
       subTitle: "Verify the key usage terms and confirm",
+      horizontalTitle: "Agreement",
       status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
       message:
         user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-        StepperStateToken.COMPLETED
-          ? ""
-          : user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-            StepperStateToken.IN_PROGRESS
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
           ? message
           : "",
     },
   ];
   return data;
 };
+export const horizontalStepperRepo = stepperRepo;
 
 export const nextStepCredStepper = async (currentStepId?: string) => {
   const user: User = await SharedPropsService.getUser();

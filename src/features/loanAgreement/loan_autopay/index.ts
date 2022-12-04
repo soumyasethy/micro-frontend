@@ -35,6 +35,7 @@ import {
   StackWidth,
   StepperItem,
   StepperProps,
+  StepperStateToken,
   StepperTypeTokens,
   TypographyProps,
   WIDGET,
@@ -43,6 +44,8 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import { MandateLinkPoll, GetMandateLink, goBack } from "./actions";
+import { User } from "../../login/otp_verify/types";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
@@ -61,16 +64,17 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       { id: "progressSpace", type: WIDGET.SPACE },
       { id: "contentStack", type: WIDGET.STACK },
       { id: "contentSpace", type: WIDGET.SPACE },
-      { id: "secureText", type: WIDGET.MESSAGE,
-      position: POSITION.STICKY_BOTTOM,
+      {
+        id: "secureText",
+        type: WIDGET.MESSAGE,
+        position: POSITION.STICKY_BOTTOM,
         padding: {
-              all: 0,
-              left: 0,
-              right: 0,
-              horizontal:0
-            },
-    
-    }
+          all: 0,
+          left: 0,
+          right: 0,
+          horizontal: 0,
+        },
+      },
       // {
       //   id: "bottomCard", type: WIDGET.CARD,
       //   position: POSITION.ABSOLUTE_BOTTOM,
@@ -147,7 +151,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       label: "Generating AutoPay link",
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.SM,
-      lineHeight:24,
+      lineHeight: 24,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
     },
@@ -156,7 +160,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       label: "We’re verifying your details. It may take up to 60 seconds",
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.XS,
-      lineHeight:18,
+      lineHeight: 18,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
@@ -165,12 +169,12 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       bgColor: ColorTokens.White,
       body: {
         widgetItems: [
-          { id: "secureText", type: WIDGET.MESSAGE }
+          { id: "secureText", type: WIDGET.MESSAGE },
           // {
           //     id: "infoStack",
           //     type: WIDGET.STACK,
           //   },
-        //  { id: "bottomCard2Details", type: WIDGET.STACK }
+          //  { id: "bottomCard2Details", type: WIDGET.STACK }
         ],
       },
     },
@@ -194,6 +198,11 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
 
 export const loanAutoPayMF: PageType<any> = {
   onLoad: async (utils) => {
+    const user: User = await SharedPropsService.getUser();
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
+      StepperStateToken.IN_PROGRESS;
+    await SharedPropsService.setUser(user);
+
     const stepper: StepperItem[] = await horizontalStepperRepo();
     MandateLinkPoll(
       { type: ACTION.POLL, routeId: ROUTE.LOAN_AUTOPAY, payload: {} },
@@ -206,7 +215,7 @@ export const loanAutoPayMF: PageType<any> = {
   actions: {
     [ACTION.POLL]: MandateLinkPoll,
     //  [ACTION.AUTOPAY]: authenticateRepayment,
-     [ACTION.GO_BACK]: goBack,
+    [ACTION.GO_BACK]: goBack,
   },
   clearPrevious: true,
 };

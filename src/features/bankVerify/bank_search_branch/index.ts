@@ -41,8 +41,9 @@ import _ from "lodash";
 export let bankCodeX = "";
 export const template: (
   bankCode: string,
-  bankName: string
-) => TemplateSchema = (bankCode, bankName) => ({
+  bankName: string,
+  bankAccountNumber?: string
+) => TemplateSchema = (bankCode, bankName, bankAccountNumber) => ({
   layout: <Layout>{
     id: ROUTE.BANK_SEARCH_BRANCH,
     type: LAYOUTS.LIST,
@@ -105,6 +106,7 @@ export const template: (
         payload: <IFSCSearchActionPayload>{
           bankCode: `${bankCode}`,
           bankName: `${bankName}`,
+          bankAccountNumber: `${bankAccountNumber}`,
           value: "",
         },
       },
@@ -119,9 +121,9 @@ export const template: (
 });
 
 export const bankSearchBranchMF: PageType<any> = {
-  onLoad: async ({}, { bankCode, bankName }) => {
+  onLoad: async ({}, { bankCode, bankName, bankAccountNumber }) => {
     bankCodeX = bankCode;
-    return Promise.resolve(template(bankCode, bankName));
+    return Promise.resolve(template(bankCode, bankName, bankAccountNumber));
   },
   actions: {
     [ACTION.ON_SELECT_IFSC]: OnSelectIFSCAction,

@@ -35,6 +35,7 @@ import {
   StackType,
   StepperItem,
   StepperProps,
+  StepperStateToken,
   StepperTypeTokens,
   TextInputProps,
   TypographyProps,
@@ -45,6 +46,8 @@ import { ACTION, LimitPayload } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import { fetchLinkRepo } from "./repo";
 import { authenticateRepayment, goBack, AutoPayPoll } from "./actions";
+import { User } from "../../login/otp_verify/types";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   stepper: StepperItem[],
@@ -80,11 +83,11 @@ export const template: (
         payload: {},
       },
     },
-     headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
+    headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
     headItem: <TypographyProps>{
       label: "Link bank account for AutoPay",
       fontSize: FontSizeTokens.MD,
-      lineHeight:24,
+      lineHeight: 24,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",

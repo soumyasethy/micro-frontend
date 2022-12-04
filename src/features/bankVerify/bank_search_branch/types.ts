@@ -4,9 +4,10 @@ export enum ACTION {
   SEARCH_IFSC_ACTION = "SEARCH_IFSC_ACTION",
   GO_BACK = "GO_BACK",
 }
-export type IFSCCodePayload = { ifscCode: string };
+export type IFSCCodePayload = { ifscCode: string; bankAccountNumber: string };
 export type IFSCSearchActionPayload = {
   bankCode: string;
   value: string;
   bankName: string;
+  bankAccountNumber: string
 };

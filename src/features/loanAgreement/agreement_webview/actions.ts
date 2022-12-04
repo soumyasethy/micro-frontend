@@ -20,14 +20,15 @@ export const AgreementStatusAction: ActionFunction<any> = async (
     })
       .then((response) => response.json())
       .then(async (response) => {
-        console.warn("AgreementStatusAction", response);
         /// handle response
+
         if (response.stepResponseObject.toLowerCase() === "success") {
           clearInterval(timerRef);
+
           const user: User = await SharedPropsService.getUser();
-          user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
-            StepperStateToken.COMPLETED;
+          user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
+
           await goBack();
           await showPopup({
             type: "SUCCESS",
