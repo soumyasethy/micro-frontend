@@ -19,8 +19,7 @@ export const DisbursalVerifyAction: ActionFunction<
       },
       { headers: await getAppHeader() }
     );
-    console.warn("DisbursalVerifyAction", response);
-    if (response) {
+    if (response.status === 200) {
       await navigate(ROUTE.WITHDRAWAL_SUCCESS, {
         disbursalAmount: action.payload.disbursalAmount,
         accountNumber: action.payload.accountNumber,
