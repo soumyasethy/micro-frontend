@@ -204,7 +204,7 @@ export const template: (
       widgetItems: [{ id: "cta1", type: WIDGET.BUTTON }],
     },
     cta1: <ButtonProps>{
-      type: ButtonTypeTokens.SmallGhost,
+      type: ButtonTypeTokens.MediumGhost,
       // width: ButtonWidthTypeToken.CONTENT,
       icon: <IconProps>{
         name: IconTokens.ChervonDownRight,
@@ -291,7 +291,7 @@ export const template: (
       widgetItems: [{ id: "cta1Faq", type: WIDGET.BUTTON }],
     },
     cta1Faq: <ButtonProps>{
-      type: ButtonTypeTokens.SmallGhost,
+      type: ButtonTypeTokens.MediumGhost,
       //  width: ButtonWidthTypeToken.CONTENT,
       icon: <IconProps>{
         name: IconTokens.ChervonDownRight,
@@ -381,7 +381,7 @@ export const template: (
       widgetItems: [{ id: "cta1Contact", type: WIDGET.BUTTON }],
     },
     cta1Contact: <ButtonProps>{
-      type: ButtonTypeTokens.SmallGhost,
+      type: ButtonTypeTokens.MediumGhost,
       // width: ButtonWidthTypeToken.CONTENT,
       icon: <IconProps>{
         name: IconTokens.ChervonDownRight,

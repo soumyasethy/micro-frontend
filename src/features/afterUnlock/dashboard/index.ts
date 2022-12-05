@@ -387,7 +387,7 @@ export const template: (
         action: {
           type: ACTION.TRANSACTION,
           payload: <NavPayload>{
-            value: 'transaction',
+           // value: 'transaction',
           },
           routeId: ROUTE.DASHBOARD,
         },
@@ -402,16 +402,25 @@ export const template: (
               align: IconAlignmentTokens.left,
               color: ColorTokens.Primary_100,
             },
+            // action: {
+            //   type: ACTION.TRANSACTION,
+            //   payload: <NavPayload>{
+            //     value: 'account',
+            //   },
+            //   routeId: ROUTE.DASHBOARD,
+            // },
           },
           {
             id: "2",
             title: "Transactions",
             status: BottomTabStateToken.NOT_SELECTED,
+         
             icon: {
               name: IconTokens.RuppeFile,
               size: IconSizeTokens.XL,
               align: IconAlignmentTokens.left,
             },
+          
           },
           {
             id: "3",
@@ -422,6 +431,13 @@ export const template: (
               size: IconSizeTokens.XL,
               align: IconAlignmentTokens.left,
             },
+            // action: {
+            //   type: ACTION.TRANSACTION,
+            //   payload: <NavPayload>{
+            //     value: 'limit',
+            //   },
+            //   routeId: ROUTE.DASHBOARD,
+            // },
           },
           {
             id: "4",
@@ -432,6 +448,13 @@ export const template: (
               size: IconSizeTokens.XL,
               align: IconAlignmentTokens.left,
             },
+            // action: {
+            //   type: ACTION.TRANSACTION,
+            //   payload: <NavPayload>{
+            //     value: 'earn',
+            //   },
+            //   routeId: ROUTE.DASHBOARD,
+            // },
           },
         ],
       },

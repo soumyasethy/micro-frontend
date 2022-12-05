@@ -3,7 +3,8 @@ import { StepResponseObject } from "../unlock_limit/types";
 export enum ACTION {
   TRANSACTION = "TRANSACTION",
   NAVIGATION = "NAVIGATION",
-  EMAIL = "EMAIL"
+  EMAIL = "EMAIL",
+  MENU = "MENU"
 }
 
 export type transactionPayload = {
@@ -13,6 +14,6 @@ export type transactionPayload = {
 };
 
 export type NavPayload = {
-  value: string;
+  value: number;
 };
 

@@ -149,4 +149,5 @@ export const faqDetailsMF: PageType<any> = {
         [ACTION.CONTACT]: contact
     },
     bgColor: "#FFFFFF",
+    clearPrevious:true,
 };
