@@ -17,7 +17,6 @@ import {
   ButtonWidthTypeToken,
   ColorTokens,
   DividerProps,
-  DividerSizeTokens,
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
@@ -74,31 +73,16 @@ export const template: (
       {
         id: "bankStack",
         type: WIDGET.STACK,
-        padding: {
-          horizontal: 10,
-          left: 10,
-          right: 10,
-          all: 10,
-        },
       },
+      { id: "dividerTopSpace", type: WIDGET.SPACE },
       { id: "divider", type: WIDGET.DIVIDER },
       {
         id: "listItem1",
         type: WIDGET.LIST_ITEM,
-        padding: {
-          horizontal: 4,
-          left: 4,
-          right: 16,
-        },
       },
       {
         id: "listItem2",
         type: WIDGET.LIST_ITEM,
-        padding: {
-          horizontal: 4,
-          left: 4,
-          right: 18,
-        },
       },
       { id: "listSpace", type: WIDGET.SPACE },
       {
@@ -109,6 +93,7 @@ export const template: (
     ],
   },
   datastore: <Datastore>{
+    dividerTopSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     header: <HeaderProps>{
       title: "Flexi repay",
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
@@ -194,11 +179,6 @@ export const template: (
       fontWeight: "700",
     },
     divider: <DividerProps>{
-      size: DividerSizeTokens.SM,
-      margin: {
-        vertical: SizeTypeTokens.SM,
-        horizontal: SizeTypeTokens.MD,
-      },
       color: ColorTokens.Grey_Milk_1,
     },
 
