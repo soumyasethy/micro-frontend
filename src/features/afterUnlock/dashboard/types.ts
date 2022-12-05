@@ -9,7 +9,7 @@ export enum ACTION {
 }
 
 export type NavPayload = {
-  value: string;
+  value: number;
 };
 
 export type CreditPayload = {

@@ -42,7 +42,7 @@ import {
     NavPayload,
     transactionPayload,
 } from "./types";
-import { emailStatement, navigation } from "./actions";
+import { emailStatement, goBack, navigation } from "./actions";
 
 export const template: TemplateSchema = {
     layout: <Layout>{
@@ -179,7 +179,7 @@ export const template: TemplateSchema = {
             action: {
               type: ACTION.NAVIGATION,
               payload: <NavPayload>{
-                value: 'dashboard',
+               // value: 'dashboard',
               },
               routeId: ROUTE.TRANSACTIONS,
             },
@@ -236,5 +236,6 @@ export const transactionsMF: PageType<any> = {
     actions: {
         [ACTION.TRANSACTION]: emailStatement,
         [ACTION.NAVIGATION]: navigation,
+        [ACTION.MENU]: goBack,
     },
 };

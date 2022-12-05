@@ -1,14 +1,48 @@
+import { IconTokens } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { CreditPayload, NavPayload, RepaymentPayload } from "./types";
+import { AlertNavProps } from "../../popup_loader/types";
+import { ACTION, CreditPayload, NavPayload, RepaymentPayload } from "./types";
 
 export const navigate: ActionFunction<NavPayload> = async (
   action,
   _datastore,
-  { navigate }
+  { navigate ,showPopup}
 ): Promise<any> => {
-  if(action.payload.value === 'transaction'){
+  if(action.payload.value === 1){
     await navigate(ROUTE.TRANSACTIONS);
+  }
+  if(action.payload.value === 2){
+    await navigate(ROUTE.ALERT_PAGE, {
+      alertProps: <AlertNavProps>{
+        type:"DEFAULT",
+        iconName: IconTokens.Sound,
+        title: "Coming soon",
+        subTitle: '',
+        ctaLabel: "Got It",
+        ctaAction: {
+          type: ACTION.MENU,
+          routeId: ROUTE.DASHBOARD,
+          payload: {},
+        },
+      },
+    });
+  }
+  if(action.payload.value === 3){
+    await navigate(ROUTE.ALERT_PAGE, {
+      alertProps: <AlertNavProps>{
+        type:"DEFAULT",
+        iconName: IconTokens.Sound,
+        title: "Coming soon",
+        subTitle: '',
+        ctaLabel: "Got It",
+        ctaAction: {
+          type: ACTION.MENU,
+          routeId: ROUTE.DASHBOARD,
+          payload: {},
+        },
+      },
+    });
   }
   
 };
@@ -56,6 +90,5 @@ export const goBack: ActionFunction<CreditPayload> = async (
   _datastore,
   { goBack }
 ): Promise<any> => {
-  console.warn("**** Go Back****");
   await goBack();
 };

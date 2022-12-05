@@ -10,7 +10,6 @@ import _ from "lodash";
 import {
     ButtonProps,
     ButtonTypeTokens,
-    ButtonWidthTypeToken,
     CardProps,
     ColorTokens,
     DividerProps,
@@ -26,12 +25,10 @@ import {
     SizeTypeTokens,
     SpaceProps,
     StackAlignItems,
-    StackHeight,
     StackJustifyContent,
     StackProps,
     StackType,
     StackWidth,
-    TagProps,
     TagTypeTokens,
     TypographyProps,
     WIDGET,
@@ -369,4 +366,5 @@ export const faqMF: PageType<any> = {
         [ACTION.BACK_BUTTON]: goBack
     },
     bgColor: "#FFFFFF",
+   
 };
