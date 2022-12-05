@@ -29,10 +29,7 @@ export const template: TemplateSchema = {
     type: LAYOUTS.LIST,
     widgets: [
       { id: "headerStack", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
-      {
-        id: "webviewStack",
-        type: WIDGET.STACK, 
-      },
+      { id: "webviewStack", type: WIDGET.STACK, padding: { left: 16, right: 0 } },
     ],
   },
   datastore: <Datastore>{
