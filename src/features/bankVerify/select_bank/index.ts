@@ -33,6 +33,7 @@ import {
 } from "./actions";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (BanksRepo: {
   ALLBANKS: { [key in string]: string };
@@ -117,6 +118,9 @@ export const template: (BanksRepo: {
 
 export const bankSelectMF: PageType<any> = {
   onLoad: async ({ network }) => {
+    /*** Reset Bank Account Number on bank list re-load ***/
+    await SharedPropsService.setAccountNumber("");
+
     const response = await network.get(api.banks, {
       headers: await getAppHeader(),
     });

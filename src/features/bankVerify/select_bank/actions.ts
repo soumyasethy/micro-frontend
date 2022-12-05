@@ -10,6 +10,7 @@ import {
   HeaderProps,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
+import { getBankIconUrl } from "../../../configs/utils";
 
 function getKeyByValue(object, value) {
   return Object.keys(object).find((key) => object[key] === value);
@@ -27,9 +28,8 @@ export const NavSearchIfscBranchInfoAction: ActionFunction<
     ...action.payload.bankRepo.ALLBANKS,
     ...action.payload.bankRepo.POPULAR,
   };
-  console.log("selct bank name", action.payload.value);
-  console.log("selct bank Code",getKeyByValue(banksMap, action.payload.value));
   const bankCode = getKeyByValue(banksMap, action.payload.value);
+
   await navigate(ROUTE.BANK_ACCOUNT_ADD, {
     bankCode,
     bankName: action.payload.value,
@@ -76,7 +76,7 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
     data: [
       ...Object.keys(dataSearchMap).map((key) => ({
         label: allBankMap[key],
-        image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
+        image: getBankIconUrl(key),
         defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
       })),
     ],
