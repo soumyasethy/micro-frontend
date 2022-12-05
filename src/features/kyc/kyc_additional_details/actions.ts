@@ -64,14 +64,6 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
       type: ButtonTypeTokens.LargeFilled,
     });
   }
-  console.warn({
-    martialStatus,
-    fatherFirstName,
-    fatherLastName,
-    motherFirstName,
-    motherLastName,
-    qualification,
-  });
 };
 
 export const onSelect: ActionFunction<DropDownPayload> = async (
@@ -79,16 +71,7 @@ export const onSelect: ActionFunction<DropDownPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.warn("onSelect", action);
   qualification = action.payload.value;
-  console.warn({
-    martialStatus,
-    fatherFirstName,
-    fatherLastName,
-    motherFirstName,
-    motherLastName,
-    qualification,
-  });
   if (
     martialStatus &&
     fatherFirstName &&
@@ -125,14 +108,6 @@ export const toggleCTA: ActionFunction<MaritalStatusPayload> = async (
     });
     martialStatus = MARITAL_STATUS.MARRIED;
   }
-  console.warn({
-    martialStatus,
-    fatherFirstName,
-    fatherLastName,
-    motherFirstName,
-    motherLastName,
-    qualification,
-  });
 
   if (
     martialStatus &&

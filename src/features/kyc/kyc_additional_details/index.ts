@@ -261,7 +261,7 @@ export const template: (
       fatherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       fatherInputBetweenSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       fatherFirstNameInput: <TextInputProps & WidgetProps>{
-        width: TextInputTypeToken.FULL,
+        width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "First name",
         fontFamily: FontFamilyTokens.Inter,
@@ -282,7 +282,7 @@ export const template: (
         },
       },
       fatherLastNameInput: <TextInputProps & WidgetProps>{
-        width: TextInputTypeToken.FULL,
+        width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "Last name",
         fontFamily: FontFamilyTokens.Inter,
@@ -323,6 +323,7 @@ export const template: (
         ],
       },
       motherFirstNameInput: <TextInputProps>{
+        width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "First name",
         fontFamily: FontFamilyTokens.Inter,
@@ -342,6 +343,7 @@ export const template: (
       },
       motherInputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       motherLastNameInput: <TextInputProps>{
+        width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "Last name",
         fontFamily: FontFamilyTokens.Inter,
