@@ -17,6 +17,7 @@ import {
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { portfolioListDatastoreBuilder, togglePortfolio } from "./utils";
+import { roundDownToNearestHundred } from "../../../configs/utils";
 
 let portfolioSearchKeyword = "";
 let listBeforeSearchUI = [];
@@ -32,7 +33,7 @@ export const getTotalLimit = (
       sum +
       item.pledgedUnits * isinNavMap[item.isinNo] * isinLTVMap[item.isinNo];
   });
-  return Math.round(sum * 100) / 100;
+  return roundDownToNearestHundred(sum);
 };
 export const getActualLimit = (
   availableCAS: AvailableCASItem[],
@@ -47,7 +48,7 @@ export const getActualLimit = (
         isinNavMap[item.isinNo] *
         isinLTVMap[item.isinNo];
   });
-  return Math.round(sum * 100) / 100;
+  return roundDownToNearestHundred(sum);
 };
 
 export const TriggerCTA: ActionFunction<CtaPayload> = async (

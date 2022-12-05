@@ -4,7 +4,7 @@ import {
   StepperStateToken,
 } from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
-import { User } from "../features/login/otp_verify/types";
+import { StepStatusMap, User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
@@ -34,6 +34,18 @@ export const showBottomSheet = ({
     },
   };
 };
+
+export const updateStepStatusMap = async (stepStatusMap: StepStatusMap) => {
+  const user: User = await SharedPropsService.getUser();
+  user.linkedApplications[0].stepStatusMap = stepStatusMap;
+  await SharedPropsService.setUser(user);
+};
+export const updateCurrentStepId = async (currentStepId: string) => {
+  const user: User = await SharedPropsService.getUser();
+  user.linkedApplications[0].currentStepId = currentStepId;
+  await SharedPropsService.setUser(user);
+};
+
 /*** don't call this  ****/
 export const clearAllData = async () => {
   await AsyncStorage.getAllKeys()
@@ -295,6 +307,7 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     currentStepId = (await SharedPropsService.getUser()).linkedApplications[0]
       .currentStepId;
   }
+  console.warn("*** currentStepId ***", currentStepId);
   if (currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION) {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
   } else if (currentStepId === ROUTE.KYC_PHOTO_VERIFICATION) {

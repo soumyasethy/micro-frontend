@@ -44,6 +44,7 @@ import {
 import {
   BavVerifyManualAction,
   ChangeBankGoBackAction,
+  GoToStepper,
   NavigationSearchIFSCAction,
   onChangeAccountNumber,
   onChangeIFSCNumber,
@@ -200,10 +201,7 @@ export const template: (
 });
 
 export const bankAccountAddMF: PageType<any> = {
-  onLoad: async ({},{ bankCode, bankName }) => {
-    console.log("Bank Code",bankCode);
-    console.log("Bank NAme",bankName);
-    console.warn("bankAccountAddMF OnLoad bankCode->", bankCode);
+  onLoad: async ({}, { bankCode, bankName }) => {
     return Promise.resolve(template(bankCode, bankName));
   },
   actions: {
@@ -213,6 +211,7 @@ export const bankAccountAddMF: PageType<any> = {
     [ACTION.TOGGLE_CTA]: ToggleCTA,
     [ACTION.TRIGGER_CTA]: BavVerifyManualAction,
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
+    [ACTION.NAV_STEPPER]: GoToStepper,
   },
   clearPrevious: true,
 };

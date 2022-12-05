@@ -119,7 +119,13 @@ export const triggerCTA: ActionFunction<KycAdditionalDetailsPayload> = async (
     response,
     "data.updatedApplicationObj.currentStepId"
   );
+  const stepStatusMap = _.get(
+    response,
+    "data.updatedApplicationObj.stepStatusMap"
+  );
   if (currentStepId) {
+    user.linkedApplications[0].stepStatusMap = stepStatusMap;
+    await SharedPropsService.setUser(user);
     await navigate(currentStepId);
   }
 };
