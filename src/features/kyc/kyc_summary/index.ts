@@ -140,7 +140,7 @@ export const template: (
       fontSize: FontSizeTokens.XS,
     },
     sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
-    sbspace2: <SpaceProps>{ size: SizeTypeTokens.MD },
+    sbSpace2: <SpaceProps>{ size: SizeTypeTokens.MD },
     space1: <SpaceProps>{ size: SizeTypeTokens.MD },
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A1_1,
