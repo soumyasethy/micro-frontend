@@ -5,6 +5,7 @@ export enum ACTION {
   CONTINUE = "CONTINUE",
   ENABLE_CONTINUE = "ENABLE_CONTINUE",
   DISABLE_CONTINUE = "DISABLE_CONTINUE",
+  PRIVACY = "PRIVACY"
 }
 export type EnableDisableCTA = {
   value: boolean;
