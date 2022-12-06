@@ -371,7 +371,7 @@ export const template: (
         ],
       },
       sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
-      sbspace2: <SpaceProps>{ size: SizeTypeTokens.MD },
+      sbSpace2: <SpaceProps>{ size: SizeTypeTokens.MD },
       sbStack: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,
