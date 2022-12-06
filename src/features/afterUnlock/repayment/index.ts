@@ -132,7 +132,7 @@ export const template: (
         "Enjoy flexible repayments. Pay partially or the complete amount in just one go.",
       type: AmountCardTypeTokens.MESSAGE,
     },
-    amountSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+    amountSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
     headStack: <TypographyProps>{
       label: "Bank account details",
       fontSize: FontSizeTokens.MD,
