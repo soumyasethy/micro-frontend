@@ -47,7 +47,6 @@ import {
   GoNext,
   ToggleSelectAction,
 } from "./actions";
-import { fetchBankRepo } from "./repo";
 import {
   horizontalStepperRepo,
   maskBankAccountNumber,
@@ -251,7 +250,6 @@ export const bankAccountVerifyMF: PageType<any> = {
     const banks = response.stepResponseObject;
     const stepper: StepperItem[] = await horizontalStepperRepo();
     const templateX = await template(banks, stepper);
-
     return Promise.resolve(templateX);
   },
   actions: {

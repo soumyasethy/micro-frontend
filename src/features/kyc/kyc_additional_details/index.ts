@@ -97,7 +97,7 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
-      selectQualificationTitleSpace2: <SpaceProps>{ size: SizeTypeTokens.XL },
+      selectQualificationTitleSpace2: <SpaceProps>{ size: SizeTypeTokens.LG },
       topSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       header: <HeaderProps & WidgetProps>{
         title: "KYC Verification",
@@ -371,7 +371,7 @@ export const template: (
         ],
       },
       sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
-      sbspace2: <SpaceProps>{ size: SizeTypeTokens.MD },
+      sbSpace2: <SpaceProps>{ size: SizeTypeTokens.MD },
       sbStack: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,

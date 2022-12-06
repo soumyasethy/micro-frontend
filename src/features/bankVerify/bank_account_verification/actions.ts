@@ -1,6 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import {
-  ACTION as ACTION_CURRENT,
+  ACTION,
   BAVVerifyActionPayload,
   NextNavPayload,
   ToggleActionPayload,
@@ -85,7 +85,6 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
   if (currentStepId && stepStatusMap) {
     await updateCurrentStepId(currentStepId);
     await updateStepStatusMap(stepStatusMap);
-
     await showPopup({
       autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
       isAutoTriggerCta: true,
@@ -94,7 +93,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
       subTitle: "You will be redirected to next step in few seconds",
       ctaLabel: "Continue",
       ctaAction: {
-        type: ACTION_CURRENT.GO_NEXT,
+        type: ACTION.GO_NEXT,
         routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
         payload: <NextNavPayload>{
           currentStepId: _.get(

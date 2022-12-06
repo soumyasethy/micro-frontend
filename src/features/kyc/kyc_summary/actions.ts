@@ -15,7 +15,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import _ from "lodash";
 import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
+import {APP_CONFIG, getAppHeader} from "../../../configs/config";
 import { User } from "../../login/otp_verify/types";
 export const verifyKycSummary: ActionFunction<any> = async (
   action,
@@ -48,7 +48,7 @@ export const verifyKycSummary: ActionFunction<any> = async (
     await SharedPropsService.setUser(user);
 
     await showPopup({
-      autoTriggerTimerInMilliseconds: 2000,
+      autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
       isAutoTriggerCta: true,
       title: "KYC done successfully!",
       subTitle: "You will be redirected to next step in few seconds",
