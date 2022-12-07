@@ -29,9 +29,12 @@ export const CreateDisbursementRequest: ActionFunction<
 > = async (
   action,
   _datastore,
-  { network, navigate, setDatastore, asyncStorage }
+  { network, navigate, setDatastore }
 ): Promise<any> => {
   if (disbursalAmount > 0) {
+    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+      loading: true,
+    });
     await network
       .post(
         api.lmsDisbursal,
@@ -44,18 +47,14 @@ export const CreateDisbursementRequest: ActionFunction<
         { headers: await getAppHeader() }
       )
       .then(async (response) => {
-        console.log(
-          "CreateDisbursementRequest->",
-          JSON.stringify(response.data)
-        );
         await navigate(ROUTE.WITHDRAWAL_OTP, {
           disbursalAmount,
           accountNumber: action.payload.accountNumber,
         });
-      })
-      .catch(function (error) {
-        console.log(error);
       });
+    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
+      loading: false,
+    });
   }
 };
 
@@ -91,13 +90,8 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
   disbursalAmount = parseFloat(action.payload.value);
 
   const user: User = await SharedPropsService.getUser();
-  // const actualLoanAmount = user.linkedCredits[0].actualLoanAmount;
   const availableCreditAmount = user.linkedCredits[0].availableCreditAmount;
-  // const alreadyWithdrawAmount = actualLoanAmount - availableCreditAmount;
   const recommendedAmount = 0.9 * availableCreditAmount;
-  // const currentRecommendedAmount = Math.abs(
-  //   recommendedAmount - alreadyWithdrawAmount
-  // );
 
   if (action.payload.value.length > 0) {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
@@ -116,10 +110,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
       ((disbursalAmount * currentApplicableInterestRate) / 1200) * 100
     ) / 100;
   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "interestItem", <TextInputProps>{
-    value: `${monthlyInterest || 0}` /*.replace(
-      /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
-      ","
-    )*/,
+    value: `${monthlyInterest || 0}`,
   });
   if (disbursalAmount > recommendedAmount) {
     await appendWidgets(

@@ -169,7 +169,7 @@ export const template: (
 export const withdraw_amountMF: PageType<any> = {
   onLoad: async ({ network }, { availableCreditAmount }) => {
     const user: User = await SharedPropsService.getUser();
-    const accountId = await user.linkedBorrowerAccounts[0].accountId;
+    const accountId = user.linkedBorrowerAccounts[0].accountId;
     const response = await network.get(`${api.userProfile}${accountId}`, {
       headers: await getAppHeader(),
     });
