@@ -37,7 +37,7 @@ import {
     NavPayload,
     transactionPayload,
 } from "./types";
-import { emailStatement, goBack, navigation } from "./actions";
+import {  getURL, goBack, navigation } from "./actions";
 
 export const template: TemplateSchema = {
     layout: <Layout>{
@@ -140,7 +140,7 @@ export const template: TemplateSchema = {
         },
         toInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
         continue: <ButtonProps & WidgetProps>{
-            label: "Email statement",
+            label: "Download now",
             labelColor:ColorTokens.White,
             type: ButtonTypeTokens.LargeFilled,
             width: ButtonWidthTypeToken.FULL,
@@ -229,7 +229,7 @@ export const template: TemplateSchema = {
 export const transactionsMF: PageType<any> = {
     onLoad: async () => Promise.resolve(template),
     actions: {
-        [ACTION.EMAIL]: emailStatement,
+        [ACTION.EMAIL]: getURL,
         [ACTION.NAVIGATION]: navigation,
         [ACTION.MENU]: goBack,
     },

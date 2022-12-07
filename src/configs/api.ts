@@ -61,4 +61,5 @@ export const api = {
   processingCharges: `${config.URL}/app/borrower/application/pledge/processingCharges`,
   borrowerApplication: `${config.URL}/app/borrower/application/`,
   additionalDetails: `${config.URL}/app/borrower/application/additionalDetails/`,
+  pdfLink: `${config.URL}/app/borrower/lms/transactions/`,
 };
