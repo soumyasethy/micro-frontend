@@ -1,1 +1,4 @@
-export const x = {};
+
+export const myFunction = () => {
+   console.log("redirect to privacy");
+  };
