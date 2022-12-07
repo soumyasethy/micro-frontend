@@ -249,7 +249,7 @@ export const template: (
       },
       fatherNameStack: <StackProps>{
         type: StackType.row,
-        width: StackWidth.FULL,
+        width: StackWidth.CONTENT,
         alignItems: StackAlignItems.flexStart,
         justifyContent: StackJustifyContent.center,
         widgetItems: [
@@ -313,7 +313,7 @@ export const template: (
       motherNameSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       motherNameStack: <StackProps>{
         type: StackType.row,
-        width: StackWidth.FULL,
+        width: StackWidth.CONTENT,
         alignItems: StackAlignItems.flexStart,
         justifyContent: StackJustifyContent.center,
         widgetItems: [
@@ -341,7 +341,7 @@ export const template: (
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
         },
       },
-      motherInputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+      motherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       motherLastNameInput: <TextInputProps>{
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
