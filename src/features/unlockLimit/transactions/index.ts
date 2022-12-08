@@ -52,7 +52,7 @@ export const template: TemplateSchema = {
             {
                 id: "headerStack",
                 type: WIDGET.HEADER,
-                position:POSITION.FIXED_TOP
+                position:POSITION.ABSOLUTE_TOP
             },
             { id: "headSpace", type: WIDGET.SPACE },
             { id: "title", type: WIDGET.TEXT },

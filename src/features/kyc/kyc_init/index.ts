@@ -54,10 +54,10 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         id: "continue",
         type: WIDGET.BUTTON,
       },
-      {id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      {id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
       {id: 'space2', type: WIDGET.SPACE},
       {id: "tcText" , type: WIDGET.TEXT},
-      {id: 'bottomSection', type: WIDGET.STACK, position: POSITION.STICKY_BOTTOM},
+      {id: 'bottomSection', type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM},
     ],
   },
   datastore: <Datastore>{

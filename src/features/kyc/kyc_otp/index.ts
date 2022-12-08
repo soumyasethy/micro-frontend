@@ -45,7 +45,7 @@ export const template: (
       { id: "subTitle", type: WIDGET.TEXT },
       { id: "spaceInput", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
-      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
     ],
   },
   datastore: <Datastore>{

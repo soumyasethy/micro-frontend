@@ -43,7 +43,7 @@ export const template: (
                 id: ROUTE.ACCOUNT_DETAILS,
                 type: LAYOUTS.LIST,
                 widgets: [
-                    { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP, },
+                    { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP, },
                     { id: "list1", type: WIDGET.LIST_ITEM,  padding: { left: 16, right: 16 }},
                     { id: "list2", type: WIDGET.LIST_ITEM,  padding: { left: 16, right: 16 } },
                     { id: "list3", type: WIDGET.LIST_ITEM,  padding: { left: 16, right: 16 } },

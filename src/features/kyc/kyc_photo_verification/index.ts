@@ -47,7 +47,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     id: ROUTE.KYC_PHOTO_VERIFICATION,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
       { id: "spaceTop", type: WIDGET.SPACE },
       { id: "title", type: WIDGET.TEXT },
       { id: "titleSpace", type: WIDGET.SPACE },

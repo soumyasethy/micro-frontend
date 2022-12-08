@@ -116,7 +116,7 @@ export const template: (
       id: ROUTE.BANK_ACCOUNT_VERIFICATION,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         { id: "space1", type: WIDGET.SPACE },
         { id: "titleStack", type: WIDGET.STACK },
         { id: "titleSpace", type: WIDGET.SPACE },
