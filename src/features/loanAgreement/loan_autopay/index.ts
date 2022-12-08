@@ -54,7 +54,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     id: ROUTE.LOAN_AUTOPAY,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
       { id: "headerSpace", type: WIDGET.SPACE },
       { id: "headerSpace1", type: WIDGET.SPACE },
       { id: "iconStack", type: WIDGET.STACK },
@@ -67,7 +67,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       {
         id: "secureText",
         type: WIDGET.MESSAGE,
-        position: POSITION.STICKY_BOTTOM,
+        position: POSITION.ABSOLUTE_BOTTOM,
         padding: {
           all: 0,
           left: 0,

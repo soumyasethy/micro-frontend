@@ -28,7 +28,7 @@ export const template: TemplateSchema = {
     id: ROUTE.PRIVACY_POLICY,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
       { id: "webviewStack", type: WIDGET.STACK, padding: { left: 16, right: 0 } },
     ],
   },

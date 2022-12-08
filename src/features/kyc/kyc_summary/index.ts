@@ -78,7 +78,7 @@ export const template: (
       { id: "tcStack", type: WIDGET.STACK },
       { id: "tcSpace", type: WIDGET.SPACE },
       { id: "stackBottom", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM},
-      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
     ],
   },
   datastore: <Datastore>{

@@ -36,7 +36,7 @@ export const template: (
                 type: LAYOUTS.LIST,
                 widgets: [
                     {
-                        id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP
+                        id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP
                     },
                     {
                         id: "detailScreen", type: WIDGET.STACK, padding: {

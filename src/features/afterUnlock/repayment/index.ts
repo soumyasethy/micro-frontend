@@ -62,7 +62,7 @@ export const template: (
       {
         id: "header",
         type: WIDGET.HEADER,
-        position: POSITION.FIXED_TOP,
+        position: POSITION.ABSOLUTE_TOP,
       },
       { id: "amountItem", type: WIDGET.AMOUNTCARD },
       { id: "amountSpace", type: WIDGET.SPACE },

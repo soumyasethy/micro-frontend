@@ -51,7 +51,7 @@ export const template: (
     id: ROUTE.LOAN_AGREEMENT,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
       { id: "headerSpace", type: WIDGET.SPACE },
       // { id: "contentStack",type: WIDGET.STACK},
       { id: "headItem", type: WIDGET.TEXT },

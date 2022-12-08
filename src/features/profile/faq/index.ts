@@ -46,7 +46,7 @@ export const template: (
                 type: LAYOUTS.LIST,
                 widgets: [
                     { id: "space0", type: WIDGET.SPACE },
-                    { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP},
+                    { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP},
                     { id: "Card1", type: WIDGET.CARD, padding: { left: 16, right: 16 }},
                     { id: "space1", type: WIDGET.SPACE },
                     { id: "Card2", type: WIDGET.CARD, padding: { left: 16, right: 16 }},

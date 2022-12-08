@@ -51,7 +51,7 @@ export const template: (
       id: ROUTE.WITHDRAW_AMOUNT,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         // { id: "headerSpace", type: WIDGET.SPACE },
         { id: "amountItem", type: WIDGET.INPUT },
         { id: "amountMsgSpace", type: WIDGET.SPACE },

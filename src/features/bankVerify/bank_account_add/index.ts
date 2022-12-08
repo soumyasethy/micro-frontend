@@ -65,7 +65,7 @@ export const template: (
       {
         id: "header",
         type: WIDGET.HEADER,
-        position: POSITION.FIXED_TOP,
+        position: POSITION.ABSOLUTE_TOP,
       },
       { id: "cardStack", type: WIDGET.STACK },
       { id: "accountSpace", type: WIDGET.SPACE },
