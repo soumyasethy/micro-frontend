@@ -203,16 +203,7 @@ export const template: (
 
 export const unlockLimitLandingMF: PageType<any> = {
     onLoad: async ({ network }, { response }) => {
-        // const user = await SharedPropsService.getUser();
-        // const applicationid = user.linkedApplications[0].applicationId;
-        // const responseX = await network.get(
-        //     `${api.pledgeLimit}${applicationid}`,
-        //     { headers: await defaultHeaders() }
-        // );
-
-        // const availableCreditAmount = _.get(responseX, "data.stepResponseObject.availableCreditAmount", {});
-
-         const responseX = response ? response.data : await fetchPledgeLimitRepo();
+        const responseX = response ? response.data : await fetchPledgeLimitRepo();
         const availableCreditAmount: number =
             responseX.stepResponseObject.availableCreditAmount || 0;
         return Promise.resolve(
@@ -221,7 +212,6 @@ export const unlockLimitLandingMF: PageType<any> = {
     },
 
     actions: {
-        [ACTION.UNLOCK_LIMIT]: continueLimit,
-        // [ACTION.MODIFY_LIMIT]: modifyLimit,
+        [ACTION.UNLOCK_LIMIT]: continueLimit
     },
 };
