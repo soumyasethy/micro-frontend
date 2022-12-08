@@ -111,7 +111,6 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
-        { id: "space0", type: WIDGET.SPACE },
         { id: "cardItem", type: WIDGET.CARD },
         { id: "space1", type: WIDGET.SPACE },
         ...listItemLayout,
