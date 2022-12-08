@@ -67,6 +67,7 @@ export const template: (
         type: WIDGET.HEADER,
         position: POSITION.ABSOLUTE_TOP,
       },
+      { id: "space1", type: WIDGET.SPACE },
       { id: "cardStack", type: WIDGET.STACK },
       { id: "accountSpace", type: WIDGET.SPACE },
       { id: "accountInput", type: WIDGET.INPUT },
@@ -90,7 +91,7 @@ export const template: (
         payload: {},
       },
     },
-    space1: <SpaceProps>{ size: SizeTypeTokens.SM },
+    space1: <SpaceProps>{ size: SizeTypeTokens.XL },
     cardStack: <StackProps>{
       type: StackType.row,
       alignItems: StackAlignItems.center,

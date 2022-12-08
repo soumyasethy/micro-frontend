@@ -51,7 +51,7 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   },
   datastore: <Datastore>{
     space0: <SpaceProps>{
-      size: SizeTypeTokens.XS,
+      size: SizeTypeTokens.MD,
     },
     title: <TypographyProps>{
       label: "Withdraw in 4 steps",

@@ -78,7 +78,7 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
-      space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       continue: <ButtonProps & WidgetProps>{
         fontSize: FontSizeTokens.MD,
         label: "Continue",

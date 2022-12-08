@@ -52,7 +52,7 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
-        // { id: "headerSpace", type: WIDGET.SPACE },
+        { id: "headerSpace", type: WIDGET.SPACE },
         { id: "amountItem", type: WIDGET.INPUT },
         { id: "amountMsgSpace", type: WIDGET.SPACE },
         // { id: "amountMessage", type: WIDGET.MESSAGE },
@@ -84,7 +84,7 @@ export const template: (
           routeId: ROUTE.WITHDRAW_AMOUNT,
         },
       },
-      headerSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+      headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       amountItem: <TextInputProps & WidgetProps>{
         placeholder: "",
         type: InputTypeToken.DEFAULT,

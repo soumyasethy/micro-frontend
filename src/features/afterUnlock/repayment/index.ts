@@ -64,6 +64,7 @@ export const template: (
         type: WIDGET.HEADER,
         position: POSITION.ABSOLUTE_TOP,
       },
+      { id: "space0", type: WIDGET.SPACE },
       { id: "amountItem", type: WIDGET.AMOUNTCARD },
       { id: "amountSpace", type: WIDGET.SPACE },
       { id: "headStack", type: WIDGET.TEXT },
@@ -109,6 +110,7 @@ export const template: (
         routeId: ROUTE.REPAYMENT,
       },
     },
+    space0: <SpaceProps> { size: SizeTypeTokens.XL },
     //<AmountCard
     //   chipText="How?"
     //   message="Recomended to use as per limit"
@@ -132,7 +134,7 @@ export const template: (
         "Enjoy flexible repayments. Pay partially or the complete amount in just one go.",
       type: AmountCardTypeTokens.MESSAGE,
     },
-    amountSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
+    amountSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
     headStack: <TypographyProps>{
       label: "Bank account details",
       fontSize: FontSizeTokens.MD,
