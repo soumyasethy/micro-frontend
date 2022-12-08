@@ -87,3 +87,11 @@ export const whatsappToggle: ActionFunction<WhatsAppEnabledPayload> = async (
 ): Promise<any> => {
   isWhatsAppEnabled = action.payload.value;
 };
+
+export const goToPrivacy: ActionFunction<{}> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  navigate(ROUTE.PRIVACY_POLICY);
+};

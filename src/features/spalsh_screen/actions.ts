@@ -33,7 +33,7 @@ export const SplashAction: ActionFunction<any> = async (
         const nextRoute = await nextStepId(
           user.linkedApplications[0].currentStepId
         );
-        //await navigate(ROUTE.TRANSACTIONS);
+      //  await navigate(ROUTE.UNLOCK_LIMIT_LANDING);
         await navigate(nextRoute.routeId, nextRoute.params);
       }
     }
