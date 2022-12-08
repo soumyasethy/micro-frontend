@@ -50,7 +50,6 @@ import {
   repayment,
   withdrawNow,
 } from "./actions";
-import { fetchUserDetails } from "./repo";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
@@ -66,7 +65,7 @@ export const template: (
   availableCreditAmount,
   actualLoanAmount,
   repaymentAmount,
-  isPendingDisbursalApproval,
+  isPendingDisbursalApproval
 ) => {
   // const _generateRepaymentDS =
   //   repaymentAmount > 0
@@ -78,7 +77,7 @@ export const template: (
   //               {
   //                 id: "repaymentItem",
   //                 type: WIDGET.REPAYMENT,
-                 
+
   //               },
   //             ],
   //           },
@@ -86,7 +85,7 @@ export const template: (
   //       }
   //     : {};
 
-      const _generateRepaymentDS =
+  const _generateRepaymentDS =
     repaymentAmount > 0
       ? {
           repaymentStickyCard: <CardProps>{
@@ -96,7 +95,6 @@ export const template: (
                 {
                   id: "repaymentItem",
                   type: WIDGET.REPAYMENT,
-                 
                 },
               ],
             },
@@ -290,14 +288,15 @@ export const template: (
             /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
             ","
           ),
-        progressLabel: `${Math.trunc(((availableCreditAmount/actualLoanAmount)*100))}`+ '% of total limit available',
+        progressLabel:
+          `${Math.trunc((availableCreditAmount / actualLoanAmount) * 100)}` +
+          "% of total limit available",
         warning: "Recommended to use as per limit",
         chipText: "",
         type: AmountCardTypeTokens.wallet,
-        progressFillPercentage: `${(
-          (availableCreditAmount * 100) /
-          actualLoanAmount
-        )}%`,
+        progressFillPercentage: `${
+          (availableCreditAmount * 100) / actualLoanAmount
+        }%`,
       },
       cardSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       continue: <ButtonProps & WidgetProps>{
@@ -317,7 +316,7 @@ export const template: (
       },
       continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       ..._generateRepaymentDS,
-     
+
       repaymentItem: <RepaymentProps>{
         title: "Repayment",
         message: "Outstanding amount",
@@ -368,11 +367,11 @@ export const template: (
         heading: "Why Volt?",
       },
       cardNav: <CardProps>{
-        padding:{
-          top:SizeTypeTokens.Size10,
-          bottom:SizeTypeTokens.MD
+        padding: {
+          top: SizeTypeTokens.Size10,
+          bottom: SizeTypeTokens.MD,
         },
-        shadow:ShadowTypeTokens.E6,
+        shadow: ShadowTypeTokens.E6,
         bgColor: ColorTokens.White,
         body: {
           widgetItems: [
@@ -387,7 +386,7 @@ export const template: (
         action: {
           type: ACTION.TRANSACTION,
           payload: <NavPayload>{
-           // value: 'transaction',
+            // value: 'transaction',
           },
           routeId: ROUTE.DASHBOARD,
         },
@@ -414,13 +413,12 @@ export const template: (
             id: "2",
             title: "Transactions",
             status: BottomTabStateToken.NOT_SELECTED,
-         
+
             icon: {
               name: IconTokens.RuppeFile,
               size: IconSizeTokens.XL,
               align: IconAlignmentTokens.left,
             },
-          
           },
           {
             id: "3",
@@ -484,9 +482,10 @@ export const dashboardMF: PageType<any> = {
     let repaymentAmount = actualLoanAmount - availableCreditAmount;
     let isPendingDisbursalApproval =
       user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_APPROVAL";
-     
-    let amountPercentage =  Math.round((availableCreditAmount * 100) /actualLoanAmount);
-      console.log("amountPercentage",amountPercentage);
+
+    let amountPercentage = Math.round(
+      (availableCreditAmount * 100) / actualLoanAmount
+    );
 
     return Promise.resolve(
       template(
