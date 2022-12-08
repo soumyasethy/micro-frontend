@@ -49,7 +49,7 @@ export const template: (
     id: ROUTE.MF_PLEDGE_PORTFOLIO,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
       { id: "space0", type: WIDGET.SPACE },
       { id: "amount", type: WIDGET.AMOUNTCARD },
       { id: "space1", type: WIDGET.SPACE },
