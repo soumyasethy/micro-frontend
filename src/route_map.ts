@@ -58,6 +58,10 @@ import { transactionsMF } from "./features/unlockLimit/transactions";
 import { privacyPolicyMF } from "./features/privacy_policy";
 import {kycAdditionalDetailsMF} from "./features/kyc/kyc_additional_details";
 import { unlockLimitLandingMF } from "./features/unlockLimit/unlock_limit_landing";
+import {distBankAccountAddMF}  from "./features/bankDetailsDistributor/bank_account_add";
+import {distBankAccountVerifyMF} from "./features/bankDetailsDistributor/bank_account_verification";
+import { distBankSearchBranchMF } from "./features/bankDetailsDistributor/bank_search_branch";
+import { distBankSelectMF } from "./features/bankDetailsDistributor/select_bank";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -117,5 +121,9 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.TRANSACTIONS]: transactionsMF,
   [ROUTE.PRIVACY_POLICY]: privacyPolicyMF,
   [ROUTE.KYC_ADDITIONAL_DETAILS]: kycAdditionalDetailsMF,
-  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF
+  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  [ROUTE.DIST_BANK_ACCOUNT_ADD]: distBankAccountAddMF,
+  [ROUTE.DIST_BANK_ACCOUNT_VERIFICATION]: distBankAccountVerifyMF,
+  [ROUTE.DIST_BANK_SEARCH_BRANCH]: distBankSearchBranchMF,
+  [ROUTE.DIST_BANK_SELECT]: distBankSelectMF
 };
