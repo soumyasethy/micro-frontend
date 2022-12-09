@@ -74,6 +74,10 @@ import { selectSourceMF } from "./features/mfFetch/select_source";
 import {manageLimitMF} from "./features/afterUnlock/manage_limit";
 import { setCreditLimitMf2 } from "./features/mfPledge/set_credit_limit_v2";
 import { portfoliofromRTAMf } from "./features/mfPledge/portfoliofromRTA";
+import {distBankAccountAddMF}  from "./features/bankDetailsDistributor/bank_account_add";
+import {distBankAccountVerifyMF} from "./features/bankDetailsDistributor/bank_account_verification";
+import { distBankSearchBranchMF } from "./features/bankDetailsDistributor/bank_search_branch";
+import { distBankSelectMF } from "./features/bankDetailsDistributor/select_bank";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -155,4 +159,9 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.SET_CREDIT_LIMIT2]: setCreditLimitMf2,
  // [ROUTE.SET_CREDIT_LIMIT2]: setCreditLimitMf2,
   [ROUTE.PORTFOLIO_FROM_RTA]: portfoliofromRTAMf,
+  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  [ROUTE.DIST_BANK_ACCOUNT_ADD]: distBankAccountAddMF,
+  [ROUTE.DIST_BANK_ACCOUNT_VERIFICATION]: distBankAccountVerifyMF,
+  [ROUTE.DIST_BANK_SEARCH_BRANCH]: distBankSearchBranchMF,
+  [ROUTE.DIST_BANK_SELECT]: distBankSelectMF
 };
