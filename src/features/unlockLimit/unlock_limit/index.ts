@@ -50,6 +50,7 @@ export const template: (
     type: LAYOUTS.LIST,
     widgets: [
       { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+      { id: "spaceHeader", type: WIDGET.SPACE },
       { id: "space0", type: WIDGET.SPACE },
       { id: "amount", type: WIDGET.AMOUNTCARD },
       { id: "space1", type: WIDGET.SPACE },
@@ -79,6 +80,7 @@ export const template: (
       trailIcon: "",
       type: "DEFAULT",
     },
+    spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XL },
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
       title: "Approved cash limit",

@@ -100,6 +100,7 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+        { id: "spaceHeader", type: WIDGET.SPACE },
         { id: "cardItem", type: WIDGET.CARD },
         { id: "space1", type: WIDGET.SPACE },
         ...listItemLayout,
@@ -170,6 +171,7 @@ export const template: (
           routeId: ROUTE.PLEDGE_CONFIRMATION,
         },
       },
+      spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XL },
       cardItem: <CardProps>{
         shadow: ShadowTypeTokens.E1,
         bgColor: ColorTokens.Primary_05,
