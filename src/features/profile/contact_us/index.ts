@@ -35,6 +35,7 @@ export const template: (
                 type: LAYOUTS.LIST,
                 widgets: [
                     { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+                    { id: "topSpace", type: WIDGET.SPACE },
                     { id: "info", type: WIDGET.TEXT },
                     { id: "space0", type: WIDGET.SPACE },
                     {
@@ -67,6 +68,7 @@ export const template: (
                         routeId: ROUTE.CONTACT_US,
                     },
                 },
+                topSpace: <SpaceProps> { size: SizeTypeTokens.XL },
                 info: <TypographyProps>{
                     label: "We would love to hear from you. You can get back to us via Call, Email or WhatsApp.",
                     color: ColorTokens.Grey_Night,

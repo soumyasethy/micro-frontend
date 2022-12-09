@@ -86,7 +86,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         payload: {},
       },
     },
-    spaceTop: <SpaceProps>{ size: SizeTypeTokens.MD },
+    spaceTop: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     continueSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
     title: <TypographyProps>{

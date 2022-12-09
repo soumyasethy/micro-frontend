@@ -141,7 +141,7 @@ export const template: (
     },
     sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
     sbSpace2: <SpaceProps>{ size: SizeTypeTokens.MD },
-    space1: <SpaceProps>{ size: SizeTypeTokens.MD },
+    space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A1_1,
       borderRadius: BorderRadiusTokens.BR1,

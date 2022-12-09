@@ -50,6 +50,7 @@ export const template: (BanksRepo: {
           type: WIDGET.HEADER,
           position: POSITION.ABSOLUTE_TOP,
         },
+        { id: "space1", type: WIDGET.SPACE },
         { id: "searchInput", type: WIDGET.INPUT },
         { id: "gridItem", type: WIDGET.GRIDITEM },
       ],
