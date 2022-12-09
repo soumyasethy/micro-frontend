@@ -108,7 +108,7 @@ export const template: (
       trailIcon: "",
       type: "DEFAULT",
     },
-    spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XL },
+    spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XS },
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
       title: "Approved cash limit",
