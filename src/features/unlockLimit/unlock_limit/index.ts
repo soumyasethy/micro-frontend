@@ -22,6 +22,7 @@ import {
   PromoCardProps,
   SizeTypeTokens,
   SpaceProps,
+  StepperStateToken,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
@@ -33,9 +34,17 @@ import {
 } from "./types";
 import { continueLimit, modifyLimit } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
-import { roundDownToNearestHundred } from "../../../configs/utils";
-
-let sourceX = "";
+import {
+  addCommasToNumber,
+  roundDownToNearestHundred,
+} from "../../../configs/utils";
+import { StepStatusMap, User } from "../../login/otp_verify/types";
+import { api } from "../../../configs/api";
+import { APP_CONFIG, getAppHeader } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
+import { ACTION as PAGE_ACTION } from "../pledge_verify/types";
+import { NavigationNext } from "../../kyc/kyc_init/types";
+import _ from "lodash";
 export const template: (
   availableCreditAmount: number,
   availableCAS: AvailableCASItem[],
@@ -82,10 +91,9 @@ export const template: (
     space0: <SpaceProps>{ size: SizeTypeTokens.LG },
     amount: <AmountCardProps>{
       title: "Approved cash limit",
-      subTitle: `${roundDownToNearestHundred(availableCreditAmount)}`.replace(
-        /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
-        ","
-      ),
+      subTitle: `${addCommasToNumber(
+        roundDownToNearestHundred(availableCreditAmount)
+      )}`,
       chipText: "",
       type: "default",
     },
@@ -183,14 +191,75 @@ export const template: (
 });
 
 export const unlockLimitMF: PageType<any> = {
-  onLoad: async ({}, { response }) => {
-    console.info(" unlockLimitMF response", response);
-    const responseX = response ? response.data : await fetchPledgeLimitRepo();
+  onLoad: async ({ showPopup, network, goBack }) => {
+    const user: User = await SharedPropsService.getUser();
+    const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
+      (response) => ({
+        data: response,
+      })
+    );
+    /* const pledgeLimitResponse = await network.get(
+      `${api.pledgeLimit}${user.linkedApplications[0].applicationId}`,
+      { headers: await getAppHeader() }
+    )*/
     const availableCreditAmount: number =
-      responseX.stepResponseObject.availableCreditAmount || 0;
+      pledgeLimitResponse.data.stepResponseObject.availableCreditAmount || 0;
     const availableCAS: AvailableCASItem[] =
-      responseX.stepResponseObject.availableCAS || [];
-    const stepResponseObject = responseX.stepResponseObject;
+      pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
+    const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
+
+    /*** Show popup as soon as we land here if MF_PLEDGE_PORTFOLIO is PENDING_CALLBACK ***/
+    const stepStatusMap: StepStatusMap =
+      pledgeLimitResponse.data.updatedApplicationObj.stepStatusMap;
+    if (
+      stepStatusMap.MF_PLEDGE_PORTFOLIO === StepperStateToken.PENDING_CALLBACK
+    ) {
+      setTimeout(async () => {
+        await showPopup({
+          title: `Pledging...`,
+          subTitle: "Please wait while we confirm your pledge with depository.",
+          type: "DEFAULT",
+          iconName: IconTokens.Volt,
+        });
+      }, 250);
+
+      /***** Starting Polling to check status of MF_PLEDGE_PORTFOLIO *****/
+      const PollerRef = setInterval(async () => {
+        const mfPledgeStatusResponse = await network.get(
+          `${api.borrowerApplication}${user.linkedApplications[0].applicationId}`,
+          { headers: await getAppHeader() }
+        );
+        user.linkedApplications[0] = _.get(mfPledgeStatusResponse, "data");
+        await SharedPropsService.setUser(user);
+        if (
+          _.get(
+            mfPledgeStatusResponse,
+            "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+          ) === "COMPLETED" &&
+          _.get(mfPledgeStatusResponse, "data.currentStepId") !==
+            "MF_PLEDGE_PORTFOLIO"
+        ) {
+          clearInterval(PollerRef);
+          await goBack();
+          await showPopup({
+            autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
+            isAutoTriggerCta: true,
+            title: `Limit unlocked successfully!`,
+            subTitle: "You will be redirected to next step in few seconds",
+            type: "SUCCESS",
+            ctaLabel: "Continue",
+            primary: true,
+            ctaAction: {
+              type: PAGE_ACTION.NAV_NEXT,
+              routeId: ROUTE.PLEDGE_VERIFY,
+              payload: <NavigationNext>{
+                stepId: _.get(mfPledgeStatusResponse, "data.currentStepId"),
+              },
+            },
+          });
+        }
+      }, APP_CONFIG.POLLING_INTERVAL);
+    }
     return Promise.resolve(
       template(availableCreditAmount, availableCAS, stepResponseObject)
     );

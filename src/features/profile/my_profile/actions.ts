@@ -3,6 +3,7 @@ import { ROUTE } from "../../../routes";
 import { ProfilePayload } from "./types";
 import { StoreKey } from "../../../configs/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {clearAllData} from "../../../configs/utils";
 
 export const accountDetails: ActionFunction<ProfilePayload> = async (
   action,
@@ -44,7 +45,7 @@ export const logout: ActionFunction<ProfilePayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  await AsyncStorage.removeItem(StoreKey.accessToken);
+  await clearAllData();
   await navigate(ROUTE.PHONE_NUMBER);
 };
 
