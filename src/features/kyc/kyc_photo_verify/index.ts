@@ -59,7 +59,7 @@ export const template: (
     ],
   },
   datastore: <Datastore>{
-    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+    topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     header: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
       subTitle:

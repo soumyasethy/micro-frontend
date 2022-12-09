@@ -42,7 +42,7 @@ export const template: (
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         { id: "spaceHeader", type: WIDGET.SPACE },
         // { id: "inputItem", type: WIDGET.INPUT },
-        // { id: "inputSpace", type: WIDGET.SPACE },
+        { id: "inputSpace", type: WIDGET.SPACE },
         { id: "listItem", type: WIDGET.LIST },
         { id: "listSpace", type: WIDGET.SPACE },
         {
@@ -96,7 +96,7 @@ export const template: (
           payload: {},
         },
       },
-      inputSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
+      inputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       listSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
       ...(await portfolioListDatastoreBuilder(stepResponseObject)),
     },

@@ -63,6 +63,7 @@ export const template: (
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         { id: "spaceHeader", type: WIDGET.SPACE },
+        { id: "space0", type: WIDGET.SPACE },
         { id: "inputItem", type: WIDGET.INPUT },
         { id: "inputSpace", type: WIDGET.SPACE },
         { id: "selectAssetForPledge", type: WIDGET.STACK },
@@ -91,6 +92,7 @@ export const template: (
         },
       },
       spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XL },
+      space0: <SpaceProps> {size: SizeTypeTokens.XXL},
       inputItem: <TextInputProps & WidgetProps>{
         placeholder: "",
         type: InputTypeToken.DEFAULT,

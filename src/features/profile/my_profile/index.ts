@@ -61,6 +61,7 @@ export const template: (
         id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP,
    
       },
+      { id: "space0", type: WIDGET.SPACE },
       {
         id: "accountCard", type: WIDGET.CARD
  
@@ -124,6 +125,7 @@ export const template: (
         routeId: ROUTE.MY_PROFILE,
       },
     },
+    space0: <SpaceProps> { size: SizeTypeTokens.XL},
     list1: <ListItemProps>{
       customTitle: <TypographyProps>{
         label: "Account details",

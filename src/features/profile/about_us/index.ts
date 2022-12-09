@@ -46,6 +46,7 @@ export const template: () => TemplateSchema = () => {
           type: WIDGET.HEADER,
           position: POSITION.ABSOLUTE_TOP,
         },
+        { id: "space0", type: WIDGET.SPACE },
         {
           id: "detailScreen",
           type: WIDGET.STACK,
@@ -72,7 +73,7 @@ export const template: () => TemplateSchema = () => {
           routeId: ROUTE.ABOUTUS,
         },
       },
-
+      space0: <SpaceProps> {size: SizeTypeTokens.XL},
       detailScreen: <StackProps>{
         widgetItems: [
           { id: "Card1", type: WIDGET.CARD },
