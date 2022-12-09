@@ -1,6 +1,6 @@
 {
   "name": "@voltmoney/micro-frontend",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Business Logic for Volt App for Web and Mobile",
   "author": "soumyasethy <soumya.sethy@voltmoney.in>",
   "homepage": "https://github.com/VOLTMoney/micro-frontend#readme",
@@ -24,15 +24,16 @@
     "publish": "npm publish --access public",
     "copy-watcher": "node chokidar.js",
     "build-copy": "npm run build ; npm run copy",
-    "npm-set-registry": "npm config set //gitlab.com/api/v4/packages/npm/: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"
+    "npm-set-registry": "npm config set //gitlab.com/api/v4/packages/npm/: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",
+    "copy-no-code": "sh scripts/copy-no-code.sh"
   },
   "devDependencies": {
     "chokidar": "^3.5.3",
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@voltmoney/schema": "^0.0.26",
-    "@voltmoney/types": "^1.0.19",
+    "@voltmoney/schema": "^0.0.27",
+    "@voltmoney/types": "^1.0.20",
     "@react-native-google-signin/google-signin": "^8.0.0",
     "@react-native-async-storage/async-storage": "^1.17.7",
     "react-google-login": "^5.2.2",
