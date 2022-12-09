@@ -7,18 +7,18 @@ import { ACTION, CreditPayload, NavPayload, RepaymentPayload } from "./types";
 export const navigate: ActionFunction<NavPayload> = async (
   action,
   _datastore,
-  { navigate ,showPopup}
+  { navigate, showPopup }
 ): Promise<any> => {
-  if(action.payload.value === 1){
+  if (action.payload.value === 1) {
     await navigate(ROUTE.TRANSACTIONS);
   }
-  if(action.payload.value === 2){
+  if (action.payload.value === 2) {
     await navigate(ROUTE.ALERT_PAGE, {
       alertProps: <AlertNavProps>{
-        type:"DEFAULT",
+        type: "DEFAULT",
         iconName: IconTokens.Sound,
         title: "Coming soon",
-        subTitle: '',
+        subTitle: "",
         ctaLabel: "Got It",
         ctaAction: {
           type: ACTION.MENU,
@@ -28,13 +28,13 @@ export const navigate: ActionFunction<NavPayload> = async (
       },
     });
   }
-  if(action.payload.value === 3){
+  if (action.payload.value === 3) {
     await navigate(ROUTE.ALERT_PAGE, {
       alertProps: <AlertNavProps>{
-        type:"DEFAULT",
+        type: "DEFAULT",
         iconName: IconTokens.Sound,
         title: "Coming soon",
-        subTitle: '',
+        subTitle: "",
         ctaLabel: "Got It",
         ctaAction: {
           type: ACTION.MENU,
@@ -44,7 +44,6 @@ export const navigate: ActionFunction<NavPayload> = async (
       },
     });
   }
-  
 };
 
 export const withdrawNow: ActionFunction<CreditPayload> = async (
@@ -52,7 +51,6 @@ export const withdrawNow: ActionFunction<CreditPayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  console.log("respay", action.payload.value);
   await navigate(ROUTE.WITHDRAW_AMOUNT, {
     availableCreditAmount: action.payload.value,
   });
@@ -78,8 +76,6 @@ export const repayment: ActionFunction<RepaymentPayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  console.warn("**** Go Repayment****");
-
   await navigate(ROUTE.REPAYMENT, {
     repaymentAmount: action.payload.repaymentAmount,
   });

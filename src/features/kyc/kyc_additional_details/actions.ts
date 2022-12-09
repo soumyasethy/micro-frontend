@@ -21,7 +21,7 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
 
-let martialStatus: MARITAL_STATUS = MARITAL_STATUS.SINGLE;
+let martialStatus: MARITAL_STATUS = null;
 let fatherFirstName = "";
 let fatherLastName = "";
 let motherFirstName = "";

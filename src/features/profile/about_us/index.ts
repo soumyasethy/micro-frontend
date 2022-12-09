@@ -44,7 +44,7 @@ export const template: () => TemplateSchema = () => {
         {
           id: "header",
           type: WIDGET.HEADER,
-          position: POSITION.FIXED_TOP,
+          position: POSITION.ABSOLUTE_TOP,
         },
         {
           id: "detailScreen",

@@ -53,9 +53,9 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         {
           id: "continue",
           type: WIDGET.BUTTON,
-          position: POSITION.FIXED_BOTTOM,
+          position: POSITION.ABSOLUTE_BOTTOM,
         },
-        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
       ],
     },
     datastore: <Datastore>{

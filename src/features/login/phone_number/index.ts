@@ -37,10 +37,12 @@ import {
   PhoneNumberPayload,
   WhatsAppEnabledPayload,
 } from "./types";
-import { sendOtp, textOnChange, toggleCTA, whatsappToggle } from "./actions";
+import { goToPrivacy, sendOtp, textOnChange, toggleCTA, whatsappToggle } from "./actions";
 import { RegexConfig } from "../../../configs/config";
+//import { myFunction } from "./repo";
 
 export const template: TemplateSchema = {
+
   layout: <Layout>{
     id: ROUTE.PHONE_NUMBER,
     type: LAYOUTS.LIST,
@@ -68,12 +70,17 @@ export const template: TemplateSchema = {
   datastore: <Datastore>{
     tc_text: <TermsTextProps>{
       html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
-      By proceeding, I accept  <span style='color:#1434CB;' >T&Cs, Privacy Policy </span>and<span style="color:#1434CB"; > Authorize</span> to obtain my KYC & bureau information.
+      By proceeding, I accept <span style='color:#1434CB;'>T&Cs, Privacy Policy </span> and<span style="color:#1434CB"; > Authorize</span> to obtain my KYC & bureau information.
       </p>`,
-      /*** UnComment for Orange Terms and Condition text **/
-      // html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
-      // By proceeding, I accept  <span style='color:#e64e1f;' >T&Cs, Privacy Policy</span>and<span style="color:#e64e1f"; > Authorize</span> to Obtain my cKYC & credit report.
-      // </p>`,
+      action: {
+        type: ACTION.PRIVACY,
+        payload: <{}>{
+          value: "",
+          widgetId: "continue",
+          isResend: false,
+        },
+        routeId: ROUTE.PHONE_NUMBER,
+      },
     },
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     continue: <ButtonProps & WidgetProps>{
@@ -173,7 +180,16 @@ export const template: TemplateSchema = {
 };
 
 export const phoneNumberMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+  onLoad: async () => {
+    const myFunction = () => {
+      console.log("in page redirection");
+    }
+
+    return Promise.resolve(template)
+
+
+    // onLoad: async () => Promise.resolve(template),
+  },
   actions: {
     [ACTION.CONTINUE]: sendOtp,
     [ACTION.PHONE_NUMBER]: textOnChange,
@@ -181,5 +197,8 @@ export const phoneNumberMF: PageType<any> = {
     [ACTION.WHATSAPP_UNCHECK]: whatsappToggle,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
+    [ACTION.PRIVACY]: goToPrivacy,
   },
+
+
 };
