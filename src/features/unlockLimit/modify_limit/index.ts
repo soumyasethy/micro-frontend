@@ -92,7 +92,7 @@ export const template: (
         },
       },
       spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XL },
-      space0: <SpaceProps> {size: SizeTypeTokens.XXL},
+      space0: <SpaceProps> {size: SizeTypeTokens.MD},
       inputItem: <TextInputProps & WidgetProps>{
         placeholder: "",
         type: InputTypeToken.DEFAULT,

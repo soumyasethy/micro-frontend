@@ -104,7 +104,7 @@ export const template: (
 
         { id: "spaceHeader", type: WIDGET.SPACE },
 
-        { id: "space0", type: WIDGET.SPACE },
+     //   { id: "space0", type: WIDGET.SPACE },
 
         { id: "cardItem", type: WIDGET.CARD },
         { id: "space1", type: WIDGET.SPACE },
@@ -177,7 +177,7 @@ export const template: (
         },
       },
       spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XL },
-      space0: <SpaceProps> { size: SizeTypeTokens.XL },
+      //space0: <SpaceProps> { size: SizeTypeTokens.XL },
       cardItem: <CardProps>{
         shadow: ShadowTypeTokens.E1,
         bgColor: ColorTokens.Primary_05,
