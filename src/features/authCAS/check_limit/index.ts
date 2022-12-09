@@ -60,7 +60,7 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
-      space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       title: <TypographyProps>{
         label: "Check available cash limit",
         fontSize: FontSizeTokens.XL,

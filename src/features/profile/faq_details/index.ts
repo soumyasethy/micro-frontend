@@ -18,6 +18,8 @@ import {
     IconAlignmentTokens,
     IconSizeTokens,
     IconTokens,
+    SizeTypeTokens,
+    SpaceProps,
     StackProps,
     TagTypeTokens,
     TypographyProps,
@@ -38,6 +40,7 @@ export const template: (
                     {
                         id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP
                     },
+                    { id: "space0", type: WIDGET.SPACE },
                     {
                         id: "detailScreen", type: WIDGET.STACK, padding: {
                             left: 16, right: 16
@@ -81,6 +84,7 @@ export const template: (
                       },
                     },
                   },
+                space0: <SpaceProps> { size: SizeTypeTokens.XL},
                 detailScreen: <StackProps>{
                     widgetItems: [
                         { id: "titleData", type: WIDGET.TEXT,padding:{

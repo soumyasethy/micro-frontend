@@ -47,6 +47,7 @@ export const template: (
                 widgets: [
                     { id: "space0", type: WIDGET.SPACE },
                     { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP},
+                    { id: "topSpace", type: WIDGET.SPACE },
                     { id: "Card1", type: WIDGET.CARD, padding: { left: 16, right: 16 }},
                     { id: "space1", type: WIDGET.SPACE },
                     { id: "Card2", type: WIDGET.CARD, padding: { left: 16, right: 16 }},
@@ -91,6 +92,7 @@ export const template: (
                         routeId: ROUTE.FAQ,
                       },
                   },
+                topSpace: <SpaceProps> { size: SizeTypeTokens.XL },
                 space0: <SpaceProps> { size: SizeTypeTokens.SM },
                 space1: <SpaceProps> { size: SizeTypeTokens.LG },
                 space2: <SpaceProps> { size: SizeTypeTokens.LG },

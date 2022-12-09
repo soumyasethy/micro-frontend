@@ -126,7 +126,7 @@ export const template: (
           routeId: ROUTE.OTP_VERIFY,
         },
       },
-      space0: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       space1: <SpaceProps>{ size: SizeTypeTokens.SM },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     },
