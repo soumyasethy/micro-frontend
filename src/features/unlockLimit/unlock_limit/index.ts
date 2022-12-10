@@ -42,9 +42,9 @@ import { StepStatusMap, User } from "../../login/otp_verify/types";
 import { api } from "../../../configs/api";
 import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
-import { ACTION as PAGE_ACTION } from "../pledge_verify/types";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
+import { NavigateNext } from "../pledge_verify/actions";
 export const template: (
   availableCreditAmount: number,
   availableCAS: AvailableCASItem[],
@@ -146,7 +146,7 @@ export const template: (
       },
       action: {
         type: ACTION.MODIFY_LIMIT,
-        payload: <{}>{
+        payload: {
           value: stepResponseObject,
           widgetId: "continue",
           isResend: false,
@@ -201,7 +201,7 @@ export const unlockLimitMF: PageType<any> = {
     /* const pledgeLimitResponse = await network.get(
       `${api.pledgeLimit}${user.linkedApplications[0].applicationId}`,
       { headers: await getAppHeader() }
-    )*/
+    );*/
     const availableCreditAmount: number =
       pledgeLimitResponse.data.stepResponseObject.availableCreditAmount || 0;
     const availableCAS: AvailableCASItem[] =
@@ -244,14 +244,14 @@ export const unlockLimitMF: PageType<any> = {
           await showPopup({
             autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
             isAutoTriggerCta: true,
-            title: `Limit unlocked successfully!`,
+            title: "Limit unlocked successfully!",
             subTitle: "You will be redirected to next step in few seconds",
             type: "SUCCESS",
             ctaLabel: "Continue",
             primary: true,
             ctaAction: {
-              type: PAGE_ACTION.NAV_NEXT,
-              routeId: ROUTE.PLEDGE_VERIFY,
+              type: ACTION.NAV_NEXT,
+              routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
               payload: <NavigationNext>{
                 stepId: _.get(mfPledgeStatusResponse, "data.currentStepId"),
               },
@@ -268,5 +268,6 @@ export const unlockLimitMF: PageType<any> = {
   actions: {
     [ACTION.UNLOCK_LIMIT]: continueLimit,
     [ACTION.MODIFY_LIMIT]: modifyLimit,
+    [ACTION.NAV_NEXT]: NavigateNext,
   },
 };
