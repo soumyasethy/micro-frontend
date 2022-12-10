@@ -58,6 +58,7 @@ import { transactionsMF } from "./features/unlockLimit/transactions";
 import { privacyPolicyMF } from "./features/privacy_policy";
 import {kycAdditionalDetailsMF} from "./features/kyc/kyc_additional_details";
 import { unlockLimitLandingMF } from "./features/unlockLimit/unlock_limit_landing";
+import { DistributorClientListMF } from "./features/DistributorClientList/ClientList";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -117,5 +118,6 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.TRANSACTIONS]: transactionsMF,
   [ROUTE.PRIVACY_POLICY]: privacyPolicyMF,
   [ROUTE.KYC_ADDITIONAL_DETAILS]: kycAdditionalDetailsMF,
-  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF
+  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
 };
