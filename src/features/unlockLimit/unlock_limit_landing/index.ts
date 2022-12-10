@@ -17,6 +17,8 @@ import {
   FontFamilyTokens,
   FontSizeTokens,
   ImageProps,
+  LottieProps,
+  LottieSizeTokens,
   ResizeModeToken,
   ShadowTypeTokens,
   SizeTypeTokens,
@@ -30,7 +32,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, LimitPayload } from "./types";
-import { continueLimit, modifyLimit } from "./actions";
+import { continueLimit } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 import { roundDownToNearestHundred } from "../../../configs/utils";
 import { image } from "./assets";
@@ -42,6 +44,7 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
     id: ROUTE.UNLOCK_LIMIT_LANDING,
     type: LAYOUTS.LIST,
     widgets: [
+      { id: "lottie", type: WIDGET.LOTTIE, position: POSITION.ABSOLUTE_CENTER },
       { id: "space0", type: WIDGET.SPACE },
       { id: "space1", type: WIDGET.SPACE },
       { id: "welcomeStack", type: WIDGET.STACK },
@@ -55,6 +58,12 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
     ],
   },
   datastore: <Datastore>{
+    lottie: <LottieProps>{
+      uri: require("./fall-from-the-sky.json"),
+      size: LottieSizeTokens.FULL,
+      autoplay: true,
+      loop: true,
+    },
     space0: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
     welcomeStack: <StackProps>{
