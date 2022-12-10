@@ -52,11 +52,10 @@ import {
   ChangeBankGoBackAction,
   GoToStepper,
   NavigationSearchIFSCAction,
-  onChangeAccountNumber,
-  onChangeIFSCNumber,
+  onChangeBankDetailse,
   ToggleCTA,
 } from "./actions";
-import { BAVVerifyActionPayload } from "../bank_account_verification/types";
+import { BAVVerifyActionPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
 import { horizontalStepperRepo } from "../../../configs/utils";
 
@@ -129,126 +128,94 @@ export const template: (
         color: ColorTokens.Grey_Smoke
       }
     },
-    // stack: <StackProps>{
-    //   type: StackType.row,
-    //   alignItems: StackAlignItems.center,
-    //   justifyContent: StackJustifyContent.flexStart,
-    //   widgetItems: [
-    //     { id: "leadIcon", type: WIDGET.IMAGE },
-    //     { id: "leadIconSpace", type: WIDGET.SPACE },
-    //     { id: "bankName", type: WIDGET.TEXT },
-    //   ],
-    // },
-    // leadIcon: <ImageProps>{
-    //   uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
-    //   defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
-    //   size: ImageSizeTokens.MD,
-    //   padding: SizeTypeTokens.NONE,
-    // },
-    // leadIconSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
-    // bankName: <TypographyProps>{
-    //   label: bankName,
-    //   color: ColorTokens.Grey_Night,
-    //   fontSize: FontSizeTokens.XL,
-    //   fontWeight: "600",
-    // },
-    // trailIcon: <IconProps & WidgetProps>{
-    //   name: IconTokens.Edit,
-    //   size: IconSizeTokens.XXL,
-    //   action: {
-    //     type: ACTION.CHANGE_BANK_GO_BACK,
-    //     routeId: ROUTE.BANK_ACCOUNT_ADD,
-    //     payload: {},
-    //   },
-    // },
     accountSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
     bankInput: <TextInputProps & WidgetProps>{
       isFocus: true,
       type: InputTypeToken.SEARCH,
-      title: "",
+      title:'Bank Name',
       placeholder: "Select bank",
-      value: `${accountNumber}`,
+      value: `${bankName}`,
       caption: { success: "", error: "" },
       keyboardType: KeyboardTypeToken.default,
       action: {
-        type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
-        payload: <InputNumberActionPayload>{ value: accountNumber },
+        type: ACTION.ONCHANGE_BANK_DETAILS,
+        payload: <InputNumberActionPayload>{ value: bankName },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
     },
     bankSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
     accountInput: <TextInputProps & WidgetProps>{
-      isFocus: true,
+      isFocus: false,
       type: InputTypeToken.DEFAULT,
-      title: "",
+      title: "Account Number",
       placeholder: "Account number",
       value: `${accountNumber}`,
       caption: { success: "", error: "" },
       keyboardType: KeyboardTypeToken.email,
       action: {
-        type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
-        payload: <InputNumberActionPayload>{ value: accountNumber },
-        routeId: ROUTE.BANK_ACCOUNT_ADD,
-      },
-    },
-    IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    confirmAccountInput: <TextInputProps & WidgetProps>{
-      isFocus: true,
-      type: InputTypeToken.DEFAULT,
-      title: "",
-      placeholder: "Confirm Account number",
-      value: `${accountNumber}`,
-      caption: { success: "", error: "" },
-      keyboardType: KeyboardTypeToken.email,
-      action: {
-        type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
+        type: ACTION.ONCHANGE_BANK_DETAILS,
         payload: <InputNumberActionPayload>{ value: accountNumber },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
     },
-    ConfirmSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
-    IFSCInputStack: <StackProps & WidgetProps>{
-      width: StackWidth.FULL,
-      type: StackType.column,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.center,
-      widgetItems: [{ id: "IFSCInput", type: WIDGET.INPUT }],
+    IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    confirmAccountInput: <TextInputProps & WidgetProps>{
+      isFocus: false,
+      type: InputTypeToken.DEFAULT,
+      title: "Confirm Account Number",
+      placeholder: "Confirm Account number",
+      value: '',
+      caption: { success: "", error: "" },
+      keyboardType: KeyboardTypeToken.email,
       action: {
-        type: ACTION.NAVIGATION_SEARCH_IFSC,
-        routeId: ROUTE.BANK_ACCOUNT_ADD,
-        payload: <NavigationSearchIFSCActionPayload>{
-          bankCode: bankCode,
-          bankName,
-        },
+        type: ACTION.ONCHANGE_BANK_DETAILS,
+        payload: <InputNumberActionPayload>{ value: '' },
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
     },
+    ConfirmSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+    // IFSCInputStack: <StackProps & WidgetProps>{
+    //   width: StackWidth.FULL,
+    //   type: StackType.column,
+    //   alignItems: StackAlignItems.center,
+    //   justifyContent: StackJustifyContent.center,
+    //   widgetItems: [{ id: "IFSCInput", type: WIDGET.INPUT }],
+    //   // action: {
+    //   //   type: ACTION.NAVIGATION_SEARCH_IFSC,
+    //   //   routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+    //   //   payload: <NavigationSearchIFSCActionPayload>{
+    //   //     bankCode: bankCode,
+    //   //     bankName,
+    //   //   },
+    //   // },
+    // },
     IFSCInput: <TextInputProps & WidgetProps>{
       isFocus: false,
       type: InputTypeToken.DEFAULT,
-      state: InputStateToken.DISABLED,
-      title: "",
+      state: InputStateToken.DEFAULT,
+      title: "Search by branch or IFSC",
       placeholder: "Search by branch or IFSC",
       keyboardType: KeyboardTypeToken.email,
       value: "",
       caption: { success: "", error: "" },
       width: TextInputTypeToken.FULL,
       action: {
-        type: ACTION.ONCHANGE_IFSC_NUMBER,
+        type: ACTION.ONCHANGE_BANK_DETAILS,
         payload: <InputNumberActionPayload>{ value: "" },
-        routeId: ROUTE.BANK_ACCOUNT_ADD,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
-      onPressAction: {
-        type: ACTION.NAVIGATION_SEARCH_IFSC,
-        routeId: ROUTE.BANK_ACCOUNT_ADD,
-        payload: <NavigationSearchIFSCActionPayload>{
-          bankCode: bankCode,
-          bankName,
-        },
-      },
+      // onPressAction: {
+      //   type: ACTION.NAVIGATION_SEARCH_IFSC,
+      //   routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+      //   payload: <NavigationSearchIFSCActionPayload>{
+      //     bankCode: bankCode,
+      //     bankName,
+      //   },
+      // },
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Save & Contiune",
-      type: ButtonTypeTokens.LargeFilled,
+      type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.TRIGGER_CTA,
@@ -276,15 +243,17 @@ export const template: (
 
 export const distBankAccountAddMF: PageType<any> = {
   onLoad: async ({ }, { bankCode, bankName }) => {
-    const stepper: StepperItem[] = await horizontalStepperRepo();
+    const isTitle = () => {
+      console.log("here");
+    }
+    const stepper: StepperItem[] = await horizontalStepperRepo(true);
    
     const accountNumber = await SharedPropsService.getAccountNumber();
     return Promise.resolve(template(bankCode, bankName, accountNumber,stepper));
   },
   actions: {
     [ACTION.NAVIGATION_SEARCH_IFSC]: NavigationSearchIFSCAction,
-    [ACTION.ONCHANGE_ACCOUNT_NUMBER]: onChangeAccountNumber,
-    [ACTION.ONCHANGE_IFSC_NUMBER]: onChangeIFSCNumber,
+    [ACTION.ONCHANGE_BANK_DETAILS]: onChangeBankDetailse,
     [ACTION.TOGGLE_CTA]: ToggleCTA,
     [ACTION.TRIGGER_CTA]: BavVerifyManualAction,
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,

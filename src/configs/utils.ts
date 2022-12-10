@@ -60,10 +60,12 @@ export const clearAllData = async () => {
   //   .then(() => console.warn("Clear data"));
 };
 
-export const stepperRepo = async () => {
+export const stepperRepo = async (isDtributor) => {
   let KYC_VERIFICATION: StepperStateToken;
+  let DISTRIBUTOR_VERIFICATION: StepperStateToken;
   let message = "We’re processing. Check after sometime.";
   const user = await SharedPropsService.getUser();
+  const isDtributorX = isDtributor;
 
   if (
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
@@ -95,6 +97,62 @@ export const stepperRepo = async () => {
   } else {
     KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
   }
+
+  const distributorData: StepperItem[] = [
+    {
+      id: "1",
+      step: "1",
+      title: "Basic details",
+      subTitle: "",
+      horizontalTitle: "Basic details",
+      status: DISTRIBUTOR_VERIFICATION,
+      message:
+      DISTRIBUTOR_VERIFICATION === StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+    {
+      id: "2",
+      step: "2",
+      title: "Bank details",
+      subTitle: "",
+      horizontalTitle: "Bank details",
+      status:
+        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
+      message:
+        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+
+    {
+      id: "3",
+      step: "3",
+      title: "Fetch portfolio",
+      subTitle: "",
+      horizontalTitle: "Fetch portfolio",
+      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      message:
+        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+    {
+      id: "4",
+      step: "4",
+      title: "Select Portfolio",
+      subTitle: "",
+      horizontalTitle: "Select Portfolio",
+      status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
+      message:
+        user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+  ];
 
   const data: StepperItem[] = [
     {
@@ -150,7 +208,7 @@ export const stepperRepo = async () => {
           : "",
     },
   ];
-  return data;
+  return isDtributorX ? distributorData : data;
 };
 export const horizontalStepperRepo = stepperRepo;
 

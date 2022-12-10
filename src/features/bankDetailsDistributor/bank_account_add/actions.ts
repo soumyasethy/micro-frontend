@@ -4,11 +4,12 @@ import {
   ButtonTypeTokens,
   IconTokens,
   StepperStateToken,
+  TextInputProps,
 } from "@voltmoney/schema";
 import {
   ACTION as ACTION_CURRENT,
-  BAVVerifyActionPayload,
-} from "../bank_account_verification/types";
+  BAVVerifyActionPayload
+} from './types';
 import {
   ACTION,
   InputNumberActionPayload,
@@ -26,6 +27,8 @@ import {
 } from "../../../configs/utils";
 
 let bankAccountNumber = "";
+let bankName = "";
+let confirmAccountNumber = "";
 let bankIfsc = "";
 
 export const NavigationSearchIFSCAction: ActionFunction<
@@ -37,38 +40,34 @@ export const NavigationSearchIFSCAction: ActionFunction<
     bankAccountNumber,
   });
 };
-export const onChangeAccountNumber: ActionFunction<
+export const onChangeBankDetailse: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
+  
+  bankName = action.payload.value;
   bankAccountNumber = action.payload.value;
-  await SharedPropsService.setAccountNumber(bankAccountNumber);
-  await ToggleCTA(action, _datastore, props);
+  confirmAccountNumber =action.payload.value;
+  bankIfsc =action.payload.value;
+  // await SharedPropsService.setBankName(bankAccountNumber);
+  if(bankName != '' && bankAccountNumber != '' && confirmAccountNumber != '' && bankIfsc != ''){
+    await ToggleCTA(action, _datastore, props);
+  }
+   
 };
-export const onChangeIFSCNumber: ActionFunction<
-  InputNumberActionPayload
-> = async (action, _datastore, { ...props }): Promise<any> => {
-  bankIfsc = action.payload.value;
-  await ToggleCTA(action, _datastore, props);
-};
+
 
 export const ToggleCTA: ActionFunction<any> = async (
   action,
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  if (bankAccountNumber && bankIfsc) {
+ 
     await setDatastore(action.routeId, action.payload.targetWidgetId, <
       ButtonProps
     >{
       type: ButtonTypeTokens.LargeFilled,
     });
-  } else {
-    await setDatastore(action.routeId, action.payload.targetWidgetId, <
-      ButtonProps
-    >{
-      type: ButtonTypeTokens.LargeOutline,
-    });
-  }
+ 
 };
 
 export const BavVerifyManualAction: ActionFunction<
