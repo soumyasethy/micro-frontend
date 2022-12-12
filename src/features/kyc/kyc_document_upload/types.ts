@@ -12,7 +12,7 @@ export type DropDownPayload = {
   widgetID: string;
 };
 
-export type DocPayload = {
-  value: { content: any; name: string };
+export type DocumentUploadPayload = {
+  value: any;//{ content: any; name: string };
   widgetID: string;
 };

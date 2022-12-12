@@ -63,4 +63,6 @@ export const api = {
   borrowerApplication: `${config.URL}/app/borrower/application/`,
   additionalDetails: `${config.URL}/app/borrower/application/additionalDetails/`,
   pdfLink: `${config.URL}/app/borrower/lms/transactions/`,
+  kycDocument: `${config.URL}/app/borrower/application/kyc/document/`,
+  documentValidate: `${config.URL}/app/borrower/application/kyc/document/validate/`,
 };
