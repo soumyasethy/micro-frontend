@@ -246,7 +246,7 @@ export const distBankAccountAddMF: PageType<any> = {
     const isTitle = () => {
       console.log("here");
     }
-    const stepper: StepperItem[] = await horizontalStepperRepo(true);
+    const stepper: StepperItem[] = await horizontalStepperRepo();
    
     const accountNumber = await SharedPropsService.getAccountNumber();
     return Promise.resolve(template(bankCode, bankName, accountNumber,stepper));
