@@ -50,12 +50,10 @@ export const clearAllData = async () => {
     .then(() => console.warn("Clear data"));
 };
 
-export const stepperRepo = async (isDtributor) => {
+export const stepperRepo = async () => {
   let KYC_VERIFICATION: StepperStateToken;
-  let DISTRIBUTOR_VERIFICATION: StepperStateToken;
   let message = "We’re processing. Check after sometime.";
   const user = await SharedPropsService.getUser();
-  const isDtributorX = isDtributor;
 
   if (
     (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
@@ -99,6 +97,118 @@ export const stepperRepo = async (isDtributor) => {
   } else {
     KYC_VERIFICATION = StepperStateToken.IN_PROGRESS;
   }
+
+
+
+  const data: StepperItem[] = [
+    {
+      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+      step: "1",
+      title: "KYC Verification",
+      subTitle: "Verify Aadhaar & other details to complete KYC",
+      horizontalTitle: "KYC",
+      status: KYC_VERIFICATION,
+      message:
+        KYC_VERIFICATION === StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+    {
+      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+      step: "2",
+      title: "Verify Bank Account ",
+      subTitle: "Provide bank account for receiving money",
+      horizontalTitle: "Bank account",
+      status:
+        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
+      message:
+        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d72",
+      step: "3",
+      title: "Setup AutoPay",
+      subTitle: "Link your account for hassle-free repayments",
+      horizontalTitle: "AutoPay",
+      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      message:
+        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d74",
+      step: "4",
+      title: "Review Agreement",
+      subTitle: "Verify the key usage terms and confirm",
+      horizontalTitle: "Agreement",
+      status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
+      message:
+        user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+  ];
+  return data;
+};
+export const horizontalStepperRepo = stepperRepo;
+
+// distributor Stepper
+
+export const distributorStepperRepo = async () => {
+  let DISTRIBUTOR_VERIFICATION: StepperStateToken;
+  let message = "We’re processing. Check after sometime.";
+  const user = await SharedPropsService.getUser();
+ 
+  if (
+    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+      StepperStateToken.COMPLETED ||
+      user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
+        StepperStateToken.COMPLETED) &&
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+      StepperStateToken.COMPLETED &&
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
+      StepperStateToken.COMPLETED &&
+    user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
+      StepperStateToken.COMPLETED
+  ) {
+    DISTRIBUTOR_VERIFICATION = StepperStateToken.COMPLETED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+      StepperStateToken.NOT_STARTED &&
+    user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
+      StepperStateToken.NOT_STARTED &&
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+      StepperStateToken.NOT_STARTED &&
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
+      StepperStateToken.NOT_STARTED &&
+    user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
+      StepperStateToken.NOT_STARTED
+  ) {
+    DISTRIBUTOR_VERIFICATION = StepperStateToken.NOT_STARTED;
+  } else if (
+    user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION
+  ) {
+    DISTRIBUTOR_VERIFICATION = StepperStateToken.PENDING_MANUAL_VERIFICATION;
+  } else {
+    DISTRIBUTOR_VERIFICATION = StepperStateToken.IN_PROGRESS;
+  }
+  
 
   const distributorData: StepperItem[] = [
     {
@@ -156,64 +266,9 @@ export const stepperRepo = async (isDtributor) => {
     },
   ];
 
-  const data: StepperItem[] = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      step: "1",
-      title: "KYC Verification",
-      subTitle: "Verify Aadhaar & other details to complete KYC",
-      horizontalTitle: "KYC",
-      status: KYC_VERIFICATION,
-      message:
-        KYC_VERIFICATION === StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      step: "2",
-      title: "Verify Bank Account ",
-      subTitle: "Provide bank account for receiving money",
-      horizontalTitle: "Bank account",
-      status:
-        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
-      message:
-        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
-    },
-
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      step: "3",
-      title: "Setup AutoPay",
-      subTitle: "Link your account for hassle-free repayments",
-      horizontalTitle: "AutoPay",
-      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
-      message:
-        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d74",
-      step: "4",
-      title: "Review Agreement",
-      subTitle: "Verify the key usage terms and confirm",
-      horizontalTitle: "Agreement",
-      status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
-      message:
-        user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
-    },
-  ];
-  return isDtributorX ? distributorData : data;
+  return distributorData;
 };
-export const horizontalStepperRepo = stepperRepo;
+export const horizontalDistributorStepperRepo = distributorStepperRepo;
 
 export const nextStepCredStepper = async (currentStepId?: string) => {
   const user: User = await SharedPropsService.getUser();

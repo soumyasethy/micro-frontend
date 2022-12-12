@@ -25,7 +25,11 @@ export const onSave: ActionFunction<{}> = async (action, _datastore, { ...props 
 };
 
 export const onSkip: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
- 
+  console.log("Skip");
+};
+
+export const onShare: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
+ console.log("Share");
 };
 
 
