@@ -125,12 +125,18 @@ export const template:(
   });
   
   const buildUI = () => {
-    const clArr = [];
-    clientRepoData.map((client, index) => {
+    const clArr = []; 
+    if(clientRepoData.length > 0) {
+      clientRepoData.map((client, index) => {
+        clArr.push(
+          { id: `listItem${index}`, type: WIDGET.STACK },
+        )
+      })
+    } else {
       clArr.push(
-        { id: `listItem${index}`, type: WIDGET.STACK },
+        { id: `noDataPendingStack`, type: WIDGET.STACK },
       )
-    })
+    }
     return clArr;
   }
 
@@ -141,10 +147,9 @@ export const template:(
       widgets: [
         { id: "tab", type: WIDGET.TABS },
         { id: "space1", type: WIDGET.SPACE },
-        
         { id: "space1", type: WIDGET.SPACE },
         { id: "space2", type: WIDGET.SPACE },
-        { id: "button", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },
+        { id: "button", type: WIDGET.BUTTON, position: (clientRepoData.length>0)?POSITION.ABSOLUTE_BOTTOM:"" },
       ],
     },
     datastore: <Datastore>{
@@ -173,6 +178,54 @@ export const template:(
           { id: 'topPendingSpace', type: WIDGET.SPACE},
           ...buildUI(),
         ]
+      },
+      noDataPendingStack: <StackProps> {
+        type: StackType.column,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.center,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          { id: "noClientIcon", type: WIDGET.ICON },
+          { id: "noClientSpace0", type: WIDGET.SPACE },
+          { id: "noClientTitle", type: WIDGET.TEXT },
+          { id: "noClientSpace1", type: WIDGET.SPACE },
+          { id: "noClientSubtitle1", type: WIDGET.TEXT },
+          { id: "noClientSubtitle2", type: WIDGET.TEXT },
+        ]
+      },
+      noClientSpace0: <SpaceProps> {
+        size: SizeTypeTokens.XL
+      },
+      noClientSpace1: <SpaceProps> {
+        size: SizeTypeTokens.MD
+      },
+      noClientIcon: <IconProps> {
+        name: IconTokens.Page,
+        size: IconSizeTokens.XXXXXXXXL,
+      },
+      noClientTitle: <TypographyProps> {
+        label: "No clients added",
+        color: ColorTokens.Grey_Night,
+        lineHeight: 28,
+        fontSize: FontSizeTokens.XL,
+        fontFamily: FontFamilyTokens.Poppins,
+        fontWeight: "600"
+      },
+      noClientSubtitle1: <TypographyProps> {
+        label: "Clients will reflect as soon as you start",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 24,
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400"
+      },
+      noClientSubtitle2: <TypographyProps> {
+        label: "creating the loan application.",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 24,
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400"
       },
       topPendingSpace: <SpaceProps> {
         size: SizeTypeTokens.Size30
