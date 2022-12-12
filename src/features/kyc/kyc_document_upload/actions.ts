@@ -15,8 +15,9 @@ import {
 import { api } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
-import { User } from "../../login/otp_verify/types";
+import { StepStatusMap, User } from "../../login/otp_verify/types";
 import { getAppHeader } from "../../../configs/config";
+import { nextStepCredStepper } from "../../../configs/utils";
 
 let documentUploadUrlMap = {
   frontDocURL: null,
@@ -55,21 +56,22 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
   await setDatastore(ROUTE.KYC_DOCUMENT_UPLOAD, "continue", <ButtonProps>{
     loading: false,
   });
-  if (
-    _.get(response, "data.stepResponseObject", "").toUpperCase() === "APPROVED"
-  ) {
-    const currentStepId = _.get(
-      response,
-      "data.updatedApplicationObj.currentStepId"
-    );
-    user.linkedApplications[0].stepStatusMap = _.get(
-      response,
-      "data.updatedApplicationObj.stepStatusMap"
-    );
-    if (currentStepId) {
-      await SharedPropsService.setUser(user);
-      await navigate(currentStepId);
-    }
+
+  const currentStepId = _.get(
+    response,
+    "data.updatedApplicationObj.currentStepId"
+  );
+  const stepStatusMap: StepStatusMap = _.get(
+    response,
+    "data.updatedApplicationObj.stepStatusMap"
+  );
+  user.linkedApplications[0].currentStepId = currentStepId;
+  user.linkedApplications[0].stepStatusMap = stepStatusMap;
+
+  if (currentStepId) {
+    await SharedPropsService.setUser(user);
+    const routeObj = await nextStepCredStepper();
+    await navigate(routeObj.routeId, routeObj.params);
   }
 };
 

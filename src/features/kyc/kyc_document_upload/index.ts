@@ -89,7 +89,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         },
       },
       title: <TypographyProps>{
-        label: "Additional information",
+        label: "Upload your ID proof",
         color: ColorTokens.Grey_Night,
         fontSize: FontSizeTokens.MD,
         fontFamily: FontFamilyTokens.Poppins,
