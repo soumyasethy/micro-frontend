@@ -62,6 +62,7 @@ import {distBankAccountAddMF}  from "./features/bankDetailsDistributor/bank_acco
 import { distBankSearchBranchMF } from "./features/bankDetailsDistributor/bank_search_branch";
 import { distBankSelectMF } from "./features/bankDetailsDistributor/select_bank";
 import { distributorPortfolioMF } from "./features/distributorPortfolio";
+import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -126,4 +127,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.DIST_BANK_SEARCH_BRANCH]: distBankSearchBranchMF,
   [ROUTE.DIST_BANK_SELECT]: distBankSelectMF,
   [ROUTE.DISTRIBUTOR_PORTFOLIO]: distributorPortfolioMF,
+  [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF
 };

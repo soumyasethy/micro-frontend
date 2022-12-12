@@ -1,6 +1,5 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { photoInitRepo } from "./repo";
 import { CameraPayload } from "./types";
 import { CameraPickerProps } from "@voltmoney/schema";
 import { stopCamera } from "../../../configs/utils";

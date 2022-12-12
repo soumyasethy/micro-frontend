@@ -5,26 +5,15 @@ import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
-  defaultHeaders,
   getAppHeader,
 } from "../../../configs/config";
 import { nextStepId } from "../../../configs/utils";
-import { ACTION } from "../../kyc/kyc_otp/types";
-import { ROUTE } from "../../../routes";
 import _ from "lodash";
 
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
-  {
-    navigate,
-    setDatastore,
-    asyncStorage,
-    handleError,
-    network,
-    goBack,
-    ...props
-  }
+  { navigate, setDatastore, network, goBack }
 ): Promise<any> => {
   if (
     action.payload.value.length !==

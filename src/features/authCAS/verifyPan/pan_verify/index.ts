@@ -158,41 +158,8 @@ export const template: (
         },
         action: {
           type: ACTION.ENTER_DOB,
-          payload: <InputPayload>{ value: "", widgetId: "calendarInput" },
+          payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
           routeId: ROUTE.KYC_PAN_VERIFICATION,
-        },
-      },
-      calendarInput: <TextInputProps & WidgetProps>{
-        value: "",
-        type: InputTypeToken.CALENDAR,
-        state: InputStateToken.DEFAULT,
-        title: "Date of birth",
-        placeholder: "Enter date of birth",
-        keyboardType: KeyboardTypeToken.numberPad,
-        action: {
-          type: ACTION.ENTER_DOB,
-          payload: <InputPayload>{ value: "", widgetId: "calendarInput" },
-          routeId: ROUTE.KYC_PAN_VERIFICATION,
-        },
-        caption: {
-          success: "",
-          error: "Please select a proper date",
-        },
-        errorAction: {
-          type: ACTION.DISABLE_CONTINUE,
-          routeId: ROUTE.KYC_PAN_VERIFICATION,
-          payload: <EnableDisableCTA>{
-            value: false,
-            targetWidgetId: "continue",
-          },
-        },
-        successAction: {
-          type: ACTION.ENABLE_CONTINUE,
-          routeId: ROUTE.KYC_PAN_VERIFICATION,
-          payload: <EnableDisableCTA>{
-            value: true,
-            targetWidgetId: "continue",
-          },
         },
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.SM },

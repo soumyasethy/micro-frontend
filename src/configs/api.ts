@@ -23,6 +23,7 @@ export const config = {
   URL: BASE_URL.STAGING,
 };
 export const StoreKey = {
+  isPledgeFirstTime: "isPledgeFirstTime",
   isLoadedFirstTime: "is_Loaded_First_Time",
   accessToken: "access_token",
   refreshToken: "refresh_token",
