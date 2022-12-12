@@ -1,10 +1,20 @@
 export enum ACTION {
-    GOTO_PHONE = "GOTO_PHONE",
-  }
-  export type TestActionPayload = {};
-  
+  TRACK = "TRACK",
+  MANAGE = "MANAGE",
+  CTA="CTA",
+}
 
-export type ClientRepoPayloadType = {
+export type TestActionPayload = {};
+
+export type ClientPendingPayloadType = {
   name: string,
   stepsCompleted: number | string,
-}  
+  applicationId: string,
+}
+
+export type ClientInProgressPayloadType = {
+  name: string,
+  utilizedAmount: number|string,
+  fullAmount: number|string,
+  applicationId: string,
+}

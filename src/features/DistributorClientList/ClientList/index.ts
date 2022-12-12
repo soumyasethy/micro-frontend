@@ -36,23 +36,26 @@ import {
     TypographyProps,
     WIDGET,
   } from "@voltmoney/schema";
-import { ACTION } from "./actions";
+import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
 import { ROUTE } from "../../../routes";
 import { clientInProgressRepoData, clientPendingRepoData } from "./repo";  
+import { onClickCTA, onManageCTA, onTrackCTA } from "./actions";
 
 export const template:(
   clientPendingRepoData: {
     name: string,
-    stepsCompleted: number|string
+    stepsCompleted: number|string,
+    applicationId: string,
   }[], 
   clientInProgressRepoData: {
     name: string, 
     utilizedAmount: number|string,
     fullAmount: number|string,
+    applicationId: string
   }[],
-) => Promise<TemplateSchema> = async (clientPendingRepoData) => {
+) => Promise<TemplateSchema> = async (clientPendingRepoData, clientInProgressRepoData) => {
 
-  const pendingBuildDS = (index, name, stepsCompleted) => {
+  const pendingBuildDS = (index, name, stepsCompleted, applicationId) => {
     return {
       [`listItem${index}`]: <StackProps> {
         type: StackType.column,
@@ -62,7 +65,6 @@ export const template:(
           { id: `clientSpace0${index}`, type: WIDGET.SPACE},
           { id: `clientListBottomText${index}`, type: WIDGET.TEXT },
           { id: `dividerStack${index}`, type:WIDGET.STACK},
-          
         ]
       },
       [`clientSpace0${index}`]: <SpaceProps> {
@@ -115,13 +117,22 @@ export const template:(
         label: "Track",
         type: ButtonTypeTokens.SmallGhost,
         fontFamily: FontFamilyTokens.Inter,
-        width: ButtonWidthTypeToken.CONTENT
+        width: ButtonWidthTypeToken.CONTENT,
+        action: {
+          type: ACTION.TRACK,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
+          payload: <ClientPendingPayloadType> {
+            name: name,
+            stepsCompleted: stepsCompleted,
+            applicationId: applicationId
+          }
+        },
       },
       [`spaceListItem${index}`]: <SpaceProps>{ size: SizeTypeTokens.LG },
     };
   }
 
-  const inProgressBuildDS = (index, name, utilizedAmount, fullAmount) => {
+  const inProgressBuildDS = (index, name, utilizedAmount, fullAmount, applicationId) => {
     return {
       [`ipListItem${index}`]: <StackProps> {
         type: StackType.column,
@@ -131,7 +142,6 @@ export const template:(
           { id: `ipClientSpace0${index}`, type: WIDGET.SPACE},
           { id: `ipClientListBottomText${index}`, type: WIDGET.TEXT },
           { id: `ipDividerStack${index}`, type:WIDGET.STACK},
-          
         ]
       },
       [`ipClientSpace0${index}`]: <SpaceProps> {
@@ -184,7 +194,17 @@ export const template:(
         label: "Manage",
         type: ButtonTypeTokens.SmallGhost,
         fontFamily: FontFamilyTokens.Inter,
-        width: ButtonWidthTypeToken.CONTENT
+        width: ButtonWidthTypeToken.CONTENT,
+        action: {
+          type: ACTION.TRACK,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
+          payload: <ClientInProgressPayloadType> {
+            name: name,
+            utilizedAmount: utilizedAmount,
+            fullAmount: fullAmount,
+            applicationId: applicationId
+          }
+        },
       },
       [`ipSpaceListItem${index}`]: <SpaceProps>{ size: SizeTypeTokens.LG },
     };
@@ -194,7 +214,7 @@ export const template:(
   clientInProgressRepoData.map((client, index) => {
     inProgress_ds = {
       ...inProgress_ds,
-      ...inProgressBuildDS(index, client.name, client.utilizedAmount, client.fullAmount),
+      ...inProgressBuildDS(index, client.name, client.utilizedAmount, client.fullAmount, client.applicationId),
     };
   });
   
@@ -203,7 +223,7 @@ export const template:(
   clientPendingRepoData.map((client, index) => {
     pending_ds = {
       ...pending_ds,
-      ...pendingBuildDS(index, client.name, client.stepsCompleted),
+      ...pendingBuildDS(index, client.name, client.stepsCompleted, client.applicationId),
     };
   });
   
@@ -343,7 +363,7 @@ export const template:(
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
-          type: ACTION.GOTO_PHONE,
+          type: ACTION.CTA,
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
         },
       },
@@ -359,6 +379,8 @@ export const DistributorClientListMF: PageType<any> = {
       return Promise.resolve(templateX);
     },
     actions: {
-      //[ACTION.GOTO_PHONE]: GoToNumber,
+      [ACTION.TRACK]: onTrackCTA,
+      [ACTION.MANAGE]: onManageCTA,
+      [ACTION.CTA]: onClickCTA,
     },
 };
