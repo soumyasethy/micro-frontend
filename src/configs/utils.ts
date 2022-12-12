@@ -69,8 +69,10 @@ export const stepperRepo = async () => {
       StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
       StepperStateToken.COMPLETED &&
-    user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
-      StepperStateToken.COMPLETED
+    (user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
+      StepperStateToken.COMPLETED ||
+      user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
+        StepperStateToken.SKIPPED)
   ) {
     KYC_VERIFICATION = StepperStateToken.COMPLETED;
   } else if (
