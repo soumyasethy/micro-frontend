@@ -38,16 +38,21 @@ import {
   } from "@voltmoney/schema";
 import { ACTION } from "./actions";
 import { ROUTE } from "../../../routes";
-import { clientRepoData } from "./repo";  
+import { clientInProgressRepoData, clientPendingRepoData } from "./repo";  
 
 export const template:(
-  clientRepoData: {
+  clientPendingRepoData: {
     name: string,
-    stepsCompleted: number | string
-  }[]
-) => Promise<TemplateSchema> = async (clientRepoData) => {
+    stepsCompleted: number|string
+  }[], 
+  clientInProgressRepoData: {
+    name: string, 
+    utilizedAmount: number|string,
+    fullAmount: number|string,
+  }[],
+) => Promise<TemplateSchema> = async (clientPendingRepoData) => {
 
-  const buildDS = (index, name, stepsCompleted) => {
+  const pendingBuildDS = (index, name, stepsCompleted) => {
     return {
       [`listItem${index}`]: <StackProps> {
         type: StackType.column,
@@ -115,19 +120,97 @@ export const template:(
       [`spaceListItem${index}`]: <SpaceProps>{ size: SizeTypeTokens.LG },
     };
   }
-  
-  let ds = {};
-  clientRepoData.map((client, index) => {
-    ds = {
-      ...ds,
-      ...buildDS(index, client.name, client.stepsCompleted),
+
+  const inProgressBuildDS = (index, name, utilizedAmount, fullAmount) => {
+    return {
+      [`ipListItem${index}`]: <StackProps> {
+        type: StackType.column,
+        width: StackWidth.FULL,
+        widgetItems: [
+          { id: `ipClientListTop${index}`, type: WIDGET.STACK },
+          { id: `ipClientSpace0${index}`, type: WIDGET.SPACE},
+          { id: `ipClientListBottomText${index}`, type: WIDGET.TEXT },
+          { id: `ipDividerStack${index}`, type:WIDGET.STACK},
+          
+        ]
+      },
+      [`ipClientSpace0${index}`]: <SpaceProps> {
+        size: SizeTypeTokens.SM,
+      },
+      [`ipDividerStack${index}`]: <StackProps> {
+        type: StackType.row,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.center,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          { id: `ipDivider${index}`, type:WIDGET.DIVIDER}
+        ]
+      },
+      [`ipDivider${index}`]: <DividerProps>{
+        size: DividerSizeTokens.SM,
+        color: ColorTokens.Grey_Milk_1,
+        margin: {
+          vertical: SizeTypeTokens.XL,
+          horizontal: SizeTypeTokens.SM
+        }
+      },
+      [`ipClientListTop${index}`]: <StackProps> {
+        type: StackType.row,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.spaceBetween,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          {id: `ipClientListTopName${index}`, type: WIDGET.TEXT}, 
+          {id: `ipClientListTopTrackButton${index}`, type:WIDGET.BUTTON}
+        ]
+      },
+      [`ipClientListBottomText${index}`]: <TypographyProps> {
+        label: `Utilized Rs. ${utilizedAmount}/Rs. ${fullAmount}`,
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 18,
+        fontSize: FontSizeTokens.XS,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400"
+      },
+      [`ipClientListTopName${index}`]: <TypographyProps> {
+        label: name,
+        color: ColorTokens.Grey_Night,
+        lineHeight: 24,
+        fontSize: FontSizeTokens.MD,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600"
+      },
+      [`ipClientListTopTrackButton${index}`]: <ButtonProps> {
+        label: "Manage",
+        type: ButtonTypeTokens.SmallGhost,
+        fontFamily: FontFamilyTokens.Inter,
+        width: ButtonWidthTypeToken.CONTENT
+      },
+      [`ipSpaceListItem${index}`]: <SpaceProps>{ size: SizeTypeTokens.LG },
+    };
+  }
+
+  let inProgress_ds = {};
+  clientInProgressRepoData.map((client, index) => {
+    inProgress_ds = {
+      ...inProgress_ds,
+      ...inProgressBuildDS(index, client.name, client.utilizedAmount, client.fullAmount),
     };
   });
   
-  const buildUI = () => {
+  
+  let pending_ds = {};
+  clientPendingRepoData.map((client, index) => {
+    pending_ds = {
+      ...pending_ds,
+      ...pendingBuildDS(index, client.name, client.stepsCompleted),
+    };
+  });
+  
+  const pendingBuildUI = () => {
     const clArr = []; 
-    if(clientRepoData.length > 0) {
-      clientRepoData.map((client, index) => {
+    if(clientPendingRepoData.length > 0) {
+      clientPendingRepoData.map((client, index) => {
         clArr.push(
           { id: `listItem${index}`, type: WIDGET.STACK },
         )
@@ -140,6 +223,16 @@ export const template:(
     return clArr;
   }
 
+  const inProgressBuildUI = () => {
+    const clArr = []; 
+    clientPendingRepoData.map((client, index) => {
+      clArr.push(
+        { id: `ipListItem${index}`, type: WIDGET.STACK },
+      )
+    })
+    return clArr;
+  }
+
   return {
     layout: <Layout>{
       id: ROUTE.CAROUSAL_PAGE,
@@ -149,7 +242,7 @@ export const template:(
         { id: "space1", type: WIDGET.SPACE },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space2", type: WIDGET.SPACE },
-        { id: "button", type: WIDGET.BUTTON, position: (clientRepoData.length>0)?POSITION.ABSOLUTE_BOTTOM:"" },
+        { id: "button", type: WIDGET.BUTTON, position: (clientPendingRepoData.length>0)?POSITION.ABSOLUTE_BOTTOM:"" },
       ],
     },
     datastore: <Datastore>{
@@ -167,17 +260,28 @@ export const template:(
         ],
         widgetItems: [
           { id:"PendingStack", type: WIDGET.STACK },
-          { id:"text2", type: WIDGET.TEXT }
+          { id:"InProgressStack", type: WIDGET.STACK }
         ]
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XL },
+      InProgressStack: <StackProps> {
+        type: StackType.column,
+        width: StackWidth.CONTENT,
+        widgetItems: [
+          { id: 'topInProgressSpace', type: WIDGET.SPACE},
+          ...inProgressBuildUI(),
+        ]
+      },
       PendingStack: <StackProps> {
         type: StackType.column,
         width: StackWidth.CONTENT,
         widgetItems: [
           { id: 'topPendingSpace', type: WIDGET.SPACE},
-          ...buildUI(),
+          ...pendingBuildUI(),
         ]
+      },
+      topInProgressSpace: <SpaceProps> {
+        size: SizeTypeTokens.Size30
       },
       noDataPendingStack: <StackProps> {
         type: StackType.column,
@@ -230,10 +334,8 @@ export const template:(
       topPendingSpace: <SpaceProps> {
         size: SizeTypeTokens.Size30
       },
-      text2: <TypographyBaseProps> {
-        label: "in progress tab"
-      },
-      ...ds,
+      ...pending_ds,
+      ...inProgress_ds,
       space2: <SpaceProps>{ size: SizeTypeTokens.XXL },
       button: <ButtonProps>{
         fontFamily: FontFamilyTokens.Poppins,
@@ -253,7 +355,7 @@ export const template:(
 
 export const DistributorClientListMF: PageType<any> = {
     onLoad: async ({}) => {
-      const templateX = await template(clientRepoData);
+      const templateX = await template(clientPendingRepoData, clientInProgressRepoData);
       return Promise.resolve(templateX);
     },
     actions: {
