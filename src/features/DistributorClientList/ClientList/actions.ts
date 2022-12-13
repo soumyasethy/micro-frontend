@@ -26,5 +26,5 @@ export const onClickCTA: ActionFunction<any> = async (
     _datastore,
     { setDatastore }
 ): Promise<any> => {
-    
+    console.warn("CTA triggerred");
 };
