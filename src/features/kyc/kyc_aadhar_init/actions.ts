@@ -24,7 +24,6 @@ export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.warn("action", action);
   await setDatastore(action.routeId, action.payload.targetWidgetId, <
     ButtonProps
   >{
@@ -42,7 +41,6 @@ export const triggerCTA: ActionFunction<AadharInitPayload> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  console.warn("action", action);
   action.payload.aadhaarNumber = aadharNumber;
   const response = await AadharInitRepo(
     action.payload.applicationId,
@@ -51,7 +49,6 @@ export const triggerCTA: ActionFunction<AadharInitPayload> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-  console.warn("KYC INIT response", response);
   if (response.hasOwnProperty("status") && response.status === "SUCCESS")
     await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
   else if (response.message) {

@@ -101,7 +101,7 @@ export const documentPickerAction: ActionFunction<
       if (action.payload.widgetID === "backSide") {
         validation.isBackDocUploaded = true;
       }
-      if (Object.keys(documentUploadUrlMap).length === 1) {
+      if (documentUploadUrlMap.backDocURL === null) {
         validation.isBackDocUploaded = true;
       }
 
@@ -175,7 +175,7 @@ export const onSelectDocumentType: ActionFunction<DropDownPayload> = async (
     },
   };
 
-  if (Object.keys(documentUploadUrlMap).length > 1) {
+  if (documentUploadUrlMap.backDocURL !== null) {
     datastore["frontSideSpace"] = <SpaceProps>{ size: SizeTypeTokens.XXXL };
     datastore["backSide"] = <DocumentPickerProps & WidgetProps>{
       titleLabel: "Back side",
