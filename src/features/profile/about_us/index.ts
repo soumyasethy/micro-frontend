@@ -200,11 +200,7 @@ export const template: () => TemplateSchema = () => {
           { id: "privacyName", type: WIDGET.ICON },
           { id: "privacySpace", type: WIDGET.SPACE },
           { id: "titleprivacy", type: WIDGET.TEXT },
-        ],
-        action: {
-          payload: {},
-          type: ACTION.GO_TO_PRIVACY,
-        },
+        ]
       },
       privacyName: <IconProps>{
         name: IconTokens.Locked,
