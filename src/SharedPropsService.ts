@@ -88,6 +88,16 @@ async function setOnboarding(boolean: boolean) {
 async function getOnboarding() {
   return await AsyncStorage.getItem(StoreKey.isLoadedFirstTime);
 }
+async function setPledgeFirstTime(boolean: boolean) {
+  await AsyncStorage.setItem(
+    StoreKey.isPledgeFirstTime,
+    JSON.stringify(boolean)
+  );
+}
+
+async function isPledgeFirstTime(): Promise<boolean> {
+  return !!(await AsyncStorage.getItem(StoreKey.isPledgeFirstTime));
+}
 
 export default {
   setGlobalProps,
@@ -101,5 +111,7 @@ export default {
   setOnboarding,
   getOnboarding,
   getAccountNumber,
-  setAccountNumber
+  setAccountNumber,
+  setPledgeFirstTime,
+  isPledgeFirstTime,
 };

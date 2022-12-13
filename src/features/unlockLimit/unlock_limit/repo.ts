@@ -23,7 +23,6 @@ export const fetchPledgeLimitRepo = async () => {
     headers: await defaultHeaders(),
   };
   const applicationid = user.linkedApplications[0].applicationId;
-  console.log("api" + api.pledgeLimit);
   return await fetch(`${api.pledgeLimit}${applicationid}`, requestOptions)
     .then((response) => response.json())
     .catch((error) => console.log("error", error));

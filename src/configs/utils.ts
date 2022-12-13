@@ -4,6 +4,7 @@ import { StepStatusMap, User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
+import {StoreKey} from "./api";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -45,9 +46,11 @@ export const updateCurrentStepId = async (currentStepId: string) => {
 
 /*** don't call this  ****/
 export const clearAllData = async () => {
-  await AsyncStorage.getAllKeys()
-    .then((keys) => AsyncStorage.multiRemove(keys))
-    .then(() => console.warn("Clear data"));
+  await AsyncStorage.removeItem(StoreKey.isPledgeFirstTime);
+  await AsyncStorage.removeItem(StoreKey.accessToken);
+  // await AsyncStorage.getAllKeys()
+  //   .then((keys) => AsyncStorage.multiRemove(keys))
+  //   .then(() => console.warn("Clear data"));
 };
 
 export const stepperRepo = async () => {
@@ -343,6 +346,14 @@ export const nextStepId = async (
         },
       };
     } else if (currentStepId === ROUTE.MF_PLEDGE_PORTFOLIO) {
+      const isPledgeFirstTime = await SharedPropsService.isPledgeFirstTime();
+      if (!isPledgeFirstTime) {
+        await SharedPropsService.setPledgeFirstTime(true);
+        return {
+          routeId: ROUTE.UNLOCK_LIMIT_LANDING,
+          params: {},
+        };
+      }
       return {
         routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
         params: {},

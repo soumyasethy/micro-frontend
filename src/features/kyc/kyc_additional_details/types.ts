@@ -38,6 +38,10 @@ export enum EDUCATION {
   POST_GRADUATE = "POST_GRADUATE",
   UNDER_GRADUATE = "UNDER_GRADUATE",
   UP_TO_12 = "UP_TO_12",
+  MBA = "MBA",
+  PHD = "PHD",
+  PROFESSIONAL = "PROFESSIONAL",
+  OTHERS = "OTHERS",
 }
 export type KycAdditionalDetailsPayload = {
   fatherFirstName: string;
