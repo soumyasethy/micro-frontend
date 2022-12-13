@@ -78,6 +78,9 @@ import {distBankAccountAddMF}  from "./features/bankDetailsDistributor/bank_acco
 import { distBankSearchBranchMF } from "./features/bankDetailsDistributor/bank_search_branch";
 import { distBankSelectMF } from "./features/bankDetailsDistributor/select_bank";
 import { distributorPortfolioMF } from "./features/distributorPortfolio";
+import { portfolioStartMF } from "./features/selectPortfolio/porftfolioStart";
+import { selectDistributorPortfolioMF } from "./features/selectPortfolio/selectDistributorPortfolio";
+import { investorMF } from "./features/investor";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -164,4 +167,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.DIST_BANK_SEARCH_BRANCH]: distBankSearchBranchMF,
   [ROUTE.DIST_BANK_SELECT]: distBankSelectMF,
   [ROUTE.DISTRIBUTOR_PORTFOLIO]: distributorPortfolioMF,
+  [ROUTE.PORTFOLOIO_START]: portfolioStartMF,
+  [ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO]: selectDistributorPortfolioMF,
+  [ROUTE.INVESTOR]: investorMF,
 };
