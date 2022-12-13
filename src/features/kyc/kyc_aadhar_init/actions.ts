@@ -8,8 +8,10 @@ import {
 } from "@voltmoney/schema";
 import { AadharInputPayload } from "./types";
 import { AadharInitPayload } from "../kyc_init/types";
-import { AadharInitRepo } from "../kyc_init/repo";
 import { ROUTE } from "../../../routes";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 
 let aadharNumber = "";
 export const onChangeAadhar: ActionFunction<AadharInputPayload> = async (
@@ -36,25 +38,30 @@ export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
 export const triggerCTA: ActionFunction<AadharInitPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore }
+  { network, navigate, setDatastore }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
   action.payload.aadhaarNumber = aadharNumber;
-  const response = await AadharInitRepo(
-    action.payload.applicationId,
-    action.payload.aadhaarNumber
+  const applicationId = (await SharedPropsService.getUser())
+    .linkedApplications[0].applicationId;
+
+  const response = await network.post(
+    api.aadharInit,
+    { applicationId, aadhaarNumber: aadharNumber },
+    { headers: await getAppHeader() }
   );
+
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-  if (response.hasOwnProperty("status") && response.status === "SUCCESS")
+  if (response.status === 200) {
     await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
-  else if (response.message) {
+  } else {
     await setDatastore(action.routeId, "input", <TextInputProps>{
       state: InputStateToken.ERROR,
-      caption: { error: response.message },
+      caption: { error: response.data.message },
     });
   }
 };
