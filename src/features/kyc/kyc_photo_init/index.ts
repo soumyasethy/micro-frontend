@@ -3,44 +3,174 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
-import { WIDGET, CameraPickerProps } from "@voltmoney/schema";
+import {
+  AspectRatioToken,
+  BorderRadiusTokens,
+  ButtonProps,
+  ButtonTypeTokens,
+  ButtonWidthTypeToken,
+  ColorTokens,
+  FontFamilyTokens,
+  FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
+  IconProps,
+  IconSizeTokens,
+  IconTokens,
+  ImageProps,
+  ImageSizeTokens,
+  SizeTypeTokens,
+  SpaceProps,
+  StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
+  StepperItem,
+  StepperProps,
+  StepperTypeTokens,
+  TypographyProps,
+  WIDGET,
+} from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, CameraPayload } from "./types";
-import { CameraAction, CancelCameraAction } from "./actions";
+import { ACTION } from "./types";
+import { CameraConfirmAction, GoBackAction } from "./actions";
+import { horizontalStepperRepo } from "../../../configs/utils";
 
-export const template: TemplateSchema = {
+export const template: (stepper: StepperItem[]) => TemplateSchema = (
+  stepper
+) => ({
   layout: <Layout>{
-    id: ROUTE.CAMERA_CAPTURE,
+    id: ROUTE.KYC_PHOTO_VERIFICATION,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "camera", type: WIDGET.CAMERA, padding: { horizontal: 0 } },
+      { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+      { id: "spaceTop", type: WIDGET.SPACE },
+      { id: "title", type: WIDGET.TEXT },
+      { id: "titleSpace", type: WIDGET.SPACE },
+      { id: "subTitle", type: WIDGET.TEXT },
+      { id: "spaceTitle", type: WIDGET.SPACE },
+      { id: "space1", type: WIDGET.SPACE },
+      { id: "stackImage", type: WIDGET.STACK },
+      {
+        id: "continue",
+        type: WIDGET.BUTTON,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      },
+      {
+        id: "continueSpace",
+        type: WIDGET.SPACE,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      },
+      {
+        id: "bottomStack",
+        type: WIDGET.STACK,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      },
     ],
   },
   datastore: <Datastore>{
-    camera: <CameraPickerProps & WidgetProps>{
-      isShowVideo: true,
-      action: {
-        type: ACTION.CAMERA_ACTION,
-        routeId: ROUTE.CAMERA_CAPTURE,
-        payload: <CameraPayload>{ value: "" },
+    header: <HeaderProps & WidgetProps>{
+      title: "KYC Verification",
+      type: HeaderTypeTokens.verification,
+      stepperProps: <StepperProps>{
+        data: stepper,
+        type: StepperTypeTokens.HORIZONTAL,
       },
-      cancelAction: {
-        type: ACTION.CANCEL_CAMERA,
-        routeId: ROUTE.CAMERA_CAPTURE,
-        payload: { value: "" },
+      action: {
+        type: ACTION.GO_BACK,
+        routeId: ROUTE.KYC_PHOTO_VERIFICATION,
+        payload: {},
       },
     },
+    spaceTop: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    space1: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
+    continueSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+    title: <TypographyProps>{
+      label: "Take photo",
+      fontWeight: "600",
+      fontFamily: FontFamilyTokens.Poppins,
+      fontSize: FontSizeTokens.MD,
+      color: ColorTokens.Grey_Night,
+      lineHeight: 28,
+    },
+    titleSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
+    subTitle: <TypographyProps>{
+      label: "We will use this this to verify your identity",
+      fontWeight: "400",
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.MD,
+      color: ColorTokens.Grey_Charcoal,
+      lineHeight: 24,
+    },
+    spaceTitle: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    spaceImage: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    stackImage: <StackProps>{
+      justifyContent: StackJustifyContent.center,
+      alignItems: StackAlignItems.center,
+      widgetItems: [
+        { id: "image", type: WIDGET.IMAGE },
+        { id: "spaceImage", type: WIDGET.SPACE },
+      ],
+    },
+    image: <ImageProps>{
+      aspectRatio: AspectRatioToken.A1_1,
+      borderRadius: BorderRadiusTokens.BR5,
+      size: ImageSizeTokens.XXXL,
+      uri: "https://volt-images.s3.ap-south-1.amazonaws.com/camera_placeholder.svg",
+    },
+    continue: <ButtonProps & WidgetProps>{
+      label: "Open Camera",
+      type: ButtonTypeTokens.LargeFilled,
+      width: ButtonWidthTypeToken.FULL,
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.MD,
+      lineHeight: SizeTypeTokens.XXL,
+      fontWeight: "700",
+      action: {
+        type: ACTION.CAMERA_ACTION,
+        routeId: ROUTE.KYC_PHOTO_VERIFICATION,
+        payload: {},
+      },
+    },
+    space2: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
+    bottomStack: <StackProps>{
+      type: StackType.row,
+      justifyContent: StackJustifyContent.center,
+      alignItems: StackAlignItems.center,
+      widgetItems: [
+        { id: "image2", type: WIDGET.ICON },
+        { id: "space3", type: WIDGET.SPACE },
+        { id: "tcText2", type: WIDGET.TEXT },
+      ],
+    },
+    image2: <IconProps>{
+      name: IconTokens.Secure,
+      size: IconSizeTokens.MD,
+      color: ColorTokens.Secondary_100,
+    },
+    space3: <SpaceProps>{ size: SizeTypeTokens.XS },
+    tcText2: <TypographyProps>{
+      label: "Don’t worry your data is secured with Volt",
+      fontWeight: "500",
+      fontFamily: FontFamilyTokens.Inter,
+      fontSize: FontSizeTokens.XS,
+      color: ColorTokens.Secondary_100,
+    },
   },
-};
+});
 
-export const cameraCaptureMF: PageType<any> = {
-  onLoad: async () => Promise.resolve(template),
+export const cameraOpenMF: PageType<any> = {
+  onLoad: async () => {
+    const stepper: StepperItem[] = await horizontalStepperRepo();
+    return Promise.resolve(template(stepper));
+  },
   actions: {
-    [ACTION.CAMERA_ACTION]: CameraAction,
-    [ACTION.CANCEL_CAMERA]: CancelCameraAction,
+    [ACTION.CAMERA_ACTION]: CameraConfirmAction,
+    [ACTION.GO_BACK]: GoBackAction,
   },
   clearPrevious: true,
 };

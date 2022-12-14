@@ -36,7 +36,7 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
+import { ACTION, PhotoVerifyPayload } from "./types";
 import { GoBackAction, PhotoVerifyAction, RetakePhoto } from "./actions";
 import { horizontalStepperRepo } from "../../../configs/utils";
 
@@ -127,7 +127,7 @@ export const template: (
       action: {
         type: ACTION.PHOTO_VERIFY,
         routeId: ROUTE.KYC_AFTER_CAMERA,
-        payload: {},
+        payload: <PhotoVerifyPayload>{ base64Image: photo },
       },
     },
     disclaimerStack: <StackProps>{
