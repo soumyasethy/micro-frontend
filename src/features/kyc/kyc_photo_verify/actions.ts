@@ -7,6 +7,7 @@ import { AadharInitPayload } from "../kyc_init/types";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
 import { nextStepCredStepper } from "../../../configs/utils";
+import _ from "lodash";
 
 export const PhotoVerifyAction: ActionFunction<any> = async (
   action,
@@ -51,6 +52,10 @@ export const PhotoVerifyAction: ActionFunction<any> = async (
       );
       if (imageVerifyResponse.status === 200) {
         /** Photo Verification Successful **/
+        user.linkedApplications[0] = _.get(
+          imageVerifyResponse,
+          "data.updatedApplicationObj"
+        );
         await SharedPropsService.setUser(user);
         const routeObj = await nextStepCredStepper();
         await navigate(routeObj.routeId, routeObj.params);
