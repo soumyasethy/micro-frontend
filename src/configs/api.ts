@@ -29,6 +29,14 @@ export const StoreKey = {
   refreshToken: "refresh_token",
   userContext: "user_context",
 };
+// Partner's app apis
+export const partnerApi = {
+  login: `${config.URL}/api/client/auth/requestOtp/`,
+  verifyOtp: `${config.URL}/api/client/auth/verifyOtp/`,
+  userContext:`${config.URL}/app/partner/user`,
+  accountAttributes: `${config.URL}/app/partner/accountAttributes/`,
+};
+
 export const api = {
   login: `${config.URL}/api/client/auth/requestOtp/`,
   verifyOtp: `${config.URL}/api/client/auth/verifyOtp/`,

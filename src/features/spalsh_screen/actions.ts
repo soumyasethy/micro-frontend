@@ -32,7 +32,7 @@ export const SplashAction: ActionFunction<any> = async (
         const nextRoute = await nextStepId(
           user.linkedApplications[0].currentStepId
         );
-
+       //   await navigate(ROUTE.DISTRIBUTOR_PHONE_NUMBER);
         await navigate(nextRoute.routeId, nextRoute.params);
       }
     }

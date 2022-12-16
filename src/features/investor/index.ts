@@ -48,9 +48,6 @@ export const template: (
         id: ROUTE.DISTRIBUTOR_PORTFOLIO,
         type: LAYOUTS.LIST,
         widgets: [
-           
-            // { id: "space0", type: WIDGET.SPACE },
-            // { id: "space1", type: WIDGET.SPACE },
             {id:"midStack",type:WIDGET.STACK,position:POSITION.ABSOLUTE_CENTER},
           
         ],

@@ -39,6 +39,19 @@ export const getAppHeader = async () => ({
   "Content-Type": "application/json",
 });
 
+export const getPartnerAuthHeaders = () => ({
+  "X-EntityType": "PARTNER",
+  "X-AppPlatform": __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP",
+  "Content-Type": "application/json",
+});
+
+
+
+export enum USERTYPE {
+  BORROWER = "BORROWER",
+  PARTNER = "PARTNER"
+}
+
 export const APP_CONFIG = {
   POLLING_INTERVAL: 5000,
   AUTO_REDIRECT: 5000,
