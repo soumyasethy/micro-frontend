@@ -3,7 +3,9 @@ import {
   __isMock__,
   AssetRepositoryType,
   ConfigTokens,
+  USERTYPE,
 } from "./configs/config";
+
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -52,6 +54,8 @@ type GlobalProps = {
   creditLimit: number;
   listItemDataCAS: any;
   desiredPortfolio?: any;
+ // userType:USERTYPE;
+  userType:string
 };
 
 let _globalProps: GlobalProps = {
@@ -94,6 +98,8 @@ let _globalProps: GlobalProps = {
   creditLimit: 25000,
   listItemDataCAS: [],
   desiredPortfolio: {},
+ // userType:USERTYPE.BORROWER
+  userType:"PARTNER"
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -133,6 +139,14 @@ async function setAssetRepositoryFetchMap(
   }
 }
 /*** End Asset repository ***/
+
+async function setUserType(userType: USERTYPE){
+  _globalProps.userType = userType;
+}
+
+async function getUserType(){
+  return _globalProps.userType;
+}
 
 async function setAccountNumber(accountNumber: string) {
   _globalProps.accountNumber = accountNumber;
@@ -189,6 +203,9 @@ function getPropsValue(key?: string) {
   }
   return null;
 }
+
+
+
 async function setUser(props: User) {
   _globalProps.user = await props;
   _globalProps.config[ConfigTokens.IS_GOOGLE_LOGIN_ENABLED] = _.get(
@@ -348,4 +365,6 @@ export default {
   getListItemDataCAS,
   setDesiredPortfolio,
   getDesiredPortfolio,
+  setUserType,
+  getUserType
 };

@@ -37,14 +37,12 @@ import {
   PhoneNumberPayload,
   WhatsAppEnabledPayload,
 } from "./types";
-import {
-  goToPrivacy,
-  sendOtp,
-  textOnChange,
-  toggleCTA,
-  whatsappToggle,
-} from "./actions";
-import { RegexConfig } from "../../../configs/config";
+
+import { checkUserType, goToPrivacy, sendOtp, textOnChange, toggleCTA, whatsappToggle } from "./actions";
+import { RegexConfig, USERTYPE } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
+
+
 
 export const template: (mobileNumber?: string) => TemplateSchema = (
   mobileNumber
@@ -189,11 +187,12 @@ export const template: (mobileNumber?: string) => TemplateSchema = (
 });
 
 export const phoneNumberMF: PageType<any> = {
+
   onLoad: async (_, { mobileNumber }) => {
     return Promise.resolve(template(mobileNumber));
   },
   actions: {
-    [ACTION.CONTINUE]: sendOtp,
+    [ACTION.CONTINUE]: checkUserType,
     [ACTION.PHONE_NUMBER]: textOnChange,
     [ACTION.WHATSAPP_CHECK]: whatsappToggle,
     [ACTION.WHATSAPP_UNCHECK]: whatsappToggle,

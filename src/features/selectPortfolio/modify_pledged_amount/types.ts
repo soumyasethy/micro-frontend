@@ -1,4 +1,4 @@
-import { StepResponseObject } from "../unlock_limit/types";
+import { StepResponseObject } from "../../unlockLimit/unlock_limit/types";
 
 export enum ACTION {
   MODIFY_PLEDGED_AMOUNT = "MODIFY_PLEDGED_AMOUNT",
