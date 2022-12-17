@@ -27,8 +27,10 @@ export const checkUserType: ActionFunction<any> = async (
   switch (userType) {
     case "PARTNER":
       await sendPartnerOtp(action,{},props);
+      break;
     case "BORROWER":
       await sendOtp(action,{},props);
+      break;
   }
 };
 

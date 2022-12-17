@@ -38,7 +38,7 @@ import {
   WhatsAppEnabledPayload,
 } from "./types";
 import { checkUserType, goToPrivacy, sendOtp, textOnChange, toggleCTA, whatsappToggle } from "./actions";
-import { RegexConfig, USERTYPE } from "../../../configs/config";
+import { RegexConfig } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: TemplateSchema = {
@@ -181,7 +181,8 @@ export const template: TemplateSchema = {
 
 export const phoneNumberMF: PageType<any> = {
   onLoad: async () => {
-  
+    const usertype = await SharedPropsService.getUserType();
+    console.log("usertype",usertype);
     return Promise.resolve(template)
   },
   actions: {

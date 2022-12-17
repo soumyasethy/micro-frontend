@@ -167,6 +167,7 @@ export const horizontalStepperRepo = stepperRepo;
 export const distributorStepperRepo = async () => {
   let DISTRIBUTOR_VERIFICATION: StepperStateToken;
   let message = "We’re processing. Check after sometime.";
+  /* API response needed for mapping
   const user = await SharedPropsService.getUser();
  
   if (
@@ -210,7 +211,7 @@ export const distributorStepperRepo = async () => {
     DISTRIBUTOR_VERIFICATION = StepperStateToken.PENDING_MANUAL_VERIFICATION;
   } else {
     DISTRIBUTOR_VERIFICATION = StepperStateToken.IN_PROGRESS;
-  }
+  } */
   
 
   const distributorData: StepperItem[] = [
@@ -232,13 +233,7 @@ export const distributorStepperRepo = async () => {
       title: "Bank details",
       subTitle: "",
       horizontalTitle: "Bank details",
-      status:
-        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION,
-      message:
-        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
+      status:StepperStateToken.PENDING_MANUAL_VERIFICATION
     },
 
     {
@@ -247,12 +242,13 @@ export const distributorStepperRepo = async () => {
       title: "Fetch portfolio",
       subTitle: "",
       horizontalTitle: "Fetch portfolio",
-      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
-      message:
-        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
+      status:StepperStateToken.PENDING_MANUAL_VERIFICATION
+      // status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      // message:
+      //   user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
+      //   StepperStateToken.PENDING_MANUAL_VERIFICATION
+      //     ? message
+      //     : "",
     },
     {
       id: "4",
@@ -260,12 +256,13 @@ export const distributorStepperRepo = async () => {
       title: "Select Portfolio",
       subTitle: "",
       horizontalTitle: "Select Portfolio",
-      status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
-      message:
-        user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
+      status:StepperStateToken.PENDING_MANUAL_VERIFICATION
+      // status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
+      // message:
+      //   user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+      //   StepperStateToken.PENDING_MANUAL_VERIFICATION
+      //     ? message
+      //     : "",
     },
   ];
 

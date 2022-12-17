@@ -46,12 +46,6 @@ export const getPartnerAuthHeaders = () => ({
 });
 
 
-
-export enum USERTYPE {
-  BORROWER = "BORROWER",
-  PARTNER = "PARTNER"
-}
-
 export const APP_CONFIG = {
   POLLING_INTERVAL: 5000,
   AUTO_REDIRECT: 5000,

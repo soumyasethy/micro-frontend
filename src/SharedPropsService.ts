@@ -1,26 +1,29 @@
 import { User } from "./features/login/otp_verify/types";
-import { USERTYPE, __isMock__ } from "./configs/config";
+import {  __isMock__ } from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/unlockLimit/unlock_limit/types";
+
+export enum USERTYPE {
+  BORROWER = "BORROWER",
+  PARTNER = "PARTNER"
+}
+
 type GlobalProps = {
   user: User;
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
- // userType:USERTYPE;
-  userType:string
+  userType:USERTYPE;
 };
-
 let _globalProps: GlobalProps = {
   user: {},
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
- // userType:USERTYPE.BORROWER
-  userType:"PARTNER"
+  userType:USERTYPE.PARTNER
 };
 
 async function setUserType(userType: USERTYPE){

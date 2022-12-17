@@ -66,6 +66,7 @@ import { portfolioStartMF } from "./features/selectPortfolio/porftfolioStart";
 import { selectDistributorPortfolioMF } from "./features/selectPortfolio/selectDistributorPortfolio";
 import { investorMF } from "./features/investor";
 import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
+import { nameMF } from "./features/enter_name";
 
 
 export const ROUTE_MAP: RouteMap = {
@@ -135,5 +136,6 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO]: selectDistributorPortfolioMF,
   [ROUTE.INVESTOR]: investorMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
+  [ROUTE.ENTER_NAME]: nameMF,
   
 };
