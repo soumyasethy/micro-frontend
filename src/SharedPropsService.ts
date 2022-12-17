@@ -26,6 +26,12 @@ export enum BUILD_TYPE {
   PARTNER_PRODUCTION = "PARTNER_PRODUCTION",
   PARTNER_STAGING = "PARTNER_STAGING",
 }
+
+export enum USERTYPE {
+  BORROWER = "BORROWER",
+  PARTNER = "PARTNER"
+}
+
 type GlobalProps = {
   buildType: BUILD_TYPE;
   user: User;
@@ -57,7 +63,6 @@ type GlobalProps = {
  // userType:USERTYPE;
   userType:string
 };
-
 let _globalProps: GlobalProps = {
   buildType: BUILD_TYPE.BORROWER_STAGING,
   user: {},
@@ -99,7 +104,7 @@ let _globalProps: GlobalProps = {
   listItemDataCAS: [],
   desiredPortfolio: {},
  // userType:USERTYPE.BORROWER
-  userType:"PARTNER"
+  userType:"PARTNER",
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;

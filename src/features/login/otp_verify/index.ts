@@ -30,7 +30,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTIONS, LoginAction, OTPPayload } from "./types";
-import { goBack, login } from "./actions";
+import { checkUserType, goBack, login } from "./actions";
 import { sendOtp } from "../phone_number/actions";
 import { ContinuePayload } from "../phone_number/types";
 
@@ -142,7 +142,7 @@ export const otpVerifyMF: PageType<any> = {
     );
   },
   actions: {
-    [ACTIONS.LoginWithCognito]: login,
+    [ACTIONS.LoginWithCognito]: checkUserType,
     [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.RESEND_OTP_NUMBER]: sendOtp,
   },

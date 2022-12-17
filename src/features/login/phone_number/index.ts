@@ -39,7 +39,7 @@ import {
 } from "./types";
 
 import { checkUserType, goToPrivacy, sendOtp, textOnChange, toggleCTA, whatsappToggle } from "./actions";
-import { RegexConfig, USERTYPE } from "../../../configs/config";
+import { RegexConfig } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
 
@@ -187,9 +187,10 @@ export const template: (mobileNumber?: string) => TemplateSchema = (
 });
 
 export const phoneNumberMF: PageType<any> = {
-
   onLoad: async (_, { mobileNumber }) => {
+    const usertype = await SharedPropsService.getUserType();
     return Promise.resolve(template(mobileNumber));
+
   },
   actions: {
     [ACTION.CONTINUE]: checkUserType,

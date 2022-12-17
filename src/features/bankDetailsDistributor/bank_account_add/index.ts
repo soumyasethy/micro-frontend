@@ -57,7 +57,7 @@ import {
 } from "./actions";
 import { BAVVerifyActionPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
-import { horizontalStepperRepo } from "../../../configs/utils";
+import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
 
 export const template: (
   bankCode: string,
@@ -246,7 +246,7 @@ export const distBankAccountAddMF: PageType<any> = {
     const isTitle = () => {
       console.log("here");
     }
-    const stepper: StepperItem[] = await horizontalStepperRepo();
+    const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
    
     const accountNumber = await SharedPropsService.getAccountNumber();
     return Promise.resolve(template(bankCode, bankName, accountNumber,stepper));
