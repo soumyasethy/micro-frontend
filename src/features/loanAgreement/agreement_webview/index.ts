@@ -54,13 +54,13 @@ export const template: (urlData: string) => TemplateSchema = (urlData) => ({
     },
     headItem: <WebViewProps>{
       uri: `${urlData}`,
-      isOpenInNewTab:true
+      isOpenInNewTab: true,
     },
   },
 });
 
 export const agreementWebViewMF: PageType<any> = {
-  onLoad: async ({ ...props }, { response, urlData }) => {
+  onLoad: async ({ ...props }, { urlData }) => {
     await AgreementStatusAction(
       {
         type: ACTION.GO_NEXT_SUCCESS,

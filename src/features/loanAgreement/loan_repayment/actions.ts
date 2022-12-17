@@ -8,12 +8,16 @@ let stepResponseObject: string = null;
 export const authenticateRepayment: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { navigate }
+  { navigate, openNewTab }
 ): Promise<any> => {
-  if (action.payload.value)
+  if (action.payload.value) {
+    /** manually opening tab to avoid popup blocker **/
+    openNewTab(action.payload.value);
+
     await navigate(ROUTE.LOAN_WEBVIEW, {
       urlData: action.payload.value,
     });
+  }
 };
 
 export const goBack: ActionFunction<LimitPayload> = async (
