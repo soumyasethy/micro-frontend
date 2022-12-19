@@ -139,15 +139,16 @@ export const template: (
         },
         routeId: ROUTE.PLEDGE_VERIFY,
       },
-      // otpAction: {
-      //     type: ACTION.RESEND_OTP_NUMBER,
-      //     payload: <OtpPayload>{
-      //       value: stepResponseObject,
-      //       widgetId: "input",
-      //       isResend: true,
-      //     },
-      //     routeId: ROUTE.OTP_VERIFY,
-      //   },
+      otpAction: {
+        type: ACTION.RESEND_OTP_NUMBER,
+        payload: <OtpPledgePayload>{
+          value: "",
+          widgetId: "input",
+          assetRepository,
+          isResend: true,
+        },
+        routeId: ROUTE.OTP_VERIFY,
+      },
     },
     inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     message: <TypographyProps>{
