@@ -12,7 +12,7 @@ import {
   TextInputProps,
 } from "@voltmoney/schema";
 import { api, partnerApi } from "../../../configs/api";
-import { getAuthHeaders, getPartnerAuthHeaders, USERTYPE } from "../../../configs/config";
+import { getAuthHeaders, getPartnerAuthHeaders } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
 let phoneNumber: string = "";

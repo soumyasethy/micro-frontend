@@ -32,8 +32,8 @@ export const SplashAction: ActionFunction<any> = async (
         const nextRoute = await nextStepId(
           user.linkedApplications[0].currentStepId
         );
-       //   await navigate(ROUTE.ENTER_NAME);
-       // await navigate(nextRoute.routeId, nextRoute.params);
+          await navigate(ROUTE.DIST_BANK_SELECT);
+     //   await navigate(nextRoute.routeId, nextRoute.params);
       }
     }
   } else {
