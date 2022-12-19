@@ -25,35 +25,205 @@ import {
   updateCurrentStepId,
   updateStepStatusMap,
 } from "../../../configs/utils";
+import { EnableDisableCTA } from "../../login/phone_number/types";
 
 let bankAccountNumber = "";
 let bankName = "";
 let confirmAccountNumber = "";
 let bankIfsc = "";
 
+export const onChangeBankDetailse: ActionFunction<
+  InputNumberActionPayload
+> = async (action, _datastore, { ...props }): Promise<any> => {
+  bankName = action.payload.value;
+  if (bankName) {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: <EnableDisableCTA>{
+          value: true,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  } else {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: <EnableDisableCTA>{
+          value: false,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  }
+   
+};
+
+
+export const onChangeIfscDetails: ActionFunction<InputNumberActionPayload> = async (
+  action,
+  _datastore,
+  { ...props }
+): Promise<any> => {
+  bankIfsc = action.payload.value;
+  if (bankIfsc) {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: <EnableDisableCTA>{
+          value: true,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  } else {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: <EnableDisableCTA>{
+          value: false,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  }
+};
+
+
+export const onConfirmAccountNumber: ActionFunction<InputNumberActionPayload> = async (
+  action,
+  _datastore,
+  { ...props }
+): Promise<any> => {
+  confirmAccountNumber = action.payload.value;
+   if(confirmAccountNumber === bankAccountNumber){
+    console.log("mateched")
+   }else{
+    console.log("not matched")
+   }
+  if (confirmAccountNumber) {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: <EnableDisableCTA>{
+          value: true,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  } else {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: <EnableDisableCTA>{
+          value: false,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  }
+};
+
+export const textOnChange: ActionFunction<InputNumberActionPayload> = async (
+  action,
+  _datastore,
+  { ...props }
+): Promise<any> => {
+  bankAccountNumber = action.payload.value;
+  if (bankAccountNumber) {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: <EnableDisableCTA>{
+          value: true,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  } else {
+    await toggleCTA(
+      {
+        type: ACTION.ENABLE_CONTINUE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: <EnableDisableCTA>{
+          value: false,
+          targetWidgetId: "continue",
+        },
+      },
+      {},
+      props
+    );
+  }
+};
+
+export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
+  action,
+  _datastore,
+  { setDatastore }
+): Promise<any> => {
+  await setDatastore(action.routeId, action.payload.targetWidgetId, <
+    ButtonProps
+  >{
+    type:
+      action.payload.value && bankName && bankAccountNumber && confirmAccountNumber && bankIfsc
+        ? ButtonTypeTokens.LargeFilled
+        : ButtonTypeTokens.LargeOutline,
+  });
+};
+
+export const onChangeAccountNumber: ActionFunction<
+  InputNumberActionPayload
+> = async (action, _datastore, { ...props }): Promise<any> => {
+  
+  console.log(action.payload.value);
+
+   
+};
+
+
 export const NavigationSearchIFSCAction: ActionFunction<
   NavigationSearchIFSCActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  await navigate(ROUTE.BANK_SEARCH_BRANCH, {
+  await navigate(ROUTE.DIST_BANK_SEARCH_BRANCH, {
     bankCode: action.payload.bankCode,
     bankName: action.payload.bankName,
     bankAccountNumber,
   });
 };
-export const onChangeBankDetailse: ActionFunction<
-  InputNumberActionPayload
-> = async (action, _datastore, { ...props }): Promise<any> => {
-  
-  bankName = action.payload.value;
-  bankAccountNumber = action.payload.value;
-  confirmAccountNumber =action.payload.value;
-  bankIfsc =action.payload.value;
-  // await SharedPropsService.setBankName(bankAccountNumber);
-  if(bankName != '' && bankAccountNumber != '' && confirmAccountNumber != '' && bankIfsc != ''){
-    await ToggleCTA(action, _datastore, props);
-  }
-   
+
+export const NavigationSearchBankAction: ActionFunction<
+  NavigationSearchIFSCActionPayload
+> = async (action, _datastore, { navigate }): Promise<any> => {
+  await navigate(ROUTE.DIST_BANK_SELECT, {
+    bankCode: action.payload.bankCode,
+    bankName: action.payload.bankName,
+    bankAccountNumber,
+  });
 };
+
+
 
 
 export const ToggleCTA: ActionFunction<any> = async (
@@ -70,98 +240,12 @@ export const ToggleCTA: ActionFunction<any> = async (
  
 };
 
-export const BavVerifyManualAction: ActionFunction<
-  BAVVerifyActionPayload
-> = async (
+export const skipBankVerification: ActionFunction<{}> = async (
   action,
   _datastore,
-  { setDatastore, network, showPopup, goBack }
+  { setDatastore, navigate}
 ): Promise<any> => {
-  console.warn("_datastore", _datastore);
-  if (!bankAccountNumber || !bankIfsc) return;
-  await setDatastore(action.routeId, "continue", <ButtonProps>{
-    loading: true,
-  });
-  await showPopup({
-    title: "Depositing Rs 1",
-    subTitle: "We’re doing this to verify your account.",
-    type: "LOADING",
-    iconName: IconTokens.Coin,
-  });
-  const user: User = await SharedPropsService.getUser();
-  const applicationId = user.linkedApplications[0].applicationId;
-
-  const response = await network.post(
-    api.bavVerify,
-    {
-      applicationId,
-      bankAccountDetails: {
-        bankAccountNumber,
-        bankIfscCode: bankIfsc,
-      },
-    },
-    { headers: await getAppHeader() },
-    async () => {
-      //dismiss modal -> Depositing Rs 1
-      await goBack();
-    }
-  );
-  const stepStatusMap: StepStatusMap = _.get(
-    response,
-    "data.updatedApplicationObj.stepStatusMap",
-    null
-  );
-  const currentStepId = _.get(
-    response,
-    "data.updatedApplicationObj.currentStepId",
-    null
-  );
-
-  if (currentStepId && stepStatusMap) {
-    await updateCurrentStepId(currentStepId);
-    await updateStepStatusMap(stepStatusMap);
-    await goBack();
-  }
-
-  if (stepStatusMap.BANK_ACCOUNT_VERIFICATION === StepperStateToken.COMPLETED) {
-    await showPopup({
-      autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-      isAutoTriggerCta: true,
-      type: "SUCCESS",
-      title: "Account verified successfully!",
-      subTitle: "You will be redirected to next step in few seconds",
-      ctaLabel: "Continue",
-      ctaAction: {
-        type: ACTION_CURRENT.GO_NEXT,
-        routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,
-        payload: {
-          currentStepId: currentStepId,
-        },
-      },
-    });
-  } else if (
-    stepStatusMap.BANK_ACCOUNT_VERIFICATION ===
-    StepperStateToken.PENDING_MANUAL_VERIFICATION
-  ) {
-    await showPopup({
-      autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-      isAutoTriggerCta: false,
-      type: "DEFAULT",
-      iconName: IconTokens.InProgress,
-      title: "Verification in progress",
-      subTitle:
-        "It's taking longer than usual to verify the account. We'll automatically try again in some time.",
-      ctaLabel: "Continue",
-      ctaAction: {
-        type: ACTION.NAV_STEPPER,
-        routeId: ROUTE.BANK_ACCOUNT_ADD,
-        payload: {},
-      },
-    });
-  }
-  await setDatastore(action.routeId, "continue", <ButtonProps>{
-    loading: false,
-  });
+  await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
 };
 export const ChangeBankGoBackAction: ActionFunction<any> = async (
   action,

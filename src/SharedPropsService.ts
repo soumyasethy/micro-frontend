@@ -3,7 +3,6 @@ import {
   __isMock__,
   AssetRepositoryType,
   ConfigTokens,
-  USERTYPE,
 } from "./configs/config";
 
 import { MockUser } from "./mock/MockUser";
@@ -105,6 +104,7 @@ let _globalProps: GlobalProps = {
   desiredPortfolio: {},
  // userType:USERTYPE.BORROWER
   userType:"PARTNER",
+ // userType:USERTYPE.BORROWER
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
