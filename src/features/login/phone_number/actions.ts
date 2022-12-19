@@ -49,18 +49,12 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
       await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
         loading: false,
       });
-      if (action.payload.isResend == false) {
-        await navigate(ROUTE.OTP_VERIFY, {
-          phone_number: phoneNumber,
-        });
-      } else {
-        console.log("No need to navigate");
-      }
-      if (action.payload.isResend == false) {
-        await setDatastore(action.routeId, "input", <TextInputProps>{
-          state: InputStateToken.SUCCESS,
-        });
-      }
+      await navigate(ROUTE.OTP_VERIFY, {
+        phone_number: phoneNumber,
+      });
+      await setDatastore(action.routeId, "input", <TextInputProps>{
+        state: InputStateToken.SUCCESS,
+      });
     } else {
       await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
         loading: false,

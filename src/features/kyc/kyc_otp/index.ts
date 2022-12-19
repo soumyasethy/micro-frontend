@@ -30,7 +30,6 @@ import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
 import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
 import { horizontalStepperRepo, maskString } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
-import { AadharInitPayload } from "../kyc_init/types";
 
 export const template: (
   stepper: StepperItem[],
@@ -82,7 +81,7 @@ export const template: (
         mobileNumber,
         0,
         5
-      )} (valid for 10mins).`,
+      )}(valid for 10mins).`,
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
@@ -96,13 +95,20 @@ export const template: (
       charLimit: 6,
       keyboardType: KeyboardTypeToken.numberPad,
       caption: { error: "Please enter a valid 12 digit number" },
-      otpAction: {
+      action: {
         type: ACTION.TRIGGER_CTA,
-        routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
-        payload: <AadharInitPayload>{
-          applicationId: "",
-          aadhaarNumber: "",
-        },
+        payload: <AadharInputPayload>{ value: "", widgetID: "input" },
+        routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+      },
+      errorAction: {
+        type: ACTION.DISABLE_CTA,
+        routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+        payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
+      },
+      successAction: {
+        type: ACTION.ENABLE_CTA,
+        routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+        payload: <EnableDisableCTA>{ value: true, targetWidgetId: "continue" },
       },
     },
   },
