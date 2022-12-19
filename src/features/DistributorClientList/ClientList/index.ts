@@ -255,7 +255,7 @@ export const template:(
 
   return {
     layout: <Layout>{
-      id: ROUTE.CAROUSAL_PAGE,
+      id: ROUTE.DISTRIBUTOR_CLIENT_LIST,
       type: LAYOUTS.LIST,
       widgets: [
         { id: "tab", type: WIDGET.TABS },

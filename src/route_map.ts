@@ -66,9 +66,10 @@ import { portfolioStartMF } from "./features/selectPortfolio/porftfolioStart";
 import { selectDistributorPortfolioMF } from "./features/selectPortfolio/selectDistributorPortfolio";
 import { investorMF } from "./features/investor";
 import { DistributorClientListMF } from "./features/DistributorClientList/ClientList";
-import { DistributorBasicDetailsInfo } from "./features/Dist_basicDetails/basicDetailsInfo";
+import { distBasicDetailsMF } from "./features/Dist_basicDetails/basicDetailsInfo";
 import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
 import { nameMF } from "./features/enter_name";
+import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
 
 
 
@@ -141,6 +142,6 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.ENTER_NAME]: nameMF,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
-  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]:DistributorBasicDetailsInfo,
-  [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF
+  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]:distBasicDetailsMF,
+  [ROUTE.DETAILS_CONFIRM]: detailsConfirmMF,
 };

@@ -24,7 +24,7 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
-  userType:USERTYPE.BORROWER
+  userType:USERTYPE.PARTNER
 };
 
 async function setUserType(userType: USERTYPE){

@@ -42,7 +42,7 @@ export const saveName: ActionFunction<ContinuePayload> = async (
     //   updatedUser.linkedApplications[0].currentStepId
     // );
     // await navigate(route.routeId, route.params);
-    await navigate(ROUTE.DIST_BANK_ACCOUNT_ADD);
+    await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
   }
 };
 export const textOnChange: ActionFunction<NamePayload> = async (

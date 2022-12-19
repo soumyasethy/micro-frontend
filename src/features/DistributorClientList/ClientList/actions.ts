@@ -1,4 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
+import { ROUTE } from "../../../routes";
+import { navigate } from "../../afterUnlock/dashboard/actions";
 import { ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
 
 export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
@@ -24,7 +26,7 @@ export const onManageCTA: ActionFunction<ClientInProgressPayloadType> = async (
 export const onClickCTA: ActionFunction<any> = async (
     action,
     _datastore,
-    { setDatastore }
+    { setDatastore,navigate }
 ): Promise<any> => {
-    console.warn("CTA triggerred");
+   await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
 };

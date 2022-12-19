@@ -1,7 +1,7 @@
 import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
 import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
 import { api } from "../../../configs/api";
-import { horizontalStepperRepo } from "../../../configs/utils";
+import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
 import { ROUTE } from "../../../routes";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
@@ -12,7 +12,7 @@ import { onChangeInput, toggleCTA, triggerCTA } from "./actions";
 
 export const template: (
   stepper: StepperItem[],
-  stepResponseObject: { [key in string]: string }
+  //stepResponseObject: { [key in string]: string }
 ) => TemplateSchema = (stepper) => {
   return {
     layout: <Layout> {
@@ -24,7 +24,7 @@ export const template: (
         { id: "topSpace1", type: WIDGET.SPACE },
         { id: "panNumberInput", type: WIDGET.INPUT },
         { id: "space0", type: WIDGET.SPACE },
-        { id: "fullNameInput", type: WIDGET.INPUT },
+       // { id: "fullNameInput", type: WIDGET.INPUT },
         { id: "panNumberSubText", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "mobileNumberInput", type: WIDGET.INPUT },
@@ -35,7 +35,7 @@ export const template: (
     },
     datastore: <Datastore> {
       header: <HeaderProps & WidgetProps>{
-        title: "Create new application",
+        title: "Create new applications",
         type: HeaderTypeTokens.verification,
         stepperProps: <StepperProps>{
           data: stepper,
@@ -43,7 +43,7 @@ export const template: (
         },
         action: {
           type: ACTION.GO_BACK,
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
+          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: {},
         },
       },
@@ -218,20 +218,10 @@ export const template: (
   }}
 }
 
-export const DistributorBasicDetailsInfo: PageType<any> = {
-    onLoad: async ({ network }) => {
-    const stepper: StepperItem[] = await horizontalStepperRepo();
-    const user = await SharedPropsService.getUser();
-    const applicationId = user.linkedApplications[0].applicationId;
-
-    const response = await network.get(
-      `${api.additionalDetails}${applicationId}`,
-      { headers: await getAppHeader() }
-    );
-    
-
-    const stepResponseObject = _.get(user, "data.stepResponseObject", {});
-    return Promise.resolve(template(stepper, stepResponseObject));
+export const distBasicDetailsMF: PageType<any> = {
+    onLoad: async () => {
+    const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
+    return Promise.resolve(template(stepper));
     },
     actions: {
       [ACTION.CHANGE_INPUT]: onChangeInput,
