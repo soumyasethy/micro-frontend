@@ -17,37 +17,27 @@ import {
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
-  IconAlignmentTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
-  InputStateToken,
-  InputTypeToken,
-  KeyboardTypeToken,
   ShimmerIconProps,
   ShimmerIconSizeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
-  StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
   StepperItem,
   StepperProps,
-  StepperStateToken,
   StepperTypeTokens,
-  TextInputProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, LimitPayload } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
-import { fetchLinkRepo } from "./repo";
 import { authenticateRepayment, goBack, AutoPayPoll } from "./actions";
-import { User } from "../../login/otp_verify/types";
-import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   stepper: StepperItem[],

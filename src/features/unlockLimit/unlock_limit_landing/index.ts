@@ -21,6 +21,7 @@ import {
   ImageProps,
   LottieProps,
   LottieSizeTokens,
+  LottieTokens,
   ResizeModeToken,
   ShadowTypeTokens,
   SizeTypeTokens,
@@ -61,7 +62,7 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
   },
   datastore: <Datastore>{
     lottie: <LottieProps>{
-      uri: require("./fall-from-the-sky.json"),
+      uri: LottieTokens.Confetti,
       size: LottieSizeTokens.FULL,
       autoplay: true,
       loop: true,

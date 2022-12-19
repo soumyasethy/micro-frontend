@@ -80,7 +80,7 @@ export const template: () => TemplateSchema = () => {
           { id: "Card2", type: WIDGET.CARD },
         ],
       },
-      Card1: <CardProps>{
+      Card1: <CardProps & WidgetProps>{
         bgColor: ColorTokens.White,
         body: {
           widgetItems: [
@@ -88,6 +88,10 @@ export const template: () => TemplateSchema = () => {
             { id: "startSpace", type: WIDGET.SPACE },
             { id: "startDivider", type: WIDGET.DIVIDER },
           ],
+        },
+        action: {
+          payload: {},
+          type: ACTION.GO_TO_PRIVACY,
         },
       },
       startDetails: <StackProps>{
@@ -196,11 +200,7 @@ export const template: () => TemplateSchema = () => {
           { id: "privacyName", type: WIDGET.ICON },
           { id: "privacySpace", type: WIDGET.SPACE },
           { id: "titleprivacy", type: WIDGET.TEXT },
-        ],
-        action: {
-          payload: {},
-          type: ACTION.GO_TO_PRIVACY,
-        },
+        ]
       },
       privacyName: <IconProps>{
         name: IconTokens.Locked,
