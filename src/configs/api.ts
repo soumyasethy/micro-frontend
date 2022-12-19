@@ -21,6 +21,7 @@ export const partnerApi = {
   verifyOtp: `${config.URL}/api/client/auth/verifyOtp/`,
   userContext:`${config.URL}/app/partner/user`,
   accountAttributes: `${config.URL}/app/partner/accountAttributes/`,
+  customer: `${config.URL}/app/partner/`
 };
 
 export const api = {

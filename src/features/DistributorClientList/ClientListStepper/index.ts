@@ -59,7 +59,7 @@ export const template:(
 
   return {
     layout: <Layout>{
-      id: ROUTE.CAROUSAL_PAGE,
+      id: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },

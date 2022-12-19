@@ -56,8 +56,6 @@ import { privacyPolicyMF } from "./features/privacy_policy";
 import { kycAdditionalDetailsMF } from "./features/kyc/kyc_additional_details";
 //import { unlockLimitLandingMF } from "./features/mfPledge/unlock_limit_landing";
 import { DistributorClientListMF } from "./features/DistributorClientList/ClientList";
-import { DistributorBasicDetailsInfo } from "./features/Dist_basicDetails/basicDetailsInfo";
-import { kycDocumentUploadMF } from "./features/kyc/kyc_document_upload";
 import { checkingLimitMf } from "./features/mfFetch/checking_limit";
 import { portfolioReadOnlyMF } from "./features/mfPledge/portfolio_readonly";
 import { verificationFailedMFNew } from "./features/mfFetch/verification_failed_new";
@@ -81,7 +79,10 @@ import { distributorPortfolioMF } from "./features/fetchDistributorPortfolio";
 import { portfolioStartMF } from "./features/selectPortfolio/porftfolioStart";
 import { selectDistributorPortfolioMF } from "./features/selectPortfolio/selectDistributorPortfolio";
 import { investorMF } from "./features/investor";
+import { distBasicDetailsMF } from "./features/Dist_basicDetails/basicDetailsInfo";
+import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
 import { nameMF } from "./features/enter_name";
+import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
 
 
 export const ROUTE_MAP: RouteMap = {
@@ -149,7 +150,6 @@ export const ROUTE_MAP: RouteMap = {
   //[ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
   [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMFV2,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
-  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]: DistributorBasicDetailsInfo,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
   [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
@@ -173,4 +173,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO]: selectDistributorPortfolioMF,
   [ROUTE.INVESTOR]: investorMF,
   [ROUTE.ENTER_NAME]: nameMF,
+  [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
+  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]:distBasicDetailsMF,
+  [ROUTE.DETAILS_CONFIRM]: detailsConfirmMF,
 };
