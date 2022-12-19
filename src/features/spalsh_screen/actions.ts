@@ -26,7 +26,6 @@ export const SplashAction: ActionFunction<any> = async (
       /****
        * ADD YOUR CUSTOM ROUTE TO NAVIGATE
        * ****/
-      return await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST, {})
 
       if (user.linkedApplications[0].applicationState === "COMPLETED") {
         await navigate(ROUTE.DASHBOARD);
