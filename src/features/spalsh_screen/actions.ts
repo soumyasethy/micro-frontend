@@ -15,11 +15,13 @@ export const SplashAction: ActionFunction<any> = async (
   // if (isSeen) {
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
   if (accessToken) {
-    const userContextResponse = await network.post(
-      api.userContext,
-      {},
-      { headers: await getAppHeader() }
-    );
+    const body = {
+      onboardingPartnerCode: await SharedPropsService.getPartnerRefCode(),
+    };
+    console.warn("SplashAction body", body);
+    const userContextResponse = await network.post(api.userContext, body, {
+      headers: await getAppHeader(),
+    });
     if (userContextResponse.status === 200) {
       const user: User = userContextResponse.data;
       await SharedPropsService.setUser(user);

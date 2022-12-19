@@ -30,7 +30,7 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
     });
     const userContextResponse = await network.post(
       api.userContext,
-      {},
+      { onboardingPartnerCode: await SharedPropsService.getPartnerRefCode() },
       { headers: await getAppHeader() }
     );
     const user: User = userContextResponse.data;
