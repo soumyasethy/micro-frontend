@@ -4,7 +4,7 @@ import { StepStatusMap, User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
-import {StoreKey} from "./api";
+import { StoreKey } from "./api";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -68,7 +68,11 @@ export const stepperRepo = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
-      StepperStateToken.COMPLETED
+      StepperStateToken.COMPLETED &&
+    (user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
+      StepperStateToken.COMPLETED ||
+      user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
+        StepperStateToken.SKIPPED)
   ) {
     KYC_VERIFICATION = StepperStateToken.COMPLETED;
   } else if (
@@ -81,6 +85,8 @@ export const stepperRepo = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
+      StepperStateToken.NOT_STARTED &&
+    user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
       StepperStateToken.NOT_STARTED
   ) {
     KYC_VERIFICATION = StepperStateToken.NOT_STARTED;
@@ -94,6 +100,8 @@ export const stepperRepo = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION
   ) {
     KYC_VERIFICATION = StepperStateToken.PENDING_MANUAL_VERIFICATION;
@@ -286,6 +294,8 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     return { routeId: ROUTE.KYC_PHOTO_VERIFICATION, params: {} };
   } else if (currentStepId === ROUTE.KYC_ADDITIONAL_DETAILS) {
     return { routeId: ROUTE.KYC_ADDITIONAL_DETAILS, params: {} };
+  } else if (currentStepId === ROUTE.KYC_DOCUMENT_UPLOAD) {
+    return { routeId: ROUTE.KYC_DOCUMENT_UPLOAD, params: {} };
   } else if (currentStepId === ROUTE.KYC_SUMMARY) {
     return { routeId: ROUTE.KYC_SUMMARY, params: {} };
   } else if (currentStepId === ROUTE.BANK_ACCOUNT_VERIFICATION) {
@@ -360,6 +370,7 @@ export const nextStepId = async (
       currentStepId === "KYC_PHOTO_VERIFICATION" ||
       currentStepId === "KYC_AADHAAR_VERIFICATION" ||
       currentStepId === "KYC_ADDITIONAL_DETAILS" ||
+      currentStepId === "KYC_DOCUMENT_UPLOAD" ||
       currentStepId === "KYC_SUMMARY" ||
       currentStepId === "BANK_ACCOUNT_VERIFICATION" ||
       currentStepId === "MANDATE_SETUP" ||

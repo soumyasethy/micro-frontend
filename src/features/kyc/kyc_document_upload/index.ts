@@ -12,8 +12,8 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
-  DocumentPickerProps,
-  DocumentPickerState,
+  // DocumentPickerProps,
+  // DocumentPickerState,
   DropDownInputProps,
   DropDownItemProps,
   FontFamilyTokens,
@@ -36,18 +36,18 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, DocPayload, DropDownPayload } from "./types";
+import { ACTION, DropDownPayload } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
-import { getAppHeader } from "../../../configs/config";
-import { api } from "../../../configs/api";
-import _ from "lodash";
-import SharedPropsService from "../../../SharedPropsService";
-import { documentPickerAction, GoBackAction } from "./actions";
+import {
+  documentPickerAction,
+  GoBackAction,
+  onSelectDocumentType,
+  triggerAction,
+} from "./actions";
 
-export const template: (
-  stepper: StepperItem[],
-  stepResponseObject: { [key in string]: string }
-) => TemplateSchema = (stepper) => {
+export const template: (stepper: StepperItem[]) => TemplateSchema = (
+  stepper
+) => {
   return {
     layout: <Layout>{
       id: ROUTE.KYC_DOCUMENT_UPLOAD,
@@ -58,12 +58,14 @@ export const template: (
         { id: "title", type: WIDGET.TEXT },
         { id: "spaceSubTitle", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
+        { id: "spaceSecondarySubTitle", type: WIDGET.SPACE },
+        { id: "secondarySubTitle", type: WIDGET.TEXT },
         { id: "subTitleSpace", type: WIDGET.SPACE },
         { id: "dropDown", type: WIDGET.DROPDOWN_INPUT },
         { id: "dropDownSpace", type: WIDGET.SPACE },
-        { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
-        { id: "frontSideSpace", type: WIDGET.SPACE },
-        { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
+        // { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
+        // { id: "frontSideSpace", type: WIDGET.SPACE },
+        // { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
         {
           id: "stackBottom",
           type: WIDGET.STACK,
@@ -89,31 +91,40 @@ export const template: (
         },
       },
       title: <TypographyProps>{
-        label: "Additional information",
+        label: "Upload your ID proof",
         color: ColorTokens.Grey_Night,
         fontSize: FontSizeTokens.MD,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
         lineHeight: 12,
       },
-      spaceSubTitle: <SpaceProps>{ size: SizeTypeTokens.XL },
+      spaceSubTitle: <SpaceProps>{ size: SizeTypeTokens.LG },
+      spaceSecondarySubTitle: <SpaceProps>{ size: SizeTypeTokens.LG },
       spaceInput: <SpaceProps>{ size: SizeTypeTokens.XL },
       subTitle: <TypographyProps>{
-        label: "Select ID proof for upload",
+        label: "Supported document formats : PNG/JPEG",
         fontSize: FontSizeTokens.SM,
-        color: ColorTokens.Grey_Night,
+        color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "600",
-        lineHeight: 24,
+        fontWeight: "400",
+        lineHeight: 18,
       },
-      subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      secondarySubTitle: <TypographyProps>{
+        label: "File size < 1 MB",
+        fontSize: FontSizeTokens.SM,
+        color: ColorTokens.Grey_Charcoal,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        lineHeight: 18,
+      },
+      subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       dropDown: <DropDownInputProps & WidgetProps>{
         label: "Select ID proof for upload",
         data: <DropDownItemProps[]>[
-          { label: "Aadhar Card", value: "AADHAR_CARD" },
+          { label: "Aadhar Card", value: "AADHAAR" },
           { label: "Driving License", value: "DRIVING_LICENSE" },
           { label: "Passport", value: "PASSPORT" },
-          { label: "Voter ID Card", value: "VOTER_ID_CARD" },
+          { label: "Voter ID Card", value: "VOTER_ID" },
         ],
         action: {
           type: ACTION.SELECT_DOC_TYPE,
@@ -122,32 +133,6 @@ export const template: (
             widgetID: "dropDown",
           },
           routeId: ROUTE.KYC_DOCUMENT_UPLOAD,
-        },
-      },
-      frontSide: <DocumentPickerProps & WidgetProps>{
-        titleLabel: "Front side",
-        ctaLabel: "Upload",
-        state: DocumentPickerState.DEFAULT,
-        action: {
-          type: ACTION.SELECT_DOCUMENT,
-          routeId: ROUTE.KYC_DOCUMENT_UPLOAD,
-          payload: <DocPayload>{
-            value: { content: null, name: null },
-            widgetID: "frontSide",
-          },
-        },
-      },
-      backSide: <DocumentPickerProps & WidgetProps>{
-        titleLabel: "Back side",
-        ctaLabel: "Upload",
-        state: DocumentPickerState.DEFAULT,
-        action: {
-          type: ACTION.SELECT_DOCUMENT,
-          routeId: ROUTE.KYC_DOCUMENT_UPLOAD,
-          payload: <DocPayload>{
-            value: { content: null, name: null },
-            widgetID: "backSide",
-          },
         },
       },
       continue: <ButtonProps & WidgetProps>{
@@ -207,19 +192,12 @@ export const template: (
 export const kycDocumentUploadMF: PageType<any> = {
   onLoad: async ({}) => {
     const stepper: StepperItem[] = await horizontalStepperRepo();
-    // const user = await SharedPropsService.getUser();
-    // const applicationId = user.linkedApplications[0].applicationId;
-
-    // const response = await network.get(
-    //   `${api.additionalDetails}${applicationId}`,
-    //   { headers: await getAppHeader() }
-    // );
-
-    const stepResponseObject = _.get({}, "data.stepResponseObject", {});
-    return Promise.resolve(template(stepper, stepResponseObject));
+    return Promise.resolve(template(stepper));
   },
   actions: {
     [ACTION.GO_BACK]: GoBackAction,
     [ACTION.SELECT_DOCUMENT]: documentPickerAction,
+    [ACTION.SELECT_DOC_TYPE]: onSelectDocumentType,
+    [ACTION.TRIGGER_CTA]: triggerAction,
   },
 };

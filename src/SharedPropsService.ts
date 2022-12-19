@@ -17,6 +17,7 @@ type GlobalProps = {
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
   userType:USERTYPE;
+  partnerRefCode?: string;
 };
 let _globalProps: GlobalProps = {
   user: {},
@@ -42,6 +43,13 @@ async function getAccountNumber() {
 }
 async function setGlobalProps(props: GlobalProps) {
   _globalProps = await props;
+}
+async function getPartnerRefCode() {
+  console.warn("*** getPartnerRefCode ***", _globalProps.partnerRefCode);
+  return _globalProps.partnerRefCode;
+}
+async function setPartnerRefCode(partnerRefCode: string) {
+  _globalProps.partnerRefCode = partnerRefCode;
 }
 
 function getPropsValue(key?: string) {
@@ -133,5 +141,7 @@ export default {
   setPledgeFirstTime,
   isPledgeFirstTime,
   setUserType,
-  getUserType
+  getUserType,
+  setPartnerRefCode,
+  getPartnerRefCode,
 };

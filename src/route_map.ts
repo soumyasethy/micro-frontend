@@ -21,10 +21,10 @@ import { bankSearchBranchMF } from "./features/bankVerify/bank_search_branch";
 import { kycSummaryMf } from "./features/kyc/kyc_summary";
 import { kycStepperMF } from "./features/kyc/kyc_stepper";
 import { kycAfterCameraMF } from "./features/kyc/kyc_photo_verify";
-import { cameraOpenMF } from "./features/kyc/kyc_photo_verification";
+import { cameraOpenMF } from "./features/kyc/kyc_photo_init";
 import { kycDigiLockerMF } from "./features/kyc/kyc_init";
 import { alertMF } from "./features/popup_loader";
-import { cameraCaptureMF } from "./features/kyc/kyc_photo_init";
+import { cameraCaptureMF } from "./features/kyc/kyc_photo_upload";
 import { splashScreenMF } from "./features/spalsh_screen";
 import { unlockLimitMF } from "./features/unlockLimit/unlock_limit";
 import { pledgeVerifyMF } from "./features/unlockLimit/pledge_verify";
@@ -65,8 +65,11 @@ import { distributorPortfolioMF } from "./features/fetchDistributorPortfolio";
 import { portfolioStartMF } from "./features/selectPortfolio/porftfolioStart";
 import { selectDistributorPortfolioMF } from "./features/selectPortfolio/selectDistributorPortfolio";
 import { investorMF } from "./features/investor";
+import { DistributorClientListMF } from "./features/DistributorClientList/ClientList";
+import { DistributorBasicDetailsInfo } from "./features/Dist_basicDetails/basicDetailsInfo";
 import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
 import { nameMF } from "./features/enter_name";
+
 
 
 export const ROUTE_MAP: RouteMap = {
@@ -137,5 +140,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.INVESTOR]: investorMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.ENTER_NAME]: nameMF,
-  
+  [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
+  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]:DistributorBasicDetailsInfo,
+  [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF
 };

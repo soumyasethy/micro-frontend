@@ -15,17 +15,19 @@ export const SplashAction: ActionFunction<any> = async (
   // if (isSeen) {
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
   if (accessToken) {
-    const userContextResponse = await network.post(
-      api.userContext,
-      {},
-      { headers: await getAppHeader() }
-    );
+    const body = {}; /*** NOT PASSING REF CODE HERE ***/
+    console.warn("SplashAction body", body);
+    const userContextResponse = await network.post(api.userContext, body, {
+      headers: await getAppHeader(),
+    });
     if (userContextResponse.status === 200) {
       const user: User = userContextResponse.data;
       await SharedPropsService.setUser(user);
       /****
        * ADD YOUR CUSTOM ROUTE TO NAVIGATE
        * ****/
+      return await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST, {})
+
       if (user.linkedApplications[0].applicationState === "COMPLETED") {
         await navigate(ROUTE.DASHBOARD);
       } else {
