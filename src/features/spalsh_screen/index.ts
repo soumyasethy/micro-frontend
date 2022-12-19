@@ -22,6 +22,8 @@ import {
 import { ROUTE } from "../../routes";
 import { ACTION } from "./types";
 import { SplashAction } from "./actions";
+import _ from "lodash";
+import SharedPropsService from "../../SharedPropsService";
 
 const template: TemplateSchema = {
   layout: <Layout>{
@@ -56,8 +58,20 @@ const template: TemplateSchema = {
 };
 
 export const splashScreenMF: PageType<any> = {
-  onLoad: async (_, { ...props }) => {
-    console.warn("splashScreenMF initial route props", props);
+  onLoad: async (__, { ...props }) => {
+    /*** Get all params sent via URL ****/
+    //Example-1
+    //http://localhost:3000/partner/dashboard/helloworld
+    // access route.params -> {params: 'helloworld'}
+    //Example-2
+    //http://localhost:3000?partnerRefCode=12345
+    // access route.params -> {ref_code: '12345'}
+    console.warn("splash mf partnerRefCode-> ", props);
+    const partnerRefCode: string = _.get(props, "partnerRefCode", null);
+    if (partnerRefCode) {
+      await SharedPropsService.setPartnerRefCode(partnerRefCode);
+    }
+
     return Promise.resolve(template);
   },
   actions: {

@@ -59,6 +59,7 @@ import { privacyPolicyMF } from "./features/privacy_policy";
 import {kycAdditionalDetailsMF} from "./features/kyc/kyc_additional_details";
 import { unlockLimitLandingMF } from "./features/unlockLimit/unlock_limit_landing";
 import { DistributorClientListMF } from "./features/DistributorClientList/ClientList";
+import { DistributorBasicDetailsInfo } from "./features/Dist_basicDetails/basicDetailsInfo";
 import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
 
 
@@ -122,5 +123,6 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.KYC_ADDITIONAL_DETAILS]: kycAdditionalDetailsMF,
   [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
+  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]:DistributorBasicDetailsInfo,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF
 };
