@@ -6,12 +6,15 @@ import {
   InputStateToken,
   TextInputProps,
 } from "@voltmoney/schema";
-import { AadharInputPayload, ACTION } from "./types";
+import { AadharInputPayload } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
-import { aadharVerifyRepo } from "./repo";
-import { AlertNavProps } from "../../popup_loader/types";
-import {AadharInitPayload} from "../kyc_init/types";
+import { AadharInitPayload } from "../kyc_init/types";
+import { api } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
+import _ from "lodash";
+import { nextStepCredStepper } from "../../../configs/utils";
+import { User } from "../../login/otp_verify/types";
 
 let aadharNumber = "";
 export const onChangeAadhar: ActionFunction<AadharInputPayload> = async (
@@ -47,47 +50,42 @@ export const goBack: ActionFunction<AadharInputPayload> = async (
 export const triggerCTA: ActionFunction<AadharInputPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore }
+  { network, navigate, setDatastore }
 ): Promise<any> => {
   if (action.payload.value.length === 6) {
     await setDatastore(ROUTE.KYC_AADHAAR_VERIFICATION_OTP, "input", <
       TextInputProps
     >{ state: InputStateToken.LOADING });
-    const response = await aadharVerifyRepo(
-      (
-        await SharedPropsService.getUser()
-      ).linkedApplications[0].applicationId,
-      action.payload.value
+    const user: User = await SharedPropsService.getUser();
+
+    const applicationId = user.linkedApplications[0].applicationId;
+
+    const response = await network.post(
+      api.aadharVerify,
+      { applicationId, otp: action.payload.value },
+      { headers: await getAppHeader() }
     );
 
-    if (response.hasOwnProperty("status") && response.status === "SUCCESS") {
+    if (response.status === 200) {
+      const currentStepId = _.get(
+        response,
+        "data.updatedApplicationObj.currentStepId"
+      );
+      user.linkedApplications[0].currentStepId = currentStepId;
+      await SharedPropsService.setUser(user);
+
       await setDatastore(ROUTE.KYC_AADHAAR_VERIFICATION_OTP, "input", <
         TextInputProps
       >{ state: InputStateToken.SUCCESS });
-      await navigate(ROUTE.KYC_PHOTO_VERIFICATION);
-    } else if (response.message) {
-      await setDatastore(ROUTE.KYC_AADHAAR_VERIFICATION_OTP, "input", <
-        TextInputProps
-      >{ state: InputStateToken.ERROR });
-      await navigate(ROUTE.ALERT_PAGE, {
-        alertProps: <AlertNavProps>{
-          title: response.statusCode,
-          subTitle: response.message,
-          ctaLabel: "Got It",
-          ctaAction: {
-            type: ACTION.GO_BACK,
-            routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
-            payload: {},
-          },
-        },
-      });
+      const routeObj = await nextStepCredStepper();
+      await navigate(routeObj.routeId, routeObj.params);
     }
   }
 };
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
-    action,
-    _datastore,
-    { goBack }
+  action,
+  _datastore,
+  { goBack }
 ): Promise<any> => {
   await goBack();
 };

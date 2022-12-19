@@ -67,24 +67,6 @@ export const template: (
   repaymentAmount,
   isPendingDisbursalApproval
 ) => {
-  // const _generateRepaymentDS =
-  //   repaymentAmount > 0
-  //     ? {
-  //         repaymentCard: <CardProps>{
-  //           bgColor: ColorTokens.White,
-  //           body: {
-  //             widgetItems: [
-  //               {
-  //                 id: "repaymentItem",
-  //                 type: WIDGET.REPAYMENT,
-
-  //               },
-  //             ],
-  //           },
-  //         },
-  //       }
-  //     : {};
-
   const _generateRepaymentDS =
     repaymentAmount > 0
       ? {
@@ -270,11 +252,6 @@ export const template: (
           "Your verification is in progress. Meanwhile you can’t withdraw the amount",
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.System_Warning_BG,
-        // actionIcon: <IconProps>{
-        //   name: IconTokens.Cancel,
-        //   size: IconSizeTokens.MD,
-        //   color: ColorTokens.Grey_Night,
-        // },
       },
       amountItem: <AmountCardProps>{
         title: "Available cash",
@@ -461,7 +438,8 @@ export const template: (
 };
 
 export const dashboardMF: PageType<any> = {
-  onLoad: async ({ network }) => {
+  onLoad: async ({ network },{...params}) => {
+    console.warn('Dashboard Navigation params', params);
     const userContextResponse = await network.post(
       api.userContext,
       {},
@@ -478,8 +456,13 @@ export const dashboardMF: PageType<any> = {
       "linkedCredits[0].actualLoanAmount",
       0
     );
+    const repaymentAmount: number = _.get(
+      user,
+      "linkedCredits[0].principalOutStandingAmount",
+      0
+    );
     await SharedPropsService.setUser(user);
-    let repaymentAmount = actualLoanAmount - availableCreditAmount;
+    //let repaymentAmount = actualLoanAmount - availableCreditAmount;
     let isPendingDisbursalApproval =
       user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_APPROVAL";
 

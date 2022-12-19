@@ -1,6 +1,7 @@
 export enum ACTION {
   UNLOCK_LIMIT = "UNLOCK_LIMIT",
   MODIFY_LIMIT = "MODIFY_LIMIT",
+  NAV_NEXT = "NAV_NEXT",
 }
 
 export type ContinuePayload = {

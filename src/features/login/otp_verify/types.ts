@@ -83,7 +83,8 @@ export interface LinkedApplication {
 export interface StepStatusMap {
   KYC_PHOTO_VERIFICATION?: StepperStateToken;
   KYC_SUMMARY?: StepperStateToken;
-  MF_PLEDGING?: StepperStateToken;
+  MF_FETCH_PORTFOLIO: StepperStateToken;
+  MF_PLEDGE_PORTFOLIO: StepperStateToken;
   CREDIT_APPROVAL?: StepperStateToken;
   KYC_AADHAAR_VERIFICATION?: StepperStateToken;
   MANDATE_SETUP?: StepperStateToken;
@@ -92,6 +93,7 @@ export interface StepStatusMap {
   AGREEMENT_SIGN?: StepperStateToken;
   BANK_ACCOUNT_VERIFICATION?: StepperStateToken;
   KYC_ADDITIONAL_DETAILS?: StepperStateToken;
+  KYC_DOCUMENT_UPLOAD?: StepperStateToken;
 }
 
 export interface LinkedBorrowerAccount {

@@ -3,5 +3,7 @@ export enum ACTION {
   PHOTO_RETAKE = "PHOTO_RETAKE",
   GO_BACK = "GO_BACK",
 }
-export type TestActionPayload = {};
-export type GoBackActionPayload = {};
+
+export type PhotoVerifyPayload = {
+  base64Image: string;
+}

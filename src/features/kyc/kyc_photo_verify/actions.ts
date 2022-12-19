@@ -5,7 +5,9 @@ import SharedPropsService from "../../../SharedPropsService";
 import { ButtonProps, CameraPickerProps } from "@voltmoney/schema";
 import { AadharInitPayload } from "../kyc_init/types";
 import { ROUTE } from "../../../routes";
-import { stopCamera } from "../../../configs/utils";
+import { User } from "../../login/otp_verify/types";
+import { nextStepCredStepper } from "../../../configs/utils";
+import _ from "lodash";
 
 export const PhotoVerifyAction: ActionFunction<any> = async (
   action,
@@ -15,27 +17,54 @@ export const PhotoVerifyAction: ActionFunction<any> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  await network
-    .post(
-      api.photoVerify,
+  const user: User = await SharedPropsService.getUser();
+  const imageName = `${user.linkedApplications[0].applicationId}_${user.linkedBorrowerAccounts[0].accountHolderPhoneNumber}.txt`;
+
+  /** Generate Image Upload Link */
+  const imageUploadLinkResponse = await network.post(
+    api.photoInit,
+    {
+      applicationId: user.linkedApplications[0].applicationId,
+      imageName,
+      imageType: "image/jpeg",
+    },
+    { headers: await getAppHeader() }
+  );
+  if (imageUploadLinkResponse.status === 200) {
+    /** Image Link Generated Successful **/
+    if (!imageUploadLinkResponse.data.stepResponseObject) return;
+    /** Upload Image to Generated Link **/
+    const imageUploadResponse = await network.put(
+      imageUploadLinkResponse.data.stepResponseObject,
+      action.payload.base64Image,
       {
-        applicationId: (
-          await SharedPropsService.getUser()
-        ).linkedApplications[0].applicationId,
-      },
-      { headers: await getAppHeader() }
-    )
-    .then(async (response) => {
-      if (response.status === 200) {
-        stopCamera();
-        await navigate(response.data.updatedApplicationObj.currentStepId);
+        headers: { "Content-Type": "image/jpeg" },
       }
-    })
-    .finally(async () => {
-      await setDatastore(action.routeId, "continue", <ButtonProps>{
-        loading: false,
-      });
+    );
+    if (imageUploadResponse.status === 200) {
+      /** Image Uploaded Successfully **/
+      const imageVerifyResponse = await network.post(
+        api.photoVerify,
+        {
+          applicationId: user.linkedApplications[0].applicationId,
+        },
+        { headers: await getAppHeader() }
+      );
+      if (imageVerifyResponse.status === 200) {
+        /** Photo Verification Successful **/
+        user.linkedApplications[0] = _.get(
+          imageVerifyResponse,
+          "data.updatedApplicationObj"
+        );
+        await SharedPropsService.setUser(user);
+        const routeObj = await nextStepCredStepper();
+        await navigate(routeObj.routeId, routeObj.params);
+      }
+    }
+    await setDatastore(action.routeId, "continue", <ButtonProps>{
+      loading: false,
     });
+  }
 };
 export const RetakePhoto: ActionFunction<any> = async (
   action,

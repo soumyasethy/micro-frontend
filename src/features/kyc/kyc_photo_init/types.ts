@@ -1,5 +1,5 @@
 export enum ACTION {
   CAMERA_ACTION = "CAMERA_ACTION",
-  CANCEL_CAMERA = "CANCEL_CAMERA",
+  GO_BACK = "GO_BACK",
 }
-export type CameraPayload = { value: any };
+export type TestActionPayload = {};

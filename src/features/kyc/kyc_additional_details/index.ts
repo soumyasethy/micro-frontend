@@ -60,6 +60,10 @@ const qualificationInputData: Array<DropDownItemProps> = [
   { label: "Diploma", value: EDUCATION.DIPLOMA },
   { label: "Graduate", value: EDUCATION.UNDER_GRADUATE },
   { label: "Post graduate", value: EDUCATION.POST_GRADUATE },
+  { label: "MBA", value: EDUCATION.MBA },
+  { label: "PHD", value: EDUCATION.PHD },
+  { label: "Professional", value: EDUCATION.PROFESSIONAL },
+  { label: "Others", value: EDUCATION.OTHERS },
 ];
 export const template: (
   stepper: StepperItem[],

@@ -20,9 +20,10 @@ export const BASE_URL = {
   PRODUCTION: "https://api.voltmoney.in",
 };
 export const config = {
-  URL: BASE_URL.STAGING,
+  URL: BASE_URL.STAGING, /// change this to BASE_URL.PRODUCTION for production
 };
 export const StoreKey = {
+  isPledgeFirstTime: "isPledgeFirstTime",
   isLoadedFirstTime: "is_Loaded_First_Time",
   accessToken: "access_token",
   refreshToken: "refresh_token",
@@ -62,4 +63,6 @@ export const api = {
   borrowerApplication: `${config.URL}/app/borrower/application/`,
   additionalDetails: `${config.URL}/app/borrower/application/additionalDetails/`,
   pdfLink: `${config.URL}/app/borrower/lms/transactions/`,
+  kycDocument: `${config.URL}/app/borrower/application/kyc/document/`,
+  documentValidate: `${config.URL}/app/borrower/application/kyc/document/validate/`,
 };
