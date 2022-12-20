@@ -31,9 +31,8 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, OtpPledgePayload } from "./types";
-import { goBack, NavigateNext, verifyOTP } from "./actions";
+import { goBack, NavigateNext, resendOTP, verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
-import { sendOtp } from "../pledge_confirmation/actions";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
@@ -139,15 +138,11 @@ export const template: (
         },
         routeId: ROUTE.PLEDGE_VERIFY,
       },
-      // otpAction: {
-      //     type: ACTION.RESEND_OTP_NUMBER,
-      //     payload: <OtpPayload>{
-      //       value: stepResponseObject,
-      //       widgetId: "input",
-      //       isResend: true,
-      //     },
-      //     routeId: ROUTE.OTP_VERIFY,
-      //   },
+      otpAction: {
+          type: ACTION.RESEND_OTP_NUMBER,
+          payload: {},
+          routeId: ROUTE.PLEDGE_VERIFY,
+        },
     },
     inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     message: <TypographyProps>{
@@ -169,7 +164,7 @@ export const pledgeVerifyMF: PageType<any> = {
 
   actions: {
     [ACTION.PLEDGE_VERIFY]: verifyOTP,
-    [ACTION.RESEND_OTP_NUMBER]: sendOtp,
+    [ACTION.RESEND_OTP_NUMBER]: resendOTP,
     [ACTION.GO_BACK]: goBack,
     [ACTION.NAV_NEXT]: NavigateNext,
   },
