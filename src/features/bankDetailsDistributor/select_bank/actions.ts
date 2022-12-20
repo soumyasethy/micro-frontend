@@ -8,6 +8,7 @@ import {
   GridImageItemProps,
   GridItemTypeTokens,
   HeaderProps,
+  TextInputProps,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { getBankIconUrl } from "../../../configs/utils";
@@ -23,16 +24,19 @@ export const GoBackAction: ActionFunction<
 };
 export const NavSearchIfscBranchInfoAction: ActionFunction<
   NavSearchIfscBranchInfoActionPayload
-> = async (action, _datastore, { navigate }): Promise<any> => {
+> = async (action, _datastore, { setDatastore,navigate,goBack }): Promise<any> => {
   const banksMap = {
     ...action.payload.bankRepo.ALLBANKS,
     ...action.payload.bankRepo.POPULAR,
   };
   const bankCode = getKeyByValue(banksMap, action.payload.value);
-  await navigate(ROUTE.DIST_BANK_ACCOUNT_ADD, {
-    bankCode,
-    bankName: action.payload.value,
-  });
+  await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD,"bankInput",<TextInputProps>{value:action.payload.value});
+  await goBack();
+  //await setDataStore(ROUTE.DIST_BANK_ACCOUNT_ADD,"bankInput",<TextInputProps>{value:action.payload.value});
+  // await navigate(ROUTE.DIST_BANK_ACCOUNT_ADD, {
+  //   bankCode,
+  //   bankName: action.payload.value,
+  // });
 };
 
 export const SearchAction: ActionFunction<SearchActionPayload> = async (

@@ -60,7 +60,9 @@ type GlobalProps = {
   listItemDataCAS: any;
   desiredPortfolio?: any;
  // userType:USERTYPE;
-  userType:string
+  userType:string;
+  partnerRefCode?: string;
+  applicationId?:string;
 };
 let _globalProps: GlobalProps = {
   buildType: BUILD_TYPE.BORROWER_STAGING,
@@ -105,6 +107,7 @@ let _globalProps: GlobalProps = {
  // userType:USERTYPE.BORROWER
   userType:"PARTNER",
  // userType:USERTYPE.BORROWER
+  applicationId:""
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -151,6 +154,13 @@ async function setUserType(userType: USERTYPE){
 
 async function getUserType(){
   return _globalProps.userType;
+}
+
+async function setApplicationId(applicationId: string) {
+  _globalProps.applicationId = applicationId;
+}
+async function getApplicationId() {
+  return _globalProps.applicationId;
 }
 
 async function setAccountNumber(accountNumber: string) {
@@ -371,5 +381,7 @@ export default {
   setDesiredPortfolio,
   getDesiredPortfolio,
   setUserType,
-  getUserType
+  getUserType,
+  setApplicationId,
+  getApplicationId
 };

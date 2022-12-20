@@ -178,5 +178,5 @@ export const distBankSelectMF: PageType<any> = {
     [ACTION.SEARCH_BANK]: SearchAction,
     [ACTION.NAV_IFSC_SEARCH_BRANCH_INFO]: NavSearchIfscBranchInfoAction,
   },
-  clearPrevious: true,
+ // clearPrevious: false,
 };

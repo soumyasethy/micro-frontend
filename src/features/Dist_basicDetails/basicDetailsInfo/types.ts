@@ -4,6 +4,7 @@ export enum ACTION {
     DISABLE_CONTINUE = "DISABLE_CONTINUE",
     ENABLE_CONTINUE = "ENABLE_CONTINUE",
     TRIGGER_CTA = "TRIGGER_CTA",
+    ENTER_DOB = "ENTER_DOB",
 }
 
 export type InputPayload = {

@@ -83,7 +83,8 @@ import { distBasicDetailsMF } from "./features/Dist_basicDetails/basicDetailsInf
 import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
 import { nameMF } from "./features/enter_name";
 import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
-
+import { basicDetailsStartMF } from "./features/Dist_basicDetails/basicDetailsStart";
+import { DistributorClientListStepperMF } from "./features/DistributorClientList/ClientListStepper";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -176,4 +177,6 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
   [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]:distBasicDetailsMF,
   [ROUTE.DETAILS_CONFIRM]: detailsConfirmMF,
+  [ROUTE.BASIC_DETAILS_START]: basicDetailsStartMF,
+  [ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER]: DistributorClientListStepperMF
 };
