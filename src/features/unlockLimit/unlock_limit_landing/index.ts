@@ -121,9 +121,7 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
     unlockItem: <ButtonProps & WidgetProps>{
       label: "Continue",
       fontFamily: FontFamilyTokens.Inter,
-      fontSize: SizeTypeTokens.LG,
       type: ButtonTypeTokens.LargeFilled,
-
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.UNLOCK_LIMIT,

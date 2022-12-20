@@ -116,7 +116,6 @@ export const template: (
     unlockItem: <ButtonProps & WidgetProps>{
       label: "Unlock limit",
       fontFamily: FontFamilyTokens.Inter,
-      fontSize: SizeTypeTokens.LG,
       type: ButtonTypeTokens.LargeFilled,
       icon: {
         name: IconTokens.Lock,
