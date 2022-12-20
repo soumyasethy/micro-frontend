@@ -30,13 +30,13 @@ import { changePanNo, confirmPan } from "./actions";
 
 export const template: (
   name: string,
-  panNumber: string,
-  targetRoute: string,
+  // panNumber: string,
+  // targetRoute: string,
   //currentStepId: string
 ) => TemplateSchema = (
   name = "Test Name",
-  panNumber,
-  targetRoute,
+  // panNumber,
+  // targetRoute,
 //  currentStepId
 ) => {
   return {
@@ -50,6 +50,7 @@ export const template: (
         justifyContent: StackJustifyContent.center,
         alignItems: StackAlignItems.center,
         widgetItems: [
+          { id: "head_space", type: WIDGET.SPACE },
           { id: "title", type: WIDGET.TEXT },
           { id: "title_space", type: WIDGET.SPACE },
           { id: "confirm", type: WIDGET.BUTTON },
@@ -60,6 +61,7 @@ export const template: (
           },
         ],
       },
+      head_space: <SpaceProps>{ size: SizeTypeTokens.MD },
       title: <TypographyProps>{
         label: `Hello, \n${name.toUpperCase()}`,
         fontSize: FontSizeTokens.LG,
@@ -77,8 +79,8 @@ export const template: (
         action: {
           type: ACTION.CONFIRM_PAN,
           payload: <ContinuePayload>{
-            targetRoute,
-            panNumber,
+            // targetRoute,
+            // panNumber,
            // currentStepId,
             widgetId: "panItem",
           },
@@ -116,9 +118,9 @@ export const template: (
 };
 
 export const detailsConfirmMF: PageType<any> = {
-  onLoad: async (_, { name, panNumber, targetRoute }) => {
+  onLoad: async (_, { name }) => {
     return Promise.resolve(
-      template(name, panNumber, targetRoute)
+      template(name)
     );
   },
   actions: {

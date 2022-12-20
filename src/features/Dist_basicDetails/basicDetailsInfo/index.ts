@@ -1,4 +1,4 @@
-import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, CalendarProps, CalendarStateToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
 import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
 import { api } from "../../../configs/api";
 import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
@@ -8,7 +8,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { getAppHeader, RegexConfig } from "../../../configs/config";
 import { ACTION, EnableDisableCTA } from "./types";
 import { InputPayload } from "./types";
-import { onChangeInput, toggleCTA, triggerCTA } from "./actions";
+import { CalendarOnChange, onChangeInput, toggleCTA, triggerCTA } from "./actions";
 
 export const template: (
   stepper: StepperItem[],
@@ -25,7 +25,8 @@ export const template: (
         { id: "panNumberInput", type: WIDGET.INPUT },
         { id: "space0", type: WIDGET.SPACE },
        // { id: "fullNameInput", type: WIDGET.INPUT },
-        { id: "panNumberSubText", type: WIDGET.TEXT },
+       // { id: "panNumberSubText", type: WIDGET.TEXT },
+       { id: "calendarPicker", type: WIDGET.CALENDAR_PICKER },
         { id: "space1", type: WIDGET.SPACE },
         { id: "mobileNumberInput", type: WIDGET.INPUT },
         { id: "space2", type: WIDGET.SPACE },
@@ -82,15 +83,31 @@ export const template: (
           payload: <EnableDisableCTA>{ value: true, targetWidgetId: "continue" },
         },
       },
-      panNumberSubText: <TypographyBaseProps> {
-        label: "We will fetch your name from PAN Card",
-        fontSize: FontSizeTokens.XS,
-        color: ColorTokens.Grey_Smoke,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "400",
-        lineHeight: 18,
-      },
+      // panNumberSubText: <TypographyBaseProps> {
+      //   label: "We will fetch your name from PAN Card",
+      //   fontSize: FontSizeTokens.XS,
+      //   color: ColorTokens.Grey_Smoke,
+      //   fontFamily: FontFamilyTokens.Inter,
+      //   fontWeight: "400",
+      //   lineHeight: 18,
+      // },
       space0: <SpaceProps> { size: SizeTypeTokens.Size32 },
+      calendarPicker: <CalendarProps & WidgetProps>{
+        year: { title: "Year", value: "", placeholder: "YYYY" },
+        month: { title: "Month", value: "", placeholder: "MM" },
+        date: { title: "Date", value: "", placeholder: "DD" },
+        state: CalendarStateToken.DEFAULT,
+        caption: {
+          success: "",
+          error: "Please select a proper date",
+          default: "Date of birth as per PAN",
+        },
+        action: {
+          type: ACTION.ENTER_DOB,
+          payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
+          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        },
+      },
       space1: <SpaceProps> { size: SizeTypeTokens.XXXL },
       space2: <SpaceProps> { size: SizeTypeTokens.Size32 },
       fullNameInput: <TextInputProps & WidgetProps>{
@@ -224,6 +241,7 @@ export const distBasicDetailsMF: PageType<any> = {
     return Promise.resolve(template(stepper));
     },
     actions: {
+      [ACTION.ENTER_DOB]: CalendarOnChange,
       [ACTION.CHANGE_INPUT]: onChangeInput,
       [ACTION.DISABLE_CONTINUE]: toggleCTA,
       [ACTION.ENABLE_CONTINUE]: toggleCTA,

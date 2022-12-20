@@ -227,7 +227,7 @@ export const distributorStepperRepo = async () => {
       id: "1",
       step: "1",
       title: "Basic details",
-      subTitle: "",
+      subTitle: "Some description around basic details",
       horizontalTitle: "Basic details",
       status: DISTRIBUTOR_VERIFICATION,
       message:
@@ -239,7 +239,7 @@ export const distributorStepperRepo = async () => {
       id: "2",
       step: "2",
       title: "Bank details",
-      subTitle: "",
+      subTitle: "Some description around basic details",
       horizontalTitle: "Bank details",
       status:StepperStateToken.PENDING_MANUAL_VERIFICATION
     },
@@ -248,7 +248,7 @@ export const distributorStepperRepo = async () => {
       id: "3",
       step: "3",
       title: "Fetch portfolio",
-      subTitle: "",
+      subTitle: "Some description around basic details",
       horizontalTitle: "Fetch portfolio",
       status:StepperStateToken.PENDING_MANUAL_VERIFICATION
       // status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
@@ -262,7 +262,7 @@ export const distributorStepperRepo = async () => {
       id: "4",
       step: "4",
       title: "Select Portfolio",
-      subTitle: "",
+      subTitle: "Some description around basic details",
       horizontalTitle: "Select Portfolio",
       status:StepperStateToken.PENDING_MANUAL_VERIFICATION
       // status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,

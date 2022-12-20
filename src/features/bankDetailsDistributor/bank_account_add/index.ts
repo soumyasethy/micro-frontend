@@ -55,6 +55,7 @@ import {
   onChangeBankDetailse,
   onChangeIfscDetails,
   onConfirmAccountNumber,
+  savebankDetails,
   skipBankVerification,
   textOnChange,
   toggleCTA,
@@ -64,13 +65,14 @@ import { BAVVerifyActionPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
 import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
 import { onChangeAccountNumber } from "../../bankVerify/bank_account_add/actions";
+import { RegexConfig } from "../../../configs/config";
 
 export const template: (
   bankCode: string,
   bankName: string,
   accountNumber: string,
   stepper:StepperItem[]
-) => TemplateSchema = (bankCode, bankName, accountNumber,stepper) => ({
+) => TemplateSchema = (bankCode, bankName="BOB", accountNumber,stepper) => ({
   layout: <Layout>{
     id: ROUTE.DIST_BANK_ACCOUNT_ADD,
     type: LAYOUTS.LIST,
@@ -192,13 +194,19 @@ export const template: (
     },
     IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     confirmAccountInput: <TextInputProps & WidgetProps>{
-      isFocus: true,
+      regex: RegexConfig.MOBILE,
       type: InputTypeToken.DEFAULT,
+      state:InputStateToken.DEFAULT,
+     
       title: "Confirm Account Number",
       placeholder: "Confirm Account number",
-      value: '',
-      caption: { success: "", error: "Account number didn’t match" },  
+      caption: { success: "", error: "" }, 
       successAction:{
+        type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload:  <InputNumberActionPayload>{ value: "", widgetId: "confirmAccountInput" },
+      },
+      errorAction:{
         type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
         payload:  <InputNumberActionPayload>{ value: "", widgetId: "confirmAccountInput" },
@@ -255,7 +263,7 @@ export const template: (
       type: ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
-        type: ACTION.TRIGGER_CTA,
+        type: ACTION.SAVE,
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
         payload: <BAVVerifyActionPayload>{
           applicationId: "",
@@ -296,8 +304,9 @@ export const distBankAccountAddMF: PageType<any> = {
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
     [ACTION.TRIGGER_CTA]: skipBankVerification,
+    [ACTION.SAVE]: savebankDetails,
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
     [ACTION.NAV_STEPPER]: GoToStepper,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };

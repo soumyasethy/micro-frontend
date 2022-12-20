@@ -1,84 +1,84 @@
 import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
-import {
-  ButtonProps,
-  ButtonTypeTokens,
-  ButtonWidthTypeToken,
-  CarousalProps,
-  ColorTokens,
-  DividerProps,
-  DividerSizeTokens,
-  FontFamilyTokens,
-  FontSizeTokens,
-  HeaderProps,
-  HeaderTypeTokens,
-  IconAlignmentTokens,
-  IconProps,
-  IconSizeTokens,
-  IconTokens,
-  ListItemProps,
-  PaddingSizeTokens,
-  SizeTypeTokens,
-  SpaceProps,
-  StackAlignItems,
-  StackFlexWrap,
-  StackJustifyContent,
-  StackProps,
-  StackType,
-  StackWidth,
-  TabsProps,
-  TypographyBaseProps,
-  TypographyProps,
-  WIDGET,
-} from "@voltmoney/schema";
+    Datastore,
+    Layout,
+    LAYOUTS,
+    PageType,
+    POSITION,
+    TemplateSchema,
+    WidgetProps,
+  } from "@voltmoney/types";
+  import {
+    ButtonProps,
+    ButtonTypeTokens,
+    ButtonWidthTypeToken,
+    CarousalProps,
+    ColorTokens,
+    DividerProps,
+    DividerSizeTokens,
+    FontFamilyTokens,
+    FontSizeTokens,
+    HeaderProps,
+    HeaderTypeTokens,
+    IconAlignmentTokens,
+    IconProps,
+    IconSizeTokens,
+    IconTokens,
+    ListItemProps,
+    PaddingSizeTokens,
+    SizeTypeTokens,
+    SpaceProps,
+    StackAlignItems,
+    StackFlexWrap,
+    StackJustifyContent,
+    StackProps,
+    StackType,
+    StackWidth,
+    TabsProps,
+    TypographyBaseProps,
+    TypographyProps,
+    WIDGET,
+  } from "@voltmoney/schema";
 import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
 import { ROUTE } from "../../../routes";
-import { clientInProgressRepoData, clientPendingRepoData } from "./repo";
-import { notification, onClickCTA, onManageCTA, onTrackCTA } from "./actions";
+import { clientInProgressRepoData, clientPendingRepoData } from "./repo";  
+import { notification, onClickCTA, onManageCTA, onTrackCTA } from "./action";
 
-export const template: (
+export const template:(
   clientPendingRepoData: {
     name: string,
-    stepsCompleted: number | string,
+    stepsCompleted: number|string,
     applicationId: string,
-  }[],
+  }[], 
   clientInProgressRepoData: {
-    name: string,
-    utilizedAmount: number | string,
-    fullAmount: number | string,
+    name: string, 
+    utilizedAmount: number|string,
+    fullAmount: number|string,
     applicationId: string
   }[],
 ) => Promise<TemplateSchema> = async (clientPendingRepoData, clientInProgressRepoData) => {
 
   const pendingBuildDS = (index, name, stepsCompleted, applicationId) => {
     return {
-      [`listItem${index}`]: <StackProps>{
+      [`listItem${index}`]: <StackProps> {
         type: StackType.column,
         width: StackWidth.FULL,
         widgetItems: [
           { id: `clientListTop${index}`, type: WIDGET.STACK },
-          { id: `clientSpace0${index}`, type: WIDGET.SPACE },
+          { id: `clientSpace0${index}`, type: WIDGET.SPACE},
           { id: `clientListBottomText${index}`, type: WIDGET.TEXT },
-          { id: `dividerStack${index}`, type: WIDGET.STACK },
+          { id: `dividerStack${index}`, type:WIDGET.STACK},
         ]
       },
-      [`clientSpace0${index}`]: <SpaceProps>{
+      [`clientSpace0${index}`]: <SpaceProps> {
         size: SizeTypeTokens.SM,
       },
-      [`dividerStack${index}`]: <StackProps>{
+      [`dividerStack${index}`]: <StackProps> {
         type: StackType.row,
         width: StackWidth.FULL,
         justifyContent: StackJustifyContent.center,
         alignItems: StackAlignItems.center,
         widgetItems: [
-          { id: `divider${index}`, type: WIDGET.DIVIDER }
+          { id: `divider${index}`, type:WIDGET.DIVIDER}
         ]
       },
       [`divider${index}`]: <DividerProps>{
@@ -89,17 +89,17 @@ export const template: (
           horizontal: SizeTypeTokens.SM
         }
       },
-      [`clientListTop${index}`]: <StackProps>{
+      [`clientListTop${index}`]: <StackProps> {
         type: StackType.row,
         width: StackWidth.FULL,
         justifyContent: StackJustifyContent.spaceBetween,
         alignItems: StackAlignItems.center,
         widgetItems: [
-          { id: `clientListTopName${index}`, type: WIDGET.TEXT },
-          { id: `clientListTopTrackButton${index}`, type: WIDGET.BUTTON }
+          {id: `clientListTopName${index}`, type: WIDGET.TEXT}, 
+          {id: `clientListTopTrackButton${index}`, type:WIDGET.BUTTON}
         ]
       },
-      [`clientListBottomText${index}`]: <TypographyProps>{
+      [`clientListBottomText${index}`]: <TypographyProps> {
         label: `${stepsCompleted}/7 completed`,
         color: ColorTokens.Grey_Charcoal,
         lineHeight: 18,
@@ -107,7 +107,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400"
       },
-      [`clientListTopName${index}`]: <TypographyProps>{
+      [`clientListTopName${index}`]: <TypographyProps> {
         label: name,
         color: ColorTokens.Grey_Night,
         lineHeight: 24,
@@ -115,7 +115,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600"
       },
-      [`clientListTopTrackButton${index}`]: <ButtonProps>{
+      [`clientListTopTrackButton${index}`]: <ButtonProps> {
         label: "Track",
         type: ButtonTypeTokens.SmallGhost,
         fontFamily: FontFamilyTokens.Inter,
@@ -123,7 +123,7 @@ export const template: (
         action: {
           type: ACTION.TRACK,
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
-          payload: <ClientPendingPayloadType>{
+          payload: <ClientPendingPayloadType> {
             name: name,
             stepsCompleted: stepsCompleted,
             applicationId: applicationId
@@ -136,26 +136,26 @@ export const template: (
 
   const inProgressBuildDS = (index, name, utilizedAmount, fullAmount, applicationId) => {
     return {
-      [`ipListItem${index}`]: <StackProps>{
+      [`ipListItem${index}`]: <StackProps> {
         type: StackType.column,
         width: StackWidth.FULL,
         widgetItems: [
           { id: `ipClientListTop${index}`, type: WIDGET.STACK },
-          { id: `ipClientSpace0${index}`, type: WIDGET.SPACE },
+          { id: `ipClientSpace0${index}`, type: WIDGET.SPACE},
           { id: `ipClientListBottomText${index}`, type: WIDGET.TEXT },
-          { id: `ipDividerStack${index}`, type: WIDGET.STACK },
+          { id: `ipDividerStack${index}`, type:WIDGET.STACK},
         ]
       },
-      [`ipClientSpace0${index}`]: <SpaceProps>{
+      [`ipClientSpace0${index}`]: <SpaceProps> {
         size: SizeTypeTokens.SM,
       },
-      [`ipDividerStack${index}`]: <StackProps>{
+      [`ipDividerStack${index}`]: <StackProps> {
         type: StackType.row,
         width: StackWidth.FULL,
         justifyContent: StackJustifyContent.center,
         alignItems: StackAlignItems.center,
         widgetItems: [
-          { id: `ipDivider${index}`, type: WIDGET.DIVIDER }
+          { id: `ipDivider${index}`, type:WIDGET.DIVIDER}
         ]
       },
       [`ipDivider${index}`]: <DividerProps>{
@@ -166,17 +166,17 @@ export const template: (
           horizontal: SizeTypeTokens.SM
         }
       },
-      [`ipClientListTop${index}`]: <StackProps>{
+      [`ipClientListTop${index}`]: <StackProps> {
         type: StackType.row,
         width: StackWidth.FULL,
         justifyContent: StackJustifyContent.spaceBetween,
         alignItems: StackAlignItems.center,
         widgetItems: [
-          { id: `ipClientListTopName${index}`, type: WIDGET.TEXT },
-          { id: `ipClientListTopTrackButton${index}`, type: WIDGET.BUTTON }
+          {id: `ipClientListTopName${index}`, type: WIDGET.TEXT}, 
+          {id: `ipClientListTopTrackButton${index}`, type:WIDGET.BUTTON}
         ]
       },
-      [`ipClientListBottomText${index}`]: <TypographyProps>{
+      [`ipClientListBottomText${index}`]: <TypographyProps> {
         label: `Utilized Rs. ${utilizedAmount}/Rs. ${fullAmount}`,
         color: ColorTokens.Grey_Charcoal,
         lineHeight: 18,
@@ -184,7 +184,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400"
       },
-      [`ipClientListTopName${index}`]: <TypographyProps>{
+      [`ipClientListTopName${index}`]: <TypographyProps> {
         label: name,
         color: ColorTokens.Grey_Night,
         lineHeight: 24,
@@ -192,7 +192,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600"
       },
-      [`ipClientListTopTrackButton${index}`]: <ButtonProps>{
+      [`ipClientListTopTrackButton${index}`]: <ButtonProps> {
         label: "Manage",
         type: ButtonTypeTokens.SmallGhost,
         fontFamily: FontFamilyTokens.Inter,
@@ -200,7 +200,7 @@ export const template: (
         action: {
           type: ACTION.TRACK,
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
-          payload: <ClientInProgressPayloadType>{
+          payload: <ClientInProgressPayloadType> {
             name: name,
             utilizedAmount: utilizedAmount,
             fullAmount: fullAmount,
@@ -219,8 +219,8 @@ export const template: (
       ...inProgressBuildDS(index, client.name, client.utilizedAmount, client.fullAmount, client.applicationId),
     };
   });
-
-
+  
+  
   let pending_ds = {};
   clientPendingRepoData.map((client, index) => {
     pending_ds = {
@@ -228,10 +228,10 @@ export const template: (
       ...pendingBuildDS(index, client.name, client.stepsCompleted, client.applicationId),
     };
   });
-
+  
   const pendingBuildUI = () => {
-    const clArr = [];
-    if (clientPendingRepoData.length > 0) {
+    const clArr = []; 
+    if(clientPendingRepoData.length > 0) {
       clientPendingRepoData.map((client, index) => {
         clArr.push(
           { id: `listItem${index}`, type: WIDGET.STACK },
@@ -239,14 +239,14 @@ export const template: (
       })
     } else {
       clArr.push(
-        { id: `noDataPendingStack`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
+        { id: `noDataPendingStack`, type: WIDGET.STACK,position:POSITION.ABSOLUTE_CENTER },
       )
     }
     return clArr;
   }
 
   const inProgressBuildUI = () => {
-    const clArr = [];
+    const clArr = []; 
     clientPendingRepoData.map((client, index) => {
       clArr.push(
         { id: `ipListItem${index}`, type: WIDGET.STACK },
@@ -260,26 +260,25 @@ export const template: (
       id: ROUTE.DISTRIBUTOR_CLIENT_LIST,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
-        { id: "header1", type: WIDGET.STACK, position: POSITION.ABSOLUTE_TOP },
+        {id:"header",type:WIDGET.HEADER,position:POSITION.ABSOLUTE_TOP},
         { id: "space0", type: WIDGET.SPACE },
         { id: "tab", type: WIDGET.TABS },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space2", type: WIDGET.SPACE },
-        { id: "button", type: WIDGET.BUTTON, position: (clientPendingRepoData.length > 0) ? POSITION.ABSOLUTE_BOTTOM : "" },
+        { id: "button", type: WIDGET.BUTTON, position: (clientPendingRepoData.length>0)?POSITION.ABSOLUTE_BOTTOM:"" },
       ],
     },
     datastore: <Datastore>{
-      header: <HeaderProps>{
+      header:<HeaderProps>{
         title: "Volt App",
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         isBackButton: false,
         type: HeaderTypeTokens.HEADERCTA,
-        leftIcon: <IconProps>{
-          name: IconTokens.BellNotified,
-          size: IconSizeTokens.XXL,
-          // color:ColorTokens.Grey_Charcoal
+        leftIcon:<IconProps>{
+          name:IconTokens.BellNotified,
+          size:IconSizeTokens.XXL,
+         // color:ColorTokens.Grey_Charcoal
         },
         action: {
           type: ACTION.NOTIFICATION,
@@ -291,108 +290,52 @@ export const template: (
           routeId: ROUTE.ABOUTUS,
         },
       },
-      header1: <StackProps>{
-        type: StackType.column,
-        width: StackWidth.FULL,
-        widgetItems: [
-          { id: 'head', type: WIDGET.STACK },
-          { id: 'tabb', type: WIDGET.STACK },
-          { id: 'divider', type: WIDGET.DIVIDER },
-        ]
-      },
-      head: <StackProps>{
-        type: StackType.row,
-        width: StackWidth.FULL,
-        justifyContent: StackJustifyContent.spaceBetween,
-        alignItems: StackAlignItems.flexStart,
-        widgetItems: [
-          { id: 'headItem', type: WIDGET.TEXT },
-          { id: 'iconItem', type: WIDGET.ICON },
-        ]
-      },
-      headItem: <TypographyProps>{
-        label: "Volt App",
-        color: ColorTokens.Grey_Night,
-        lineHeight: 24,
-        fontSize: FontSizeTokens.MD,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "700"
-      },
-      iconItem: <IconProps>{
-        name: IconTokens.BellNotified,
-        size: IconSizeTokens.XXL
-      },
-      tabb: <TabsProps>{
-        active: 0,
-        options: [
-          {
-            label: "My clients",
-            disabled: false
-          },
-          {
-            label: "My Earnings",
-            disabled: false
-          }
-        ],
-        widgetItems: [
-          { id: "PendingStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
-          { id: "InProgressStack", type: WIDGET.STACK }
-        ]
-      },
-      divider: <DividerProps>{
-        size: DividerSizeTokens.SM,
-        margin: {
-          vertical: SizeTypeTokens.SM,
-          horizontal: SizeTypeTokens.SM,
-        },
-      },
 
       space0: <SpaceProps>{ size: SizeTypeTokens.LG },
-      tab: <TabsProps>{
+      tab: <TabsProps> {
         active: 0,
         options: [
           {
-            label: "My clients",
+            label: "Pending",
             disabled: false
           },
           {
-            label: "My Earnings",
+            label: "In progress",
             disabled: false
           }
         ],
         widgetItems: [
-          { id: "PendingStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
-          { id: "InProgressStack", type: WIDGET.STACK }
+          { id:"PendingStack", type: WIDGET.STACK },
+          { id:"InProgressStack", type: WIDGET.STACK }
         ]
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XL },
-      InProgressStack: <StackProps>{
+      InProgressStack: <StackProps> {
         type: StackType.column,
         width: StackWidth.CONTENT,
         widgetItems: [
-          { id: 'topInProgressSpace', type: WIDGET.SPACE },
+          { id: 'topInProgressSpace', type: WIDGET.SPACE},
           ...inProgressBuildUI(),
         ]
       },
-      PendingStack: <StackProps>{
+      PendingStack: <StackProps> {
         type: StackType.column,
         width: StackWidth.CONTENT,
         widgetItems: [
-          { id: 'topPendingSpace', type: WIDGET.SPACE },
+          { id: 'topPendingSpace', type: WIDGET.SPACE},
           ...pendingBuildUI(),
         ]
       },
-      topInProgressSpace: <SpaceProps>{
+      topInProgressSpace: <SpaceProps> {
         size: SizeTypeTokens.Size30
       },
-      noDataPendingStack: <StackProps>{
+      noDataPendingStack: <StackProps> {
         type: StackType.column,
         width: StackWidth.FULL,
         justifyContent: StackJustifyContent.center,
         alignItems: StackAlignItems.center,
         widgetItems: [
-          { id: "noClientSpaces", type: WIDGET.SPACE },
-          { id: "noClientIcon", type: WIDGET.ICON, position: POSITION.ABSOLUTE_CENTER },
+          { id: "noClientIcon", type: WIDGET.ICON ,position:POSITION.ABSOLUTE_CENTER},
           { id: "noClientSpace0", type: WIDGET.SPACE },
           { id: "noClientTitle", type: WIDGET.TEXT },
           { id: "noClientSpace1", type: WIDGET.SPACE },
@@ -400,20 +343,17 @@ export const template: (
           { id: "noClientSubtitle2", type: WIDGET.TEXT },
         ]
       },
-      noClientSpaces: <SpaceProps>{
-        size: SizeTypeTokens.XXXL
-      },
-      noClientSpace0: <SpaceProps>{
+      noClientSpace0: <SpaceProps> {
         size: SizeTypeTokens.XL
       },
-      noClientSpace1: <SpaceProps>{
+      noClientSpace1: <SpaceProps> {
         size: SizeTypeTokens.MD
       },
-      noClientIcon: <IconProps>{
+      noClientIcon: <IconProps> {
         name: IconTokens.List,
         size: IconSizeTokens.XXXXXXXXL,
       },
-      noClientTitle: <TypographyProps>{
+      noClientTitle: <TypographyProps> {
         label: "No clients added",
         color: ColorTokens.Grey_Night,
         lineHeight: 28,
@@ -421,7 +361,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "600"
       },
-      noClientSubtitle1: <TypographyProps>{
+      noClientSubtitle1: <TypographyProps> {
         label: "Clients will reflect as soon as you start",
         color: ColorTokens.Grey_Charcoal,
         lineHeight: 24,
@@ -429,7 +369,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400"
       },
-      noClientSubtitle2: <TypographyProps>{
+      noClientSubtitle2: <TypographyProps> {
         label: "creating the loan application.",
         color: ColorTokens.Grey_Charcoal,
         lineHeight: 24,
@@ -437,7 +377,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400"
       },
-      topPendingSpace: <SpaceProps>{
+      topPendingSpace: <SpaceProps> {
         size: SizeTypeTokens.Size30
       },
       ...pending_ds,
@@ -455,19 +395,19 @@ export const template: (
       },
     },
   }
+   
+  };
+  
 
-};
-
-
-export const DistributorClientListMF: PageType<any> = {
-  onLoad: async ({ }) => {
-    const templateX = await template(clientPendingRepoData, clientInProgressRepoData);
-    return Promise.resolve(templateX);
-  },
-  actions: {
-    [ACTION.TRACK]: onTrackCTA,
-    [ACTION.MANAGE]: onManageCTA,
-    [ACTION.CTA]: onClickCTA,
-    [ACTION.NOTIFICATION]: notification
-  },
+export const clientLandingMF: PageType<any> = {
+    onLoad: async ({}) => {
+      const templateX = await template(clientPendingRepoData, clientInProgressRepoData);
+      return Promise.resolve(templateX);
+    },
+    actions: {
+      [ACTION.TRACK]: onTrackCTA,
+      [ACTION.MANAGE]: onManageCTA,
+      [ACTION.CTA]: onClickCTA,
+      [ACTION.NOTIFICATION]:notification
+    },
 };

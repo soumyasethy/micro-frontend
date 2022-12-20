@@ -20,7 +20,12 @@ export const confirmPan: ActionFunction<ContinuePayload> = async (
   //   subTitle: user.linkedBorrowerAccounts[0].accountHolderPAN,
   // });
   // const routeObj = await nextStepId(action.payload.currentStepId);
-  await goBack();
+  await navigate(ROUTE.DIST_BANK_SELECT, {
+    bankCode:"",
+    bankName:""
+  });
+ // await navigate(ROUTE.DIST_BANK_SELECT);
+ // await goBack();
  // await navigate(routeObj.routeId, routeObj.params);
 };
 export const changePanNo: ActionFunction<PanPayload> = async (

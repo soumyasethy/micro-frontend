@@ -11,8 +11,12 @@ export const SplashAction: ActionFunction<any> = async (
   _datastore,
   { network, navigate, asyncStorage }
 ): Promise<any> => {
-  // await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
-  // return;
+  await navigate(ROUTE.DIST_BANK_ACCOUNT_ADD, {
+    bankCode:"BOB",
+    bankName:"bob"
+  });
+  //  await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
+   return;
   // const isSeen = await SharedPropsService.getOnboarding();
   // if (isSeen) {
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
@@ -36,7 +40,7 @@ export const SplashAction: ActionFunction<any> = async (
         const nextRoute = await nextStepId(
           user.linkedApplications[0].currentStepId
         );
-          await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
+          await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
      //   await navigate(nextRoute.routeId, nextRoute.params);
       }
     }

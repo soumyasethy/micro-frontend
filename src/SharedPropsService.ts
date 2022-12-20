@@ -18,13 +18,15 @@ type GlobalProps = {
   accountNumber: string;
   userType:USERTYPE;
   partnerRefCode?: string;
+  applicationId?:string;
 };
 let _globalProps: GlobalProps = {
   user: {},
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
-  userType:USERTYPE.PARTNER
+  userType:USERTYPE.PARTNER,
+  applicationId:""
 };
 
 async function setUserType(userType: USERTYPE){
@@ -33,6 +35,13 @@ async function setUserType(userType: USERTYPE){
 
 async function getUserType(){
   return _globalProps.userType;
+}
+
+async function setApplicationId(applicationId: string) {
+  _globalProps.applicationId = applicationId;
+}
+async function getApplicationId() {
+  return _globalProps.applicationId;
 }
 
 async function setAccountNumber(accountNumber: string) {
@@ -144,4 +153,6 @@ export default {
   getUserType,
   setPartnerRefCode,
   getPartnerRefCode,
+  setApplicationId,
+  getApplicationId
 };

@@ -2,6 +2,7 @@ export enum ACTION {
   TRACK = "TRACK",
   MANAGE = "MANAGE",
   CTA="CTA",
+  NOTIFICATION="NOTIFICATION",
 }
 
 export type TestActionPayload = {};
