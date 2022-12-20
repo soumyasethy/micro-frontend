@@ -18,6 +18,7 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
+  partnerRefCode: "",
 };
 
 async function setAccountNumber(accountNumber: string) {
