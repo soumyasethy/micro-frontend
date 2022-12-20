@@ -57,7 +57,10 @@ export const triggerCTA: ActionFunction<AadharInitPayload> = async (
     loading: false,
   });
   if (response.status === 200) {
-    await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP);
+    await navigate(ROUTE.KYC_AADHAAR_VERIFICATION_OTP, {
+      appId: applicationId,
+      aadNum: aadharNumber,
+    });
   } else {
     await setDatastore(action.routeId, "input", <TextInputProps>{
       state: InputStateToken.ERROR,

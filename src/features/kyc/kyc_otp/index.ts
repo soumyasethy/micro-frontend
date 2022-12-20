@@ -27,14 +27,17 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { AadharInputPayload, ACTION, EnableDisableCTA } from "./types";
-import { GoBackAction, onChangeAadhar, toggleCTA, triggerCTA } from "./actions";
+import { GoBackAction, onChangeAadhar, resendOTP, toggleCTA, triggerCTA } from "./actions";
 import { horizontalStepperRepo, maskString } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
+import { AadharInitPayload } from "../kyc_init/types";
 
 export const template: (
   stepper: StepperItem[],
-  mobileNumber: string
-) => TemplateSchema = (stepper, mobileNumber) => ({
+  mobileNumber: string,
+  aadNum: string,
+  appId: string
+) => TemplateSchema = (stepper, mobileNumber, aadNum, appId) => ({
   layout: <Layout>{
     id: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
     type: LAYOUTS.LIST,
@@ -81,7 +84,7 @@ export const template: (
         mobileNumber,
         0,
         5
-      )}(valid for 10mins).`,
+      )} (valid for 10mins).`,
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
@@ -110,16 +113,24 @@ export const template: (
         routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
         payload: <EnableDisableCTA>{ value: true, targetWidgetId: "continue" },
       },
+      otpAction: {
+        type: ACTION.RESEND_OTP,
+        payload: <AadharInitPayload>{
+          applicationId: appId,
+          aadhaarNumber: aadNum,
+        },
+        routeId: ROUTE.KYC_AADHAAR_VERIFICATION_OTP,
+      },
     },
   },
 });
 
 export const kycAadharOTPVerifyMF: PageType<any> = {
-  onLoad: async () => {
+  onLoad: async ({ asyncStorage }, { aadNum, appId }) => {
     const stepper: StepperItem[] = await horizontalStepperRepo();
     const mobileNumber = (await SharedPropsService.getUser())
       .linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    return Promise.resolve(template(stepper, mobileNumber));
+    return Promise.resolve(template(stepper, mobileNumber, aadNum, appId));
   },
   actions: {
     [ACTION.TRIGGER_CTA]: triggerCTA,
@@ -127,6 +138,7 @@ export const kycAadharOTPVerifyMF: PageType<any> = {
     [ACTION.DISABLE_CTA]: toggleCTA,
     [ACTION.AADHAR_NUMBER]: onChangeAadhar,
     [ACTION.GO_BACK]: GoBackAction,
+    [ACTION.RESEND_OTP]: resendOTP,
   },
   clearPrevious: true,
 };
