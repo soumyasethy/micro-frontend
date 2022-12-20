@@ -5,7 +5,15 @@ import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/unlockLimit/unlock_limit/types";
+
+export enum BUILD_TYPE {
+  BORROWER_PRODUCTION = "BORROWER_PRODUCTION",
+  BORROWER_STAGING = "BORROWER_STAGING",
+  PARTNER_PRODUCTION = "PARTNER_PRODUCTION",
+  PARTNER_STAGING = "PARTNER_STAGING",
+}
 type GlobalProps = {
+  buildType: BUILD_TYPE;
   user: User;
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
@@ -14,11 +22,19 @@ type GlobalProps = {
 };
 
 let _globalProps: GlobalProps = {
+  buildType: BUILD_TYPE.PARTNER_STAGING,
   user: {},
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
+  partnerRefCode: "",
 };
+async function setBuildType(buildType) {
+  _globalProps.buildType = buildType;
+}
+export function getBuildType() {
+  return _globalProps.buildType;
+}
 
 async function setAccountNumber(accountNumber: string) {
   _globalProps.accountNumber = accountNumber;
@@ -30,7 +46,6 @@ async function setGlobalProps(props: GlobalProps) {
   _globalProps = await props;
 }
 async function getPartnerRefCode() {
-  console.warn("*** getPartnerRefCode ***", _globalProps.partnerRefCode);
   return _globalProps.partnerRefCode;
 }
 async function setPartnerRefCode(partnerRefCode: string) {
@@ -108,6 +123,8 @@ async function isPledgeFirstTime(): Promise<boolean> {
 }
 
 export default {
+  setBuildType,
+  getBuildType,
   setGlobalProps,
   getPropsValue,
   setUser,
