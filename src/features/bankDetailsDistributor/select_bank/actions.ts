@@ -12,6 +12,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { getBankIconUrl } from "../../../configs/utils";
+import SharedPropsService from "../../../SharedPropsService";
 
 function getKeyByValue(object, value) {
   return Object.keys(object).find((key) => object[key] === value);
@@ -30,7 +31,13 @@ export const NavSearchIfscBranchInfoAction: ActionFunction<
     ...action.payload.bankRepo.POPULAR,
   };
   const bankCode = getKeyByValue(banksMap, action.payload.value);
-  await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD,"bankInput",<TextInputProps>{value:action.payload.value});
+  console.log("action.payload.value",action.payload.value);
+  console.log("action.payload.value",bankCode);
+  await SharedPropsService.setBankName(action.payload.value);
+  await SharedPropsService.setBankCode(bankCode);
+  //await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD,"bankInput",<TextInputProps>{value:action.payload.value});
+  //await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD,"IFSCInput",<TextInputProps>{value:bankCode});
+  
   await goBack();
   //await setDataStore(ROUTE.DIST_BANK_ACCOUNT_ADD,"bankInput",<TextInputProps>{value:action.payload.value});
   // await navigate(ROUTE.DIST_BANK_ACCOUNT_ADD, {

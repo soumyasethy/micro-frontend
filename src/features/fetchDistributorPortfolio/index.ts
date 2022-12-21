@@ -36,7 +36,7 @@ import {
     ACTION,
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../configs/utils";
-import { onSave, onShare, onSkip } from "./action";
+import { onBack, onSave, onShare, onSkip } from "./action";
 
 
 export const template: (
@@ -58,7 +58,7 @@ export const template: (
             { id: "karvyStack", type: WIDGET.STACK },
             { id: "karvySpace", type: WIDGET.SPACE },
             { id: "karvyDivider", type: WIDGET.DIVIDER },
-            { id: "operationalStack", type: WIDGET.STACK },
+          //  { id: "operationalStack", type: WIDGET.STACK },
             {
                 id: "continue",
                 type: WIDGET.BUTTON,
@@ -145,7 +145,7 @@ export const template: (
         },
         btnItems: <ButtonProps & WidgetProps>{
             label: "Fetch",
-            type: ButtonTypeTokens.LargeSoftFilled,
+            type: ButtonTypeTokens.MediumSoftFilled,
             labelColor: ColorTokens.Primary_100,
             width: ButtonWidthTypeToken.CONTENT,
             action: {
@@ -212,7 +212,7 @@ export const template: (
         },
         btnKarvyItems: <ButtonProps & WidgetProps>{
             label: "Fetch",
-            type: ButtonTypeTokens.LargeSoftFilled,
+            type: ButtonTypeTokens.MediumSoftFilled,
             labelColor: ColorTokens.Primary_100,
             width: ButtonWidthTypeToken.CONTENT,
             action: {
@@ -389,7 +389,7 @@ export const distributorPortfolioMF: PageType<any> = {
     actions: {
         [ACTION.ON_SAVE]: onSave,
         [ACTION.ON_SKIP]: onSkip,
-        [ACTION.GO_BACK]: onSkip,
+        [ACTION.GO_BACK]: onBack,
         [ACTION.SHARE]: onShare,
     },
 

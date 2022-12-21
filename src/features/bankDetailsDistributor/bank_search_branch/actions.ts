@@ -55,15 +55,17 @@ export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
     state: InputStateToken.DISABLED,
     value: action.payload.ifscCode,
   });
+  await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "continue", <ButtonProps>{
+    type: ButtonTypeTokens.LargeFilled,
+  });
   const accountNumber = await SharedPropsService.getAccountNumber();
+  console.log("acc no",accountNumber)
   if (accountNumber) {
     await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "accountInput", <TextInputProps>{
       value: accountNumber,
     });
-    await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "continue", <ButtonProps>{
-      type: ButtonTypeTokens.LargeFilled,
-    });
   }
+  
 };
 
 const widgetItemDs = (

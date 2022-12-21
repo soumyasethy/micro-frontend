@@ -9,7 +9,8 @@ import {
 } from "@voltmoney/schema";
 import {
   ACTION as ACTION_CURRENT,
-  BAVVerifyActionPayload
+  BAVVerifyActionPayload,
+  InputPayload
 } from './types';
 import {
   ACTION,
@@ -32,18 +33,19 @@ let bankAccountNumber = "";
 let bankName = "";
 let confirmAccountNumber = "";
 let bankIfsc = "";
+let acc ="";
 
 
 
 export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
   action,
   _datastore,
-  { network, setDatastore, navigate }
+  { network, setDatastore, navigate,showPopup }
 ): Promise<any> => {
+   console.log(confirmAccountNumber)
   if (bankName &&
     bankIfsc &&
-    bankAccountNumber && confirmAccountNumber) {
-
+    bankAccountNumber) {
     await setDatastore(action.routeId, "continue", <ButtonProps>{ loading: true });
 
     const applicationId = await SharedPropsService.getApplicationId()
@@ -56,28 +58,27 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
       applicationId: applicationId,
       bankAccountNumber: bankAccountNumber,
       bankIfscCode: bankIfsc,
-      confirmedBankAccountNumber:confirmAccountNumber
+      confirmedBankAccountNumber:bankAccountNumber
     },
     { headers: await getAppHeader() }
   )
   .then(async (response) => {
-    // await setDatastore(action.routeId, "continue", <ButtonProps>{
-    //   label: "Continue",
-    //   type: ButtonTypeTokens.LargeFilled,
-    //   loading: false,
-    // });
-    // if (response?.data.stepResponseObject?.fullName) {
-      // await setDatastore(action.routeId, "input", <TextInputProps>{
-      //   state: InputStateToken.SUCCESS,
-      // });
-      // const currentStepId = await response?.data.updatedApplicationObj
-      //   .currentStepId;
-      // (
-      //   await SharedPropsService.getUser()
-      // ).linkedApplications[0].currentStepId = currentStepId;
-
-      await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-   // }
+      await showPopup({
+        autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
+        isAutoTriggerCta: true,
+        title: "Bank details saved succesfully",
+        subTitle: "You will be redirected to next step in few seconds",
+        type: "SUCCESS",
+        ctaLabel: "Continue",
+        primary: true,
+        ctaAction: {
+          type: ACTION.NEXT_ROUTE,
+          routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+          payload: <{}>{
+           
+          },
+        },
+      });
   })
   .catch(async (error) => {
     await setDatastore(action.routeId, "continue", <ButtonProps>{
@@ -85,40 +86,102 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
       type: ButtonTypeTokens.LargeOutline,
       loading: false,
     });
-    // await setDatastore(action.routeId, "input", <TextInputProps>{
-    //   state: InputStateToken.ERROR,
-    // });
   });
+  }
+};
+
+export const goNext: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
+};
 
 
-    // const response = await network.post(
-    //   `${partnerApi.customer}${accountId}${'/customer'}`,
-    //   {
-    //     email: email,
-    //     panNumber: panNumber,
-    //     phoneNumber: `+91${mobileNumber}`,
-    //     dob:dob
-    //   },
-    //   { headers: await getAppHeader() }
-    // );
-    // console.log(response)
+export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
+  action,
+  _datastore,
+  { setDatastore }
+): Promise<any> => {
+  console.log("in toogle")
+  await setDatastore(action.routeId, action.payload.targetWidgetId, <
+    ButtonProps
+  >{
+    type:
+       bankName && bankAccountNumber && confirmAccountNumber && bankIfsc
+        ? ButtonTypeTokens.LargeFilled
+        : ButtonTypeTokens.LargeOutline,
+  });
+};
 
 
-    // setTimeout(async () => {
-    //   await setDatastore(action.routeId, "continue", <ButtonProps>{ loading: false });
-    // }, 2000);
+export const btnAction: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { setDatastore }
+): Promise<any> => {
+  console.log("in btnAction")
+    await setDatastore(action.routeId, action.payload.targetWidgetId, <
+      ButtonProps
+    >{
+      type: ButtonTypeTokens.LargeFilled,
+    });
+ 
+};
 
-    // await navigate(ROUTE.PAN_CONFIRM_NAME, {
-    //   name: response?.data.stepResponseObject?.fullName,
-    //   panNumber: response?.data.stepResponseObject?.panNumber,
-    //   targetRoute: action.payload.targetRoute,
-    // });
 
+export const onChangeInput: ActionFunction<InputPayload> = async (
+  action,
+  _datastore,
+  { setDatastore }
+): Promise<any> => {
+  switch (action.payload.widgetId) {
+    case "bankInput": {
+      bankName = action.payload.value;
+      break;
+    }
+    case "IFSCInput": {
+      bankIfsc = action.payload.value;
+      break;
+    }
+    case "accountInput": {
+      bankAccountNumber = action.payload.value;
+      break;
+    }
+    case "confirmAccountInput": {
+      confirmAccountNumber = action.payload.value;
+      await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
+        charLimit:bankAccountNumber.length
+      });
+      if(confirmAccountNumber === bankAccountNumber){
+        acc = confirmAccountNumber;
+         await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
+            state: InputStateToken.SUCCESS,
+          });
+       }else{
+        acc = confirmAccountNumber;
+        await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
+          state: InputStateToken.ERROR,
+        });
+       }
+      break;
+    }
+  }
+
+  if (
+    bankName &&
+    bankIfsc &&
+    bankAccountNumber &&
+    confirmAccountNumber) {
+    await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    })
   }
 };
 
 
-export const onChangeBankDetailse: ActionFunction<
+export const onChangeBankDetails: ActionFunction<
   InputNumberActionPayload
 > = async (action, _datastore, { ...props }): Promise<any> => {
   bankName = action.payload.value;
@@ -237,16 +300,16 @@ export const onConfirmAccountNumber: ActionFunction<InputNumberActionPayload> = 
   // }
 };
 
-export const textOnChange: ActionFunction<InputNumberActionPayload> = async (
+export const onChangeAccountNumber: ActionFunction<InputNumberActionPayload> = async (
   action,
   _datastore,
   { setDatastore,...props }
 ): Promise<any> => {
   bankAccountNumber = action.payload.value;
-  await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
+  // await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
   
-    charLimit:action.payload.value.length-1
-  });
+  //   charLimit:action.payload.value.length-1
+  // });
   if (bankAccountNumber) {
     await toggleCTA(
       {
@@ -276,38 +339,18 @@ export const textOnChange: ActionFunction<InputNumberActionPayload> = async (
   }
 };
 
-export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
-  action,
-  _datastore,
-  { setDatastore }
-): Promise<any> => {
-  await setDatastore(action.routeId, action.payload.targetWidgetId, <
-    ButtonProps
-  >{
-    type:
-      action.payload.value && bankName && bankAccountNumber && confirmAccountNumber && bankIfsc
-        ? ButtonTypeTokens.LargeFilled
-        : ButtonTypeTokens.LargeOutline,
-  });
-};
 
-export const onChangeAccountNumber: ActionFunction<
-  InputNumberActionPayload
-> = async (action, _datastore, { ...props }): Promise<any> => {
-  
-  console.log(action.payload.value);
-
-   
-};
 
 
 export const NavigationSearchIFSCAction: ActionFunction<
   NavigationSearchIFSCActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
+  console.log(action.payload);
   await navigate(ROUTE.DIST_BANK_SEARCH_BRANCH, {
     bankCode: action.payload.bankCode,
     bankName: action.payload.bankName,
     bankAccountNumber,
+    confirmAccountNumber
   });
 };
 
@@ -324,19 +367,6 @@ export const NavigationSearchBankAction: ActionFunction<
 
 
 
-export const ToggleCTA: ActionFunction<any> = async (
-  action,
-  _datastore,
-  { setDatastore }
-): Promise<any> => {
- 
-    await setDatastore(action.routeId, action.payload.targetWidgetId, <
-      ButtonProps
-    >{
-      type: ButtonTypeTokens.LargeFilled,
-    });
- 
-};
 
 export const skipBankVerification: ActionFunction<{}> = async (
   action,
@@ -348,9 +378,9 @@ export const skipBankVerification: ActionFunction<{}> = async (
 export const ChangeBankGoBackAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { goBack }
+  { navigate,goBack }
 ): Promise<any> => {
-  await goBack();
+  await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
 };
 export const GoToStepper: ActionFunction<any> = async (
   action,

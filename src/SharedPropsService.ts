@@ -19,6 +19,8 @@ type GlobalProps = {
   userType:USERTYPE;
   partnerRefCode?: string;
   applicationId?:string;
+  bankCode?:string;
+  bankName?:string;
 };
 let _globalProps: GlobalProps = {
   user: {},
@@ -26,8 +28,26 @@ let _globalProps: GlobalProps = {
   availableAuthCasMap: {},
   accountNumber: "",
   userType:USERTYPE.PARTNER,
-  applicationId:""
+  applicationId:"",
+  bankCode:"",
+  bankName:""
 };
+
+async function setBankCode(bankCode: string){
+  _globalProps.bankCode = bankCode;
+}
+
+async function getBankCode(){
+  return _globalProps.bankCode;
+}
+
+async function setBankName(bankName: string){
+  _globalProps.bankName = bankName;
+}
+
+async function getBankName(){
+  return _globalProps.bankName;
+}
 
 async function setUserType(userType: USERTYPE){
   _globalProps.userType = userType;
@@ -154,5 +174,9 @@ export default {
   setPartnerRefCode,
   getPartnerRefCode,
   setApplicationId,
-  getApplicationId
+  getApplicationId,
+  setBankCode,
+  getBankCode,
+  setBankName,
+  getBankName
 };

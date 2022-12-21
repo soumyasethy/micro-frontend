@@ -59,9 +59,10 @@ export const template: (
             id: "confirm_stack",
             type: WIDGET.STACK,
           },
+          { id: "wrong_space1", type: WIDGET.SPACE },
         ],
       },
-      head_space: <SpaceProps>{ size: SizeTypeTokens.MD },
+      head_space: <SpaceProps>{ size: SizeTypeTokens.XXL },
       title: <TypographyProps>{
         label: `Hello, \n${name.toUpperCase()}`,
         fontSize: FontSizeTokens.LG,
@@ -113,6 +114,7 @@ export const template: (
         color: ColorTokens.Primary_100,
         fontWeight: "600",
       },
+      wrong_space1: <SpaceProps>{ size: SizeTypeTokens.XL },
     },
   };
 };

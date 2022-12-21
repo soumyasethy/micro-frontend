@@ -15,6 +15,7 @@ export enum ACTION {
   NAV_STEPPER = "NAV_STEPPER",
   GO_NEXT = "GO_BACK",
   SAVE = "SAVE",
+  NEXT_ROUTE = "NEXT_ROUTE",
   ENABLE_CONTINUE = "ENABLE_CONTINUE",
   DISABLE_CONTINUE = "DISABLE_CONTINUE",
 }
@@ -28,4 +29,9 @@ export type InputNumberActionPayload = {
 };
 export type BAVVerifyActionPayload = {
   applicationId: string;
+};
+
+export type InputPayload = {
+  value: string;
+  widgetId: string;
 };

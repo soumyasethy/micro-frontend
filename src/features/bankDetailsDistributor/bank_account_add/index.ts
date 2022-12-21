@@ -12,14 +12,12 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
+  FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
   IconProps,
-  IconSizeTokens,
   IconTokens,
-  ImageProps,
-  ImageSizeTokens,
   InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
@@ -34,7 +32,6 @@ import {
   StackWidth,
   StepperItem,
   StepperProps,
-  StepperStateToken,
   StepperTypeTokens,
   TextInputProps,
   TextInputTypeToken,
@@ -44,27 +41,23 @@ import {
 import { ROUTE } from "../../../routes";
 import {
   ACTION,
-  InputNumberActionPayload,
+  InputPayload,
   NavigationSearchIFSCActionPayload,
 } from "./types";
 import {
   ChangeBankGoBackAction,
+  goNext,
   GoToStepper,
   NavigationSearchBankAction,
   NavigationSearchIFSCAction,
-  onChangeBankDetailse,
-  onChangeIfscDetails,
-  onConfirmAccountNumber,
+  onChangeInput,
   savebankDetails,
   skipBankVerification,
-  textOnChange,
   toggleCTA,
-  ToggleCTA,
 } from "./actions";
 import { BAVVerifyActionPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
-import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
-import { onChangeAccountNumber } from "../../bankVerify/bank_account_add/actions";
+import { horizontalDistributorStepperRepo } from "../../../configs/utils";
 import { RegexConfig } from "../../../configs/config";
 
 export const template: (
@@ -126,11 +119,20 @@ export const template: (
     },
     // space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     cardStack: <MessageProps>{
-      label: 'Bank account holder name & details must match with investor',
+      customLabel:<TypographyProps>{
+        label: "Bank account holder name & details must match with investor",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 28,
+        fontSize: FontSizeTokens.XXS,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "500"
+      },
+      label: '',
       actionText: '',
       labelColor: ColorTokens.Grey_Charcoal,
       bgColor: ColorTokens.Grey_Milk,
-      alignText: MessageAlignType.CENTER,
+      alignText: MessageAlignType.FLEX_START,
+     // alignText:"flex-start",
       icon: <IconProps>{
         name: IconTokens.Info,
         color: ColorTokens.Grey_Smoke
@@ -165,7 +167,7 @@ export const template: (
       width: TextInputTypeToken.FULL,
       action: {
         type: ACTION.ONCHANGE_BANK_DETAILS,
-        payload: <InputNumberActionPayload>{ value: "", widgetId:"bankInput" },
+        payload: <InputPayload>{ value: "", widgetId:"bankInput" },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
       onPressAction: {
@@ -188,33 +190,31 @@ export const template: (
       keyboardType: KeyboardTypeToken.email,
       action: {
         type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
-        payload: <InputNumberActionPayload>{ value:"", widgetId:"accountInput" },
+        payload: <InputPayload>{ value:"", widgetId:"accountInput" },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
     },
     IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     confirmAccountInput: <TextInputProps & WidgetProps>{
-      regex: RegexConfig.MOBILE,
+     // regex: RegexConfig.MOBILE,
       type: InputTypeToken.DEFAULT,
-      state:InputStateToken.DEFAULT,
-     
       title: "Confirm Account Number",
       placeholder: "Confirm Account number",
-      caption: { success: "", error: "" }, 
+      caption: { success: "", error: "Account number didn’t match" }, 
       successAction:{
-        type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
-        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
-        payload:  <InputNumberActionPayload>{ value: "", widgetId: "confirmAccountInput" },
+        // type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
+        // routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        // payload:  <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
       },
       errorAction:{
-        type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
-        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
-        payload:  <InputNumberActionPayload>{ value: "", widgetId: "confirmAccountInput" },
+        // type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
+        // routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        // payload:  <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
       },
       keyboardType: KeyboardTypeToken.email,
       action: {
         type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
-        payload: <InputNumberActionPayload>{ value: "", widgetId: "confirmAccountInput" },
+        payload: <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
     },
@@ -246,7 +246,7 @@ export const template: (
       width: TextInputTypeToken.FULL,
       action: {
         type: ACTION.ONCHANGE_IFSC_DETAILS,
-        payload: <InputNumberActionPayload>{ value: "",widgetId:"IFSCInput" },
+        payload: <InputPayload>{ value: "",widgetId:"IFSCInput" },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
       onPressAction: {
@@ -260,7 +260,7 @@ export const template: (
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Save & Contiune",
-      type: ButtonTypeTokens.LargeOutline,
+      type: `${bankCode} && ${bankName}` ? ButtonTypeTokens.LargeFilled :ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.SAVE,
@@ -285,9 +285,9 @@ export const template: (
 });
 
 export const distBankAccountAddMF: PageType<any> = {
-  onLoad: async ({ }, { bankCode, bankName }) => {
-    console.log("code",bankCode);
-    console.log("name",bankName);
+  onLoad: async ({ }, { }) => {
+    const bankCode = await SharedPropsService.getBankCode();
+      const bankName = await SharedPropsService.getBankName();
     const accountNumber = await SharedPropsService.getAccountNumber();
     const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
     return Promise.resolve(template(bankCode, bankName, accountNumber,stepper));
@@ -295,11 +295,11 @@ export const distBankAccountAddMF: PageType<any> = {
   actions: {
     [ACTION.NAVIGATION_SEARCH_IFSC]: NavigationSearchIFSCAction,
     [ACTION.NAVIGATION_SEARCH_BANK]: NavigationSearchBankAction,
-    [ACTION.ONCHANGE_BANK_DETAILS]: onChangeBankDetailse,
-    [ACTION.ONCHANGE_IFSC_DETAILS]: onChangeIfscDetails,
+    [ACTION.ONCHANGE_BANK_DETAILS]: onChangeInput,
+    [ACTION.ONCHANGE_IFSC_DETAILS]: onChangeInput,
    // [ACTION.ONCHANGE_ACCOUNT_NUMBER]: onChangeAccountNumber,
-   [ACTION.ONCHANGE_ACCOUNT_NUMBER]: textOnChange,
-   [ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER]: onConfirmAccountNumber,
+   [ACTION.ONCHANGE_ACCOUNT_NUMBER]: onChangeInput,
+   [ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER]: onChangeInput,
     //[ACTION.TOGGLE_CTA]: ToggleCTA,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
@@ -307,6 +307,7 @@ export const distBankAccountAddMF: PageType<any> = {
     [ACTION.SAVE]: savebankDetails,
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
     [ACTION.NAV_STEPPER]: GoToStepper,
+    [ACTION.NEXT_ROUTE]: goNext,
   },
-  clearPrevious: false,
+  clearPrevious: true,
 };
