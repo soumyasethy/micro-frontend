@@ -32,4 +32,8 @@ export const onShare: ActionFunction<{}> = async (action, _datastore, { ...props
  console.log("Share");
 };
 
+export const onBack: ActionFunction<{}> = async (action, _datastore, { goBack }): Promise<any> => {
+  await goBack();
+ };
+
 

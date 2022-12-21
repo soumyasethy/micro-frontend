@@ -16,35 +16,21 @@ let dob: string = "";
 export const CalendarOnChange: ActionFunction<InputPayload> = async (
   action,
   _datastore,
-  { ...props }
+  {setDatastore, ...props }
 ): Promise<any> => {
   dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
-  if (dob) {
-    await toggleCTA(
-      {
-        type: ACTION.ENABLE_CONTINUE,
-        routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-        payload: <EnableDisableCTA>{
-          value: true,
-          targetWidgetId: "continue",
-        },
-      },
-      {},
-      props
-    );
-  } else {
-    await toggleCTA(
-      {
-        type: ACTION.ENABLE_CONTINUE,
-        routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-        payload: <EnableDisableCTA>{
-          value: false,
-          targetWidgetId: "continue",
-        },
-      },
-      {},
-      props
-    );
+  console.log(action.payload.value);
+  if (
+    panNumber &&
+    mobileNumber &&
+    email && dob) {
+    await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    })
+  }else{
+    await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeOutline,
+    })
   }
 };
 
@@ -53,13 +39,14 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
+  console.log(action.payload.widgetId);
   switch (action.payload.widgetId) {
     case "panNumberInput": {
       panNumber = action.payload.value;
       break;
     }
-    case "fullNameInput": {
-      fullName = action.payload.value;
+    case "calendarPicker": {
+      dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
       break;
     }
     case "mobileNumberInput": {
@@ -74,7 +61,6 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
 
   if (
     panNumber &&
-    fullName &&
     mobileNumber &&
     email && dob) {
     await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
@@ -192,4 +178,13 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
     // });
 
   }
+};
+
+
+export const goBack: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { goBack }
+): Promise<any> => {
+  await goBack();
 };

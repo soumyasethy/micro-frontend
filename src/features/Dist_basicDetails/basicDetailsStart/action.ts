@@ -71,7 +71,7 @@ export const textOnChange: ActionFunction<NamePayload> = async (
 export const goBack: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate }
+  { goBack }
 ): Promise<any> => {
-  navigate(ROUTE.EMAIL_VERIFY);
+  await goBack();
 };

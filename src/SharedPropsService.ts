@@ -63,6 +63,8 @@ type GlobalProps = {
   userType:string;
   partnerRefCode?: string;
   applicationId?:string;
+  bankCode?:string;
+  bankName?:string;
 };
 let _globalProps: GlobalProps = {
   buildType: BUILD_TYPE.BORROWER_STAGING,
@@ -107,7 +109,9 @@ let _globalProps: GlobalProps = {
  // userType:USERTYPE.BORROWER
   userType:"PARTNER",
  // userType:USERTYPE.BORROWER
-  applicationId:""
+  applicationId:"",
+  bankCode:"",
+  bankName:""
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -147,6 +151,22 @@ async function setAssetRepositoryFetchMap(
   }
 }
 /*** End Asset repository ***/
+
+async function setBankCode(bankCode: string){
+  _globalProps.bankCode = bankCode;
+}
+
+async function getBankCode(){
+  return _globalProps.bankCode;
+}
+
+async function setBankName(bankName: string){
+  _globalProps.bankName = bankName;
+}
+
+async function getBankName(){
+  return _globalProps.bankName;
+}
 
 async function setUserType(userType: USERTYPE){
   _globalProps.userType = userType;
@@ -383,5 +403,9 @@ export default {
   setUserType,
   getUserType,
   setApplicationId,
-  getApplicationId
+  getApplicationId,
+  setBankCode,
+  getBankCode,
+  setBankName,
+  getBankName
 };

@@ -42,6 +42,7 @@ import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType } from ".
 import { ROUTE } from "../../../routes";
 import { clientInProgressRepoData, clientPendingRepoData } from "./repo";
 import { notification, onClickCTA, onManageCTA, onTrackCTA } from "./actions";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   clientPendingRepoData: {
@@ -247,11 +248,17 @@ export const template: (
 
   const inProgressBuildUI = () => {
     const clArr = [];
-    clientPendingRepoData.map((client, index) => {
+    if (clientPendingRepoData.length > 0) {
+      clientPendingRepoData.map((client, index) => {
+        clArr.push(
+          { id: `listItem${index}`, type: WIDGET.STACK },
+        )
+      })
+    } else {
       clArr.push(
-        { id: `ipListItem${index}`, type: WIDGET.STACK },
+        { id: `noDataEarningStack`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
       )
-    })
+    }
     return clArr;
   }
 
@@ -261,13 +268,13 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
-        { id: "header1", type: WIDGET.STACK, position: POSITION.ABSOLUTE_TOP },
+        //{ id: "header1", type: WIDGET.STACK, position: POSITION.ABSOLUTE_TOP },
         { id: "space0", type: WIDGET.SPACE },
         { id: "tab", type: WIDGET.TABS },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space2", type: WIDGET.SPACE },
-        { id: "button", type: WIDGET.BUTTON, position: (clientPendingRepoData.length > 0) ? POSITION.ABSOLUTE_BOTTOM : "" },
+        { id: "button", type: WIDGET.BUTTON, position: (clientPendingRepoData.length > 0) ? POSITION.ABSOLUTE_CENTER : "" },
       ],
     },
     datastore: <Datastore>{
@@ -276,11 +283,11 @@ export const template: (
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         isBackButton: false,
         type: HeaderTypeTokens.HEADERCTA,
-        leftIcon: <IconProps>{
-          name: IconTokens.BellNotified,
-          size: IconSizeTokens.XXL,
-          // color:ColorTokens.Grey_Charcoal
-        },
+        // leftIcon: <IconProps>{
+        //   name: IconTokens.BellNotified,
+        //   size: IconSizeTokens.XXL,
+        //   // color:ColorTokens.Grey_Charcoal
+        // },
         action: {
           type: ACTION.NOTIFICATION,
           payload: <{}>{
@@ -437,6 +444,58 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400"
       },
+      noDataEarningStack: <StackProps>{
+        type: StackType.column,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.center,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          { id: "noEarningSpaces", type: WIDGET.SPACE },
+          { id: "noEarningIcon", type: WIDGET.ICON, position: POSITION.ABSOLUTE_CENTER },
+          { id: "noEarningSpace0", type: WIDGET.SPACE },
+          { id: "noEarningTitle", type: WIDGET.TEXT },
+          { id: "noEarningSpace1", type: WIDGET.SPACE },
+          { id: "noEarningSubtitle1", type: WIDGET.TEXT },
+          { id: "noEarningSubtitle2", type: WIDGET.TEXT },
+        ]
+      },
+      noEarningSpaces: <SpaceProps>{
+        size: SizeTypeTokens.XXXL
+      },
+      noEarningSpace0: <SpaceProps>{
+        size: SizeTypeTokens.XL
+      },
+      noEarningSpace1: <SpaceProps>{
+        size: SizeTypeTokens.MD
+      },
+      noEarningIcon: <IconProps>{
+        name: IconTokens.SvgChart,
+        size: IconSizeTokens.XXXXXXXXL,
+      },
+      noEarningTitle: <TypographyProps>{
+        label: "No earnings",
+        color: ColorTokens.Grey_Night,
+        lineHeight: 28,
+        fontSize: FontSizeTokens.XL,
+        fontFamily: FontFamilyTokens.Poppins,
+        fontWeight: "600"
+      },
+      noEarningSubtitle1: <TypographyProps>{
+        label: "Earning will reflect as soon as you start",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 24,
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400"
+      },
+      noEarningSubtitle2: <TypographyProps>{
+        label: "creating the loan application.",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 24,
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400"
+      },
       topPendingSpace: <SpaceProps>{
         size: SizeTypeTokens.Size30
       },
@@ -461,6 +520,8 @@ export const template: (
 
 export const DistributorClientListMF: PageType<any> = {
   onLoad: async ({ }) => {
+    const user = await SharedPropsService.getUser();
+    console.log("client user",user);
     const templateX = await template(clientPendingRepoData, clientInProgressRepoData);
     return Promise.resolve(templateX);
   },
