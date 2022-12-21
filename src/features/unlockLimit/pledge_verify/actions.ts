@@ -179,3 +179,26 @@ export const NavigateNext: ActionFunction<NavigationNext> = async (
     navigate(ROUTE.KYC_STEPPER, {});
   }
 };
+
+export const resendOTP: ActionFunction<OtpPledgePayload> = async (
+  action,
+  _datastore,
+  { setDatastore, network }
+): Promise<any> => {
+  const resendOtpResponse = await network.post(
+    api.pledgeCreate,
+    {
+      applicationId: (
+        await SharedPropsService.getUser()
+      ).linkedApplications[0].applicationId,
+      assetRepository: AssetRepositoryType.DEFAULT,
+      portfolioItemList: AssetRepositoryMap[AssetRepositoryType.DEFAULT].LIST,
+    },
+    { headers: await getAppHeader() }
+  );
+  if (_.get(resendOtpResponse, "data.status") === "SUCCESS") {
+    await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
+      state: InputStateToken.DEFAULT,
+    });
+  }
+}

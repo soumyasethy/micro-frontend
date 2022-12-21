@@ -89,3 +89,22 @@ export const GoBackAction: ActionFunction<AadharInitPayload> = async (
 ): Promise<any> => {
   await goBack();
 };
+export const resendOTP: ActionFunction<AadharInitPayload> = async (
+  action,
+  _datastore,
+  { network, setDatastore }
+): Promise<any> => {
+  const response = await network.post(
+    api.aadharInit,
+    {
+      applicationId: action.payload.applicationId,
+      aadhaarNumber: action.payload.aadhaarNumber,
+    },
+    { headers: await getAppHeader() }
+  );
+  if (response.status === 200) {
+    await setDatastore(ROUTE.KYC_AADHAAR_VERIFICATION_OTP, "input", <
+      TextInputProps
+    >{ state: InputStateToken.DEFAULT });
+  }
+};
