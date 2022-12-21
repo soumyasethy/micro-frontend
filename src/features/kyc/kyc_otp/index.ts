@@ -126,7 +126,7 @@ export const template: (
 });
 
 export const kycAadharOTPVerifyMF: PageType<any> = {
-  onLoad: async ({ asyncStorage }, { aadNum, appId }) => {
+  onLoad: async ({}, { aadNum, appId }) => {
     const stepper: StepperItem[] = await horizontalStepperRepo();
     const mobileNumber = (await SharedPropsService.getUser())
       .linkedBorrowerAccounts[0].accountHolderPhoneNumber;
