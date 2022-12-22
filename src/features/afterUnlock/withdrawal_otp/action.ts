@@ -11,7 +11,7 @@ export const DisbursalVerifyAction: ActionFunction<
 > = async (
   action,
   _datastore,
-  { navigate, network, setDatastore }
+  { navigate, network, setDatastore, goBack }
 ): Promise<any> => {
   if (`${action.payload.value}`.length > 3) {
     await setDatastore(ROUTE.WITHDRAWAL_OTP, "input", <TextInputProps>{
@@ -25,7 +25,14 @@ export const DisbursalVerifyAction: ActionFunction<
           await SharedPropsService.getUser()
         ).linkedBorrowerAccounts[0].accountHolderPhoneNumber,
       },
-      { headers: await getAppHeader() }
+      { headers: await getAppHeader() },
+      async () => {
+        await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountItem", <TextInputProps>{
+          state: InputStateToken.DEFAULT,
+          value: '0',
+        });
+        await goBack();
+      }
     );
     if (response.status === 200) {
       await setDatastore(ROUTE.WITHDRAWAL_OTP, "input", <TextInputProps>{
@@ -46,7 +53,11 @@ export const DisbursalVerifyAction: ActionFunction<
 export const goBack: ActionFunction<DisbursementOTPPayload> = async (
   action,
   _datastore,
-  { goBack }
+  { setDatastore, goBack }
 ): Promise<any> => {
-  goBack();
+    await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountItem", <TextInputProps>{
+      state: InputStateToken.DEFAULT,
+      value: '0',
+    });
+    await goBack();
 };
