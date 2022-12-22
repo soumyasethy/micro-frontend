@@ -36,7 +36,8 @@ export const partnerApi = {
   userContext:`${config.URL}/app/partner/user`,
   accountAttributes: `${config.URL}/app/partner/accountAttributes/`,
   customer: `${config.URL}/app/partner/`,
-  bavAdd:`${config.URL}/app/borrower/application/bav/add`
+  bavAdd:`${config.URL}/app/borrower/application/bav/add`,
+  pledgeLimit: `${config.URL}/app/borrower/application/pledge/limit/`
 };
 
 export const api = {

@@ -270,7 +270,9 @@ export const template: (
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         //{ id: "header1", type: WIDGET.STACK, position: POSITION.ABSOLUTE_TOP },
         { id: "space0", type: WIDGET.SPACE },
-        { id: "tab", type: WIDGET.TABS },
+        { id: "tab", type: WIDGET.TABS,
+       // position:POSITION.ABSOLUTE_CENTER 
+      },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space2", type: WIDGET.SPACE },
@@ -399,6 +401,7 @@ export const template: (
         alignItems: StackAlignItems.center,
         widgetItems: [
           { id: "noClientSpaces", type: WIDGET.SPACE },
+          { id: "noClientSpaces1", type: WIDGET.SPACE },
           { id: "noClientIcon", type: WIDGET.ICON, position: POSITION.ABSOLUTE_CENTER },
           { id: "noClientSpace0", type: WIDGET.SPACE },
           { id: "noClientTitle", type: WIDGET.TEXT },
@@ -408,7 +411,10 @@ export const template: (
         ]
       },
       noClientSpaces: <SpaceProps>{
-        size: SizeTypeTokens.XXXL
+        size: SizeTypeTokens.XXXXXXL
+      },
+      noClientSpaces1: <SpaceProps>{
+        size: SizeTypeTokens.XXXXXXL
       },
       noClientSpace0: <SpaceProps>{
         size: SizeTypeTokens.XL
@@ -451,6 +457,7 @@ export const template: (
         alignItems: StackAlignItems.center,
         widgetItems: [
           { id: "noEarningSpaces", type: WIDGET.SPACE },
+          { id: "noEarningSpaces1", type: WIDGET.SPACE },
           { id: "noEarningIcon", type: WIDGET.ICON, position: POSITION.ABSOLUTE_CENTER },
           { id: "noEarningSpace0", type: WIDGET.SPACE },
           { id: "noEarningTitle", type: WIDGET.TEXT },
@@ -460,7 +467,10 @@ export const template: (
         ]
       },
       noEarningSpaces: <SpaceProps>{
-        size: SizeTypeTokens.XXXL
+        size: SizeTypeTokens.XXXXXXL
+      },
+      noEarningSpaces1: <SpaceProps>{
+        size: SizeTypeTokens.XXXXXXL
       },
       noEarningSpace0: <SpaceProps>{
         size: SizeTypeTokens.XL

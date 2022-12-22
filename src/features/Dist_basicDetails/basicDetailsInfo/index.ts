@@ -12,7 +12,6 @@ import { CalendarOnChange, goBack, onChangeInput, toggleCTA, triggerCTA } from "
 
 export const template: (
   stepper: StepperItem[],
-  //stepResponseObject: { [key in string]: string }
 ) => TemplateSchema = (stepper) => {
   return {
     layout: <Layout>{
@@ -57,6 +56,7 @@ export const template: (
         placeholder: "Enter PAN Number",
         keyboardType: KeyboardTypeToken.default,
         isUpperCase: true,
+        isFocus:false,
         caption: {
           success: "",
           error: "Enter a valid PAN.",

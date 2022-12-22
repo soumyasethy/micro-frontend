@@ -18,6 +18,7 @@ import {
   updateCurrentStepId,
   updateStepStatusMap,
 } from "../../configs/utils";
+import { navigate } from "../afterUnlock/dashboard/actions";
 
 
 export const onSave: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
@@ -32,8 +33,8 @@ export const onShare: ActionFunction<{}> = async (action, _datastore, { ...props
  console.log("Share");
 };
 
-export const onBack: ActionFunction<{}> = async (action, _datastore, { goBack }): Promise<any> => {
-  await goBack();
+export const onBack: ActionFunction<{}> = async (action, _datastore, { navigate }): Promise<any> => {
+  await navigate(ROUTE.BASIC_DETAILS_START)
  };
 
 

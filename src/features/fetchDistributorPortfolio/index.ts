@@ -37,6 +37,9 @@ import {
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../configs/utils";
 import { onBack, onSave, onShare, onSkip } from "./action";
+import SharedPropsService from "../../SharedPropsService";
+import { partnerApi } from "../../configs/api";
+import { getAppHeader } from "../../configs/config";
 
 
 export const template: (
@@ -54,7 +57,7 @@ export const template: (
             { id: "space0", type: WIDGET.SPACE },
             { id: "space1", type: WIDGET.SPACE },
             { id: "camsStack", type: WIDGET.STACK },
-            { id: "midDivider", type: WIDGET.DIVIDER },
+            //{ id: "midDivider", type: WIDGET.DIVIDER },
             { id: "karvyStack", type: WIDGET.STACK },
             { id: "karvySpace", type: WIDGET.SPACE },
             { id: "karvyDivider", type: WIDGET.DIVIDER },
@@ -154,10 +157,9 @@ export const template: (
                 payload: <{}>{},
             },
         },
-
-        midDivider: <DividerProps>{
+        midDivider:<DividerProps>{
             size: DividerSizeTokens.SM,
-            color: ColorTokens.Grey_Milk_1,
+            color: ColorTokens.Grey_Night,
             margin: {
                 vertical: SizeTypeTokens.XL,
                 horizontal: SizeTypeTokens.XL,
@@ -382,7 +384,41 @@ export const template: (
 });
 
 export const distributorPortfolioMF: PageType<any> = {
-    onLoad: async () => {
+    onLoad: async ({network},{}) => {
+        const applictaionId = await SharedPropsService.getApplicationId();
+        const response = await network.get(`${partnerApi.pledgeLimit}${applictaionId}`,
+            { headers: await getAppHeader() }
+          );
+          console.log(response.data.casFetchDates);
+          let isAgain = false;
+          if(response.status === 200){
+            if(response.data.casFetchDates){
+                isAgain = true;
+            }
+            // const casFetchDates = _.get(
+            //         response,
+            //         "data.casFetchDates",
+            //         {}
+            //       );
+          }
+      
+        //   const processingFeesBreakUp = _.get(
+        //     response,
+        //     "data.stepResponseObject.processingChargesBreakup",
+        //     {}
+        //   );
+        //   const totalCharges = _.get(
+        //     response,
+        //     "data.stepResponseObject.totalCharges",
+        //     0
+        //   );
+      
+        //   const totalAmount = getTotalLimit(
+        //     stepResponseObject.availableCAS,
+        //     stepResponseObject.isinNAVMap,
+        //     stepResponseObject.isinLTVMap
+        //   );
+      
         const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
         return Promise.resolve(template(stepper));
     },

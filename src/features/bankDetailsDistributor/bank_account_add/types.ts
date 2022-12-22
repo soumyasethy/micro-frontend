@@ -35,3 +35,31 @@ export type InputPayload = {
   value: string;
   widgetId: string;
 };
+
+ export type updatedApplicationObj = {
+  applicationId: string,
+  accountId: string,
+  applicationType: string,
+  applicationState: string,
+  applicationApprovalStatus: any,
+  creditAmount: any,
+  lenderAccountId: string,
+  partnerAccountId: string,
+  platformAccountId: string,
+  currentStepId: string,
+  stepStatusMap: {
+      KYC_AADHAAR_VERIFICATION: string,
+      KYC_ADDITIONAL_DETAILS: string,
+      KYC_PAN_VERIFICATION: string,
+      MF_PLEDGE_PORTFOLIO: string,
+      KYC_PHOTO_VERIFICATION: string,
+      AGREEMENT_SIGN: string,
+      MF_FETCH_PORTFOLIO: string,
+      BANK_ACCOUNT_VERIFICATION: string,
+      KYC_SUMMARY: string,
+      KYC_CKYC: string,
+      MANDATE_SETUP: string,
+      KYC_DOCUMENT_UPLOAD: string,
+      CREDIT_APPROVAL: string
+  }
+}

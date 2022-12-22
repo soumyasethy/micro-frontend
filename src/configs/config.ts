@@ -33,7 +33,7 @@ export const getAuthHeaders = () => ({
   "Content-Type": "application/json",
 });
 export const getAppHeader = async () => ({
-  "X-AppMode": "INVESTOR_VIEW",
+  //"X-AppMode": "INVESTOR_VIEW",
   "X-AppPlatform": __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP",
   Authorization: `Bearer ${await SharedPropsService.getToken()}`,
   "Content-Type": "application/json",
@@ -75,5 +75,5 @@ export enum RegexConfig {
   EMAIL = "^^[a-zA-Z0-9._{|}-]*@[a-zA-Z0-9]+.^[A-Za-z]+${2,}$",
   MOBILE = "^[0-9]*$",
   PAN = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",
-  AADHAR = "^[2-9]{1}[0-9]{11}$",
+  AADHAR = "^[2-9]{1}[0-9]{11}$"
 }
