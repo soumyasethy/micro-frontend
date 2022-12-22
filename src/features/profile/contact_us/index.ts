@@ -131,7 +131,7 @@ export const template: () => TemplateSchema = () => {
         },
         customSubTitle: <TypographyProps>{
           label:
-            "Call us at +91 96117 49097. We are available in working days from 9.30 AM to 6.30 PM",
+            "Call us at +91 96117-49097. We are available in working days from 9.30 AM to 6.30 PM",
           color: ColorTokens.Grey_Charcoal,
           fontFamily: FontFamilyTokens.Inter,
           fontWeight: "400",
