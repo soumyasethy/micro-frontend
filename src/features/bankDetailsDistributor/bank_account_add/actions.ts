@@ -57,6 +57,7 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
   )
   .then(async (response) => {
     if(response.status == 200){
+      await SharedPropsService.setAccountId(response.data.updatedApplicationObj.accountId);
         await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
         isAutoTriggerCta: true,
@@ -77,21 +78,7 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
       
   })
   .catch(async (error) => {
-    await navigate(ROUTE.ALERT_PAGE, {
-      alertProps: {
-        iconName: IconTokens.Failed,
-        title: "Something went wrong!",
-        subTitle: "Please try again",
-        type: "DEFAULT",
-        ctaLabel: "Continue to try again",
-        primary: true,
-        ctaAction: {
-          type: ACTION.NAV_STEPPER,
-          routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
-          payload: {},
-        },
-      },
-    });
+    console.log("error",error);
   });
   }
 };

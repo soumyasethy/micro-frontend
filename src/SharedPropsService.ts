@@ -21,6 +21,7 @@ type GlobalProps = {
   applicationId?:string;
   bankCode?:string;
   bankName?:string;
+  accountId?:string;
 };
 let _globalProps: GlobalProps = {
   user: {},
@@ -30,8 +31,17 @@ let _globalProps: GlobalProps = {
   userType:USERTYPE.PARTNER,
   applicationId:"",
   bankCode:"",
-  bankName:""
+  bankName:"",
+  accountId:""
 };
+
+async function setAccountId(accountId: string){
+  _globalProps.accountId = accountId;
+}
+
+async function getAccountId(){
+  return _globalProps.accountId;
+}
 
 async function setBankCode(bankCode: string){
   _globalProps.bankCode = bankCode;
@@ -178,5 +188,7 @@ export default {
   setBankCode,
   getBankCode,
   setBankName,
-  getBankName
+  getBankName,
+  getAccountId,
+  setAccountId
 };
