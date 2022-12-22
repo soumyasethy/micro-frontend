@@ -47,7 +47,6 @@ export const APP_CONFIG = {
 export enum AssetRepositoryType {
   CAMS = "CAMS",
   KARVY = "KARVY",
-  DEFAULT = "KARVY",
 }
 export const AssetRepositoryMap = {
   [AssetRepositoryType.CAMS]: {

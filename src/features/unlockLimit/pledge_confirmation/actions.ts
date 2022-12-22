@@ -16,12 +16,13 @@ export const sendOtp: ActionFunction<OtpPayload> = async (
   _datastore,
   { network, navigate, setDatastore }
 ): Promise<any> => {
+  const assetRepository = await SharedPropsService.getAssetRepositoryType();
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     label: "",
     type: ButtonTypeTokens.LargeOutline,
     loading: true,
   });
-  AssetRepositoryMap[AssetRepositoryType.DEFAULT].LIST = [];
+  AssetRepositoryMap[assetRepository].LIST = [];
   action.payload.value.availableCAS.map((item) => {
     AssetRepositoryMap[item.assetRepository.toUpperCase()].LIST.push({
       ...item,
@@ -35,14 +36,14 @@ export const sendOtp: ActionFunction<OtpPayload> = async (
       applicationId: (
         await SharedPropsService.getUser()
       ).linkedApplications[0].applicationId,
-      assetRepository: AssetRepositoryType.DEFAULT,
-      portfolioItemList: AssetRepositoryMap[AssetRepositoryType.DEFAULT].LIST,
+      assetRepository: assetRepository,
+      portfolioItemList: AssetRepositoryMap[assetRepository].LIST,
     },
     { headers: await getAppHeader() }
   );
   if (_.get(response, "data.status") === "SUCCESS") {
     await navigate(ROUTE.PLEDGE_VERIFY, {
-      assetRepository: AssetRepositoryMap[AssetRepositoryType.DEFAULT].NAME,
+      assetRepository: AssetRepositoryMap[assetRepository].NAME,
     });
   }
 

@@ -2,11 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import { AuthCASPayload } from "./types";
 import { api } from "../../../configs/api";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
-import {
-  AssetRepositoryMap,
-  AssetRepositoryType,
-  getAppHeader,
-} from "../../../configs/config";
+import { AssetRepositoryMap, getAppHeader } from "../../../configs/config";
 import { nextStepId } from "../../../configs/utils";
 import _ from "lodash";
 
@@ -17,7 +13,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
 ): Promise<any> => {
   if (
     action.payload.value.length !==
-    AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
+    AssetRepositoryMap[action.payload.assetRepository].OTP_LENGTH
   )
     return;
   await setDatastore(action.routeId, "input", <TextInputProps>{

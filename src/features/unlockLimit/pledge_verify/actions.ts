@@ -30,7 +30,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
 ): Promise<any> => {
   if (
     action.payload.value.length !==
-    AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
+    AssetRepositoryMap[action.payload.assetRepository].OTP_LENGTH
   ) {
     return;
   }
@@ -43,7 +43,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
       applicationId: (
         await SharedPropsService.getUser()
       ).linkedApplications[0].applicationId,
-      assetRepository: AssetRepositoryType.DEFAULT,
+      assetRepository: action.payload.assetRepository,
       otp: action.payload.value,
     },
     { headers: await getAppHeader() }
@@ -191,8 +191,8 @@ export const resendOTP: ActionFunction<OtpPledgePayload> = async (
       applicationId: (
         await SharedPropsService.getUser()
       ).linkedApplications[0].applicationId,
-      assetRepository: AssetRepositoryType.DEFAULT,
-      portfolioItemList: AssetRepositoryMap[AssetRepositoryType.DEFAULT].LIST,
+      assetRepository: action.payload.assetRepository,
+      portfolioItemList: AssetRepositoryMap[action.payload.assetRepository].LIST,
     },
     { headers: await getAppHeader() }
   );

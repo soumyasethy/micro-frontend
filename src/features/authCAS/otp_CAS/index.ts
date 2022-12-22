@@ -39,6 +39,7 @@ import {
   AssetRepositoryMap,
   AssetRepositoryType,
 } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
   applicationId: string,
@@ -121,9 +122,7 @@ export const template: (
         ],
       },
       subTitle: <TypographyProps>{
-        label: `${
-          AssetRepositoryMap[AssetRepositoryType.DEFAULT].NAME
-        } depository has sent an OTP to `,
+        label: `${AssetRepositoryMap[assetRepository].NAME} depository has sent an OTP to `,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
@@ -144,21 +143,21 @@ export const template: (
         type: InputTypeToken.OTP,
         state: InputStateToken.DEFAULT,
         keyboardType: KeyboardTypeToken.numberPad,
-        charLimit: AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
+        charLimit: AssetRepositoryMap[assetRepository].OTP_LENGTH,
         action: {
           type: ACTIONS.AUTH_CAS,
           routeId: ROUTE.OTP_AUTH_CAS,
           payload: <AuthCASPayload>{
             value: "",
             applicationId,
-            assetRepository: AssetRepositoryType.DEFAULT,
+            assetRepository,
           },
         },
         otpAction: {
           type: ACTIONS.RESEND_OTP_AUTH_CAS,
           payload: <FetchPortfolioPayload>{
             applicationId,
-            assetRepository: AssetRepositoryType.DEFAULT,
+            assetRepository,
             emailId,
             panNumber,
             phoneNumber,
@@ -173,10 +172,8 @@ export const template: (
 };
 
 export const otpVerifyAuthCASMF: PageType<any> = {
-  onLoad: async (
-    _,
-    { applicationId, assetRepository, emailId, panNumber, phoneNumber }
-  ) => {
+  onLoad: async (_, { applicationId, emailId, panNumber, phoneNumber }) => {
+    const assetRepository = await SharedPropsService.getAssetRepositoryType();
     return Promise.resolve(
       template(applicationId, assetRepository, emailId, panNumber, phoneNumber)
     );

@@ -37,8 +37,15 @@ export const template: (
   applicationId: string,
   panNumber: string,
   phoneNumber: string,
-  emailId: string
-) => TemplateSchema = (applicationId, panNumber, phoneNumber, emailId) => {
+  emailId: string,
+  assetRepository: AssetRepositoryType
+) => TemplateSchema = (
+  applicationId,
+  panNumber,
+  phoneNumber,
+  emailId,
+  assetRepository
+) => {
   return {
     layout: <Layout>{
       id: ROUTE.MF_FETCH_PORTFOLIO,
@@ -133,8 +140,7 @@ export const template: (
             emailId,
             phoneNumber,
             panNumber,
-            // assetRepository: "CAMS",
-            assetRepository: AssetRepositoryType.DEFAULT,
+            assetRepository,
           },
         },
       },
@@ -158,9 +164,10 @@ export const checkLimitMF: PageType<any> = {
     if (!applicationId) {
       applicationId = applicationId || user.linkedApplications[0].applicationId;
     }
+    const assetRepository = await SharedPropsService.getAssetRepositoryType();
 
     return Promise.resolve(
-      template(applicationId, panNumberX, phoneNumber, emailId)
+      template(applicationId, panNumberX, phoneNumber, emailId, assetRepository)
     );
   },
   actions: {
@@ -168,6 +175,5 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_PAN]: editPanNumber,
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
-    [ACTION.EDIT_PAN]: editPanNumber,
   },
 };

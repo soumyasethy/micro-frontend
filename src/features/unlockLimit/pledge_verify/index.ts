@@ -37,6 +37,7 @@ import {
   AssetRepositoryMap,
   AssetRepositoryType,
 } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 export const template: (
   phoneNumber: string,
   assetRepository: string
@@ -89,7 +90,7 @@ export const template: (
       },
       action: {
         type: ACTION.GO_BACK,
-        payload: <{}>{
+        payload: {
           value: "",
           widgetId: "input",
           isResend: false,
@@ -109,7 +110,7 @@ export const template: (
     },
     subTitle: <TypographyProps>{
       label: `A ${
-        AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
+        AssetRepositoryMap[assetRepository].OTP_LENGTH
       }-digit OTP was sent on `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
@@ -127,7 +128,7 @@ export const template: (
     input: <TextInputProps & WidgetProps>{
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
-      charLimit: AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
+      charLimit: AssetRepositoryMap[assetRepository].OTP_LENGTH,
       keyboardType: KeyboardTypeToken.numberPad,
       action: {
         type: ACTION.PLEDGE_VERIFY,
@@ -139,10 +140,10 @@ export const template: (
         routeId: ROUTE.PLEDGE_VERIFY,
       },
       otpAction: {
-          type: ACTION.RESEND_OTP_NUMBER,
-          payload: {},
-          routeId: ROUTE.PLEDGE_VERIFY,
-        },
+        type: ACTION.RESEND_OTP_NUMBER,
+        payload: <OtpPledgePayload>{ assetRepository },
+        routeId: ROUTE.PLEDGE_VERIFY,
+      },
     },
     inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     message: <TypographyProps>{
@@ -156,9 +157,10 @@ export const template: (
 });
 
 export const pledgeVerifyMF: PageType<any> = {
-  onLoad: async ({}, { assetRepository }) => {
+  onLoad: async () => {
     const response = await fetchUserRepo();
     const phoneNumber = response.user.phoneNumber;
+    const assetRepository = await SharedPropsService.getAssetRepositoryType();
     return Promise.resolve(template(phoneNumber, assetRepository));
   },
 

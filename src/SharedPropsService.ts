@@ -1,5 +1,5 @@
 import { User } from "./features/login/otp_verify/types";
-import { __isMock__ } from "./configs/config";
+import { __isMock__, AssetRepositoryType } from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,15 +19,24 @@ type GlobalProps = {
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
   partnerRefCode?: string;
+  assetRepositoryType?: AssetRepositoryType;
+  assetRepositoryFetchMap?: { [key in AssetRepositoryType]: boolean };
 };
 
 let _globalProps: GlobalProps = {
-  buildType: BUILD_TYPE.PARTNER_STAGING,
+  buildType: BUILD_TYPE.BORROWER_STAGING,
   user: {},
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
   partnerRefCode: "",
+  /*** Default asset repository */
+  assetRepositoryType: AssetRepositoryType.KARVY,
+  assetRepositoryFetchMap: {
+    /*** Sequence of fetching asset repository ***/
+    [AssetRepositoryType.KARVY]: false,
+    [AssetRepositoryType.CAMS]: false,
+  },
 };
 async function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -35,6 +44,25 @@ async function setBuildType(buildType) {
 export function getBuildType() {
   return _globalProps.buildType;
 }
+/*** Asset repository ***/
+async function setAssetRepositoryType(
+  assetRepositoryType: AssetRepositoryType
+) {
+  _globalProps.assetRepositoryType = assetRepositoryType;
+}
+async function getAssetRepositoryType() {
+  return _globalProps.assetRepositoryType;
+}
+async function getAssetRepositoryFetchMap() {
+  return _globalProps.assetRepositoryFetchMap;
+}
+async function setAssetRepositoryFetchMap(
+  assetRepositoryType: AssetRepositoryType,
+  value: boolean
+) {
+  _globalProps.assetRepositoryType[assetRepositoryType] = value;
+}
+/*** End Asset repository ***/
 
 async function setAccountNumber(accountNumber: string) {
   _globalProps.accountNumber = accountNumber;
@@ -141,4 +169,8 @@ export default {
   isPledgeFirstTime,
   setPartnerRefCode,
   getPartnerRefCode,
+  setAssetRepositoryType,
+  getAssetRepositoryType,
+  getAssetRepositoryFetchMap,
+  setAssetRepositoryFetchMap,
 };

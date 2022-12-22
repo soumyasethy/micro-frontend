@@ -32,7 +32,7 @@ import {
   LimitPayload,
   StepResponseObject,
 } from "./types";
-import { continueLimit, modifyLimit } from "./actions";
+import { continueLimit, getMoreMfPortfolio, modifyLimit } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 import {
   addCommasToNumber,
@@ -107,10 +107,30 @@ export const template: (
       body: {
         widgetItems: [
           { id: "unlockItem", type: WIDGET.BUTTON },
+          { id: "camsBtn", type: WIDGET.BUTTON },
           { id: "space2", type: WIDGET.SPACE },
           { id: "modifyItem", type: WIDGET.BUTTON },
           { id: "space3", type: WIDGET.SPACE },
         ],
+      },
+    },
+    camsBtn: <ButtonProps & WidgetProps>{
+      label: "Get more MF portfolio",
+      fontFamily: FontFamilyTokens.Inter,
+      type: ButtonTypeTokens.LargeFilled,
+      icon: {
+        name: IconTokens.Lock,
+        align: IconAlignmentTokens.left,
+      },
+      width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTION.GET_MORE_MF_PORTFOLIO,
+        payload: <LimitPayload>{
+          value: stepResponseObject,
+          widgetId: "continue",
+          isResend: false,
+        },
+        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
       },
     },
     unlockItem: <ButtonProps & WidgetProps>{
@@ -268,5 +288,7 @@ export const unlockLimitMF: PageType<any> = {
     [ACTION.UNLOCK_LIMIT]: continueLimit,
     [ACTION.MODIFY_LIMIT]: modifyLimit,
     [ACTION.NAV_NEXT]: NavigateNext,
+    [ACTION.GET_MORE_MF_PORTFOLIO]: getMoreMfPortfolio,
   },
+  clearPrevious:true
 };
