@@ -260,7 +260,7 @@ export const template: (
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Save & Contiune",
-      type: `${bankCode} && ${bankName}` ? ButtonTypeTokens.LargeFilled :ButtonTypeTokens.LargeOutline,
+      type:ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.SAVE,
@@ -297,10 +297,8 @@ export const distBankAccountAddMF: PageType<any> = {
     [ACTION.NAVIGATION_SEARCH_BANK]: NavigationSearchBankAction,
     [ACTION.ONCHANGE_BANK_DETAILS]: onChangeInput,
     [ACTION.ONCHANGE_IFSC_DETAILS]: onChangeInput,
-   // [ACTION.ONCHANGE_ACCOUNT_NUMBER]: onChangeAccountNumber,
    [ACTION.ONCHANGE_ACCOUNT_NUMBER]: onChangeInput,
    [ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER]: onChangeInput,
-    //[ACTION.TOGGLE_CTA]: ToggleCTA,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
     [ACTION.TRIGGER_CTA]: skipBankVerification,

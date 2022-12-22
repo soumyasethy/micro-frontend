@@ -1,4 +1,4 @@
-import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, IconTokens } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -8,7 +8,6 @@ import { ACTION, EnableDisableCTA, InputPayload } from "./types";
 import moment from "moment";
 
 let panNumber = "";
-let fullName = "";
 let mobileNumber = "";
 let email = "";
 let dob: string = "";
@@ -119,15 +118,6 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
     if (response?.data.stepResponseObject?.fullName) {
 
      await SharedPropsService.setApplicationId(response?.data.updatedApplicationObj?.applicationId);
-      // await setDatastore(action.routeId, "input", <TextInputProps>{
-      //   state: InputStateToken.SUCCESS,
-      // });
-      // const currentStepId = await response?.data.updatedApplicationObj
-      //   .currentStepId;
-      // (
-      //   await SharedPropsService.getUser()
-      // ).linkedApplications[0].currentStepId = currentStepId;
-
       await navigate(ROUTE.DETAILS_CONFIRM, {
         name: response?.data.stepResponseObject?.fullName,
         targetRoute: ROUTE.DETAILS_CONFIRM,
@@ -135,48 +125,22 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
     }
   })
   .catch(async (error) => {
-    await setDatastore(action.routeId, "continue", <ButtonProps>{
-      label: "Continue",
-      type: ButtonTypeTokens.LargeOutline,
-      loading: false,
+    await navigate(ROUTE.ALERT_PAGE, {
+      alertProps: {
+        iconName: IconTokens.Failed,
+        title: "Something went wrong!",
+        subTitle: "Please try again",
+        type: "DEFAULT",
+        ctaLabel: "Continue to try again",
+        primary: true,
+        ctaAction: {
+          type: ACTION.GO_BACK,
+          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+          payload: {},
+        },
+      },
     });
-    // await setDatastore(action.routeId, "input", <TextInputProps>{
-    //   state: InputStateToken.ERROR,
-    // });
   });
-
-
-    // const response = await network.post(
-    //   `${partnerApi.customer}${accountId}${'/customer'}`,
-    //   {
-    //     email: email,
-    //     panNumber: panNumber,
-    //     phoneNumber: `+91${mobileNumber}`,
-    //     dob:dob
-    //   },
-    //   { headers: await getAppHeader() }
-    // );
-    // console.log(response)
-
-    console.warn("Data Object: " + JSON.stringify({
-      panNumber,
-      fullName,
-      mobileNumber,
-      email,
-      dob
-    }));
-
-
-    // setTimeout(async () => {
-    //   await setDatastore(action.routeId, "continue", <ButtonProps>{ loading: false });
-    // }, 2000);
-
-    // await navigate(ROUTE.PAN_CONFIRM_NAME, {
-    //   name: response?.data.stepResponseObject?.fullName,
-    //   panNumber: response?.data.stepResponseObject?.panNumber,
-    //   targetRoute: action.payload.targetRoute,
-    // });
-
   }
 };
 

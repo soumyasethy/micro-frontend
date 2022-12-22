@@ -56,6 +56,7 @@ export const getAuthHeaders = () => ({
 export const getAppHeader = async () => ({
   "X-AppMode": "INVESTOR_VIEW",
   "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+  //"X-AppMode": "INVESTOR_VIEW",
   Authorization: `Bearer ${await SharedPropsService.getToken()}`,
   "Content-Type": "application/json",
   "X-DeviceType":
@@ -141,4 +142,5 @@ export enum ConfigTokens {
 
 export enum ConfigValues {
   MinimumAmountAllowed = 25000,
+  AADHAR = "^[2-9]{1}[0-9]{11}$"
 }

@@ -4,12 +4,10 @@ import {
   ButtonTypeTokens,
   IconTokens,
   InputStateToken,
-  StepperStateToken,
   TextInputProps,
 } from "@voltmoney/schema";
 import {
   ACTION as ACTION_CURRENT,
-  BAVVerifyActionPayload,
   InputPayload
 } from './types';
 import {
@@ -21,12 +19,7 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { api, partnerApi } from "../../../configs/api";
-import { APP_CONFIG, getAppHeader } from "../../../configs/config";
-import { StepStatusMap, User } from "../../login/otp_verify/types";
-import {
-  updateCurrentStepId,
-  updateStepStatusMap,
-} from "../../../configs/utils";
+import { APP_CONFIG, getAppHeader, RegexConfig } from "../../../configs/config";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 
 let bankAccountNumber = "";
@@ -58,12 +51,13 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
       applicationId: applicationId,
       bankAccountNumber: bankAccountNumber,
       bankIfscCode: bankIfsc,
-      confirmedBankAccountNumber:bankAccountNumber
+      confirmedBankAccountNumber:confirmAccountNumber
     },
     { headers: await getAppHeader() }
   )
   .then(async (response) => {
-      await showPopup({
+    if(response.status == 200){
+        await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
         isAutoTriggerCta: true,
         title: "Bank details saved succesfully",
@@ -79,12 +73,24 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
           },
         },
       });
+    }
+      
   })
   .catch(async (error) => {
-    await setDatastore(action.routeId, "continue", <ButtonProps>{
-      label: "Continue",
-      type: ButtonTypeTokens.LargeOutline,
-      loading: false,
+    await navigate(ROUTE.ALERT_PAGE, {
+      alertProps: {
+        iconName: IconTokens.Failed,
+        title: "Something went wrong!",
+        subTitle: "Please try again",
+        type: "DEFAULT",
+        ctaLabel: "Continue to try again",
+        primary: true,
+        ctaAction: {
+          type: ACTION.NAV_STEPPER,
+          routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+          payload: {},
+        },
+      },
     });
   });
   }
@@ -151,16 +157,18 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
     }
     case "confirmAccountInput": {
       confirmAccountNumber = action.payload.value;
+      const acc_regex = bankAccountNumber;
+      await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
+        regex:acc_regex
+      });
       await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
         charLimit:bankAccountNumber.length
       });
       if(confirmAccountNumber === bankAccountNumber){
-        acc = confirmAccountNumber;
          await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
             state: InputStateToken.SUCCESS,
           });
        }else{
-        acc = confirmAccountNumber;
         await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
           state: InputStateToken.ERROR,
         });
@@ -258,10 +266,7 @@ export const onConfirmAccountNumber: ActionFunction<InputNumberActionPayload> = 
   { setDatastore,...props }
 ): Promise<any> => {
   confirmAccountNumber = action.payload.value;
-  console.log("account number",bankAccountNumber)
-  console.log("conf account number",confirmAccountNumber)
    if(confirmAccountNumber === bankAccountNumber){
-    console.log("matched")
      await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
         state: InputStateToken.SUCCESS,
       });
@@ -271,33 +276,6 @@ export const onConfirmAccountNumber: ActionFunction<InputNumberActionPayload> = 
       state: InputStateToken.ERROR,
     });
    }
-  // if (confirmAccountNumber) {
-  //   await toggleCTA(
-  //     {
-  //       type: ACTION.ENABLE_CONTINUE,
-  //       routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
-  //       payload: <EnableDisableCTA>{
-  //         value: true,
-  //         targetWidgetId: "continue",
-  //       },
-  //     },
-  //     {},
-  //     props
-  //   );
-  // } else {
-  //   await toggleCTA(
-  //     {
-  //       type: ACTION.ENABLE_CONTINUE,
-  //       routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
-  //       payload: <EnableDisableCTA>{
-  //         value: false,
-  //         targetWidgetId: "continue",
-  //       },
-  //     },
-  //     {},
-  //     props
-  //   );
-  // }
 };
 
 export const onChangeAccountNumber: ActionFunction<InputNumberActionPayload> = async (
@@ -306,10 +284,6 @@ export const onChangeAccountNumber: ActionFunction<InputNumberActionPayload> = a
   { setDatastore,...props }
 ): Promise<any> => {
   bankAccountNumber = action.payload.value;
-  // await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
-  
-  //   charLimit:action.payload.value.length-1
-  // });
   if (bankAccountNumber) {
     await toggleCTA(
       {
@@ -380,12 +354,12 @@ export const ChangeBankGoBackAction: ActionFunction<any> = async (
   _datastore,
   { navigate,goBack }
 ): Promise<any> => {
-  await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
+  await navigate(ROUTE.BASIC_DETAILS_START);
 };
 export const GoToStepper: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate }
+  { navigate,goBack }
 ): Promise<any> => {
-  await navigate(ROUTE.KYC_STEPPER);
+  await goBack();
 };

@@ -44,6 +44,7 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
             { id: "space1", type: WIDGET.SPACE },
             { id: "image", type: WIDGET.IMAGE },
             { id: "space", type: WIDGET.SPACE },
+            { id: "spaceExtra", type: WIDGET.SPACE },
             { id: "stepper", type: WIDGET.STEPPER },
             { id: "space2", type: WIDGET.SPACE },
             {
@@ -80,14 +81,15 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
             size: SizeTypeTokens.XXL,
         },
         image: <ImageProps>{
-           // size: ImageSizeTokens.FULL,
-            height:190,
-            width:328,
+            size: ImageSizeTokens.FULL,
+          //  height:190,
+           // width:328,
             resizeMode: ResizeModeToken.COVER,
             aspectRatio: AspectRatioToken.A2_1,
             uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUgAAAC+CAYAAABXqJaDAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAALsSURBVHgB7dcxcRthFEbRfyU12wmCIcRMQiWIAiEOAzNwIBiCuh1H8iraIpmJ7YvA51TvI3Bn3jRulmW52+8P369jfLnN4wD4rK7jYV0v3+Z5fp62OO72h6chjAB/ndbXy/30cj7/uBXz6wDgn2mMx+nl9/k6AHjrtBsAfOQokABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJELZAngYA7+ymMX4NAP5zXdef07Isd7v94em2jwOAzWl9vdzv5nl+3o5xHQ8D4HM73b7qx62JWxv/AKTiODAjKLkxAAAAAElFTkSuQmCC",
         },
         space: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+        spaceExtra: <SpaceProps>{ size: SizeTypeTokens.XS },
         stepper: <StepperProps & WidgetProps>{
             type: StepperTypeTokens.DISTRIBUTOR,
             data: data,
