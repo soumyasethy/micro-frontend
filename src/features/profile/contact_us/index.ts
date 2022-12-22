@@ -35,10 +35,10 @@ export const template: () => TemplateSchema = () => {
         { id: "topSpace", type: WIDGET.SPACE },
         { id: "info", type: WIDGET.TEXT },
         { id: "space0", type: WIDGET.SPACE },
-        {
-          id: "whatsappCard",
-          type: WIDGET.CARD,
-        },
+        // {
+        //   id: "whatsappCard",
+        //   type: WIDGET.CARD,
+        // },
         { id: "space1", type: WIDGET.SPACE },
         {
           id: "callCard",
@@ -131,7 +131,7 @@ export const template: () => TemplateSchema = () => {
         },
         customSubTitle: <TypographyProps>{
           label:
-            "Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM",
+            "Call us at +91 96117 49097. We are available in working days from 9.30 AM to 6.30 PM",
           color: ColorTokens.Grey_Charcoal,
           fontFamily: FontFamilyTokens.Inter,
           fontWeight: "400",
