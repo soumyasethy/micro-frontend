@@ -38,3 +38,17 @@ export const onBack: ActionFunction<{}> = async (action, _datastore, { navigate 
  };
 
 
+export const goCamsNext: ActionFunction<{}> = async (action, _datastore, { navigate }): Promise<any> => {
+  await navigate(ROUTE.CHECK_PARTNER_LIMIT,{
+    headTitle:"CAMS"
+  })
+ };
+
+
+export const goKarvyNext: ActionFunction<{}> = async (action, _datastore, { navigate }): Promise<any> => {
+  await navigate(ROUTE.CHECK_PARTNER_LIMIT,{
+    headTitle:"CAMS"
+  })
+ };
+
+

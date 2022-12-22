@@ -80,8 +80,8 @@ export const SplashAction: ActionFunction<any> = async (
           await navigate(ROUTE.ENTER_NAME);
         }else if(user.linkedPartnerAccounts[0].partnerName != null){
           console.log(`user.linkedPartnerAccounts[0].partnerName`);
-          //await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
-          await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
+         // await navigate(ROUTE.DIST_BANK_ACCOUNT_ADD);
+          await navigate(ROUTE.CHECK_PARTNER_LIMIT);
         }else{
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
         }

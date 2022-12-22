@@ -65,6 +65,7 @@ type GlobalProps = {
   applicationId?:string;
   bankCode?:string;
   bankName?:string;
+  accountId?:string;
 };
 let _globalProps: GlobalProps = {
   buildType: BUILD_TYPE.BORROWER_STAGING,
@@ -111,7 +112,8 @@ let _globalProps: GlobalProps = {
  // userType:USERTYPE.BORROWER
   applicationId:"",
   bankCode:"",
-  bankName:""
+  bankName:"",
+  accountId:""
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -151,6 +153,14 @@ async function setAssetRepositoryFetchMap(
   }
 }
 /*** End Asset repository ***/
+
+async function setAccountId(accountId: string){
+  _globalProps.accountId = accountId;
+}
+
+async function getAccountId(){
+  return _globalProps.accountId;
+}
 
 async function setBankCode(bankCode: string){
   _globalProps.bankCode = bankCode;
@@ -407,5 +417,7 @@ export default {
   setBankCode,
   getBankCode,
   setBankName,
-  getBankName
+  getBankName,
+  getAccountId,
+  setAccountId
 };

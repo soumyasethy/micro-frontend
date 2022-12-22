@@ -85,6 +85,10 @@ import { nameMF } from "./features/enter_name";
 import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
 import { basicDetailsStartMF } from "./features/Dist_basicDetails/basicDetailsStart";
 import { DistributorClientListStepperMF } from "./features/DistributorClientList/ClientListStepper";
+import { checkPartnerLimitMF } from "./features/authCASPartner/check_limit";
+import { otpVerifyAuthPartnerMF } from "./features/authCASPartner/otp_CAS";
+import { updatePartnerEmailMF } from "./features/authCASPartner/update_emailId";
+import { updatePartnerMobileNumberMF } from "./features/authCASPartner/update_phoneNo";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -178,5 +182,9 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]:distBasicDetailsMF,
   [ROUTE.DETAILS_CONFIRM]: detailsConfirmMF,
   [ROUTE.BASIC_DETAILS_START]: basicDetailsStartMF,
-  [ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER]: DistributorClientListStepperMF
+  [ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER]: DistributorClientListStepperMF,
+  [ROUTE.CHECK_PARTNER_LIMIT]: checkPartnerLimitMF,
+  [ROUTE.OTP_PARTNER_PORTFOLIO]: otpVerifyAuthPartnerMF,
+  [ROUTE.PARTNER_MOBILE_UPDATE]: updatePartnerMobileNumberMF,
+  [ROUTE.PARTNER_EMAIL_UPDATE]: updatePartnerEmailMF,
 };
