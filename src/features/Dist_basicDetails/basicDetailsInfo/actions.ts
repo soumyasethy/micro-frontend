@@ -6,6 +6,7 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { ACTION, EnableDisableCTA, InputPayload } from "./types";
 import moment from "moment";
+import { BasicData } from "../../login/otp_verify/types";
 
 let panNumber = "";
 let mobileNumber = "";
@@ -42,6 +43,9 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   switch (action.payload.widgetId) {
     case "panNumberInput": {
       panNumber = action.payload.value;
+      const data: BasicData = await SharedPropsService.getBasicData();
+      data.panNumber = panNumber;
+      await SharedPropsService.setBasicData(data);
       break;
     }
     case "calendarPicker": {
@@ -50,10 +54,16 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
     }
     case "mobileNumberInput": {
       mobileNumber = action.payload.value;
+      const data: BasicData = await SharedPropsService.getBasicData();
+      data.mobileNumber = mobileNumber;
+      await SharedPropsService.setBasicData(data);
       break;
     }
     case "emailInput": {
       email = action.payload.value;
+      const data: BasicData = await SharedPropsService.getBasicData();
+      data.email = email;
+      await SharedPropsService.setBasicData(data);
       break;
     }
   }

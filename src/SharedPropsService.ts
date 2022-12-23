@@ -1,4 +1,4 @@
-import { User } from "./features/login/otp_verify/types";
+import { BankData, User ,PartnerUser, BasicData} from "./features/login/otp_verify/types";
 import {  __isMock__ } from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
@@ -13,6 +13,7 @@ export enum USERTYPE {
 
 type GlobalProps = {
   user: User;
+  partnerUser: PartnerUser;
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
@@ -22,9 +23,21 @@ type GlobalProps = {
   bankCode?:string;
   bankName?:string;
   accountId?:string;
+  pbankAccNo?:string;
+  pconfirmAccNo?:string;
+  pbankIfsc?:string;
+  bankData :BankData;
+  basicData: BasicData
 };
+
 let _globalProps: GlobalProps = {
   user: {},
+  partnerUser:{
+    name:"",
+    panNumber: "",
+    phoneNumber: "",
+    emailId: "",
+  },
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
@@ -32,8 +45,48 @@ let _globalProps: GlobalProps = {
   applicationId:"",
   bankCode:"",
   bankName:"",
-  accountId:""
+  accountId:"",
+  pbankAccNo:"",
+  pconfirmAccNo:"",
+  pbankIfsc:"",
+  bankData:{
+    bankName: "",
+    bankCode:"",
+    accountNumber:"",
+    confirmAccountNumber:"",
+    bankIfsc:""
+  },
+  basicData:{
+    panNumber:"",
+    mobileNumber:"",
+    email:""
+  }
 };
+
+async function setBasicData(props: BasicData) {
+  _globalProps.basicData = await props;
+}
+
+async function getBasicData() {
+  return _globalProps.basicData;
+}
+
+
+async function setBankData(props: BankData) {
+  _globalProps.bankData = await props;
+}
+
+async function getBankData() {
+  return _globalProps.bankData;
+}
+
+async function setPartnerUser(props: PartnerUser) {
+  _globalProps.partnerUser = await props;
+}
+
+async function getPartnerUser() {
+  return _globalProps.partnerUser;
+}
 
 async function setAccountId(accountId: string){
   _globalProps.accountId = accountId;
@@ -190,5 +243,11 @@ export default {
   setBankName,
   getBankName,
   getAccountId,
-  setAccountId
+  setAccountId,
+  setPartnerUser,
+  getPartnerUser,
+  setBankData,
+  getBankData,
+  setBasicData,
+  getBasicData
 };

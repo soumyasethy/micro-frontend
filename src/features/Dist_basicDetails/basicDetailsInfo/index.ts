@@ -12,7 +12,8 @@ import { CalendarOnChange, goBack, onChangeInput, toggleCTA, triggerCTA } from "
 
 export const template: (
   stepper: StepperItem[],
-) => TemplateSchema = (stepper) => {
+  isDisabled:string
+) => TemplateSchema = (stepper,isDisabled) => {
   return {
     layout: <Layout>{
       id: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
@@ -172,7 +173,7 @@ export const template: (
         ]
       },
       continue: <ButtonProps & WidgetProps>{
-        type: ButtonTypeTokens.LargeOutline,
+        type: `${isDisabled}` ? ButtonTypeTokens.LargeFilled:ButtonTypeTokens.LargeOutline,
         label: "Save & Confirm",
         width: ButtonWidthTypeToken.FULL,
         fontFamily: FontFamilyTokens.Inter,
@@ -191,8 +192,13 @@ export const template: (
 
 export const distBasicDetailsMF: PageType<any> = {
   onLoad: async () => {
+    const data = await SharedPropsService.getBasicData();
+    let isDisabled = "";
+    if(data.panNumber !== "" && data.mobileNumber !== "" && data.email !== ""){
+      isDisabled = "true";
+    }
     const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-    return Promise.resolve(template(stepper));
+    return Promise.resolve(template(stepper,isDisabled));
   },
   actions: {
     [ACTION.ENTER_DOB]: onChangeInput,

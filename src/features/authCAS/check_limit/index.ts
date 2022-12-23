@@ -14,6 +14,8 @@ import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   IconTokens,
   ListItemProps,
   SizeTypeTokens,
@@ -28,27 +30,36 @@ import {
   editMobileNumber,
   editPanNumber,
   fetchMyPortfolio,
+  goBack,
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryType } from "../../../configs/config";
+import { AssetRepositoryType, getAppHeader } from "../../../configs/config";
+import { partnerApi } from "../../../configs/api";
 
 export const template: (
   applicationId: string,
   panNumber: string,
   phoneNumber: string,
-  emailId: string
-) => TemplateSchema = (applicationId, panNumber, phoneNumber, emailId) => {
+  emailId: string,
+  headTitle: string
+) => TemplateSchema = (applicationId, panNumber, phoneNumber, emailId, headTitle) => {
   return {
     layout: <Layout>{
       id: ROUTE.MF_FETCH_PORTFOLIO,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "space0", type: WIDGET.SPACE },
-        { id: "title", type: WIDGET.TEXT },
-        { id: "space1", type: WIDGET.SPACE },
-        { id: "subTitle", type: WIDGET.TEXT },
-        { id: "space2", type: WIDGET.SPACE },
+        ...(headTitle
+          ? [
+            { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+          ]
+          : [
+            { id: "space0", type: WIDGET.SPACE },
+            { id: "title", type: WIDGET.TEXT },
+            { id: "space1", type: WIDGET.SPACE },
+            { id: "subTitle", type: WIDGET.TEXT },
+            { id: "space2", type: WIDGET.SPACE },
+          ]),
         { id: "panItem", type: WIDGET.LIST_ITEM },
         { id: "mobileItem", type: WIDGET.LIST_ITEM },
         { id: "emailItem", type: WIDGET.LIST_ITEM },
@@ -60,6 +71,16 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      header: <HeaderProps & WidgetProps>{
+        isBackButton: true,
+        type: HeaderTypeTokens.DEFAULT,
+        title: `Fetch From ${headTitle}`,
+        action: {
+          type: ACTION.GO_BACK,
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
+          payload: {},
+        },
+      },
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       title: <TypographyProps>{
         label: "Check available cash limit",
@@ -121,7 +142,8 @@ export const template: (
         },
       },
       fetchCTA: <ButtonProps & WidgetProps>{
-        label: "Get my portfolio",
+        label: "Get MY Portfolio",
+        //  label: `${headTitle} ? Verify By OTP ? Get MY Portfolio`,
         fontFamily: FontFamilyTokens.Poppins,
         width: ButtonWidthTypeToken.FULL,
         type: ButtonTypeTokens.LargeFilled,
@@ -133,8 +155,8 @@ export const template: (
             emailId,
             phoneNumber,
             panNumber,
-            // assetRepository: "CAMS",
-            assetRepository: AssetRepositoryType.DEFAULT,
+            assetRepository: headTitle ? headTitle : AssetRepositoryType.DEFAULT,
+            //assetRepository: AssetRepositoryType.DEFAULT,
           },
         },
       },
@@ -144,23 +166,32 @@ export const template: (
 
 export const checkLimitMF: PageType<any> = {
   onLoad: async (
-    { asyncStorage },
-    { applicationId, email, panNumber, mobileNumber }
+    { network, asyncStorage },
+    { applicationId, email, panNumber, mobileNumber, headTitle }
   ) => {
-    const user: User = await SharedPropsService.getUser();
-    const panNumberX =
-      panNumber || user.linkedBorrowerAccounts[0].accountHolderPAN;
-    const phoneNumber =
-      mobileNumber || user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId = `${
-      email || user.linkedBorrowerAccounts[0].accountHolderEmail
-    }`.toLowerCase();
-    if (!applicationId) {
-      applicationId = applicationId || user.linkedApplications[0].applicationId;
+    const userType = await SharedPropsService.getUserType();
+    let phoneNumber = "";
+    let panNumberX = "";
+    let emailId = "";
+    console.log("userType", userType);
+    if (userType === "BORROWER") {
+      const user: User = await SharedPropsService.getUser();
+      panNumberX =
+        panNumber || user.linkedBorrowerAccounts[0].accountHolderPAN;
+      phoneNumber =
+        mobileNumber || user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+      emailId = `${email || user.linkedBorrowerAccounts[0].accountHolderEmail
+        }`.toLowerCase();
+      if (!applicationId) {
+        applicationId = applicationId || user.linkedApplications[0].applicationId;
+      }
+    } else {
+      phoneNumber = await (await SharedPropsService.getPartnerUser()).phoneNumber;
+      emailId = await (await SharedPropsService.getPartnerUser()).emailId;
+      panNumberX = await (await SharedPropsService.getPartnerUser()).panNumber;
     }
-
     return Promise.resolve(
-      template(applicationId, panNumberX, phoneNumber, emailId)
+      template(applicationId, panNumberX, phoneNumber, emailId, headTitle)
     );
   },
   actions: {
@@ -169,5 +200,6 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
     [ACTION.EDIT_PAN]: editPanNumber,
+    [ACTION.GO_BACK]: goBack,
   },
 };

@@ -95,9 +95,17 @@ export const template: (prevMob: string) => TemplateSchema = (prevMob) => ({
 
 export const updateMobileNumberMF: PageType<any> = {
   onLoad: async () => {
-    const prevMob = `${(
-      await SharedPropsService.getUser()
-    ).linkedBorrowerAccounts[0].accountHolderPhoneNumber.replace("+91", "")}`;
+    const userType = await SharedPropsService.getUserType();
+    let prevMob = "";
+    if(userType === "BORROWER"){
+       prevMob = `${(
+        await SharedPropsService.getUser()
+      ).linkedBorrowerAccounts[0].accountHolderPhoneNumber.replace("+91", "")}`;
+    }else{
+      prevMob = `${
+        (await (await SharedPropsService.getPartnerUser()).phoneNumber.replace("+91", ""))
+      }`;
+    }
     return Promise.resolve(template(prevMob));
   },
   actions: {

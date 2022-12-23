@@ -40,29 +40,31 @@ import { goCamsNext, goKarvyNext, onBack, onSave, onShare, onSkip } from "./acti
 import SharedPropsService from "../../SharedPropsService";
 import { partnerApi } from "../../configs/api";
 import { getAppHeader } from "../../configs/config";
+import moment from "moment";
 
 
 export const template: (
-    isDataUpdated:boolean,
+    isDataUpdated: any,
+    camsFetches: {},
     stepper: StepperItem[]
-) => TemplateSchema = (isDataUpdated,stepper) => {
-    const _generateRepaymentDS =
-    isDataUpdated === true
-      ? {
-        operationalStickyStack: <StackProps>{
-            body: {
-              widgetItems: [
-                {
-                  id: "operationalStack",
-                  type: WIDGET.STACK,
+) => TemplateSchema = (isDataUpdated, camsFetches, stepper) => {
+    const _generateDS =
+        isDataUpdated
+            ? {
+                operationalStickyStack: <StackProps>{
+                    body: {
+                        widgetItems: [
+                            {
+                                id: "operationalStack",
+                                type: WIDGET.STACK,
+                            },
+                        ],
+                    },
                 },
-              ],
-            },
-          },
-        }
-      : {};
-      console.log(isDataUpdated);
-   console.log(_generateRepaymentDS);
+            }
+            : {};
+    console.log(isDataUpdated);
+    console.log(_generateDS);
 
     return {
         layout: <Layout>{
@@ -76,21 +78,25 @@ export const template: (
                 },
                 { id: "space0", type: WIDGET.SPACE },
                 { id: "space1", type: WIDGET.SPACE },
-                { id: "camsStack", type: WIDGET.STACK },
+                ...(`${Object.keys(camsFetches)}` === "CAMS"
+                    ? [
+                        { id: "operationalStack", type: WIDGET.STACK }
+                    ]
+                    : [
+                        { id: "camsStack", type: WIDGET.STACK },
+                    ]),
+
                 { id: "midDivider", type: WIDGET.DIVIDER },
-                 { id: "karvyStack", type: WIDGET.STACK },
+                ...(`${Object.keys(camsFetches)}` === "KARVY" ?
+                    [
+                        { id: "operationalStack", type: WIDGET.STACK }
+                    ] : [
+                        { id: "karvyStack", type: WIDGET.STACK },
+                    ]),
                 { id: "karvySpace", type: WIDGET.SPACE },
                 { id: "karvyDivider", type: WIDGET.DIVIDER },
-                ...(isDataUpdated === true
-                    ? [
-                        {
-                          id: "operationalStickyStack",
-                          type: WIDGET.STACK,
-                          
-                        },
-                      ]
-                    : []),
-              //  { id: "operationalStack", type: WIDGET.STACK },
+
+
                 {
                     id: "continue",
                     type: WIDGET.BUTTON,
@@ -102,8 +108,10 @@ export const template: (
                     type: WIDGET.BUTTON,
                     position: POSITION.ABSOLUTE_BOTTOM,
                 },
+
             ],
         },
+
         datastore: <Datastore>{
             header: <HeaderProps & WidgetProps>{
                 isBackButton: true,
@@ -130,8 +138,8 @@ export const template: (
             space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
             camsStack: <StackProps>{
                 type: StackType.row,
-                alignItems: StackAlignItems.center,
-                justifyContent: StackJustifyContent.center,
+                alignItems: StackAlignItems.flexStart,
+                justifyContent: StackJustifyContent.flexStart,
                 widgetItems: [
                     { id: "textStack", type: WIDGET.STACK },
                     { id: "btnStack", type: WIDGET.STACK }
@@ -196,8 +204,8 @@ export const template: (
             },
             karvyStack: <StackProps>{
                 type: StackType.row,
-                alignItems: StackAlignItems.center,
-                justifyContent: StackJustifyContent.center,
+                alignItems: StackAlignItems.flexStart,
+                justifyContent: StackJustifyContent.flexStart,
                 widgetItems: [
                     { id: "textKarvyStack", type: WIDGET.STACK },
                     { id: "btnKarvyStack", type: WIDGET.STACK }
@@ -265,7 +273,7 @@ export const template: (
                 },
             },
 
-            ..._generateRepaymentDS,
+            ..._generateDS,
             operationalStack: <StackProps>{
                 type: StackType.row,
                 alignItems: StackAlignItems.flexStart,
@@ -283,16 +291,16 @@ export const template: (
                     { id: "headItems", type: WIDGET.TEXT },
                     { id: "headSpace", type: WIDGET.SPACE },
                     { id: "dateItems", type: WIDGET.TEXT },
-                    { id: "portfolioItems", type: WIDGET.TEXT },
-                    { id: "totalItems", type: WIDGET.TEXT },
-                    { id: "creditLimitItems", type: WIDGET.TEXT },
-                    { id: "availableLimitItems", type: WIDGET.TEXT },
-                    { id: "limitSpace", type: WIDGET.SPACE },
+                    // { id: "portfolioItems", type: WIDGET.TEXT },
+                    // { id: "totalItems", type: WIDGET.TEXT },
+                    // { id: "creditLimitItems", type: WIDGET.TEXT },
+                    // { id: "availableLimitItems", type: WIDGET.TEXT },
+                    // { id: "limitSpace", type: WIDGET.SPACE },
                     { id: "viewPortfolio", type: WIDGET.STACK },
                 ],
             },
             headItems: <TypographyProps>{
-                label: "Fetch from Karvy",
+                label: `Fetch From ${Object.keys(camsFetches)}`,
                 fontSize: FontSizeTokens.MD,
                 fontWeight: '600',
                 color: ColorTokens.Grey_Night,
@@ -303,7 +311,8 @@ export const template: (
                 size: SizeTypeTokens.SM
             },
             dateItems: <TypographyProps>{
-                label: "Last fetched on Wed 19 Oct",
+                label: `Last fetched on ${Object.values(camsFetches)}`,
+                // label: `Last fetched on ${moment(Object.values(camsFetches), "DD-MM-yyyy").valueOf()}`,
                 fontSize: FontSizeTokens.XS,
                 fontWeight: '400',
                 color: ColorTokens.Grey_Charcoal,
@@ -369,7 +378,7 @@ export const template: (
             },
             operationalBtn: <StackProps>{
                 type: StackType.column,
-                alignItems: StackAlignItems.flexStart,
+                alignItems: StackAlignItems.flexEnd,
                 justifyContent: StackJustifyContent.flexEnd,
                 widgetItems: [
                     { id: "operationalBtnItems", type: WIDGET.BUTTON },
@@ -378,7 +387,7 @@ export const template: (
             },
             operationalBtnItems: <ButtonProps & WidgetProps>{
                 label: "Fetch again",
-                type: ButtonTypeTokens.LargeSoftFilled,
+                type: ButtonTypeTokens.MediumSoftFilled,
                 labelColor: ColorTokens.Primary_100,
                 width: ButtonWidthTypeToken.CONTENT,
                 action: {
@@ -390,7 +399,7 @@ export const template: (
 
             continue: <ButtonProps & WidgetProps>{
                 label: "Save & Contiune",
-                type: ButtonTypeTokens.LargeOutline,
+                type: `${Object.keys(camsFetches)}` ? ButtonTypeTokens.LargeFilled : ButtonTypeTokens.LargeOutline,
                 labelColor: ColorTokens.Grey_Charcoal,
                 width: ButtonWidthTypeToken.FULL,
                 action: {
@@ -418,45 +427,29 @@ export const template: (
 
 export const distributorPortfolioMF: PageType<any> = {
     onLoad: async ({ network }, { }) => {
-       // const applictaionId ="20ea8350-ba8c-4bd5-857d-1ee6ecdbafa7";
-        // const applictaionId = await SharedPropsService.getApplicationId();
-        // const response = await network.get(
-        //     `${partnerApi.pledgeLimit}${applictaionId}`,
-        //     { headers: await getAppHeader() }
-        // );
+        /* For testing purpose 
+            const applictaionId ="bd2c1f9d-356c-40c1-b4b9-fad351fbd992";
+            let camsFetches = {
+                "KARVY": 1671781866
+            }
+            let isDataUpdated = "Data Exist";
+         */
 
-        //   console.log(response.data.casFetchDates);
-        let isDataUpdated = true;
-        //   if(response.status === 200){
-        //     if(response.data.casFetchDates){
-        //         isAgain = true;
-        //     }
-        // const casFetchDates = _.get(
-        //         response,
-        //         "data.casFetchDates",
-        //         {}
-        //       );
-        // }
-
-        //   const processingFeesBreakUp = _.get(
-        //     response,
-        //     "data.stepResponseObject.processingChargesBreakup",
-        //     {}
-        //   );
-        //   const totalCharges = _.get(
-        //     response,
-        //     "data.stepResponseObject.totalCharges",
-        //     0
-        //   );
-
-        //   const totalAmount = getTotalLimit(
-        //     stepResponseObject.availableCAS,
-        //     stepResponseObject.isinNAVMap,
-        //     stepResponseObject.isinLTVMap
-        //   );
-
+        const applictaionId = await SharedPropsService.getApplicationId();
+        const response = await network.get(
+            `${partnerApi.pledgeLimit}${applictaionId}`,
+            { headers: await getAppHeader() }
+        );
+        let camsFetches = {}
+        let isDataUpdated = "";
+        if (JSON.stringify(response.data.stepResponseObject.casFetchDates) === '{}') {
+            isDataUpdated = "";
+        } else {
+            camsFetches = response.data.stepResponseObject.casFetchDates;
+            isDataUpdated = "Data Exist";
+        }
         const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-        return Promise.resolve(template(isDataUpdated,stepper));
+        return Promise.resolve(template(isDataUpdated, camsFetches, stepper));
     },
     actions: {
         [ACTION.ON_SAVE]: onSave,

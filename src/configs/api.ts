@@ -38,7 +38,9 @@ export const partnerApi = {
   customer: `${config.URL}/app/partner/`,
   bavAdd:`${config.URL}/app/borrower/application/bav/add`,
   pledgeLimit: `${config.URL}/app/borrower/application/pledge/limit/`,
-  userProfile:`${config.URL}/app/borrower/userProfile/`
+  userProfile:`${config.URL}/app/borrower/userProfile/`,
+  pledgeInit:`${config.URL}/app/borrower/application/pledge/init`,
+  authCAS:`${config.URL}/app/borrower/application/pledge/authCAS`
 };
 
 export const api = {

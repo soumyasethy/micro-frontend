@@ -1,10 +1,10 @@
 import { ActionFunction } from "@voltmoney/types";
 import { FetchPortfolioPayload, PanEditPayload } from "./types";
-import { api } from "../../../configs/api";
+import { api, partnerApi } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
-import SharedPropsService from "../../../SharedPropsService";
+import SharedPropsService, { USERTYPE } from "../../../SharedPropsService";
 import { getAppHeader } from "../../../configs/config";
 let hasChangedInDetails = false;
 
@@ -51,40 +51,77 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
     loading: true,
   });
 
-  if (hasChangedInDetails) {
-    const user: User = await SharedPropsService.getUser();
-    action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
-    action.payload.phoneNumber =
-      user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    action.payload.emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
-    if (!action.payload.applicationId) {
-      action.payload.applicationId = user.linkedApplications[0].applicationId;
-    }
-  }
-  await network
-    .post(
-      api.pledgeInit,
-      <FetchPortfolioPayload>{
-        ...action.payload,
-      },
-      {
-        headers: await getAppHeader(),
-      }
-    )
-    .then(async (response) => {
+
+
+  const userType = await SharedPropsService.getUserType();
+  console.log(userType);
+  if (userType == "BORROWER") {
+    // updataion after implement at correct place 
+    if (hasChangedInDetails) {
       const user: User = await SharedPropsService.getUser();
-      user.linkedApplications[0].currentStepId =
-        response.data.updatedApplicationObj.currentStepId;
-      await SharedPropsService.setUser(user);
-      await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
-        ...action.payload,
+      action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+      action.payload.phoneNumber =
+        user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+      action.payload.emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
+      if (!action.payload.applicationId) {
+        action.payload.applicationId = user.linkedApplications[0].applicationId;
+      }
+    }
+    await network
+      .post(
+        api.pledgeInit,
+        <FetchPortfolioPayload>{
+          ...action.payload,
+        },
+        {
+          headers: await getAppHeader(),
+        }
+      )
+      .then(async (response) => {
+        const user: User = await SharedPropsService.getUser();
+        user.linkedApplications[0].currentStepId =
+          response.data.updatedApplicationObj.currentStepId;
+        await SharedPropsService.setUser(user);
+        await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
+          ...action.payload,
+        });
+      })
+      .finally(async () => {
+        await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
+          label: "Get my portfolio",
+          type: ButtonTypeTokens.LargeFilled,
+          loading: false,
+        });
       });
-    })
-    .finally(async () => {
-      await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
-        label: "Get my portfolio",
-        type: ButtonTypeTokens.LargeFilled,
-        loading: false,
+  } else {
+    const applicationId = await SharedPropsService.getApplicationId()
+    await network
+      .post(
+        `${partnerApi.pledgeInit}`,
+        <FetchPortfolioPayload>{
+          ...action.payload,
+        },
+        { headers: await getAppHeader() }
+      )
+      .then(async (response) => {
+        await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
+          ...action.payload,
+        });
+      })
+      .finally(async () => {
+        await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
+          label: "Get my portfolio",
+          type: ButtonTypeTokens.LargeFilled,
+          loading: false,
+        });
       });
-    });
+  }
+};
+
+export const goBack: ActionFunction<{}> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  goBack();
 };

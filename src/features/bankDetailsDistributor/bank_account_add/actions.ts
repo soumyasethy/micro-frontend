@@ -21,6 +21,7 @@ import _ from "lodash";
 import { api, partnerApi } from "../../../configs/api";
 import { APP_CONFIG, getAppHeader, RegexConfig } from "../../../configs/config";
 import { EnableDisableCTA } from "../../login/phone_number/types";
+import { BankData } from "../../login/otp_verify/types";
 
 let bankAccountNumber = "";
 let bankName = "";
@@ -129,21 +130,34 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
+  
   switch (action.payload.widgetId) {
     case "bankInput": {
       bankName = action.payload.value;
+      const bank: BankData = await SharedPropsService.getBankData();
+      bank.bankName = bankName;
+      await SharedPropsService.setBankData(bank);
       break;
     }
     case "IFSCInput": {
       bankIfsc = action.payload.value;
+      const bank: BankData = await SharedPropsService.getBankData();
+      bank.bankIfsc = bankIfsc;
+      await SharedPropsService.setBankData(bank);
       break;
     }
     case "accountInput": {
       bankAccountNumber = action.payload.value;
+      const bank: BankData = await SharedPropsService.getBankData();
+      bank.accountNumber = bankAccountNumber;
+      await SharedPropsService.setBankData(bank);
       break;
     }
     case "confirmAccountInput": {
       confirmAccountNumber = action.payload.value;
+      const bank: BankData = await SharedPropsService.getBankData();
+      bank.confirmAccountNumber = confirmAccountNumber;
+      await SharedPropsService.setBankData(bank);
       const acc_regex = bankAccountNumber;
       await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
         regex:acc_regex
@@ -163,12 +177,12 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
       break;
     }
   }
-
   if (
     bankName &&
     bankIfsc &&
     bankAccountNumber &&
     confirmAccountNumber) {
+
     await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     })
