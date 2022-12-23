@@ -28,6 +28,27 @@ export type Authentication = {
 };
 //***************** User Model ***********************//
 
+export interface BankData {
+  bankName?: string;
+  bankCode?: string;
+  accountNumber?: string;
+  confirmAccountNumber?: string;
+  bankIfsc?:string;
+}
+
+export interface BasicData {
+  panNumber?: string;
+  mobileNumber?: string;
+  email?: string;
+}
+
+export interface PartnerUser {
+  name: string,
+  panNumber: string,
+  phoneNumber: string,
+  emailId: string,
+}
+
 export interface User {
   isLoggedIn?: boolean;
   user?: UserClass;

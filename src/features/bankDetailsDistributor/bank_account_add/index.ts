@@ -64,8 +64,9 @@ export const template: (
   bankCode: string,
   bankName: string,
   accountNumber: string,
-  stepper:StepperItem[]
-) => TemplateSchema = (bankCode, bankName="BOB", accountNumber,stepper) => ({
+  stepper:StepperItem[],
+  isDisabled:string,
+) => TemplateSchema = (bankCode, bankName="BOB", accountNumber,stepper,isDisabled) => ({
   layout: <Layout>{
     id: ROUTE.DIST_BANK_ACCOUNT_ADD,
     type: LAYOUTS.LIST,
@@ -188,6 +189,7 @@ export const template: (
       placeholder: "Account number",
       caption: { success: "", error: "" },
       keyboardType: KeyboardTypeToken.email,
+      secureTextEntry:true,
       action: {
         type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
         payload: <InputPayload>{ value:"", widgetId:"accountInput" },
@@ -198,6 +200,8 @@ export const template: (
     confirmAccountInput: <TextInputProps & WidgetProps>{
      // regex: RegexConfig.MOBILE,
       type: InputTypeToken.DEFAULT,
+    //  secureTextEntry:{true},
+      secureTextEntry:false,
       title: "Confirm Account Number",
       placeholder: "Confirm Account number",
       caption: { success: "", error: "Account number didn’t match" }, 
@@ -260,7 +264,7 @@ export const template: (
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Save & Contiune",
-      type:ButtonTypeTokens.LargeOutline,
+      type: `${isDisabled}` ? ButtonTypeTokens.LargeFilled:ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.SAVE,
@@ -286,11 +290,21 @@ export const template: (
 
 export const distBankAccountAddMF: PageType<any> = {
   onLoad: async ({ }, { }) => {
+    const bankDetails = await SharedPropsService.getBankData();
+    const name = await (await SharedPropsService.getBankData()).bankName;
+    const bankIfsc = await (await SharedPropsService.getBankData()).bankIfsc;
+    const bankAccountNumber = await (await SharedPropsService.getBankData()).accountNumber;
+    const confirmAccountNumber = await (await SharedPropsService.getBankData()).confirmAccountNumber;
+    let isDisabled = "";
+    if(name !== "" && bankIfsc !== "" && bankAccountNumber !== "" && confirmAccountNumber !== ""){
+      isDisabled = "true";
+    }
+    
     const bankCode = await SharedPropsService.getBankCode();
-      const bankName = await SharedPropsService.getBankName();
+    const bankName = await SharedPropsService.getBankName();
     const accountNumber = await SharedPropsService.getAccountNumber();
     const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-    return Promise.resolve(template(bankCode, bankName, accountNumber,stepper));
+    return Promise.resolve(template(bankCode, bankName, accountNumber,stepper,isDisabled));
   },
   actions: {
     [ACTION.NAVIGATION_SEARCH_IFSC]: NavigationSearchIFSCAction,

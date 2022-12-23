@@ -34,6 +34,9 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
 import { authCAS, fetchMyPortfolio, goBack, navToFetch } from "./actions";
+
+import { FetchPortfolioPayload } from "../check_limit/types";
+
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
@@ -164,7 +167,8 @@ export const template: (
           payload: <AuthCASPayload>{
             value: "",
             applicationId,
-            assetRepository,
+            assetRepository: assetRepository,
+           // assetRepository: AssetRepositoryType.DEFAULT,
           },
         },
         otpAction: {
@@ -200,6 +204,7 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
     [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.NAV_TO_FETCH]: navToFetch,
+    [ACTIONS.NEXT_ROUTE]: goNext,
   },
   clearPrevious: false,
 };

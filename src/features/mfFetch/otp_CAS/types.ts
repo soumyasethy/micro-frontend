@@ -4,6 +4,7 @@ export enum ACTIONS {
   RESEND_OTP_AUTH_CAS = "RESEND_OTP_AUTH_CAS",
   GO_BACK = "GO_BACK",
   NAV_TO_FETCH = "NAV_TO_FETCH",
+  NEXT_ROUTE="NEXT_ROUTE"
 }
 export type AuthCASPayload = {
   applicationId: string;

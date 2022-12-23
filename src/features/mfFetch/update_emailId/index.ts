@@ -96,10 +96,19 @@ export const template: (email: String) => TemplateSchema = (email) => ({
 
 export const updateEmailMF: PageType<any> = {
   onLoad: async () => {
-    const prevEmail = `${
-      (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
-        .accountHolderEmail
-    }`;
+    const userType = await SharedPropsService.getUserType();
+    let prevEmail = "";
+    if(userType === "BORROWER"){
+       prevEmail = `${
+        (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
+          .accountHolderEmail
+      }`;
+    }else{
+      prevEmail = `${
+        (await (await SharedPropsService.getPartnerUser()).emailId)
+      }`;
+    }
+    
     return Promise.resolve(template(prevEmail));
   },
   actions: {

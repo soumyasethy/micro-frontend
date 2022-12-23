@@ -1,10 +1,10 @@
-import { User } from "./features/login/otp_verify/types";
+
 import {
   __isMock__,
   AssetRepositoryType,
   ConfigTokens,
 } from "./configs/config";
-
+import { BankData, User ,PartnerUser, BasicData} from "./features/login/otp_verify/types";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -34,6 +34,7 @@ export enum USERTYPE {
 type GlobalProps = {
   buildType: BUILD_TYPE;
   user: User;
+  partnerUser: PartnerUser;
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
@@ -66,10 +67,22 @@ type GlobalProps = {
   bankCode?:string;
   bankName?:string;
   accountId?:string;
+  pbankAccNo?:string;
+  pconfirmAccNo?:string;
+  pbankIfsc?:string;
+  bankData :BankData;
+  basicData: BasicData
 };
+
 let _globalProps: GlobalProps = {
   buildType: BUILD_TYPE.BORROWER_STAGING,
   user: {},
+  partnerUser:{
+    name:"",
+    panNumber: "",
+    phoneNumber: "",
+    emailId: "",
+  },
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
@@ -113,7 +126,22 @@ let _globalProps: GlobalProps = {
   applicationId:"",
   bankCode:"",
   bankName:"",
-  accountId:""
+  accountId:"",
+  pbankAccNo:"",
+  pconfirmAccNo:"",
+  pbankIfsc:"",
+  bankData:{
+    bankName: "",
+    bankCode:"",
+    accountNumber:"",
+    confirmAccountNumber:"",
+    bankIfsc:""
+  },
+  basicData:{
+    panNumber:"",
+    mobileNumber:"",
+    email:""
+  }
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -153,6 +181,31 @@ async function setAssetRepositoryFetchMap(
   }
 }
 /*** End Asset repository ***/
+
+async function setBasicData(props: BasicData) {
+  _globalProps.basicData = await props;
+}
+
+async function getBasicData() {
+  return _globalProps.basicData;
+}
+
+
+async function setBankData(props: BankData) {
+  _globalProps.bankData = await props;
+}
+
+async function getBankData() {
+  return _globalProps.bankData;
+}
+
+async function setPartnerUser(props: PartnerUser) {
+  _globalProps.partnerUser = await props;
+}
+
+async function getPartnerUser() {
+  return _globalProps.partnerUser;
+}
 
 async function setAccountId(accountId: string){
   _globalProps.accountId = accountId;
@@ -419,5 +472,11 @@ export default {
   setBankName,
   getBankName,
   getAccountId,
-  setAccountId
+  setAccountId,
+  setPartnerUser,
+  getPartnerUser,
+  setBankData,
+  getBankData,
+  setBasicData,
+  getBasicData
 };
