@@ -18,7 +18,7 @@ type GlobalProps = {
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
-  partnerRefCode?: string;
+  ref?: string;
 };
 
 let _globalProps: GlobalProps = {
@@ -27,7 +27,7 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
-  partnerRefCode: "",
+  ref: "",
 };
 async function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -46,10 +46,10 @@ async function setGlobalProps(props: GlobalProps) {
   _globalProps = await props;
 }
 async function getPartnerRefCode() {
-  return _globalProps.partnerRefCode;
+  return _globalProps.ref;
 }
-async function setPartnerRefCode(partnerRefCode: string) {
-  _globalProps.partnerRefCode = partnerRefCode;
+async function setPartnerRefCode(ref: string) {
+  _globalProps.ref = ref;
 }
 
 function getPropsValue(key?: string) {
