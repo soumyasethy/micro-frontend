@@ -32,7 +32,7 @@ let _globalProps: GlobalProps = {
 async function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
-export function getBuildType() {
+export function getBuildType(): BUILD_TYPE {
   return _globalProps.buildType;
 }
 
