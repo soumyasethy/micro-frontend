@@ -29,7 +29,7 @@ let _globalProps: GlobalProps = {
   accountNumber: "",
   ref: "",
 };
-async function setBuildType(buildType) {
+export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
 export function getBuildType(): BUILD_TYPE {
