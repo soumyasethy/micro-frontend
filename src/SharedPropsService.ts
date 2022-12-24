@@ -18,7 +18,7 @@ type GlobalProps = {
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
-  partnerRefCode?: string;
+  ref?: string;
   assetRepositoryType?: AssetRepositoryType;
   assetRepositoryFetchMap?: { [key in AssetRepositoryType]: boolean };
 };
@@ -29,7 +29,7 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
-  partnerRefCode: "",
+  ref: "",
   /*** Default asset repository */
   assetRepositoryType: AssetRepositoryType.KARVY,
   assetRepositoryFetchMap: {
@@ -38,10 +38,10 @@ let _globalProps: GlobalProps = {
     [AssetRepositoryType.CAMS]: false,
   },
 };
-async function setBuildType(buildType) {
+export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
-export function getBuildType() {
+export function getBuildType(): BUILD_TYPE {
   return _globalProps.buildType;
 }
 /*** Asset repository ***/
@@ -74,10 +74,10 @@ async function setGlobalProps(props: GlobalProps) {
   _globalProps = await props;
 }
 async function getPartnerRefCode() {
-  return _globalProps.partnerRefCode;
+  return _globalProps.ref;
 }
-async function setPartnerRefCode(partnerRefCode: string) {
-  _globalProps.partnerRefCode = partnerRefCode;
+async function setPartnerRefCode(ref: string) {
+  _globalProps.ref = ref;
 }
 
 function getPropsValue(key?: string) {
