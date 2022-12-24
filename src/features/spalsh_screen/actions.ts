@@ -45,6 +45,7 @@ export const SplashAction: ActionFunction<any> = async (
       const userContextResponse = await network.post(partnerApi.userContext, body, {
         headers: await getAppHeader(),
       });
+      const partnerUser = await (await SharedPropsService.getPartnerUser()).panNumber;
       if (userContextResponse.status === 200) {
         console.log(`user.linkedPartnerAccounts[0].partnerName`);
         const user: User = userContextResponse.data;
@@ -53,12 +54,13 @@ export const SplashAction: ActionFunction<any> = async (
           await navigate(ROUTE.ENTER_NAME);
         }else if(user.linkedPartnerAccounts[0].partnerName != null){
           console.log(`user.linkedPartnerAccounts[0].partnerName`);
-          await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
+          await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
         //  await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
+        }else if(partnerUser !== ''){
+          await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
         }else{
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
         }
-        
       }else{
         await navigate(ROUTE.PHONE_NUMBER);
       }

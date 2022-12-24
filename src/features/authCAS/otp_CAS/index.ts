@@ -38,6 +38,7 @@ import { fetchMyPortfolio } from "../check_limit/actions";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
+  PartnerAssetRepositoryMap,
 } from "../../../configs/config";
 
 export const template: (
@@ -144,8 +145,9 @@ export const template: (
         type: InputTypeToken.OTP,
         state: InputStateToken.DEFAULT,
         keyboardType: KeyboardTypeToken.numberPad,
-        charLimit: AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
-        action: {
+       // charLimit: `${assetRepository}` ? PartnerAssetRepositoryMap[`${assetRepository}`].OTP_LENGTH :  AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
+       charLimit:  AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH, 
+       action: {
           type: ACTIONS.AUTH_CAS,
           routeId: ROUTE.OTP_AUTH_CAS,
           payload: <AuthCASPayload>{

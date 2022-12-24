@@ -71,7 +71,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
       await setDatastore(action.routeId, "input", <TextInputProps>{
         state: InputStateToken.SUCCESS,
       });
-      await goBack();
+      //await goBack();
       await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
         isAutoTriggerCta: true,
@@ -83,7 +83,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
         ctaAction: {
           type: ACTIONS.NEXT_ROUTE,
           routeId: ROUTE.OTP_AUTH_CAS,
-          payload: <{}>{
+          payload: {
           },
         },
       });

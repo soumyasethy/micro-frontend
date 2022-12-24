@@ -56,6 +56,22 @@ export enum AssetRepositoryType {
   KARVY = "KARVY",
   DEFAULT = "KARVY",
 }
+
+export const PartnerAssetRepositoryMap = {
+  [AssetRepositoryType.CAMS]: {
+    value: AssetRepositoryType.CAMS,
+    NAME: "Cams",
+    OTP_LENGTH: 4,
+    LIST: [],
+  },
+  [AssetRepositoryType.KARVY]: {
+    VALUE: AssetRepositoryType.KARVY,
+    NAME: "karvy",
+    OTP_LENGTH: 5,
+    LIST: [],
+  },
+};
+
 export const AssetRepositoryMap = {
   [AssetRepositoryType.CAMS]: {
     value: AssetRepositoryType.CAMS,
