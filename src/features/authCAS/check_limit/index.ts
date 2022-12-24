@@ -52,6 +52,7 @@ export const template: (
         ...(headTitle
           ? [
             { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+            { id: "headerspace", type: WIDGET.SPACE },
           ]
           : [
             { id: "space0", type: WIDGET.SPACE },
@@ -81,6 +82,7 @@ export const template: (
           payload: {},
         },
       },
+      headerspace: <SpaceProps>{ size: SizeTypeTokens.XXL },
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       title: <TypographyProps>{
         label: "Check available cash limit",
@@ -105,8 +107,9 @@ export const template: (
         title: "PAN Number",
         subTitle: panNumber,
         leadIconName: IconTokens.CreditCard,
-        trailIconName: IconTokens.Edit,
+        trailIconName: `${headTitle}` ? "" : IconTokens.Edit,
         subTitleLineHeight: 24,
+        isDivider:true,
         action: {
           routeId: ROUTE.MF_FETCH_PORTFOLIO,
           type: ACTION.EDIT_PAN,
@@ -123,6 +126,7 @@ export const template: (
         leadIconName: IconTokens.Phone,
         trailIconName: IconTokens.Edit,
         subTitleLineHeight: 24,
+        isDivider:true,
         action: {
           type: ACTION.EDIT_MOBILE_NUMBER,
           routeId: ROUTE.MF_FETCH_PORTFOLIO,

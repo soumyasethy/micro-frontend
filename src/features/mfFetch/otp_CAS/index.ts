@@ -40,6 +40,7 @@ import { FetchPortfolioPayload } from "../check_limit/types";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
+  PartnerAssetRepositoryMap,
 } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
@@ -161,6 +162,7 @@ export const template: (
         state: InputStateToken.DEFAULT,
         keyboardType: KeyboardTypeToken.numberPad,
         charLimit: AssetRepositoryMap.get(assetRepository).OTP_LENGTH,
+          // charLimit: `${assetRepository}` ? PartnerAssetRepositoryMap[`${assetRepository}`].OTP_LENGTH :  AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
         action: {
           type: ACTIONS.AUTH_CAS,
           routeId: ROUTE.OTP_AUTH_CAS,

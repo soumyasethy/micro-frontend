@@ -311,8 +311,8 @@ export const template: (
                 size: SizeTypeTokens.SM
             },
             dateItems: <TypographyProps>{
-                label: `Last fetched on ${Object.values(camsFetches)}`,
-                // label: `Last fetched on ${moment(Object.values(camsFetches), "DD-MM-yyyy").valueOf()}`,
+                //label: `Last fetched on ${Object.values(camsFetches)}`,
+                label: `Last fetched on ${moment(Object.values(camsFetches), "dddd D MMMM")}`,
                 fontSize: FontSizeTokens.XS,
                 fontWeight: '400',
                 color: ColorTokens.Grey_Charcoal,

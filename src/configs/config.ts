@@ -82,6 +82,22 @@ export enum AssetRepositoryType {
   CAMS = "CAMS",
   KARVY = "KARVY",
 }
+
+export const PartnerAssetRepositoryMap = {
+  [AssetRepositoryType.CAMS]: {
+    value: AssetRepositoryType.CAMS,
+    NAME: "Cams",
+    OTP_LENGTH: 4,
+    LIST: [],
+  },
+  [AssetRepositoryType.KARVY]: {
+    VALUE: AssetRepositoryType.KARVY,
+    NAME: "karvy",
+    OTP_LENGTH: 5,
+    LIST: [],
+  },
+};
+
 export const AssetRepositoryMap = new Map([
   [
       AssetRepositoryType.CAMS, {
@@ -108,6 +124,7 @@ export const AssetRepositoryMap = new Map([
     IS_PLEDGED: false
   }
   ]]);
+
 
 export const getPrimaryAssetRepository = async () => {
   let [priorityMap] = new Map([...AssetRepositoryMap.entries()]

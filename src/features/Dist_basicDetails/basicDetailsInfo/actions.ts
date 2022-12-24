@@ -16,7 +16,7 @@ let dob: string = "";
 export const CalendarOnChange: ActionFunction<InputPayload> = async (
   action,
   _datastore,
-  {setDatastore, ...props }
+  { setDatastore, ...props }
 ): Promise<any> => {
   dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
   console.log(action.payload.value);
@@ -27,7 +27,7 @@ export const CalendarOnChange: ActionFunction<InputPayload> = async (
     await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     })
-  }else{
+  } else {
     await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeOutline,
     })
@@ -108,49 +108,33 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
       .linkedPartnerAccounts[0].accountId;
 
 
-  await network
-  .post(
-    `${partnerApi.customer}${accountId}${'/customer'}`,
-    {
-      email: email,
-        panNumber: panNumber,
-        phoneNumber: `+91${mobileNumber}`,
-        dob:dob
-    },
-    { headers: await getAppHeader() }
-  )
-  .then(async (response) => {
+    const response = await network
+      .post(
+        `${partnerApi.customer}${accountId}${'/customer'}`,
+        {
+          email: email,
+          panNumber: panNumber,
+          phoneNumber: `+91${mobileNumber}`,
+          dob: dob
+        },
+        { headers: await getAppHeader() }
+      )
     await setDatastore(action.routeId, "continue", <ButtonProps>{
       label: "Continue",
       type: ButtonTypeTokens.LargeFilled,
       loading: false,
     });
-    if (response?.data.stepResponseObject?.fullName) {
+    if (response.status === 200) {
+      if (response?.data.stepResponseObject?.fullName) {
 
-     await SharedPropsService.setApplicationId(response?.data.updatedApplicationObj?.applicationId);
-      await navigate(ROUTE.DETAILS_CONFIRM, {
-        name: response?.data.stepResponseObject?.fullName,
-        targetRoute: ROUTE.DETAILS_CONFIRM,
-      });
+        await SharedPropsService.setApplicationId(response?.data.updatedApplicationObj?.applicationId);
+        await navigate(ROUTE.DETAILS_CONFIRM, {
+          name: response?.data.stepResponseObject?.fullName,
+          targetRoute: ROUTE.DETAILS_CONFIRM,
+        });
+      }
     }
-  })
-  .catch(async (error) => {
-    await navigate(ROUTE.ALERT_PAGE, {
-      alertProps: {
-        iconName: IconTokens.Failed,
-        title: "Something went wrong!",
-        subTitle: "Please try again",
-        type: "DEFAULT",
-        ctaLabel: "Continue to try again",
-        primary: true,
-        ctaAction: {
-          type: ACTION.GO_BACK,
-          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: {},
-        },
-      },
-    });
-  });
+
   }
 };
 
