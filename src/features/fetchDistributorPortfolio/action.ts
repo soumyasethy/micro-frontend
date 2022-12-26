@@ -7,7 +7,7 @@ import {
 } from "@voltmoney/schema";
 
 import {
-  ACTION
+  ACTION, AmountPayload
 } from "./types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
@@ -21,8 +21,10 @@ import {
 import { navigate } from "../afterUnlock/dashboard/actions";
 
 
-export const onSave: ActionFunction<{}> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
-  await navigate(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO);
+export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
+  await navigate(ROUTE.PORTFOLOIO_START,{
+    amount:action.payload.value
+  });
 };
 
 export const onSkip: ActionFunction<{}> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
@@ -80,7 +82,7 @@ export const goKarvyNext: ActionFunction<{}> = async (action, _datastore, { navi
   }
   await navigate(ROUTE.MF_FETCH_PORTFOLIO, {
     headTitle: "KARVY",
-    applictaionId
+    applicationId: applictaionId
   })
 };
 

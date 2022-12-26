@@ -43,10 +43,11 @@ import { onSave, onShare, onSkip } from "./actions";
 
 
 export const template: (
-    stepper: StepperItem[]
-) => TemplateSchema = (stepper) => ({
+    stepper: StepperItem[],
+    amount: string
+) => TemplateSchema = (stepper, amount) => ({
     layout: <Layout>{
-        id: ROUTE.DISTRIBUTOR_PORTFOLIO,
+        id: ROUTE.PORTFOLOIO_START,
         type: LAYOUTS.LIST,
         widgets: [
             {
@@ -56,23 +57,8 @@ export const template: (
             },
             { id: "space0", type: WIDGET.SPACE },
             { id: "space1", type: WIDGET.SPACE },
-            { id: "iconStack", type: WIDGET.STACK },
-            { id: "iconSpace", type: WIDGET.SPACE },
-            { id: "headStack", type: WIDGET.STACK},
-            { id: "headSpace", type: WIDGET.SPACE },
-            { id: "infoStack", type: WIDGET.STACK },
-            { id: "infoSpace", type: WIDGET.SPACE },
-            {
-                id: "modify",
-                type: WIDGET.BUTTON,
-              //  position: POSITION.ABSOLUTE_BOTTOM,
-            },
-            { id: "btnSpace", type: WIDGET.SPACE },
-            {
-                id: "modifyAmount",
-                type: WIDGET.BUTTON,
-               // position: POSITION.ABSOLUTE_BOTTOM,
-            },
+            { id: "midStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
+
             {
                 id: "continue",
                 type: WIDGET.BUTTON,
@@ -104,6 +90,30 @@ export const template: (
         },
         space0: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
         space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
+        midStack: <StackProps>{
+            type: StackType.column,
+            alignItems: StackAlignItems.center,
+            justifyContent: StackJustifyContent.center,
+            widgetItems: [
+                { id: "iconStack", type: WIDGET.STACK },
+                { id: "iconSpace", type: WIDGET.SPACE },
+                { id: "headStack", type: WIDGET.STACK },
+                { id: "headSpace", type: WIDGET.SPACE },
+                { id: "infoStack", type: WIDGET.STACK },
+                { id: "infoSpace", type: WIDGET.SPACE },
+                {
+                    id: "modify",
+                    type: WIDGET.BUTTON,
+                    //  position: POSITION.ABSOLUTE_BOTTOM,
+                },
+                { id: "btnSpace", type: WIDGET.SPACE },
+                {
+                    id: "modifyAmount",
+                    type: WIDGET.BUTTON,
+                    // position: POSITION.ABSOLUTE_BOTTOM,
+                },
+            ],
+        },
         iconStack: <StackProps>{
             type: StackType.row,
             alignItems: StackAlignItems.center,
@@ -112,15 +122,15 @@ export const template: (
                 { id: "iconItems", type: WIDGET.ICON }
             ],
         },
-        iconItems:<IconProps>{
-            name:IconTokens.Coin,
-            size:IconSizeTokens.XXXXXXL,
+        iconItems: <IconProps>{
+            name: IconTokens.Coin,
+            size: IconSizeTokens.XXXXXXL,
             //color:ColorTokens.YE
         },
-        iconSpace:<SpaceProps>{
-            size:SizeTypeTokens.XXXL
+        iconSpace: <SpaceProps>{
+            size: SizeTypeTokens.XXXL
         },
-        
+
         headStack: <StackProps>{
             type: StackType.column,
             alignItems: StackAlignItems.center,
@@ -130,15 +140,18 @@ export const template: (
                 { id: "headItems2", type: WIDGET.TEXT }
             ],
         },
-        headItems1:<TypographyProps>{
-            label: "Rs. 30,000 is the",
+        headItems1: <TypographyProps>{
+            label: `Rs. ${amount}.replace(
+                /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
+                ","
+              ) is the`,
             fontSize: FontSizeTokens.XXL,
             fontWeight: '600',
             color: ColorTokens.Grey_Night,
             lineHeight: 28,
             fontFamily: FontFamilyTokens.Poppins
         },
-        headItems2:<TypographyProps>{
+        headItems2: <TypographyProps>{
             label: "unlocked credit limit",
             fontSize: FontSizeTokens.XXL,
             fontWeight: '600',
@@ -146,8 +159,8 @@ export const template: (
             lineHeight: 28,
             fontFamily: FontFamilyTokens.Poppins
         },
-        headSpace:<SpaceProps>{
-            size:SizeTypeTokens.MD
+        headSpace: <SpaceProps>{
+            size: SizeTypeTokens.MD
         },
         infoStack: <StackProps>{
             type: StackType.column,
@@ -159,7 +172,7 @@ export const template: (
                 { id: "infoItems3", type: WIDGET.TEXT }
             ],
         },
-        infoItems1:<TypographyProps>{
+        infoItems1: <TypographyProps>{
             label: "Volt picked the right portfolio. Click the button",
             fontSize: FontSizeTokens.SM,
             fontWeight: '400',
@@ -167,7 +180,7 @@ export const template: (
             lineHeight: 24,
             fontFamily: FontFamilyTokens.Inter
         },
-        infoItems2:<TypographyProps>{
+        infoItems2: <TypographyProps>{
             label: "below to change/edit portfolio or update the",
             fontSize: FontSizeTokens.SM,
             fontWeight: '400',
@@ -175,20 +188,20 @@ export const template: (
             lineHeight: 24,
             fontFamily: FontFamilyTokens.Inter
         },
-        infoItems3:<TypographyProps>{
-            label: "credit limit.",
+        infoItems3: <TypographyProps>{
+            label: "Modify credit limit",
             fontSize: FontSizeTokens.SM,
             fontWeight: '400',
             color: ColorTokens.Grey_Charcoal,
             lineHeight: 24,
             fontFamily: FontFamilyTokens.Inter
         },
-        infoSpace:<SpaceProps>{
-            size:SizeTypeTokens.XXXL
+        infoSpace: <SpaceProps>{
+            size: SizeTypeTokens.XXXL
         },
-       
+
         modify: <ButtonProps & WidgetProps>{
-            label: "Modify credit limit",
+            label: "Modify credit amount",
             type: ButtonTypeTokens.LargeGhost,
             labelColor: ColorTokens.Primary_100,
             width: ButtonWidthTypeToken.FULL,
@@ -216,7 +229,7 @@ export const template: (
             type: ButtonTypeTokens.LargeFilled,
             width: ButtonWidthTypeToken.FULL,
             action: {
-                type: ACTION.ON_SKIP,
+                type: ACTION.SHARE,
                 routeId: ROUTE.PORTFOLOIO_START,
                 payload: <{}>{},
             },
@@ -225,9 +238,9 @@ export const template: (
 });
 
 export const portfolioStartMF: PageType<any> = {
-    onLoad: async () => {
+    onLoad: async ({ }, { amount }) => {
         const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-        return Promise.resolve(template(stepper));
+        return Promise.resolve(template(stepper, amount));
     },
     actions: {
         [ACTION.ON_SAVE]: onSave,

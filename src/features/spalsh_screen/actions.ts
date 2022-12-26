@@ -42,6 +42,9 @@ export const SplashAction: ActionFunction<any> = async (
 
       }
     } else {
+      // const userContextResponses = await network.post(api.userContext, body, {
+      //   headers: await getAppHeader(),
+      // });
       const userContextResponse = await network.post(partnerApi.userContext, body, {
         headers: await getAppHeader(),
       });
@@ -55,7 +58,6 @@ export const SplashAction: ActionFunction<any> = async (
         }else if(user.linkedPartnerAccounts[0].partnerName != null){
           console.log(`user.linkedPartnerAccounts[0].partnerName`);
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
-        //  await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
         }else if(partnerUser !== ''){
           await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
         }else{

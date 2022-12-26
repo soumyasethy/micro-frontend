@@ -33,7 +33,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import {
-    ACTION,
+    ACTION, AmountPayload,
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../configs/utils";
 import { goCamsNext, goKarvyNext, onBack, onSave, onShare, onSkip } from "./action";
@@ -46,8 +46,9 @@ import moment from "moment";
 export const template: (
     isDataUpdated: any,
     camsFetches: {},
-    stepper: StepperItem[]
-) => TemplateSchema = (isDataUpdated, camsFetches, stepper) => {
+    stepper: StepperItem[],
+    unlockedAmont:string
+) => TemplateSchema = (isDataUpdated, camsFetches, stepper,unlockedAmont) => {
     const _generateDS =
         isDataUpdated
             ? {
@@ -405,7 +406,9 @@ export const template: (
                 action: {
                     type: ACTION.ON_SAVE,
                     routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
-                    payload: <{}>{},
+                    payload: <AmountPayload>{
+                        value:`${unlockedAmont}`
+                    },
                 },
             },
             btnSpace: <SpaceProps>{
@@ -442,14 +445,16 @@ export const distributorPortfolioMF: PageType<any> = {
         );
         let camsFetches = {}
         let isDataUpdated = "";
+        let unlockedAmont = "";
         if (JSON.stringify(response.data.stepResponseObject.casFetchDates) === '{}') {
             isDataUpdated = "";
         } else {
+            unlockedAmont = response.data.stepResponseObject.availableCreditAmount;
             camsFetches = response.data.stepResponseObject.casFetchDates;
             isDataUpdated = "Data Exist";
         }
         const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-        return Promise.resolve(template(isDataUpdated, camsFetches, stepper));
+        return Promise.resolve(template(isDataUpdated, camsFetches, stepper,unlockedAmont));
     },
     actions: {
         [ACTION.ON_SAVE]: onSave,

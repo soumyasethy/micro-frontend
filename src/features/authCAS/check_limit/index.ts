@@ -206,4 +206,5 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_PAN]: editPanNumber,
     [ACTION.GO_BACK]: goBack,
   },
+  clearPrevious:true
 };

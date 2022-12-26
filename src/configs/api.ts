@@ -40,7 +40,8 @@ export const partnerApi = {
   pledgeLimit: `${config.URL}/app/borrower/application/pledge/limit/`,
   userProfile:`${config.URL}/app/borrower/userProfile/`,
   pledgeInit:`${config.URL}/app/borrower/application/pledge/init`,
-  authCAS:`${config.URL}/app/borrower/application/pledge/authCAS`
+  authCAS:`${config.URL}/app/borrower/application/pledge/authCAS`,
+  pledgeSave:`${config.URL}/app/borrower/application/pledge/save`
 };
 
 export const api = {

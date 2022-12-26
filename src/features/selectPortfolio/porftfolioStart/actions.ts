@@ -18,18 +18,19 @@ import {
   updateCurrentStepId,
   updateStepStatusMap,
 } from "../../../configs/utils";
+import { navigate } from "../../afterUnlock/dashboard/actions";
 
 
-export const onSave: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
- 
+export const onSave: ActionFunction<{}> = async (action, _datastore, {navigate, ...props }): Promise<any> => {
+  await navigate(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO);
 };
 
 export const onSkip: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
   console.log("Skip");
 };
 
-export const onShare: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
- console.log("Share");
+export const onShare: ActionFunction<{}> = async (action, _datastore, { navigate,...props }): Promise<any> => {
+ await navigate(ROUTE.INVESTOR);
 };
 
 

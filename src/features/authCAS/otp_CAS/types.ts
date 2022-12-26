@@ -3,7 +3,8 @@ export enum ACTIONS {
   OTP_NUMBER = "OTP_NUMBER",
   RESEND_OTP_AUTH_CAS = "RESEND_OTP_AUTH_CAS",
   GO_BACK = "GO_BACK",
-  NEXT_ROUTE="NEXT_ROUTE"
+  NEXT_ROUTE="NEXT_ROUTE",
+  MY_ROUTE="MY_ROUTE"
 }
 export type AuthCASPayload = {
   applicationId: string;
