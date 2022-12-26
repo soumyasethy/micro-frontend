@@ -1,3 +1,4 @@
+import { Linking } from "react-native";
 import {
   Datastore,
   Layout,
@@ -105,7 +106,9 @@ export const template: () => TemplateSchema = () => {
         isDivider: false,
         title: "WhatsApp",
         leadIconName: IconTokens.Whatsapp,
-        onPress: () => {},
+        onPress: () => {
+          Linking.openURL("https://wa.me/919611749097"); // whatsapp://send?phone=919611749097
+        },
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XL },
       callCard: <CardProps>{
@@ -131,7 +134,7 @@ export const template: () => TemplateSchema = () => {
         },
         customSubTitle: <TypographyProps>{
           label:
-            "Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM",
+            "Call us at +91 96117-49097. We are available in working days from 9.30 AM to 6.30 PM",
           color: ColorTokens.Grey_Charcoal,
           fontFamily: FontFamilyTokens.Inter,
           fontWeight: "400",
@@ -140,7 +143,9 @@ export const template: () => TemplateSchema = () => {
         isDivider: false,
         title: "Call",
         leadIconName: IconTokens.Phone,
-        onPress: () => {},
+        onPress: () => {
+          Linking.openURL(`tel:+919611749097`);
+        },
       },
 
       space2: <SpaceProps>{ size: SizeTypeTokens.XL },
@@ -173,7 +178,9 @@ export const template: () => TemplateSchema = () => {
         title: "Email",
         subTitle: "Email us at support@voltmoney.in",
         leadIconName: IconTokens.Email,
-        onPress: () => {},
+        onPress: () => {
+          Linking.openURL("mailto:support@voltmoney.in");
+        },
       },
     },
   };
