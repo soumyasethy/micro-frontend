@@ -45,16 +45,18 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   _datastore,
   { network, navigate, setDatastore }
 ): Promise<any> => {
+ 
   await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
     label: "",
     type: ButtonTypeTokens.LargeOutline,
     loading: true,
   });
 
-
+  console.log(action.payload);
 
   const userType = await SharedPropsService.getUserType();
   console.log(userType);
+  
   if (userType == "BORROWER") {
     // updataion after implement at correct place 
     if (hasChangedInDetails) {
@@ -104,6 +106,7 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
         { headers: await getAppHeader() }
       )
       .then(async (response) => {
+       
         await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
           ...action.payload,
         });

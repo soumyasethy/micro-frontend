@@ -45,7 +45,7 @@ import { onSave, onShare, onSkip } from "./actions";
 export const template: (
 ) => TemplateSchema = () => ({
     layout: <Layout>{
-        id: ROUTE.DISTRIBUTOR_PORTFOLIO,
+        id: ROUTE.INVESTOR,
         type: LAYOUTS.LIST,
         widgets: [
             {id:"midStack",type:WIDGET.STACK,position:POSITION.ABSOLUTE_CENTER},
@@ -211,7 +211,7 @@ export const template: (
             width: ButtonWidthTypeToken.FULL,
             action: {
                 type: ACTION.ON_SKIP,
-                routeId: ROUTE.PORTFOLOIO_START,
+                routeId: ROUTE.INVESTOR,
                 payload: <{}>{},
             },
         },

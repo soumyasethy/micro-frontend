@@ -1,7 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ACTIONS, AuthCASPayload } from "./types";
 import { api, partnerApi } from "../../../configs/api";
-import { InputStateToken, TextInputProps } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, ColorTokens, InputStateToken, TextInputProps } from "@voltmoney/schema";
 import {
   APP_CONFIG,
   AssetRepositoryMap,
@@ -43,7 +43,6 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
         state: InputStateToken.SUCCESS,
       });
       await goBack();
-
       if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
         const nextRoute = await nextStepId(
           response.data.updatedApplicationObj.currentStepId
@@ -71,7 +70,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
       await setDatastore(action.routeId, "input", <TextInputProps>{
         state: InputStateToken.SUCCESS,
       });
-      //await goBack();
+      await goBack();
       await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
         isAutoTriggerCta: true,
@@ -83,8 +82,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
         ctaAction: {
           type: ACTIONS.NEXT_ROUTE,
           routeId: ROUTE.OTP_AUTH_CAS,
-          payload: {
-          },
+          payload: {},
         },
       });
     } else {
@@ -109,8 +107,14 @@ export const goBack: ActionFunction<any> = async (
 export const goNext: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate }
+  { setDatastore,navigate }
 ): Promise<any> => {
+  await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, "fetchCTA", <ButtonProps>{
+    label: "Get my portfolio",
+    labelColor:ColorTokens.White,
+    type: ButtonTypeTokens.LargeFilled,
+    loading: false,
+  });
   await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
 };
 

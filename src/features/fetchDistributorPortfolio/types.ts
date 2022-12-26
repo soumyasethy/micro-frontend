@@ -6,4 +6,9 @@ export enum ACTION {
     GO_CAMS = "GO_CAMS",
     GO_KARVY = "GO_KARVY"
   }
+
+  export type AmountPayload = {
+    value: string;
+  };
+  
   

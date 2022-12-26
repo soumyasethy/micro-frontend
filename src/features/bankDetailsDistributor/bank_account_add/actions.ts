@@ -81,6 +81,29 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
   .catch(async (error) => {
     console.log("error",error);
   });
+
+
+  const accountId = (await SharedPropsService.getUser())
+  .linkedPartnerAccounts[0].accountId;
+
+
+const responses = await network
+  .post(
+    `${partnerApi.customer}${accountId}${'/customer'}`,
+    {
+      email: "ana@gmail.com",
+      panNumber: "HUOPK5622R",
+      phoneNumber: `+917011791466`,
+      dob: "857154600000"
+    },
+    { headers: await getAppHeader() }
+  )
+await setDatastore(action.routeId, "continue", <ButtonProps>{
+  label: "Continue",
+  type: ButtonTypeTokens.LargeFilled,
+  loading: false,
+});
+
   }
 };
 
