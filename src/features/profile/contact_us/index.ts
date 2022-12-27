@@ -1,4 +1,5 @@
-import { Linking } from "react-native";
+import { Linking, Dimensions } from "react-native";
+import { getScreenType } from "@voltmoney/platform";
 import {
   Datastore,
   Layout,
@@ -6,6 +7,7 @@ import {
   PageType,
   POSITION,
   TemplateSchema,
+  SCREEN_SIZE,
 } from "@voltmoney/types";
 import _ from "lodash";
 import {
@@ -26,6 +28,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack } from "./actions";
+import { DeepLinks } from "../../../configs/config";
 export const template: () => TemplateSchema = () => {
   return {
     layout: <Layout>{
@@ -107,7 +110,15 @@ export const template: () => TemplateSchema = () => {
         title: "WhatsApp",
         leadIconName: IconTokens.Whatsapp,
         onPress: () => {
-          Linking.openURL("https://wa.me/919611749097"); // whatsapp://send?phone=919611749097
+          const screenType = getScreenType(Dimensions.get("window").width);
+          if (
+            screenType === SCREEN_SIZE.X_SMALL ||
+            screenType === SCREEN_SIZE.SMALL
+          ) {
+            Linking.openURL(DeepLinks.MOBILE_WHATSAPP);
+          } else {
+            Linking.openURL(DeepLinks.WHATSAPP);
+          }
         },
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XL },
@@ -144,7 +155,7 @@ export const template: () => TemplateSchema = () => {
         title: "Call",
         leadIconName: IconTokens.Phone,
         onPress: () => {
-          Linking.openURL(`tel:+919611749097`);
+          Linking.openURL(DeepLinks.CALL);
         },
       },
 
@@ -179,7 +190,7 @@ export const template: () => TemplateSchema = () => {
         subTitle: "Email us at support@voltmoney.in",
         leadIconName: IconTokens.Email,
         onPress: () => {
-          Linking.openURL("mailto:support@voltmoney.in");
+          Linking.openURL(DeepLinks.MAILTO);
         },
       },
     },
