@@ -115,9 +115,9 @@ export const template: () => TemplateSchema = () => {
             screenType === SCREEN_SIZE.X_SMALL ||
             screenType === SCREEN_SIZE.SMALL
           ) {
-            Linking.openURL(DeepLinks.MOBILE_WHATSAPP);
+            window.open(DeepLinks.MOBILE_WHATSAPP, "_parent"); //Linking.openURL(DeepLinks.MOBILE_WHATSAPP);
           } else {
-            Linking.openURL(DeepLinks.WHATSAPP);
+            window.open(DeepLinks.WHATSAPP, "_blank"); //Linking.openURL(DeepLinks.WHATSAPP)
           }
         },
       },
@@ -155,7 +155,7 @@ export const template: () => TemplateSchema = () => {
         title: "Call",
         leadIconName: IconTokens.Phone,
         onPress: () => {
-          Linking.openURL(DeepLinks.CALL);
+          window.open(DeepLinks.CALL, "_parent"); //Linking.openURL(DeepLinks.CALL);
         },
       },
 
@@ -190,7 +190,7 @@ export const template: () => TemplateSchema = () => {
         subTitle: "Email us at support@voltmoney.in",
         leadIconName: IconTokens.Email,
         onPress: () => {
-          Linking.openURL(DeepLinks.MAILTO);
+          window.open(DeepLinks.MAILTO, "_parent"); //Linking.openURL(DeepLinks.MAILTO);
         },
       },
     },
