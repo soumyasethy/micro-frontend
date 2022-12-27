@@ -161,8 +161,9 @@ export const checkLimitMF: PageType<any> = {
     const emailId = `${
       email || user.linkedBorrowerAccounts[0].accountHolderEmail
     }`.toLowerCase();
+
     if (!applicationId) {
-      applicationId = applicationId || user.linkedApplications[0].applicationId;
+      applicationId = user.linkedApplications[0].applicationId;
     }
     const assetRepository = await SharedPropsService.getAssetRepositoryType();
 
@@ -176,4 +177,5 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
   },
+  clearPrevious: true,
 };

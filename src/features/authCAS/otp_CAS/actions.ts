@@ -5,17 +5,20 @@ import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import { AssetRepositoryMap, getAppHeader } from "../../../configs/config";
 import { nextStepId } from "../../../configs/utils";
 import _ from "lodash";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
   { navigate, setDatastore, network, goBack }
 ): Promise<any> => {
+  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
     action.payload.value.length !==
-    AssetRepositoryMap[action.payload.assetRepository].OTP_LENGTH
-  )
+    AssetRepositoryMap[assetRepositoryType].OTP_LENGTH
+  ) {
     return;
+  }
   await setDatastore(action.routeId, "input", <TextInputProps>{
     state: InputStateToken.LOADING,
   });
@@ -25,7 +28,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     {
       applicationId: action.payload.applicationId,
       otp: action.payload.value,
-      assetRepository: action.payload.assetRepository,
+      assetRepository: assetRepositoryType,
     },
     { headers: await getAppHeader() }
   );

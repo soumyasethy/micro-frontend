@@ -1,49 +1,52 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { OtpPayload } from "./types";
+import { OtpPayloadForPledgeConfirm } from "./types";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import {
-  AssetRepositoryMap,
-  AssetRepositoryType,
-  getAppHeader,
-} from "../../../configs/config";
+import { AssetRepositoryMap, getAppHeader } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
 
-export const sendOtp: ActionFunction<OtpPayload> = async (
+export const sendOtpForPledgeConfirm: ActionFunction<
+  OtpPayloadForPledgeConfirm
+> = async (
   action,
   _datastore,
-  { network, navigate, setDatastore }
+  { network, navigate, setDatastore, ...props }
 ): Promise<any> => {
-  const assetRepository = await SharedPropsService.getAssetRepositoryType();
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     label: "",
     type: ButtonTypeTokens.LargeOutline,
     loading: true,
   });
-  AssetRepositoryMap[assetRepository].LIST = [];
-  action.payload.value.availableCAS.map((item) => {
-    AssetRepositoryMap[item.assetRepository.toUpperCase()].LIST.push({
-      ...item,
-      is_pledged: true,
-    });
+
+  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
+  AssetRepositoryMap[assetRepositoryType].LIST = [];
+  action.payload.value.availableCAS.forEach((item) => {
+    if (item.pledgedUnits > 0) {
+      AssetRepositoryMap[item.assetRepository.toUpperCase()].LIST.push({
+        ...item,
+        is_pledged: true,
+      });
+    }
+  });
+  const applicationId = (await SharedPropsService.getUser())
+    .linkedApplications[0].applicationId;
+
+  const body = {
+    applicationId: applicationId,
+    assetRepository: assetRepositoryType,
+    portfolioItemList: AssetRepositoryMap[assetRepositoryType].LIST,
+  };
+
+  const response = await network.post(api.pledgeCreate, body, {
+    headers: await getAppHeader(),
   });
 
-  const response = await network.post(
-    api.pledgeCreate,
-    {
-      applicationId: (
-        await SharedPropsService.getUser()
-      ).linkedApplications[0].applicationId,
-      assetRepository: assetRepository,
-      portfolioItemList: AssetRepositoryMap[assetRepository].LIST,
-    },
-    { headers: await getAppHeader() }
-  );
   if (_.get(response, "data.status") === "SUCCESS") {
     await navigate(ROUTE.PLEDGE_VERIFY, {
-      assetRepository: AssetRepositoryMap[assetRepository].NAME,
+      assetRepository: AssetRepositoryMap[assetRepositoryType].NAME,
+      sendOtpForPledgeConfirmAction: action,
     });
   }
 

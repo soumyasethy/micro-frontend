@@ -1,6 +1,8 @@
 import { ActionFunction } from "@voltmoney/types";
-import { ACTION as PAGE_ACTION, OtpPledgePayload } from "./types";
-import SharedPropsService from "../../../SharedPropsService";
+import { ACTION, OtpPledgePayload } from "./types";
+import SharedPropsService, {
+  AssetRepositoryConfigItemType,
+} from "../../../SharedPropsService";
 import _ from "lodash";
 import { ROUTE } from "../../../routes";
 import { NavigationNext } from "../../kyc/kyc_init/types";
@@ -16,6 +18,7 @@ import {
   InputStateToken,
   StepperStateToken,
   TextInputProps,
+  TypographyProps,
 } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
 import {
@@ -26,24 +29,34 @@ import {
 export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   action,
   _datastore,
-  { setDatastore, showPopup, network, goBack }
+  { setDatastore, showPopup, network, goBack, ...props }
 ): Promise<any> => {
+  /** get current asset repository globally**/
+  const assetRepositoryType: AssetRepositoryType =
+    await SharedPropsService.getAssetRepositoryType();
+
+  /** reject if otp length is not matching as config */
   if (
     action.payload.value.length !==
-    AssetRepositoryMap[action.payload.assetRepository].OTP_LENGTH
+    AssetRepositoryMap[assetRepositoryType].OTP_LENGTH
   ) {
     return;
   }
+
+  /** verification done, init api call loader */
   await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
     state: InputStateToken.LOADING,
   });
+  /** get current application id of user **/
+  const user: User = await SharedPropsService.getUser();
+  const applicationId = user.linkedApplications[0].applicationId;
+
+  /** Actual Api call for verify **/
   const authPledgeResponse = await network.post(
     api.authPledge,
     {
-      applicationId: (
-        await SharedPropsService.getUser()
-      ).linkedApplications[0].applicationId,
-      assetRepository: action.payload.assetRepository,
+      applicationId: applicationId,
+      assetRepository: assetRepositoryType,
       otp: action.payload.value,
     },
     { headers: await getAppHeader() }
@@ -53,22 +66,162 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
       state: InputStateToken.SUCCESS,
     });
-    const user: User = await SharedPropsService.getUser();
-    const applicationId = user.linkedApplications[0].applicationId;
     await goBack();
+    /*** update user application obj ***/
     user.linkedApplications[0] = _.get(
       authPledgeResponse,
       "data.updatedApplicationObj",
       user.linkedApplications[0]
     );
+    /*** update user obj ***/
     await SharedPropsService.setUser(user);
 
+    /*** Mark current asset repository pledging as completed ***/
+    const assetRepositoryMap =
+      await SharedPropsService.getAssetRepositoryFetchMap();
+    /*** Current asset repository type item ***/
+    const assetRepositoryConfigItemType: AssetRepositoryConfigItemType =
+      assetRepositoryMap[assetRepositoryType];
+    /*** mark pledging in current asset repo ***/
+    assetRepositoryConfigItemType.isPledged = true;
+    /*** update globally asset repository map ***/
+    await SharedPropsService.setAssetRepositoryFetchMap(
+      assetRepositoryConfigItemType
+    );
+
+    /*** update UI for next asset repository map since we are not re-building the page ***/
+    if (assetRepositoryType === AssetRepositoryType.KARVY) {
+      await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
+      await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
+        state: InputStateToken.DEFAULT,
+        charLimit: AssetRepositoryMap[AssetRepositoryType.CAMS].OTP_LENGTH,
+      });
+      await setDatastore(ROUTE.PLEDGE_VERIFY, "subTitle", <TypographyProps>{
+        label: `${AssetRepositoryType.CAMS} has sent ${
+          AssetRepositoryMap[AssetRepositoryType.CAMS].OTP_LENGTH
+        }-digit OTP was sent on `,
+      });
+    } else if (assetRepositoryType === AssetRepositoryType.CAMS) {
+      await SharedPropsService.setAssetRepositoryType(
+        AssetRepositoryType.KARVY
+      );
+      await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
+        state: InputStateToken.DEFAULT,
+        charLimit: AssetRepositoryMap[AssetRepositoryType.KARVY].OTP_LENGTH,
+      });
+      await setDatastore(ROUTE.PLEDGE_VERIFY, "subTitle", <TypographyProps>{
+        label: `${AssetRepositoryType.KARVY} has sent ${
+          AssetRepositoryMap[AssetRepositoryType.KARVY].OTP_LENGTH
+        }-digit OTP was sent on `,
+      });
+    }
+
+    /*** check whether all asset repository is pledged or not ***/
+    const refreshedAssetRepositoryMap =
+      await SharedPropsService.getAssetRepositoryFetchMap();
+    console.warn(
+      "***** refreshedAssetRepositoryMap",
+      refreshedAssetRepositoryMap
+    );
+
     if (
-      _.get(
-        authPledgeResponse,
-        "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-      ) === "COMPLETED"
+      refreshedAssetRepositoryMap[AssetRepositoryType.KARVY].isPledged &&
+      refreshedAssetRepositoryMap[AssetRepositoryType.CAMS].isPledged
     ) {
+      /*** if all pledged then continue normal flow ***/
+      if (
+        _.get(
+          authPledgeResponse,
+          "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+        ) === "COMPLETED"
+      ) {
+        await showPopup({
+          autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
+          isAutoTriggerCta: true,
+          title: `₹ ${addCommasToNumber(
+            roundDownToNearestHundred(
+              _.get(
+                authPledgeResponse,
+                "data.stepResponseObject.approvedCreditAmount",
+                0
+              )
+            )
+          )} unlocked successfully!`,
+          subTitle: "You will be redirected to next step in few seconds",
+          type: "SUCCESS",
+          ctaLabel: "Continue",
+          primary: true,
+          ctaAction: {
+            type: ACTION.NAV_NEXT,
+            routeId: ROUTE.PLEDGE_VERIFY,
+            payload: <NavigationNext>{
+              stepId: _.get(
+                authPledgeResponse,
+                "data.updatedApplicationObj.currentStepId"
+              ),
+            },
+          },
+        });
+      }
+      if (
+        _.get(
+          authPledgeResponse,
+          "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+        ) === StepperStateToken.PENDING_CALLBACK
+      ) {
+        await showPopup({
+          title: `Pledging...`,
+          subTitle: "Please wait while we confirm your pledge with depository.",
+          type: "DEFAULT",
+          iconName: IconTokens.Volt,
+        });
+
+        /***** Starting Polling to check status of MF_PLEDGE_PORTFOLIO *****/
+        const PollerRef = setInterval(async () => {
+          const mfPledgeStatusResponse = await network.get(
+            `${api.borrowerApplication}${applicationId}`,
+            { headers: await getAppHeader() }
+          );
+          user.linkedApplications[0] = _.get(mfPledgeStatusResponse, "data");
+          await SharedPropsService.setUser(user);
+          if (
+            _.get(
+              mfPledgeStatusResponse,
+              "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+            ) === "COMPLETED" &&
+            _.get(mfPledgeStatusResponse, "data.currentStepId") !==
+              "MF_PLEDGE_PORTFOLIO"
+          ) {
+            clearInterval(PollerRef);
+            await goBack();
+            await showPopup({
+              autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
+              isAutoTriggerCta: true,
+              title: `₹ ${addCommasToNumber(
+                roundDownToNearestHundred(
+                  _.get(
+                    authPledgeResponse,
+                    "data.stepResponseObject.approvedCreditAmount",
+                    0
+                  )
+                )
+              )} unlocked successfully!`,
+              subTitle: "You will be redirected to next step in few seconds",
+              type: "SUCCESS",
+              ctaLabel: "Continue",
+              primary: true,
+              ctaAction: {
+                type: ACTION.NAV_NEXT,
+                routeId: ROUTE.PLEDGE_VERIFY,
+                payload: <NavigationNext>{
+                  stepId: _.get(mfPledgeStatusResponse, "data.currentStepId"),
+                },
+              },
+            });
+          }
+        }, APP_CONFIG.POLLING_INTERVAL);
+      }
+    } else {
       await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
         isAutoTriggerCta: true,
@@ -81,79 +234,13 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
             )
           )
         )} unlocked successfully!`,
-        subTitle: "You will be redirected to next step in few seconds",
+        subTitle:
+          "You will be redirected to next step in few seconds to fetch more credit",
         type: "SUCCESS",
         ctaLabel: "Continue",
         primary: true,
-        ctaAction: {
-          type: PAGE_ACTION.NAV_NEXT,
-          routeId: ROUTE.PLEDGE_VERIFY,
-          payload: <NavigationNext>{
-            stepId: _.get(
-              authPledgeResponse,
-              "data.updatedApplicationObj.currentStepId"
-            ),
-          },
-        },
+        ctaAction: action.payload.sendOtpForPledgeConfirmAction,
       });
-    }
-    if (
-      _.get(
-        authPledgeResponse,
-        "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-      ) === StepperStateToken.PENDING_CALLBACK
-    ) {
-      await showPopup({
-        title: `Pledging...`,
-        subTitle: "Please wait while we confirm your pledge with depository.",
-        type: "DEFAULT",
-        iconName: IconTokens.Volt,
-      });
-
-      /***** Starting Polling to check status of MF_PLEDGE_PORTFOLIO *****/
-      const PollerRef = setInterval(async () => {
-        const mfPledgeStatusResponse = await network.get(
-          `${api.borrowerApplication}${applicationId}`,
-          { headers: await getAppHeader() }
-        );
-        user.linkedApplications[0] = _.get(mfPledgeStatusResponse, "data");
-        await SharedPropsService.setUser(user);
-        if (
-          _.get(
-            mfPledgeStatusResponse,
-            "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-          ) === "COMPLETED" &&
-          _.get(mfPledgeStatusResponse, "data.currentStepId") !==
-            "MF_PLEDGE_PORTFOLIO"
-        ) {
-          clearInterval(PollerRef);
-          await goBack();
-          await showPopup({
-            autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-            isAutoTriggerCta: true,
-            title: `₹ ${addCommasToNumber(
-              roundDownToNearestHundred(
-                _.get(
-                  authPledgeResponse,
-                  "data.stepResponseObject.approvedCreditAmount",
-                  0
-                )
-              )
-            )} unlocked successfully!`,
-            subTitle: "You will be redirected to next step in few seconds",
-            type: "SUCCESS",
-            ctaLabel: "Continue",
-            primary: true,
-            ctaAction: {
-              type: PAGE_ACTION.NAV_NEXT,
-              routeId: ROUTE.PLEDGE_VERIFY,
-              payload: <NavigationNext>{
-                stepId: _.get(mfPledgeStatusResponse, "data.currentStepId"),
-              },
-            },
-          });
-        }
-      }, APP_CONFIG.POLLING_INTERVAL);
     }
   }
 };
@@ -185,14 +272,15 @@ export const resendOTP: ActionFunction<OtpPledgePayload> = async (
   _datastore,
   { setDatastore, network }
 ): Promise<any> => {
+  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   const resendOtpResponse = await network.post(
     api.pledgeCreate,
     {
       applicationId: (
         await SharedPropsService.getUser()
       ).linkedApplications[0].applicationId,
-      assetRepository: action.payload.assetRepository,
-      portfolioItemList: AssetRepositoryMap[action.payload.assetRepository].LIST,
+      assetRepository: assetRepositoryType,
+      portfolioItemList: AssetRepositoryMap[assetRepositoryType].LIST,
     },
     { headers: await getAppHeader() }
   );
@@ -201,4 +289,4 @@ export const resendOTP: ActionFunction<OtpPledgePayload> = async (
       state: InputStateToken.DEFAULT,
     });
   }
-}
+};

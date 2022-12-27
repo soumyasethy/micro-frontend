@@ -33,18 +33,23 @@ export const getMoreMfPortfolio: ActionFunction<OtpPledgePayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  // const assetRepoMap: { [key in AssetRepositoryType]: boolean } =
+  // const assetRepositoryMap =
   //   await SharedPropsService.getAssetRepositoryFetchMap();
   //
-  // let nextAssetRepo: AssetRepositoryType = undefined;
+  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
+  // assetRepositoryMap[assetRepositoryType].isFetched = true;
   //
-  // Object.keys(assetRepoMap).forEach((assetRepoKey) => {
-  //   if (!assetRepoMap[assetRepoKey]) {
-  //     return (nextAssetRepo = assetRepoKey as AssetRepositoryType);
-  //   }
-  // });
-  // if (nextAssetRepo) {
-  await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
-  navigate(ROUTE.MF_FETCH_PORTFOLIO);
-  // }
+  // await SharedPropsService.setAssetRepositoryFetchMap(
+  //   assetRepositoryType,
+  //   assetRepositoryMap[assetRepositoryType]
+  // );
+
+  if (assetRepositoryType === AssetRepositoryType.KARVY) {
+    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
+    // await SharedPropsService.setPledgeFirstTime(true);
+  } else if (assetRepositoryType === AssetRepositoryType.CAMS) {
+    // await SharedPropsService.setPledgeFirstTime(true);
+    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.KARVY);
+  }
+  await navigate(ROUTE.MF_FETCH_PORTFOLIO);
 };

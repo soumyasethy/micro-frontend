@@ -35,10 +35,7 @@ import { ACTIONS, AuthCASPayload } from "./types";
 import { authCAS, goBack } from "./actions";
 import { FetchPortfolioPayload } from "../check_limit/types";
 import { fetchMyPortfolio } from "../check_limit/actions";
-import {
-  AssetRepositoryMap,
-  AssetRepositoryType,
-} from "../../../configs/config";
+import { AssetRepositoryMap } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
@@ -183,5 +180,5 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
     [ACTIONS.GO_BACK]: goBack,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };

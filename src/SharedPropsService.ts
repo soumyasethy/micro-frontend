@@ -6,6 +6,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/unlockLimit/unlock_limit/types";
 
+export type AssetRepositoryConfigItemType = {
+  isFetched?: boolean;
+  isPledgedRequired?: boolean;
+  isPledged?: boolean;
+  priority?: number;
+};
 export enum BUILD_TYPE {
   BORROWER_PRODUCTION = "BORROWER_PRODUCTION",
   BORROWER_STAGING = "BORROWER_STAGING",
@@ -20,7 +26,9 @@ type GlobalProps = {
   accountNumber: string;
   ref?: string;
   assetRepositoryType?: AssetRepositoryType;
-  assetRepositoryFetchMap?: { [key in AssetRepositoryType]: boolean };
+  assetRepositoryConfig?: {
+    [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
+  };
 };
 
 let _globalProps: GlobalProps = {
@@ -32,10 +40,20 @@ let _globalProps: GlobalProps = {
   ref: "",
   /*** Default asset repository */
   assetRepositoryType: AssetRepositoryType.KARVY,
-  assetRepositoryFetchMap: {
+  assetRepositoryConfig: {
     /*** Sequence of fetching asset repository ***/
-    [AssetRepositoryType.KARVY]: false,
-    [AssetRepositoryType.CAMS]: false,
+    [AssetRepositoryType.KARVY]: {
+      isFetched: false,
+      isPledgedRequired: false,
+      isPledged: false,
+      priority: 1,
+    },
+    [AssetRepositoryType.CAMS]: {
+      isFetched: false,
+      isPledgedRequired: false,
+      isPledged: false,
+      priority: 2,
+    },
   },
 };
 export function setBuildType(buildType) {
@@ -54,13 +72,12 @@ async function getAssetRepositoryType() {
   return _globalProps.assetRepositoryType;
 }
 async function getAssetRepositoryFetchMap() {
-  return _globalProps.assetRepositoryFetchMap;
+  return _globalProps.assetRepositoryConfig;
 }
 async function setAssetRepositoryFetchMap(
-  assetRepositoryType: AssetRepositoryType,
-  value: boolean
+  value: AssetRepositoryConfigItemType
 ) {
-  _globalProps.assetRepositoryType[assetRepositoryType] = value;
+  _globalProps.assetRepositoryConfig[_globalProps.assetRepositoryType] = value;
 }
 /*** End Asset repository ***/
 

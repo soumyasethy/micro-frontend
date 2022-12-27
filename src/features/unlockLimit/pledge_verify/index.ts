@@ -1,4 +1,5 @@
 import {
+  Action,
   Datastore,
   Layout,
   LAYOUTS,
@@ -40,8 +41,13 @@ import {
 import SharedPropsService from "../../../SharedPropsService";
 export const template: (
   phoneNumber: string,
-  assetRepository: string
-) => TemplateSchema = (phoneNumber, assetRepository) => ({
+  assetRepository: string,
+  sendOtpForPledgeConfirmAction: Action<any>
+) => TemplateSchema = (
+  phoneNumber,
+  assetRepository,
+  sendOtpForPledgeConfirmAction
+) => ({
   layout: <Layout>{
     id: ROUTE.PLEDGE_VERIFY,
     type: LAYOUTS.MODAL,
@@ -109,9 +115,7 @@ export const template: (
       ],
     },
     subTitle: <TypographyProps>{
-      label: `A ${
-        AssetRepositoryMap[assetRepository].OTP_LENGTH
-      }-digit OTP was sent on `,
+      label: `${assetRepository} has sent ${AssetRepositoryMap[assetRepository].OTP_LENGTH}-digit OTP was sent on `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
@@ -136,6 +140,7 @@ export const template: (
           value: "",
           widgetId: "input",
           assetRepository,
+          sendOtpForPledgeConfirmAction,
         },
         routeId: ROUTE.PLEDGE_VERIFY,
       },
@@ -147,7 +152,7 @@ export const template: (
     },
     inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     message: <TypographyProps>{
-      label: "Resend OTP in 14 secs",
+      label: "Resend OTP in 30 secs",
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
@@ -157,11 +162,13 @@ export const template: (
 });
 
 export const pledgeVerifyMF: PageType<any> = {
-  onLoad: async () => {
+  onLoad: async (_, { sendOtpForPledgeConfirmAction }) => {
     const response = await fetchUserRepo();
     const phoneNumber = response.user.phoneNumber;
     const assetRepository = await SharedPropsService.getAssetRepositoryType();
-    return Promise.resolve(template(phoneNumber, assetRepository));
+    return Promise.resolve(
+      template(phoneNumber, assetRepository, sendOtpForPledgeConfirmAction)
+    );
   },
 
   actions: {
@@ -170,5 +177,5 @@ export const pledgeVerifyMF: PageType<any> = {
     [ACTION.GO_BACK]: goBack,
     [ACTION.NAV_NEXT]: NavigateNext,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };
