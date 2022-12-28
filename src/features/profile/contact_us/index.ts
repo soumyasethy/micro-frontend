@@ -38,10 +38,10 @@ export const template: () => TemplateSchema = () => {
         { id: "topSpace", type: WIDGET.SPACE },
         { id: "info", type: WIDGET.TEXT },
         { id: "space0", type: WIDGET.SPACE },
-        {
-          id: "whatsappCard",
-          type: WIDGET.CARD,
-        },
+        // {
+        //   id: "whatsappCard",
+        //   type: WIDGET.CARD,
+        // },
         { id: "space1", type: WIDGET.SPACE },
         {
           id: "callCard",
