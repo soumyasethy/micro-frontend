@@ -83,7 +83,6 @@ export const textOnChange: ActionFunction<ContinuePayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.log(action.payload.value);
   phoneNumber = action.payload.value;
 };
 export const whatsappToggle: ActionFunction<WhatsAppEnabledPayload> = async (

@@ -1,6 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { GetMoreMfPortfolioPayload, LimitPayload } from "./types";
+import { ACTION, GetMoreMfPortfolioPayload, LimitPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
 import {
   AssetRepositoryMap,
@@ -33,7 +33,7 @@ export const modifyLimit: ActionFunction<LimitPayload> = async (
 };
 export const getMoreMfPortfolio: ActionFunction<
   GetMoreMfPortfolioPayload
-> = async (action, _datastore, { navigate }): Promise<any> => {
+> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
   /*** check if the user has pledged any mf portfolio */
   const assetRepoMap = {};
   /*** Get unique asset repository from the cas list */
@@ -53,6 +53,15 @@ export const getMoreMfPortfolio: ActionFunction<
   }
 
   await navigate(ROUTE.MF_FETCH_PORTFOLIO);
+  await removeGetMorePortfolio(
+    {
+      type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
+      routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+      payload: {},
+    },
+    {},
+    { navigate, ...props }
+  );
 };
 export const removeGetMorePortfolio: ActionFunction<any> = async (
   action,
