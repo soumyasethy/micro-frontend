@@ -16,7 +16,6 @@ export const SplashAction: ActionFunction<any> = async (
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
   if (accessToken) {
     const body = {}; /*** NOT PASSING REF CODE HERE ***/
-    console.warn("SplashAction body", body);
     const userContextResponse = await network.post(api.userContext, body, {
       headers: await getAppHeader(),
     });

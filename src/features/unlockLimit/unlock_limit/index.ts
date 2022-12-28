@@ -29,10 +29,16 @@ import { ROUTE } from "../../../routes";
 import {
   ACTION,
   AvailableCASItem,
+  GetMoreMfPortfolioPayload,
   LimitPayload,
   StepResponseObject,
 } from "./types";
-import { continueLimit, modifyLimit } from "./actions";
+import {
+  continueLimit,
+  getMoreMfPortfolio,
+  modifyLimit,
+  removeGetMorePortfolio,
+} from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 import {
   addCommasToNumber,
@@ -45,6 +51,10 @@ import SharedPropsService from "../../../SharedPropsService";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
+
+/*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
+let availableCASX: AvailableCASItem[];
+
 export const template: (
   availableCreditAmount: number,
   availableCAS: AvailableCASItem[],
@@ -77,6 +87,11 @@ export const template: (
           horizontal: 0,
           all: 0,
         },
+      },
+      {
+        id: "fetchMorePortfolioBtn",
+        type: WIDGET.BUTTON,
+        position: POSITION.ABSOLUTE_BOTTOM,
       },
     ],
   },
@@ -111,6 +126,23 @@ export const template: (
           { id: "modifyItem", type: WIDGET.BUTTON },
           { id: "space3", type: WIDGET.SPACE },
         ],
+      },
+    },
+    fetchMorePortfolioBtn: <ButtonProps & WidgetProps>{
+      label: "Get more MF portfolio",
+      fontFamily: FontFamilyTokens.Inter,
+      type: ButtonTypeTokens.LargeFilled,
+      // icon: {
+      //   name: IconTokens.Lock,
+      //   align: IconAlignmentTokens.left,
+      // },
+      width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTION.GET_MORE_MF_PORTFOLIO,
+        payload: <GetMoreMfPortfolioPayload>{
+          casList: stepResponseObject.availableCAS,
+        },
+        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
       },
     },
     unlockItem: <ButtonProps & WidgetProps>{
@@ -205,6 +237,7 @@ export const unlockLimitMF: PageType<any> = {
       pledgeLimitResponse.data.stepResponseObject.availableCreditAmount || 0;
     const availableCAS: AvailableCASItem[] =
       pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
+    await SharedPropsService.setCasListOriginal(availableCAS);
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
 
     /*** Show popup as soon as we land here if MF_PLEDGE_PORTFOLIO is PENDING_CALLBACK ***/
@@ -260,7 +293,7 @@ export const unlockLimitMF: PageType<any> = {
       }, APP_CONFIG.POLLING_INTERVAL);
     }
     return Promise.resolve(
-      template(availableCreditAmount, availableCAS, stepResponseObject)
+      template(availableCreditAmount, availableCASX, stepResponseObject)
     );
   },
 
@@ -268,5 +301,13 @@ export const unlockLimitMF: PageType<any> = {
     [ACTION.UNLOCK_LIMIT]: continueLimit,
     [ACTION.MODIFY_LIMIT]: modifyLimit,
     [ACTION.NAV_NEXT]: NavigateNext,
+    [ACTION.GET_MORE_MF_PORTFOLIO]: getMoreMfPortfolio,
+    [ACTION.REMOVE_GET_MORE_MF_PORTFOLIO]: removeGetMorePortfolio,
+  },
+  clearPrevious: true,
+  action: {
+    type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
+    routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+    payload: {},
   },
 };

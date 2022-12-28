@@ -1,6 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { OtpPayload } from "./types";
+import { OtpPayloadForPledgeConfirm } from "./types";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import {
@@ -11,38 +11,78 @@ import {
 import { api } from "../../../configs/api";
 import _ from "lodash";
 
-export const sendOtp: ActionFunction<OtpPayload> = async (
+export const sendOtpForPledgeConfirm: ActionFunction<
+  OtpPayloadForPledgeConfirm
+> = async (
   action,
   _datastore,
-  { network, navigate, setDatastore }
+  { network, navigate, setDatastore, ...props }
 ): Promise<any> => {
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     label: "",
     type: ButtonTypeTokens.LargeOutline,
     loading: true,
   });
-  AssetRepositoryMap[AssetRepositoryType.DEFAULT].LIST = [];
-  action.payload.value.availableCAS.map((item) => {
-    AssetRepositoryMap[item.assetRepository.toUpperCase()].LIST.push({
-      ...item,
-      is_pledged: true,
-    });
+
+  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
+  AssetRepositoryMap[assetRepositoryType].LIST = [];
+  action.payload.value.availableCAS.forEach((item) => {
+    if (item.pledgedUnits > 0) {
+      AssetRepositoryMap[item.assetRepository.toUpperCase()].LIST.push({
+        ...item,
+        is_pledged: true,
+      });
+    }
+  });
+  const applicationId = (await SharedPropsService.getUser())
+    .linkedApplications[0].applicationId;
+
+  /*** check if the user has selected both karvy and cams ***/
+  const assetRepositoryConfig =
+    await SharedPropsService.getAssetRepositoryFetchMap();
+
+  /*** update the config if the user has selected both karvy and cams ***/
+  for (const assetType of Object.keys(AssetRepositoryType)) {
+    assetRepositoryConfig[assetType].isPledgedRequired =
+      AssetRepositoryMap[assetType].LIST.length > 0;
+    await SharedPropsService.setAssetRepositoryFetchMap(
+      assetRepositoryConfig[assetType],
+      assetType as AssetRepositoryType
+    );
+  }
+
+  const body = {
+    applicationId: applicationId,
+    assetRepository: assetRepositoryType,
+    portfolioItemList: AssetRepositoryMap[assetRepositoryType].LIST,
+  };
+  /**** check if user has empty portfolio then switch asset repository type ****/
+  if (
+    assetRepositoryType === AssetRepositoryType.KARVY &&
+    AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length === 0
+  ) {
+    body["assetRepository"] = AssetRepositoryType.CAMS;
+    body["portfolioItemList"] =
+      AssetRepositoryMap[AssetRepositoryType.CAMS].LIST;
+    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
+  } else if (
+    assetRepositoryType === AssetRepositoryType.CAMS &&
+    AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length === 0
+  ) {
+    body["assetRepository"] = AssetRepositoryType.KARVY;
+    body["portfolioItemList"] =
+      AssetRepositoryMap[AssetRepositoryType.KARVY].LIST;
+    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.KARVY);
+  }
+  /** actual api call with body */
+  const response = await network.post(api.pledgeCreate, body, {
+    headers: await getAppHeader(),
   });
 
-  const response = await network.post(
-    api.pledgeCreate,
-    {
-      applicationId: (
-        await SharedPropsService.getUser()
-      ).linkedApplications[0].applicationId,
-      assetRepository: AssetRepositoryType.DEFAULT,
-      portfolioItemList: AssetRepositoryMap[AssetRepositoryType.DEFAULT].LIST,
-    },
-    { headers: await getAppHeader() }
-  );
   if (_.get(response, "data.status") === "SUCCESS") {
     await navigate(ROUTE.PLEDGE_VERIFY, {
-      assetRepository: AssetRepositoryMap[AssetRepositoryType.DEFAULT].NAME,
+      assetRepository: AssetRepositoryMap[assetRepositoryType].NAME,
+      sendOtpForPledgeConfirmAction: action,
     });
   }
 

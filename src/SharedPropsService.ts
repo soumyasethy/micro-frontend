@@ -1,11 +1,17 @@
 import { User } from "./features/login/otp_verify/types";
-import { __isMock__ } from "./configs/config";
+import { __isMock__, AssetRepositoryType } from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/unlockLimit/unlock_limit/types";
 
+export type AssetRepositoryConfigItemType = {
+  isFetched?: boolean;
+  isPledgedRequired?: boolean;
+  isPledged?: boolean;
+  priority?: number;
+};
 export enum BUILD_TYPE {
   BORROWER_PRODUCTION = "BORROWER_PRODUCTION",
   BORROWER_STAGING = "BORROWER_STAGING",
@@ -19,15 +25,38 @@ type GlobalProps = {
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
   ref?: string;
+  assetRepositoryType?: AssetRepositoryType;
+  assetRepositoryConfig?: {
+    [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
+  };
+  casListOriginal?: AvailableCASItem[];
 };
 
 let _globalProps: GlobalProps = {
-  buildType: BUILD_TYPE.PARTNER_STAGING,
+  buildType: BUILD_TYPE.BORROWER_STAGING,
   user: {},
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
   ref: "",
+  /*** Default asset repository */
+  assetRepositoryType: AssetRepositoryType.KARVY,
+  assetRepositoryConfig: {
+    /*** Sequence of fetching asset repository ***/
+    [AssetRepositoryType.KARVY]: {
+      isFetched: false,
+      isPledgedRequired: false,
+      isPledged: false,
+      priority: 1,
+    },
+    [AssetRepositoryType.CAMS]: {
+      isFetched: false,
+      isPledgedRequired: false,
+      isPledged: false,
+      priority: 2,
+    },
+  },
+  casListOriginal: [],
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -35,6 +64,30 @@ export function setBuildType(buildType) {
 export function getBuildType(): BUILD_TYPE {
   return _globalProps.buildType;
 }
+/*** Asset repository ***/
+async function setAssetRepositoryType(
+  assetRepositoryType: AssetRepositoryType
+) {
+  _globalProps.assetRepositoryType = assetRepositoryType;
+}
+async function getAssetRepositoryType() {
+  return _globalProps.assetRepositoryType;
+}
+async function getAssetRepositoryFetchMap() {
+  return _globalProps.assetRepositoryConfig;
+}
+async function setAssetRepositoryFetchMap(
+  value: AssetRepositoryConfigItemType,
+  type?: AssetRepositoryType
+) {
+  if (type) {
+    _globalProps.assetRepositoryConfig[type] = value;
+  } else {
+    _globalProps.assetRepositoryConfig[_globalProps.assetRepositoryType] =
+      value;
+  }
+}
+/*** End Asset repository ***/
 
 async function setAccountNumber(accountNumber: string) {
   _globalProps.accountNumber = accountNumber;
@@ -122,6 +175,13 @@ async function isPledgeFirstTime(): Promise<boolean> {
   return !!(await AsyncStorage.getItem(StoreKey.isPledgeFirstTime));
 }
 
+async function setCasListOriginal(casListOriginal: AvailableCASItem[]) {
+  _globalProps.casListOriginal = casListOriginal;
+}
+async function getCasListOriginal() {
+  return _globalProps.casListOriginal;
+}
+
 export default {
   setBuildType,
   getBuildType,
@@ -141,4 +201,10 @@ export default {
   isPledgeFirstTime,
   setPartnerRefCode,
   getPartnerRefCode,
+  setAssetRepositoryType,
+  getAssetRepositoryType,
+  getAssetRepositoryFetchMap,
+  setAssetRepositoryFetchMap,
+  setCasListOriginal,
+  getCasListOriginal,
 };

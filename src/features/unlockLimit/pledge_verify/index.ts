@@ -1,4 +1,5 @@
 import {
+  Action,
   Datastore,
   Layout,
   LAYOUTS,
@@ -37,10 +38,16 @@ import {
   AssetRepositoryMap,
   AssetRepositoryType,
 } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 export const template: (
   phoneNumber: string,
-  assetRepository: string
-) => TemplateSchema = (phoneNumber, assetRepository) => ({
+  assetRepository: string,
+  sendOtpForPledgeConfirmAction: Action<any>
+) => TemplateSchema = (
+  phoneNumber,
+  assetRepository,
+  sendOtpForPledgeConfirmAction
+) => ({
   layout: <Layout>{
     id: ROUTE.PLEDGE_VERIFY,
     type: LAYOUTS.MODAL,
@@ -89,7 +96,7 @@ export const template: (
       },
       action: {
         type: ACTION.GO_BACK,
-        payload: <{}>{
+        payload: {
           value: "",
           widgetId: "input",
           isResend: false,
@@ -108,9 +115,7 @@ export const template: (
       ],
     },
     subTitle: <TypographyProps>{
-      label: `A ${
-        AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
-      }-digit OTP was sent on `,
+      label: `${assetRepository} has sent ${AssetRepositoryMap[assetRepository].OTP_LENGTH}-digit OTP was sent on `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
@@ -127,7 +132,7 @@ export const template: (
     input: <TextInputProps & WidgetProps>{
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
-      charLimit: AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
+      charLimit: AssetRepositoryMap[assetRepository].OTP_LENGTH,
       keyboardType: KeyboardTypeToken.numberPad,
       action: {
         type: ACTION.PLEDGE_VERIFY,
@@ -135,18 +140,19 @@ export const template: (
           value: "",
           widgetId: "input",
           assetRepository,
+          sendOtpForPledgeConfirmAction,
         },
         routeId: ROUTE.PLEDGE_VERIFY,
       },
       otpAction: {
-          type: ACTION.RESEND_OTP_NUMBER,
-          payload: {},
-          routeId: ROUTE.PLEDGE_VERIFY,
-        },
+        type: ACTION.RESEND_OTP_NUMBER,
+        payload: <OtpPledgePayload>{ assetRepository },
+        routeId: ROUTE.PLEDGE_VERIFY,
+      },
     },
     inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     message: <TypographyProps>{
-      label: "Resend OTP in 14 secs",
+      label: "Resend OTP in 30 secs",
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
@@ -156,10 +162,13 @@ export const template: (
 });
 
 export const pledgeVerifyMF: PageType<any> = {
-  onLoad: async ({}, { assetRepository }) => {
+  onLoad: async (_, { sendOtpForPledgeConfirmAction }) => {
     const response = await fetchUserRepo();
     const phoneNumber = response.user.phoneNumber;
-    return Promise.resolve(template(phoneNumber, assetRepository));
+    const assetRepository = await SharedPropsService.getAssetRepositoryType();
+    return Promise.resolve(
+      template(phoneNumber, assetRepository, sendOtpForPledgeConfirmAction)
+    );
   },
 
   actions: {
@@ -168,5 +177,5 @@ export const pledgeVerifyMF: PageType<any> = {
     [ACTION.GO_BACK]: goBack,
     [ACTION.NAV_NEXT]: NavigateNext,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };
