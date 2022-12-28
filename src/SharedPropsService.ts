@@ -29,6 +29,7 @@ type GlobalProps = {
   assetRepositoryConfig?: {
     [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
   };
+  casListOriginal?: AvailableCASItem[];
 };
 
 let _globalProps: GlobalProps = {
@@ -55,6 +56,7 @@ let _globalProps: GlobalProps = {
       priority: 2,
     },
   },
+  casListOriginal: [],
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -173,6 +175,13 @@ async function isPledgeFirstTime(): Promise<boolean> {
   return !!(await AsyncStorage.getItem(StoreKey.isPledgeFirstTime));
 }
 
+async function setCasListOriginal(casListOriginal: AvailableCASItem[]) {
+  _globalProps.casListOriginal = casListOriginal;
+}
+async function getCasListOriginal() {
+  return _globalProps.casListOriginal;
+}
+
 export default {
   setBuildType,
   getBuildType,
@@ -196,4 +205,6 @@ export default {
   getAssetRepositoryType,
   getAssetRepositoryFetchMap,
   setAssetRepositoryFetchMap,
+  setCasListOriginal,
+  getCasListOriginal,
 };
