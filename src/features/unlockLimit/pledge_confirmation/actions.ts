@@ -3,7 +3,11 @@ import { ROUTE } from "../../../routes";
 import { OtpPayloadForPledgeConfirm } from "./types";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryMap, getAppHeader } from "../../../configs/config";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+  getAppHeader,
+} from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
 
@@ -33,12 +37,44 @@ export const sendOtpForPledgeConfirm: ActionFunction<
   const applicationId = (await SharedPropsService.getUser())
     .linkedApplications[0].applicationId;
 
+  /*** check if the user has selected both karvy and cams ***/
+  const assetRepositoryConfig =
+    await SharedPropsService.getAssetRepositoryFetchMap();
+
+  /*** update the config if the user has selected both karvy and cams ***/
+  for (const assetType of Object.keys(AssetRepositoryType)) {
+    assetRepositoryConfig[assetType].isPledgedRequired =
+      AssetRepositoryMap[assetType].LIST.length > 0;
+    await SharedPropsService.setAssetRepositoryFetchMap(
+      assetRepositoryConfig[assetType],
+      assetType as AssetRepositoryType
+    );
+  }
+
   const body = {
     applicationId: applicationId,
     assetRepository: assetRepositoryType,
     portfolioItemList: AssetRepositoryMap[assetRepositoryType].LIST,
   };
-
+  /**** check if user has empty portfolio then switch asset repository type ****/
+  if (
+    assetRepositoryType === AssetRepositoryType.KARVY &&
+    AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length === 0
+  ) {
+    body["assetRepository"] = AssetRepositoryType.CAMS;
+    body["portfolioItemList"] =
+      AssetRepositoryMap[AssetRepositoryType.CAMS].LIST;
+    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
+  } else if (
+    assetRepositoryType === AssetRepositoryType.CAMS &&
+    AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length === 0
+  ) {
+    body["assetRepository"] = AssetRepositoryType.KARVY;
+    body["portfolioItemList"] =
+      AssetRepositoryMap[AssetRepositoryType.KARVY].LIST;
+    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.KARVY);
+  }
+  /** actual api call with body */
   const response = await network.post(api.pledgeCreate, body, {
     headers: await getAppHeader(),
   });

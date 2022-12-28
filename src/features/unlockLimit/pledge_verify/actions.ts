@@ -89,8 +89,11 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
       assetRepositoryConfigItemType
     );
 
-    /*** update UI for next asset repository map since we are not re-building the page ***/
-    if (assetRepositoryType === AssetRepositoryType.KARVY) {
+    /*** update UI manually for next asset repository since we are not re-building the page ***/
+    if (
+      assetRepositoryType === AssetRepositoryType.KARVY &&
+      AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length > 0
+    ) {
       await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
       await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
         state: InputStateToken.DEFAULT,
@@ -101,7 +104,10 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
           AssetRepositoryMap[AssetRepositoryType.CAMS].OTP_LENGTH
         }-digit OTP was sent on `,
       });
-    } else if (assetRepositoryType === AssetRepositoryType.CAMS) {
+    } else if (
+      assetRepositoryType === AssetRepositoryType.CAMS &&
+      AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length > 0
+    ) {
       await SharedPropsService.setAssetRepositoryType(
         AssetRepositoryType.KARVY
       );
@@ -119,22 +125,30 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     /*** check whether all asset repository is pledged or not ***/
     const refreshedAssetRepositoryMap =
       await SharedPropsService.getAssetRepositoryFetchMap();
-    console.warn(
-      "***** refreshedAssetRepositoryMap",
-      refreshedAssetRepositoryMap
-    );
 
+    /*** check whether all asset repository is pledged or not ***/
     if (
-      refreshedAssetRepositoryMap[AssetRepositoryType.KARVY].isPledged &&
-      refreshedAssetRepositoryMap[AssetRepositoryType.CAMS].isPledged
+      (refreshedAssetRepositoryMap[AssetRepositoryType.KARVY].isPledged &&
+        AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length > 0 &&
+        refreshedAssetRepositoryMap[AssetRepositoryType.CAMS].isPledged &&
+        AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length > 0) ||
+      (refreshedAssetRepositoryMap[AssetRepositoryType.KARVY].isPledged &&
+        AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length > 0 &&
+        AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length === 0) ||
+      (refreshedAssetRepositoryMap[AssetRepositoryType.CAMS].isPledged &&
+        AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length > 0 &&
+        AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length === 0)
     ) {
       /*** if all pledged then continue normal flow ***/
-      if (
-        _.get(
-          authPledgeResponse,
-          "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-        ) === "COMPLETED"
-      ) {
+      const mfPledgePortfolioStatus = _.get(
+        authPledgeResponse,
+        "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+      );
+
+      if (mfPledgePortfolioStatus === "COMPLETED") {
+        /*** close previous popup ***/
+        await goBack();
+        /*** show success popup ***/
         await showPopup({
           autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
           isAutoTriggerCta: true,
@@ -162,13 +176,12 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
             },
           },
         });
-      }
-      if (
-        _.get(
-          authPledgeResponse,
-          "data.updatedApplicationObj.stepStatusMap.MF_PLEDGE_PORTFOLIO"
-        ) === StepperStateToken.PENDING_CALLBACK
+      } else if (
+        mfPledgePortfolioStatus === StepperStateToken.PENDING_CALLBACK
       ) {
+        /*** close previous popup ***/
+        await goBack();
+        /*** show popup for pending callback ***/
         await showPopup({
           title: `Pledging...`,
           subTitle: "Please wait while we confirm your pledge with depository.",
@@ -222,6 +235,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         }, APP_CONFIG.POLLING_INTERVAL);
       }
     } else {
+      console.warn("***** CHECKING FOR NOT PLEDGED");
       await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
         isAutoTriggerCta: true,

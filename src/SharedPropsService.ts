@@ -75,9 +75,15 @@ async function getAssetRepositoryFetchMap() {
   return _globalProps.assetRepositoryConfig;
 }
 async function setAssetRepositoryFetchMap(
-  value: AssetRepositoryConfigItemType
+  value: AssetRepositoryConfigItemType,
+  type?: AssetRepositoryType
 ) {
-  _globalProps.assetRepositoryConfig[_globalProps.assetRepositoryType] = value;
+  if (type) {
+    _globalProps.assetRepositoryConfig[type] = value;
+  } else {
+    _globalProps.assetRepositoryConfig[_globalProps.assetRepositoryType] =
+      value;
+  }
 }
 /*** End Asset repository ***/
 
