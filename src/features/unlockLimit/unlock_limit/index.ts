@@ -42,6 +42,7 @@ import {
 import { fetchPledgeLimitRepo } from "./repo";
 import {
   addCommasToNumber,
+  isMorePortfolioRenderCheck,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
 import { StepStatusMap, User } from "../../login/otp_verify/types";
@@ -58,11 +59,13 @@ let availableCASX: AvailableCASItem[];
 export const template: (
   availableCreditAmount: number,
   availableCAS: AvailableCASItem[],
-  stepResponseObject: StepResponseObject
+  stepResponseObject: StepResponseObject,
+  shouldShowGetMorePortfolio: boolean
 ) => TemplateSchema = (
   availableCreditAmount,
   availableCAS,
-  stepResponseObject
+  stepResponseObject,
+  shouldShowGetMorePortfolio
 ) => ({
   layout: <Layout>{
     id: ROUTE.MF_PLEDGE_PORTFOLIO,
@@ -88,11 +91,17 @@ export const template: (
           all: 0,
         },
       },
-      {
-        id: "fetchMorePortfolioBtn",
-        type: WIDGET.BUTTON,
-        position: POSITION.ABSOLUTE_BOTTOM,
-      },
+      shouldShowGetMorePortfolio
+        ? {
+            id: "fetchMorePortfolioBtn",
+            type: WIDGET.BUTTON,
+            position: POSITION.ABSOLUTE_BOTTOM,
+          }
+        : {
+            id: "dontShow",
+            type: WIDGET.BUTTON,
+            position: POSITION.ABSOLUTE_BOTTOM,
+          },
     ],
   },
   datastore: <Datastore>{
@@ -132,10 +141,6 @@ export const template: (
       label: "Get more MF portfolio",
       fontFamily: FontFamilyTokens.Inter,
       type: ButtonTypeTokens.LargeFilled,
-      // icon: {
-      //   name: IconTokens.Lock,
-      //   align: IconAlignmentTokens.left,
-      // },
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.GET_MORE_MF_PORTFOLIO,
@@ -292,8 +297,14 @@ export const unlockLimitMF: PageType<any> = {
         }
       }, APP_CONFIG.POLLING_INTERVAL);
     }
+    const shouldShowGetMorePortfolio = await isMorePortfolioRenderCheck();
     return Promise.resolve(
-      template(availableCreditAmount, availableCASX, stepResponseObject)
+      template(
+        availableCreditAmount,
+        availableCASX,
+        stepResponseObject,
+        shouldShowGetMorePortfolio
+      )
     );
   },
 
@@ -305,9 +316,9 @@ export const unlockLimitMF: PageType<any> = {
     [ACTION.REMOVE_GET_MORE_MF_PORTFOLIO]: removeGetMorePortfolio,
   },
   clearPrevious: true,
-  action: {
-    type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
-    routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-    payload: {},
-  },
+  // action: {
+  //   type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
+  //   routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+  //   payload: {},
+  // },
 };

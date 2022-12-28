@@ -2,11 +2,9 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { ACTION, GetMoreMfPortfolioPayload, LimitPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
-import {
-  AssetRepositoryMap,
-  AssetRepositoryType,
-} from "../../../configs/config";
+import { AssetRepositoryType } from "../../../configs/config";
 import { WIDGET } from "@voltmoney/schema";
+import { isMorePortfolioRenderCheck } from "../../../configs/utils";
 
 export const continueLimit: ActionFunction<LimitPayload> = async (
   action,
@@ -68,21 +66,7 @@ export const removeGetMorePortfolio: ActionFunction<any> = async (
   _datastore,
   { removeWidgets }
 ): Promise<any> => {
-  const casList = await SharedPropsService.getCasListOriginal();
-  /*** check if the user has pledged any mf portfolio */
-  const assetRepoMap = {};
-  /*** Get unique asset repository from the cas list */
-  for (let i = 0; i < casList.length; i++) {
-    const item = casList[i];
-    assetRepoMap[item.assetRepository] = true;
-  }
-  /*** remove if both Karvy and Cams are present */
-  if (
-    Object.keys(assetRepoMap).length === 2 ||
-    (Object.keys(assetRepoMap).length == 1 &&
-      (AssetRepositoryMap[AssetRepositoryType.CAMS].isDisabled ||
-        AssetRepositoryMap[AssetRepositoryType.KARVY].isDisabled))
-  ) {
+  if (await isMorePortfolioRenderCheck()) {
     await removeWidgets(ROUTE.MF_PLEDGE_PORTFOLIO, [
       { id: "fetchMorePortfolioBtn", type: WIDGET.BUTTON },
     ]);

@@ -5,6 +5,7 @@ import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
 import { StoreKey } from "./api";
+import { AssetRepositoryMap, AssetRepositoryType } from "./config";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -66,15 +67,13 @@ export const stepperRepo = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
       StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
-      StepperStateToken.COMPLETED
-    &&
+      StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
       StepperStateToken.COMPLETED &&
     (user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
       StepperStateToken.COMPLETED ||
       user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
-        StepperStateToken.SKIPPED
-    )
+        StepperStateToken.SKIPPED)
   ) {
     KYC_VERIFICATION = StepperStateToken.COMPLETED;
   } else if (
@@ -85,8 +84,7 @@ export const stepperRepo = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
       StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
-      StepperStateToken.NOT_STARTED
-    &&
+      StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
       StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
@@ -101,8 +99,7 @@ export const stepperRepo = async () => {
     user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION
-    ||
+      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
@@ -348,4 +345,22 @@ export const maskBankAccountNumber = (accountNo: string) => {
     return maskString.concat(showString);
   }
   return "Account number less than 4 digits";
+};
+
+export const isMorePortfolioRenderCheck = async () => {
+  const casList = await SharedPropsService.getCasListOriginal();
+  /*** check if the user has pledged any mf portfolio */
+  const assetRepoMap = {};
+  /*** Get unique asset repository from the cas list */
+  for (let i = 0; i < casList.length; i++) {
+    const item = casList[i];
+    assetRepoMap[item.assetRepository] = true;
+  }
+  /*** remove if both Karvy and Cams are present */
+  return !(
+    Object.keys(assetRepoMap).length === 2 ||
+    (Object.keys(assetRepoMap).length == 1 &&
+      (AssetRepositoryMap[AssetRepositoryType.CAMS].isDisabled ||
+        AssetRepositoryMap[AssetRepositoryType.KARVY].isDisabled))
+  );
 };
