@@ -92,9 +92,9 @@ export const template: (
           id: "card",
           type: WIDGET.CARD,
           position: POSITION.ABSOLUTE_TOP,
-          padding: {
-            horizontal: 16,
-          },
+          // padding: {
+          //   horizontal: 16,
+          // },
         },
         ...(isPendingDisbursalApproval
           ? [
