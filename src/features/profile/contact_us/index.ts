@@ -1,5 +1,4 @@
 import { Linking, Dimensions } from "react-native";
-import { getScreenType } from "@voltmoney/platform";
 import {
   Datastore,
   Layout,
@@ -9,7 +8,6 @@ import {
   TemplateSchema,
   SCREEN_SIZE,
 } from "@voltmoney/types";
-import _ from "lodash";
 import {
   BorderRadiusTokens,
   CardProps,
@@ -29,6 +27,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack } from "./actions";
 import { DeepLinks } from "../../../configs/config";
+import {getScreenType} from "../../../configs/platfom-utils";
 export const template: () => TemplateSchema = () => {
   return {
     layout: <Layout>{
