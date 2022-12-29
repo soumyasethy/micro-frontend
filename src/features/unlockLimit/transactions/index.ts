@@ -18,6 +18,7 @@ import {
     FontFamilyTokens,
     FontSizeTokens,
     HeaderProps,
+    HeaderTypeTokens,
     IconAlignmentTokens,
     IconSizeTokens,
     IconTokens,
@@ -88,7 +89,7 @@ export const template: TemplateSchema = {
             title: "Transactions",
             leadIcon: "https://reactnative.dev/img/tiny_logo.png",
             isBackButton: false,
-            type: "DEFAULT"
+            type: HeaderTypeTokens.DEFAULT,
         },
         headSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
         title: <TypographyProps>{

@@ -55,7 +55,7 @@ export const template: (
       },
       { id: "titleSpace", type: WIDGET.SPACE },
       { id: "subTitleStack", type: WIDGET.STACK },
-      { id: "subTitleSpace", type: WIDGET.SPACE },
+      { id: "space1", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
       { id: "inputSpace", type: WIDGET.SPACE },
     ],
@@ -103,11 +103,12 @@ export const template: (
     },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     subTitleStack: <StackProps & WidgetProps>{
-      type: StackType.row,
-      alignItems: StackAlignItems.center,
+      type: StackType.column,
+      alignItems: StackAlignItems.flexStart,
       justifyContent: StackJustifyContent.flexStart,
       widgetItems: [
         { id: "subTitle", type: WIDGET.TEXT },
+        { id: "subTitleSpace", type: WIDGET.SPACE },
         { id: "subTitle2", type: WIDGET.TEXT },
       ],
     },
@@ -118,6 +119,9 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
+    subTitleSpace: <SpaceProps>{
+      size: SizeTypeTokens.SM,
+    },
     subTitle2: <TypographyProps>{
       label: phoneNumber.substring(3),
       color: ColorTokens.Grey_Charcoal,
@@ -125,7 +129,7 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
     },
-    subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     input: <TextInputProps & WidgetProps>{
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
