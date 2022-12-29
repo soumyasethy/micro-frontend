@@ -38,6 +38,7 @@ export const DisbursalVerifyAction: ActionFunction<
       await setDatastore(ROUTE.WITHDRAWAL_OTP, "input", <TextInputProps>{
         state: InputStateToken.SUCCESS,
       });
+      await goBack();
       await navigate(ROUTE.WITHDRAWAL_SUCCESS, {
         disbursalAmount: action.payload.disbursalAmount,
         accountNumber: action.payload.accountNumber,
