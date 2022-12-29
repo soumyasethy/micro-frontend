@@ -99,7 +99,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
     subTitle: <TypographyProps>{
-      label: "We will use this this to verify your identity",
+      label: "We will use this to verify your identity",
       fontWeight: "400",
       fontFamily: FontFamilyTokens.Inter,
       fontSize: FontSizeTokens.MD,
