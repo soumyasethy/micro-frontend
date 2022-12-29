@@ -34,10 +34,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION, OtpPledgePayload } from "./types";
 import { goBack, NavigateNext, resendOTP, verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
-import {
-  AssetRepositoryMap,
-  AssetRepositoryType,
-} from "../../../configs/config";
+import { AssetRepositoryMap } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 export const template: (
   phoneNumber: string,
@@ -115,7 +112,7 @@ export const template: (
       ],
     },
     subTitle: <TypographyProps>{
-      label: `${assetRepository} has sent ${AssetRepositoryMap[assetRepository].OTP_LENGTH}-digit OTP was sent on `,
+      label: `${AssetRepositoryMap[assetRepository].NAME} has sent ${AssetRepositoryMap[assetRepository].OTP_LENGTH}-digit OTP was sent on `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,

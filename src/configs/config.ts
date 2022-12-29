@@ -1,4 +1,4 @@
-import SharedPropsService from "../SharedPropsService";
+import SharedPropsService, { BUILD_TYPE } from "../SharedPropsService";
 
 export const __isTest__ = false;
 export const __isMock__ = false;
@@ -54,11 +54,11 @@ export const AssetRepositoryMap = {
     NAME: "Cams",
     OTP_LENGTH: 5,
     LIST: [],
-    isDisabled: false,
+    isDisabled: !BUILD_TYPE.BORROWER_STAGING,
   },
   [AssetRepositoryType.KARVY]: {
     VALUE: AssetRepositoryType.KARVY,
-    NAME: "karvy",
+    NAME: "Karvy",
     OTP_LENGTH: 6,
     LIST: [],
     isDisabled: false,
