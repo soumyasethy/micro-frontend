@@ -48,7 +48,7 @@ import {
   MARITAL_STATUS,
   MaritalStatusPayload,
 } from "./types";
-import { onChangeInput, onSelect, toggleCTA, triggerCTA } from "./actions";
+import { onChangeInput, onSelect, toggleCTA, triggerCTA, GoBackAction } from "./actions";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import { getAppHeader } from "../../../configs/config";
 import { api } from "../../../configs/api";
@@ -112,7 +112,7 @@ export const template: (
         },
         action: {
           type: ACTION.GO_BACK,
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
+          routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
           payload: {},
         },
       },
@@ -421,5 +421,6 @@ export const kycAdditionalDetailsMF: PageType<any> = {
     [ACTION.STATUS_UNCHECK]: toggleCTA,
     [ACTION.INPUT_NAME]: onChangeInput,
     [ACTION.SELECT_QUALIFICATION]: onSelect,
+    [ACTION.GO_BACK]: GoBackAction,
   },
 };
