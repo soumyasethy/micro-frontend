@@ -25,6 +25,7 @@ type GlobalProps = {
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
   ref?: string;
+  url?: string;
   assetRepositoryType?: AssetRepositoryType;
   assetRepositoryConfig?: {
     [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
@@ -103,6 +104,12 @@ async function getPartnerRefCode() {
 }
 async function setPartnerRefCode(ref: string) {
   _globalProps.ref = ref;
+}
+async function getUrlParams() {
+  return _globalProps.url;
+}
+async function setUrlParams(url: string) {
+  _globalProps.url = url;
 }
 
 function getPropsValue(key?: string) {
@@ -207,4 +214,6 @@ export default {
   setAssetRepositoryFetchMap,
   setCasListOriginal,
   getCasListOriginal,
+  setUrlParams,
+  getUrlParams
 };

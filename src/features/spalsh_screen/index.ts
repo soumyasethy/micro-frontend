@@ -67,8 +67,12 @@ export const splashScreenMF: PageType<any> = {
     //http://localhost:3000?ref=12345
     // access route.params -> {ref_code: '12345'}
     const ref: string = _.get(props, "ref", null);
+    const urlParams: string = _.get(props, "urlParams", null);
     if (ref) {
       await SharedPropsService.setPartnerRefCode(ref);
+    }
+    if (urlParams) {
+      await SharedPropsService.setUrlParams(urlParams);
     }
 
     return Promise.resolve(template);

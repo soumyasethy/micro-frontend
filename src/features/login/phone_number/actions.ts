@@ -13,6 +13,7 @@ import {
 } from "@voltmoney/schema";
 import { api } from "../../../configs/api";
 import { getAuthHeaders } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 
 let phoneNumber: string = "";
 let isWhatsAppEnabled: boolean = false;
@@ -42,9 +43,14 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
     await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
       loading: true,
     });
-    const response = await network.get(`${api.login}${phoneNumber}`, {
-      headers: getAuthHeaders(),
-    });
+    const urlParams = `${await SharedPropsService.getUrlParams()}`.split("?");
+    const requestUrl = `${api.login}${phoneNumber}`;
+    const response = await network.get(
+      `${requestUrl}${urlParams.length > 1 ? `?${urlParams[1]}` : ""}`,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
     if (response.status === 200) {
       await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
         loading: false,
@@ -53,8 +59,6 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
         await navigate(ROUTE.OTP_VERIFY, {
           phone_number: phoneNumber,
         });
-      } else {
-        console.log("No need to navigate");
       }
       if (action.payload.isResend == false) {
         await setDatastore(action.routeId, "input", <TextInputProps>{
