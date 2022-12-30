@@ -10,13 +10,14 @@ import {
 } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
+import { AnalyticsEventTracker } from "../../../configs/constants";
 
 export const sendOtpForPledgeConfirm: ActionFunction<
   OtpPayloadForPledgeConfirm
 > = async (
   action,
   _datastore,
-  { network, navigate, setDatastore, ...props }
+  { analytics, network, navigate, setDatastore, ...props }
 ): Promise<any> => {
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     label: "",
@@ -80,6 +81,9 @@ export const sendOtpForPledgeConfirm: ActionFunction<
   });
 
   if (_.get(response, "data.status") === "SUCCESS") {
+    analytics(AnalyticsEventTracker.borrower_mf_pledge_init["Event Name"], {
+      ...AnalyticsEventTracker.borrower_mf_pledge_init,
+    });
     await navigate(ROUTE.PLEDGE_VERIFY, {
       assetRepository: AssetRepositoryMap[assetRepositoryType].NAME,
       sendOtpForPledgeConfirmAction: action,

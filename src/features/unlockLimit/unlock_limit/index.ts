@@ -227,7 +227,7 @@ export const template: (
 });
 
 export const unlockLimitMF: PageType<any> = {
-  onLoad: async ({ getDatastore, showPopup, network, goBack }) => {
+  onLoad: async ({ showPopup, network, goBack }) => {
     const user: User = await SharedPropsService.getUser();
     const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
       (response) => ({

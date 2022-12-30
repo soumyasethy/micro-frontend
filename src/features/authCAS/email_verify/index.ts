@@ -28,7 +28,6 @@ import {
   StackProps,
   StackType,
   StackWidth,
-  TextAlignTokens,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -133,7 +132,7 @@ export const template: (applicationId: string) => TemplateSchema = (
 });
 
 export const emailVerifyMF: PageType<any> = {
-  onLoad: async (_, { applicationId }) => {
+  onLoad: async ({ analytics }, { applicationId }) => {
     return Promise.resolve(template(applicationId));
   },
   actions: {

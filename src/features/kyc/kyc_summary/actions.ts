@@ -15,12 +15,13 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import _ from "lodash";
 import { api } from "../../../configs/api";
-import {APP_CONFIG, getAppHeader} from "../../../configs/config";
+import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import { User } from "../../login/otp_verify/types";
+import { AnalyticsEventTracker } from "../../../configs/constants";
 export const verifyKycSummary: ActionFunction<any> = async (
   action,
   _datastore,
-  { network, setDatastore, showPopup }
+  { network, setDatastore, showPopup, analytics }
 ): Promise<any> => {
   await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
     loading: true,
@@ -46,6 +47,10 @@ export const verifyKycSummary: ActionFunction<any> = async (
     user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
       StepperStateToken.IN_PROGRESS;
     await SharedPropsService.setUser(user);
+
+    analytics(AnalyticsEventTracker.borrower_kyc_complete["Event Name"], {
+      ...AnalyticsEventTracker.borrower_kyc_complete,
+    });
 
     await showPopup({
       autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,

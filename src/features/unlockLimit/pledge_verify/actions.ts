@@ -25,11 +25,12 @@ import {
   addCommasToNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
+import { AnalyticsEventTracker } from "../../../configs/constants";
 
 export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   action,
   _datastore,
-  { setDatastore, showPopup, network, goBack, ...props }
+  { setDatastore, showPopup, network, goBack, analytics, ...props }
 ): Promise<any> => {
   /** get current asset repository globally**/
   const assetRepositoryType: AssetRepositoryType =
@@ -51,7 +52,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   const user: User = await SharedPropsService.getUser();
   const applicationId = user.linkedApplications[0].applicationId;
 
-  /** Actual Api call for verify **/
+  /** Actual Api call for pledge verify **/
   const authPledgeResponse = await network.post(
     api.authPledge,
     {
@@ -63,6 +64,9 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   );
 
   if (_.get(authPledgeResponse, "data.status") === "SUCCESS") {
+    analytics(AnalyticsEventTracker.borrower_mf_pledge_complete["Event Name"], {
+      ...AnalyticsEventTracker.borrower_mf_pledge_complete,
+    });
     await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
       state: InputStateToken.SUCCESS,
     });

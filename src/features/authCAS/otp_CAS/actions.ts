@@ -6,11 +6,12 @@ import { AssetRepositoryMap, getAppHeader } from "../../../configs/config";
 import { nextStepId } from "../../../configs/utils";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
+import { AnalyticsEventTracker } from "../../../configs/constants";
 
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, network, goBack }
+  { navigate, setDatastore, network, goBack, analytics }
 ): Promise<any> => {
   const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
@@ -33,6 +34,22 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     { headers: await getAppHeader() }
   );
   if (response.status === 200) {
+    /*** check available credit limit ***/
+    const availableCreditAmount = _.get(
+      response,
+      "data.data.stepResponseObject.availableCreditAmount",
+      0
+    );
+    if (availableCreditAmount > 0) {
+      analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
+        ...AnalyticsEventTracker.borrower_mf_pull,
+      });
+    } else {
+      analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
+        ...AnalyticsEventTracker.borrower_mf_pull_failed,
+      });
+    }
+
     await setDatastore(action.routeId, "input", <TextInputProps>{
       state: InputStateToken.SUCCESS,
     });

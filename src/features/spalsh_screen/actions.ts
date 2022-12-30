@@ -5,11 +5,12 @@ import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
 import { getAppHeader } from "../../configs/config";
+import { AnalyticsEventTracker } from "../../configs/constants";
 
 export const SplashAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { network, navigate, asyncStorage }
+  { network, navigate, asyncStorage, analytics }
 ): Promise<any> => {
   // const isSeen = await SharedPropsService.getOnboarding();
   // if (isSeen) {
