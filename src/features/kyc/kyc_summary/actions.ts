@@ -1,5 +1,4 @@
 import { ActionFunction } from "@voltmoney/types";
-import { kycSummaryVerifyRepo } from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
 import {
   AadharInitPayload,
