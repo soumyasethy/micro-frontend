@@ -9,7 +9,7 @@ import { getAppHeader } from "../../configs/config";
 export const SplashAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { network, navigate, asyncStorage, analytics }
+  { network, navigate, asyncStorage }
 ): Promise<any> => {
   // const isSeen = await SharedPropsService.getOnboarding();
   // if (isSeen) {

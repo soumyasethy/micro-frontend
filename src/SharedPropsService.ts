@@ -31,6 +31,7 @@ type GlobalProps = {
     [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
   };
   casListOriginal?: AvailableCASItem[];
+  appPlatform?: string;
 };
 
 let _globalProps: GlobalProps = {
@@ -58,6 +59,7 @@ let _globalProps: GlobalProps = {
     },
   },
   casListOriginal: [],
+  appPlatform: "VOLT_MOBILE_APP",
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -188,6 +190,12 @@ async function setCasListOriginal(casListOriginal: AvailableCASItem[]) {
 async function getCasListOriginal() {
   return _globalProps.casListOriginal;
 }
+async function setAppPlatform(type: string) {
+  _globalProps.appPlatform = type;
+}
+async function getAppPlatform() {
+  return _globalProps.appPlatform;
+}
 
 export default {
   setBuildType,
@@ -215,5 +223,7 @@ export default {
   setCasListOriginal,
   getCasListOriginal,
   setUrlParams,
-  getUrlParams
+  getUrlParams,
+  setAppPlatform,
+  getAppPlatform
 };
