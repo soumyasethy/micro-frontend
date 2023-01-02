@@ -24,6 +24,7 @@ import { ACTION } from "./types";
 import { SplashAction } from "./actions";
 import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
+import { getParameters } from "../../configs/utils";
 
 const template: TemplateSchema = {
   layout: <Layout>{
@@ -73,6 +74,19 @@ export const splashScreenMF: PageType<any> = {
     }
     if (urlParams) {
       await SharedPropsService.setUrlParams(urlParams);
+
+      /*** get params for custom api header if present in url
+       *** example, voltmoney.in/partnerplatform?platform=VOLT_MOBILE_APP ****/
+
+      const partnerPlatform = urlParams.includes("partnerplatform");
+      const platform = urlParams.includes("platform");
+
+      if (partnerPlatform && platform) {
+        const params = getParameters(urlParams);
+        const customPlatform = params["platform"];
+        /*** setting app global api header here if not VOLT_MOBILE_APP ****/
+        await SharedPropsService.setAppPlatform(customPlatform);
+      }
     }
 
     return Promise.resolve(template);
