@@ -6,10 +6,10 @@ export const Go_Next_Action: ActionFunction<{ stepId?: string }> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  console.warn("**** NextStep Action triggered ****", action);
+  // console.warn("**** NextStep Action triggered ****", action);
   const routeObj = action.payload.stepId
     ? await nextStepCredStepper(action.payload.stepId)
     : await nextStepCredStepper();
-  console.warn("**** NextStep Route ****", routeObj);
+  // console.warn("**** NextStep Route ****", routeObj);
   await navigate(routeObj.routeId, routeObj.params);
 };
