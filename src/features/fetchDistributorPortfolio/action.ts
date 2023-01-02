@@ -23,8 +23,11 @@ import { navigate } from "../afterUnlock/dashboard/actions";
 
 export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
   await navigate(ROUTE.PORTFOLOIO_START,{
-    amount:action.payload.value
+    stepResponseObject: action.payload.value,
   });
+  // await navigate(ROUTE.PORTFOLOIO_START,{
+  //   amount:action.payload.value
+  // });
 };
 
 export const onSkip: ActionFunction<{}> = async (action, _datastore, { navigate, ...props }): Promise<any> => {

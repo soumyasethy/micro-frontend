@@ -23,12 +23,28 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
   )
     return;
+    // await showPopup({
+    //   autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
+    //   isAutoTriggerCta: true,
+    //   title: "Portfolio fetched succesfullyy start",
+    //   subTitle: "You will be redirected to next step in few seconds",
+    //   type: "SUCCESS",
+    //   ctaLabel: "Continue",
+    //   primary: true,
+    //   ctaAction: {
+    //     type: ACTIONS.NEXT_ROUTE,
+    //     routeId: ROUTE.OTP_AUTH_CAS,
+    //     payload: {},
+    //   },
+    // });
+    // return;
   await setDatastore(action.routeId, "input", <TextInputProps>{
     state: InputStateToken.LOADING,
   });
 
   const userType = await SharedPropsService.getUserType();
   if (userType === "BORROWER") {
+   
     const response = await network.post(
       api.authCAS,
       {
@@ -66,11 +82,12 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
       },
       { headers: await getAppHeader() }
     );
+   
     if (response.status === 200) {
-      await setDatastore(action.routeId, "input", <TextInputProps>{
-        state: InputStateToken.SUCCESS,
-      });
-      await goBack();
+      // await setDatastore(action.routeId, "input", <TextInputProps>{
+      //   state: InputStateToken.SUCCESS,
+      // });
+      // await goBack();
       await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
         isAutoTriggerCta: true,
@@ -90,8 +107,10 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
         state: InputStateToken.ERROR,
       });
     }
-  }
 
+   
+  }
+ 
 
 };
 
@@ -109,6 +128,7 @@ export const goNext: ActionFunction<any> = async (
   _datastore,
   { setDatastore,navigate }
 ): Promise<any> => {
+  console.log("here");
   await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, "fetchCTA", <ButtonProps>{
     label: "Get my portfolio",
     labelColor:ColorTokens.White,

@@ -33,7 +33,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import {
-    ACTION, AmountPayload,
+    ACTION, AmountPayload, AvailableCASItem, LimitPayload, StepResponseObject,
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../configs/utils";
 import { goCamsNext, goKarvyNext, onBack, onSave, onShare, onSkip } from "./action";
@@ -41,14 +41,17 @@ import SharedPropsService from "../../SharedPropsService";
 import { partnerApi } from "../../configs/api";
 import { getAppHeader } from "../../configs/config";
 import moment from "moment";
+import { fetchPledgeLimitRepo } from "./repo";
+import { StepStatusMap } from "../login/otp_verify/types";
 
 
 export const template: (
     isDataUpdated: any,
     camsFetches: {},
     stepper: StepperItem[],
-    unlockedAmont:string
-) => TemplateSchema = (isDataUpdated, camsFetches, stepper,unlockedAmont) => {
+    unlockedAmont:string,
+    stepResponseObject:StepResponseObject
+) => TemplateSchema = (isDataUpdated, camsFetches, stepper,unlockedAmont,stepResponseObject) => {
     const _generateDS =
         isDataUpdated
             ? {
@@ -295,7 +298,7 @@ export const template: (
                     // { id: "portfolioItems", type: WIDGET.TEXT },
                     // { id: "totalItems", type: WIDGET.TEXT },
                     // { id: "creditLimitItems", type: WIDGET.TEXT },
-                    // { id: "availableLimitItems", type: WIDGET.TEXT },
+                     { id: "availableLimitItems", type: WIDGET.TEXT },
                     // { id: "limitSpace", type: WIDGET.SPACE },
                     { id: "viewPortfolio", type: WIDGET.STACK },
                 ],
@@ -313,7 +316,7 @@ export const template: (
             },
             dateItems: <TypographyProps>{
                 //label: `Last fetched on ${Object.values(camsFetches)}`,
-                label: `Last fetched on ${moment(Object.values(camsFetches), "dddd D MMMM")}`,
+                label: `Last fetched on ${moment(Object.values(camsFetches), "LL")}`,
                 fontSize: FontSizeTokens.XS,
                 fontWeight: '400',
                 color: ColorTokens.Grey_Charcoal,
@@ -345,7 +348,7 @@ export const template: (
                 fontFamily: FontFamilyTokens.Inter
             },
             availableLimitItems: <TypographyProps>{
-                label: "Available limit: Rs. 2,00,000",
+                label: `Available limit: Rs. ${unlockedAmont}`,
                 fontSize: FontSizeTokens.XS,
                 fontWeight: '400',
                 color: ColorTokens.Grey_Charcoal,
@@ -406,9 +409,12 @@ export const template: (
                 action: {
                     type: ACTION.ON_SAVE,
                     routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
-                    payload: <AmountPayload>{
-                        value:`${unlockedAmont}`
+                    payload: <LimitPayload>{
+                        value:stepResponseObject
                     },
+                    // payload: <AmountPayload>{
+                    //     value:`${unlockedAmont}`
+                    // },
                 },
             },
             btnSpace: <SpaceProps>{
@@ -437,24 +443,46 @@ export const distributorPortfolioMF: PageType<any> = {
             }
             let isDataUpdated = "Data Exist";
          */
+            const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
+                (response) => ({
+                  data: response,
+                })
+              );
+              /* const pledgeLimitResponse = await network.get(
+                `${api.pledgeLimit}${user.linkedApplications[0].applicationId}`,
+                { headers: await getAppHeader() }
+              );*/
+              const availableCreditAmount: number =
+                pledgeLimitResponse.data.stepResponseObject.availableCreditAmount || 0;
+              const availableCAS: AvailableCASItem[] =
+                pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
+              const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
+          
+              /*** Show popup as soon as we land here if MF_PLEDGE_PORTFOLIO is PENDING_CALLBACK ***/
+              const stepStatusMap: StepStatusMap =
+                pledgeLimitResponse.data.updatedApplicationObj.stepStatusMap;
+             
 
         const applictaionId = await SharedPropsService.getApplicationId();
-        const response = await network.get(
-            `${partnerApi.pledgeLimit}${applictaionId}`,
-            { headers: await getAppHeader() }
-        );
+        // const response = await network.get(
+        //     `${partnerApi.pledgeLimit}${applictaionId}`,
+        //     { headers: await getAppHeader() }
+        // );
         let camsFetches = {}
         let isDataUpdated = "";
         let unlockedAmont = "";
-        if (JSON.stringify(response.data.stepResponseObject.casFetchDates) === '{}') {
+        if (JSON.stringify(pledgeLimitResponse.data.stepResponseObject.casFetchDates) === '{}') {
             isDataUpdated = "";
         } else {
-            unlockedAmont = response.data.stepResponseObject.availableCreditAmount;
-            camsFetches = response.data.stepResponseObject.casFetchDates;
+            unlockedAmont = pledgeLimitResponse.data.stepResponseObject.availableCreditAmount;
+            camsFetches = pledgeLimitResponse.data.stepResponseObject.casFetchDates;
             isDataUpdated = "Data Exist";
         }
         const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-        return Promise.resolve(template(isDataUpdated, camsFetches, stepper,unlockedAmont));
+        return Promise.resolve(
+          //  template(availableCreditAmount, availableCAS, stepResponseObject)
+            template(isDataUpdated, camsFetches, stepper,unlockedAmont,stepResponseObject)
+            );
     },
     actions: {
         [ACTION.ON_SAVE]: onSave,

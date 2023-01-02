@@ -27,7 +27,8 @@ export const partnerApi = {
   userProfile:`${config.URL}/app/borrower/userProfile/`,
   pledgeInit:`${config.URL}/app/borrower/application/pledge/init`,
   authCAS:`${config.URL}/app/borrower/application/pledge/authCAS`,
-  pledgeSave:`${config.URL}/app/borrower/application/pledge/save`
+  pledgeSave:`${config.URL}/app/borrower/application/pledge/save`,
+  referalLink:`${config.URL}/app/partner/referralLink/application/`
 };
 
 export const api = {
