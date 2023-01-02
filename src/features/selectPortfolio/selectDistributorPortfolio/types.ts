@@ -36,3 +36,4 @@ export type SearchPortfolioPayload = {
   widgetId: string;
   stepResponseObject: StepResponseObject;
 };
+

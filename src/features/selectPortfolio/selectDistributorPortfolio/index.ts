@@ -46,12 +46,14 @@ import {
   import SharedPropsService from "../../../SharedPropsService";
   import { portfolioListDatastoreBuilder } from "./utils";
 import { horizontalDistributorStepperRepo } from "../../../configs/utils";
+import { partnerApi } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
   
   export const template: (
-   // stepResponseObject: StepResponseObject,
+    stepResponseObject: StepResponseObject,
     stepper: StepperItem[]
   ) => Promise<TemplateSchema> = async (
-    //stepResponseObject,
+    stepResponseObject,
     stepper
     ) => {
     return {
@@ -154,7 +156,7 @@ import { horizontalDistributorStepperRepo } from "../../../configs/utils";
             payload: <SearchPortfolioPayload>{
               value: "",
               widgetId: "listItem",
-             // stepResponseObject,
+              stepResponseObject,
             },
             routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
           },
@@ -165,19 +167,28 @@ import { horizontalDistributorStepperRepo } from "../../../configs/utils";
           },
         },
         listSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
-       // ...(await portfolioListDatastoreBuilder(stepResponseObject)),
+        ...(await portfolioListDatastoreBuilder(stepResponseObject)),
       },
     };
   };
   
   export const selectDistributorPortfolioMF: PageType<any> = {
-    onLoad: async ({}, { 
-     // stepResponseObject, updateAvailableCASMap
+    onLoad: async ({network}, { 
+      stepResponseObject
+      , updateAvailableCASMap
      }) => {
-     // await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+      const applicationId = await SharedPropsService.getApplicationId();
+      // const response = await network.get(
+      //   `${partnerApi.pledgeLimit}${applicationId}`,
+      //   {
+      //     headers: await getAppHeader(),
+      //   }
+      // );
+      await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+    // const stepResponseObject = response.data.stepResponseObject;
       const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
       return Promise.resolve(await template(
-        //stepResponseObject,
+        stepResponseObject,
         stepper
         ));
     },

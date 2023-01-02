@@ -36,16 +36,18 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import {
-    ACTION,
+    ACTION, AssetsPayload,
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../../configs/utils";
 import { onSave, onShare, onSkip } from "./actions";
+import { LimitPayload, StepResponseObject } from "../../fetchDistributorPortfolio/types";
 
 
 export const template: (
     stepper: StepperItem[],
+    stepResponseObject:StepResponseObject,
     amount: string
-) => TemplateSchema = (stepper, amount) => ({
+) => TemplateSchema = (stepper,stepResponseObject, amount) => ({
     layout: <Layout>{
         id: ROUTE.PORTFOLOIO_START,
         type: LAYOUTS.LIST,
@@ -141,10 +143,10 @@ export const template: (
             ],
         },
         headItems1: <TypographyProps>{
-            label: `Rs. ${amount}.replace(
+            label: "Rs. "+ `${amount}`.replace(
                 /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
                 ","
-              ) is the`,
+              ) +" is the",
             fontSize: FontSizeTokens.XXL,
             fontWeight: '600',
             color: ColorTokens.Grey_Night,
@@ -221,7 +223,14 @@ export const template: (
             action: {
                 type: ACTION.ON_SKIP,
                 routeId: ROUTE.PORTFOLOIO_START,
-                payload: <{}>{},
+                payload: <AssetsPayload>{
+                    value: "",
+                    widgetId: "input",
+                    stepResponseObject,
+                  },
+                // payload: <LimitPayload>{
+                //     value:stepResponseObject
+                // },
             },
         },
         continue: <ButtonProps & WidgetProps>{
@@ -231,16 +240,26 @@ export const template: (
             action: {
                 type: ACTION.SHARE,
                 routeId: ROUTE.PORTFOLOIO_START,
-                payload: <{}>{},
+                payload: <AssetsPayload>{
+                    value: "",
+                    widgetId: "input",
+                    stepResponseObject,
+                },
             },
         },
     },
 });
 
 export const portfolioStartMF: PageType<any> = {
-    onLoad: async ({ }, { amount }) => {
+    onLoad: async ({ }, {
+        // amount,
+        stepResponseObject }) => {
+        console.log("stepResponseObject",stepResponseObject);
+        const amount = stepResponseObject.availableCreditAmount;
         const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-        return Promise.resolve(template(stepper, amount));
+        return Promise.resolve(template(stepper, stepResponseObject,
+            amount
+            ));
     },
     actions: {
         [ACTION.ON_SAVE]: onSave,

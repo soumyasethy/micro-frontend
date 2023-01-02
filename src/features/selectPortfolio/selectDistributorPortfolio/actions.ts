@@ -60,6 +60,7 @@ export const TriggerCTA: ActionFunction<CtaPayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
+  console.log("here")
   const availableCASMap = await SharedPropsService.getAvailableCASMap();
   const updatedList: AvailableCASItem[] = [];
   Object.keys(availableCASMap).forEach((key) => {
@@ -105,10 +106,10 @@ export const ToggleSelectAction: ActionFunction<
     action.payload.stepResponseObject,
     portfolioSearchKeyword
   );
-  await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps & WidgetProps>{
+  await setDatastore(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO, "listItem", <ListProps & WidgetProps>{
     ...props.listItem,
   });
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+  await setDatastore(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO, "totalItem", <CtaCardProps>{
     ...props.totalItem,
   });
 };
