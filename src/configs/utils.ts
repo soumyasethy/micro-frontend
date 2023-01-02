@@ -218,8 +218,8 @@ export const nextStepId = async (
     if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
       // ***  Comment Email Verify FLow since google login is not working ***//
       return {
-        // routeId: ROUTE.EMAIL_VERIFY,
-        routeId: ROUTE.ENTER_EMAIL,
+        routeId: ROUTE.EMAIL_VERIFY,
+        // routeId: ROUTE.ENTER_EMAIL,
         params: {
           applicationId: user.linkedBorrowerAccounts[0].accountId,
         },
