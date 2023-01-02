@@ -9,6 +9,7 @@ import {
 } from "@voltmoney/types";
 import {
   AmountCardProps,
+  AspectRatioToken,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -16,13 +17,9 @@ import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
-  IconProps,
-  IconTokens,
-  ImageProps,
   LottieProps,
   LottieSizeTokens,
   LottieTokens,
-  ResizeModeToken,
   ShadowTypeTokens,
   SizeTypeTokens,
   SpaceProps,
@@ -38,7 +35,7 @@ import { ACTION, LimitPayload } from "./types";
 import { continueLimit } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 import { roundDownToNearestHundred } from "../../../configs/utils";
-import { image } from "./assets";
+import { commonTemplates } from "../../../configs/common";
 
 export const template: (availableCreditAmount: number) => TemplateSchema = (
   availableCreditAmount
@@ -47,7 +44,11 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
     id: ROUTE.UNLOCK_LIMIT_LANDING,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "lottie", type: WIDGET.LOTTIE, position: POSITION.ABSOLUTE_CENTER },
+      {
+        id: "lottie",
+        type: WIDGET.LOTTIE,
+        position: POSITION.ABSOLUTE_CENTER,
+      },
       { id: "space0", type: WIDGET.SPACE },
       { id: "space1", type: WIDGET.SPACE },
       { id: "welcomeStack", type: WIDGET.STACK },
@@ -58,12 +59,14 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
         type: WIDGET.CARD,
         position: POSITION.ABSOLUTE_BOTTOM,
       },
+      commonTemplates.poweredBy.widgetItem,
     ],
   },
   datastore: <Datastore>{
+    ...commonTemplates.poweredBy.datastore,
     lottie: <LottieProps>{
       uri: LottieTokens.Confetti,
-      size: LottieSizeTokens.FULL,
+      size: LottieSizeTokens.FULL_PARENT,
       autoplay: true,
       loop: true,
     },
@@ -114,7 +117,6 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
           { id: "space3", type: WIDGET.SPACE },
           // { id: "portfolioItem", type: WIDGET.BUTTON },
           // { id: "space4", type: WIDGET.SPACE },
-          { id: "imageStack", type: WIDGET.STACK },
         ],
       },
     },
@@ -151,58 +153,6 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
       },
     },
     space4: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    imageStack: <StackProps>{
-      type: StackType.row,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.center,
-      widgetItems: [
-        { id: "powerBy", type: WIDGET.ICON },
-        { id: "space5", type: WIDGET.SPACE },
-        { id: "cams", type: WIDGET.ICON },
-        { id: "space6", type: WIDGET.SPACE },
-        { id: "kfin", type: WIDGET.ICON },
-        { id: "space7", type: WIDGET.SPACE },
-        { id: "cdsl", type: WIDGET.ICON },
-        { id: "space8", type: WIDGET.SPACE },
-        { id: "nsdl", type: WIDGET.IMAGE },
-      ],
-    },
-    powerBy: <IconProps>{ name: IconTokens.PoweredBy },
-    cams: <IconProps>{ name: IconTokens.Cams },
-    kfin: <IconProps>{ name: IconTokens.Kfin },
-    cdsl: <IconProps>{ name: IconTokens.Cdsl },
-    image1: <ImageProps>{
-      uri: image.powered,
-      height: 16,
-      width: 56,
-      resizeMode: ResizeModeToken.CONTAIN,
-      padding: SizeTypeTokens.NONE,
-    },
-    space5: <SpaceProps>{ size: SizeTypeTokens.LG },
-    image2: <ImageProps>{
-      uri: image.cibil,
-      height: 23,
-      width: 54,
-      resizeMode: ResizeModeToken.CONTAIN,
-      padding: SizeTypeTokens.NONE,
-    },
-    space6: <SpaceProps>{ size: SizeTypeTokens.LG },
-    space8: <SpaceProps>{ size: SizeTypeTokens.LG },
-    image3: <ImageProps>{
-      uri: image.circle,
-      height: 21,
-      width: 21,
-      resizeMode: ResizeModeToken.CONTAIN,
-      padding: SizeTypeTokens.NONE,
-    },
-    space7: <SpaceProps>{ size: SizeTypeTokens.LG },
-    nsdl: <ImageProps>{
-      uri: image.nsdl,
-      height: 23,
-      width: 48,
-      resizeMode: ResizeModeToken.CONTAIN,
-      padding: SizeTypeTokens.NONE,
-    },
   },
 });
 
