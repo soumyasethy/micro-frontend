@@ -127,13 +127,12 @@ async function getUrlParams() {
 }
 async function setUrlParams(url: string) {
   if (
-    url.includes(
-      "utm_source" ||
-        "utm_medium" ||
-        "utm_campaign" ||
-        "utm_content" ||
-        "utm_id"
-    )
+    url.includes("utm_source=") ||
+    url.includes("utm_medium=") ||
+    url.includes("utm_campaign=") ||
+    url.includes("utm_content=") ||
+    url.includes("utm_id=") || 
+    url.includes("utm_term=")
   ) {
     const urlWithDate = url + "&timestamp=" + new Date().getTime();
     await AsyncStorage.setItem(StoreKey.urlWithDate, urlWithDate);
