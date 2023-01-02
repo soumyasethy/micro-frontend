@@ -91,10 +91,17 @@ export const template: (
       {
         id: "getMorePortfolio",
         type: WIDGET.SUGGESTION_CARD,
+        padding: { horizontal: 0 },
+      },
+      {
+        id: "promoCardTopSpace",
+        type: WIDGET.SPACE,
+        padding: { horizontal: 0 },
       },
       {
         id: "promoCard",
-        type: WIDGET.CARD,
+        type: WIDGET.PROMOCARD,
+        padding: { horizontal: 0 },
       },
     ],
   },
@@ -240,13 +247,8 @@ export const template: (
       },
     },
     space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    promoCard: <CardProps>{
-      bgColor: ColorTokens.White,
-      body: {
-        widgetItems: [{ id: "promo", type: WIDGET.PROMOCARD }],
-      },
-    },
-    promo: <PromoCardProps>{
+    promoCardTopSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+    promoCard: <PromoCardProps>{
       data: [
         {
           id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -349,13 +351,13 @@ export const unlockLimitMF: PageType<any> = {
         }
       }, APP_CONFIG.POLLING_INTERVAL);
     }
-    const shouldShowGetMorePortfolio = true;//await isMorePortfolioRenderCheck();
+    const isGetMorePortfolio = await isMorePortfolioRenderCheck();
     return Promise.resolve(
       template(
         availableCreditAmount,
         availableCASX,
         stepResponseObject,
-        shouldShowGetMorePortfolio,
+        isGetMorePortfolio,
         totalPortfolioAmount
       )
     );
