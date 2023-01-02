@@ -15,6 +15,7 @@ import {
   CardProps,
   ColorTokens,
   FontFamilyTokens,
+  FontSizeTokens,
   HeaderProps,
   IconAlignmentTokens,
   IconSizeTokens,
@@ -23,6 +24,7 @@ import {
   SizeTypeTokens,
   SpaceProps,
   StepperStateToken,
+  SuggestionItemProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
@@ -36,7 +38,7 @@ import {
 import {
   continueLimit,
   getMoreMfPortfolio,
-  modifyLimit,
+  selectPortfolio,
   removeGetMorePortfolio,
 } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
@@ -52,6 +54,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
+import { SelectAssets } from "../modify_limit/actions";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -60,12 +63,14 @@ export const template: (
   availableCreditAmount: number,
   availableCAS: AvailableCASItem[],
   stepResponseObject: StepResponseObject,
-  shouldShowGetMorePortfolio: boolean
+  shouldShowGetMorePortfolio: boolean,
+  totalPortfolioAmount: number
 ) => TemplateSchema = (
   availableCreditAmount,
   availableCAS,
   stepResponseObject,
-  shouldShowGetMorePortfolio
+  shouldShowGetMorePortfolio,
+  totalPortfolioAmount
 ) => ({
   layout: <Layout>{
     id: ROUTE.MF_PLEDGE_PORTFOLIO,
@@ -84,24 +89,13 @@ export const template: (
         },
       },
       {
+        id: "getMorePortfolio",
+        type: WIDGET.SUGGESTION_CARD,
+      },
+      {
         id: "promoCard",
         type: WIDGET.CARD,
-        padding: {
-          horizontal: 0,
-          all: 0,
-        },
       },
-      shouldShowGetMorePortfolio
-        ? {
-            id: "fetchMorePortfolioBtn",
-            type: WIDGET.BUTTON,
-            position: POSITION.ABSOLUTE_BOTTOM,
-          }
-        : {
-            id: "dontShow",
-            type: WIDGET.BUTTON,
-            position: POSITION.ABSOLUTE_BOTTOM,
-          },
     ],
   },
   datastore: <Datastore>{
@@ -132,9 +126,64 @@ export const template: (
         widgetItems: [
           { id: "unlockItem", type: WIDGET.BUTTON },
           { id: "space2", type: WIDGET.SPACE },
-          { id: "modifyItem", type: WIDGET.BUTTON },
-          { id: "space3", type: WIDGET.SPACE },
+          // { id: "modifyItem", type: WIDGET.BUTTON },
+          // { id: "space3", type: WIDGET.SPACE },
         ],
+      },
+    },
+    getMorePortfolio: <SuggestionItemProps & WidgetProps>{
+      title: {
+        label: "Selected MF portfolio",
+        fontSize: FontSizeTokens.XS,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 18,
+      },
+      subTitle: {
+        label: `₹${addCommasToNumber(
+          roundDownToNearestHundred(totalPortfolioAmount)
+        )}`,
+        fontSize: FontSizeTokens.MD,
+        fontFamily: FontFamilyTokens.Poppins,
+        fontWeight: "700",
+        color: ColorTokens.Grey_Night,
+        lineHeight: 24,
+      },
+      actionText: "Edit",
+      isMore: shouldShowGetMorePortfolio,
+      ctaText: "Get more MF porfolio",
+      quotationText: {
+        label: "Want to increase limit by adding more MFs? ",
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        color: ColorTokens.Grey_Night,
+        lineHeight: 24,
+      },
+      quotationSubText: {
+        label: "We’ll get your MF portfolio from other sources ",
+        fontSize: FontSizeTokens.XS,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        color: ColorTokens.Grey_Night,
+        lineHeight: 18,
+      },
+      action: {
+        type: ACTION.GET_MORE_MF_PORTFOLIO,
+        payload: <GetMoreMfPortfolioPayload>{
+          casList: stepResponseObject.availableCAS,
+        },
+        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+      },
+      actionSecondary: {
+        type: ACTION.MODIFY_LIMIT,
+        payload: {
+          value: stepResponseObject,
+          widgetId: "continue",
+          isResend: false,
+        },
+        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
       },
     },
     fetchMorePortfolioBtn: <ButtonProps & WidgetProps>{
@@ -240,6 +289,9 @@ export const unlockLimitMF: PageType<any> = {
     );*/
     const availableCreditAmount: number =
       pledgeLimitResponse.data.stepResponseObject.availableCreditAmount || 0;
+    const totalPortfolioAmount: number =
+      pledgeLimitResponse.data.stepResponseObject.totalPortfolioAmount || 0;
+
     const availableCAS: AvailableCASItem[] =
       pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
     await SharedPropsService.setCasListOriginal(availableCAS);
@@ -297,20 +349,21 @@ export const unlockLimitMF: PageType<any> = {
         }
       }, APP_CONFIG.POLLING_INTERVAL);
     }
-    const shouldShowGetMorePortfolio = await isMorePortfolioRenderCheck();
+    const shouldShowGetMorePortfolio = true;//await isMorePortfolioRenderCheck();
     return Promise.resolve(
       template(
         availableCreditAmount,
         availableCASX,
         stepResponseObject,
-        shouldShowGetMorePortfolio
+        shouldShowGetMorePortfolio,
+        totalPortfolioAmount
       )
     );
   },
 
   actions: {
     [ACTION.UNLOCK_LIMIT]: continueLimit,
-    [ACTION.MODIFY_LIMIT]: modifyLimit,
+    [ACTION.MODIFY_LIMIT]: selectPortfolio,
     [ACTION.NAV_NEXT]: NavigateNext,
     [ACTION.GET_MORE_MF_PORTFOLIO]: getMoreMfPortfolio,
     [ACTION.REMOVE_GET_MORE_MF_PORTFOLIO]: removeGetMorePortfolio,

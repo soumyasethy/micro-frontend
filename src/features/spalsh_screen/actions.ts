@@ -5,7 +5,6 @@ import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
 import { getAppHeader } from "../../configs/config";
-import { AnalyticsEventTracker } from "../../configs/constants";
 
 export const SplashAction: ActionFunction<any> = async (
   action,
@@ -26,6 +25,7 @@ export const SplashAction: ActionFunction<any> = async (
       /****
        * ADD YOUR CUSTOM ROUTE TO NAVIGATE
        * ****/
+      return await navigate(ROUTE.CHECKING_LIMIT);
 
       if (user.linkedApplications[0].applicationState === "COMPLETED") {
         await navigate(ROUTE.DASHBOARD);

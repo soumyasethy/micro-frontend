@@ -248,7 +248,7 @@ export const nextStepId = async (
       if (!isPledgeFirstTime) {
         await SharedPropsService.setPledgeFirstTime(true);
         return {
-          routeId: ROUTE.UNLOCK_LIMIT_LANDING,
+          routeId: ROUTE.CHECKING_LIMIT,
           params: {},
         };
       }

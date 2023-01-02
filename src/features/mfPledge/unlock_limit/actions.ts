@@ -5,6 +5,9 @@ import SharedPropsService from "../../../SharedPropsService";
 import { AssetRepositoryType } from "../../../configs/config";
 import { WIDGET } from "@voltmoney/schema";
 import { isMorePortfolioRenderCheck } from "../../../configs/utils";
+import { SelectAssets } from "../modify_limit/actions";
+import { AssetsPayload } from "../modify_limit/types";
+import { ACTION as MODIFY_LIMIT_ACTION } from "../modify_limit/types";
 
 export const continueLimit: ActionFunction<LimitPayload> = async (
   action,
@@ -20,14 +23,27 @@ export const continueLimit: ActionFunction<LimitPayload> = async (
   });
 };
 
-export const modifyLimit: ActionFunction<LimitPayload> = async (
+export const selectPortfolio: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { navigate }
+  { navigate, ...props }
 ): Promise<any> => {
-  await navigate(ROUTE.MODIFY_LIMIT, {
-    stepResponseObject: action.payload.value,
-  });
+  // await navigate(ROUTE.MODIFY_LIMIT, {
+  //   stepResponseObject: action.payload.value,
+  // });
+  await SelectAssets(
+    {
+      type: MODIFY_LIMIT_ACTION.CONFIRM_CTA,
+      payload: <AssetsPayload>{
+        value: "",
+        widgetId: "input",
+        stepResponseObject: action.payload.value,
+      },
+      routeId: ROUTE.MODIFY_LIMIT,
+    },
+    {},
+    { navigate, ...props }
+  );
 };
 export const getMoreMfPortfolio: ActionFunction<
   GetMoreMfPortfolioPayload
@@ -50,7 +66,9 @@ export const getMoreMfPortfolio: ActionFunction<
     }
   }
 
+  /*** Go to re-fetch portfolio from other Asset Type **/
   await navigate(ROUTE.MF_FETCH_PORTFOLIO);
+  /*** remove fetch more asset type option from UI */
   await removeGetMorePortfolio(
     {
       type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,

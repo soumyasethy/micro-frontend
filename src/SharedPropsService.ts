@@ -4,7 +4,7 @@ import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
-import { AvailableCASItem } from "./features/unlockLimit/unlock_limit/types";
+import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;

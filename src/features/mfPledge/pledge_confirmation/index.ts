@@ -12,6 +12,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  CardOrientation,
   CardProps,
   ColorTokens,
   DividerProps,
@@ -19,6 +20,8 @@ import {
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
+  IconProps,
+  IconTokens,
   ListItemProps,
   ShadowTypeTokens,
   SizeTypeTokens,
@@ -33,24 +36,26 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, OtpPayloadForPledgeConfirm } from "./types";
-import { sendOtpForPledgeConfirm, goBack } from "./actions";
+import { goBack, sendOtpForPledgeConfirm } from "./actions";
 import _ from "lodash";
 import { AvailableCASItem, StepResponseObject } from "../unlock_limit/types";
 import { getTotalLimit } from "../portfolio/actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
+import { AssetRepositoryType, getAppHeader } from "../../../configs/config";
 
 export const template: (
   totalAmount: number,
   totalCharges: number,
   processingFeesBreakUp: { [key in string]: number },
-  stepResponseObject: StepResponseObject
+  stepResponseObject: StepResponseObject,
+  showOtpConfirmation: boolean
 ) => TemplateSchema = (
   totalAmount = 0,
   totalCharges = 0,
   processingFeesBreakUp = {},
-  stepResponseObject
+  stepResponseObject,
+  showOtpConfirmation = false
 ) => {
   const listItemLayout = Object.keys(processingFeesBreakUp).map(
     (key, index) => {
@@ -152,6 +157,20 @@ export const template: (
             right: 16,
           },
         },
+        ...(showOtpConfirmation
+          ? [
+              {
+                id: "otpConfirmInfo",
+                type: WIDGET.CARD,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+              {
+                id: "continueSpace",
+                type: WIDGET.CARD,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+            ]
+          : []),
         {
           id: "continue",
           type: WIDGET.BUTTON,
@@ -160,6 +179,38 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      otpConfirmInfo: <CardProps>{
+        bgColor: ColorTokens.Secondary_05,
+        width: StackWidth.FULL,
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG,
+          left: SizeTypeTokens.LG,
+          right: SizeTypeTokens.LG,
+        },
+        bodyOrientation: CardOrientation.HORIZONTAL,
+        body: {
+          widgetItems: [
+            { id: "infoIcon", type: WIDGET.ICON },
+            { id: "infoIconSpace", type: WIDGET.SPACE },
+            { id: "infoLabel", type: WIDGET.TEXT },
+          ],
+        },
+      },
+      infoIcon: <IconProps>{
+        name: IconTokens.InfoFilled,
+        color: ColorTokens.Secondary_100,
+      },
+      infoIconSpace: <SpaceProps>{ size: SizeTypeTokens.Size10 },
+      continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      infoLabel: <TypographyProps>{
+        label: "We will trigger 2 OTP’s to confirm your pledge",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontColor: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XS,
+        lineHeight: 18,
+      },
       header: <HeaderProps>{
         title: "Confirm pledge",
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
@@ -171,7 +222,7 @@ export const template: (
           routeId: ROUTE.PLEDGE_CONFIRMATION,
         },
       },
-      space0: <SpaceProps> { size: SizeTypeTokens.XL },
+      space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       cardItem: <CardProps>{
         shadow: ShadowTypeTokens.E1,
         bgColor: ColorTokens.Primary_05,
@@ -461,11 +512,11 @@ export const template: (
 export const pledgeConfirmationMF: PageType<any> = {
   onLoad: async ({ network }, { stepResponseObject }) => {
     /// Pledging
-    const mutualFundPortfolioItems: AvailableCASItem[] = (
+    const mfPortfolioArray: AvailableCASItem[] = (
       stepResponseObject as StepResponseObject
     ).availableCAS;
-    mutualFundPortfolioItems.forEach((_item, index) => {
-      mutualFundPortfolioItems[index].is_pledged = _item.pledgedUnits > 0;
+    mfPortfolioArray.forEach((_item, index) => {
+      mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
     });
 
     const applicationId = (await SharedPropsService.getUser())
@@ -476,7 +527,7 @@ export const pledgeConfirmationMF: PageType<any> = {
       api.processingCharges,
       {
         applicationId: applicationId,
-        mutualFundPortfolioItems,
+        mutualFundPortfolioItems: mfPortfolioArray,
       },
       { headers: await getAppHeader() }
     );
@@ -498,12 +549,21 @@ export const pledgeConfirmationMF: PageType<any> = {
       stepResponseObject.isinLTVMap
     );
 
+    const assetTypeMap = {};
+    /*** check unique asset type */
+    mfPortfolioArray.forEach((item) => {
+      assetTypeMap[item.assetRepository] = true;
+    });
+    /*** show 2 otp confirmation if both Karvy and CAMS is present */
+    const showOtpConfirmation: boolean = Object.keys(assetTypeMap).length > 1;
+
     return Promise.resolve(
       template(
         totalAmount,
         totalCharges,
         processingFeesBreakUp,
-        stepResponseObject as StepResponseObject
+        stepResponseObject as StepResponseObject,
+        showOtpConfirmation
       )
     );
   },
