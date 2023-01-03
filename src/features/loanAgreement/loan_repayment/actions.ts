@@ -85,21 +85,23 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
 
     hidePopup();
 
-    showPopup({
-      autoTriggerTimerInMilliseconds: APP_CONFIG.LOAN_REPAYMENT_AUTO_TRIGGER,
-      isAutoTriggerCta: true,
-      type: "DEFAULT",
-      iconName: IconTokens.Redirecting,
-      title: "Waiting for response",
-      subTitle: "Please wait while we process your request",
-      ctaLabel: "Continue",
-      ctaAction: {
-        type: ACTION.POLL_MANDATE_STATUS,
-        routeId: ROUTE.LOAN_REPAYMENT,
-        payload: {},
-      },
-      primary: false,
-    });
+    const timer = setInterval(async () => {
+      clearInterval(timer);
+      showPopup({
+        isAutoTriggerCta: true,
+        type: "DEFAULT",
+        iconName: IconTokens.Redirecting,
+        title: "Waiting for response",
+        subTitle: "Please wait while we process your request",
+        ctaLabel: "Continue",
+        ctaAction: {
+          type: ACTION.POLL_MANDATE_STATUS,
+          routeId: ROUTE.LOAN_REPAYMENT,
+          payload: {},
+        },
+        primary: false,
+      });
+    }, 100);
   }
 };
 
@@ -127,39 +129,41 @@ export const PollMandateStatus: ActionFunction<any> = async (
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
           hidePopup();
-          showPopup({
-            isAutoTriggerCta: false,
-            autoTriggerTimerInMilliseconds:
-              APP_CONFIG.LOAN_REPAYMENT_AUTO_TRIGGER,
-            type: "SUCCESS",
-            title: "AutoPay setup successful!",
-            subTitle:
-              "Interest charges will be paid automatically every month.",
-            ctaLabel: "Proceed to review agreement",
-            ctaAction: {
-              type: ACTION.GO_LOAN_AGREEMENT,
-              routeId: ROUTE.LOAN_REPAYMENT,
-              payload: {},
-            },
-          });
+          const refTimer = setInterval(async () => {
+            clearInterval(refTimer);
+            showPopup({
+              isAutoTriggerCta: false,
+              type: "SUCCESS",
+              title: "AutoPay setup successful!",
+              subTitle:
+                "Interest charges will be paid automatically every month.",
+              ctaLabel: "Proceed to review agreement",
+              ctaAction: {
+                type: ACTION.GO_LOAN_AGREEMENT,
+                routeId: ROUTE.LOAN_REPAYMENT,
+                payload: {},
+              },
+            });
+          }, 100);
         } else if (response.stepResponseObject.toLowerCase() === "failed") {
           clearInterval(timer);
           hidePopup();
-          showPopup({
-            isAutoTriggerCta: false,
-            autoTriggerTimerInMilliseconds:
-              APP_CONFIG.LOAN_REPAYMENT_AUTO_TRIGGER,
-            type: "FAILED",
-            title: "AutoPay setup failed!",
-            subTitle:
-              "Bank account must be linked for AutoPay. Please try again.",
-            ctaLabel: "Continue to try again",
-            ctaAction: {
-              type: ACTION.GO_LOAN_AGREEMENT,
-              routeId: ROUTE.LOAN_REPAYMENT,
-              payload: {},
-            },
-          });
+          const refTimer = setInterval(async () => {
+            clearInterval(refTimer);
+            showPopup({
+              isAutoTriggerCta: false,
+              type: "FAILED",
+              title: "AutoPay setup failed!",
+              subTitle:
+                "Bank account must be linked for AutoPay. Please try again.",
+              ctaLabel: "Continue to try again",
+              ctaAction: {
+                type: ACTION.GO_LOAN_REPAYMENT,
+                routeId: ROUTE.LOAN_REPAYMENT,
+                payload: {},
+              },
+            });
+          }, 100);
         }
       });
   };
@@ -176,3 +180,13 @@ export const NavLoanAgreement: ActionFunction<any> = async (
   await goBack();
   await navigate(ROUTE.LOAN_AGREEMENT);
 };
+
+export const NavLoanRepayment: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  await goBack();
+  await navigate(ROUTE.LOAN_REPAYMENT);
+};
+

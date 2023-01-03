@@ -50,21 +50,23 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
 
     hidePopup();
 
-    showPopup({
-      autoTriggerTimerInMilliseconds: APP_CONFIG.LOAN_REPAYMENT_AUTO_TRIGGER,
-      isAutoTriggerCta: true,
-      type: "DEFAULT",
-      iconName: IconTokens.Redirecting,
-      title: "Waiting for response",
-      subTitle: "Please wait while we process your request",
-      ctaLabel: "Continue",
-      ctaAction: {
-        type: ACTION.POLL_AGREEMENT_STATUS,
-        routeId: ROUTE.LOAN_AGREEMENT,
-        payload: {},
-      },
-      primary: false,
-    });
+    const timer = setInterval(() => {
+      clearInterval(timer);
+      showPopup({
+        isAutoTriggerCta: true,
+        type: "DEFAULT",
+        iconName: IconTokens.Redirecting,
+        title: "Waiting for response",
+        subTitle: "Please wait while we process your request",
+        ctaLabel: "Continue",
+        ctaAction: {
+          type: ACTION.POLL_AGREEMENT_STATUS,
+          routeId: ROUTE.LOAN_AGREEMENT,
+          payload: {},
+        },
+        primary: false,
+      });
+    }, 100);
   }
 };
 
@@ -90,39 +92,42 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
           hidePopup();
-          showPopup({
-            isAutoTriggerCta: false,
-            autoTriggerTimerInMilliseconds:
-              APP_CONFIG.LOAN_REPAYMENT_AUTO_TRIGGER,
+          const timer = setInterval(() => {
+            clearInterval(timer);
+            showPopup({
+              isAutoTriggerCta: false,
+
               type: "SUCCESS",
               title: "Agreement submitted!",
               subTitle:
                 "Congratulations! Your loan application is created successfully.",
               ctaLabel: "Go to dashboard",
-            ctaAction: {
-              type: ACTION.GO_TO_DASHBOARD,
-              routeId: ROUTE.LOAN_AGREEMENT,
-              payload: {},
-            },
-          });
+              ctaAction: {
+                type: ACTION.GO_TO_DASHBOARD,
+                routeId: ROUTE.LOAN_AGREEMENT,
+                payload: {},
+              },
+            });
+          }, 100);
         } else if (response.stepResponseObject.toLowerCase() === "failed") {
           clearInterval(timerRef);
           hidePopup();
-          showPopup({
-            isAutoTriggerCta: false,
-            autoTriggerTimerInMilliseconds:
-              APP_CONFIG.LOAN_REPAYMENT_AUTO_TRIGGER,
-            type: "FAILED",
-            title: "AutoPay setup failed!",
-            subTitle:
-              "Bank account must be linked for AutoPay. Please try again.",
-            ctaLabel: "Continue to try again",
-            ctaAction: {
-              type: ACTION.GO_TO_DASHBOARD,
-              routeId: ROUTE.LOAN_AGREEMENT,
-              payload: {},
-            },
-          });
+          const timer = setInterval(() => {
+            clearInterval(timer);
+            showPopup({
+              isAutoTriggerCta: false,
+              type: "FAILED",
+              title: "AutoPay setup failed!",
+              subTitle:
+                "Bank account must be linked for AutoPay. Please try again.",
+              ctaLabel: "Continue to try again",
+              ctaAction: {
+                type: ACTION.GO_TO_DASHBOARD,
+                routeId: ROUTE.LOAN_AGREEMENT,
+                payload: {},
+              },
+            });
+          }, 100);
         }
       });
   };
@@ -139,3 +144,14 @@ export const NavToDashboard: ActionFunction<any> = async (
   await goBack();
   await navigate(ROUTE.DASHBOARD);
 };
+
+export const NavToLoanAgreement: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  await goBack();
+  await navigate(ROUTE.LOAN_AGREEMENT);
+};
+
+

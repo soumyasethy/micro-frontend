@@ -44,6 +44,7 @@ import {
   openLinkInNewTab,
   PollMandateStatus,
   NavLoanAgreement,
+  NavLoanRepayment,
 } from "./actions";
 
 export const template: (
@@ -184,5 +185,6 @@ export const loanRepaymentMF: PageType<any> = {
     [ACTION.OPEN_TAB]: openLinkInNewTab,
     [ACTION.POLL_MANDATE_STATUS]: PollMandateStatus,
     [ACTION.GO_LOAN_AGREEMENT]: NavLoanAgreement,
+    [ACTION.GO_LOAN_REPAYMENT]: NavLoanRepayment,
   },
 };
