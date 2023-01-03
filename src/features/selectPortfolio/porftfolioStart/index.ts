@@ -36,10 +36,10 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import {
-    ACTION, AssetsPayload,
+    ACTION, AssetsPayload, EditItemPayload,
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../../configs/utils";
-import { onSave, onShare, onSkip } from "./actions";
+import { onModify, onSave, onShare, onSkip } from "./actions";
 import { LimitPayload, StepResponseObject } from "../../fetchDistributorPortfolio/types";
 
 
@@ -208,9 +208,12 @@ export const template: (
             labelColor: ColorTokens.Primary_100,
             width: ButtonWidthTypeToken.FULL,
             action: {
-                type: ACTION.ON_SAVE,
+                type: ACTION.ON_MODIFY,
                 routeId: ROUTE.PORTFOLOIO_START,
-                payload: <{}>{},
+                payload: <EditItemPayload>{
+                    stepResponseObject,
+                    selectedMap:{}
+                  },
             },
         },
         btnSpace: <SpaceProps>{
@@ -262,6 +265,7 @@ export const portfolioStartMF: PageType<any> = {
             ));
     },
     actions: {
+        [ACTION.ON_MODIFY]: onModify,
         [ACTION.ON_SAVE]: onSave,
         [ACTION.ON_SKIP]: onSkip,
         [ACTION.GO_BACK]: onSkip,
