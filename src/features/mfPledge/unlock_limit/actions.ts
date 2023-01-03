@@ -2,7 +2,7 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { ACTION, GetMoreMfPortfolioPayload, LimitPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryType } from "../../../configs/config";
+import { AssetRepositoryType, ConfigTokens } from "../../../configs/config";
 import { WIDGET } from "@voltmoney/schema";
 import { isMorePortfolioRenderCheck } from "../../../configs/utils";
 import { SelectAssets } from "../modify_limit/actions";
@@ -68,7 +68,8 @@ export const getMoreMfPortfolio: ActionFunction<
       );
     }
   }
-
+  /*** disable pan edit option */
+  await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
   /*** Go to re-fetch portfolio from other Asset Type **/
   await navigate(ROUTE.MF_FETCH_PORTFOLIO);
   /*** remove fetch more asset type option from UI */

@@ -1,5 +1,9 @@
 import { User } from "./features/login/otp_verify/types";
-import { __isMock__, AssetRepositoryType } from "./configs/config";
+import {
+  __isMock__,
+  AssetRepositoryType,
+  ConfigTokens,
+} from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -32,6 +36,7 @@ type GlobalProps = {
   };
   casListOriginal?: AvailableCASItem[];
   appPlatform?: string;
+  config?: { isPanEditAllowed?: boolean };
 };
 
 let _globalProps: GlobalProps = {
@@ -60,12 +65,19 @@ let _globalProps: GlobalProps = {
   },
   casListOriginal: [],
   appPlatform: "VOLT_MOBILE_APP",
+  config: { [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true },
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
 export function getBuildType(): BUILD_TYPE {
   return _globalProps.buildType;
+}
+export function setConfig(configId: ConfigTokens, configValue: any) {
+  _globalProps.config[configId] = configValue;
+}
+export function getConfig(configId?: ConfigTokens): any {
+  return configId ? _globalProps.config[configId] : _globalProps.config;
 }
 /*** Asset repository ***/
 async function setAssetRepositoryType(
@@ -227,4 +239,6 @@ export default {
   getUrlParams,
   setAppPlatform,
   getAppPlatform,
+  setConfig,
+  getConfig,
 };

@@ -31,20 +31,22 @@ import {
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryType } from "../../../configs/config";
+import { AssetRepositoryType, ConfigTokens } from "../../../configs/config";
 
 export const template: (
   applicationId: string,
   panNumber: string,
   phoneNumber: string,
   emailId: string,
-  assetRepository: AssetRepositoryType
+  assetRepository: AssetRepositoryType,
+  isPanEditAllowed: boolean
 ) => TemplateSchema = (
   applicationId,
   panNumber,
   phoneNumber,
   emailId,
-  assetRepository
+  assetRepository,
+  isPanEditAllowed
 ) => {
   return {
     layout: <Layout>{
@@ -91,17 +93,19 @@ export const template: (
         title: "PAN Number",
         subTitle: panNumber,
         leadIconName: IconTokens.CreditCard,
-        trailIconName: IconTokens.Edit,
+        trailIconName: isPanEditAllowed ? IconTokens.Edit : null,
         subTitleLineHeight: 24,
-        action: {
-          routeId: ROUTE.MF_FETCH_PORTFOLIO,
-          type: ACTION.EDIT_PAN,
-          payload: <PanEditPayload>{
-            applicationId,
-            targetRoute: ROUTE.MF_FETCH_PORTFOLIO,
-            panNumber: panNumber,
-          },
-        },
+        action: isPanEditAllowed
+          ? {
+              routeId: ROUTE.MF_FETCH_PORTFOLIO,
+              type: ACTION.EDIT_PAN,
+              payload: <PanEditPayload>{
+                applicationId,
+                targetRoute: ROUTE.MF_FETCH_PORTFOLIO,
+                panNumber: panNumber,
+              },
+            }
+          : null,
       },
       mobileItem: <ListItemProps & WidgetProps>{
         title: "Mobile Number",
@@ -167,8 +171,19 @@ export const checkLimitMF: PageType<any> = {
     }
     const assetRepository = await SharedPropsService.getAssetRepositoryType();
 
+    const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
+      ConfigTokens.IS_PAN_EDIT_ALLOWED
+    );
+
     return Promise.resolve(
-      template(applicationId, panNumberX, phoneNumber, emailId, assetRepository)
+      template(
+        applicationId,
+        panNumberX,
+        phoneNumber,
+        emailId,
+        assetRepository,
+        isPanEditAllowed
+      )
     );
   },
   actions: {
