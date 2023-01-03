@@ -1,26 +1,11 @@
-//export enum BUILD_TYPE {
-//   PRODUCTION = "PRODUCTION",
-//   STAGING = "STAGING",
-// }
-// export const BASE_URL = {
-//   [BUILD_TYPE.STAGING]: "https://api.staging.voltmoney.in",
-//   [BUILD_TYPE.PRODUCTION]: "https://api.voltmoney.in",
-// };
-// let baseUrl = "";
-// export const setBaseURL = (buildType: BUILD_TYPE) => {
-//   baseUrl = BASE_URL[buildType];
-// };
-//
-// export const config = {
-//   URL: getBaseUrl(),
-// };
+import SharedPropsService, { BUILD_TYPE } from "../SharedPropsService";
 
 export const BASE_URL = {
-  STAGING: "https://api.staging.voltmoney.in",
-  PRODUCTION: "https://api.voltmoney.in",
+  [BUILD_TYPE.BORROWER_STAGING]: "https://api.staging.voltmoney.in",
+  [BUILD_TYPE.BORROWER_PRODUCTION]: "https://api.voltmoney.in",
 };
 export const config = {
-  URL: BASE_URL.STAGING, /// change this to BASE_URL.PRODUCTION for production
+  URL: BASE_URL[SharedPropsService.getBuildType()], /// change this to BASE_URL.PRODUCTION for production
 };
 export const StoreKey = {
   isPledgeFirstTime: "isPledgeFirstTime",

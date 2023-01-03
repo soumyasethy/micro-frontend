@@ -102,7 +102,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       spaceSecondarySubTitle: <SpaceProps>{ size: SizeTypeTokens.LG },
       spaceInput: <SpaceProps>{ size: SizeTypeTokens.XL },
       subTitle: <TypographyProps>{
-        label: "Supported document formats : PNG/JPEG",
+        label: "Supported document formats : PDF/PNG/JPEG",
         fontSize: FontSizeTokens.SM,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
@@ -110,7 +110,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         lineHeight: 18,
       },
       secondarySubTitle: <TypographyProps>{
-        label: "File size < 1 MB",
+        label: "File size < 5 MB",
         fontSize: FontSizeTokens.SM,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,

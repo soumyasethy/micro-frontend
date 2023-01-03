@@ -42,8 +42,16 @@ export const template: (
   panNumber: string,
   phoneNumber: string,
   emailId: string,
-  headTitle: string
-) => TemplateSchema = (applicationId, panNumber, phoneNumber, emailId, headTitle) => {
+  headTitle: string,
+  assetRepository:AssetRepositoryType
+) => TemplateSchema = (
+  applicationId,
+  panNumber,
+  phoneNumber,
+  emailId,
+  headTitle,
+  assetRepository
+) => {
   return {
     layout: <Layout>{
       id: ROUTE.MF_FETCH_PORTFOLIO,
@@ -159,8 +167,9 @@ export const template: (
             emailId,
             phoneNumber,
             panNumber,
-            assetRepository: headTitle ? headTitle : AssetRepositoryType.DEFAULT,
+            assetRepository: headTitle ? headTitle : assetRepository,
             //assetRepository: AssetRepositoryType.DEFAULT,
+           // assetRepository,
           },
         },
       },
@@ -189,13 +198,16 @@ export const checkLimitMF: PageType<any> = {
       if (!applicationId) {
         applicationId = applicationId || user.linkedApplications[0].applicationId;
       }
+      const assetRepository = await SharedPropsService.getAssetRepositoryType();
     } else {
       phoneNumber = await (await SharedPropsService.getPartnerUser()).phoneNumber;
       emailId = await (await SharedPropsService.getPartnerUser()).emailId;
       panNumberX = await (await SharedPropsService.getPartnerUser()).panNumber;
+      const assetRepository = headTitle;
     }
+    const assetRepository = await SharedPropsService.getAssetRepositoryType();
     return Promise.resolve(
-      template(applicationId, panNumberX, phoneNumber, emailId, headTitle)
+      template(applicationId, panNumberX, phoneNumber, emailId, headTitle,assetRepository)
     );
   },
   actions: {
@@ -203,7 +215,6 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_PAN]: editPanNumber,
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
-    [ACTION.EDIT_PAN]: editPanNumber,
     [ACTION.GO_BACK]: goBack,
   },
   clearPrevious:true

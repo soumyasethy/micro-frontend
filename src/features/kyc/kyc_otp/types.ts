@@ -5,6 +5,7 @@ export enum ACTION {
   ENABLE_CTA = "ENABLE_CTA",
   AADHAR_NUMBER = "AADHAR_NUMBER",
   GO_BACK = "GO_BACK",
+  RESEND_OTP = "RESEND_OTP",
 }
 export type EnableDisableCTA = {
   value: boolean;

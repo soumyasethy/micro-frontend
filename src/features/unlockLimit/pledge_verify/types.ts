@@ -1,3 +1,5 @@
+import { Action } from "@voltmoney/types";
+
 export enum ACTION {
   PLEDGE_VERIFY = "PLEDGE_VERIFY",
   RESEND_OTP_NUMBER = "RESEND_OTP_NUMBER",
@@ -10,4 +12,5 @@ export type OtpPledgePayload = {
   widgetId: string;
   isResend?: boolean;
   assetRepository?: string;
+  sendOtpForPledgeConfirmAction?: Action<any>;
 };

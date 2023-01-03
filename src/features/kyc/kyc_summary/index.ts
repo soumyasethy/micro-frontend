@@ -53,6 +53,8 @@ import { ToggleKYCVerifyCTA } from "../kyc_init/types";
 import moment from "moment";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import { User } from "../../login/otp_verify/types";
+import _ from "lodash";
 
 export const template: (
   pan: string,
@@ -77,7 +79,11 @@ export const template: (
       { id: "spaceAddress", type: WIDGET.SPACE },
       { id: "tcStack", type: WIDGET.STACK },
       { id: "tcSpace", type: WIDGET.SPACE },
-      { id: "stackBottom", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM},
+      {
+        id: "stackBottom",
+        type: WIDGET.STACK,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      },
       { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
     ],
   },
@@ -99,11 +105,11 @@ export const template: (
         payload: {},
       },
     },
-    divider1: <DividerProps> {
+    divider1: <DividerProps>{
       size: DividerSizeTokens.SM,
       color: ColorTokens.Grey_Milk,
     },
-    divider2: <DividerProps> {
+    divider2: <DividerProps>{
       size: DividerSizeTokens.SM,
       color: ColorTokens.Grey_Milk,
     },
@@ -116,7 +122,7 @@ export const template: (
         { id: "sbSpace1", type: WIDGET.SPACE },
         { id: "sbStack", type: WIDGET.STACK },
         { id: "sbSpace2", type: WIDGET.SPACE },
-      ]
+      ],
     },
     sbStack: <StackProps>{
       type: StackType.row,
@@ -126,7 +132,7 @@ export const template: (
         { id: "image2", type: WIDGET.ICON },
         { id: "sbpace3", type: WIDGET.SPACE },
         { id: "disclaimer", type: WIDGET.TEXT },
-      ]
+      ],
     },
     image2: <IconProps>{
       name: IconTokens.Secure,
@@ -217,18 +223,35 @@ export const template: (
 
 export const kycSummaryMf: PageType<any> = {
   onLoad: async ({ network }) => {
-    const applicationId = (await SharedPropsService.getUser())
-      .linkedApplications[0].applicationId;
+    const user: User = await SharedPropsService.getUser();
+    const applicationId = user.linkedApplications[0].applicationId;
+    const pan = user.linkedBorrowerAccounts[0].accountHolderPAN;
+
     const response = await network.get(
       `${api.kycSummaryInit}${applicationId}`,
       { headers: await getAppHeader() }
     );
 
-    const { address, dob, fullName, photoURL } = await response.data
-      .stepResponseObject;
-    const pan = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
-      .accountHolderPAN;
+    const address = _.get(response, "data.stepResponseObject.address");
+    const dob = _.get(response, "data.stepResponseObject.dob");
+    const fullName = _.get(response, "data.stepResponseObject.fullName");
+    const photoURL = _.get(response, "data.stepResponseObject.photoURL");
+
     const stepper: StepperItem[] = await horizontalStepperRepo();
+    console.warn(
+      "*** kyc summary **** ",
+      "address",
+      address,
+      "dob",
+      dob,
+      "fullName",
+      fullName,
+      "photoURL",
+      photoURL,
+      "stepper",
+      stepper
+    );
+
     return Promise.resolve(
       template(pan, address, dob, fullName, photoURL, stepper)
     );

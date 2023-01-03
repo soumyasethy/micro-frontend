@@ -1,3 +1,4 @@
+import { Linking, Dimensions } from "react-native";
 import {
   Datastore,
   Layout,
@@ -5,8 +6,8 @@ import {
   PageType,
   POSITION,
   TemplateSchema,
+  SCREEN_SIZE,
 } from "@voltmoney/types";
-import _ from "lodash";
 import {
   BorderRadiusTokens,
   CardProps,
@@ -25,6 +26,8 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack } from "./actions";
+import { DeepLinks } from "../../../configs/config";
+import {getScreenType} from "../../../configs/platfom-utils";
 export const template: () => TemplateSchema = () => {
   return {
     layout: <Layout>{
@@ -105,7 +108,17 @@ export const template: () => TemplateSchema = () => {
         isDivider: false,
         title: "WhatsApp",
         leadIconName: IconTokens.Whatsapp,
-        onPress: () => {},
+        onPress: () => {
+          const screenType = getScreenType(Dimensions.get("window").width);
+          if (
+            screenType === SCREEN_SIZE.X_SMALL ||
+            screenType === SCREEN_SIZE.SMALL
+          ) {
+            window.open(DeepLinks.MOBILE_WHATSAPP, "_parent"); //Linking.openURL(DeepLinks.MOBILE_WHATSAPP);
+          } else {
+            window.open(DeepLinks.WHATSAPP, "_blank"); //Linking.openURL(DeepLinks.WHATSAPP)
+          }
+        },
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.XL },
       callCard: <CardProps>{
@@ -131,7 +144,7 @@ export const template: () => TemplateSchema = () => {
         },
         customSubTitle: <TypographyProps>{
           label:
-            "Call us at (022) 62820570. We are available in working days from 9.30 AM to 6.30 PM",
+            "Call us at +91 96117-49097. We are available in working days from 9.30 AM to 6.30 PM",
           color: ColorTokens.Grey_Charcoal,
           fontFamily: FontFamilyTokens.Inter,
           fontWeight: "400",
@@ -140,7 +153,9 @@ export const template: () => TemplateSchema = () => {
         isDivider: false,
         title: "Call",
         leadIconName: IconTokens.Phone,
-        onPress: () => {},
+        onPress: () => {
+          window.open(DeepLinks.CALL, "_parent"); //Linking.openURL(DeepLinks.CALL);
+        },
       },
 
       space2: <SpaceProps>{ size: SizeTypeTokens.XL },
@@ -173,7 +188,9 @@ export const template: () => TemplateSchema = () => {
         title: "Email",
         subTitle: "Email us at support@voltmoney.in",
         leadIconName: IconTokens.Email,
-        onPress: () => {},
+        onPress: () => {
+          window.open(DeepLinks.MAILTO, "_parent"); //Linking.openURL(DeepLinks.MAILTO);
+        },
       },
     },
   };

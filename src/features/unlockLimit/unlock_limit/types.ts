@@ -1,5 +1,7 @@
 export enum ACTION {
   UNLOCK_LIMIT = "UNLOCK_LIMIT",
+  GET_MORE_MF_PORTFOLIO = "GET_MORE_MF_PORTFOLIO",
+  REMOVE_GET_MORE_MF_PORTFOLIO = "REMOVE_GET_MORE_MF_PORTFOLIO",
   MODIFY_LIMIT = "MODIFY_LIMIT",
   NAV_NEXT = "NAV_NEXT",
 }
@@ -9,6 +11,7 @@ export type ContinuePayload = {
   widgetId: string;
   isResend?: boolean;
 };
+export type GetMoreMfPortfolioPayload = { casList: AvailableCASItem[] };
 
 export type LimitPayload = {
   value: StepResponseObject;

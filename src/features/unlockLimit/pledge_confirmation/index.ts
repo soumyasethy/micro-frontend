@@ -32,8 +32,8 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, OtpPayload } from "./types";
-import { sendOtp, goBack } from "./actions";
+import { ACTION, OtpPayloadForPledgeConfirm } from "./types";
+import { sendOtpForPledgeConfirm, goBack } from "./actions";
 import _ from "lodash";
 import { AvailableCASItem, StepResponseObject } from "../unlock_limit/types";
 import { getTotalLimit } from "../portfolio/actions";
@@ -452,7 +452,7 @@ export const template: (
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.PLEDGE_CONFIRMATION,
-          payload: <OtpPayload>{
+          payload: <OtpPayloadForPledgeConfirm>{
             value: stepResponseObject,
             widgetId: "continue",
             isResend: false,
@@ -514,7 +514,7 @@ export const pledgeConfirmationMF: PageType<any> = {
     );
   },
   actions: {
-    [ACTION.PLEDGE_CONFIRMATION]: sendOtp,
+    [ACTION.PLEDGE_CONFIRMATION]: sendOtpForPledgeConfirm,
     [ACTION.BACK_BUTTON]: goBack,
   },
   clearPrevious: true,

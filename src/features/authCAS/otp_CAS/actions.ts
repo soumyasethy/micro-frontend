@@ -12,32 +12,22 @@ import { nextStepId } from "../../../configs/utils";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
 import { ROUTE } from "../../../routes";
+import { AnalyticsEventTracker } from "../../../configs/constants";
 
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, network, goBack, showPopup }
+  { navigate, setDatastore, network, goBack, showPopup ,analytics}
 ): Promise<any> => {
+  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
     action.payload.value.length !==
-    AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
-  )
+    AssetRepositoryMap[assetRepositoryType].OTP_LENGTH
+  ) {
     return;
-    // await showPopup({
-    //   autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
-    //   isAutoTriggerCta: true,
-    //   title: "Portfolio fetched succesfullyy start",
-    //   subTitle: "You will be redirected to next step in few seconds",
-    //   type: "SUCCESS",
-    //   ctaLabel: "Continue",
-    //   primary: true,
-    //   ctaAction: {
-    //     type: ACTIONS.NEXT_ROUTE,
-    //     routeId: ROUTE.OTP_AUTH_CAS,
-    //     payload: {},
-    //   },
-    // });
-    // return;
+
+  }
+
   await setDatastore(action.routeId, "input", <TextInputProps>{
     state: InputStateToken.LOADING,
   });
@@ -50,15 +40,32 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
       {
         applicationId: action.payload.applicationId,
         otp: action.payload.value,
-        assetRepository: action.payload.assetRepository,
+        assetRepository: assetRepositoryType,
       },
       { headers: await getAppHeader() }
     );
     if (response.status === 200) {
+      /*** check available credit limit ***/
+      const availableCreditAmount = _.get(
+        response,
+        "data.data.stepResponseObject.availableCreditAmount",
+        0
+      );
+      if (availableCreditAmount > 0) {
+        analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
+          ...AnalyticsEventTracker.borrower_mf_pull,
+        });
+      } else {
+        analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
+          ...AnalyticsEventTracker.borrower_mf_pull_failed,
+        });
+      }
+  
       await setDatastore(action.routeId, "input", <TextInputProps>{
         state: InputStateToken.SUCCESS,
       });
       await goBack();
+  
       if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
         const nextRoute = await nextStepId(
           response.data.updatedApplicationObj.currentStepId
@@ -66,11 +73,8 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
         nextRoute.params = { ...nextRoute.params, response };
         await navigate(nextRoute.routeId, nextRoute.params);
       }
-    } else {
-      await setDatastore(action.routeId, "input", <TextInputProps>{
-        state: InputStateToken.ERROR,
-      });
-    }
+
+ 
   } else {
     console.log("partner otp verify");
     const response = await network.post(
@@ -108,9 +112,9 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
       });
     }
 
-   
   }
- 
+  }
+
 
 };
 

@@ -1,5 +1,6 @@
+
 import { BankData, User ,PartnerUser, BasicData} from "./features/login/otp_verify/types";
-import {  __isMock__ } from "./configs/config";
+import { __isMock__, AssetRepositoryType } from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -11,7 +12,21 @@ export enum USERTYPE {
   PARTNER = "PARTNER"
 }
 
+export type AssetRepositoryConfigItemType = {
+  isFetched?: boolean;
+  isPledgedRequired?: boolean;
+  isPledged?: boolean;
+  priority?: number;
+};
+export enum BUILD_TYPE {
+  BORROWER_PRODUCTION = "BORROWER_PRODUCTION",
+  BORROWER_STAGING = "BORROWER_STAGING",
+  PARTNER_PRODUCTION = "PARTNER_PRODUCTION",
+  PARTNER_STAGING = "PARTNER_STAGING",
+}
+
 type GlobalProps = {
+  buildType: BUILD_TYPE;
   user: User;
   partnerUser: PartnerUser;
   access_token: string;
@@ -27,10 +42,19 @@ type GlobalProps = {
   pconfirmAccNo?:string;
   pbankIfsc?:string;
   bankData :BankData;
-  basicData: BasicData
+  basicData: BasicData;
+  ref?: string;
+  url?: string;
+  assetRepositoryType?: AssetRepositoryType;
+  assetRepositoryConfig?: {
+    [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
+  };
+  casListOriginal?: AvailableCASItem[];
+  appPlatform?: string;
 };
 
 let _globalProps: GlobalProps = {
+  buildType: BUILD_TYPE.BORROWER_STAGING,
   user: {},
   partnerUser:{
     name:"",
@@ -60,8 +84,58 @@ let _globalProps: GlobalProps = {
     panNumber:"",
     mobileNumber:"",
     email:""
-  }
+  },
+  ref: "",
+  /*** Default asset repository */
+  assetRepositoryType: AssetRepositoryType.KARVY,
+  assetRepositoryConfig: {
+    /*** Sequence of fetching asset repository ***/
+    [AssetRepositoryType.KARVY]: {
+      isFetched: false,
+      isPledgedRequired: false,
+      isPledged: false,
+      priority: 1,
+    },
+    [AssetRepositoryType.CAMS]: {
+      isFetched: false,
+      isPledgedRequired: false,
+      isPledged: false,
+      priority: 2,
+    },
+  },
+  casListOriginal: [],
+  appPlatform: "VOLT_MOBILE_APP",
 };
+export function setBuildType(buildType) {
+  _globalProps.buildType = buildType;
+}
+export function getBuildType(): BUILD_TYPE {
+  return _globalProps.buildType;
+}
+/*** Asset repository ***/
+async function setAssetRepositoryType(
+  assetRepositoryType: AssetRepositoryType
+) {
+  _globalProps.assetRepositoryType = assetRepositoryType;
+}
+async function getAssetRepositoryType() {
+  return _globalProps.assetRepositoryType;
+}
+async function getAssetRepositoryFetchMap() {
+  return _globalProps.assetRepositoryConfig;
+}
+async function setAssetRepositoryFetchMap(
+  value: AssetRepositoryConfigItemType,
+  type?: AssetRepositoryType
+) {
+  if (type) {
+    _globalProps.assetRepositoryConfig[type] = value;
+  } else {
+    _globalProps.assetRepositoryConfig[_globalProps.assetRepositoryType] =
+      value;
+  }
+}
+/*** End Asset repository ***/
 
 async function setBasicData(props: BasicData) {
   _globalProps.basicData = await props;
@@ -137,11 +211,16 @@ async function setGlobalProps(props: GlobalProps) {
   _globalProps = await props;
 }
 async function getPartnerRefCode() {
-  console.warn("*** getPartnerRefCode ***", _globalProps.partnerRefCode);
-  return _globalProps.partnerRefCode;
+  return _globalProps.ref;
 }
-async function setPartnerRefCode(partnerRefCode: string) {
-  _globalProps.partnerRefCode = partnerRefCode;
+async function setPartnerRefCode(ref: string) {
+  _globalProps.ref = ref;
+}
+async function getUrlParams() {
+  return _globalProps.url;
+}
+async function setUrlParams(url: string) {
+  _globalProps.url = url;
 }
 
 function getPropsValue(key?: string) {
@@ -217,7 +296,22 @@ async function isPledgeFirstTime(): Promise<boolean> {
   return !!(await AsyncStorage.getItem(StoreKey.isPledgeFirstTime));
 }
 
+async function setCasListOriginal(casListOriginal: AvailableCASItem[]) {
+  _globalProps.casListOriginal = casListOriginal;
+}
+async function getCasListOriginal() {
+  return _globalProps.casListOriginal;
+}
+async function setAppPlatform(type: string) {
+  _globalProps.appPlatform = type;
+}
+async function getAppPlatform() {
+  return _globalProps.appPlatform;
+}
+
 export default {
+  setBuildType,
+  getBuildType,
   setGlobalProps,
   getPropsValue,
   setUser,
@@ -249,5 +343,15 @@ export default {
   setBankData,
   getBankData,
   setBasicData,
-  getBasicData
+  getBasicData,
+  setAssetRepositoryType,
+  getAssetRepositoryType,
+  getAssetRepositoryFetchMap,
+  setAssetRepositoryFetchMap,
+  setCasListOriginal,
+  getCasListOriginal,
+  setUrlParams,
+  getUrlParams,
+  setAppPlatform,
+  getAppPlatform
 };

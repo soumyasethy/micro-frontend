@@ -24,6 +24,7 @@ import { ACTION } from "./types";
 import { SplashAction } from "./actions";
 import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
+import { getParameters } from "../../configs/utils";
 
 const template: TemplateSchema = {
   layout: <Layout>{
@@ -64,12 +65,28 @@ export const splashScreenMF: PageType<any> = {
     //http://localhost:3000/partner/dashboard/helloworld
     // access route.params -> {params: 'helloworld'}
     //Example-2
-    //http://localhost:3000?partnerRefCode=12345
+    //http://localhost:3000?ref=12345
     // access route.params -> {ref_code: '12345'}
-    console.warn("splash mf partnerRefCode-> ", props);
-    const partnerRefCode: string = _.get(props, "partnerRefCode", null);
-    if (partnerRefCode) {
-      await SharedPropsService.setPartnerRefCode(partnerRefCode);
+    const ref: string = _.get(props, "ref", null);
+    const urlParams: string = _.get(props, "urlParams", null);
+    if (ref) {
+      await SharedPropsService.setPartnerRefCode(ref);
+    }
+    if (urlParams) {
+      await SharedPropsService.setUrlParams(urlParams);
+
+      /*** get params for custom api header if present in url
+       *** example, voltmoney.in/partnerplatform?platform=VOLT_MOBILE_APP ****/
+
+      const partnerPlatform = urlParams.includes("partnerplatform");
+      const platform = urlParams.includes("platform");
+
+      if (partnerPlatform && platform) {
+        const params = getParameters(urlParams);
+        const customPlatform = params["platform"];
+        /*** setting app global api header here if not VOLT_MOBILE_APP ****/
+        await SharedPropsService.setAppPlatform(customPlatform);
+      }
     }
 
     return Promise.resolve(template);

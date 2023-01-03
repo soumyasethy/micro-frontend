@@ -92,9 +92,9 @@ export const template: (
           id: "card",
           type: WIDGET.CARD,
           position: POSITION.ABSOLUTE_TOP,
-          padding: {
-            horizontal: 16,
-          },
+          // padding: {
+          //   horizontal: 16,
+          // },
         },
         ...(isPendingDisbursalApproval
           ? [
@@ -160,7 +160,7 @@ export const template: (
         type: StackType.row,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
-        padding: PaddingSizeTokens.LG,
+        padding: { horizontal: SizeTypeTokens.LG },
         widgetItems: [
           { id: "title", type: WIDGET.TEXT },
           // { id: "leadIcon", type: WIDGET.BUTTON },
@@ -171,7 +171,7 @@ export const template: (
         type: StackType.row,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.flexEnd,
-        padding: PaddingSizeTokens.LG,
+        padding: { horizontal: SizeTypeTokens.LG },
         widgetItems: [
           { id: "contactUs", type: WIDGET.TAG },
           { id: "contactUsSpace", type: WIDGET.SPACE },
@@ -438,8 +438,8 @@ export const template: (
 };
 
 export const dashboardMF: PageType<any> = {
-  onLoad: async ({ network },{...params}) => {
-    console.warn('Dashboard Navigation params', params);
+  onLoad: async ({ network }, { ...params }) => {
+    console.warn("Dashboard Navigation params", params);
     const userContextResponse = await network.post(
       api.userContext,
       {},

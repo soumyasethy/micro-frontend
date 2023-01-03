@@ -1,4 +1,4 @@
-import { IconTokens } from "@voltmoney/schema";
+import { ButtonProps, IconTokens } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
 import { api } from "../../../configs/api";
 import { defaultHeaders } from "../../../configs/config";
@@ -13,6 +13,9 @@ export const getURL: ActionFunction<transactionPayload> = async (
   _datastore,
   { navigate, setDatastore, asyncStorage }
 ): Promise<any> => {
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: true,
+  });
   const requestOptions = {
     method: "GET",
     headers: await defaultHeaders(),
@@ -36,6 +39,9 @@ export const getURL: ActionFunction<transactionPayload> = async (
   document.body.removeChild(anchor);
 
   URL.revokeObjectURL(imageURL);
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: false,
+  });
 }
 
 

@@ -11,6 +11,7 @@ import {
   InputStateToken,
   TextInputProps,
 } from "@voltmoney/schema";
+
 import { api, partnerApi } from "../../../configs/api";
 import { getAuthHeaders, getPartnerAuthHeaders } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
@@ -61,19 +62,29 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
       loading: true,
     });
 
-    const response = await network.get(`${api.login}${phoneNumber}`, {
-      headers: getAuthHeaders(),
-    });
+    const urlParams = `${await SharedPropsService.getUrlParams()}`.split("?");
+    const requestUrl = `${api.login}${phoneNumber}`;
+    const response = await network.get(
+      `${requestUrl}${urlParams.length > 1 ? `?${urlParams[1]}` : ""}`,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+
     if (response.status === 200) {
       await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
         loading: false,
       });
-      await navigate(ROUTE.OTP_VERIFY, {
-        phone_number: phoneNumber,
-      });
-      await setDatastore(action.routeId, "input", <TextInputProps>{
-        state: InputStateToken.SUCCESS,
-      });
+      if (action.payload.isResend == false) {
+        await navigate(ROUTE.OTP_VERIFY, {
+          phone_number: phoneNumber,
+        });
+      }
+      if (action.payload.isResend == false) {
+        await setDatastore(action.routeId, "input", <TextInputProps>{
+          state: InputStateToken.SUCCESS,
+        });
+      }
     } else {
       await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
         loading: false,
@@ -141,7 +152,6 @@ export const textOnChange: ActionFunction<ContinuePayload> = async (
   _datastore,
   { }
 ): Promise<any> => {
-  console.log(action.payload.value);
   phoneNumber = action.payload.value;
 };
 export const whatsappToggle: ActionFunction<WhatsAppEnabledPayload> = async (

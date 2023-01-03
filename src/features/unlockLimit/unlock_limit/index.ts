@@ -29,13 +29,20 @@ import { ROUTE } from "../../../routes";
 import {
   ACTION,
   AvailableCASItem,
+  GetMoreMfPortfolioPayload,
   LimitPayload,
   StepResponseObject,
 } from "./types";
-import { continueLimit, modifyLimit } from "./actions";
+import {
+  continueLimit,
+  getMoreMfPortfolio,
+  modifyLimit,
+  removeGetMorePortfolio,
+} from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 import {
   addCommasToNumber,
+  isMorePortfolioRenderCheck,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
 import { StepStatusMap, User } from "../../login/otp_verify/types";
@@ -45,14 +52,20 @@ import SharedPropsService from "../../../SharedPropsService";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
+
+/*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
+let availableCASX: AvailableCASItem[];
+
 export const template: (
   availableCreditAmount: number,
   availableCAS: AvailableCASItem[],
-  stepResponseObject: StepResponseObject
+  stepResponseObject: StepResponseObject,
+  shouldShowGetMorePortfolio: boolean
 ) => TemplateSchema = (
   availableCreditAmount,
   availableCAS,
-  stepResponseObject
+  stepResponseObject,
+  shouldShowGetMorePortfolio
 ) => ({
   layout: <Layout>{
     id: ROUTE.MF_PLEDGE_PORTFOLIO,
@@ -73,12 +86,22 @@ export const template: (
       },
       {
         id: "promoCard",
-        type: WIDGET.CARD,
+        type: WIDGET.PROMOCARD,
         padding: {
           horizontal: 0,
-          all: 0,
         },
       },
+      shouldShowGetMorePortfolio
+        ? {
+            id: "fetchMorePortfolioBtn",
+            type: WIDGET.BUTTON,
+            position: POSITION.ABSOLUTE_BOTTOM,
+          }
+        : {
+            id: "dontShow",
+            type: WIDGET.BUTTON,
+            position: POSITION.ABSOLUTE_BOTTOM,
+          },
     ],
   },
   datastore: <Datastore>{
@@ -115,10 +138,22 @@ export const template: (
         ],
       },
     },
+    fetchMorePortfolioBtn: <ButtonProps & WidgetProps>{
+      label: "Get more MF portfolio",
+      fontFamily: FontFamilyTokens.Inter,
+      type: ButtonTypeTokens.LargeFilled,
+      width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTION.GET_MORE_MF_PORTFOLIO,
+        payload: <GetMoreMfPortfolioPayload>{
+          casList: stepResponseObject.availableCAS,
+        },
+        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+      },
+    },
     unlockItem: <ButtonProps & WidgetProps>{
       label: "Unlock limit",
       fontFamily: FontFamilyTokens.Inter,
-      fontSize: SizeTypeTokens.LG,
       type: ButtonTypeTokens.LargeFilled,
       icon: {
         name: IconTokens.Lock,
@@ -157,13 +192,7 @@ export const template: (
       },
     },
     space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    promoCard: <CardProps>{
-      bgColor: ColorTokens.White,
-      body: {
-        widgetItems: [{ id: "promo", type: WIDGET.PROMOCARD }],
-      },
-    },
-    promo: <PromoCardProps>{
+    promoCard: <PromoCardProps>{
       data: [
         {
           id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -208,6 +237,7 @@ export const unlockLimitMF: PageType<any> = {
       pledgeLimitResponse.data.stepResponseObject.availableCreditAmount || 0;
     const availableCAS: AvailableCASItem[] =
       pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
+    await SharedPropsService.setCasListOriginal(availableCAS);
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
 
     /*** Show popup as soon as we land here if MF_PLEDGE_PORTFOLIO is PENDING_CALLBACK ***/
@@ -262,8 +292,14 @@ export const unlockLimitMF: PageType<any> = {
         }
       }, APP_CONFIG.POLLING_INTERVAL);
     }
+    const shouldShowGetMorePortfolio = await isMorePortfolioRenderCheck();
     return Promise.resolve(
-      template(availableCreditAmount, availableCAS, stepResponseObject)
+      template(
+        availableCreditAmount,
+        availableCASX,
+        stepResponseObject,
+        shouldShowGetMorePortfolio
+      )
     );
   },
 
@@ -271,5 +307,13 @@ export const unlockLimitMF: PageType<any> = {
     [ACTION.UNLOCK_LIMIT]: continueLimit,
     [ACTION.MODIFY_LIMIT]: modifyLimit,
     [ACTION.NAV_NEXT]: NavigateNext,
+    [ACTION.GET_MORE_MF_PORTFOLIO]: getMoreMfPortfolio,
+    [ACTION.REMOVE_GET_MORE_MF_PORTFOLIO]: removeGetMorePortfolio,
   },
+  clearPrevious: true,
+  // action: {
+  //   type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
+  //   routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+  //   payload: {},
+  // },
 };

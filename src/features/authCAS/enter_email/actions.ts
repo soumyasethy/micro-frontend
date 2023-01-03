@@ -7,13 +7,14 @@ import SharedPropsService from "../../../SharedPropsService";
 import { ROUTE } from "../../../routes";
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import { AnalyticsEventTracker } from "../../../configs/constants";
 
 let emailId: string = "";
 
 export const saveEmailId: ActionFunction<ContinuePayload> = async (
   action,
   _datastore,
-  { network, setDatastore, navigate }
+  { network, setDatastore, navigate, analytics }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
@@ -44,6 +45,9 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
   });
   const updatedUser: User = response.data;
   if (updatedUser) {
+    analytics(AnalyticsEventTracker.borrower_sign_up["Event Name"], {
+      ...AnalyticsEventTracker.borrower_sign_up,
+    });
     await SharedPropsService.setUser(updatedUser);
     const route = await nextStepId(
       updatedUser.linkedApplications[0].currentStepId

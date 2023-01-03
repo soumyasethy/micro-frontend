@@ -5,6 +5,7 @@ import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
 import { getAppHeader } from "../../configs/config";
+import { AnalyticsEventTracker } from "../../configs/constants";
 
 export const SplashAction: ActionFunction<any> = async (
   action,
@@ -16,20 +17,21 @@ export const SplashAction: ActionFunction<any> = async (
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
   if (accessToken) {
     const body = {}; /*** NOT PASSING REF CODE HERE ***/
+
     console.warn("SplashAction body", body);
     const userType = await SharedPropsService.getUserType();
     console.log("userType", userType);
     if (userType === "BORROWER") {
-      const userContextResponse = await network.post(api.userContext, body, {
-        headers: await getAppHeader(),
-      });
-      if (userContextResponse.status === 200) {
-        const user: User = userContextResponse.data;
-        await SharedPropsService.setUser(user);
-        /****
-         * ADD YOUR CUSTOM ROUTE TO NAVIGATE
-         * ****/
-        //return await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST, {})
+     
+    const userContextResponse = await network.post(api.userContext, body, {
+      headers: await getAppHeader(),
+    });
+    if (userContextResponse.status === 200) {
+      const user: User = userContextResponse.data;
+      await SharedPropsService.setUser(user);
+      /****
+       * ADD YOUR CUSTOM ROUTE TO NAVIGATE
+       * ****/
 
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);

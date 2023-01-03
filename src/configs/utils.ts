@@ -5,6 +5,7 @@ import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
 import { StoreKey } from "./api";
+import { AssetRepositoryMap, AssetRepositoryType } from "./config";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -454,4 +455,38 @@ export const maskBankAccountNumber = (accountNo: string) => {
     return maskString.concat(showString);
   }
   return "Account number less than 4 digits";
+};
+
+export const isMorePortfolioRenderCheck = async () => {
+  const casList = await SharedPropsService.getCasListOriginal();
+  /*** check if the user has pledged any mf portfolio */
+  const assetRepoMap = {};
+  /*** Get unique asset repository from the cas list */
+  for (let i = 0; i < casList.length; i++) {
+    const item = casList[i];
+    assetRepoMap[item.assetRepository] = true;
+  }
+  /*** remove if both Karvy and Cams are present */
+  return !(
+    Object.keys(assetRepoMap).length === 2 ||
+    (Object.keys(assetRepoMap).length == 1 &&
+      (AssetRepositoryMap[AssetRepositoryType.CAMS].isDisabled ||
+        AssetRepositoryMap[AssetRepositoryType.KARVY].isDisabled))
+  );
+};
+
+export const getParameters: (url: string) => {
+  [key in string]: string;
+} = (url: string) => {
+  const params = {};
+  let paramString = url.split('?')[1];
+  let queryString = new URLSearchParams(
+      paramString,
+  );
+  for (let pair of queryString.entries()) {
+    console.log('Key is:' + pair[0]);
+    console.log('Value is:' + pair[1]);
+    params[pair[0]] = pair[1];
+  }
+  return params;
 };

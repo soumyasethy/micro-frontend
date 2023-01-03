@@ -1,4 +1,5 @@
 import {
+  Action,
   Datastore,
   Layout,
   LAYOUTS,
@@ -31,17 +32,19 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, OtpPledgePayload } from "./types";
-import { goBack, NavigateNext, verifyOTP } from "./actions";
+import { goBack, NavigateNext, resendOTP, verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
-import { sendOtp } from "../pledge_confirmation/actions";
-import {
-  AssetRepositoryMap,
-  AssetRepositoryType,
-} from "../../../configs/config";
+import { AssetRepositoryMap } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 export const template: (
   phoneNumber: string,
-  assetRepository: string
-) => TemplateSchema = (phoneNumber, assetRepository) => ({
+  assetRepository: string,
+  sendOtpForPledgeConfirmAction: Action<any>
+) => TemplateSchema = (
+  phoneNumber,
+  assetRepository,
+  sendOtpForPledgeConfirmAction
+) => ({
   layout: <Layout>{
     id: ROUTE.PLEDGE_VERIFY,
     type: LAYOUTS.MODAL,
@@ -52,7 +55,7 @@ export const template: (
       },
       { id: "titleSpace", type: WIDGET.SPACE },
       { id: "subTitleStack", type: WIDGET.STACK },
-      { id: "subTitleSpace", type: WIDGET.SPACE },
+      { id: "space1", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
       { id: "inputSpace", type: WIDGET.SPACE },
     ],
@@ -90,7 +93,7 @@ export const template: (
       },
       action: {
         type: ACTION.GO_BACK,
-        payload: <{}>{
+        payload: {
           value: "",
           widgetId: "input",
           isResend: false,
@@ -100,22 +103,24 @@ export const template: (
     },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     subTitleStack: <StackProps & WidgetProps>{
-      type: StackType.row,
-      alignItems: StackAlignItems.center,
+      type: StackType.column,
+      alignItems: StackAlignItems.flexStart,
       justifyContent: StackJustifyContent.flexStart,
       widgetItems: [
         { id: "subTitle", type: WIDGET.TEXT },
+        { id: "subTitleSpace", type: WIDGET.SPACE },
         { id: "subTitle2", type: WIDGET.TEXT },
       ],
     },
     subTitle: <TypographyProps>{
-      label: `A ${
-        AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH
-      }-digit OTP was sent on `,
+      label: `${AssetRepositoryMap[assetRepository].NAME} has sent ${AssetRepositoryMap[assetRepository].OTP_LENGTH}-digit OTP was sent on `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
+    },
+    subTitleSpace: <SpaceProps>{
+      size: SizeTypeTokens.SM,
     },
     subTitle2: <TypographyProps>{
       label: phoneNumber.substring(3),
@@ -124,11 +129,11 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
     },
-    subTitleSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     input: <TextInputProps & WidgetProps>{
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
-      charLimit: AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
+      charLimit: AssetRepositoryMap[assetRepository].OTP_LENGTH,
       keyboardType: KeyboardTypeToken.numberPad,
       action: {
         type: ACTION.PLEDGE_VERIFY,
@@ -136,22 +141,19 @@ export const template: (
           value: "",
           widgetId: "input",
           assetRepository,
+          sendOtpForPledgeConfirmAction,
         },
         routeId: ROUTE.PLEDGE_VERIFY,
       },
-      // otpAction: {
-      //     type: ACTION.RESEND_OTP_NUMBER,
-      //     payload: <OtpPayload>{
-      //       value: stepResponseObject,
-      //       widgetId: "input",
-      //       isResend: true,
-      //     },
-      //     routeId: ROUTE.OTP_VERIFY,
-      //   },
+      otpAction: {
+        type: ACTION.RESEND_OTP_NUMBER,
+        payload: <OtpPledgePayload>{ assetRepository },
+        routeId: ROUTE.PLEDGE_VERIFY,
+      },
     },
     inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     message: <TypographyProps>{
-      label: "Resend OTP in 14 secs",
+      label: "Resend OTP in 30 secs",
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
       fontFamily: FontFamilyTokens.Inter,
@@ -161,17 +163,20 @@ export const template: (
 });
 
 export const pledgeVerifyMF: PageType<any> = {
-  onLoad: async ({}, { assetRepository }) => {
+  onLoad: async (_, { sendOtpForPledgeConfirmAction }) => {
     const response = await fetchUserRepo();
     const phoneNumber = response.user.phoneNumber;
-    return Promise.resolve(template(phoneNumber, assetRepository));
+    const assetRepository = await SharedPropsService.getAssetRepositoryType();
+    return Promise.resolve(
+      template(phoneNumber, assetRepository, sendOtpForPledgeConfirmAction)
+    );
   },
 
   actions: {
     [ACTION.PLEDGE_VERIFY]: verifyOTP,
-    [ACTION.RESEND_OTP_NUMBER]: sendOtp,
+    [ACTION.RESEND_OTP_NUMBER]: resendOTP,
     [ACTION.GO_BACK]: goBack,
     [ACTION.NAV_NEXT]: NavigateNext,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };
