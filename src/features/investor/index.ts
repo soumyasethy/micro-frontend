@@ -4,9 +4,11 @@ import {
     LAYOUTS,
     PageType,
     POSITION,
+    SCREEN_SIZE,
     TemplateSchema,
     WidgetProps,
 } from "@voltmoney/types";
+import { Linking, Dimensions } from "react-native";
 import {
     ButtonProps,
     ButtonTypeTokens,
@@ -36,11 +38,13 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import {
-    ACTION,
+    ACTION, LinkPayload,
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../configs/utils";
-import { onSave, onShare, onSkip } from "./actions";
-
+import {  copyToClipboard, onSave, onShare, onSkip } from "./actions";
+import { getScreenType } from "../../configs/platfom-utils";
+import { DeepLinks } from "../../configs/config";
+let screenType = getScreenType(Dimensions.get("window").width);
 
 export const template: (
     link:string
@@ -193,10 +197,24 @@ export const template: (
             },
             labelColor: ColorTokens.Grey_Night,
             width: ButtonWidthTypeToken.FULL,
+            // onPress: () => {
+            //     const screenType = getScreenType(Dimensions.get("window").width);
+            //     if (
+            //       screenType === SCREEN_SIZE.X_SMALL ||
+            //       screenType === SCREEN_SIZE.SMALL
+            //     ) {
+            //       window.open(DeepLinks.MOBILE_WHATSAPP, "_parent"); //Linking.openURL(DeepLinks.MOBILE_WHATSAPP);
+            //     } else {
+            //       window.open(DeepLinks.WHATSAPP, "_blank"); //Linking.openURL(DeepLinks.WHATSAPP)
+            //     }
+            //   },
             action: {
-                type: ACTION.ON_SAVE,
-                routeId: ROUTE.PORTFOLOIO_START,
-                payload: <{}>{},
+               
+                type: ACTION.SHARE,
+                routeId: ROUTE.INVESTOR,
+                payload: <LinkPayload>{
+                    value:`${link}`
+                },
             },
         },
         btnSpace: <SpaceProps>{
@@ -211,9 +229,11 @@ export const template: (
             type: ButtonTypeTokens.LargeSoftFilled,
             width: ButtonWidthTypeToken.FULL,
             action: {
-                type: ACTION.ON_SKIP,
+                type: ACTION.ON_CLIPBOARD,
                 routeId: ROUTE.INVESTOR,
-                payload: <{}>{},
+                payload: <LinkPayload>{
+                    value: `${link}`
+                },
             },
         },
         copySpace: <SpaceProps>{
@@ -241,6 +261,7 @@ export const investorMF: PageType<any> = {
         [ACTION.ON_SKIP]: onSkip,
         [ACTION.GO_BACK]: onSkip,
         [ACTION.SHARE]: onShare,
+        [ACTION.ON_CLIPBOARD]: copyToClipboard,
     },
 
     clearPrevious: true,

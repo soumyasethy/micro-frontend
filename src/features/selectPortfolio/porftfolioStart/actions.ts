@@ -23,6 +23,7 @@ import {
 import { navigate } from "../../afterUnlock/dashboard/actions";
 import { AvailableCASItem, IsinLTVMap, IsinNAVMap, LimitPayload } from "../../fetchDistributorPortfolio/types";
 import { getTotalLimit } from "../selectDistributorPortfolio/actions";
+import { amountPayload } from "../pledged_amount/types";
 
 
 export const onSave: ActionFunction<{}> = async (action, _datastore, {navigate, ...props }): Promise<any> => {
@@ -196,4 +197,13 @@ export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore,
     
 };
 
+
+export const goBackACtion: ActionFunction<amountPayload> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore, asyncStorage, goBack }
+): Promise<any> => {
+  console.log("here");
+  goBack();
+};
 

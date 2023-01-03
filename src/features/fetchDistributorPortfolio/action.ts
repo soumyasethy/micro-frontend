@@ -7,13 +7,13 @@ import {
 } from "@voltmoney/schema";
 
 import {
-  ACTION, AmountPayload
+  ACTION, AmountPayload, RepositoryPayload
 } from "./types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
 import _ from "lodash";
 import { api, partnerApi } from "../../configs/api";
-import { APP_CONFIG, getAppHeader } from "../../configs/config";
+import { APP_CONFIG, AssetRepositoryType, getAppHeader } from "../../configs/config";
 import {
   updateCurrentStepId,
   updateStepStatusMap,
@@ -60,6 +60,7 @@ export const goCamsNext: ActionFunction<{}> = async (action, _datastore, { navig
     });
   }
   //await getUserDetails({},{});
+  await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
   await navigate(ROUTE.MF_FETCH_PORTFOLIO, {
     headTitle: "CAMS",
     applicationId: applictaionId
@@ -83,8 +84,37 @@ export const goKarvyNext: ActionFunction<{}> = async (action, _datastore, { navi
       emailId: response.data.emailId
     });
   }
+  await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.KARVY);
   await navigate(ROUTE.MF_FETCH_PORTFOLIO, {
     headTitle: "KARVY",
+    applicationId: applictaionId
+  })
+};
+
+export const goNext: ActionFunction<RepositoryPayload> = async (action, _datastore, { navigate, network }): Promise<any> => {
+  const applictaionId = await SharedPropsService.getApplicationId();
+  //  await getUserDetails({},{});
+  const accountId = await SharedPropsService.getAccountId();
+  const response = await network.get(
+    `${partnerApi.userProfile}${accountId}`,
+    { headers: await getAppHeader() }
+  );
+  if (response.status === 200) {
+    await SharedPropsService.setPartnerUser({
+      name: response.data.phoneNumber,
+      panNumber: response.data.panNumber,
+      phoneNumber: response.data.phoneNumber,
+      emailId: response.data.emailId
+    });
+  }
+  if(AssetRepositoryType.CAMS === action.payload.value){
+    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
+  }else{
+    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.KARVY);
+  }
+  
+  await navigate(ROUTE.MF_FETCH_PORTFOLIO, {
+    headTitle: action.payload.value,
     applicationId: applictaionId
   })
 };

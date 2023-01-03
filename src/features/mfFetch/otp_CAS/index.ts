@@ -163,6 +163,9 @@ export const template: (
         keyboardType: KeyboardTypeToken.numberPad,
         charLimit: AssetRepositoryMap.get(assetRepository).OTP_LENGTH,
           // charLimit: `${assetRepository}` ? PartnerAssetRepositoryMap[`${assetRepository}`].OTP_LENGTH :  AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
+       // charLimit: `${assetRepository}` ? PartnerAssetRepositoryMap[`${assetRepository}`].OTP_LENGTH :  AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
+      // charLimit:  AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH, 
+
         action: {
           type: ACTIONS.AUTH_CAS,
           routeId: ROUTE.OTP_AUTH_CAS,

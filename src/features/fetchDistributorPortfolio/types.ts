@@ -4,10 +4,15 @@ export enum ACTION {
     GO_BACK = "GO_BACK",
     SHARE = "SHARE",
     GO_CAMS = "GO_CAMS",
-    GO_KARVY = "GO_KARVY"
+    GO_KARVY = "GO_KARVY",
+    GO_OPERATIONAL = "GO_OPERATIONAL"
   }
 
   export type AmountPayload = {
+    value: string;
+  };
+
+  export type RepositoryPayload = {
     value: string;
   };
   
