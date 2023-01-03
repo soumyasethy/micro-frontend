@@ -85,10 +85,9 @@ export const template: (
       },
       {
         id: "promoCard",
-        type: WIDGET.CARD,
+        type: WIDGET.PROMOCARD,
         padding: {
           horizontal: 0,
-          all: 0,
         },
       },
       shouldShowGetMorePortfolio
@@ -191,13 +190,7 @@ export const template: (
       },
     },
     space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    promoCard: <CardProps>{
-      bgColor: ColorTokens.White,
-      body: {
-        widgetItems: [{ id: "promo", type: WIDGET.PROMOCARD }],
-      },
-    },
-    promo: <PromoCardProps>{
+    promoCard: <PromoCardProps>{
       data: [
         {
           id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
