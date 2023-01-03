@@ -33,8 +33,9 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
   });
 
   const userType = await SharedPropsService.getUserType();
+  console.log(userType);
   if (userType === "BORROWER") {
-   
+    console.log("here1")
     const response = await network.post(
       api.authCAS,
       {
@@ -60,7 +61,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
           ...AnalyticsEventTracker.borrower_mf_pull_failed,
         });
       }
-  
+      console.log("why here")
       await setDatastore(action.routeId, "input", <TextInputProps>{
         state: InputStateToken.SUCCESS,
       });
@@ -74,8 +75,13 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
         await navigate(nextRoute.routeId, nextRoute.params);
       }
 
- 
-  } else {
+ console.log("here")
+  }else {
+    await setDatastore(action.routeId, "input", <TextInputProps>{
+      state: InputStateToken.ERROR,
+    });
+  }
+}else {
     console.log("partner otp verify");
     const response = await network.post(
       partnerApi.authCAS,
@@ -113,8 +119,6 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     }
 
   }
-  }
-
 
 };
 

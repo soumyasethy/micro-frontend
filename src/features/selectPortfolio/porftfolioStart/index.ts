@@ -39,7 +39,7 @@ import {
     ACTION, AssetsPayload, EditItemPayload,
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../../configs/utils";
-import { onModify, onSave, onShare, onSkip } from "./actions";
+import { goBackACtion, onModify, onSave, onShare, onSkip } from "./actions";
 import { LimitPayload, StepResponseObject } from "../../fetchDistributorPortfolio/types";
 
 
@@ -258,7 +258,8 @@ export const portfolioStartMF: PageType<any> = {
         // amount,
         stepResponseObject }) => {
         console.log("stepResponseObject",stepResponseObject);
-        const amount = stepResponseObject.availableCreditAmount;
+        //const amount = stepResponseObject.availableCreditAmount;
+        const amount = "30000";
         const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
         return Promise.resolve(template(stepper, stepResponseObject,
             amount
@@ -268,7 +269,7 @@ export const portfolioStartMF: PageType<any> = {
         [ACTION.ON_MODIFY]: onModify,
         [ACTION.ON_SAVE]: onSave,
         [ACTION.ON_SKIP]: onSkip,
-        [ACTION.GO_BACK]: onSkip,
+        [ACTION.GO_BACK]: goBackACtion,
         [ACTION.SHARE]: onShare,
     },
 
