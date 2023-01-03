@@ -167,4 +167,5 @@ export const unlockLimitLandingMF: PageType<any> = {
   actions: {
     [ACTION.UNLOCK_LIMIT]: continueLimit,
   },
+  clearPrevious: true,
 };
