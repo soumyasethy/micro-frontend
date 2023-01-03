@@ -43,7 +43,8 @@ import { onSave, onShare, onSkip } from "./actions";
 
 
 export const template: (
-) => TemplateSchema = () => ({
+    link:string
+) => TemplateSchema = (link) => ({
     layout: <Layout>{
         id: ROUTE.INVESTOR,
         type: LAYOUTS.LIST,
@@ -232,8 +233,8 @@ export const template: (
 });
 
 export const investorMF: PageType<any> = {
-    onLoad: async () => {
-        return Promise.resolve(template());
+    onLoad: async ({},{link}) => {
+        return Promise.resolve(template(link));
     },
     actions: {
         [ACTION.ON_SAVE]: onSave,

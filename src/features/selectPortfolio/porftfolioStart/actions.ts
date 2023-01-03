@@ -7,7 +7,7 @@ import {
 } from "@voltmoney/schema";
 
 import {
-  ACTION, AssetsPayload
+  ACTION, AssetsPayload, EditItemPayload
 } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
@@ -15,6 +15,8 @@ import _ from "lodash";
 import { api, partnerApi } from "../../../configs/api";
 import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import {
+  addCommasToNumber,
+  roundDownToNearestHundred,
   updateCurrentStepId,
   updateStepStatusMap,
 } from "../../../configs/utils";
@@ -100,6 +102,71 @@ export const onSkip: ActionFunction<AssetsPayload> = async (action, _datastore, 
   //   stepResponseObject: action.payload.value,
   // });
  
+};
+
+export const onModify: ActionFunction<EditItemPayload> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  let portfolioSearchKeyword = "";
+ /* const selectedMap = {};
+  action.payload.stepResponseObject.availableCAS.forEach((item, index) => {
+    const key = `${item.isinNo}-${item.folioNo}`;
+    selectedMap[index] = updateAvailableCASMap[key].pledgedUnits > 0;
+    action.payload.stepResponseObject.availableCAS[index] = updateAvailableCASMap[key];
+
+    const title = `₹ ${addCommasToNumber(
+      roundDownToNearestHundred(
+        getTotalLimit(
+          [updateAvailableCASMap[key]],
+          stepResponseObject.isinNAVMap,
+          stepResponseObject.isinLTVMap
+        )
+      )
+    )}`;
+
+    const subTitle = `/ ₹ ${addCommasToNumber(
+      roundDownToNearestHundred(
+        getActualLimit(
+          [updateAvailableCASMap[key]],
+          stepResponseObject.isinNAVMap,
+          stepResponseObject.isinLTVMap
+        )
+      )
+    )}`;
+
+    listItemDataProps.push({
+      label: updateAvailableCASMap[key].schemeName,
+      info: "",
+      trailIcon: {
+        name:
+          updateAvailableCASMap[key].pledgedUnits > 0
+            ? IconTokens.CheckedSquare
+            : IconTokens.NotCheckedSquare,
+      },
+      trailTitle: title,
+      trailSubTitle: subTitle,
+      action: "edit",
+      trailIconAction: {
+        type: ACTION.EDIT_ITEM,
+        routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
+        payload: <EditItemPayload>{
+          stepResponseObject,
+          selectedMap: selectedMap,
+        },
+      },
+    });
+  });
+
+*/
+
+  navigate(ROUTE.MODIFY_PLEDGED_AMOUNT, {
+    index: action.payload.value,
+    stepResponseObject: action.payload.stepResponseObject,
+    selectedMap: action.payload.selectedMap,
+    portfolioSearchKeyword,
+  });
 };
 
 export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore, {network, navigate,...props }): Promise<any> => {

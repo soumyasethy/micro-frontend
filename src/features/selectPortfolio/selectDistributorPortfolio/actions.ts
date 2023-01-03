@@ -18,6 +18,8 @@ import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { portfolioListDatastoreBuilder, togglePortfolio } from "./utils";
 import { roundDownToNearestHundred } from "../../../configs/utils";
+import { partnerApi } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 let portfolioSearchKeyword = "";
 let listBeforeSearchUI = [];
@@ -48,8 +50,8 @@ export const getActualLimit = (
       sum +
       roundDownToNearestHundred(
         item.totalAvailableUnits *
-          isinNavMap[item.isinNo] *
-          isinLTVMap[item.isinNo]
+        isinNavMap[item.isinNo] *
+        isinLTVMap[item.isinNo]
       );
   });
   return sum;
@@ -58,9 +60,8 @@ export const getActualLimit = (
 export const TriggerCTA: ActionFunction<CtaPayload> = async (
   action,
   _datastore,
-  { navigate }
+  { network, navigate }
 ): Promise<any> => {
-  console.log("here")
   const availableCASMap = await SharedPropsService.getAvailableCASMap();
   const updatedList: AvailableCASItem[] = [];
   Object.keys(availableCASMap).forEach((key) => {
@@ -71,7 +72,32 @@ export const TriggerCTA: ActionFunction<CtaPayload> = async (
     ...action.payload.value,
     availableCAS: [...updatedList],
   };
-  navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
+
+  //start
+
+  const applicationId = await SharedPropsService.getApplicationId();
+  // const portfolioItemList = action.payload.stepResponseObject.availableCAS;
+  const portfolioItemList = stepResponseObject.availableCAS;
+  const response = await network.post(
+    `${partnerApi.pledgeSave}`,
+    {
+      applicationId: applicationId,
+      assetRepository: "CAMS",
+      portfolioItemList: portfolioItemList,
+    },
+    { headers: await getAppHeader() }
+  );
+
+  const Linkresponse = await network.get(
+    `${partnerApi.referalLink}${applicationId}`,
+    {
+      headers: await getAppHeader(),
+    }
+  );
+  navigate(ROUTE.INVESTOR, {
+    link: Linkresponse.data.link
+  });
+  // navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
 };
 
 export const goBack: ActionFunction<OtpPayload> = async (

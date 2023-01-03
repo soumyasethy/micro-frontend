@@ -53,7 +53,8 @@ export const SplashAction: ActionFunction<any> = async (
         console.log(`user.linkedPartnerAccounts[0].partnerName`);
         const user: User = userContextResponse.data;
         await SharedPropsService.setUser(user);
-       
+        // await navigate(ROUTE.OTP_AUTH_CAS);
+        // return;
         if (user.linkedPartnerAccounts[0].partnerName == null) {
           await navigate(ROUTE.ENTER_NAME);
         }else if(user.linkedPartnerAccounts[0].partnerName != null){
