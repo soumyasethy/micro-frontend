@@ -66,7 +66,7 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
     ...commonTemplates.poweredBy.datastore,
     lottie: <LottieProps>{
       uri: LottieTokens.Confetti,
-      size: LottieSizeTokens.FULL_PARENT,
+      size: LottieSizeTokens.FULL,
       autoplay: true,
       loop: true,
     },

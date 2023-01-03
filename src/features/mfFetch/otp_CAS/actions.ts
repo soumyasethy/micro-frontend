@@ -57,7 +57,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
 
     if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
       /**  enable animation again ***/
-      await SharedPropsService.setPledgeFirstTime(false);
+      await SharedPropsService.setPledgeFirstTime(true);
       const nextRoute = await nextStepId(
         response.data.updatedApplicationObj.currentStepId
       );

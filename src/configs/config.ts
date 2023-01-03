@@ -54,7 +54,7 @@ export const AssetRepositoryMap = {
     NAME: "Cams",
     OTP_LENGTH: 5,
     LIST: [],
-    isDisabled: true,
+    isDisabled: false,
   },
   [AssetRepositoryType.KARVY]: {
     VALUE: AssetRepositoryType.KARVY,

@@ -54,7 +54,6 @@ import SharedPropsService from "../../../SharedPropsService";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
-import { SelectAssets } from "../modify_limit/actions";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -101,9 +100,7 @@ export const template: (
       {
         id: "promoCard",
         type: WIDGET.PROMOCARD,
-        padding: {
-          horizontal: 0,
-        },
+        padding: { horizontal: 0 },
       },
     ],
   },

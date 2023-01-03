@@ -181,7 +181,8 @@ async function setPledgeFirstTime(boolean: boolean) {
 }
 
 async function isPledgeFirstTime(): Promise<boolean> {
-  return !!(await AsyncStorage.getItem(StoreKey.isPledgeFirstTime));
+  const isFirstTime = await AsyncStorage.getItem(StoreKey.isPledgeFirstTime);
+  return isFirstTime === null ? true : JSON.parse(isFirstTime);
 }
 
 async function setCasListOriginal(casListOriginal: AvailableCASItem[]) {
@@ -225,5 +226,5 @@ export default {
   setUrlParams,
   getUrlParams,
   setAppPlatform,
-  getAppPlatform
+  getAppPlatform,
 };
