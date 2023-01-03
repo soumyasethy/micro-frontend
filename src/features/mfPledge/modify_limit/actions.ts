@@ -9,6 +9,7 @@ import {
 } from "../unlock_limit/types";
 import { getTotalLimit } from "../portfolio/actions";
 import SharedPropsService from "../../../SharedPropsService";
+import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 
 let amount: number = 0;
 const getUpdateAvailableCAS = (
@@ -46,8 +47,6 @@ export const SelectAssets: ActionFunction<AssetsPayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  if (amount !== 0) {
-  }
   const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = {};
 
@@ -95,7 +94,7 @@ export const ConfirmCTA: ActionFunction<AssetsPayload> = async (
     stepResponseObject.isinNAVMap,
     stepResponseObject.isinLTVMap
   );
-  navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
+  await navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
 };
 
 export const goBack: ActionFunction<AssetsPayload> = async (
@@ -109,12 +108,17 @@ export const goBack: ActionFunction<AssetsPayload> = async (
 export const EnterAmountAction: ActionFunction<AssetsPayload> = async (
   action,
   _datastore,
-  _
+  { setDatastore }
 ): Promise<any> => {
   if (action.payload.value === "") {
     amount = 0;
   } else {
     amount = parseFloat(action.payload.value);
   }
-  console.warn("EnterAmountAction", amount);
+  await setDatastore(ROUTE.MODIFY_LIMIT, "continue", <ButtonProps>{
+    type:
+      amount > 0
+        ? ButtonTypeTokens.LargeFilled
+        : ButtonTypeTokens.LargeOutline,
+  });
 };

@@ -14,13 +14,16 @@ export const continueLimit: ActionFunction<LimitPayload> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  action.payload.value.availableCAS.forEach((item, index) => {
-    action.payload.value.availableCAS[index].pledgedUnits =
-      item.totalAvailableUnits;
-  });
-  await navigate(ROUTE.PLEDGE_CONFIRMATION, {
+  await navigate(ROUTE.MODIFY_LIMIT, {
     stepResponseObject: action.payload.value,
   });
+  // action.payload.value.availableCAS.forEach((item, index) => {
+  //   action.payload.value.availableCAS[index].pledgedUnits =
+  //     item.totalAvailableUnits;
+  // });
+  // await navigate(ROUTE.PLEDGE_CONFIRMATION, {
+  //   stepResponseObject: action.payload.value,
+  // });
 };
 
 export const selectPortfolio: ActionFunction<LimitPayload> = async (
