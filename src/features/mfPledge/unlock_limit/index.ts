@@ -101,7 +101,9 @@ export const template: (
       {
         id: "promoCard",
         type: WIDGET.PROMOCARD,
-        padding: { horizontal: 0 },
+        padding: {
+          horizontal: 0,
+        },
       },
     ],
   },
