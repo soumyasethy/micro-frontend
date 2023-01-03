@@ -552,7 +552,7 @@ export const pledgeConfirmationMF: PageType<any> = {
     const assetTypeMap = {};
     /*** check unique asset type */
     mfPortfolioArray.forEach((item) => {
-      assetTypeMap[item.assetRepository] = true;
+      if (item.is_pledged) assetTypeMap[item.assetRepository] = true;
     });
     /*** show 2 otp confirmation if both Karvy and CAMS is present */
     const showOtpConfirmation: boolean = Object.keys(assetTypeMap).length > 1;

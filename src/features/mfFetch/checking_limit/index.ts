@@ -14,7 +14,11 @@ import {
   FontSizeTokens,
   ImageProps,
   SizeTypeTokens,
-  SpaceProps,
+  SpaceProps, StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
+  StackWidth,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -37,12 +41,13 @@ export const template: () => TemplateSchema = () => {
           id: "placeholder",
           type: WIDGET.IMAGE,
           position: POSITION.CENTER,
+          padding: { horizontal: 0 },
         },
         {
           id: "placeholderSpace",
           type: WIDGET.SPACE,
         },
-        { id: "title", type: WIDGET.TEXT },
+        { id: "titleStack", type: WIDGET.STACK, position: POSITION.CENTER },
       ],
     },
     datastore: <Datastore>{
@@ -54,6 +59,13 @@ export const template: () => TemplateSchema = () => {
         height: 180,
       },
       placeholderSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+      titleStack: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.CONTENT,
+        justifyContent: StackJustifyContent.flexStart,
+        alignItems: StackAlignItems.flexStart,
+        widgetItems: [{ id: "title", type: WIDGET.TEXT }],
+      },
       title: <TypographyProps>{
         label: "Evaluating your mutual funds",
         fontFamily: FontFamilyTokens.Poppins,

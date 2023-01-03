@@ -79,14 +79,8 @@ export const template: (
       { id: "space0", type: WIDGET.SPACE },
       { id: "amount", type: WIDGET.AMOUNTCARD },
       { id: "space1", type: WIDGET.SPACE },
-      {
-        id: "cardItem",
-        type: WIDGET.CARD,
-        padding: {
-          horizontal: 0,
-          all: 0,
-        },
-      },
+      { id: "unlockItem", type: WIDGET.BUTTON },
+      { id: "space2", type: WIDGET.SPACE },
       {
         id: "getMorePortfolio",
         type: WIDGET.SUGGESTION_CARD,
@@ -122,21 +116,6 @@ export const template: (
       type: "default",
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.LG },
-    cardItem: <CardProps>{
-      bgColor: ColorTokens.Grey_Milk,
-      padding: {
-        left: SizeTypeTokens.XXXL,
-        right: SizeTypeTokens.XXXL,
-      },
-      body: {
-        widgetItems: [
-          { id: "unlockItem", type: WIDGET.BUTTON },
-          { id: "space2", type: WIDGET.SPACE },
-          // { id: "modifyItem", type: WIDGET.BUTTON },
-          // { id: "space3", type: WIDGET.SPACE },
-        ],
-      },
-    },
     getMorePortfolio: <SuggestionItemProps & WidgetProps>{
       title: {
         label: "Selected MF portfolio",
@@ -370,6 +349,7 @@ export const unlockLimitMF: PageType<any> = {
     [ACTION.REMOVE_GET_MORE_MF_PORTFOLIO]: removeGetMorePortfolio,
   },
   clearPrevious: true,
+  bgColor: "#F3F5FC",
   // action: {
   //   type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
   //   routeId: ROUTE.MF_PLEDGE_PORTFOLIO,

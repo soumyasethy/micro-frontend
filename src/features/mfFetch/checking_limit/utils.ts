@@ -14,31 +14,38 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
+import {POSITION} from "@voltmoney/types";
 
 export const listItems = [
   {
     id: "titleSpace1",
     type: WIDGET.SPACE,
+    position: POSITION.CENTER,
   },
   {
     id: "listItemStack1",
     type: WIDGET.STACK,
+    position: POSITION.CENTER,
   },
   {
     id: "titleSpace2",
     type: WIDGET.SPACE,
+    position: POSITION.CENTER,
   },
   {
     id: "listItemStack2",
     type: WIDGET.STACK,
+    position: POSITION.CENTER,
   },
   {
     id: "titleSpace3",
     type: WIDGET.SPACE,
+    position: POSITION.CENTER,
   },
   {
     id: "listItemStack3",
     type: WIDGET.STACK,
+    position: POSITION.CENTER,
   },
 ];
 export const buildDataStore = () => {
@@ -55,8 +62,8 @@ export const buildDataStore = () => {
       [`listItemStack${i}`]: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.flexStart,
-        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.center,
+        width: StackWidth.CONTENT,
         widgetItems: [
           { id: `itemIcon${i}`, type: WIDGET.LOTTIE },
           { id: `itemIconSpace${i}`, type: WIDGET.SPACE },

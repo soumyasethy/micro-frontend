@@ -78,3 +78,8 @@ export enum DeepLinks {
   CALL = "tel:+919611749097",
   MAILTO = "mailto:support@voltmoney.in",
 }
+
+export enum ConfigTokens {
+  IS_PAN_EDIT_ALLOWED = "IS_PAN_EDIT_ALLOWED",
+  IS_MF_FETCH_AUTO_TRIGGER_OTP = "IS_MF_FETCH_AUTO_TRIGGER_OTP",
+}

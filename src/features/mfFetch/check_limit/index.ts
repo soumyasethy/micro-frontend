@@ -24,6 +24,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, FetchPortfolioPayload, PanEditPayload } from "./types";
 import {
+  autoTriggerOtp,
   editEmailId,
   editMobileNumber,
   editPanNumber,
@@ -154,7 +155,7 @@ export const template: (
 
 export const checkLimitMF: PageType<any> = {
   onLoad: async (
-    { asyncStorage },
+    { asyncStorage, ...props },
     { applicationId, email, panNumber, mobileNumber }
   ) => {
     const user: User = await SharedPropsService.getUser();
@@ -175,22 +176,26 @@ export const checkLimitMF: PageType<any> = {
       ConfigTokens.IS_PAN_EDIT_ALLOWED
     );
 
-    return Promise.resolve(
-      template(
-        applicationId,
-        panNumberX,
-        phoneNumber,
-        emailId,
-        assetRepository,
-        isPanEditAllowed
-      )
+    return template(
+      applicationId,
+      panNumberX,
+      phoneNumber,
+      emailId,
+      assetRepository,
+      isPanEditAllowed
     );
   },
   actions: {
+    [ACTION.AUTO_FETCH_MY_PORTFOLIO]: autoTriggerOtp,
     [ACTION.FETCH_MY_PORTFOLIO]: fetchMyPortfolio,
     [ACTION.EDIT_PAN]: editPanNumber,
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
   },
   clearPrevious: true,
+  action: {
+    type: ACTION.AUTO_FETCH_MY_PORTFOLIO,
+    routeId: ROUTE.MF_FETCH_PORTFOLIO,
+    payload: {},
+  },
 };

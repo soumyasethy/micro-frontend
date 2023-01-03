@@ -36,7 +36,10 @@ type GlobalProps = {
   };
   casListOriginal?: AvailableCASItem[];
   appPlatform?: string;
-  config?: { isPanEditAllowed?: boolean };
+  config?: {
+    [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
+    [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
+  };
 };
 
 let _globalProps: GlobalProps = {
@@ -65,7 +68,10 @@ let _globalProps: GlobalProps = {
   },
   casListOriginal: [],
   appPlatform: "VOLT_MOBILE_APP",
-  config: { [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true },
+  config: {
+    [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true,
+    [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
+  },
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;

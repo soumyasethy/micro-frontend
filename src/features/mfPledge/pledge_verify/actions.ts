@@ -253,7 +253,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
           )
         )} unlocked successfully!`,
         subTitle:
-          "You will be redirected to next step in few seconds to fetch more credit",
+          "We will be sending one more otp to unlock the remaining amount",
         type: "SUCCESS",
         ctaLabel: "Continue",
         primary: true,

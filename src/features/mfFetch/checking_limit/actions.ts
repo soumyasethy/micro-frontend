@@ -18,7 +18,7 @@ export const addListItemsOnUI: ActionFunction<any> = async (
     ROUTE.CHECKING_LIMIT,
     buildDataStore(),
     [listItems[0], listItems[1]],
-    "title"
+    "titleStack"
   );
 
   const count = listItems.length - 1;
