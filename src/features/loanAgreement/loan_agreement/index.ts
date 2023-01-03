@@ -39,7 +39,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import { fetchLinkRepo } from "./repo";
-import { authenticateRepayment, goBack } from "./actions";
+import { NavToDashboard, PollAgreementStatusAction, authenticateRepayment, goBack, openLinkInNewTab } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 
@@ -192,5 +192,8 @@ export const loanAgreementMF: PageType<any> = {
   actions: {
     [ACTION.REPAYMENT]: authenticateRepayment,
     [ACTION.GO_BACK]: goBack,
+    [ACTION.OPEN_TAB]: openLinkInNewTab,
+    [ACTION.GO_TO_DASHBOARD]: NavToDashboard,
+    [ACTION.POLL_AGREEMENT_STATUS]: PollAgreementStatusAction
   },
 };
