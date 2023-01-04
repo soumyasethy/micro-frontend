@@ -381,18 +381,21 @@ export const getParameters: (url: string) => {
   return params;
 };
 
-export const getDigio = (
-    success_callback?: Function,
-    error_callback?: Function
-) => {
+export const digioKycSuccess = (response: any):void => {
+  console.log("Success: " + JSON.stringify(response))
+}
+export const digioKycFailure = (response: any):void => {
+  console.log("Failure: " + JSON.stringify(response))
+}
+export const getDigio = ():void  => {
     const digioOptions = {
       environment: 'sandbox',
       callback: function (response: any) {
         if (response.hasOwnProperty('error_code')) {
-          error_callback && error_callback(response);
+          digioKycFailure(response)
           return console.log('error occurred in process');
         }
-        success_callback && success_callback(response);
+        digioKycSuccess(response)
         console.log('Signing completed successfully');
       },
       logo: 'https://www.mylogourl.com/image.jpeg',
