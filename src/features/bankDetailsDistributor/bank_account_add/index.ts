@@ -263,7 +263,7 @@ export const template: (
       },
     },
     continue: <ButtonProps & WidgetProps>{
-      label: "Save & Contiune",
+      label: "Save & Continue",
       type: `${isDisabled}` ? ButtonTypeTokens.LargeFilled:ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {

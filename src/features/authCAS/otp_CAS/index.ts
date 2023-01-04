@@ -194,5 +194,5 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.NEXT_ROUTE]: goNext,
   },
-  clearPrevious: false,
+  clearPrevious: true,
 };

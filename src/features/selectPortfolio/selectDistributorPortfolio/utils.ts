@@ -110,7 +110,7 @@ import {
             )
           )
         ),
-        actionLabel: "Confirm and get OTP",
+        actionLabel: "Confirm & share link",
         action: {
           type: ACTION.PORTFOLIO,
           payload: <CtaPayload>{ value: stepResponseObject },

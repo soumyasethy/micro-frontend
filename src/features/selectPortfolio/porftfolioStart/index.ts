@@ -258,8 +258,8 @@ export const portfolioStartMF: PageType<any> = {
         // amount,
         stepResponseObject }) => {
         console.log("stepResponseObject",stepResponseObject);
-        //const amount = stepResponseObject.availableCreditAmount;
-        const amount = "30000";
+        const amount = stepResponseObject.availableCreditAmount;
+        //const amount = "30000";
         const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
         return Promise.resolve(template(stepper, stepResponseObject,
             amount

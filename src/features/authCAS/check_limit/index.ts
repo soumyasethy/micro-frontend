@@ -154,7 +154,7 @@ export const template: (
         },
       },
       fetchCTA: <ButtonProps & WidgetProps>{
-        label: "Get MY Portfolio",
+        label: "Get my portfolio",
         //  label: `${headTitle} ? Verify By OTP ? Get MY Portfolio`,
         fontFamily: FontFamilyTokens.Poppins,
         width: ButtonWidthTypeToken.FULL,
@@ -206,6 +206,7 @@ export const checkLimitMF: PageType<any> = {
       const assetRepository = headTitle;
     }
     const assetRepository = await SharedPropsService.getAssetRepositoryType();
+    console.log("repo",assetRepository);
     return Promise.resolve(
       template(applicationId, panNumberX, phoneNumber, emailId, headTitle,assetRepository)
     );
