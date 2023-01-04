@@ -92,6 +92,7 @@ export const goKarvyNext: ActionFunction<{}> = async (action, _datastore, { navi
 };
 
 export const goNext: ActionFunction<RepositoryPayload> = async (action, _datastore, { navigate, network }): Promise<any> => {
+ console.log(action.payload.value);
   const applictaionId = await SharedPropsService.getApplicationId();
   //  await getUserDetails({},{});
   const accountId = await SharedPropsService.getAccountId();

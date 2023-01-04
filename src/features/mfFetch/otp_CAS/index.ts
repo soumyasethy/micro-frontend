@@ -211,5 +211,5 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.NAV_TO_FETCH]: navToFetch,
     [ACTIONS.NEXT_ROUTE]: goNext,
   },
-  clearPrevious: false,
+  clearPrevious: true,
 };

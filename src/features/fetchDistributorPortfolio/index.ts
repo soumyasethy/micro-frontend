@@ -89,6 +89,8 @@ export const template: (
                 }
                 : {};
         // console.log(isDataUpdated);
+        console.log(camsAmount);
+        console.log(karvyAmount);
         console.log(_generateDSCAMS);
         console.log(_generateDSKARVY);
 
@@ -342,7 +344,7 @@ export const template: (
 
                     //label: `Last fetched on ${Object.values(camsFetches)}`,
                     //label: "Last fetched on ",
-                      label: "Last fetched on " + `${moment(camsDate, "MMMM D")}`.substring(0, 10),
+                    label: "Last fetched on " + `${moment(camsDate, "MMMM D")}`.substring(0, 10),
                     //label: "Last fetched on " +`${moment(Object.values(camsFetches), "MMMM D")}`.substring(0,10),
                     fontSize: FontSizeTokens.XS,
                     fontWeight: '400',
@@ -564,10 +566,10 @@ export const template: (
                 },
 
                 continue: <ButtonProps & WidgetProps>{
-                    label: "Save & Contiune",
-                    type: ButtonTypeTokens.LargeFilled,
-                    // type: `${Object.keys(camsFetches)}` ? ButtonTypeTokens.LargeFilled : ButtonTypeTokens.LargeOutline,
-                    labelColor: ColorTokens.Grey_Charcoal,
+                    label: "Save & Continue",
+                   // type: ButtonTypeTokens.LargeFilled,
+                     type: `${camsAmount}` || `${karvyAmount}` ? ButtonTypeTokens.LargeFilled : ButtonTypeTokens.LargeOutline,
+                   // labelColor: ColorTokens.Grey_Charcoal,
                     width: ButtonWidthTypeToken.FULL,
                     action: {
                         type: ACTION.ON_SAVE,
@@ -849,12 +851,14 @@ export const distributorPortfolioMF: PageType<any> = {
         const conditionData = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap;
         let conditionDataKAMS = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS;
         let conditionDataKARVY = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY;
+        console.log("karvydata",conditionDataKARVY);
         if (conditionDataKAMS.availableCreditAmount !== 0) {
             camsDate = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate;
             camsPortfolio = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.availablePortfolioAmount;
             camsAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.availableCreditAmount;
             isDataUpdated = "Data Exist";
         } else if (conditionDataKARVY.availableCreditAmount !== 0) {
+            console.log("karvy");
             karvyDate = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
             karvyPortfolio = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availablePortfolioAmount;
             karvyAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availableCreditAmount;
@@ -862,6 +866,8 @@ export const distributorPortfolioMF: PageType<any> = {
         } else {
             isDataUpdated = "";
         }
+        console.log("cams",camsAmount);
+        console.log("karvy",karvyAmount);
         // Object.keys(conditionData).map(key => {
         //     const value = conditionData[key] // obj[x]
         //     conditionDataKAMS = value;
