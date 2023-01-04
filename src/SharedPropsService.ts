@@ -9,6 +9,7 @@ import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
+import { AuthCASModel } from "./types/AuthCASModel";
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
@@ -28,6 +29,7 @@ type GlobalProps = {
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
+  authCAS?: AuthCASModel;
   ref?: string;
   url?: string;
   assetRepositoryType?: AssetRepositoryType;
@@ -48,6 +50,7 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
+  authCAS: null,
   ref: "",
   /*** Default asset repository */
   assetRepositoryType: AssetRepositoryType.KARVY,
@@ -215,6 +218,12 @@ async function setAppPlatform(type: string) {
 async function getAppPlatform() {
   return _globalProps.appPlatform;
 }
+async function setAuthCASResponse(data: AuthCASModel) {
+  _globalProps.authCAS = data;
+}
+async function getAuthCASResponse() {
+  return _globalProps.authCAS;
+}
 
 export default {
   setBuildType,
@@ -247,4 +256,6 @@ export default {
   getAppPlatform,
   setConfig,
   getConfig,
+  setAuthCASResponse,
+  getAuthCASResponse,
 };

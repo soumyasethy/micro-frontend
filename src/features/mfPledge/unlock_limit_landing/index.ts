@@ -37,6 +37,7 @@ import { fetchPledgeLimitRepo } from "./repo";
 import { roundDownToNearestHundred } from "../../../configs/utils";
 import { commonTemplates } from "../../../configs/common";
 import SharedPropsService from "../../../SharedPropsService";
+import { AuthCASModel } from "../../../types/AuthCASModel";
 
 export const template: (availableCreditAmount: number) => TemplateSchema = (
   availableCreditAmount
@@ -158,8 +159,9 @@ export const template: (availableCreditAmount: number) => TemplateSchema = (
 });
 
 export const unlockLimitLandingMF: PageType<any> = {
-  onLoad: async ({ network }, { response }) => {
-    const responseX = response ? response.data : await fetchPledgeLimitRepo();
+  onLoad: async () => {
+    const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
+    const responseX = authCAS ? authCAS : await fetchPledgeLimitRepo();
     const availableCreditAmount: number =
       responseX.stepResponseObject.availableCreditAmount || 0;
     /*** disable this page for next time ***/

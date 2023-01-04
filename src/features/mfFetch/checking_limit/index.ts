@@ -14,7 +14,8 @@ import {
   FontSizeTokens,
   ImageProps,
   SizeTypeTokens,
-  SpaceProps, StackAlignItems,
+  SpaceProps,
+  StackAlignItems,
   StackJustifyContent,
   StackProps,
   StackType,
@@ -60,7 +61,7 @@ export const template: () => TemplateSchema = () => {
       },
       placeholderSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
       titleStack: <StackProps>{
-        type: StackType.row,
+        type: StackType.column,
         width: StackWidth.CONTENT,
         justifyContent: StackJustifyContent.flexStart,
         alignItems: StackAlignItems.flexStart,

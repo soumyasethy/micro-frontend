@@ -54,6 +54,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
+import { AuthCASModel } from "../../../types/AuthCASModel";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -258,15 +259,20 @@ export const template: (
 export const unlockLimitMF: PageType<any> = {
   onLoad: async ({ showPopup, network, goBack }) => {
     const user: User = await SharedPropsService.getUser();
-    const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
-      (response) => ({
-        data: response,
-      })
-    );
+    const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
+    const pledgeLimitResponse = authCAS
+      ? { data: authCAS }
+      : await fetchPledgeLimitRepo().then((response) => ({
+          data: response,
+        }));
     /* const pledgeLimitResponse = await network.get(
       `${api.pledgeLimit}${user.linkedApplications[0].applicationId}`,
       { headers: await getAppHeader() }
     );*/
+    /*** update authCAS in SharedPropsService if fetched from api ***/
+    if (!authCAS && pledgeLimitResponse.data) {
+      await SharedPropsService.setAuthCASResponse(pledgeLimitResponse.data);
+    }
     const availableCreditAmount: number =
       pledgeLimitResponse.data.stepResponseObject.availableCreditAmount || 0;
     const totalPortfolioAmount: number =

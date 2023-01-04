@@ -44,6 +44,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
       analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
         ...AnalyticsEventTracker.borrower_mf_pull,
       });
+      await SharedPropsService.setAuthCASResponse(response.data);
     } else {
       analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
         ...AnalyticsEventTracker.borrower_mf_pull_failed,
