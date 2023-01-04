@@ -7,11 +7,10 @@ import SharedPropsService from "../../../SharedPropsService";
 import { AlertNavProps } from "../../popup_loader/types";
 import { ACTION, NavPayload, transactionPayload } from "./types";
 
-
 export const getURL: ActionFunction<transactionPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage }
+  { navigate, setDatastore, asyncStorage, showPopup }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
@@ -24,7 +23,24 @@ export const getURL: ActionFunction<transactionPayload> = async (
     .linkedBorrowerAccounts[0].accountId;
   const url_data = await fetch(`${api.pdfLink}${accountId}`, requestOptions)
     .then((response) => response.json())
-    .catch((error) => console.log("error", error));
+    .catch((error) => async () => {
+      console.log("error", error);
+      await setDatastore(action.routeId, "continue", <ButtonProps>{
+        loading: false,
+      });
+      showPopup({
+        type: "FAILED",
+        title: "Email sent unsuccessfully",
+        subTitle: "Transaction details were not sent to your email address.",
+        ctaLabel: "Try again later",
+        ctaAction: {
+          type: ACTION.MENU,
+          routeId: ROUTE.TRANSACTIONS,
+          payload: {},
+        },
+        primary: false,
+      });
+    });
 
   const image = await fetch(`${url_data[0].documentPath}`);
   const imageBlog = await image.blob();
@@ -42,8 +58,19 @@ export const getURL: ActionFunction<transactionPayload> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: false,
   });
-}
-
+  showPopup({
+    type: "SUCCESS",
+    title: "Email sent successfully",
+    subTitle: "Transaction details have been sent to your email address.",
+    ctaLabel: "Continue",
+    ctaAction: {
+      type: ACTION.MENU,
+      routeId: ROUTE.TRANSACTIONS,
+      payload: {},
+    },
+    primary: false,
+  });
+};
 
 export const navigation: ActionFunction<NavPayload> = async (
   action,

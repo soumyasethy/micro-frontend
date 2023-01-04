@@ -141,8 +141,9 @@ export const template: TemplateSchema = {
         // },
         toInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
         continue: <ButtonProps & WidgetProps>{
-            label: "Download now",
+            label: "Email statement",
             labelColor:ColorTokens.White,
+            fontFamily: FontFamilyTokens.Poppins,
             type: ButtonTypeTokens.LargeFilled,
             width: ButtonWidthTypeToken.FULL,
             action: {
