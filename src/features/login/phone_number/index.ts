@@ -6,6 +6,7 @@ import {
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
+import moment from "moment";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -65,6 +66,7 @@ export const template: TemplateSchema = {
         id: "tc_text",
         type: WIDGET.TERMS_TEXT,
       },
+      //{id:"dateItem",type:WIDGET.TEXT},
     ],
   },
   datastore: <Datastore>{
@@ -113,6 +115,18 @@ export const template: TemplateSchema = {
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
+    dateItem: <TypographyProps>{
+
+      //label: `Last fetched on ${Object.values(camsFetches)}`,
+      //label: "Last fetched on ",
+      label: "Last fetched on " + `${moment(1672820952, "DD-MMM-YYYY")}`.substring(0, 10),
+      //label: "Last fetched on " +`${moment(Object.values(camsFetches), "MMMM D")}`.substring(0,10),
+      fontSize: FontSizeTokens.XS,
+      fontWeight: '400',
+      color: ColorTokens.Grey_Charcoal,
+      lineHeight: 18,
+      fontFamily: FontFamilyTokens.Inter
+  },
     input: <TextInputProps & WidgetProps>{
       regex: RegexConfig.MOBILE,
       type: InputTypeToken.MOBILE,
@@ -182,6 +196,12 @@ export const template: TemplateSchema = {
 export const phoneNumberMF: PageType<any> = {
   onLoad: async () => {
     const usertype = await SharedPropsService.getUserType();
+   // const  date = moment(1672820952).format("DD-MM-YYYY");
+   // const date = new Date(1672820952);
+   
+    // const  dates = moment(date).format("DD-MM-YYYY");
+    // console.log("date",dates);
+    
     console.log("usertype",usertype);
     return Promise.resolve(template)
   },

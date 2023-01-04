@@ -191,7 +191,7 @@ export const template: (
             fontFamily: FontFamilyTokens.Inter
         },
         infoItems3: <TypographyProps>{
-            label: "Modify credit limit",
+            label: "credit limit",
             fontSize: FontSizeTokens.SM,
             fontWeight: '400',
             color: ColorTokens.Grey_Charcoal,
@@ -203,18 +203,19 @@ export const template: (
         },
 
         modify: <ButtonProps & WidgetProps>{
-            label: "Modify credit amount",
+            label: "Modify credit limit",
             type: ButtonTypeTokens.LargeGhost,
             labelColor: ColorTokens.Primary_100,
             width: ButtonWidthTypeToken.FULL,
-            action: {
-                type: ACTION.ON_MODIFY,
-                routeId: ROUTE.PORTFOLOIO_START,
-                payload: <EditItemPayload>{
-                    stepResponseObject,
-                    selectedMap:{}
-                  },
-            },
+            // action: {
+            //     type: ACTION.ON_MODIFY,
+            //     routeId: ROUTE.PORTFOLOIO_START,
+            //     payload: <AssetsPayload>{
+            //         value: "",
+            //         widgetId: "input",
+            //         stepResponseObject,
+            //       },
+            // },
         },
         btnSpace: <SpaceProps>{
             size: SizeTypeTokens.MD

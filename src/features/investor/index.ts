@@ -43,7 +43,9 @@ import {
 import { horizontalDistributorStepperRepo } from "../../configs/utils";
 import {  copyToClipboard, onSave, onShare, onSkip } from "./actions";
 import { getScreenType } from "../../configs/platfom-utils";
-import { DeepLinks } from "../../configs/config";
+import { DeepLinks, getAppHeader } from "../../configs/config";
+import { partnerApi } from "../../configs/api";
+import SharedPropsService from "../../SharedPropsService";
 let screenType = getScreenType(Dimensions.get("window").width);
 
 export const template: (
@@ -253,7 +255,15 @@ export const template: (
 });
 
 export const investorMF: PageType<any> = {
-    onLoad: async ({},{link}) => {
+    onLoad: async ({network}) => {
+        const applicationId = await SharedPropsService.getApplicationId();
+        const Linkresponse = await network.get(
+            `${partnerApi.referalLink}${applicationId}`,
+            {
+              headers: await getAppHeader(),
+            }
+          );
+          const link = Linkresponse.data.link;
         return Promise.resolve(template(link));
     },
     actions: {

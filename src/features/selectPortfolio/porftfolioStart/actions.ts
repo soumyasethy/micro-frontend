@@ -162,6 +162,10 @@ export const onModify: ActionFunction<EditItemPayload> = async (
 
 */
 
+
+
+
+
   navigate(ROUTE.MODIFY_PLEDGED_AMOUNT, {
     index: action.payload.value,
     stepResponseObject: action.payload.stepResponseObject,
@@ -185,15 +189,13 @@ export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore,
         { headers: await getAppHeader() }
       );
 
-     const Linkresponse = await network.get(
-        `${partnerApi.referalLink}${applicationId}`,
-        {
-          headers: await getAppHeader(),
-        }
-      );
-      navigate(ROUTE.INVESTOR, { 
-        link:Linkresponse.data.link
-       });
+    //  const Linkresponse = await network.get(
+    //     `${partnerApi.referalLink}${applicationId}`,
+    //     {
+    //       headers: await getAppHeader(),
+    //     }
+    //   );
+      navigate(ROUTE.INVESTOR);
     
 };
 

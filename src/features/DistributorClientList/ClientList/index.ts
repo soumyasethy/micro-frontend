@@ -41,16 +41,14 @@ import {
 } from "@voltmoney/schema";
 import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
 import { ROUTE } from "../../../routes";
-import { clientInProgressRepoData, clientPendingRepoData } from "./repo";
-import { notification, onClickCTA, onManageCTA, onTrackCTA } from "./actions";
+import { clientInProgressRepoData } from "./repo";
+import { notification, onClickCTA, onManageCTA, onTrackCTA, pendingTracks } from "./actions";
 import SharedPropsService from "../../../SharedPropsService";
+import { partnerApi } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 export const template: (
-  clientPendingRepoData: {
-    name: string,
-    stepsCompleted: number | string,
-    applicationId: string,
-  }[],
+  clientPendingRepoData: any,
   clientInProgressRepoData: {
     name: string,
     utilizedAmount: number | string,
@@ -59,11 +57,13 @@ export const template: (
   }[],
 ) => Promise<TemplateSchema> = async (clientPendingRepoData, clientInProgressRepoData) => {
 
-  const pendingBuildDS = (index, name, stepsCompleted, applicationId) => {
+  const pendingBuildDS = (index, name, stepsCompleted, applicationId,applicationData) => {
     return {
       [`listItem${index}`]: <StackProps>{
         type: StackType.column,
         width: StackWidth.FULL,
+        justifyContent:StackJustifyContent.center,
+        alignItems:StackAlignItems.flexStart,
         widgetItems: [
           { id: `clientListTop${index}`, type: WIDGET.STACK },
           { id: `clientSpace0${index}`, type: WIDGET.SPACE },
@@ -75,17 +75,25 @@ export const template: (
         size: SizeTypeTokens.SM,
       },
       [`dividerStack${index}`]: <StackProps>{
-        type: StackType.row,
+       // type: StackType.row,
         width: StackWidth.FULL,
-        justifyContent: StackJustifyContent.center,
-        alignItems: StackAlignItems.center,
+        // justifyContent: StackJustifyContent.center,
+        // alignItems: StackAlignItems.center,
         widgetItems: [
           { id: `divider${index}`, type: WIDGET.DIVIDER }
         ]
       },
+      [`dividers${index}`]: <DividerProps>{
+        size: DividerSizeTokens.SM,
+        color: ColorTokens.Grey_Night,
+        margin: {
+          vertical: SizeTypeTokens.XL,
+          horizontal: SizeTypeTokens.SM
+        }
+      },
       [`divider${index}`]: <DividerProps>{
         size: DividerSizeTokens.SM,
-        color: ColorTokens.Grey_Milk_1,
+        color: ColorTokens.Grey_Night,
         margin: {
           vertical: SizeTypeTokens.XL,
           horizontal: SizeTypeTokens.SM
@@ -123,12 +131,13 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         width: ButtonWidthTypeToken.CONTENT,
         action: {
-          type: ACTION.TRACK,
+          type: ACTION.TRACK_PENDING,
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
           payload: <ClientPendingPayloadType>{
             name: name,
             stepsCompleted: stepsCompleted,
-            applicationId: applicationId
+            applicationId: applicationId,
+            data:applicationData
           }
         },
       },
@@ -224,19 +233,31 @@ export const template: (
 
 
   let pending_ds = {};
-  clientPendingRepoData.map((client, index) => {
+  clientPendingRepoData.forEach((client, index) => {
+    console.log("name",client.borrowerAccountProfile.name);
+    console.log("client",client);
+    let completedStatus = 2;
     pending_ds = {
       ...pending_ds,
-      ...pendingBuildDS(index, client.name, client.stepsCompleted, client.applicationId),
+      ...pendingBuildDS(index, client.borrowerAccountProfile.name, completedStatus, client.creditApplication.applicationId,client.creditApplication),
     };
   });
+  // clientPendingRepoData.map((client, index) => {
+  //   console.log("name",Object.keys(client));
+  //   console.log("client",client);
+  //   pending_ds = {
+  //     ...pending_ds,
+  //     ...pendingBuildDS(index, client.name, client.stepsCompleted, client.applicationId),
+  //   };
+  // });
 
   const pendingBuildUI = () => {
     const clArr = [];
     if (clientPendingRepoData.length > 0) {
-      clientPendingRepoData.map((client, index) => {
+      clientPendingRepoData.forEach((client, index) => {
         clArr.push(
           { id: `listItem${index}`, type: WIDGET.STACK },
+          { id: `dividers${index}`, type: WIDGET.DIVIDER },
         )
       })
     } else {
@@ -252,7 +273,7 @@ export const template: (
     if (clientPendingRepoData.length > 0) {
       clientPendingRepoData.map((client, index) => {
         clArr.push(
-          { id: `listItem${index}`, type: WIDGET.STACK },
+          { id: `listItem${index}`, type: WIDGET.STACK }
         )
       })
     } else {
@@ -262,8 +283,9 @@ export const template: (
     }
     return clArr;
   }
-
+console.log(clientPendingRepoData.length);
   return {
+    
     layout: <Layout>{
       id: ROUTE.DISTRIBUTOR_CLIENT_LIST,
       type: LAYOUTS.LIST,
@@ -277,7 +299,7 @@ export const template: (
         { id: "space1", type: WIDGET.SPACE },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space2", type: WIDGET.SPACE },
-        { id: "button", type: WIDGET.BUTTON, position: (clientPendingRepoData.length > 0) ? POSITION.ABSOLUTE_CENTER : "" },
+        { id: "button", type: WIDGET.BUTTON, position: (clientPendingRepoData.length > 0) ? POSITION.ABSOLUTE_BOTTOM : POSITION.ABSOLUTE_CENTER },
       ],
     },
     datastore: <Datastore>{
@@ -531,14 +553,34 @@ export const template: (
 
 
 export const DistributorClientListMF: PageType<any> = {
-  onLoad: async ({ }) => {
+  onLoad: async ({network}) => {
+    const body = {}; 
+    const partnerApplicatiionId = await SharedPropsService.getApplicationId();
+    const userContextResponse = await network.post(partnerApi.userContext, body, {
+      headers: await getAppHeader(),
+    });
+
+    const partnerAccountId = userContextResponse.data.linkedPartnerAccounts[0].accountId;
+      const response = await network.get(
+        `${partnerApi.clientList}${partnerAccountId}/customers/all`,
+        {
+          headers: await getAppHeader(),
+        }
+      );
+      const clientPendingRepoData = response.data.customerMetadataList;
+      clientPendingRepoData.forEach((client, index) => {
+        console.log("name",client.borrowerAccountProfile.name);
+        console.log("client",client);
+       
+      });
     const user = await SharedPropsService.getUser();
-    console.log("client user",user);
+    console.log("client user",clientPendingRepoData);
     const templateX = await template(clientPendingRepoData, clientInProgressRepoData);
     return Promise.resolve(templateX);
   },
   actions: {
     [ACTION.TRACK]: onTrackCTA,
+    [ACTION.TRACK_PENDING]: pendingTracks,
     [ACTION.MANAGE]: onManageCTA,
     [ACTION.CTA]: onClickCTA,
     [ACTION.NOTIFICATION]: notification

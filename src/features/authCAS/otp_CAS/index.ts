@@ -147,7 +147,7 @@ export const template: (
         keyboardType: KeyboardTypeToken.numberPad,
        // charLimit: `${assetRepository}` ? PartnerAssetRepositoryMap[`${assetRepository}`].OTP_LENGTH :  AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH,
       // charLimit:  AssetRepositoryMap[AssetRepositoryType.DEFAULT].OTP_LENGTH, 
-      charLimit:  AssetRepositoryMap[AssetRepositoryType.KARVY].OTP_LENGTH, 
+      charLimit:  AssetRepositoryMap[`${assetRepository}`].OTP_LENGTH, 
 //        action: {
 // =======
 //         charLimit: AssetRepositoryMap[assetRepository].OTP_LENGTH,

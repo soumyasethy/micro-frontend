@@ -31,7 +31,7 @@ export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, 
 };
 
 export const onSkip: ActionFunction<{}> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
-  await navigate(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO);
+  await navigate(ROUTE.INVESTOR);
 };
 
 export const onShare: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
