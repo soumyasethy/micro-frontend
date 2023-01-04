@@ -836,10 +836,10 @@ export const distributorPortfolioMF: PageType<any> = {
         // testing statrt
         let unlockedAmont = 0;
         let isDataUpdated = "";
-        let camsDate = "";
+        let camsDate;
         let camsPortfolio = 0;
         let camsAmount = 0;
-        let karvyDate = "";
+        let karvyDate;
         let karvyPortfolio = 0;
         let karvyAmount = 0;
         const availableCreditAmount: number =
@@ -854,20 +854,22 @@ export const distributorPortfolioMF: PageType<any> = {
         console.log("karvydata",conditionDataKARVY);
         if (conditionDataKAMS.availableCreditAmount !== 0) {
             camsDate = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate;
+            camsDate = new Date(camsDate * 1000);
             camsPortfolio = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.availablePortfolioAmount;
             camsAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.availableCreditAmount;
             isDataUpdated = "Data Exist";
-        } else if (conditionDataKARVY.availableCreditAmount !== 0) {
+        } 
+         if (conditionDataKARVY.availableCreditAmount !== 0) {
             console.log("karvy");
             karvyDate = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
+            karvyDate = new Date(karvyDate * 1000);
             karvyPortfolio = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availablePortfolioAmount;
             karvyAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availableCreditAmount;
             isDataUpdated = "Data Exist";
-        } else {
-            isDataUpdated = "";
-        }
+        } 
         console.log("cams",camsAmount);
         console.log("karvy",karvyAmount);
+      //  var date = 
         // Object.keys(conditionData).map(key => {
         //     const value = conditionData[key] // obj[x]
         //     conditionDataKAMS = value;

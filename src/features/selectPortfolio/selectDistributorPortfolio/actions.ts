@@ -88,15 +88,13 @@ export const TriggerCTA: ActionFunction<CtaPayload> = async (
     { headers: await getAppHeader() }
   );
 
-  const Linkresponse = await network.get(
-    `${partnerApi.referalLink}${applicationId}`,
-    {
-      headers: await getAppHeader(),
-    }
-  );
-  navigate(ROUTE.INVESTOR, {
-    link: Linkresponse.data.link
-  });
+  // const Linkresponse = await network.get(
+  //   `${partnerApi.referalLink}${applicationId}`,
+  //   {
+  //     headers: await getAppHeader(),
+  //   }
+  // );
+  navigate(ROUTE.INVESTOR);
   // navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
 };
 
