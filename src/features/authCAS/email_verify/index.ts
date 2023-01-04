@@ -139,5 +139,5 @@ export const emailVerifyMF: PageType<any> = {
     [ACTIONS.GOOGLE_LOGIN]: loginGoogle,
     [ACTIONS.OTHER_EMAIL]: otherEmail,
   },
-  clearPrevious: false,
+  clearPrevious: true,
 };
