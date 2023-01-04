@@ -58,7 +58,7 @@ export const template: (
 
   return {
     layout: <Layout>{
-      id: ROUTE.PLEDGE_CONFIRMATION,
+      id: ROUTE.MODIFY_LIMIT,
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
@@ -67,7 +67,7 @@ export const template: (
         { id: "inputSpace", type: WIDGET.SPACE },
         { id: "selectAssetForPledge", type: WIDGET.STACK },
         {
-          id: "otpItem",
+          id: "continue",
           type: WIDGET.BUTTON,
           position: POSITION.ABSOLUTE_BOTTOM,
         },
@@ -90,8 +90,9 @@ export const template: (
           routeId: ROUTE.MODIFY_LIMIT,
         },
       },
-      space0: <SpaceProps> {size: SizeTypeTokens.XXL},
+      space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
       inputItem: <TextInputProps & WidgetProps>{
+        value: `${totalAmount}`,
         placeholder: "",
         type: InputTypeToken.DEFAULT,
         title: "Enter amount",
@@ -144,7 +145,7 @@ export const template: (
         size: IconSizeTokens.XL,
         color: ColorTokens.Primary_100,
       },
-      otpItem: <ButtonProps & WidgetProps>{
+      continue: <ButtonProps & WidgetProps>{
         label: "Confirm & get OTP",
         fontFamily: FontFamilyTokens.Poppins,
         type: ButtonTypeTokens.LargeFilled,

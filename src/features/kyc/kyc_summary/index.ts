@@ -238,19 +238,6 @@ export const kycSummaryMf: PageType<any> = {
     const photoURL = _.get(response, "data.stepResponseObject.photoURL");
 
     const stepper: StepperItem[] = await horizontalStepperRepo();
-    console.warn(
-      "*** kyc summary **** ",
-      "address",
-      address,
-      "dob",
-      dob,
-      "fullName",
-      fullName,
-      "photoURL",
-      photoURL,
-      "stepper",
-      stepper
-    );
 
     return Promise.resolve(
       template(pan, address, dob, fullName, photoURL, stepper)

@@ -83,7 +83,6 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
     })
       .then((response) => response.json())
       .then(async (response) => {
-        console.log("agreement response", response);
         /// handle response
 
         if (response.stepResponseObject.toLowerCase() === "success") {

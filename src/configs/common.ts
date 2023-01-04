@@ -9,6 +9,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
   WIDGET,
 } from "@voltmoney/schema";
 import { assetsMap } from "./assets";
@@ -23,6 +24,7 @@ export const commonTemplates = {
     },
     datastore: <Datastore>{
       poweredBy: <StackProps>{
+        width: StackWidth.CONTENT,
         type: StackType.row,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.center,

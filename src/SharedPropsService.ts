@@ -1,10 +1,15 @@
 import { User } from "./features/login/otp_verify/types";
-import { __isMock__, AssetRepositoryType } from "./configs/config";
+import {
+  __isMock__,
+  AssetRepositoryType,
+  ConfigTokens,
+} from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
-import { AvailableCASItem } from "./features/unlockLimit/unlock_limit/types";
+import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
+import { AuthCASModel } from "./types/AuthCASModel";
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
@@ -24,6 +29,7 @@ type GlobalProps = {
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
+  authCAS?: AuthCASModel;
   ref?: string;
   url?: string;
   assetRepositoryType?: AssetRepositoryType;
@@ -32,6 +38,10 @@ type GlobalProps = {
   };
   casListOriginal?: AvailableCASItem[];
   appPlatform?: string;
+  config?: {
+    [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
+    [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
+  };
 };
 
 let _globalProps: GlobalProps = {
@@ -40,6 +50,7 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
+  authCAS: null,
   ref: "",
   /*** Default asset repository */
   assetRepositoryType: AssetRepositoryType.KARVY,
@@ -60,12 +71,22 @@ let _globalProps: GlobalProps = {
   },
   casListOriginal: [],
   appPlatform: "VOLT_MOBILE_APP",
+  config: {
+    [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true,
+    [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
+  },
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
 export function getBuildType(): BUILD_TYPE {
   return _globalProps.buildType;
+}
+export function setConfig(configId: ConfigTokens, configValue: any) {
+  _globalProps.config[configId] = configValue;
+}
+export function getConfig(configId?: ConfigTokens): any {
+  return configId ? _globalProps.config[configId] : _globalProps.config;
 }
 /*** Asset repository ***/
 async function setAssetRepositoryType(
@@ -208,7 +229,8 @@ async function setPledgeFirstTime(boolean: boolean) {
 }
 
 async function isPledgeFirstTime(): Promise<boolean> {
-  return !!(await AsyncStorage.getItem(StoreKey.isPledgeFirstTime));
+  const isFirstTime = await AsyncStorage.getItem(StoreKey.isPledgeFirstTime);
+  return isFirstTime === null ? true : JSON.parse(isFirstTime);
 }
 
 async function setCasListOriginal(casListOriginal: AvailableCASItem[]) {
@@ -222,6 +244,12 @@ async function setAppPlatform(type: string) {
 }
 async function getAppPlatform() {
   return _globalProps.appPlatform;
+}
+async function setAuthCASResponse(data: AuthCASModel) {
+  _globalProps.authCAS = data;
+}
+async function getAuthCASResponse() {
+  return _globalProps.authCAS;
 }
 
 export default {
@@ -252,5 +280,9 @@ export default {
   setUrlParams,
   getUrlParams,
   setAppPlatform,
-  getAppPlatform
+  getAppPlatform,
+  setConfig,
+  getConfig,
+  setAuthCASResponse,
+  getAuthCASResponse,
 };

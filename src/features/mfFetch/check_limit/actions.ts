@@ -1,16 +1,11 @@
-import { ActionFunction } from "@voltmoney/types";
-import { FetchPortfolioPayload, PanEditPayload } from "./types";
-import { api } from "../../../configs/api";
-import { ROUTE } from "../../../routes";
-import { User } from "../../login/otp_verify/types";
-import {
-  ButtonProps,
-  ButtonTypeTokens,
-  InputStateToken,
-  TextInputProps,
-} from "@voltmoney/schema";
+import {ActionFunction} from "@voltmoney/types";
+import {ACTION, FetchPortfolioPayload, PanEditPayload} from "./types";
+import {api} from "../../../configs/api";
+import {ROUTE} from "../../../routes";
+import {User} from "../../login/otp_verify/types";
+import {ButtonProps, ButtonTypeTokens, InputStateToken, TextInputProps,} from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryMap, getAppHeader } from "../../../configs/config";
+import {AssetRepositoryMap, ConfigTokens, getAppHeader,} from "../../../configs/config";
 import _ from "lodash";
 
 let hasChangedInDetails = false;
@@ -46,6 +41,43 @@ export const editEmailId: ActionFunction<PanEditPayload> = async (
   await navigate(ROUTE.UPDATE_EMAIL_ID, {
     applicationId: action.payload.applicationId,
   });
+};
+export const autoTriggerOtp: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { ...props }
+) => {
+  const user: User = await SharedPropsService.getUser();
+  const applicationId = user.linkedApplications[0].applicationId;
+  const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
+  const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+  const emailId =
+    `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+  const isAutoTriggerOtp: boolean = await SharedPropsService.getConfig(
+    ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP
+  );
+  const assetRepository = await SharedPropsService.getAssetRepositoryType();
+
+  /*** Auto trigger is globally enabled. mostly this will be disabled,
+   * and we are manually enabled it when user tries fetch more assets from UnlockLimit Page ***/
+  if (isAutoTriggerOtp) {
+    await SharedPropsService.setConfig(ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP, false);
+    fetchMyPortfolio(
+      {
+        routeId: ROUTE.MF_FETCH_PORTFOLIO,
+        type: ACTION.FETCH_MY_PORTFOLIO,
+        payload: <FetchPortfolioPayload>{
+          applicationId,
+          emailId,
+          phoneNumber,
+          panNumber: panNumberX,
+          assetRepository,
+        },
+      },
+      {},
+      { ...props }
+    );
+  }
 };
 export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   action,

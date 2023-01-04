@@ -37,13 +37,14 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     /*** check available credit limit ***/
     const availableCreditAmount = _.get(
       response,
-      "data.data.stepResponseObject.availableCreditAmount",
+      "data.stepResponseObject.availableCreditAmount",
       0
     );
     if (availableCreditAmount > 0) {
       analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
         ...AnalyticsEventTracker.borrower_mf_pull,
       });
+      await SharedPropsService.setAuthCASResponse(response.data);
     } else {
       analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
         ...AnalyticsEventTracker.borrower_mf_pull_failed,
@@ -56,6 +57,8 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     await goBack();
 
     if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+      /**  enable animation again ***/
+      await SharedPropsService.setPledgeFirstTime(true);
       const nextRoute = await nextStepId(
         response.data.updatedApplicationObj.currentStepId
       );
