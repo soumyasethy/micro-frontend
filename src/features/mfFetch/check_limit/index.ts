@@ -24,6 +24,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, FetchPortfolioPayload, PanEditPayload } from "./types";
 import {
+  autoTriggerOtp,
   editEmailId,
   editMobileNumber,
   editPanNumber,
@@ -31,20 +32,22 @@ import {
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryType } from "../../../configs/config";
+import { AssetRepositoryType, ConfigTokens } from "../../../configs/config";
 
 export const template: (
   applicationId: string,
   panNumber: string,
   phoneNumber: string,
   emailId: string,
-  assetRepository: AssetRepositoryType
+  assetRepository: AssetRepositoryType,
+  isPanEditAllowed: boolean
 ) => TemplateSchema = (
   applicationId,
   panNumber,
   phoneNumber,
   emailId,
-  assetRepository
+  assetRepository,
+  isPanEditAllowed
 ) => {
   return {
     layout: <Layout>{
@@ -91,17 +94,19 @@ export const template: (
         title: "PAN Number",
         subTitle: panNumber,
         leadIconName: IconTokens.CreditCard,
-        trailIconName: IconTokens.Edit,
+        trailIconName: isPanEditAllowed ? IconTokens.Edit : null,
         subTitleLineHeight: 24,
-        action: {
-          routeId: ROUTE.MF_FETCH_PORTFOLIO,
-          type: ACTION.EDIT_PAN,
-          payload: <PanEditPayload>{
-            applicationId,
-            targetRoute: ROUTE.MF_FETCH_PORTFOLIO,
-            panNumber: panNumber,
-          },
-        },
+        action: isPanEditAllowed
+          ? {
+              routeId: ROUTE.MF_FETCH_PORTFOLIO,
+              type: ACTION.EDIT_PAN,
+              payload: <PanEditPayload>{
+                applicationId,
+                targetRoute: ROUTE.MF_FETCH_PORTFOLIO,
+                panNumber: panNumber,
+              },
+            }
+          : null,
       },
       mobileItem: <ListItemProps & WidgetProps>{
         title: "Mobile Number",
@@ -150,7 +155,7 @@ export const template: (
 
 export const checkLimitMF: PageType<any> = {
   onLoad: async (
-    { asyncStorage },
+    { asyncStorage, ...props },
     { applicationId, email, panNumber, mobileNumber }
   ) => {
     const user: User = await SharedPropsService.getUser();
@@ -167,15 +172,30 @@ export const checkLimitMF: PageType<any> = {
     }
     const assetRepository = await SharedPropsService.getAssetRepositoryType();
 
-    return Promise.resolve(
-      template(applicationId, panNumberX, phoneNumber, emailId, assetRepository)
+    const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
+      ConfigTokens.IS_PAN_EDIT_ALLOWED
+    );
+
+    return template(
+      applicationId,
+      panNumberX,
+      phoneNumber,
+      emailId,
+      assetRepository,
+      isPanEditAllowed
     );
   },
   actions: {
+    [ACTION.AUTO_FETCH_MY_PORTFOLIO]: autoTriggerOtp,
     [ACTION.FETCH_MY_PORTFOLIO]: fetchMyPortfolio,
     [ACTION.EDIT_PAN]: editPanNumber,
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
   },
   clearPrevious: true,
+  action: {
+    type: ACTION.AUTO_FETCH_MY_PORTFOLIO,
+    routeId: ROUTE.MF_FETCH_PORTFOLIO,
+    payload: {},
+  },
 };

@@ -17,7 +17,7 @@ export const sendOtpForPledgeConfirm: ActionFunction<
 > = async (
   action,
   _datastore,
-  { analytics, network, navigate, setDatastore, ...props }
+  { analytics, network, navigate, setDatastore }
 ): Promise<any> => {
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     label: "",
