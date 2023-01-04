@@ -2,15 +2,12 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { LimitPayload } from "./types";
 import { nextStepId } from "../../../configs/utils";
-import SharedPropsService from "../../../SharedPropsService";
 
 export const continueLimit: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
   { navigate }
 ): Promise<any> => {
-  /*** disable this page for next time ***/
-  await SharedPropsService.setPledgeFirstTime(false);
   const routeObj = await nextStepId(ROUTE.MF_PLEDGE_PORTFOLIO);
   await navigate(routeObj.routeId, routeObj.params);
   // await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);

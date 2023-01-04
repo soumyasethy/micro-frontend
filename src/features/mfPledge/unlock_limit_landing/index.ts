@@ -36,6 +36,7 @@ import { continueLimit } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 import { roundDownToNearestHundred } from "../../../configs/utils";
 import { commonTemplates } from "../../../configs/common";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (availableCreditAmount: number) => TemplateSchema = (
   availableCreditAmount
@@ -161,6 +162,8 @@ export const unlockLimitLandingMF: PageType<any> = {
     const responseX = response ? response.data : await fetchPledgeLimitRepo();
     const availableCreditAmount: number =
       responseX.stepResponseObject.availableCreditAmount || 0;
+    /*** disable this page for next time ***/
+    await SharedPropsService.setPledgeFirstTime(false);
     return Promise.resolve(template(availableCreditAmount));
   },
 
