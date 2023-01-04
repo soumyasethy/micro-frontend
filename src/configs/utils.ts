@@ -380,3 +380,30 @@ export const getParameters: (url: string) => {
   }
   return params;
 };
+
+export const getDigio = (
+    success_callback?: Function,
+    error_callback?: Function
+) => {
+    const digioOptions = {
+      environment: 'sandbox',
+      callback: function (response: any) {
+        if (response.hasOwnProperty('error_code')) {
+          error_callback && error_callback(response);
+          return console.log('error occurred in process');
+        }
+        success_callback && success_callback(response);
+        console.log('Signing completed successfully');
+      },
+      logo: 'https://www.mylogourl.com/image.jpeg',
+      theme: {
+        primaryColor: '#AB3498',
+        secondaryColor: '#000000',
+      },
+      is_iframe: true,
+    }
+    //@ts-ignore
+    let digioObj = new Digio(digioOptions);
+    //@ts-ignore
+    window.digio = digioObj;
+}

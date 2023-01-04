@@ -4,15 +4,16 @@ import {User} from "../login/otp_verify/types";
 import SharedPropsService from "../../SharedPropsService";
 import {api} from "../../configs/api";
 import {KycAdditionalDetailsPayload} from "../kyc/kyc_additional_details/types";
-import {getAppHeader} from "../../configs/config";
+import {getAppHeader, ImportScriptSrc} from "../../configs/config";
+import { getDigio } from "../../configs/utils";
 
 export const TestAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, goBack, network, digio }
+  { navigate, goBack, network, digio, importScript }
 ): Promise<any> => {
   console.warn("**** Test Action Triggered ****", action);
-
+  importScript(ImportScriptSrc.DIGIO_SCRIPT, getDigio)
   // Digio Kyc Mandate
   const user: User = await SharedPropsService.getUser();
   const applicationId = user.linkedApplications[0].applicationId;
@@ -34,7 +35,6 @@ export const TestAction: ActionFunction<any> = async (
              const tokenId = response.data.stepResponseObject.tokenId
              //@ts-ignore
              digio.init();
-
              console.log("RequestId: ", requestId)
              console.log("PhoneNumber: ", user.user.phoneNumber)
              console.log("tokenId: ", tokenId)
@@ -53,8 +53,9 @@ export const TestAction: ActionFunction<any> = async (
                         }
                     }
                 ).then(res=> {
-                    console.log(res);
-                    clearInterval(pollInterval)
+                    if(res && res.data && res.data.stepResponseObject !== "PENDING") {
+                        clearInterval(pollInterval)
+                    }
                 })
              }, 5000)
          }

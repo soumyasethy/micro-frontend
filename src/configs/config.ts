@@ -78,3 +78,7 @@ export enum DeepLinks {
   CALL = "tel:+919611749097",
   MAILTO = "mailto:support@voltmoney.in",
 }
+
+export enum ImportScriptSrc {
+ DIGIO_SCRIPT="https://app.digio.in/sdk/v10/digio.js"
+}
