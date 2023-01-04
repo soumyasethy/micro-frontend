@@ -34,7 +34,7 @@ export const getAuthHeaders = () => ({
 });
 export const getAppHeader = async () => ({
   "X-AppMode": "INVESTOR_VIEW",
-  "X-AppPlatform": __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP",
+  "X-AppPlatform": await SharedPropsService.getAppPlatform(),
   Authorization: `Bearer ${await SharedPropsService.getToken()}`,
   "Content-Type": "application/json",
 });
@@ -55,7 +55,7 @@ export const AssetRepositoryMap = {
     NAME: "Cams",
     OTP_LENGTH: 5,
     LIST: [],
-    isDisabled: false,
+    isDisabled: true,
   },
   [AssetRepositoryType.KARVY]: {
     VALUE: AssetRepositoryType.KARVY,
@@ -79,4 +79,3 @@ export enum DeepLinks {
   CALL = "tel:+919611749097",
   MAILTO = "mailto:support@voltmoney.in",
 }
-
