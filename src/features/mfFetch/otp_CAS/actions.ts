@@ -37,7 +37,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     /*** check available credit limit ***/
     const availableCreditAmount = _.get(
       response,
-      "data.data.stepResponseObject.availableCreditAmount",
+      "data.stepResponseObject.availableCreditAmount",
       0
     );
     if (availableCreditAmount > 0) {
