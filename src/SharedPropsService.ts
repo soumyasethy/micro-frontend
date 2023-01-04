@@ -129,10 +129,37 @@ async function setPartnerRefCode(ref: string) {
   _globalProps.ref = ref;
 }
 async function getUrlParams() {
-  return _globalProps.url;
+  const timestamp = new Date().getTime();
+  const urlWithDate = await AsyncStorage.getItem(StoreKey.urlWithDate);
+  if (urlWithDate && urlWithDate.includes("&timestamp=")) {
+    const dataArray = urlWithDate.split("&timestamp=");
+    const time = parseInt(dataArray[1]) || 0;
+    if (time) {
+      const diff = timestamp - time;
+      if (diff > 2419200000) {
+        return null;
+      } else {
+        return dataArray[0];
+      }
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
 }
 async function setUrlParams(url: string) {
-  _globalProps.url = url;
+  if (
+    url.includes("utm_source=") ||
+    url.includes("utm_medium=") ||
+    url.includes("utm_campaign=") ||
+    url.includes("utm_content=") ||
+    url.includes("utm_id=") || 
+    url.includes("utm_term=")
+  ) {
+    const urlWithDate = url + "&timestamp=" + new Date().getTime();
+    await AsyncStorage.setItem(StoreKey.urlWithDate, urlWithDate);
+  }
 }
 
 function getPropsValue(key?: string) {

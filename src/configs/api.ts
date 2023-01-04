@@ -13,6 +13,7 @@ export const StoreKey = {
   accessToken: "access_token",
   refreshToken: "refresh_token",
   userContext: "user_context",
+  urlWithDate: "url_with_date",
 };
 export const api = {
   login: `${config.URL}/api/client/auth/requestOtp/`,
