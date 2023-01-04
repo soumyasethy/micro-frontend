@@ -66,7 +66,7 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
         },
         primary: false,
       });
-    }, 100);
+    }, APP_CONFIG.MODAL_TRIGGER_TIMEOUT);
   }
 };
 
@@ -108,7 +108,7 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
                 payload: {},
               },
             });
-          }, 100);
+          }, APP_CONFIG.MODAL_TRIGGER_TIMEOUT);
         } else if (response.stepResponseObject.toLowerCase() === "failed") {
           clearInterval(timerRef);
           hidePopup();
@@ -127,7 +127,7 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
                 payload: {},
               },
             });
-          }, 100);
+          }, APP_CONFIG.MODAL_TRIGGER_TIMEOUT);
         }
       });
   };
