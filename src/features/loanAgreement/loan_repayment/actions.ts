@@ -93,7 +93,6 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
         iconName: IconTokens.Redirecting,
         title: "Waiting for response",
         subTitle: "Please wait while we process your request",
-        ctaLabel: "Continue",
         ctaAction: {
           type: ACTION.POLL_MANDATE_STATUS,
           routeId: ROUTE.LOAN_REPAYMENT,

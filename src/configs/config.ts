@@ -42,7 +42,7 @@ export const getAppHeader = async () => ({
 export const APP_CONFIG = {
   POLLING_INTERVAL: 5000,
   AUTO_REDIRECT: 5000,
-  MODAL_TRIGGER_TIMEOUT: 100,
+  MODAL_TRIGGER_TIMEOUT: 250,
 };
 
 export enum AssetRepositoryType {
