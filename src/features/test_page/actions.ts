@@ -4,8 +4,10 @@ import {User} from "../login/otp_verify/types";
 import SharedPropsService from "../../SharedPropsService";
 import {api} from "../../configs/api";
 import {KycAdditionalDetailsPayload} from "../kyc/kyc_additional_details/types";
-import {getAppHeader, ImportScriptSrc} from "../../configs/config";
+import {DigioDocsStatus, DigioKycStatus, getAppHeader, ImportScriptSrc} from "../../configs/config";
 import { getDigio } from "../../configs/utils";
+
+let pollInterval;
 
 export const TestAction: ActionFunction<any> = async (
   action,
@@ -13,11 +15,47 @@ export const TestAction: ActionFunction<any> = async (
   { navigate, goBack, network, digio, importScript }
 ): Promise<any> => {
   console.warn("**** Test Action Triggered ****", action);
-  importScript(ImportScriptSrc.DIGIO_SCRIPT, getDigio)
+  const user: User = await SharedPropsService.getUser();
+  const applicationId = user.linkedApplications[0].applicationId;
+  /*
+  //DIGIO Kyc Verification Integration
+  importScript(ImportScriptSrc.DIGIO_SCRIPT, getDigio, async(digio_response)=>{
+      network.post(
+          `${api.digioKycCheckRequestStatusOnCallBack}${applicationId}`,
+          {},
+          {
+              headers: {
+                  "X-AppMode": "SDK_INVESTWELL",
+                  "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+                  Authorization: `Bearer ${await SharedPropsService.getToken()}`,
+                  "Content-Type": "application/json",
+              }
+          }
+      ).then(response=>{
+          clearInterval(pollInterval)
+          console.log("Success: ", response)
+          console.log("Digio_Response", digio_response)
+
+      })
+  }, async(digio_response)=>{
+      network.post(
+          `${api.digioKycCheckRequestStatusOnCallBack}${applicationId}`,
+          {},
+          {
+              headers: {
+                  "X-AppMode": "SDK_INVESTWELL",
+                  "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+                  Authorization: `Bearer ${await SharedPropsService.getToken()}`,
+                  "Content-Type": "application/json",
+              }
+          }
+      ).then(response=>{
+        clearInterval(pollInterval)
+        console.log("Failure: ", response)
+        console.log("Digio_Response", digio_response)
+      })
+  })
   // Digio Kyc Mandate
-  setTimeout(async()=> {
-      const user: User = await SharedPropsService.getUser();
-      const applicationId = user.linkedApplications[0].applicationId;
       await network.post(
           `${api.digioKycESignInitiateRequest}${applicationId}`,
           {},
@@ -41,7 +79,7 @@ export const TestAction: ActionFunction<any> = async (
                   console.log("tokenId: ", tokenId)
                   digio.submit(requestId, user.user.phoneNumber, tokenId)
                   //polling
-                  const pollInterval = setInterval(async ()=> {
+                  pollInterval = setInterval(async ()=> {
                       network.post(
                           `${api.digioKycCheckRequestStatus}${applicationId}`,
                           {},
@@ -54,7 +92,8 @@ export const TestAction: ActionFunction<any> = async (
                               }
                           }
                       ).then(res=> {
-                          if(res && res.data && res.data.stepResponseObject !== "PENDING") {
+                          if(res && res.data && res.data.stepResponseObject !== DigioKycStatus.CREATED) {
+                              console.log("Verification Completed")
                               clearInterval(pollInterval)
                           }
                       })
@@ -64,5 +103,88 @@ export const TestAction: ActionFunction<any> = async (
       }).catch(error=>{
           console.log(error)
       });
-  }, 250)
+  */
+    importScript(
+        ImportScriptSrc.DIGIO_SCRIPT,
+        getDigio,
+        async(digio_response)=>{
+            network.post(
+                `${api.digioDocsCheckRequestStatusOnCallBack}${applicationId}`,
+                {},
+                {
+                    headers: {
+                        "X-AppMode": "SDK_INVESTWELL",
+                        "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+                        Authorization: `Bearer ${await SharedPropsService.getToken()}`,
+                        "Content-Type": "application/json",
+                    }
+            }
+        ).then(response=>{
+            clearInterval(pollInterval)
+            console.log("Success: ", response)
+            console.log("Digio_Response", digio_response)
+        })
+    }, async(digio_response)=>{
+        network.post(
+            `${api.digioDocsCheckRequestStatusOnCallBack}${applicationId}`,
+            {},
+            {
+                headers: {
+                    "X-AppMode": "SDK_INVESTWELL",
+                    "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+                    Authorization: `Bearer ${await SharedPropsService.getToken()}`,
+                    "Content-Type": "application/json",
+                }
+            }
+        ).then(response=>{
+            clearInterval(pollInterval)
+            console.log("Failure: ", response)
+            console.log("Digio_Response", digio_response)
+        })
+    })
+    // Digio Kyc Mandate
+    await network.post(
+        `${api.digioDocsESignInitiateRequest}${applicationId}`,
+        {},
+        {
+            headers: {
+                "X-AppMode": "SDK_INVESTWELL",
+                "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+                Authorization: `Bearer ${await SharedPropsService.getToken()}`,
+                "Content-Type": "application/json",
+            }
+        }
+    ).then(response => {
+        if(response.status === 200) {
+            if(response.data && response.data.stepResponseObject) {
+                console.log("init: ", response.data)
+                const stepResponseObjectId = response.data.stepResponseObject
+                //@ts-ignore
+                digio.init();
+                digio.submit(stepResponseObjectId, user.user.phoneNumber)
+                //polling
+                pollInterval = setInterval(async ()=> {
+                    network.post(
+                        `${api.digioDocsCheckRequestStatus}${applicationId}`,
+                        {},
+                        {
+                            headers: {
+                                "X-AppMode": "SDK_INVESTWELL",
+                                "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+                                Authorization: `Bearer ${await SharedPropsService.getToken()}`,
+                                "Content-Type": "application/json",
+                            }
+                        }
+                    ).then(res=> {
+                         if(res && res.data && res.data.stepResponseObject !== DigioDocsStatus.REQUESTED) {
+                            console.log("Polling Completed")
+                            clearInterval(pollInterval)
+                         }
+                    })
+                }, 5000)
+            }
+        }
+    }).catch(error=>{
+        console.log(error)
+    });
 };

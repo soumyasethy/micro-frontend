@@ -82,3 +82,14 @@ export enum DeepLinks {
 export enum ImportScriptSrc {
  DIGIO_SCRIPT="https://app.digio.in/sdk/v10/digio.js"
 }
+
+export enum DigioKycStatus {
+  CREATED = "CREATED",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  EXPIRED = "EXPIRED"
+}
+
+export enum DigioDocsStatus {
+  REQUESTED ="REQUESTED",
+}
