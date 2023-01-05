@@ -5,7 +5,6 @@ import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
 import { getAppHeader } from "../../configs/config";
-import { AnalyticsEventTracker } from "../../configs/constants";
 
 export const SplashAction: ActionFunction<any> = async (
   action,
@@ -22,16 +21,16 @@ export const SplashAction: ActionFunction<any> = async (
     const userType = await SharedPropsService.getUserType();
     console.log("userType", userType);
     if (userType === "BORROWER") {
-     
-    const userContextResponse = await network.post(api.userContext, body, {
-      headers: await getAppHeader(),
-    });
-    if (userContextResponse.status === 200) {
-      const user: User = userContextResponse.data;
-      await SharedPropsService.setUser(user);
-      /****
-       * ADD YOUR CUSTOM ROUTE TO NAVIGATE
-       * ****/
+
+      const userContextResponse = await network.post(api.userContext, body, {
+        headers: await getAppHeader(),
+      });
+      if (userContextResponse.status === 200) {
+        const user: User = userContextResponse.data;
+        await SharedPropsService.setUser(user);
+        /****
+         * ADD YOUR CUSTOM ROUTE TO NAVIGATE
+         * ****/
 
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
@@ -39,10 +38,16 @@ export const SplashAction: ActionFunction<any> = async (
           const nextRoute = await nextStepId(
             user.linkedApplications[0].currentStepId
           );
-             await navigate(nextRoute.routeId, nextRoute.params);
+          await navigate(nextRoute.routeId, nextRoute.params);
         }
 
+
+      } else {
+        await navigate(ROUTE.PHONE_NUMBER);
+
       }
+
+
     } else {
       // const userContextResponses = await network.post(api.userContext, body, {
       //   headers: await getAppHeader(),
@@ -59,17 +64,16 @@ export const SplashAction: ActionFunction<any> = async (
         // return;
         if (user.linkedPartnerAccounts[0].partnerName == null) {
           await navigate(ROUTE.ENTER_NAME);
-        }else if(user.linkedPartnerAccounts[0].partnerName != null){
+        } else if (user.linkedPartnerAccounts[0].partnerName != null) {
           console.log(`user.linkedPartnerAccounts[0].partnerName`);
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
-        }else if(partnerUser !== ''){
+        } else if (partnerUser !== '') {
           await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-        }else{
+        } else {
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
         }
-      }else{
-        await navigate(ROUTE.PHONE_NUMBER);
       }
+
     }
   } else {
     await navigate(ROUTE.PHONE_NUMBER);

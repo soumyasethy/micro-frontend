@@ -1,16 +1,16 @@
 import { RouteMap } from "@voltmoney/types";
 import { phoneNumberMF } from "./features/login/phone_number";
 import { otpVerifyMF } from "./features/login/otp_verify";
-import { emailVerifyMF } from "./features/authCAS/email_verify";
+import { emailVerifyMF } from "./features/mfFetch/email_verify";
 import { ROUTE } from "./routes";
-import { emailMF } from "./features/authCAS/enter_email";
-import { panVerifyMF } from "./features/authCAS/verifyPan/pan_verify";
-import { panConfirmMF } from "./features/authCAS/verifyPan/pan_confirm";
-import { checkLimitMF } from "./features/authCAS/check_limit";
-import { updateMobileNumberMF } from "./features/authCAS/update_phoneNo";
-import { updateEmailMF } from "./features/authCAS/update_emailId";
-import { otpVerifyAuthCASMF } from "./features/authCAS/otp_CAS";
-import { verificationFailedMF } from "./features/authCAS/verification_failed";
+import { emailMF } from "./features/mfFetch/enter_email";
+import { panVerifyMF } from "./features/mfFetch/verifyPan/pan_verify";
+import { panConfirmMF } from "./features/mfFetch/verifyPan/pan_confirm";
+import { checkLimitMF } from "./features/mfFetch/check_limit";
+import { updateMobileNumberMF } from "./features/mfFetch/update_phoneNo";
+import { updateEmailMF } from "./features/mfFetch/update_emailId";
+import { otpVerifyAuthCASMF } from "./features/mfFetch/otp_CAS";
+import { verificationFailedMF } from "./features/mfFetch/verification_failed";
 import { testPageMF } from "./features/test_page";
 import { kycAadharVerifyMF } from "./features/kyc/kyc_aadhar_init";
 import { kycAadharOTPVerifyMF } from "./features/kyc/kyc_otp";
@@ -26,16 +26,16 @@ import { kycDigiLockerMF } from "./features/kyc/kyc_init";
 import { alertMF } from "./features/popup_loader";
 import { cameraCaptureMF } from "./features/kyc/kyc_photo_upload";
 import { splashScreenMF } from "./features/spalsh_screen";
-import { unlockLimitMF } from "./features/unlockLimit/unlock_limit";
-import { pledgeVerifyMF } from "./features/unlockLimit/pledge_verify";
-import { pledgeLoadingMF } from "./features/unlockLimit/pledge_loading";
-import { pledgeConfirmationLoadingMF } from "./features/unlockLimit/pledge_confirmation_loader";
-import { pledgeConfirmationMF } from "./features/unlockLimit/pledge_confirmation";
-import { unlockSuccessMF } from "./features/unlockLimit/unlock_success";
-import { modifyLimitMF } from "./features/unlockLimit/modify_limit";
-import { portfolioMF } from "./features/unlockLimit/portfolio";
-import { pledgeAmountMF } from "./features/unlockLimit/pledged_amount";
-import { modifyPledgeMF } from "./features/unlockLimit/modify_pledged_amount";
+import { unlockLimitMF } from "./features/mfPledge/unlock_limit";
+import { pledgeVerifyMF } from "./features/mfPledge/pledge_verify";
+import { pledgeLoadingMF } from "./features/mfPledge/pledge_loading";
+import { pledgeConfirmationLoadingMF } from "./features/mfPledge/pledge_confirmation_loader";
+import { pledgeConfirmationMF } from "./features/mfPledge/pledge_confirmation";
+import { unlockSuccessMF } from "./features/mfPledge/unlock_success";
+import { modifyLimitMF } from "./features/mfPledge/modify_limit";
+import { portfolioMF } from "./features/mfPledge/portfolio";
+import { pledgeAmountMF } from "./features/mfPledge/pledged_amount";
+import { modifyPledgeMF } from "./features/mfPledge/modify_pledged_amount";
 import { dashboardMF } from "./features/afterUnlock/dashboard";
 import { withdraw_amountMF } from "./features/afterUnlock/withdraw_amount";
 import { withdrawalOtpMF } from "./features/afterUnlock/withdrawal_otp";
@@ -54,10 +54,9 @@ import { aboutUsMF } from "./features/profile/about_us";
 import { faqDetailsMF } from "./features/profile/faq_details";
 import { carousalPageMF } from "./features/carousal/";
 import { landingPageMF } from "./features/landing";
-import { transactionsMF } from "./features/unlockLimit/transactions";
+import { transactionsMF } from "./features/mfPledge/transactions";
 import { privacyPolicyMF } from "./features/privacy_policy";
 import {kycAdditionalDetailsMF} from "./features/kyc/kyc_additional_details";
-import { unlockLimitLandingMF } from "./features/unlockLimit/unlock_limit_landing";
 import {distBankAccountAddMF}  from "./features/bankDetailsDistributor/bank_account_add";
 import { distBankSearchBranchMF } from "./features/bankDetailsDistributor/bank_search_branch";
 import { distBankSelectMF } from "./features/bankDetailsDistributor/select_bank";
@@ -67,11 +66,13 @@ import { selectDistributorPortfolioMF } from "./features/selectPortfolio/selectD
 import { investorMF } from "./features/investor";
 import { DistributorClientListMF } from "./features/DistributorClientList/ClientList";
 import { distBasicDetailsMF } from "./features/Dist_basicDetails/basicDetailsInfo";
-import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
 import { nameMF } from "./features/enter_name";
 import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
 import { basicDetailsStartMF } from "./features/Dist_basicDetails/basicDetailsStart";
 import { DistributorClientListStepperMF } from "./features/DistributorClientList/ClientListStepper";
+import { unlockLimitLandingMF } from "./features/mfPledge/unlock_limit_landing";
+import { kycDocumentUploadMF } from "./features/kyc/kyc_document_upload";
+import { checkingLimitMf } from "./features/mfFetch/checking_limit";
 
 
 export const ROUTE_MAP: RouteMap = {
@@ -147,5 +148,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.DETAILS_CONFIRM]: detailsConfirmMF,
   [ROUTE.BASIC_DETAILS_START]: basicDetailsStartMF,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER]: DistributorClientListStepperMF,
-
+  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]: distBasicDetailsMF,
+  [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
+  [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
 };

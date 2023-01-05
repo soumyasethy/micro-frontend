@@ -13,6 +13,7 @@ export const StoreKey = {
   accessToken: "access_token",
   refreshToken: "refresh_token",
   userContext: "user_context",
+  urlWithDate: "url_with_date",
 };
 // Partner's app apis
 export const partnerApi = {

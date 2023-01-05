@@ -24,7 +24,6 @@ import {
   IconSizeTokens,
   IconTokens,
   MessageProps,
-  PaddingSizeTokens,
   PromoCardProps,
   RepaymentProps,
   ShadowTypeTokens,
@@ -71,6 +70,10 @@ export const template: (
     repaymentAmount > 0
       ? {
           repaymentStickyCard: <CardProps>{
+            padding: {
+              horizontal: SizeTypeTokens.NONE,
+              vertical: SizeTypeTokens.NONE,
+            },
             bgColor: ColorTokens.White,
             body: {
               widgetItems: [
@@ -130,7 +133,7 @@ export const template: (
           : []),
         {
           id: "promoCard",
-          type: WIDGET.CARD,
+          type: WIDGET.PROMOCARD,
           padding: {
             horizontal: 0,
             all: 0,
@@ -311,13 +314,7 @@ export const template: (
         },
       },
       repaymentSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
-      promoCard: <CardProps>{
-        bgColor: ColorTokens.White,
-        body: {
-          widgetItems: [{ id: "promoItem", type: WIDGET.PROMOCARD }],
-        },
-      },
-      promoItem: <PromoCardProps>{
+      promoCard: <PromoCardProps>{
         data: [
           {
             id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",

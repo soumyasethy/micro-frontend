@@ -2,25 +2,14 @@ import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { ACTION, GetMoreMfPortfolioPayload, LimitPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryType } from "../../../configs/config";
+import { AssetRepositoryType, ConfigTokens } from "../../../configs/config";
 import { WIDGET } from "@voltmoney/schema";
 import { isMorePortfolioRenderCheck } from "../../../configs/utils";
+import { SelectAssets } from "../modify_limit/actions";
+import { AssetsPayload } from "../modify_limit/types";
+import { ACTION as MODIFY_LIMIT_ACTION } from "../modify_limit/types";
 
 export const continueLimit: ActionFunction<LimitPayload> = async (
-  action,
-  _datastore,
-  { navigate }
-): Promise<any> => {
-  action.payload.value.availableCAS.forEach((item, index) => {
-    action.payload.value.availableCAS[index].pledgedUnits =
-      item.totalAvailableUnits;
-  });
-  await navigate(ROUTE.PLEDGE_CONFIRMATION, {
-    stepResponseObject: action.payload.value,
-  });
-};
-
-export const modifyLimit: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
   { navigate }
@@ -28,6 +17,36 @@ export const modifyLimit: ActionFunction<LimitPayload> = async (
   await navigate(ROUTE.MODIFY_LIMIT, {
     stepResponseObject: action.payload.value,
   });
+  // action.payload.value.availableCAS.forEach((item, index) => {
+  //   action.payload.value.availableCAS[index].pledgedUnits =
+  //     item.totalAvailableUnits;
+  // });
+  // await navigate(ROUTE.PLEDGE_CONFIRMATION, {
+  //   stepResponseObject: action.payload.value,
+  // });
+};
+
+export const selectPortfolio: ActionFunction<LimitPayload> = async (
+  action,
+  _datastore,
+  { navigate, ...props }
+): Promise<any> => {
+  // await navigate(ROUTE.MODIFY_LIMIT, {
+  //   stepResponseObject: action.payload.value,
+  // });
+  await SelectAssets(
+    {
+      type: MODIFY_LIMIT_ACTION.CONFIRM_CTA,
+      payload: <AssetsPayload>{
+        value: "",
+        widgetId: "input",
+        stepResponseObject: action.payload.value,
+      },
+      routeId: ROUTE.MODIFY_LIMIT,
+    },
+    {},
+    { navigate, ...props }
+  );
 };
 export const getMoreMfPortfolio: ActionFunction<
   GetMoreMfPortfolioPayload
@@ -49,8 +68,16 @@ export const getMoreMfPortfolio: ActionFunction<
       );
     }
   }
-
+  /*** disable pan edit option */
+  await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
+  /*** Enable auto otp trigger when user lands on MF_Fetch */
+  await SharedPropsService.setConfig(
+    ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP,
+    true
+  );
+  /*** Go to re-fetch portfolio from other Asset Type **/
   await navigate(ROUTE.MF_FETCH_PORTFOLIO);
+  /*** remove fetch more asset type option from UI */
   await removeGetMorePortfolio(
     {
       type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,

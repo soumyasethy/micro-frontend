@@ -1,11 +1,17 @@
 
 import { BankData, User ,PartnerUser, BasicData} from "./features/login/otp_verify/types";
-import { __isMock__, AssetRepositoryType } from "./configs/config";
+
+import {
+  __isMock__,
+  AssetRepositoryType,
+  ConfigTokens,
+} from "./configs/config";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
-import { AvailableCASItem } from "./features/unlockLimit/unlock_limit/types";
+import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
+import { AuthCASModel } from "./types/AuthCASModel";
 
 export enum USERTYPE {
   BORROWER = "BORROWER",
@@ -43,6 +49,7 @@ type GlobalProps = {
   pbankIfsc?:string;
   bankData :BankData;
   basicData: BasicData;
+  authCAS?: AuthCASModel;
   ref?: string;
   url?: string;
   assetRepositoryType?: AssetRepositoryType;
@@ -51,6 +58,10 @@ type GlobalProps = {
   };
   casListOriginal?: AvailableCASItem[];
   appPlatform?: string;
+  config?: {
+    [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
+    [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
+  };
 };
 
 let _globalProps: GlobalProps = {
@@ -85,6 +96,7 @@ let _globalProps: GlobalProps = {
     mobileNumber:"",
     email:""
   },
+  authCAS: null,
   ref: "",
   /*** Default asset repository */
   assetRepositoryType: AssetRepositoryType.KARVY,
@@ -105,12 +117,22 @@ let _globalProps: GlobalProps = {
   },
   casListOriginal: [],
   appPlatform: "VOLT_MOBILE_APP",
+  config: {
+    [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true,
+    [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
+  },
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
 export function getBuildType(): BUILD_TYPE {
   return _globalProps.buildType;
+}
+export function setConfig(configId: ConfigTokens, configValue: any) {
+  _globalProps.config[configId] = configValue;
+}
+export function getConfig(configId?: ConfigTokens): any {
+  return configId ? _globalProps.config[configId] : _globalProps.config;
 }
 /*** Asset repository ***/
 async function setAssetRepositoryType(
@@ -217,10 +239,37 @@ async function setPartnerRefCode(ref: string) {
   _globalProps.ref = ref;
 }
 async function getUrlParams() {
-  return _globalProps.url;
+  const timestamp = new Date().getTime();
+  const urlWithDate = await AsyncStorage.getItem(StoreKey.urlWithDate);
+  if (urlWithDate && urlWithDate.includes("&timestamp=")) {
+    const dataArray = urlWithDate.split("&timestamp=");
+    const time = parseInt(dataArray[1]) || 0;
+    if (time) {
+      const diff = timestamp - time;
+      if (diff > 2419200000) {
+        return null;
+      } else {
+        return dataArray[0];
+      }
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
 }
 async function setUrlParams(url: string) {
-  _globalProps.url = url;
+  if (
+    url.includes("utm_source=") ||
+    url.includes("utm_medium=") ||
+    url.includes("utm_campaign=") ||
+    url.includes("utm_content=") ||
+    url.includes("utm_id=") || 
+    url.includes("utm_term=")
+  ) {
+    const urlWithDate = url + "&timestamp=" + new Date().getTime();
+    await AsyncStorage.setItem(StoreKey.urlWithDate, urlWithDate);
+  }
 }
 
 function getPropsValue(key?: string) {
@@ -293,7 +342,8 @@ async function setPledgeFirstTime(boolean: boolean) {
 }
 
 async function isPledgeFirstTime(): Promise<boolean> {
-  return !!(await AsyncStorage.getItem(StoreKey.isPledgeFirstTime));
+  const isFirstTime = await AsyncStorage.getItem(StoreKey.isPledgeFirstTime);
+  return isFirstTime === null ? true : JSON.parse(isFirstTime);
 }
 
 async function setCasListOriginal(casListOriginal: AvailableCASItem[]) {
@@ -307,6 +357,12 @@ async function setAppPlatform(type: string) {
 }
 async function getAppPlatform() {
   return _globalProps.appPlatform;
+}
+async function setAuthCASResponse(data: AuthCASModel) {
+  _globalProps.authCAS = data;
+}
+async function getAuthCASResponse() {
+  return _globalProps.authCAS;
 }
 
 export default {
@@ -353,5 +409,9 @@ export default {
   setUrlParams,
   getUrlParams,
   setAppPlatform,
-  getAppPlatform
+  getAppPlatform,
+  setConfig,
+  getConfig,
+  setAuthCASResponse,
+  getAuthCASResponse,
 };

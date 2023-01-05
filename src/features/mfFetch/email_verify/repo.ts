@@ -11,8 +11,8 @@ export const signInGoogle = async () => {
     iosClientId:
       "487300478427-tfvesrcgup8dfqvskj5k563qotiab4jc.apps.googleusercontent.com",
     webClientId:
-      "85274716805-4c9hnt3nm3ntslg72ojt79ubnfkmp9lf.apps.googleusercontent.com",
-  });
+      "62646021413-queb1g13go0snvnotl0ee06t68jcgb98.apps.googleusercontent.com",
+  }); // 85274716805-4c9hnt3nm3ntslg72ojt79ubnfkmp9lf.apps.googleusercontent.com //old
   try {
     await GoogleSignin.hasPlayServices();
     const userInfo: GoogleLoginResponse = await GoogleSignin.signIn();
@@ -58,8 +58,12 @@ export const signInGoogleWeb = async () => {
       console.warn("google error", response);
     },
     clientId:
-      "85274716805-4c9hnt3nm3ntslg72ojt79ubnfkmp9lf.apps.googleusercontent.com",
+      "62646021413-queb1g13go0snvnotl0ee06t68jcgb98.apps.googleusercontent.com", //85274716805-4c9hnt3nm3ntslg72ojt79ubnfkmp9lf.apps.googleusercontent.com // old
     cookiePolicy: "single_host_origin",
   });
-  await signIn();
+  if (loaded) {
+    signIn();
+  } else {
+    console.warn("google error", "not loaded");
+  }
 };

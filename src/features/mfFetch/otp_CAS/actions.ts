@@ -17,7 +17,7 @@ import { AnalyticsEventTracker } from "../../../configs/constants";
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, network, goBack, showPopup ,analytics}
+  { navigate, setDatastore, network, goBack, showPopup, analytics }
 ): Promise<any> => {
   const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
@@ -32,10 +32,11 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     state: InputStateToken.LOADING,
   });
 
+
   const userType = await SharedPropsService.getUserType();
   console.log(userType);
   if (userType === "BORROWER") {
-    
+
     const response = await network.post(
       api.authCAS,
       {
@@ -47,39 +48,64 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     );
     if (response.status === 200) {
       /*** check available credit limit ***/
+
       const availableCreditAmount = _.get(
         response,
-        "data.data.stepResponseObject.availableCreditAmount",
+        "data.stepResponseObject.availableCreditAmount",
         0
       );
       if (availableCreditAmount > 0) {
         analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
           ...AnalyticsEventTracker.borrower_mf_pull,
         });
+        await SharedPropsService.setAuthCASResponse(response.data);
       } else {
         analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
           ...AnalyticsEventTracker.borrower_mf_pull_failed,
         });
       }
+
       await setDatastore(action.routeId, "input", <TextInputProps>{
         state: InputStateToken.SUCCESS,
       });
       await goBack();
-  
+
       if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+        /**  enable animation again ***/
+        await SharedPropsService.setPledgeFirstTime(true);
         const nextRoute = await nextStepId(
           response.data.updatedApplicationObj.currentStepId
         );
-        nextRoute.params = { ...nextRoute.params, response };
-        await navigate(nextRoute.routeId, nextRoute.params);
+        if (availableCreditAmount > 0) {
+          analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
+            ...AnalyticsEventTracker.borrower_mf_pull,
+          });
+        } else {
+          analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
+            ...AnalyticsEventTracker.borrower_mf_pull_failed,
+          });
+        }
+        await setDatastore(action.routeId, "input", <TextInputProps>{
+          state: InputStateToken.SUCCESS,
+        });
+        await goBack();
+
+        if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+          const nextRoute = await nextStepId(
+            response.data.updatedApplicationObj.currentStepId
+          );
+          nextRoute.params = { ...nextRoute.params, response };
+          await navigate(nextRoute.routeId, nextRoute.params);
+        }
+
+      } else {
+        await setDatastore(action.routeId, "input", <TextInputProps>{
+          state: InputStateToken.ERROR,
+        });
       }
+    }
 
   }else {
-    await setDatastore(action.routeId, "input", <TextInputProps>{
-      state: InputStateToken.ERROR,
-    });
-  }
-}else {
     console.log("partner otp verify");
     const response = await network.post(
       partnerApi.authCAS,
@@ -118,12 +144,10 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
         state: InputStateToken.ERROR,
       });
     }
-
   }
-
 };
 
-export const goBack: ActionFunction<any> = async (
+export const goBackAction: ActionFunction<any> = async (
   action,
   _datastore,
   { goBack }
@@ -135,12 +159,12 @@ export const goBack: ActionFunction<any> = async (
 export const goNext: ActionFunction<any> = async (
   action,
   _datastore,
-  { setDatastore,navigate }
+  { setDatastore, navigate }
 ): Promise<any> => {
   console.log("here");
   await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, "fetchCTA", <ButtonProps>{
     label: "Get my portfolio",
-    labelColor:ColorTokens.White,
+    labelColor: ColorTokens.White,
     type: ButtonTypeTokens.LargeFilled,
     loading: false,
   });

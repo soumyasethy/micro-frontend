@@ -37,7 +37,15 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, LimitPayload } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
-import { authenticateRepayment, goBack, AutoPayPoll } from "./actions";
+import {
+  authenticateRepayment,
+  goBack,
+  AutoPayPoll,
+  openLinkInNewTab,
+  PollMandateStatus,
+  NavLoanAgreement,
+  NavLoanRepayment,
+} from "./actions";
 
 export const template: (
   stepper: StepperItem[],
@@ -174,5 +182,9 @@ export const loanRepaymentMF: PageType<any> = {
     [ACTION.REPAYMENT]: authenticateRepayment,
     [ACTION.GO_BACK]: goBack,
     [ACTION.LINK_POLL]: AutoPayPoll,
+    [ACTION.OPEN_TAB]: openLinkInNewTab,
+    [ACTION.POLL_MANDATE_STATUS]: PollMandateStatus,
+    [ACTION.GO_LOAN_AGREEMENT]: NavLoanAgreement,
+    [ACTION.GO_LOAN_REPAYMENT]: NavLoanRepayment,
   },
 };

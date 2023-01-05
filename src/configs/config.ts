@@ -50,6 +50,7 @@ export const getPartnerAuthHeaders = () => ({
 export const APP_CONFIG = {
   POLLING_INTERVAL: 5000,
   AUTO_REDIRECT: 5000,
+  MODAL_TRIGGER_TIMEOUT: 250,
 };
 
 export enum AssetRepositoryType {
@@ -78,7 +79,7 @@ export const AssetRepositoryMap = {
     NAME: "Cams",
     OTP_LENGTH: 5,
     LIST: [],
-    isDisabled: true,
+    isDisabled: false,
   },
   [AssetRepositoryType.KARVY]: {
     VALUE: AssetRepositoryType.KARVY,
@@ -101,4 +102,9 @@ export enum DeepLinks {
   WHATSAPP = "https://wa.me/919611749097",
   CALL = "tel:+919611749097",
   MAILTO = "mailto:support@voltmoney.in",
+}
+
+export enum ConfigTokens {
+  IS_PAN_EDIT_ALLOWED = "IS_PAN_EDIT_ALLOWED",
+  IS_MF_FETCH_AUTO_TRIGGER_OTP = "IS_MF_FETCH_AUTO_TRIGGER_OTP",
 }

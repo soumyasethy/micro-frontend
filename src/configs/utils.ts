@@ -328,8 +328,8 @@ export const nextStepId = async (
     if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
       // ***  Comment Email Verify FLow since google login is not working ***//
       return {
-        // routeId: ROUTE.EMAIL_VERIFY,
-        routeId: ROUTE.ENTER_EMAIL,
+        routeId: ROUTE.EMAIL_VERIFY,
+        // routeId: ROUTE.ENTER_EMAIL,
         params: {
           applicationId: user.linkedBorrowerAccounts[0].accountId,
         },
@@ -355,17 +355,18 @@ export const nextStepId = async (
       };
     } else if (currentStepId === ROUTE.MF_PLEDGE_PORTFOLIO) {
       const isPledgeFirstTime = await SharedPropsService.isPledgeFirstTime();
-      if (!isPledgeFirstTime) {
-        await SharedPropsService.setPledgeFirstTime(true);
+      console.warn("*** isPledgeFirstTime", isPledgeFirstTime);
+      if (isPledgeFirstTime) {
         return {
-          routeId: ROUTE.UNLOCK_LIMIT_LANDING,
+          routeId: ROUTE.CHECKING_LIMIT,
+          params: {},
+        };
+      } else {
+        return {
+          routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
           params: {},
         };
       }
-      return {
-        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-        params: {},
-      };
     } else if (
       currentStepId === "KYC_CKYC" ||
       currentStepId === "KYC_PHOTO_VERIFICATION" ||
@@ -479,13 +480,11 @@ export const getParameters: (url: string) => {
   [key in string]: string;
 } = (url: string) => {
   const params = {};
-  let paramString = url.split('?')[1];
-  let queryString = new URLSearchParams(
-      paramString,
-  );
+  let paramString = url.split("?")[1];
+  let queryString = new URLSearchParams(paramString);
   for (let pair of queryString.entries()) {
-    console.log('Key is:' + pair[0]);
-    console.log('Value is:' + pair[1]);
+    console.log("Key is:" + pair[0]);
+    console.log("Value is:" + pair[1]);
     params[pair[0]] = pair[1];
   }
   return params;
