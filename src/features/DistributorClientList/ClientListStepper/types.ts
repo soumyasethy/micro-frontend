@@ -2,6 +2,7 @@ export enum ACTION {
   TRACK = "TRACK",
   MANAGE = "MANAGE",
   CTA="CTA",
+  GO_BACKAction="GO_BACKAction",
 }
 
 export type TestActionPayload = {};

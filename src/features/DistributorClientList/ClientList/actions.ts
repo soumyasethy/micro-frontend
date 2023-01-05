@@ -7,11 +7,13 @@ import { ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
 export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
     action,
     _datastore,
-    { setDatastore }
+    { navigate,setDatastore }
 ): Promise<any> => {
-    console.warn(
-        JSON.stringify(action.payload)
-    );
+    await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,{
+        applicationId:action.payload.applicationId,
+        name: action.payload.name,
+        stepperData:action.payload.steps
+    });
 };
 
 export const pendingTracks: ActionFunction<ClientPendingPayloadType> = async (

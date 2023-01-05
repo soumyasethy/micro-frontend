@@ -89,10 +89,6 @@ export const template: (
                 }
                 : {};
         // console.log(isDataUpdated);
-        console.log(camsAmount);
-        console.log(karvyAmount);
-        console.log(_generateDSCAMS);
-        console.log(_generateDSKARVY);
 
         return {
             layout: <Layout>{
@@ -851,7 +847,6 @@ export const distributorPortfolioMF: PageType<any> = {
         const conditionData = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap;
         let conditionDataKAMS = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS;
         let conditionDataKARVY = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY;
-        console.log("karvydata",conditionDataKARVY);
         if (conditionDataKAMS.availableCreditAmount !== 0) {
             camsDate = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate;
             camsDate = new Date(camsDate * 1000);
@@ -860,15 +855,13 @@ export const distributorPortfolioMF: PageType<any> = {
             isDataUpdated = "Data Exist";
         } 
          if (conditionDataKARVY.availableCreditAmount !== 0) {
-            console.log("karvy");
             karvyDate = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
             karvyDate = new Date(karvyDate * 1000);
             karvyPortfolio = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availablePortfolioAmount;
             karvyAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availableCreditAmount;
             isDataUpdated = "Data Exist";
         } 
-        console.log("cams",camsAmount);
-        console.log("karvy",karvyAmount);
+      
       //  var date = 
         // Object.keys(conditionData).map(key => {
         //     const value = conditionData[key] // obj[x]

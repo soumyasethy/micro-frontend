@@ -28,3 +28,11 @@ export const onClickCTA: ActionFunction<any> = async (
 ): Promise<any> => {
     console.warn("CTA triggerred");
 };
+
+export const goBackAction: ActionFunction<any> = async (
+    action,
+    _datastore,
+    { goBack,setDatastore }
+): Promise<any> => {
+    await goBack();
+};

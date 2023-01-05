@@ -33,8 +33,13 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack, Go_Next_Action } from "./action";
 import { distributorStepperRepo, stepperRepo } from "../../../configs/utils";
+import { partnerApi } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
-export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
+export const template: (
+    data: any
+  ) => Promise<TemplateSchema> = async (data) => {
+    return {
     layout: <Layout>{
         id: ROUTE.BASIC_DETAILS_START,
         type: LAYOUTS.LIST,
@@ -65,7 +70,7 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
             fontFamily: FontFamilyTokens.Inter,
             fontSize: FontSizeTokens.MD,
             lineHeight: SizeTypeTokens.XXL,
-            icon:<IconProps>{
+            icon: <IconProps>{
                 name: IconTokens.Cross,
                 size: IconSizeTokens.XXXL,
                 color: ColorTokens.Grey_Charcoal
@@ -76,14 +81,14 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
                 payload: {},
             },
         },
-       
+
         space1: <SpaceProps>{
             size: SizeTypeTokens.XXL,
         },
         image: <ImageProps>{
             size: ImageSizeTokens.FULL,
-          //  height:190,
-           // width:328,
+            //  height:190,
+            // width:328,
             resizeMode: ResizeModeToken.COVER,
             aspectRatio: AspectRatioToken.A2_1,
             uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUgAAAC+CAYAAABXqJaDAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAALsSURBVHgB7dcxcRthFEbRfyU12wmCIcRMQiWIAiEOAzNwIBiCuh1H8iraIpmJ7YvA51TvI3Bn3jRulmW52+8P369jfLnN4wD4rK7jYV0v3+Z5fp62OO72h6chjAB/ndbXy/30cj7/uBXz6wDgn2mMx+nl9/k6AHjrtBsAfOQokABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJEAQSIAgkQBBIgCCQAEEgAYJAAgSBBAgCCRAEEiAIJEAQSIAgkABBIAGCQAIEgQQIAgkQBBIgCCRAEEiAIJAAQSABgkACBIEECAIJELZAngYA7+ymMX4NAP5zXdef07Isd7v94em2jwOAzWl9vdzv5nl+3o5xHQ8D4HM73b7qx62JWxv/AKTiODAjKLkxAAAAAElFTkSuQmCC",
@@ -108,11 +113,37 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
             },
         },
     },
-});
+}
+};
 
 export const basicDetailsStartMF: PageType<any> = {
-    onLoad: async () => {
-        return Promise.resolve(template(await distributorStepperRepo()));
+    onLoad: async ({ network }) => {
+        const applicationId = "";
+        const response = await network.post(
+            partnerApi.stepperData,
+            {},
+            { headers: await getAppHeader() }
+        );
+
+        let data1 = [];
+        let data = [];
+        Object.keys(response.data.partnerViewStepperMap).map(key=> {
+          const value = response.data.partnerViewStepperMap[key];
+          const stepData:any = new Object();
+          if(value.isEditable === true){
+            stepData.title = value.verticalDisplayName;
+            stepData.subTitle = value.verticalDescription;
+            stepData.id =value.order;
+            stepData.status = value.status;
+            data1.push(stepData);
+          }
+          })
+          data = data1.sort(function (a, b) {
+            return a.id - b.id;
+          });
+       // return Promise.resolve(template(await distributorStepperRepo(data)));
+        const templateX = await template( data);
+        return Promise.resolve(templateX);
     },
     actions: {
         [ACTION.GO_TO_BASIC_DETAILS]: Go_Next_Action,

@@ -33,7 +33,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
-import { authCAS, fetchMyPortfolio, goBack, navToFetch } from "./actions";
+import { authCAS, fetchMyPortfolio,goNext, goBack, navToFetch } from "./actions";
 
 import { FetchPortfolioPayload } from "../check_limit/types";
 

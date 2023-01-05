@@ -108,7 +108,7 @@ export const goNext: ActionFunction<RepositoryPayload> = async (action, _datasto
       emailId: response.data.emailId
     });
   }
-  if(AssetRepositoryType.CAMS === action.payload.value){
+  if(action.payload.value === AssetRepositoryType.CAMS){
     await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
   }else{
     await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.KARVY);

@@ -13,7 +13,7 @@ import {
   } from "./types";
   import { ROUTE } from "../../../routes";
   import { getActualLimit, getTotalLimit } from "./actions";
-  import { StepResponseObject } from "../../unlockLimit/unlock_limit/types";
+  import { StepResponseObject } from "../../mfPledge/unlock_limit/types";
   import { Datastore, WidgetProps } from "@voltmoney/types";
   import SharedPropsService from "../../../SharedPropsService";
   import {
