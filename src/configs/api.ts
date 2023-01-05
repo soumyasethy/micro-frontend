@@ -30,6 +30,7 @@ export const partnerApi = {
   pledgeSave:`${config.URL}/app/borrower/application/pledge/save`,
   referalLink:`${config.URL}/app/partner/referralLink/application/`,
   clientList:`${config.URL}/app/partner/`,
+  stepperData: `${config.URL}/app/borrower/application/stepper/`,
 };
 
 export const api = {

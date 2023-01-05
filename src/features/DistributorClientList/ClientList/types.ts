@@ -10,7 +10,7 @@ export type TestActionPayload = {};
 
 export type ClientPendingPayloadType = {
   name: string,
-  stepsCompleted: number | string,
+  steps: any,
   applicationId: string,
   data:any
 }

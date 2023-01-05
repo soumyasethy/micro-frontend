@@ -42,7 +42,7 @@ import {
     SearchPortfolio,
     ClearSearchPortfolio,
   } from "./actions";
-  import { StepResponseObject } from "../../unlockLimit/unlock_limit/types";
+  import { StepResponseObject } from "../../mfPledge/unlock_limit/types";
   import SharedPropsService from "../../../SharedPropsService";
   import { portfolioListDatastoreBuilder } from "./utils";
 import { horizontalDistributorStepperRepo } from "../../../configs/utils";

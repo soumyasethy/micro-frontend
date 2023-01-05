@@ -32,8 +32,8 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, AmountPayload, ModifyAmountPayload } from "./types";
 import { EditAmountAction, ModifyAmountAction, goBack } from "./actions";
-import { StepResponseObject } from "../../unlockLimit/unlock_limit/types";
-import { getActualLimit, getTotalLimit } from "../../unlockLimit/portfolio/actions";
+import { StepResponseObject } from "../../mfPledge/unlock_limit/types";
+import { getActualLimit, getTotalLimit } from "../../mfPledge/portfolio/actions";
 import { roundDownToNearestHundred } from "../../../configs/utils";
 
 export const template: (

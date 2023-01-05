@@ -1,6 +1,6 @@
 import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, CalendarProps, CalendarStateToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
 import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
-import { api } from "../../../configs/api";
+import { api, partnerApi } from "../../../configs/api";
 import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
 import { ROUTE } from "../../../routes";
 import _ from "lodash";
@@ -12,8 +12,9 @@ import { CalendarOnChange, goBack, onChangeInput, toggleCTA, triggerCTA } from "
 
 export const template: (
   stepper: StepperItem[],
-  isDisabled:string
-) => TemplateSchema = (stepper,isDisabled) => {
+  isDisabled:string,
+  stepper_data:any
+) => TemplateSchema = (stepper,isDisabled,stepper_data) => {
   return {
     layout: <Layout>{
       id: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
@@ -37,7 +38,7 @@ export const template: (
         title: "Create new applications",
         type: HeaderTypeTokens.verification,
         stepperProps: <StepperProps>{
-          data: stepper,
+          data: stepper_data,
           type: StepperTypeTokens.HORIZONTAL,
         },
         action: {
@@ -191,14 +192,38 @@ export const template: (
 }
 
 export const distBasicDetailsMF: PageType<any> = {
-  onLoad: async () => {
+  onLoad: async ({network}) => {
     const data = await SharedPropsService.getBasicData();
+    const applicationId = "";
+    const response = await network.post(
+        partnerApi.stepperData,
+        {},
+        { headers: await getAppHeader() }
+    );
+
+    let data1 = [];
+    let stepper_data = [];
+    Object.keys(response.data.partnerViewStepperMap).map(key=> {
+      const value = response.data.partnerViewStepperMap[key];
+      const stepData:any = new Object();
+      if(value.isEditable === true){
+        stepData.title = value.verticalDisplayName;
+        stepData.subTitle = value.verticalDescription;
+        stepData.id =value.order;
+        stepData.horizontalTitle = value.horizontalDisplayName;
+        stepData.status = value.status;
+        data1.push(stepData);
+      }
+      })
+      stepper_data = data1.sort(function (a, b) {
+        return a.id - b.id;
+      });
     let isDisabled = "";
     if(data.panNumber !== "" && data.mobileNumber !== "" && data.email !== ""){
       isDisabled = "true";
     }
     const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-    return Promise.resolve(template(stepper,isDisabled));
+    return Promise.resolve(template(stepper,isDisabled,stepper_data));
   },
   actions: {
     [ACTION.ENTER_DOB]: onChangeInput,

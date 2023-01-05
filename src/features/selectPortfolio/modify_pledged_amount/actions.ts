@@ -5,7 +5,7 @@ import { CtaCardProps, ListProps } from "@voltmoney/schema";
 import {
   customEditPortfolio,
   portfolioListDatastoreBuilder,
-} from "../../unlockLimit/portfolio/utils";
+} from "../../mfPledge/portfolio/utils";
 let amount: number = 0;
 
 export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (

@@ -13,7 +13,7 @@ import {
   IsinLTVMap,
   IsinNAVMap,
   StepResponseObject,
-} from "../../unlockLimit/unlock_limit/types";
+} from "../../mfPledge/unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { portfolioListDatastoreBuilder, togglePortfolio } from "./utils";
