@@ -6,7 +6,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
 import { StoreKey } from "./api";
 import { AssetRepositoryMap, AssetRepositoryType } from "./config";
-import {ImportScriptCustomCallbackType} from "@voltmoney/types";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -380,29 +379,3 @@ export const getParameters: (url: string) => {
   }
   return params;
 };
-
-export const getDigio:ImportScriptCustomCallbackType = (
-    successCB, failureCB
-) => {
-    const digioOptions = {
-      environment: 'sandbox',
-      callback: function (response: any) {
-        if (response.hasOwnProperty('error_code')) {
-          failureCB && failureCB(response)
-          return console.log('error occurred in process');
-        }
-        successCB && successCB(response)
-        console.log('Signing completed successfully');
-      },
-      logo: 'https://www.mylogourl.com/image.jpeg',
-      theme: {
-        primaryColor: '#AB3498',
-        secondaryColor: '#000000',
-      },
-      is_iframe: true,
-    }
-    //@ts-ignore
-    let digioObj = new Digio(digioOptions);
-    //@ts-ignore
-    window.digio = digioObj;
-}

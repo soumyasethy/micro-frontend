@@ -4,17 +4,17 @@ import { nextStepId } from "../../configs/utils";
 import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
-import { getAppHeader, ImportScriptSrc } from "../../configs/config";
+
+import { getAppHeader } from "../../configs/config";
 import { AnalyticsEventTracker } from "../../configs/constants";
 
 export const SplashAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { network, navigate, asyncStorage, importScript }
+  { network, navigate, asyncStorage }
 ): Promise<any> => {
   // const isSeen = await SharedPropsService.getOnboarding();
   // if (isSeen) {
-  importScript(ImportScriptSrc.DIGIO_SCRIPT)
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
   if (accessToken) {
     const body = {}; /*** NOT PASSING REF CODE HERE ***/
