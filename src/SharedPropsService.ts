@@ -186,7 +186,7 @@ async function setToken(access_token: string) {
   await AsyncStorage.setItem(StoreKey.accessToken, access_token);
 }
 
-export async function getToken() {
+async function getToken() {
   if (__isMock__) {
     return MockToken;
   }
