@@ -26,7 +26,9 @@ import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
 import { getParameters } from "../../configs/utils";
 
-const template: TemplateSchema = {
+const template: (setIsUserLoggedIn?: Function) => TemplateSchema = (
+  setIsUserLoggedIn
+) => ({
   layout: <Layout>{
     id: ROUTE.SPLASH_SCREEN,
     type: LAYOUTS.LIST,
@@ -56,10 +58,10 @@ const template: TemplateSchema = {
       },
     },
   },
-};
+});
 
 export const splashScreenMF: PageType<any> = {
-  onLoad: async (__, { ...props }) => {
+  onLoad: async ({...standardUtilities}, { setIsUserLoggedIn, ...props }) => {
     /*** Get all params sent via URL ****/
     //Example-1
     //http://localhost:3000/partner/dashboard/helloworld
@@ -88,15 +90,28 @@ export const splashScreenMF: PageType<any> = {
         await SharedPropsService.setAppPlatform(customPlatform);
       }
     }
+    setTimeout(
+      () => {},
+      await SplashAction(
+        {
+          type: ACTION.AUTH_NAV,
+          routeId: ROUTE.SPLASH_SCREEN,
+          payload: { setIsUserLoggedIn },
+        },
+        {},
+          standardUtilities
+      ),
+      250
+    );
 
-    return Promise.resolve(template);
+    return Promise.resolve(template(setIsUserLoggedIn));
   },
   actions: {
     [ACTION.AUTH_NAV]: SplashAction,
   },
-  action: {
-    type: ACTION.AUTH_NAV,
-    payload: {},
-  },
+  // action: {
+  //   type: ACTION.AUTH_NAV,
+  //   payload: {},
+  // },
   bgColor: "#1434CB",
 };
