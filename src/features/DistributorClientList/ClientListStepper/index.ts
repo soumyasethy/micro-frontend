@@ -63,7 +63,8 @@ export const template: (
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         { id: "topSpace0", type: WIDGET.SPACE },
-        { id: "stepper", type: WIDGET.STEPPER }
+        { id: "stepper", type: WIDGET.STEPPER },
+        {id:"continue",type:WIDGET.BUTTON, position:POSITION.ABSOLUTE_BOTTOM}
       ],
     },
     datastore: <Datastore>{
@@ -122,7 +123,17 @@ export const template: (
       stepper: <StepperProps>{
         type: StepperTypeTokens.DISTRIBUTOR,
         data:data
-      }
+      },
+      continue: <ButtonProps & WidgetProps>{
+        label: "Resume",
+        type: ButtonTypeTokens.LargeFilled,
+        width: ButtonWidthTypeToken.FULL,
+        action: {
+          type: ACTION.CTA,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
+          payload: {},
+        },
+      },
     }
   }
 }
@@ -141,7 +152,7 @@ export const DistributorClientListStepperMF: PageType<any> = {
       stepData.subTitle = value.verticalDescription;
       stepData.id =value.order;
       stepData.status = value.status;
-      stepData.statusText = value.isEditable;
+      //stepData.statusText = value.isEditable;
       data1.push(stepData);
       })
 
@@ -179,4 +190,5 @@ export const DistributorClientListStepperMF: PageType<any> = {
     [ACTION.CTA]: onClickCTA,
     [ACTION.GO_BACKAction]: goBackAction,
   },
+  clearPrevious: true,
 };

@@ -53,7 +53,7 @@ export const template: (
     // conditionDataKAMS: {},
     // conditionDataKARVY: {},
     //  camsFetches: {},
-    stepper: StepperItem[],
+    stepper: any,
     unlockedAmont: Number,
     stepResponseObject: StepResponseObject
 ) => TemplateSchema = (isDataUpdated, camsDate, camsAmount, camsPortfolio,
@@ -604,11 +604,18 @@ export const distributorPortfolioMF: PageType<any> = {
             }
             let isDataUpdated = "Data Exist";
          */
-        const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
-            (response) => ({
-              data: response,
-            })
-          );
+
+            const applicationid = await SharedPropsService.getApplicationId();
+              const pledgeLimitResponse = await network.get(
+                `${partnerApi.pledgeLimit}${applicationid}`,
+                { headers: await getAppHeader() }
+              );
+             
+        // const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
+        //     (response) => ({
+        //       data: response,
+        //     })
+        //   );
         // const pledgeLimitResponse = {
         //     "errorMessage": null,
         //     "status": "SUCCESS",
@@ -900,7 +907,20 @@ export const distributorPortfolioMF: PageType<any> = {
         //     camsFetches = pledgeLimitResponse.data.stepResponseObject.casFetchDates;
         //     isDataUpdated = "Data Exist";
         // }
-        const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
+       // const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
+      // const stepper = await SharedPropsService.getStepperData();
+       let data1 = [];
+       // let stepper_data = [];
+   
+       let stepper_data = await SharedPropsService.getStepperData();
+       stepper_data.forEach((item, index) => {
+         if (item.horizontalTitle === "Fetch Portfolio") {
+           item.status = "IN_PROGRESS";
+         }
+         data1.push(item);
+       })
+   
+       await SharedPropsService.setStepperData(data1);
         return Promise.resolve(
             //  template(availableCreditAmount, availableCAS, stepResponseObject)
             //  template(isDataUpdated, camsFetches, stepper,unlockedAmont,stepResponseObject)
@@ -908,7 +928,7 @@ export const distributorPortfolioMF: PageType<any> = {
             // template(isDataUpdated,conditionDataKAMS,conditionDataKARVY, stepper, unlockedAmont, stepResponseObject)
             template(isDataUpdated, camsDate, camsAmount, camsPortfolio,
                 karvyDate, karvyAmount, karvyPortfolio
-                , stepper, unlockedAmont, stepResponseObject)
+                , data1, unlockedAmont, stepResponseObject)
         );
     },
     actions: {

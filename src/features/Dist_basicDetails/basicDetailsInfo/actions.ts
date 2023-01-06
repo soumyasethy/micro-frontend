@@ -1,4 +1,4 @@
-import { ButtonProps, ButtonTypeTokens, IconTokens } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, CalendarProps, CalendarStateToken, IconTokens } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -19,6 +19,7 @@ export const CalendarOnChange: ActionFunction<InputPayload> = async (
   { setDatastore, ...props }
 ): Promise<any> => {
   dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
+  console.log("here");
   console.log(action.payload.value);
   if (
     panNumber &&
@@ -39,7 +40,7 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.log(action.payload.widgetId);
+  console.log("widget",action.payload.widgetId);
   switch (action.payload.widgetId) {
     case "panNumberInput": {
       panNumber = action.payload.value;
@@ -49,7 +50,26 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
       break;
     }
     case "calendarPicker": {
-      dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
+    
+      const todate = new Date(dob);
+     // const month = todate.getMonth();
+     console.log("payload",action.payload.value);
+      console.log("dob",dob);
+      const month = action.payload.value.substring(3,5);
+      const date = action.payload.value.substring(0,2);
+      console.log("month",month);
+      console.log("date",date);
+      if(parseInt(month) > 12 || parseInt(date) > 31){
+        await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "calendarPicker", <CalendarProps>{
+         state:CalendarStateToken.ERROR
+        })
+        dob = "";
+      }else{
+        await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "calendarPicker", <CalendarProps>{
+          state:CalendarStateToken.SUCCESS
+         })
+         dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
+      }
       break;
     }
     case "mobileNumberInput": {
@@ -132,6 +152,29 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
           targetRoute: ROUTE.DETAILS_CONFIRM,
         });
       }
+
+
+    let data1 = [];
+    let stepper_data = [];
+    Object.keys(response.data.partnerViewStepperMap).map(key=> {
+      const value = response.data.partnerViewStepperMap[key];
+      const stepData:any = new Object();
+      if(value.isEditable === true){
+       
+          stepData.title = value.verticalDisplayName;
+          stepData.subTitle = value.verticalDescription;
+          stepData.id = value.order;
+          stepData.horizontalTitle = value.horizontalDisplayName;
+          stepData.status = value.status;
+      
+       
+        data1.push(stepData);
+      }
+      })
+      stepper_data = data1.sort(function (a, b) {
+        return a.id - b.id;
+      });
+      await SharedPropsService.setStepperData(stepper_data);
     }
 
   }

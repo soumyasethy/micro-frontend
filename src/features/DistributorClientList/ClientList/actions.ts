@@ -1,4 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
+import { partnerApi } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { navigate } from "../../afterUnlock/dashboard/actions";
@@ -62,8 +64,33 @@ export const onManageCTA: ActionFunction<ClientInProgressPayloadType> = async (
 export const onClickCTA: ActionFunction<any> = async (
     action,
     _datastore,
-    { setDatastore,navigate }
+    { network,setDatastore,navigate }
 ): Promise<any> => {
-   await navigate(ROUTE.BASIC_DETAILS_START);
+    const applicationId = "";
+        const response = await network.post(
+            partnerApi.stepperData,
+            {},
+            { headers: await getAppHeader() }
+        );
+
+        let data1 = [];
+        let data = [];
+        Object.keys(response.data.partnerViewStepperMap).map(key=> {
+          const value = response.data.partnerViewStepperMap[key];
+          const stepData:any = new Object();
+          if(value.isEditable === true){
+            stepData.title = value.verticalDisplayName;
+            stepData.subTitle = value.verticalDescription;
+            stepData.id =value.order;
+            stepData.status = value.status;
+            data1.push(stepData);
+          }
+          })
+          data = data1.sort(function (a, b) {
+            return a.id - b.id;
+          });
+
+          await SharedPropsService.setStepperData(data);
+            await navigate(ROUTE.BASIC_DETAILS_START);
  // await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
 };

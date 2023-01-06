@@ -25,6 +25,7 @@ export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, 
   await navigate(ROUTE.PORTFOLOIO_START,{
     stepResponseObject: action.payload.value,
   });
+  
   // await navigate(ROUTE.PORTFOLOIO_START,{
   //   amount:action.payload.value
   // });

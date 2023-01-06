@@ -58,15 +58,16 @@ import {
 import { BAVVerifyActionPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
 import { horizontalDistributorStepperRepo } from "../../../configs/utils";
-import { RegexConfig } from "../../../configs/config";
+import { getAppHeader, RegexConfig } from "../../../configs/config";
+import { partnerApi } from "../../../configs/api";
 
 export const template: (
   bankCode: string,
   bankName: string,
   accountNumber: string,
-  stepper:StepperItem[],
-  isDisabled:string,
-) => TemplateSchema = (bankCode, bankName="BOB", accountNumber,stepper,isDisabled) => ({
+  stepper_data: any,
+  isDisabled: string,
+) => TemplateSchema = (bankCode, bankName = "BOB", accountNumber, stepper_data, isDisabled) => ({
   layout: <Layout>{
     id: ROUTE.DIST_BANK_ACCOUNT_ADD,
     type: LAYOUTS.LIST,
@@ -107,7 +108,7 @@ export const template: (
       isBackButton: true,
       type: HeaderTypeTokens.verification,
       stepperProps: <StepperProps>{
-        data: stepper,
+        data: stepper_data,
         type: StepperTypeTokens.HORIZONTAL,
       },
       title: "Create new application",
@@ -116,11 +117,11 @@ export const template: (
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
         payload: {},
       },
-      
+
     },
     // space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     cardStack: <MessageProps>{
-      customLabel:<TypographyProps>{
+      customLabel: <TypographyProps>{
         label: "Bank account holder name & details must match with investor",
         color: ColorTokens.Grey_Charcoal,
         lineHeight: 28,
@@ -133,7 +134,7 @@ export const template: (
       labelColor: ColorTokens.Grey_Charcoal,
       bgColor: ColorTokens.Grey_Milk,
       alignText: MessageAlignType.FLEX_START,
-     // alignText:"flex-start",
+      // alignText:"flex-start",
       icon: <IconProps>{
         name: IconTokens.Info,
         color: ColorTokens.Grey_Smoke
@@ -155,7 +156,7 @@ export const template: (
         },
       },
     },
-    
+
     bankInput: <TextInputProps & WidgetProps>{
       isFocus: false,
       type: InputTypeToken.DEFAULT,
@@ -163,12 +164,12 @@ export const template: (
       title: "Bank Name",
       placeholder: "Select bank",
       keyboardType: KeyboardTypeToken.email,
-      value:`${bankName}`,
+      value: `${bankName}`,
       caption: { success: "", error: "" },
       width: TextInputTypeToken.FULL,
       action: {
         type: ACTION.ONCHANGE_BANK_DETAILS,
-        payload: <InputPayload>{ value: "", widgetId:"bankInput" },
+        payload: <InputPayload>{ value: "", widgetId: "bankInput" },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
       onPressAction: {
@@ -180,7 +181,7 @@ export const template: (
         },
       },
     },
-   
+
     bankSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
     accountInput: <TextInputProps & WidgetProps>{
       isFocus: false,
@@ -189,28 +190,28 @@ export const template: (
       placeholder: "Account number",
       caption: { success: "", error: "" },
       keyboardType: KeyboardTypeToken.email,
-      secureTextEntry:true,
+      secureTextEntry: true,
       action: {
         type: ACTION.ONCHANGE_ACCOUNT_NUMBER,
-        payload: <InputPayload>{ value:"", widgetId:"accountInput" },
+        payload: <InputPayload>{ value: "", widgetId: "accountInput" },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
     },
     IFSCSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     confirmAccountInput: <TextInputProps & WidgetProps>{
-     // regex: RegexConfig.MOBILE,
+      // regex: RegexConfig.MOBILE,
       type: InputTypeToken.DEFAULT,
-    //  secureTextEntry:{true},
-      secureTextEntry:false,
+      //  secureTextEntry:{true},
+      secureTextEntry: false,
       title: "Confirm Account Number",
       placeholder: "Confirm Account number",
-      caption: { success: "", error: "Account number didn’t match" }, 
-      successAction:{
+      caption: { success: "", error: "Account number didn’t match" },
+      successAction: {
         // type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
         // routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
         // payload:  <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
       },
-      errorAction:{
+      errorAction: {
         // type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
         // routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
         // payload:  <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
@@ -238,7 +239,7 @@ export const template: (
         },
       },
     },
-    
+
     IFSCInput: <TextInputProps & WidgetProps>{
       isFocus: false,
       type: InputTypeToken.DEFAULT,
@@ -250,7 +251,7 @@ export const template: (
       width: TextInputTypeToken.FULL,
       action: {
         type: ACTION.ONCHANGE_IFSC_DETAILS,
-        payload: <InputPayload>{ value: "",widgetId:"IFSCInput" },
+        payload: <InputPayload>{ value: "", widgetId: "IFSCInput" },
         routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
       },
       onPressAction: {
@@ -264,7 +265,7 @@ export const template: (
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Save & Continue",
-      type: `${isDisabled}` ? ButtonTypeTokens.LargeFilled:ButtonTypeTokens.LargeOutline,
+      type: `${isDisabled}` ? ButtonTypeTokens.LargeFilled : ButtonTypeTokens.LargeOutline,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.SAVE,
@@ -289,30 +290,59 @@ export const template: (
 });
 
 export const distBankAccountAddMF: PageType<any> = {
-  onLoad: async ({ }, { }) => {
+  onLoad: async ({ network }, { }) => {
     const bankDetails = await SharedPropsService.getBankData();
     const name = await (await SharedPropsService.getBankData()).bankName;
     const bankIfsc = await (await SharedPropsService.getBankData()).bankIfsc;
     const bankAccountNumber = await (await SharedPropsService.getBankData()).accountNumber;
     const confirmAccountNumber = await (await SharedPropsService.getBankData()).confirmAccountNumber;
     let isDisabled = "";
-    if(name !== "" && bankIfsc !== "" && bankAccountNumber !== "" && confirmAccountNumber !== ""){
+    if (name !== "" && bankIfsc !== "" && bankAccountNumber !== "" && confirmAccountNumber !== "") {
       isDisabled = "true";
     }
-    
     const bankCode = await SharedPropsService.getBankCode();
     const bankName = await SharedPropsService.getBankName();
     const accountNumber = await SharedPropsService.getAccountNumber();
-    const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-    return Promise.resolve(template(bankCode, bankName, accountNumber,stepper,isDisabled));
+    // const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
+    // const applicationId = "";
+    // const response = await network.post(
+    //     partnerApi.stepperData,
+    //     {},
+    //     { headers: await getAppHeader() }
+    // );
+
+     let data1 = [];
+    // let stepper_data = [];
+
+    let stepper_data = await SharedPropsService.getStepperData();
+    stepper_data.forEach((item, index) => {
+      if (item.horizontalTitle === "Bank details") {
+        item.status = "IN_PROGRESS";
+      }
+      data1.push(item);
+    })
+
+    await SharedPropsService.setStepperData(data1);
+
+    //     data1.push(stepData);
+    //   }
+    //   })
+    //   stepper_data = data1.sort(function (a, b) {
+    //     return a.id - b.id;
+    //   });
+
+
+
+
+    return Promise.resolve(template(bankCode, bankName, accountNumber, data1, isDisabled));
   },
   actions: {
     [ACTION.NAVIGATION_SEARCH_IFSC]: NavigationSearchIFSCAction,
     [ACTION.NAVIGATION_SEARCH_BANK]: NavigationSearchBankAction,
     [ACTION.ONCHANGE_BANK_DETAILS]: onChangeInput,
     [ACTION.ONCHANGE_IFSC_DETAILS]: onChangeInput,
-   [ACTION.ONCHANGE_ACCOUNT_NUMBER]: onChangeInput,
-   [ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER]: onChangeInput,
+    [ACTION.ONCHANGE_ACCOUNT_NUMBER]: onChangeInput,
+    [ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER]: onChangeInput,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
     [ACTION.TRIGGER_CTA]: skipBankVerification,

@@ -1,5 +1,6 @@
+import { ActionFunction } from "@voltmoney/types";
 import { partnerApi } from "../../configs/api";
-import { defaultHeaders } from "../../configs/config";
+import { defaultHeaders, getAppHeader } from "../../configs/config";
 import SharedPropsService from "../../SharedPropsService";
 
 export const fetchPledgeLimitRepo = async () => {
@@ -15,3 +16,20 @@ export const fetchPledgeLimitRepo = async () => {
       .then((response) => response.json())
       .catch((error) => console.log("error", error));
   };
+
+  // export const fetchPledgeLimitRepo = async (
+  //   action,
+  //   { network}
+  // ): Promise<any> => {
+  //   const accountId = await SharedPropsService.getAccountId();
+  //   const applicationid = await SharedPropsService.getApplicationId();
+  //   const response = await network.get(
+  //     `${partnerApi.pledgeLimit}${applicationid}`,
+  //     { headers: await getAppHeader() }
+  //   );
+  //   if (response.status === 200) {
+  //    return response.json();
+  //   }
+  
+  // };
+  

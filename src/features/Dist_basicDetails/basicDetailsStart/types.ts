@@ -17,3 +17,65 @@ export enum ACTION {
     applicationId: string;
   };
   
+
+  export type StepperData = {
+      borrowerViewStepperMap: {
+        additionalProp1: {
+          horizontalDisplayName: string,
+          isEditable: boolean,
+          message: string,
+          order: number,
+          status: string,
+          verticalDescription: string,
+          verticalDisplayName: string
+        },
+        additionalProp2: {
+          horizontalDisplayName: string,
+          isEditable: boolean,
+          message: string,
+          order: number,
+          status: string,
+          verticalDescription: string,
+          verticalDisplayName: string
+        },
+        additionalProp3: {
+          horizontalDisplayName: string,
+          isEditable: boolean,
+          message: string,
+          order: number,
+          status: string,
+          verticalDescription: string,
+          verticalDisplayName: string
+        }
+      },
+      partnerViewStepperMap: {
+        additionalProp1: {
+          horizontalDisplayName: string,
+          isEditable: boolean,
+          message: string,
+          order: number,
+          status: string,
+          verticalDescription: string,
+          verticalDisplayName: string
+        },
+        additionalProp2: {
+          horizontalDisplayName: string,
+          isEditable: boolean,
+          message: string,
+          order: number,
+          status: string,
+          verticalDescription: string,
+          verticalDisplayName: string
+        },
+        additionalProp3: {
+          horizontalDisplayName: string,
+          isEditable: boolean,
+          message: string,
+          order: number,
+          status: string,
+          verticalDescription: string,
+          verticalDisplayName: string
+        }
+      }
+    
+  }

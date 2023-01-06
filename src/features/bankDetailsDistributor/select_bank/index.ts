@@ -62,7 +62,7 @@ export const template: (BanksRepo: {
         title: "Select your bank",
         action: {
           type: ACTION.GO_BACK,
-          routeId: ROUTE.BANK_SELECT,
+          routeId: ROUTE.DIST_BANK_SELECT,
           payload: {},
         },
       },

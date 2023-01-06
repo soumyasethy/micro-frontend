@@ -16,7 +16,32 @@ export const Go_Next_Action: ActionFunction<{ stepId?: string }> = async (
     { navigate }
   ): Promise<any> => {
     console.warn("**** NextStep Action triggered ****", action);
+   // 
+    const stepper = await SharedPropsService.getStepperData();
     await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
+    // stepper.forEach((item,index) => {
+    //   if(item.status === "NOT_STARTED"){
+    //     if(item.title == "Basic Details"){
+    //       navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
+    //       return;
+    //     }
+    //     if(item.title == "Bank Details"){
+    //       navigate(ROUTE.DIST_BANK_ACCOUNT_ADD);
+    //       return;
+    //     }
+    //     if(item.title == "Fetch Portfolio"){
+    //       // const account_id = await SharedPropsService.getAccountId();
+    //       // navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
+    //       return;
+    //     }
+    //     if(item.title == "Select Portfolio"){
+    //        //navigate(ROUTE.PORTFOLOIO_START);
+    //        return;
+    //     } 
+    //   }
+    // });
+
+
     // const routeObj = action.payload.stepId
     //   ? await nextStepCredStepper(action.payload.stepId)
     //   : await nextStepCredStepper();

@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
+import { StepperData } from "./features/Dist_basicDetails/basicDetailsStart/types";
 
 export enum USERTYPE {
   BORROWER = "BORROWER",
@@ -62,6 +63,7 @@ type GlobalProps = {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
   };
+  stepperData?:any
 };
 
 let _globalProps: GlobalProps = {
@@ -121,7 +123,16 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true,
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
   },
+  stepperData: {}
 };
+
+export function setStepperData(StepperData) {
+  _globalProps.stepperData = StepperData;
+}
+export function getStepperData(): any {
+  return _globalProps.stepperData;
+}
+
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
@@ -414,4 +425,6 @@ export default {
   getConfig,
   setAuthCASResponse,
   getAuthCASResponse,
+  setStepperData,
+  getStepperData
 };
