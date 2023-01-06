@@ -13,6 +13,11 @@ import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
 import _ from "lodash";
 
+export enum USERTYPE {
+  BORROWER = "BORROWER",
+  PARTNER = "PARTNER"
+}
+
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
   isPledgedRequired?: boolean;
@@ -26,10 +31,6 @@ export enum BUILD_TYPE {
   PARTNER_STAGING = "PARTNER_STAGING",
 }
 
-export enum USERTYPE {
-  BORROWER = "BORROWER",
-  PARTNER = "PARTNER"
-}
 
 type GlobalProps = {
   buildType: BUILD_TYPE;
@@ -71,7 +72,12 @@ type GlobalProps = {
   pconfirmAccNo?:string;
   pbankIfsc?:string;
   bankData :BankData;
-  basicData: BasicData
+
+  basicData: BasicData;
+
+  assetRepositoryType?: AssetRepositoryType;
+
+  stepperData?:any
 };
 
 let _globalProps: GlobalProps = {
@@ -141,8 +147,17 @@ let _globalProps: GlobalProps = {
     panNumber:"",
     mobileNumber:"",
     email:""
-  }
+  },
+  stepperData: {}
 };
+
+export function setStepperData(StepperData) {
+  _globalProps.stepperData = StepperData;
+}
+export function getStepperData(): any {
+  return _globalProps.stepperData;
+}
+
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
@@ -478,5 +493,7 @@ export default {
   setBankData,
   getBankData,
   setBasicData,
-  getBasicData
+  getBasicData,
+  setStepperData,
+  getStepperData
 };

@@ -51,7 +51,7 @@ import { getAppHeader } from "../../../configs/config";
   
   export const template: (
     stepResponseObject: StepResponseObject,
-    stepper: StepperItem[]
+    stepper: any
   ) => Promise<TemplateSchema> = async (
     stepResponseObject,
     stepper
@@ -186,10 +186,22 @@ import { getAppHeader } from "../../../configs/config";
       // );
       await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
     // const stepResponseObject = response.data.stepResponseObject;
-      const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
+    //  const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
+      let data1 = [];
+      // let stepper_data = [];
+  
+      let stepper_data = await SharedPropsService.getStepperData();
+      stepper_data.forEach((item, index) => {
+        if (item.horizontalTitle === "Select Portfolio") {
+          item.status = "IN_PROGRESS";
+        }
+        data1.push(item);
+      })
+  
+      await SharedPropsService.setStepperData(data1);
       return Promise.resolve(await template(
         stepResponseObject,
-        stepper
+        data1
         ));
     },
     actions: {

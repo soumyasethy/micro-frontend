@@ -41,10 +41,11 @@ import {
 import { horizontalDistributorStepperRepo } from "../../../configs/utils";
 import { goBackACtion, onModify, onSave, onShare, onSkip } from "./actions";
 import { LimitPayload, StepResponseObject } from "../../fetchDistributorPortfolio/types";
+import SharedPropsService from "../../../SharedPropsService";
 
 
 export const template: (
-    stepper: StepperItem[],
+    stepper:any,
     stepResponseObject:StepResponseObject,
     amount: string
 ) => TemplateSchema = (stepper,stepResponseObject, amount) => ({
@@ -261,8 +262,20 @@ export const portfolioStartMF: PageType<any> = {
         console.log("stepResponseObject",stepResponseObject);
         const amount = stepResponseObject.availableCreditAmount;
         //const amount = "30000";
-        const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-        return Promise.resolve(template(stepper, stepResponseObject,
+        //const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
+        let data1 = [];
+        // let stepper_data = [];
+    
+        let stepper_data = await SharedPropsService.getStepperData();
+        stepper_data.forEach((item, index) => {
+          if (item.horizontalTitle === "Select Portfolio") {
+            item.status = "IN_PROGRESS";
+          }
+          data1.push(item);
+        })
+    
+        await SharedPropsService.setStepperData(data1);
+        return Promise.resolve(template(data1, stepResponseObject,
             amount
             ));
     },

@@ -207,17 +207,27 @@ export const distBasicDetailsMF: PageType<any> = {
       const value = response.data.partnerViewStepperMap[key];
       const stepData:any = new Object();
       if(value.isEditable === true){
-        stepData.title = value.verticalDisplayName;
-        stepData.subTitle = value.verticalDescription;
-        stepData.id =value.order;
-        stepData.horizontalTitle = value.horizontalDisplayName;
-        stepData.status = value.status;
+        if (value.horizontalDisplayName === "Basic Details") {
+          stepData.title = value.verticalDisplayName;
+          stepData.subTitle = value.verticalDescription;
+          stepData.horizontalTitle = value.horizontalDisplayName;
+          stepData.id = value.order;
+          stepData.status = "IN_PROGRESS";
+      } else {
+          stepData.title = value.verticalDisplayName;
+          stepData.subTitle = value.verticalDescription;
+          stepData.id = value.order;
+          stepData.horizontalTitle = value.horizontalDisplayName;
+          stepData.status = value.status;
+      }
+       
         data1.push(stepData);
       }
       })
       stepper_data = data1.sort(function (a, b) {
         return a.id - b.id;
       });
+      await SharedPropsService.setStepperData(stepper_data);
     let isDisabled = "";
     if(data.panNumber !== "" && data.mobileNumber !== "" && data.email !== ""){
       isDisabled = "true";

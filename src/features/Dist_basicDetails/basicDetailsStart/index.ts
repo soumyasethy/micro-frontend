@@ -35,6 +35,7 @@ import { goBack, Go_Next_Action } from "./action";
 import { distributorStepperRepo, stepperRepo } from "../../../configs/utils";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
     data: any
@@ -118,29 +119,32 @@ export const template: (
 
 export const basicDetailsStartMF: PageType<any> = {
     onLoad: async ({ network }) => {
-        const applicationId = "";
-        const response = await network.post(
-            partnerApi.stepperData,
-            {},
-            { headers: await getAppHeader() }
-        );
+        // const applicationId = "";
+        // const response = await network.post(
+        //     partnerApi.stepperData,
+        //     {},
+        //     { headers: await getAppHeader() }
+        // );
 
-        let data1 = [];
-        let data = [];
-        Object.keys(response.data.partnerViewStepperMap).map(key=> {
-          const value = response.data.partnerViewStepperMap[key];
-          const stepData:any = new Object();
-          if(value.isEditable === true){
-            stepData.title = value.verticalDisplayName;
-            stepData.subTitle = value.verticalDescription;
-            stepData.id =value.order;
-            stepData.status = value.status;
-            data1.push(stepData);
-          }
-          })
-          data = data1.sort(function (a, b) {
-            return a.id - b.id;
-          });
+        // let data1 = [];
+        // let data = [];
+        // Object.keys(response.data.partnerViewStepperMap).map(key=> {
+        //   const value = response.data.partnerViewStepperMap[key];
+        //   const stepData:any = new Object();
+        //   if(value.isEditable === true){
+        //     stepData.title = value.verticalDisplayName;
+        //     stepData.subTitle = value.verticalDescription;
+        //     stepData.id =value.order;
+        //     stepData.status = value.status;
+        //     data1.push(stepData);
+        //   }
+        //   })
+        //   data = data1.sort(function (a, b) {
+        //     return a.id - b.id;
+        //   });
+
+        //   await SharedPropsService.setStepperData(data);
+        const data = await SharedPropsService.getStepperData();
        // return Promise.resolve(template(await distributorStepperRepo(data)));
         const templateX = await template( data);
         return Promise.resolve(templateX);

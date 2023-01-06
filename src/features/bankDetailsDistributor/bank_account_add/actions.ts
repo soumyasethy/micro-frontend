@@ -75,6 +75,30 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
           },
         },
       });
+
+
+    let data1 = [];
+    let stepper_data = [];
+    Object.keys(response.data.partnerViewStepperMap).map(key=> {
+      const value = response.data.partnerViewStepperMap[key];
+      const stepData:any = new Object();
+      if(value.isEditable === true){
+       
+          stepData.title = value.verticalDisplayName;
+          stepData.subTitle = value.verticalDescription;
+          stepData.id = value.order;
+          stepData.horizontalTitle = value.horizontalDisplayName;
+          stepData.status = value.status;
+      
+       
+        data1.push(stepData);
+      }
+      })
+      stepper_data = data1.sort(function (a, b) {
+        return a.id - b.id;
+      });
+      await SharedPropsService.setStepperData(stepper_data);
+
     }
       
   })
@@ -83,21 +107,7 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
   });
 
 
-  const accountId = (await SharedPropsService.getUser())
-  .linkedPartnerAccounts[0].accountId;
 
-
-const responses = await network
-  .post(
-    `${partnerApi.customer}${accountId}${'/customer'}`,
-    {
-      email: "ana@gmail.com",
-      panNumber: "HUOPK5622R",
-      phoneNumber: `+917011791466`,
-      dob: "857154600000"
-    },
-    { headers: await getAppHeader() }
-  )
 await setDatastore(action.routeId, "continue", <ButtonProps>{
   label: "Continue",
   type: ButtonTypeTokens.LargeFilled,
@@ -177,9 +187,10 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
       break;
     }
     case "confirmAccountInput": {
-      confirmAccountNumber = action.payload.value;
+      let confirmAccountNumbers = action.payload.value;
+      
       const bank: BankData = await SharedPropsService.getBankData();
-      bank.confirmAccountNumber = confirmAccountNumber;
+      
       await SharedPropsService.setBankData(bank);
       const acc_regex = bankAccountNumber;
       await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
@@ -188,14 +199,18 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
       await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
         charLimit:bankAccountNumber.length
       });
-      if(confirmAccountNumber === bankAccountNumber){
+      if(confirmAccountNumbers === bankAccountNumber){
          await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
             state: InputStateToken.SUCCESS,
           });
+          confirmAccountNumber = action.payload.value;
+          bank.confirmAccountNumber = confirmAccountNumber;
        }else{
         await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
           state: InputStateToken.ERROR,
         });
+        bank.confirmAccountNumber = "";
+        confirmAccountNumber = "";
        }
       break;
     }
