@@ -1,7 +1,7 @@
 import { ButtonProps, IconTokens } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
 import { api } from "../../../configs/api";
-import { defaultHeaders } from "../../../configs/config";
+import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { AlertNavProps } from "../../popup_loader/types";
@@ -21,14 +21,52 @@ export const getURL: ActionFunction<transactionPayload> = async (
   };
   const accountId = (await SharedPropsService.getUser())
     .linkedBorrowerAccounts[0].accountId;
-  const url_data = await fetch(`${api.pdfLink}${accountId}`, requestOptions)
-    .then((response) => response.json())
+  await fetch(`${api.pdfEmail}${accountId}`, requestOptions)
+    .then((response) => {
+      response.json();
+      if (response.status === 200) {
+        setDatastore(action.routeId, "continue", <ButtonProps>{
+          loading: false,
+        });
+        showPopup({
+          autoTriggerTimerInMilliseconds: APP_CONFIG.MODAL_TRIGGER_TIMEOUT,
+          type: "SUCCESS",
+          title: "Email sent successfully",
+          subTitle: "Transaction details have been sent to your email address.",
+          ctaLabel: "Continue",
+          ctaAction: {
+            type: ACTION.MENU,
+            routeId: ROUTE.TRANSACTIONS,
+            payload: {},
+          },
+          primary: false,
+        });
+      } else {
+        setDatastore(action.routeId, "continue", <ButtonProps>{
+          loading: false,
+        });
+        showPopup({
+          autoTriggerTimerInMilliseconds: APP_CONFIG.MODAL_TRIGGER_TIMEOUT,
+          type: "FAILED",
+          title: "Email sent unsuccessfully",
+          subTitle: "Transaction details were not sent to your email address.",
+          ctaLabel: "Try again later",
+          ctaAction: {
+            type: ACTION.MENU,
+            routeId: ROUTE.TRANSACTIONS,
+            payload: {},
+          },
+          primary: false,
+        });
+      }
+    })
     .catch((error) => async () => {
       console.log("error", error);
       await setDatastore(action.routeId, "continue", <ButtonProps>{
         loading: false,
       });
       showPopup({
+        autoTriggerTimerInMilliseconds: APP_CONFIG.MODAL_TRIGGER_TIMEOUT,
         type: "FAILED",
         title: "Email sent unsuccessfully",
         subTitle: "Transaction details were not sent to your email address.",
@@ -42,34 +80,19 @@ export const getURL: ActionFunction<transactionPayload> = async (
       });
     });
 
-  const image = await fetch(`${url_data[0].documentPath}`);
-  const imageBlog = await image.blob();
-  const imageURL = URL.createObjectURL(imageBlog);
+  // const image = await fetch(`${url_data[0].documentPath}`);
+  // const imageBlog = await image.blob();
+  // const imageURL = URL.createObjectURL(imageBlog);
 
-  const anchor = document.createElement("a");
-  anchor.href = imageURL;
-  anchor.download = "voltMoney_transaction";
+  // const anchor = document.createElement("a");
+  // anchor.href = imageURL;
+  // anchor.download = "voltMoney_transaction";
 
-  document.body.appendChild(anchor);
-  anchor.click();
-  document.body.removeChild(anchor);
+  // document.body.appendChild(anchor);
+  // anchor.click();
+  // document.body.removeChild(anchor);
 
-  URL.revokeObjectURL(imageURL);
-  await setDatastore(action.routeId, "continue", <ButtonProps>{
-    loading: false,
-  });
-  showPopup({
-    type: "SUCCESS",
-    title: "Email sent successfully",
-    subTitle: "Transaction details have been sent to your email address.",
-    ctaLabel: "Continue",
-    ctaAction: {
-      type: ACTION.MENU,
-      routeId: ROUTE.TRANSACTIONS,
-      payload: {},
-    },
-    primary: false,
-  });
+  // URL.revokeObjectURL(imageURL);
 };
 
 export const navigation: ActionFunction<NavPayload> = async (
@@ -86,7 +109,7 @@ export const navigation: ActionFunction<NavPayload> = async (
         type: "DEFAULT",
         iconName: IconTokens.Sound,
         title: "Coming soon",
-        subTitle: '',
+        subTitle: "",
         ctaLabel: "Got It",
         ctaAction: {
           type: ACTION.MENU,
@@ -102,7 +125,7 @@ export const navigation: ActionFunction<NavPayload> = async (
         type: "DEFAULT",
         iconName: IconTokens.Sound,
         title: "Coming soon",
-        subTitle: '',
+        subTitle: "",
         ctaLabel: "Got It",
         ctaAction: {
           type: ACTION.MENU,
@@ -112,7 +135,6 @@ export const navigation: ActionFunction<NavPayload> = async (
       },
     });
   }
-
 };
 
 export const goBack: ActionFunction<{}> = async (

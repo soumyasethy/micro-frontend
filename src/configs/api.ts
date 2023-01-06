@@ -51,4 +51,5 @@ export const api = {
   pdfLink: `${config.URL}/app/borrower/lms/transactions/`,
   kycDocument: `${config.URL}/app/borrower/application/kyc/document/`,
   documentValidate: `${config.URL}/app/borrower/application/kyc/document/validate/`,
+  pdfEmail: `${config.URL}/app/borrower/lms/transactions/email/`
 };
