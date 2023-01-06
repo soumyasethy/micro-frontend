@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
 import { StoreKey } from "./api";
 import { AssetRepositoryMap, AssetRepositoryType } from "./config";
+import {ImportScriptCustomCallbackType} from "@voltmoney/types";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -218,8 +219,8 @@ export const nextStepId = async (
     if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
       // ***  Comment Email Verify FLow since google login is not working ***//
       return {
-        routeId: ROUTE.EMAIL_VERIFY,
-        // routeId: ROUTE.ENTER_EMAIL,
+        // routeId: ROUTE.EMAIL_VERIFY,
+        routeId: ROUTE.ENTER_EMAIL,
         params: {
           applicationId: user.linkedBorrowerAccounts[0].accountId,
         },
@@ -245,8 +246,8 @@ export const nextStepId = async (
       };
     } else if (currentStepId === ROUTE.MF_PLEDGE_PORTFOLIO) {
       const isPledgeFirstTime = await SharedPropsService.isPledgeFirstTime();
-      console.warn("*** isPledgeFirstTime", isPledgeFirstTime);
-      if (isPledgeFirstTime) {
+      if (!isPledgeFirstTime) {
+        await SharedPropsService.setPledgeFirstTime(true);
         return {
           routeId: ROUTE.CHECKING_LIMIT,
           params: {},
@@ -379,3 +380,29 @@ export const getParameters: (url: string) => {
   }
   return params;
 };
+
+export const getDigio:ImportScriptCustomCallbackType = (
+    successCB, failureCB
+) => {
+    const digioOptions = {
+      environment: 'sandbox',
+      callback: function (response: any) {
+        if (response.hasOwnProperty('error_code')) {
+          failureCB && failureCB(response)
+          return console.log('error occurred in process');
+        }
+        successCB && successCB(response)
+        console.log('Signing completed successfully');
+      },
+      logo: 'https://www.mylogourl.com/image.jpeg',
+      theme: {
+        primaryColor: '#AB3498',
+        secondaryColor: '#000000',
+      },
+      is_iframe: true,
+    }
+    //@ts-ignore
+    let digioObj = new Digio(digioOptions);
+    //@ts-ignore
+    window.digio = digioObj;
+}
