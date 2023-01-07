@@ -21,7 +21,6 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
-        { id: "topSpace0", type: WIDGET.SPACE },
         { id: "topSpace1", type: WIDGET.SPACE },
         { id: "mobileNumberInput", type: WIDGET.INPUT },
         { id: "space2", type: WIDGET.SPACE },
@@ -47,7 +46,7 @@ export const template: (
           payload: {},
         },
       },
-      topSpace0: <SpaceProps>{ size: SizeTypeTokens.XXL },
+      //topSpace0: <SpaceProps>{ size: SizeTypeTokens.XXL },
       topSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
       panNumberInput: <TextInputProps & WidgetProps>{
         regex: RegexConfig.PAN,

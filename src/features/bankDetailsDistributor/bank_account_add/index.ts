@@ -78,7 +78,7 @@ export const template: (
         position: POSITION.ABSOLUTE_TOP,
       },
       {
-        id: "cardStack", type: WIDGET.MESSAGE, position: POSITION.STICKY_TOP, padding: {
+        id: "cardStack", type: WIDGET.MESSAGE, position: POSITION.ABSOLUTE_TOP, padding: {
           left: 0, right: 0, top: 0
         }
       },
@@ -140,7 +140,7 @@ export const template: (
         color: ColorTokens.Grey_Smoke
       }
     },
-    accountSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+    accountSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
     bankInputStack: <StackProps & WidgetProps>{
       width: StackWidth.FULL,
       type: StackType.column,

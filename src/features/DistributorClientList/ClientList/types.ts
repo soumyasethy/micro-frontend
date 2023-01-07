@@ -12,7 +12,9 @@ export type ClientPendingPayloadType = {
   name: string,
   steps: any,
   applicationId: string,
-  data:any
+  data:any,
+  totalSteps:string,
+  completedSteps:string
 }
 
 export type ClientInProgressPayloadType = {

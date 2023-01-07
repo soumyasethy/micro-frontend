@@ -162,6 +162,9 @@ export const goNext: ActionFunction<any> = async (
   { setDatastore, navigate }
 ): Promise<any> => {
   console.log("here");
+  await setDatastore(ROUTE.OTP_AUTH_CAS, "input", <TextInputProps>{
+      state: InputStateToken.DEFAULT,
+    });
   await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, "fetchCTA", <ButtonProps>{
     label: "Get my portfolio",
     labelColor: ColorTokens.White,

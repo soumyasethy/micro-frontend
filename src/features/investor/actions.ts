@@ -53,4 +53,8 @@ export const copyToClipboard: ActionFunction<LinkPayload> = async (
   clipboard.set(action.payload.value);
 };
 
+export const onClient: ActionFunction<{}> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
+  await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
+};
+
 
