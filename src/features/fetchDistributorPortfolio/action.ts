@@ -22,10 +22,24 @@ import { navigate } from "../afterUnlock/dashboard/actions";
 
 
 export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
+ 
+  
+  const response = await SharedPropsService.getStepperData();
+  let data1 = [];
+  let stepper_data = [];
+  response.forEach((item,index) => {
+    if(item.horizontalDisplayName === "Fetch Portfolio"){
+      item.status = "COMPLETED";
+    }
+    data1.push(item);
+  });
+  await SharedPropsService.setStepperData(data1);
   await navigate(ROUTE.PORTFOLOIO_START,{
     stepResponseObject: action.payload.value,
   });
-  
+
+
+
   // await navigate(ROUTE.PORTFOLOIO_START,{
   //   amount:action.payload.value
   // });
@@ -54,7 +68,7 @@ export const goCamsNext: ActionFunction<{}> = async (action, _datastore, { navig
   );
   if (response.status === 200) {
     await SharedPropsService.setPartnerUser({
-      name: response.data.phoneNumber,
+      name: response.data.name,
       panNumber: response.data.panNumber,
       phoneNumber: response.data.phoneNumber,
       emailId: response.data.emailId
@@ -79,7 +93,7 @@ export const goKarvyNext: ActionFunction<{}> = async (action, _datastore, { navi
   );
   if (response.status === 200) {
     await SharedPropsService.setPartnerUser({
-      name: response.data.phoneNumber,
+      name: response.data.name,
       panNumber: response.data.panNumber,
       phoneNumber: response.data.phoneNumber,
       emailId: response.data.emailId
@@ -103,7 +117,7 @@ export const goNext: ActionFunction<RepositoryPayload> = async (action, _datasto
   );
   if (response.status === 200) {
     await SharedPropsService.setPartnerUser({
-      name: response.data.phoneNumber,
+      name: response.data.name,
       panNumber: response.data.panNumber,
       phoneNumber: response.data.phoneNumber,
       emailId: response.data.emailId

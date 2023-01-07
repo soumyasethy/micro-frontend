@@ -132,4 +132,15 @@ export const navToFetch: ActionFunction<any> = async (
   { navigate }
 ): Promise<any> => {
   navigate(ROUTE.MF_FETCH_PORTFOLIO);
+  // console.log("here");
+  // await setDatastore(ROUTE.OTP_AUTH_CAS, "input", <TextInputProps>{
+  //     state: InputStateToken.DEFAULT,
+  //   });
+  // await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, "fetchCTA", <ButtonProps>{
+  //   label: "Get my portfolio",
+  //   labelColor: ColorTokens.White,
+  //   type: ButtonTypeTokens.LargeFilled,
+  //   loading: false,
+  // });
+  // await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
 };

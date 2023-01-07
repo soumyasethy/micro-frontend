@@ -12,6 +12,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  CardProps,
   CarousalProps,
   ColorTokens,
   DividerProps,
@@ -26,6 +27,7 @@ import {
   IconTokens,
   ListItemProps,
   PaddingSizeTokens,
+  ShadowTypeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -53,21 +55,107 @@ import { getAppHeader } from "../../../configs/config";
 export const template: (
   applicationId: string,
   name: string,
-  data: any
-) => Promise<TemplateSchema> = async (applicationId, name, data) => {
+  data: any,
+  totalSteps:string,
+  completedSteps:string
+) => Promise<TemplateSchema> = async (applicationId, name, data,totalSteps,completedSteps) => {
 
   return {
     layout: <Layout>{
       id: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+        {
+          id: "header2", type: WIDGET.CARD, position: POSITION.ABSOLUTE_TOP,
+        },
         { id: "topSpace0", type: WIDGET.SPACE },
         { id: "stepper", type: WIDGET.STEPPER },
         {id:"continue",type:WIDGET.BUTTON, position:POSITION.ABSOLUTE_BOTTOM}
       ],
     },
     datastore: <Datastore>{
+      header2:<CardProps>{
+        padding: {
+          horizontal: SizeTypeTokens.NONE,
+         vertical: SizeTypeTokens.NONE,
+        },
+        bgColor: ColorTokens.White,
+        shadow:ShadowTypeTokens.E1,
+        body: {
+          widgetItems: [
+            { id: 'head1', type: WIDGET.STACK },
+           // { id: 'bottom', type: WIDGET.STACK },
+         
+          ],
+        },
+      },
+      head1: <StackProps> {
+        type: StackType.column,
+        width: StackWidth.CONTENT,
+       
+       // alignItems: StackAlignItems.flexStart,
+        widgetItems: [
+          { id: 'head', type: WIDGET.STACK },
+          { id: 'midSpace', type: WIDGET.SPACE },
+           { id: 'bottom', type: WIDGET.STACK },
+          
+        ]
+      },
+      head: <StackProps> {
+        type: StackType.row,
+        width: StackWidth.CONTENT,
+      //  justifyContent: StackJustifyContent.flexStart,
+       // alignItems: StackAlignItems.flexStart,
+        widgetItems: [
+         
+          { id: "IconSpace", type: WIDGET.SPACE },
+          { id: "IconItem", type: WIDGET.BUTTON },
+          { id: "title", type: WIDGET.TEXT },
+        ]
+      },
+      IconSpace:<SpaceProps>{
+        size:SizeTypeTokens.XL
+      },
+      IconItem: <ButtonProps & WidgetProps>{
+        label: "",
+        labelColor:ColorTokens.Grey_Night,
+        type: ButtonTypeTokens.SmallGhost,
+        icon:<IconProps>{
+          name:IconTokens.ChevronLeft,
+          size:IconSizeTokens.XL,
+          color:ColorTokens.Grey_Night
+        },
+        width: ButtonWidthTypeToken.CONTENT,
+        action: {
+          type: ACTION.GO_BACKAction,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
+          payload: {},
+        },
+      },
+      title: <TypographyProps> {
+        label: `${name}`,
+        color: ColorTokens.Grey_Night,
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.MD,
+        fontWeight: "700",
+        lineHeight: 24,
+      },
+      midSpace:<SpaceProps>{
+        size:SizeTypeTokens.SM,
+        isHeaght:true
+      },
+      bottom: <StackProps> {
+        type: StackType.row,
+        width: StackWidth.CONTENT,
+        widgetItems: [
+          { id: "headSpaces", type: WIDGET.SPACE },
+          { id: "subtitle", type: WIDGET.TEXT },
+        ]
+      },
+      headSpaces: <SpaceProps>{
+        size: SizeTypeTokens.XXXXL,
+        isHeaght:false
+      },
       header: <HeaderProps>{
         action: {
           type: ACTION.GO_BACKAction,
@@ -77,35 +165,34 @@ export const template: (
         title: `${name}`,
         isBackButton: true,
         type: HeaderTypeTokens.DEFAULT,
-       // subTitle: `${stepperData}`,
-        // widgetItem: { id: "subtitle", type: WIDGET.TEXT },
+       //subTitle: `${stepperData}`,
+        widgetItem: { id: "subtitleStack", type: WIDGET.STACK },
         // rightWidgetItem: {
         //   id: "rightHeaderStack", type: WIDGET.STACK
         // }
       },
-      // subtitle: <TypographyProps> {
-      //   label: "Subtitle",
-      //   color: ColorTokens.Grey_Charcoal,
-      //   fontFamily: FontFamilyTokens.Inter,
-      //   fontSize: FontSizeTokens.XS,
-      //   fontWeight: "400",
-      //   lineHeight: 18,
-      // },
+      subtitleStack: <StackProps> {
+          type: StackType.row,
+          width: StackWidth.CONTENT,
+          justifyContent: StackJustifyContent.flexStart,
+          alignItems: StackAlignItems.flexStart,
+          widgetItems: [
+            { id: "IconSpace", type: WIDGET.SPACE },
+            { id: "subtitle", type: WIDGET.TEXT },
+          ]
+        },
+      subtitle: <TypographyProps> {
+        label: `${completedSteps}/${totalSteps} Completed`,
+        color: ColorTokens.Grey_Charcoal,
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.XS,
+        fontWeight: "400",
+        lineHeight: 18,
+      },
       topSpace0: <SpaceProps>{
         size: SizeTypeTokens.XXXL
       },
-      // rightHeaderStack: <StackProps> {
-      //   type: StackType.row,
-      //   width: StackWidth.CONTENT,
-      //   justifyContent: StackJustifyContent.center,
-      //   alignItems: StackAlignItems.center,
-      //   widgetItems: [
-      //     { id: "Icon", type: WIDGET.ICON },
-      //     { id: "IconSpace", type: WIDGET.SPACE },
-      //     { id: "IconText", type: WIDGET.TEXT }
-      //   ]
-      // },
-      IconSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
+     
       Icon: <IconProps>{
         name: IconTokens.Share,
         size: IconSizeTokens.MD,
@@ -126,7 +213,7 @@ export const template: (
       },
       continue: <ButtonProps & WidgetProps>{
         label: "Resume",
-        type: ButtonTypeTokens.LargeFilled,
+        type: ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.CTA,
@@ -140,9 +227,7 @@ export const template: (
 
 
 export const DistributorClientListStepperMF: PageType<any> = {
-  onLoad: async ({network},{applicationId,name,stepperData}) => {
-  
-    const steps = "2/7 Completed";
+  onLoad: async ({network},{applicationId,name,stepperData,totalSteps,completedSteps}) => {
     let data1 = [];
     let data = []; 
     Object.keys(stepperData).map(key=> {
@@ -160,28 +245,8 @@ export const DistributorClientListStepperMF: PageType<any> = {
        data = data1.sort(function (a, b) {
         return a.id - b.id;
       });
-     
-   
-  //  Object.keys(stepperData).map(key=> {
-  //    const value = stepperData[key];
-  //     var map = new Map();
-
-  //     map.set('title', value.verticalDisplayName);
-  //     map.set('subTitle', value.verticalDescription);
-  //     map.set('status', value.status);
-  //     console.log("map",map);
-  //     data.push([...map])
-  //    })
-
     
-    // const response = await network.post(
-    //   partnerApi.stepperData,
-    //   {
-    //     applicationId:applicationId
-    //   },
-    //   { headers: await getAppHeader() }
-    // );
-    const templateX = await template(applicationId, name, data);
+    const templateX = await template(applicationId, name, data,totalSteps,completedSteps);
     return Promise.resolve(templateX);
   },
   actions: {

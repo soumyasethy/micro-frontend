@@ -14,7 +14,9 @@ export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
     await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,{
         applicationId:action.payload.applicationId,
         name: action.payload.name,
-        stepperData:action.payload.steps
+        stepperData:action.payload.steps,
+        completedSteps:action.payload.completedSteps,
+        totalSteps:action.payload.totalSteps
     });
 };
 

@@ -41,7 +41,7 @@ import {
     ACTION, LinkPayload,
 } from "./types";
 import { horizontalDistributorStepperRepo } from "../../configs/utils";
-import {  copyToClipboard, onSave, onShare, onSkip } from "./actions";
+import {  copyToClipboard, onClient, onSave, onShare, onSkip } from "./actions";
 import { getScreenType } from "../../configs/platfom-utils";
 import { DeepLinks, getAppHeader } from "../../configs/config";
 import { partnerApi } from "../../configs/api";
@@ -49,8 +49,9 @@ import SharedPropsService from "../../SharedPropsService";
 let screenType = getScreenType(Dimensions.get("window").width);
 
 export const template: (
-    link:string
-) => TemplateSchema = (link) => ({
+    link:string,
+    name:string
+) => TemplateSchema = (link,name) => ({
     layout: <Layout>{
         id: ROUTE.INVESTOR,
         type: LAYOUTS.LIST,
@@ -158,7 +159,7 @@ export const template: (
             fontFamily: FontFamilyTokens.Inter
         },
         infoItems2:<TypographyProps>{
-            label: "message to Mufaddal Ezzy",
+            label: `message to ${name}`,
             fontSize: FontSizeTokens.LG,
             fontWeight: '500',
             color: ColorTokens.Grey_Charcoal,
@@ -246,7 +247,7 @@ export const template: (
             type: ButtonTypeTokens.LargeGhost,
             width: ButtonWidthTypeToken.FULL,
             action: {
-                type: ACTION.ON_SKIP,
+                type: ACTION.ON_CLIENT,
                 routeId: ROUTE.INVESTOR,
                 payload: <{}>{},
             },
@@ -264,13 +265,15 @@ export const investorMF: PageType<any> = {
             }
           );
           const link = Linkresponse.data.link;
-        return Promise.resolve(template(link));
+          const name = await (await SharedPropsService.getPartnerUser()).name;
+        return Promise.resolve(template(link,name));
     },
     actions: {
         [ACTION.ON_SAVE]: onSave,
         [ACTION.ON_SKIP]: onSkip,
         [ACTION.GO_BACK]: onSkip,
         [ACTION.SHARE]: onShare,
+        [ACTION.ON_CLIENT]: onClient,
         [ACTION.ON_CLIPBOARD]: copyToClipboard,
     },
 
