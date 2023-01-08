@@ -37,12 +37,16 @@ import {
   PhoneNumberPayload,
   WhatsAppEnabledPayload,
 } from "./types";
-import { goToPrivacy, sendOtp, textOnChange, toggleCTA, whatsappToggle } from "./actions";
+import {
+  goToPrivacy,
+  sendOtp,
+  textOnChange,
+  toggleCTA,
+  whatsappToggle,
+} from "./actions";
 import { RegexConfig } from "../../../configs/config";
-//import { myFunction } from "./repo";
 
 export const template: TemplateSchema = {
-
   layout: <Layout>{
     id: ROUTE.PHONE_NUMBER,
     type: LAYOUTS.LIST,
@@ -181,12 +185,7 @@ export const template: TemplateSchema = {
 
 export const phoneNumberMF: PageType<any> = {
   onLoad: async () => {
-    const myFunction = () => {
-      console.log("in page redirection");
-    }
-
-    return Promise.resolve(template)
-
+    return Promise.resolve(template);
 
     // onLoad: async () => Promise.resolve(template),
   },
@@ -199,6 +198,4 @@ export const phoneNumberMF: PageType<any> = {
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
     [ACTION.PRIVACY]: goToPrivacy,
   },
-
-
 };
