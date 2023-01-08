@@ -35,6 +35,7 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
     );
     const user: User = userContextResponse.data;
     await SharedPropsService.setUser(user);
+    action?.payload?.setIsUserLoggedIn(user);
 
     const nextRoute = await nextStepId(
       user.linkedApplications[0].currentStepId

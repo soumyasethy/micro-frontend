@@ -4,7 +4,9 @@ import { nextStepId } from "../../configs/utils";
 import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
+
 import { getAppHeader } from "../../configs/config";
+import { AnalyticsEventTracker } from "../../configs/constants";
 
 export const SplashAction: ActionFunction<any> = async (
   action,
@@ -22,6 +24,7 @@ export const SplashAction: ActionFunction<any> = async (
     if (userContextResponse.status === 200) {
       const user: User = userContextResponse.data;
       await SharedPropsService.setUser(user);
+      action?.payload?.setIsUserLoggedIn(user);
       /****
        * ADD YOUR CUSTOM ROUTE TO NAVIGATE
        * ****/

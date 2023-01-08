@@ -51,5 +51,7 @@ export const api = {
   pdfLink: `${config.URL}/app/borrower/lms/transactions/`,
   kycDocument: `${config.URL}/app/borrower/application/kyc/document/`,
   documentValidate: `${config.URL}/app/borrower/application/kyc/document/validate/`,
-  pdfEmail: `${config.URL}/app/borrower/lms/transactions/email/`
+  pdfEmail: `${config.URL}/app/borrower/lms/transactions/email/`,
+  digioKycESignInitiateRequest: `${config.URL}/app/borrower/application/kyc/digio/init/`,
+  digioKycCheckRequestStatus: `${config.URL}/app/borrower/application/kyc/digio/status/`,
 };
