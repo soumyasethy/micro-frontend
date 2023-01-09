@@ -64,8 +64,8 @@ export const stepperRepo = async () => {
       StepperStateToken.COMPLETED ||
       user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
         StepperStateToken.COMPLETED) &&
-    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.COMPLETED &&
+    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+    //   StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
@@ -81,8 +81,8 @@ export const stepperRepo = async () => {
       StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
       StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.NOT_STARTED &&
+    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+    //   StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
@@ -96,8 +96,8 @@ export const stepperRepo = async () => {
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
-    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+    //   StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
