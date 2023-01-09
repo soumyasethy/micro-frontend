@@ -245,8 +245,7 @@ export const nextStepId = async (
       };
     } else if (currentStepId === ROUTE.MF_PLEDGE_PORTFOLIO) {
       const isPledgeFirstTime = await SharedPropsService.isPledgeFirstTime();
-      if (!isPledgeFirstTime) {
-        await SharedPropsService.setPledgeFirstTime(true);
+      if (isPledgeFirstTime) {
         return {
           routeId: ROUTE.CHECKING_LIMIT,
           params: {},
