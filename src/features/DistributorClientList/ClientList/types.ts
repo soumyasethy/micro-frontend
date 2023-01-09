@@ -3,10 +3,16 @@ export enum ACTION {
   TRACK_PENDING = "TRACK_PENDING",
   MANAGE = "MANAGE",
   CTA="CTA",
-  NOTIFICATION="NOTIFICATION",
+  ON_CHANGE="ON_CHANGE",
 }
 
 export type TestActionPayload = {};
+
+export type dataTypeClient = {
+  value:any,
+  widgetID: string;
+  data:any
+}
 
 export type ClientPendingPayloadType = {
   name: string,
