@@ -58,58 +58,8 @@ export const onBack: ActionFunction<{}> = async (action, _datastore, { navigate 
 };
 
 
-export const goCamsNext: ActionFunction<{}> = async (action, _datastore, { navigate, network }): Promise<any> => {
-  const applictaionId = await SharedPropsService.getApplicationId();
-  console.log("send", applictaionId);
-  const accountId = await SharedPropsService.getAccountId();
-  const response = await network.get(
-    `${partnerApi.userProfile}${accountId}`,
-    { headers: await getAppHeader() }
-  );
-  if (response.status === 200) {
-    await SharedPropsService.setPartnerUser({
-      name: response.data.name,
-      panNumber: response.data.panNumber,
-      phoneNumber: response.data.phoneNumber,
-      emailId: response.data.emailId
-    });
-  }
-  //await getUserDetails({},{});
-  await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
-  await navigate(ROUTE.MF_FETCH_PORTFOLIO, {
-    headTitle: "CAMS",
-    applicationId: applictaionId
-  })
-};
-
-
-export const goKarvyNext: ActionFunction<{}> = async (action, _datastore, { navigate, network }): Promise<any> => {
-  const applictaionId = await SharedPropsService.getApplicationId();
-  //  await getUserDetails({},{});
-  const accountId = await SharedPropsService.getAccountId();
-  const response = await network.get(
-    `${partnerApi.userProfile}${accountId}`,
-    { headers: await getAppHeader() }
-  );
-  if (response.status === 200) {
-    await SharedPropsService.setPartnerUser({
-      name: response.data.name,
-      panNumber: response.data.panNumber,
-      phoneNumber: response.data.phoneNumber,
-      emailId: response.data.emailId
-    });
-  }
-  await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.KARVY);
-  await navigate(ROUTE.MF_FETCH_PORTFOLIO, {
-    headTitle: "KARVY",
-    applicationId: applictaionId
-  })
-};
-
 export const goNext: ActionFunction<RepositoryPayload> = async (action, _datastore, { navigate, network }): Promise<any> => {
- console.log(action.payload.value);
   const applictaionId = await SharedPropsService.getApplicationId();
-  //  await getUserDetails({},{});
   const accountId = await SharedPropsService.getAccountId();
   const response = await network.get(
     `${partnerApi.userProfile}${accountId}`,

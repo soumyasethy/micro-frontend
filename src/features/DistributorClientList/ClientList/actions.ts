@@ -4,7 +4,6 @@ import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
-import { navigate } from "../../afterUnlock/dashboard/actions";
 import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType, dataTypeClient } from "./types";
 
 export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
@@ -26,7 +25,17 @@ export const appendData: ActionFunction<dataTypeClient> = async (
     { navigate, setDatastore, removeWidgets, appendWidgets }
 ): Promise<any> => {
     const datastore: Datastore = {
-        continueButton: <ButtonProps>{
+        continuePendingButton: <ButtonProps>{
+            fontFamily: FontFamilyTokens.Poppins,
+            label: "Create new application",
+            type: ButtonTypeTokens.LargeFilled,
+            width: ButtonWidthTypeToken.FULL,
+            action: {
+              type: ACTION.CTA,
+              routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+            },
+          },
+          continueInProgressButton: <ButtonProps>{
             fontFamily: FontFamilyTokens.Poppins,
             label: "Create new application",
             type: ButtonTypeTokens.LargeFilled,
@@ -39,15 +48,22 @@ export const appendData: ActionFunction<dataTypeClient> = async (
     };
     if (action.payload.value === 1) {
         await removeWidgets(ROUTE.DISTRIBUTOR_CLIENT_LIST, [
-            { id: "continueButton", type: WIDGET.BUTTON },
+            { id: "continuePendingButton", type: WIDGET.BUTTON },
+            { id: "continueInProgressButton", type: WIDGET.BUTTON },
         ]);
     } else {
-        if(action.payload.data.length > 0){
-            console.log("action.payload.data",action.payload.data);
+        if(action.payload.PendingData.length > 0 ){
             await appendWidgets(
                 ROUTE.DISTRIBUTOR_CLIENT_LIST,
                 datastore,
-                [{ id: "continueButton", type: WIDGET.BUTTON,position:POSITION.ABSOLUTE_BOTTOM },]
+                [{ id: "continuePendingButton", type: WIDGET.BUTTON,position:POSITION.ABSOLUTE_BOTTOM },]
+            );
+        }
+        if(action.payload.InProgressData.length > 0 ){
+            await appendWidgets(
+                ROUTE.DISTRIBUTOR_CLIENT_LIST,
+                datastore,
+                [{ id: "continueInProgressButton", type: WIDGET.BUTTON,position:POSITION.ABSOLUTE_BOTTOM },]
             );
         }
         

@@ -313,7 +313,8 @@ export const template: (
         {
           id: "header2", type: WIDGET.CARD, position: POSITION.ABSOLUTE_TOP,
         },
-        (clientPendingRepoData.length > 0) ? { id: "continueButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM } : {}
+        (clientPendingRepoData.length > 0) ? { id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM } : {},
+        (clientInProgressRepoData.length > 0) ? { id: "continueInProgressButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM } : {}
       ],
     },
     datastore: <Datastore>{
@@ -373,7 +374,8 @@ export const template: (
           type: ACTION.ON_CHANGE,
           payload: <dataTypeClient>{
             value: null,
-            data: clientPendingRepoData,
+            PendingData: clientPendingRepoData,
+            InProgressData: clientInProgressRepoData,
             widgetID: "tabb",
           },
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
@@ -413,14 +415,16 @@ export const template: (
 
       space0: <SpaceProps>{ size: SizeTypeTokens.LG },
       tab: <TabsProps & WidgetProps>{
-        // action: {
-        //   type: ACTION.ON_CHANGE,
-        //   payload: <dataTypeClient>{
-        //     value: null,
-        //     widgetID: "tabb",
-        //   },
-        //   routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
-        // },
+        action: {
+          type: ACTION.ON_CHANGE,
+          payload: <dataTypeClient>{
+            value: null,
+            PendingData: clientPendingRepoData,
+            InProgressData: clientInProgressRepoData,
+            widgetID: "tabb",
+          },
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+        },
         active: 0,
         type: TabTypeTokens.BORDER,
         options: [
@@ -666,7 +670,17 @@ export const template: (
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
         },
       },
-      continueButton: <ButtonProps>{
+      continuePendingButton: <ButtonProps>{
+        fontFamily: FontFamilyTokens.Poppins,
+        label: "Create new application",
+        type: ButtonTypeTokens.LargeFilled,
+        width: ButtonWidthTypeToken.FULL,
+        action: {
+          type: ACTION.CTA,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+        },
+      },
+      continueInProgressButton: <ButtonProps>{
         fontFamily: FontFamilyTokens.Poppins,
         label: "Create new application",
         type: ButtonTypeTokens.LargeFilled,

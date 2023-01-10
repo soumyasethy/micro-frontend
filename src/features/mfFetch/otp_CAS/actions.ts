@@ -107,12 +107,13 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
 
   }else {
     console.log("partner otp verify");
+    const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
     const response = await network.post(
       partnerApi.authCAS,
       {
         applicationId: action.payload.applicationId,
         otp: action.payload.value,
-        assetRepository: action.payload.assetRepository,
+        assetRepository: assetRepositoryType,
       },
       { headers: await getAppHeader() }
     );

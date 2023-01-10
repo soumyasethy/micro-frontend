@@ -6,12 +6,15 @@ export enum ACTION {
   ON_CHANGE="ON_CHANGE",
 }
 
-export type TestActionPayload = {};
+export type StepperPayload = {
+  value:any,
+};
 
 export type dataTypeClient = {
   value:any,
   widgetID: string;
-  data:any
+  PendingData:any,
+  InProgressData:any,
 }
 
 export type ClientPendingPayloadType = {

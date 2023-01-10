@@ -13,10 +13,7 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   CardProps,
-  CarousalProps,
   ColorTokens,
-  DividerProps,
-  DividerSizeTokens,
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
@@ -25,40 +22,35 @@ import {
   IconProps,
   IconSizeTokens,
   IconTokens,
-  ListItemProps,
-  PaddingSizeTokens,
   ShadowTypeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
-  StackFlexWrap,
   StackJustifyContent,
   StackProps,
   StackType,
   StackWidth,
-  StepperItem,
   StepperProps,
-  StepperStateToken,
   StepperTypeTokens,
-  TabsProps,
-  TypographyBaseProps,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
 import { ROUTE } from "../../../routes";
 import { clientInProgressRepoData, clientPendingRepoData } from "./repo";
-import { goBackAction, onClickCTA, onManageCTA, onTrackCTA } from "./actions";
+import { goBackAction, onClickCTA, onManageCTA, onTrackCTA, resumeSteps } from "./actions";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import { StepperPayload } from "../ClientList/types";
 
 export const template: (
   applicationId: string,
   name: string,
   data: any,
-  totalSteps:string,
-  completedSteps:string
-) => Promise<TemplateSchema> = async (applicationId, name, data,totalSteps,completedSteps) => {
+  totalSteps: string,
+  completedSteps: string,
+  editableData:any
+) => Promise<TemplateSchema> = async (applicationId, name, data, totalSteps, completedSteps,editableData) => {
 
   return {
     layout: <Layout>{
@@ -70,60 +62,60 @@ export const template: (
         },
         { id: "topSpace0", type: WIDGET.SPACE },
         { id: "stepper", type: WIDGET.STEPPER },
-        {id:"continue",type:WIDGET.BUTTON, position:POSITION.ABSOLUTE_BOTTOM}
+        { id: "continue", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM }
       ],
     },
     datastore: <Datastore>{
-      header2:<CardProps>{
+      header2: <CardProps>{
         padding: {
           horizontal: SizeTypeTokens.NONE,
-         vertical: SizeTypeTokens.NONE,
+          vertical: SizeTypeTokens.NONE,
         },
         bgColor: ColorTokens.White,
-        shadow:ShadowTypeTokens.E1,
+        shadow: ShadowTypeTokens.E1,
         body: {
           widgetItems: [
             { id: 'head1', type: WIDGET.STACK },
-           // { id: 'bottom', type: WIDGET.STACK },
-         
+            // { id: 'bottom', type: WIDGET.STACK },
+
           ],
         },
       },
-      head1: <StackProps> {
+      head1: <StackProps>{
         type: StackType.column,
         width: StackWidth.CONTENT,
-       
-       // alignItems: StackAlignItems.flexStart,
+
+        // alignItems: StackAlignItems.flexStart,
         widgetItems: [
           { id: 'head', type: WIDGET.STACK },
           { id: 'midSpace', type: WIDGET.SPACE },
-           { id: 'bottom', type: WIDGET.STACK },
-          
+          { id: 'bottom', type: WIDGET.STACK },
+
         ]
       },
-      head: <StackProps> {
+      head: <StackProps>{
         type: StackType.row,
         width: StackWidth.CONTENT,
-      //  justifyContent: StackJustifyContent.flexStart,
-       // alignItems: StackAlignItems.flexStart,
+        //  justifyContent: StackJustifyContent.flexStart,
+        // alignItems: StackAlignItems.flexStart,
         widgetItems: [
-         
+
           { id: "IconSpace", type: WIDGET.SPACE },
           { id: "IconItem", type: WIDGET.BUTTON },
           { id: "title", type: WIDGET.TEXT },
         ]
       },
-      IconSpace:<SpaceProps>{
-        size:SizeTypeTokens.XL
+      IconSpace: <SpaceProps>{
+        size: SizeTypeTokens.XL
       },
       IconItem: <ButtonProps & WidgetProps>{
         label: "",
-        labelColor:ColorTokens.Grey_Night,
+        labelColor: ColorTokens.Grey_Night,
         type: ButtonTypeTokens.SmallGhost,
-        icon:<IconProps>{
-          name:IconTokens.ChevronLeft,
-          size:IconSizeTokens.XL,
-          color:ColorTokens.Grey_Night
+        icon: <IconProps>{
+          name: IconTokens.ChevronLeft,
+          size: IconSizeTokens.XL,
+          color: ColorTokens.Grey_Night
         },
         width: ButtonWidthTypeToken.CONTENT,
         action: {
@@ -132,7 +124,7 @@ export const template: (
           payload: {},
         },
       },
-      title: <TypographyProps> {
+      title: <TypographyProps>{
         label: `${name}`,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Inter,
@@ -140,11 +132,11 @@ export const template: (
         fontWeight: "700",
         lineHeight: 24,
       },
-      midSpace:<SpaceProps>{
-        size:SizeTypeTokens.SM,
-        isHeaght:true
+      midSpace: <SpaceProps>{
+        size: SizeTypeTokens.SM,
+        isHeaght: true
       },
-      bottom: <StackProps> {
+      bottom: <StackProps>{
         type: StackType.row,
         width: StackWidth.CONTENT,
         widgetItems: [
@@ -154,34 +146,34 @@ export const template: (
       },
       headSpaces: <SpaceProps>{
         size: SizeTypeTokens.XXXXL,
-        isHeaght:false
+        isHeaght: false
       },
       header: <HeaderProps>{
         action: {
           type: ACTION.GO_BACKAction,
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
           payload: <{}>{},
-      },
+        },
         title: `${name}`,
         isBackButton: true,
         type: HeaderTypeTokens.DEFAULT,
-       //subTitle: `${stepperData}`,
+        //subTitle: `${stepperData}`,
         widgetItem: { id: "subtitleStack", type: WIDGET.STACK },
         // rightWidgetItem: {
         //   id: "rightHeaderStack", type: WIDGET.STACK
         // }
       },
-      subtitleStack: <StackProps> {
-          type: StackType.row,
-          width: StackWidth.CONTENT,
-          justifyContent: StackJustifyContent.flexStart,
-          alignItems: StackAlignItems.flexStart,
-          widgetItems: [
-            { id: "IconSpace", type: WIDGET.SPACE },
-            { id: "subtitle", type: WIDGET.TEXT },
-          ]
-        },
-      subtitle: <TypographyProps> {
+      subtitleStack: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.CONTENT,
+        justifyContent: StackJustifyContent.flexStart,
+        alignItems: StackAlignItems.flexStart,
+        widgetItems: [
+          { id: "IconSpace", type: WIDGET.SPACE },
+          { id: "subtitle", type: WIDGET.TEXT },
+        ]
+      },
+      subtitle: <TypographyProps>{
         label: `${completedSteps}/${totalSteps} Completed`,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
@@ -192,7 +184,7 @@ export const template: (
       topSpace0: <SpaceProps>{
         size: SizeTypeTokens.XXXL
       },
-     
+
       Icon: <IconProps>{
         name: IconTokens.Share,
         size: IconSizeTokens.MD,
@@ -209,16 +201,18 @@ export const template: (
       },
       stepper: <StepperProps>{
         type: StepperTypeTokens.DISTRIBUTOR,
-        data:data
+        data: data
       },
       continue: <ButtonProps & WidgetProps>{
         label: "Resume",
-        type: ButtonTypeTokens.LargeOutline,
+        type: `${editableData}` ? ButtonTypeTokens.LargeFilled : ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
         action: {
-          type: ACTION.CTA,
+          type: ACTION.RESUME,
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
-          payload: {},
+          payload: <StepperPayload>{
+            value:editableData
+          },
         },
       },
     }
@@ -227,26 +221,28 @@ export const template: (
 
 
 export const DistributorClientListStepperMF: PageType<any> = {
-  onLoad: async ({network},{applicationId,name,stepperData,totalSteps,completedSteps}) => {
+  onLoad: async ({ network }, { applicationId, name, stepperData, totalSteps, completedSteps }) => {
     let data1 = [];
-    let data = []; 
-    Object.keys(stepperData).map(key=> {
-      const value = stepperData[key] 
-      const stepData:any = new Object();
+    let data = [];
+    Object.keys(stepperData).map(key => {
+      const value = stepperData[key]
+      const stepData: any = new Object();
       stepData.title = value.verticalDisplayName;
       stepData.subTitle = value.verticalDescription;
-      stepData.id =value.order;
+      stepData.id = value.order;
       stepData.status = value.status;
+      stepData.isEditable = value.isEditable;
       //stepData.statusText = value.isEditable;
       data1.push(stepData);
-      })
+    })
 
-     // let sorted = Object.entries(stepperData);
-       data = data1.sort(function (a, b) {
-        return a.id - b.id;
-      });
-    
-    const templateX = await template(applicationId, name, data,totalSteps,completedSteps);
+    // let sorted = Object.entries(stepperData);
+    data = data1.sort(function (a, b) {
+      return a.id - b.id;
+    });
+    const editableData = data.filter((value) => value.isEditable === true && value.status === "IN_PROGRESS");
+
+    const templateX = await template(applicationId, name, data, totalSteps, completedSteps,editableData);
     return Promise.resolve(templateX);
   },
   actions: {
@@ -254,6 +250,7 @@ export const DistributorClientListStepperMF: PageType<any> = {
     [ACTION.MANAGE]: onManageCTA,
     [ACTION.CTA]: onClickCTA,
     [ACTION.GO_BACKAction]: goBackAction,
+    [ACTION.RESUME]: resumeSteps,
   },
   clearPrevious: true,
 };
