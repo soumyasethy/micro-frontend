@@ -11,6 +11,31 @@ export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
     _datastore,
     { navigate, setDatastore }
 ): Promise<any> => {
+    console.log(action.payload);
+    console.log(action.payload.data);
+
+    await SharedPropsService.setAccountId(action.payload.data.accountId);
+    await SharedPropsService.setApplicationId(action.payload.data.applicationId);
+
+    let data1 = [];
+    let stepper_data = [];
+    Object.keys(action.payload.steps).map(key => {
+        const value = action.payload.steps[key];
+        const stepData: any = new Object();
+        if (value.isEditable === true) {
+            stepData.title = value.verticalDisplayName;
+            stepData.subTitle = value.verticalDescription;
+            stepData.id = value.order;
+            stepData.horizontalTitle = value.horizontalDisplayName;
+            stepData.status = value.status;
+            data1.push(stepData);
+        }
+    })
+    stepper_data = data1.sort(function (a, b) {
+        return a.id - b.id;
+    });
+    await SharedPropsService.setStepperData(stepper_data);
+
     await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER, {
         applicationId: action.payload.applicationId,
         name: action.payload.name,
@@ -18,6 +43,7 @@ export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
         completedSteps: action.payload.completedSteps,
         totalSteps: action.payload.totalSteps
     });
+
 };
 export const appendData: ActionFunction<dataTypeClient> = async (
     action,
@@ -31,20 +57,20 @@ export const appendData: ActionFunction<dataTypeClient> = async (
             type: ButtonTypeTokens.LargeFilled,
             width: ButtonWidthTypeToken.FULL,
             action: {
-              type: ACTION.CTA,
-              routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+                type: ACTION.CTA,
+                routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
             },
-          },
-          continueInProgressButton: <ButtonProps>{
+        },
+        continueInProgressButton: <ButtonProps>{
             fontFamily: FontFamilyTokens.Poppins,
             label: "Create new application",
             type: ButtonTypeTokens.LargeFilled,
             width: ButtonWidthTypeToken.FULL,
             action: {
-              type: ACTION.CTA,
-              routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+                type: ACTION.CTA,
+                routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
             },
-          },
+        },
     };
     if (action.payload.value === 1) {
         await removeWidgets(ROUTE.DISTRIBUTOR_CLIENT_LIST, [
@@ -52,21 +78,21 @@ export const appendData: ActionFunction<dataTypeClient> = async (
             { id: "continueInProgressButton", type: WIDGET.BUTTON },
         ]);
     } else {
-        if(action.payload.PendingData.length > 0 ){
+        if (action.payload.PendingData.length > 0) {
             await appendWidgets(
                 ROUTE.DISTRIBUTOR_CLIENT_LIST,
                 datastore,
-                [{ id: "continuePendingButton", type: WIDGET.BUTTON,position:POSITION.ABSOLUTE_BOTTOM },]
+                [{ id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },]
             );
         }
-        if(action.payload.InProgressData.length > 0 ){
+        if (action.payload.InProgressData.length > 0) {
             await appendWidgets(
                 ROUTE.DISTRIBUTOR_CLIENT_LIST,
                 datastore,
-                [{ id: "continueInProgressButton", type: WIDGET.BUTTON,position:POSITION.ABSOLUTE_BOTTOM },]
+                [{ id: "continueInProgressButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },]
             );
         }
-        
+
     }
 };
 export const pendingTracks: ActionFunction<ClientPendingPayloadType> = async (

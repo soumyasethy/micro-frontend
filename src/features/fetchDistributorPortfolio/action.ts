@@ -28,7 +28,8 @@ export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, 
   let data1 = [];
   let stepper_data = [];
   response.forEach((item,index) => {
-    if(item.horizontalDisplayName === "Fetch Portfolio"){
+    console.log("item",item);
+    if(item.horizontalDisplayName === "Fetch portfolio"){
       item.status = "COMPLETED";
     }
     data1.push(item);
@@ -46,6 +47,18 @@ export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, 
 };
 
 export const onSkip: ActionFunction<{}> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
+ 
+  let filtered_stepper = [];
+  let stepper_data = await SharedPropsService.getStepperData();
+  stepper_data.forEach((item, index) => {
+      if (item.horizontalTitle === "Fetch Portfolio") {
+          item.status = "NOT_STARTED";
+      }
+      filtered_stepper.push(item);
+  })
+
+  await SharedPropsService.setStepperData(filtered_stepper);
+
   await navigate(ROUTE.INVESTOR);
 };
 

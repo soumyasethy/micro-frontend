@@ -1,61 +1,57 @@
 import {
-    Datastore,
-    Layout,
-    LAYOUTS,
-    PageType,
-    POSITION,
-    TemplateSchema,
-    WidgetProps,
-  } from "@voltmoney/types";
-  import {
-      ButtonProps,
-      ButtonTypeTokens,
-      ButtonWidthTypeToken,
-      ColorTokens,
-      FontFamilyTokens,
-      FontSizeTokens,
-    HeaderProps,
-    HeaderTypeTokens,
-    InputStateToken,
-    InputTypeToken,
-    KeyboardTypeToken,
-    SizeTypeTokens,
-    SpaceProps,
-    StackAlignItems,
-    StackJustifyContent,
-    StackProps,
-    StackType,
-    StepperItem,
-    StepperProps,
-    StepperTypeTokens,
-    TextInputProps,
-    TypographyProps,
-    WIDGET,
-  } from "@voltmoney/schema";
-  import { ROUTE } from "../../../routes";
-  import { ACTION, OtpPayload, SearchPortfolioPayload } from "./types";
-  import {
-    TriggerCTA,
-    goBack,
-    ToggleSelectAction,
-    EditItem,
-    SearchPortfolio,
-    ClearSearchPortfolio,
-  } from "./actions";
-  import { StepResponseObject } from "../../mfPledge/unlock_limit/types";
-  import SharedPropsService from "../../../SharedPropsService";
-  import { portfolioListDatastoreBuilder } from "./utils";
-import { horizontalDistributorStepperRepo } from "../../../configs/utils";
-import { partnerApi } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
-  
-  export const template: (
-    stepResponseObject: StepResponseObject,
-    stepper: any
-  ) => Promise<TemplateSchema> = async (
-    stepResponseObject,
-    stepper
-    ) => {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
+import {
+  ButtonProps,
+  ButtonTypeTokens,
+  ButtonWidthTypeToken,
+  ColorTokens,
+  FontFamilyTokens,
+  FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
+  InputStateToken,
+  InputTypeToken,
+  KeyboardTypeToken,
+  SizeTypeTokens,
+  SpaceProps,
+  StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
+  StepperProps,
+  StepperTypeTokens,
+  TextInputProps,
+  TypographyProps,
+  WIDGET,
+} from "@voltmoney/schema";
+import { ROUTE } from "../../../routes";
+import { ACTION, SearchPortfolioPayload } from "./types";
+import {
+  TriggerCTA,
+  goBack,
+  ToggleSelectAction,
+  EditItem,
+  SearchPortfolio,
+  ClearSearchPortfolio,
+} from "./actions";
+import { StepResponseObject } from "../../mfPledge/unlock_limit/types";
+import SharedPropsService from "../../../SharedPropsService";
+import { portfolioListDatastoreBuilder } from "./utils";
+
+export const template: (
+  stepResponseObject: StepResponseObject,
+  stepper: any
+) => Promise<TemplateSchema> = async (
+  stepResponseObject,
+  stepper
+) => {
     return {
       layout: <Layout>{
         id: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
@@ -65,7 +61,7 @@ import { getAppHeader } from "../../../configs/config";
           { id: "spaceHeader", type: WIDGET.SPACE },
           { id: "spaceHeader1", type: WIDGET.SPACE },
           // 
-          {id:"heading",type:WIDGET.STACK},
+          { id: "heading", type: WIDGET.STACK },
           { id: "inputSpace", type: WIDGET.SPACE },
           { id: "inputItem", type: WIDGET.INPUT },
           { id: "listItem", type: WIDGET.LIST },
@@ -84,65 +80,60 @@ import { getAppHeader } from "../../../configs/config";
       },
       datastore: <Datastore>{
         header: <HeaderProps & WidgetProps>{
-            isBackButton: true,
-            type: HeaderTypeTokens.verification,
-            leftCta: "Share",
-            trailIcon: "Share",
-            stepperProps: <StepperProps>{
-                data: stepper,
-                type: StepperTypeTokens.HORIZONTAL,
-            },
-            title: "Create new application",
-            action: {
-                type: ACTION.BACK_BUTTON,
-                routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
-                payload: {},
-            },
-            // leftAction: {
-            //     type: ACTION.SHARE,
-            //     routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
-            //     payload: {},
-            // },
+          isBackButton: true,
+          type: HeaderTypeTokens.verification,
+          leftCta: "Share",
+          trailIcon: "Share",
+          stepperProps: <StepperProps>{
+            data: stepper,
+            type: StepperTypeTokens.HORIZONTAL,
+          },
+          title: "Create new application",
+          action: {
+            type: ACTION.BACK_BUTTON,
+            routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
+            payload: {},
+          },
         },
         spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XXXL },
         spaceHeader1: <SpaceProps>{ size: SizeTypeTokens.SM },
-        heading:<StackProps>{
-            type:StackType.row,
-            alignItems:StackAlignItems.center,
-            justifyContent:StackJustifyContent.center,
-            widgetItems: [
-                { id: "headItems", type: WIDGET.TEXT },
-                { id: "trailItems", type: WIDGET.STACK },
-            ],
+        heading: <StackProps>{
+          type: StackType.row,
+          alignItems: StackAlignItems.center,
+          justifyContent: StackJustifyContent.center,
+          widgetItems: [
+            { id: "headItems", type: WIDGET.TEXT },
+            { id: "trailItems", type: WIDGET.STACK },
+          ],
         },
-        headItems:<TypographyProps>{
-            label: "Select portfolio",
-            fontSize: FontSizeTokens.MD,
-            fontWeight: '700',
-            color: ColorTokens.Grey_Night,
-            lineHeight: 24,
-            fontFamily: FontFamilyTokens.Inter
+        headItems: <TypographyProps>{
+          label: "Select portfolio",
+          fontSize: FontSizeTokens.MD,
+          fontWeight: '700',
+          color: ColorTokens.Grey_Night,
+          lineHeight: 24,
+          fontFamily: FontFamilyTokens.Inter
         },
-        trailItems:<StackProps>{
-            type:StackType.row,
-            alignItems:StackAlignItems.flexEnd,
-            justifyContent:StackJustifyContent.flexEnd,
-            widgetItems: [
-                { id: "btnItems", type: WIDGET.BUTTON }
-            ],
+        trailItems: <StackProps>{
+          type: StackType.row,
+          alignItems: StackAlignItems.flexEnd,
+          justifyContent: StackJustifyContent.flexEnd,
+          widgetItems: [
+            { id: "btnItems", type: WIDGET.BUTTON }
+          ],
         },
-        btnItems:<ButtonProps & WidgetProps>{
-            label: "Filter",
-            type: ButtonTypeTokens.SmallGhost,
-            labelColor: ColorTokens.Primary_100,
-            width: ButtonWidthTypeToken.CONTENT,
-            action: {
-                type: ACTION.BACK_BUTTON,
-                routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
-                payload: <{}>{},
-            },
+        btnItems: <ButtonProps & WidgetProps>{
+          label: "Filter",
+          type: ButtonTypeTokens.SmallGhost,
+          labelColor: ColorTokens.Primary_100,
+          width: ButtonWidthTypeToken.CONTENT,
+          action: {
+            type: ACTION.BACK_BUTTON,
+            routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
+            payload: <{}>{},
+          },
         },
-     
+
         inputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
         inputItem: <TextInputProps & WidgetProps>{
           type: InputTypeToken.SEARCH,
@@ -171,47 +162,37 @@ import { getAppHeader } from "../../../configs/config";
       },
     };
   };
-  
-  export const selectDistributorPortfolioMF: PageType<any> = {
-    onLoad: async ({network}, { 
-      stepResponseObject
-      , updateAvailableCASMap
-     }) => {
-      const applicationId = await SharedPropsService.getApplicationId();
-      // const response = await network.get(
-      //   `${partnerApi.pledgeLimit}${applicationId}`,
-      //   {
-      //     headers: await getAppHeader(),
-      //   }
-      // );
-      await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
-    // const stepResponseObject = response.data.stepResponseObject;
-    //  const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-      let data1 = [];
-      // let stepper_data = [];
-  
-      let stepper_data = await SharedPropsService.getStepperData();
-      stepper_data.forEach((item, index) => {
-        if (item.horizontalTitle === "Select Portfolio") {
-          item.status = "IN_PROGRESS";
-        }
-        data1.push(item);
-      })
-  
-      await SharedPropsService.setStepperData(data1);
-      return Promise.resolve(await template(
-        stepResponseObject,
-        data1
-        ));
-    },
-    actions: {
-      [ACTION.PORTFOLIO]: TriggerCTA,
-      [ACTION.SEARCH_PORTFOLIO]: SearchPortfolio,
-      [ACTION.CLEAR_SEARCH_PORTFOLIO]: ClearSearchPortfolio,
-      [ACTION.BACK_BUTTON]: goBack,
-      [ACTION.TOGGLE_ITEM]: ToggleSelectAction,
-      [ACTION.EDIT_ITEM]: EditItem,
-    },
-    clearPrevious: true,
-  };
-  
+
+export const selectDistributorPortfolioMF: PageType<any> = {
+  onLoad: async ({ network }, {
+    stepResponseObject
+    , updateAvailableCASMap
+  }) => {
+    const applicationId = await SharedPropsService.getApplicationId();
+    await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+    let data1 = [];
+
+    let stepper_data = await SharedPropsService.getStepperData();
+    stepper_data.forEach((item) => {
+      if (item.horizontalTitle === "Select Portfolio") {
+        item.status = "IN_PROGRESS";
+      }
+      data1.push(item);
+    })
+
+    await SharedPropsService.setStepperData(data1);
+    return Promise.resolve(await template(
+      stepResponseObject,
+      data1
+    ));
+  },
+  actions: {
+    [ACTION.PORTFOLIO]: TriggerCTA,
+    [ACTION.SEARCH_PORTFOLIO]: SearchPortfolio,
+    [ACTION.CLEAR_SEARCH_PORTFOLIO]: ClearSearchPortfolio,
+    [ACTION.BACK_BUTTON]: goBack,
+    [ACTION.TOGGLE_ITEM]: ToggleSelectAction,
+    [ACTION.EDIT_ITEM]: EditItem,
+  },
+  clearPrevious: true,
+};

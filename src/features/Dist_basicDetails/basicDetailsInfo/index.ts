@@ -93,6 +93,16 @@ export const template: (
           error: "Please select a proper date",
           default: "Date of birth as per PAN",
         },
+      errorAction: {
+        type: ACTION.ENTER_DOB,
+        routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
+      },
+      successAction: {
+        type: ACTION.ENTER_DOB,
+        routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
+      },
         action: {
           type: ACTION.ENTER_DOB,
           payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },

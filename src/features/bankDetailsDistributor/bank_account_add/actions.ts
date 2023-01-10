@@ -83,15 +83,12 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
       const value = response.data.partnerViewStepperMap[key];
       const stepData:any = new Object();
       if(value.isEditable === true){
-       
           stepData.title = value.verticalDisplayName;
           stepData.subTitle = value.verticalDescription;
           stepData.id = value.order;
           stepData.horizontalTitle = value.horizontalDisplayName;
           stepData.status = value.status;
-      
-       
-        data1.push(stepData);
+          data1.push(stepData);
       }
       })
       stepper_data = data1.sort(function (a, b) {
@@ -386,7 +383,20 @@ export const skipBankVerification: ActionFunction<{}> = async (
   _datastore,
   { setDatastore, navigate}
 ): Promise<any> => {
+ 
+  let filtered_stepper = [];
+  let stepper_data = await SharedPropsService.getStepperData();
+  stepper_data.forEach((item, index) => {
+      if (item.horizontalTitle === "Bank details") {
+          item.status = "NOT_STARTED";
+      }
+      filtered_stepper.push(item);
+  })
+
+  await SharedPropsService.setStepperData(filtered_stepper);
+
   await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
+
 };
 export const ChangeBankGoBackAction: ActionFunction<any> = async (
   action,
