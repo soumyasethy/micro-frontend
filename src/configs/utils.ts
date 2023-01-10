@@ -5,7 +5,11 @@ import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
 import { StoreKey } from "./api";
-import { AssetRepositoryMap, AssetRepositoryType } from "./config";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+  ConfigTokens,
+} from "./config";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -219,7 +223,11 @@ export const nextStepId = async (
       // ***  Comment Email Verify FLow since google login is not working ***//
       return {
         // routeId: ROUTE.EMAIL_VERIFY,
-        routeId: ROUTE.ENTER_EMAIL,
+        routeId: (await SharedPropsService.getConfig(
+          ConfigTokens.IS_GOOGLE_LOGIN_ENABLED
+        ))
+          ? ROUTE.EMAIL_VERIFY
+          : ROUTE.ENTER_EMAIL,
         params: {
           applicationId: user.linkedBorrowerAccounts[0].accountId,
         },

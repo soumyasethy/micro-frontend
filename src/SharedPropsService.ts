@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
+import _ from "lodash";
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
@@ -41,6 +42,8 @@ type GlobalProps = {
   config?: {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
+    [ConfigTokens.IS_KYC_PHOTO_VERIFICATION]?: boolean;
+    [ConfigTokens.IS_GOOGLE_LOGIN_ENABLED]?: boolean;
   };
 };
 
@@ -74,6 +77,8 @@ let _globalProps: GlobalProps = {
   config: {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true,
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
+    [ConfigTokens.IS_KYC_PHOTO_VERIFICATION]: false,
+    [ConfigTokens.IS_GOOGLE_LOGIN_ENABLED]: false,
   },
 };
 export function setBuildType(buildType) {
@@ -154,7 +159,7 @@ async function setUrlParams(url: string) {
     url.includes("utm_medium=") ||
     url.includes("utm_campaign=") ||
     url.includes("utm_content=") ||
-    url.includes("utm_id=") || 
+    url.includes("utm_id=") ||
     url.includes("utm_term=")
   ) {
     const urlWithDate = url + "&timestamp=" + new Date().getTime();
@@ -170,6 +175,13 @@ function getPropsValue(key?: string) {
 }
 async function setUser(props: User) {
   _globalProps.user = await props;
+  _globalProps.config[ConfigTokens.IS_GOOGLE_LOGIN_ENABLED] = _.get(
+    props,
+    "linkedPlatformAccounts[0].platformCode",
+    ""
+  )
+    .toUpperCase()
+    .includes("VOLT");
 }
 
 async function getUser() {
