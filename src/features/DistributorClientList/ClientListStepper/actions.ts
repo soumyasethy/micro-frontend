@@ -10,6 +10,7 @@ export const resumeSteps: ActionFunction<StepperPayload> = async (
     _datastore,
     { navigate }
 ): Promise<any> => {
+    console.log(action.payload.value);
     if (action.payload.value[0].title == "Basic Details") {
         navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
         return;
@@ -23,7 +24,7 @@ export const resumeSteps: ActionFunction<StepperPayload> = async (
         return;
     } else
     if (action.payload.value[0].title == "Select Portfolio") {
-        navigate(ROUTE.PORTFOLOIO_START);
+        navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
         return;
     }
 

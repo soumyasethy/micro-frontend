@@ -12,8 +12,6 @@ import {
     ButtonTypeTokens,
     ButtonWidthTypeToken,
     ColorTokens,
-    DividerProps,
-    DividerSizeTokens,
     FontFamilyTokens,
     FontSizeTokens,
     HeaderProps,
@@ -21,14 +19,12 @@ import {
     IconProps,
     IconSizeTokens,
     IconTokens,
-    ListItemProps,
     SizeTypeTokens,
     SpaceProps,
     StackAlignItems,
     StackJustifyContent,
     StackProps,
     StackType,
-    StepperItem,
     StepperProps,
     StepperTypeTokens,
     TypographyProps,
@@ -38,9 +34,8 @@ import { ROUTE } from "../../../routes";
 import {
     ACTION, AssetsPayload, EditItemPayload,
 } from "./types";
-import { horizontalDistributorStepperRepo } from "../../../configs/utils";
 import { goBackACtion, onModify, onSave, onShare, onSkip } from "./actions";
-import { LimitPayload, StepResponseObject } from "../../fetchDistributorPortfolio/types";
+import { StepResponseObject } from "../../fetchDistributorPortfolio/types";
 import SharedPropsService from "../../../SharedPropsService";
 
 
@@ -85,11 +80,6 @@ export const template: (
                 routeId: ROUTE.PORTFOLOIO_START,
                 payload: {},
             },
-            // leftAction: {
-            //     type: ACTION.SHARE,
-            //     routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
-            //     payload: {},
-            // },
         },
         space0: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
         space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
@@ -107,13 +97,11 @@ export const template: (
                 {
                     id: "modify",
                     type: WIDGET.BUTTON,
-                    //  position: POSITION.ABSOLUTE_BOTTOM,
                 },
                 { id: "btnSpace", type: WIDGET.SPACE },
                 {
                     id: "modifyAmount",
                     type: WIDGET.BUTTON,
-                    // position: POSITION.ABSOLUTE_BOTTOM,
                 },
             ],
         },
@@ -208,18 +196,9 @@ export const template: (
             type: ButtonTypeTokens.LargeGhost,
             labelColor: ColorTokens.Primary_100,
             width: ButtonWidthTypeToken.FULL,
-            // action: {
-            //     type: ACTION.ON_MODIFY,
-            //     routeId: ROUTE.PORTFOLOIO_START,
-            //     payload: <AssetsPayload>{
-            //         value: "",
-            //         widgetId: "input",
-            //         stepResponseObject,
-            //       },
-            // },
         },
         btnSpace: <SpaceProps>{
-            size: SizeTypeTokens.MD
+            size: SizeTypeTokens.SM
         },
         modifyAmount: <ButtonProps & WidgetProps>{
             label: "Modify portfolio amount",
@@ -233,9 +212,6 @@ export const template: (
                     widgetId: "input",
                     stepResponseObject,
                   },
-                // payload: <LimitPayload>{
-                //     value:stepResponseObject
-                // },
             },
         },
         continue: <ButtonProps & WidgetProps>{
@@ -257,15 +233,10 @@ export const template: (
 
 export const portfolioStartMF: PageType<any> = {
     onLoad: async ({ }, {
-        // amount,
         stepResponseObject }) => {
         console.log("stepResponseObject",stepResponseObject);
         const amount = stepResponseObject.availableCreditAmount;
-        //const amount = "30000";
-        //const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
         let data1 = [];
-        // let stepper_data = [];
-    
         let stepper_data = await SharedPropsService.getStepperData();
         stepper_data.forEach((item, index) => {
           if (item.horizontalTitle === "Select Portfolio") {

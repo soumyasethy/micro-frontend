@@ -1,26 +1,10 @@
 import { ActionFunction, SCREEN_SIZE } from "@voltmoney/types";
-import {
-  ButtonProps,
-  ButtonTypeTokens,
-  IconTokens,
-  StepperStateToken,
-} from "@voltmoney/schema";
 import { Linking, Dimensions } from "react-native";
-import {
-  ACTION, LinkPayload
+import { LinkPayload
 } from "./types";
 import { ROUTE } from "../../routes";
-import SharedPropsService from "../../SharedPropsService";
-import _ from "lodash";
-import { api } from "../../configs/api";
-import { APP_CONFIG, DeepLinks, getAppHeader } from "../../configs/config";
-import {
-  updateCurrentStepId,
-  updateStepStatusMap,
-} from "../../configs/utils";
-import { navigate } from "../afterUnlock/dashboard/actions";
 import { getScreenType } from "../../configs/platfom-utils";
-
+import { ButtonProps } from "@voltmoney/schema";
 
 export const onSave: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
 
@@ -48,12 +32,17 @@ export const onShare: ActionFunction<LinkPayload> = async (action, _datastore, {
 export const copyToClipboard: ActionFunction<LinkPayload> = async (
   action,
   _datastore,
-  { clipboard }
+  { setDatastore,clipboard }
 ): Promise<any> => {
   clipboard.set(action.payload.value);
+  await setDatastore(ROUTE.INVESTOR, "copy", <
+    ButtonProps
+  >{
+    label: "Copied invite Link",
+  });
 };
 
-export const onClient: ActionFunction<{}> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
+export const onClient: ActionFunction<{}> = async (action, _datastore, { navigate }): Promise<any> => {
   await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
 };
 

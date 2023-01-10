@@ -152,15 +152,15 @@ export const template: (
         },
         infoItems1:<TypographyProps>{
             label: "We have already sent an email and text",
-            fontSize: FontSizeTokens.LG,
-            fontWeight: '500',
+            fontSize: FontSizeTokens.SM,
+            fontWeight: '400',
             color: ColorTokens.Grey_Charcoal,
             lineHeight: 24,
             fontFamily: FontFamilyTokens.Inter
         },
         infoItems2:<TypographyProps>{
             label: `message to ${name}`,
-            fontSize: FontSizeTokens.LG,
+            fontSize: FontSizeTokens.SM,
             fontWeight: '500',
             color: ColorTokens.Grey_Charcoal,
             lineHeight: 24,

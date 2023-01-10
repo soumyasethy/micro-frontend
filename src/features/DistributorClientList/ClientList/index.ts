@@ -697,7 +697,7 @@ export const template: (
 
 
 export const DistributorClientListMF: PageType<any> = {
-  onLoad: async ({ network }) => {
+  onLoad: async ({ network },{}) => {
     const body = {};
     const partnerApplicatiionId = await SharedPropsService.getApplicationId();
     const userContextResponse = await network.post(partnerApi.userContext, body, {
@@ -713,6 +713,7 @@ export const DistributorClientListMF: PageType<any> = {
         headers: await getAppHeader(),
       }
     );
+    
     response.data.customerMetadataList.forEach((data, index) => {
       const status = data.creditApplication.applicationState;
       if (status === "IN_PROGRESS") {
@@ -739,4 +740,5 @@ export const DistributorClientListMF: PageType<any> = {
     [ACTION.CTA]: onClickCTA,
     [ACTION.ON_CHANGE]: appendData
   },
+  clearPrevious:true
 };

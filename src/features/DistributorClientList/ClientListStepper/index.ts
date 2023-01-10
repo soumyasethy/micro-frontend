@@ -240,7 +240,7 @@ export const DistributorClientListStepperMF: PageType<any> = {
     data = data1.sort(function (a, b) {
       return a.id - b.id;
     });
-    const editableData = data.filter((value) => value.isEditable === true && value.status === "IN_PROGRESS");
+    const editableData = data.filter((value) => value.isEditable === true && (value.status === "IN_PROGRESS" || value.status === "NOT_STARTED"));
 
     const templateX = await template(applicationId, name, data, totalSteps, completedSteps,editableData);
     return Promise.resolve(templateX);

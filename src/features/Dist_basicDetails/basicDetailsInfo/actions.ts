@@ -19,8 +19,6 @@ export const CalendarOnChange: ActionFunction<InputPayload> = async (
   { setDatastore, ...props }
 ): Promise<any> => {
   dob = `${moment(action.payload.value, "DD-MM-yyyy").valueOf()}`;
-  console.log("here");
-  console.log(action.payload.value);
   if (
     panNumber &&
     mobileNumber &&
@@ -40,7 +38,6 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.log("widget",action.payload.widgetId);
   switch (action.payload.widgetId) {
     case "panNumberInput": {
       panNumber = action.payload.value;
@@ -52,13 +49,8 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
     case "calendarPicker": {
     
       const todate = new Date(dob);
-     // const month = todate.getMonth();
-     console.log("payload",action.payload.value);
-      console.log("dob",dob);
       const month = action.payload.value.substring(3,5);
       const date = action.payload.value.substring(0,2);
-      console.log("month",month);
-      console.log("date",date);
       if(parseInt(month) > 12 || parseInt(date) > 31){
         await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "calendarPicker", <CalendarProps>{
          state:CalendarStateToken.ERROR
@@ -145,8 +137,9 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
       loading: false,
     });
     if (response.status === 200) {
+    
       if (response?.data.stepResponseObject?.fullName) {
-
+        await SharedPropsService.setAccountId(response?.data.updatedApplicationObj?.accountId);
         await SharedPropsService.setApplicationId(response?.data.updatedApplicationObj?.applicationId);
         await navigate(ROUTE.DETAILS_CONFIRM, {
           name: response?.data.stepResponseObject?.fullName,
