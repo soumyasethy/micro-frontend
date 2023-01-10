@@ -18,14 +18,12 @@ import {
     FontSizeTokens,
     HeaderProps,
     HeaderTypeTokens,
-    ListItemProps,
     SizeTypeTokens,
     SpaceProps,
     StackAlignItems,
     StackJustifyContent,
     StackProps,
     StackType,
-    StepperItem,
     StepperProps,
     StepperTypeTokens,
     TypographyProps,
@@ -33,16 +31,13 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import {
-    ACTION, AmountPayload, AvailableCASItem, LimitPayload, RepositoryPayload, StepResponseObject,
+    ACTION, AvailableCASItem, LimitPayload, RepositoryPayload, StepResponseObject,
 } from "./types";
-import { horizontalDistributorStepperRepo } from "../../configs/utils";
-import { goCamsNext, goKarvyNext, goNext, onBack, onSave, onShare, onSkip } from "./action";
+import { goNext, onBack, onSave, onShare, onSkip } from "./action";
 import SharedPropsService from "../../SharedPropsService";
 import { partnerApi } from "../../configs/api";
 import { getAppHeader } from "../../configs/config";
 import moment from "moment";
-import { fetchPledgeLimitRepo } from "./repo";
-import { StepStatusMap } from "../login/otp_verify/types";
 
 
 export const template: (
@@ -88,7 +83,6 @@ export const template: (
                     },
                 }
                 : {};
-        // console.log(isDataUpdated);
 
         return {
             layout: <Layout>{
@@ -214,9 +208,11 @@ export const template: (
                     labelColor: ColorTokens.Primary_100,
                     width: ButtonWidthTypeToken.CONTENT,
                     action: {
-                        type: ACTION.GO_CAMS,
+                        type: ACTION.GO_OPERATIONAL,
                         routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
-                        payload: <{}>{},
+                        payload: <RepositoryPayload>{
+                            value:"CAMS"
+                        },
                     },
                 },
                 midDivider: <DividerProps>{
@@ -280,9 +276,11 @@ export const template: (
                     labelColor: ColorTokens.Primary_100,
                     width: ButtonWidthTypeToken.CONTENT,
                     action: {
-                        type: ACTION.GO_KARVY,
+                        type: ACTION.GO_OPERATIONAL,
                         routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
-                        payload: <{}>{},
+                        payload: <RepositoryPayload>{
+                            value:"KARVY"
+                        },
                     },
                 },
 
@@ -325,7 +323,6 @@ export const template: (
                     ],
                 },
                 headItemsCAMS: <TypographyProps>{
-                    // label: `Fetch From ${conditionCAMSData}`,
                     label: `Fetch From CAMS`,
                     fontSize: FontSizeTokens.MD,
                     fontWeight: '600',
@@ -337,11 +334,7 @@ export const template: (
                     size: SizeTypeTokens.SM
                 },
                 dateItemsCAMS: <TypographyProps>{
-
-                    //label: `Last fetched on ${Object.values(camsFetches)}`,
-                    //label: "Last fetched on ",
-                    label: "Last fetched on " + `${moment(camsDate, "MMMM D")}`.substring(0, 10),
-                    //label: "Last fetched on " +`${moment(Object.values(camsFetches), "MMMM D")}`.substring(0,10),
+                    label: "Last fetched on " + `${moment.unix(Number(camsDate) / 1000).format("MMMM D")}`,
                     fontSize: FontSizeTokens.XS,
                     fontWeight: '400',
                     color: ColorTokens.Grey_Charcoal,
@@ -349,7 +342,7 @@ export const template: (
                     fontFamily: FontFamilyTokens.Inter
                 },
                 portfolioItemsCAMS: <TypographyProps>{
-                    label: "Portfolio Value: Rs. "+`${camsPortfolio}`,
+                    label: "Portfolio Value: Rs. " + `${camsPortfolio}`,
                     fontSize: FontSizeTokens.XS,
                     fontWeight: '400',
                     color: ColorTokens.Grey_Charcoal,
@@ -423,8 +416,7 @@ export const template: (
                         type: ACTION.GO_OPERATIONAL,
                         routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
                         payload: <RepositoryPayload>{
-                            value:"CAMS"
-                            //value:`${Object.keys(camsFetches)}`
+                            value: "CAMS"
                         },
                     },
                 },
@@ -457,7 +449,6 @@ export const template: (
                     ],
                 },
                 headItemsKARVY: <TypographyProps>{
-                    // label: `Fetch From ${conditionCAMSData}`,
                     label: `Fetch From KARVY`,
                     fontSize: FontSizeTokens.MD,
                     fontWeight: '600',
@@ -469,11 +460,7 @@ export const template: (
                     size: SizeTypeTokens.SM
                 },
                 dateItemsKARVY: <TypographyProps>{
-
-                    //label: `Last fetched on ${Object.values(camsFetches)}`,
-                    //label: "Last fetched on ",
-                      label: "Last fetched on " + `${moment(karvyDate, "MMMM D")}`.substring(0, 10),
-                    //label: "Last fetched on " +`${moment(Object.values(camsFetches), "MMMM D")}`.substring(0,10),
+                    label: "Last fetched on " + `${moment(karvyDate, "MMMM D")}`.substring(0, 10),
                     fontSize: FontSizeTokens.XS,
                     fontWeight: '400',
                     color: ColorTokens.Grey_Charcoal,
@@ -481,7 +468,7 @@ export const template: (
                     fontFamily: FontFamilyTokens.Inter
                 },
                 portfolioItemsKARVY: <TypographyProps>{
-                    label: "Portfolio Value: Rs. "+`${karvyPortfolio}`,
+                    label: "Portfolio Value: Rs. " + `${karvyPortfolio}`,
                     fontSize: FontSizeTokens.XS,
                     fontWeight: '400',
                     color: ColorTokens.Grey_Charcoal,
@@ -555,17 +542,14 @@ export const template: (
                         type: ACTION.GO_OPERATIONAL,
                         routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
                         payload: <RepositoryPayload>{
-                        //    value:`${Object.keys(camsFetches)}`
-                        value:"KARVY"
+                            value: "KARVY"
                         },
                     },
                 },
 
                 continue: <ButtonProps & WidgetProps>{
                     label: "Save & Continue",
-                   // type: ButtonTypeTokens.LargeFilled,
-                     type: `${camsAmount}` || `${karvyAmount}` ? ButtonTypeTokens.LargeFilled : ButtonTypeTokens.LargeOutline,
-                   // labelColor: ColorTokens.Grey_Charcoal,
+                    type: `${camsAmount}` || `${karvyAmount}` ? ButtonTypeTokens.LargeFilled : ButtonTypeTokens.LargeOutline,
                     width: ButtonWidthTypeToken.FULL,
                     action: {
                         type: ACTION.ON_SAVE,
@@ -573,9 +557,6 @@ export const template: (
                         payload: <LimitPayload>{
                             value: stepResponseObject
                         },
-                        // payload: <AmountPayload>{
-                        //     value:`${unlockedAmont}`
-                        // },
                     },
                 },
                 btnSpace: <SpaceProps>{
@@ -597,246 +578,13 @@ export const template: (
 
 export const distributorPortfolioMF: PageType<any> = {
     onLoad: async ({ network }, { }) => {
-        /* For testing purpose 
-            const applictaionId ="bd2c1f9d-356c-40c1-b4b9-fad351fbd992";
-            let camsFetches = {
-                "KARVY": 1671781866
-            }
-            let isDataUpdated = "Data Exist";
-         */
+        const applicationid = await SharedPropsService.getApplicationId();
+        const pledgeLimitResponse = await network.get(
+            `${partnerApi.pledgeLimit}${applicationid}`,
+            { headers: await getAppHeader() }
+        );
 
-            const applicationid = await SharedPropsService.getApplicationId();
-              const pledgeLimitResponse = await network.get(
-                `${partnerApi.pledgeLimit}${applicationid}`,
-                { headers: await getAppHeader() }
-              );
-             
-        // const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
-        //     (response) => ({
-        //       data: response,
-        //     })
-        //   );
-        // const pledgeLimitResponse = {
-        //     "errorMessage": null,
-        //     "status": "SUCCESS",
-        //     "updatedApplicationObj": {
-        //         "applicationId": "6f4d2224-9c06-41ae-81ae-9aceb96137d3",
-        //         "accountId": "94802dd0-48f7-45fc-ac32-860f5e6379af",
-        //         "applicationType": "CREDIT_AGAINST_SECURITIES_BORROWER",
-        //         "applicationState": "IN_PROGRESS",
-        //         "applicationApprovalStatus": "APPROVED",
-        //         "creditAmount": null,
-        //         "lenderAccountId": "Bajaj",
-        //         "partnerAccountId": "test",
-        //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-        //         "currentStepId": "MANDATE_SETUP",
-        //         "stepStatusMap": {
-        //             "KYC_SUMMARY": "COMPLETED",
-        //             "KYC_AADHAAR_VERIFICATION": "SKIPPED",
-        //             "MF_FETCH_PORTFOLIO": "COMPLETED",
-        //             "KYC_CKYC": "COMPLETED",
-        //             "KYC_ADDITIONAL_DETAILS": "COMPLETED",
-        //             "CREDIT_APPROVAL": "COMPLETED",
-        //             "KYC_PHOTO_VERIFICATION": "COMPLETED",
-        //             "MANDATE_SETUP": "NOT_STARTED",
-        //             "KYC_PAN_VERIFICATION": "COMPLETED",
-        //             "MF_PLEDGE_PORTFOLIO": "COMPLETED",
-        //             "AGREEMENT_SIGN": "IN_PROGRESS",
-        //             "KYC_DOCUMENT_UPLOAD": "SKIPPED",
-        //             "BANK_ACCOUNT_VERIFICATION": "COMPLETED"
-        //         },
-        //         "createdOn": 1671876150766,
-        //         "lastUpdatedOn": 1672726581841,
-        //         "completedOn": null
-        //     },
-        //     "stepResponseObject": {
-        //         "applicationId": "6f4d2224-9c06-41ae-81ae-9aceb96137d3",
-        //         "totalPortfolioAmount": 872800,
-        //         "availableCreditAmount": 392600,
-        //         "requestedCreditAmount": 0,
-        //         "approvedCreditAmount": 392600,
-        //         "processingFees": 999,
-        //         "processingFeesBreakUp": {
-        //             "Processing Fee": 999
-        //         },
-        //         "interestRate": 9.5,
-        //         "loanTenureInMonths": 12,
-        //         "isinLTVMap": {
-        //             "INF846K01859": 0.45,
-        //             "INF769K01010": 0.45,
-        //             "INF843K01047": 0.45,
-        //             "INF251K01894": 0.45
-        //         },
-        //         "isinNAVMap": {
-        //             "INF846K01859": 66.63,
-        //             "INF769K01010": 80.542,
-        //             "INF843K01047": 53.981,
-        //             "INF251K01894": 145.3279
-        //         },
-        //         "repositoryAssetMetadataMap": {
-        //             "KARVY": {
-        //                 "availablePortfolioAmount": 872800,
-        //                 "approvedPortfolioAmount": 0,
-        //                 "availableCreditAmount": 392600,
-        //                 "approvedCreditAmount": 0,
-        //                 "casFetchDate": null
-        //             },
-        //             "CAMS": {
-        //                 "availablePortfolioAmount": 0,
-        //                 "approvedPortfolioAmount": 0,
-        //                 "availableCreditAmount": 0,
-        //                 "approvedCreditAmount": 0,
-        //                 "casFetchDate": null
-        //             }
-        //         },
-        //         "availableCAS": [
-        //             {
-        //                 "assetRepository": "KARVY",
-        //                 "amcName": null,
-        //                 "amcCode": "128",
-        //                 "folioNo": "9048897656",
-        //                 "schemeCode": "MCGP",
-        //                 "schemeName": "Axis Mid Cap Fund  Regular Growth",
-        //                 "isinNo": "INF846K01859",
-        //                 "schemeType": "EQUITY",
-        //                 "totalAvailableUnits": 6371.203,
-        //                 "fetchedOn": null,
-        //                 "is_pledged": null,
-        //                 "is_pledged_confirmed": null,
-        //                 "pledgedUnits": null,
-        //                 "pledgedOn": null,
-        //                 "pledgeReferenceNo": null
-        //             },
-        //             {
-        //                 "assetRepository": "KARVY",
-        //                 "amcName": null,
-        //                 "amcCode": "117",
-        //                 "folioNo": "7042093481",
-        //                 "schemeCode": "IORG",
-        //                 "schemeName": "Mirae Asset India Equity Fund  Regular Growth Plan",
-        //                 "isinNo": "INF769K01010",
-        //                 "schemeType": "EQUITY",
-        //                 "totalAvailableUnits": 1939.585,
-        //                 "fetchedOn": null,
-        //                 "is_pledged": null,
-        //                 "is_pledged_confirmed": null,
-        //                 "pledgedUnits": null,
-        //                 "pledgedOn": null,
-        //                 "pledgeReferenceNo": null
-        //             },
-        //             {
-        //                 "assetRepository": "KARVY",
-        //                 "amcName": null,
-        //                 "amcCode": "118",
-        //                 "folioNo": "3002703269",
-        //                 "schemeCode": "EFRG",
-        //                 "schemeName": "Edelweiss Large & Mid Cap Fund  Regular Plan Growth",
-        //                 "isinNo": "INF843K01047",
-        //                 "schemeType": "EQUITY",
-        //                 "totalAvailableUnits": 2816.244,
-        //                 "fetchedOn": null,
-        //                 "is_pledged": null,
-        //                 "is_pledged_confirmed": null,
-        //                 "pledgedUnits": null,
-        //                 "pledgedOn": null,
-        //                 "pledgeReferenceNo": null
-        //             },
-        //             {
-        //                 "assetRepository": "KARVY",
-        //                 "amcName": null,
-        //                 "amcCode": "178",
-        //                 "folioNo": "900000376840",
-        //                 "schemeCode": "LCRG",
-        //                 "schemeName": "BNP PARIBAS LARGE CAP FUND  REGULAR GROWTH",
-        //                 "isinNo": "INF251K01894",
-        //                 "schemeType": "EQUITY",
-        //                 "totalAvailableUnits": 964.708,
-        //                 "fetchedOn": null,
-        //                 "is_pledged": null,
-        //                 "is_pledged_confirmed": null,
-        //                 "pledgedUnits": null,
-        //                 "pledgedOn": null,
-        //                 "pledgeReferenceNo": null
-        //             }
-        //         ],
-        //         "tobePledgedPortfolio": [],
-        //         "pledgedPortfolio": [
-        //             {
-        //                 "assetRepository": "KARVY",
-        //                 "amcName": null,
-        //                 "amcCode": "117",
-        //                 "folioNo": "7042093481",
-        //                 "schemeCode": "IORG",
-        //                 "schemeName": "Mirae Asset India Equity Fund  Regular Growth Plan",
-        //                 "isinNo": "INF769K01010",
-        //                 "schemeType": null,
-        //                 "totalAvailableUnits": null,
-        //                 "fetchedOn": null,
-        //                 "is_pledged": true,
-        //                 "is_pledged_confirmed": true,
-        //                 "pledgedUnits": 1939.585,
-        //                 "pledgedOn": 1671876180817,
-        //                 "pledgeReferenceNo": "163656690"
-        //             },
-        //             {
-        //                 "assetRepository": "KARVY",
-        //                 "amcName": null,
-        //                 "amcCode": "118",
-        //                 "folioNo": "3002703269",
-        //                 "schemeCode": "EFRG",
-        //                 "schemeName": "Edelweiss Large & Mid Cap Fund  Regular Plan Growth",
-        //                 "isinNo": "INF843K01047",
-        //                 "schemeType": null,
-        //                 "totalAvailableUnits": null,
-        //                 "fetchedOn": null,
-        //                 "is_pledged": true,
-        //                 "is_pledged_confirmed": true,
-        //                 "pledgedUnits": 2816.244,
-        //                 "pledgedOn": 1671876180817,
-        //                 "pledgeReferenceNo": "411174900"
-        //             },
-        //             {
-        //                 "assetRepository": "KARVY",
-        //                 "amcName": null,
-        //                 "amcCode": "128",
-        //                 "folioNo": "9048897656",
-        //                 "schemeCode": "MCGP",
-        //                 "schemeName": "Axis Mid Cap Fund  Regular Growth",
-        //                 "isinNo": "INF846K01859",
-        //                 "schemeType": null,
-        //                 "totalAvailableUnits": null,
-        //                 "fetchedOn": null,
-        //                 "is_pledged": true,
-        //                 "is_pledged_confirmed": true,
-        //                 "pledgedUnits": 6371.203,
-        //                 "pledgedOn": 1671876180817,
-        //                 "pledgeReferenceNo": "807876033"
-        //             },
-        //             {
-        //                 "assetRepository": "KARVY",
-        //                 "amcName": null,
-        //                 "amcCode": "178",
-        //                 "folioNo": "900000376840",
-        //                 "schemeCode": "LCRG",
-        //                 "schemeName": "BNP PARIBAS LARGE CAP FUND  REGULAR GROWTH",
-        //                 "isinNo": "INF251K01894",
-        //                 "schemeType": null,
-        //                 "totalAvailableUnits": null,
-        //                 "fetchedOn": null,
-        //                 "is_pledged": true,
-        //                 "is_pledged_confirmed": true,
-        //                 "pledgedUnits": 964.708,
-        //                 "pledgedOn": 1671876180817,
-        //                 "pledgeReferenceNo": "24952245"
-        //             }
-        //         ],
-        //         "casFetchDates": {
-        //             "KARVY": 1671876175
-        //         }
-        //     }
-        // };
 
-        // testing statrt
         let unlockedAmont = 0;
         let isDataUpdated = "";
         let camsDate;
@@ -860,75 +608,30 @@ export const distributorPortfolioMF: PageType<any> = {
             camsPortfolio = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.availablePortfolioAmount;
             camsAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.availableCreditAmount;
             isDataUpdated = "Data Exist";
-        } 
-         if (conditionDataKARVY.availableCreditAmount !== 0) {
+        }
+        if (conditionDataKARVY.availableCreditAmount !== 0) {
             karvyDate = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
             karvyDate = new Date(karvyDate * 1000);
             karvyPortfolio = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availablePortfolioAmount;
             karvyAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availableCreditAmount;
             isDataUpdated = "Data Exist";
-        } 
-      
-      //  var date = 
-        // Object.keys(conditionData).map(key => {
-        //     const value = conditionData[key] // obj[x]
-        //     conditionDataKAMS = value;
-        // })
-        // console.log("cams");
-        // console.log("cams",pledgeLimitResponse.stepResponseObject.repositoryAssetMetadataMap.CAMS.);
-        // console.log("camsdata",conditionCAMSData[0].availableCreditAmount);
-
-        // testing end
-
-        //   const availableCreditAmount: number =
-        //     pledgeLimitResponse.data.stepResponseObject.availableCreditAmount || 0;
-        //   const availableCAS: AvailableCASItem[] =
-        //     pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
-        //const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
-
-        /*** Show popup as soon as we land here if MF_PLEDGE_PORTFOLIO is PENDING_CALLBACK ***/
-        //   const stepStatusMap: StepStatusMap =
-        //     pledgeLimitResponse.data.updatedApplicationObj.stepStatusMap;
-
-
+        }
         const applictaionId = await SharedPropsService.getApplicationId();
-
-        // let camsFetches = {
-        //     "KARVY": 1671781866
-        // }
-        // let isDataUpdated = "Data Exist";
         let camsFetches = {}
+        let filtered_stepper = [];
+        let stepper_data = await SharedPropsService.getStepperData();
+        stepper_data.forEach((item, index) => {
+            if (item.horizontalTitle === "Fetch Portfolio") {
+                item.status = "IN_PROGRESS";
+            }
+            filtered_stepper.push(item);
+        })
 
-        
-        // if (JSON.stringify(pledgeLimitResponse.data.stepResponseObject.casFetchDates) === '{}') {
-        //     isDataUpdated = "";
-        // } else {
-        //     unlockedAmont = pledgeLimitResponse.data.stepResponseObject.availableCreditAmount;
-        //     camsFetches = pledgeLimitResponse.data.stepResponseObject.casFetchDates;
-        //     isDataUpdated = "Data Exist";
-        // }
-       // const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-      // const stepper = await SharedPropsService.getStepperData();
-       let data1 = [];
-       // let stepper_data = [];
-   
-       let stepper_data = await SharedPropsService.getStepperData();
-       stepper_data.forEach((item, index) => {
-         if (item.horizontalTitle === "Fetch Portfolio") {
-           item.status = "IN_PROGRESS";
-         }
-         data1.push(item);
-       })
-   
-       await SharedPropsService.setStepperData(data1);
+        await SharedPropsService.setStepperData(filtered_stepper);
         return Promise.resolve(
-            //  template(availableCreditAmount, availableCAS, stepResponseObject)
-            //  template(isDataUpdated, camsFetches, stepper,unlockedAmont,stepResponseObject)
-            //template(isDataUpdated,conditionData, stepper,unlockedAmont,stepResponseObject)
-            // template(isDataUpdated,conditionDataKAMS,conditionDataKARVY, stepper, unlockedAmont, stepResponseObject)
             template(isDataUpdated, camsDate, camsAmount, camsPortfolio,
                 karvyDate, karvyAmount, karvyPortfolio
-                , data1, unlockedAmont, stepResponseObject)
+                , filtered_stepper, unlockedAmont, stepResponseObject)
         );
     },
     actions: {
@@ -936,10 +639,7 @@ export const distributorPortfolioMF: PageType<any> = {
         [ACTION.ON_SKIP]: onSkip,
         [ACTION.GO_BACK]: onBack,
         [ACTION.SHARE]: onShare,
-        [ACTION.GO_CAMS]: goCamsNext,
-        [ACTION.GO_KARVY]: goKarvyNext,
         [ACTION.GO_OPERATIONAL]: goNext,
     },
-
     clearPrevious: true,
 };

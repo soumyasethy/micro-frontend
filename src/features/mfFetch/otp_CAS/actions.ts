@@ -1,8 +1,9 @@
 import { ActionFunction } from "@voltmoney/types";
-import { AuthCASPayload } from "./types";
-import { api } from "../../../configs/api";
+import { ACTIONS, AuthCASPayload } from "./types";
+import { api, partnerApi } from "../../../configs/api";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import {
+  APP_CONFIG,
   AssetRepositoryMap, AssetRepositoryType,
   ConfigTokens,
   getAppHeader,
@@ -54,6 +55,8 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
   _datastore,
   { navigate, setDatastore, network, analytics, showPopup, hidePopup }
 ): Promise<any> => {
+  const userType = await SharedPropsService.getUserType();
+  if(userType === "BORROWER"){
   let assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
     action.payload.value.length !==
@@ -116,6 +119,72 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
       state: InputStateToken.ERROR,
     });
   }
+  }else {
+    console.log("partner otp verify");
+    const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
+    const response = await network.post(
+      partnerApi.authCAS,
+      {
+        applicationId: action.payload.applicationId,
+        otp: action.payload.value,
+        assetRepository: assetRepositoryType,
+      },
+      { headers: await getAppHeader() }
+    );
+   
+    if (response.status === 200) {
+      // await setDatastore(action.routeId, "input", <TextInputProps>{
+      //   state: InputStateToken.SUCCESS,
+      // });
+      // await goBack();
+      await setDatastore(action.routeId, "input", <TextInputProps>{
+        state: InputStateToken.SUCCESS,
+      });
+      await showPopup({
+        autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
+        isAutoTriggerCta: true,
+        title: "Portfolio fetched succesfully ",
+        subTitle: "You will be redirected to next step in few seconds",
+        type: "SUCCESS",
+        ctaLabel: "Continue",
+        primary: true,
+        ctaAction: {
+          type: ACTIONS.NEXT_ROUTE,
+          routeId: ROUTE.OTP_AUTH_CAS,
+          payload: {},
+        },
+      });
+      await SharedPropsService.setAuthCASResponse(response.data);
+    } else {
+      analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
+        ...AnalyticsEventTracker.borrower_mf_pull_failed,
+      });
+    }
+
+  //   await setDatastore(action.routeId, "input", <TextInputProps>{
+  //     state: InputStateToken.SUCCESS,
+  //   });
+  //   // await goBack();
+
+  //   if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+  //     /**  enable animation again ***/
+  //     const layoutType = await SharedPropsService.getConfig(
+  //       ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
+  //     );
+  //     /*** Don't run animation MF_FETCH is not full screen */
+  //     if (!layoutType) await SharedPropsService.setPledgeFirstTime(true);
+
+  //     const nextRoute = await nextStepId(
+  //       response.data.updatedApplicationObj.currentStepId
+  //     );
+  //     nextRoute.params = { ...nextRoute.params, response };
+  //     await navigate(nextRoute.routeId, nextRoute.params);
+  //   }
+  // } else {
+  //   await setDatastore(action.routeId, "input", <TextInputProps>{
+  //     state: InputStateToken.ERROR,
+  //   });
+   }
 };
 
 export const goBack: ActionFunction<any> = async (
