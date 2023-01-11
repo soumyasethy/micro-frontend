@@ -61,7 +61,7 @@ const template: (setIsUserLoggedIn?: Function) => TemplateSchema = (
 });
 
 export const splashScreenMF: PageType<any> = {
-  onLoad: async ({...standardUtilities}, { setIsUserLoggedIn, ...props }) => {
+  onLoad: async ({ ...standardUtilities }, { setIsUserLoggedIn, ...props }) => {
     /*** Get all params sent via URL ****/
     //Example-1
     //http://localhost:3000/partner/dashboard/helloworld
@@ -71,6 +71,7 @@ export const splashScreenMF: PageType<any> = {
     // access route.params -> {ref_code: '12345'}
     const ref: string = _.get(props, "ref", null);
     const urlParams: string = _.get(props, "urlParams", null);
+    let mobileNumber = null;
     if (ref) {
       await SharedPropsService.setPartnerRefCode(ref);
     }
@@ -89,18 +90,26 @@ export const splashScreenMF: PageType<any> = {
         /*** setting app global api header here if not VOLT_MOBILE_APP ****/
         await SharedPropsService.setAppPlatform(customPlatform);
       }
+
+      /*** if ?user=8763666620 then autofill mobile number in login screen ****/
+      const isPreFillMobileNumber = urlParams.includes("user");
+
+      if (isPreFillMobileNumber) {
+        const params = getParameters(urlParams);
+        mobileNumber = params["user"];
+      }
     }
     setTimeout(
-      () => {},
-      await SplashAction(
-        {
-          type: ACTION.AUTH_NAV,
-          routeId: ROUTE.SPLASH_SCREEN,
-          payload: { setIsUserLoggedIn },
-        },
-        {},
+      async () =>
+        await SplashAction(
+          {
+            type: ACTION.AUTH_NAV,
+            routeId: ROUTE.SPLASH_SCREEN,
+            payload: { setIsUserLoggedIn, mobileNumber },
+          },
+          {},
           standardUtilities
-      ),
+        ),
       250
     );
 

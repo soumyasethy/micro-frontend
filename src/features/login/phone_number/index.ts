@@ -46,7 +46,9 @@ import {
 } from "./actions";
 import { RegexConfig } from "../../../configs/config";
 
-export const template: TemplateSchema = {
+export const template: (mobileNumber?: string) => TemplateSchema = (
+  mobileNumber
+) => ({
   layout: <Layout>{
     id: ROUTE.PHONE_NUMBER,
     type: LAYOUTS.LIST,
@@ -118,6 +120,7 @@ export const template: TemplateSchema = {
       fontWeight: "400",
     },
     input: <TextInputProps & WidgetProps>{
+      value: mobileNumber ? `${mobileNumber}` : "",
       regex: RegexConfig.MOBILE,
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
@@ -181,13 +184,11 @@ export const template: TemplateSchema = {
     },
     space5: <SpaceProps>{ size: SizeTypeTokens.Size32 },
   },
-};
+});
 
 export const phoneNumberMF: PageType<any> = {
-  onLoad: async () => {
-    return Promise.resolve(template);
-
-    // onLoad: async () => Promise.resolve(template),
+  onLoad: async (_, { mobileNumber }) => {
+    return Promise.resolve(template(mobileNumber));
   },
   actions: {
     [ACTION.CONTINUE]: sendOtp,

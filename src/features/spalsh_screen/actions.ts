@@ -6,7 +6,6 @@ import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
 
 import { getAppHeader } from "../../configs/config";
-import { AnalyticsEventTracker } from "../../configs/constants";
 
 export const SplashAction: ActionFunction<any> = async (
   action,
@@ -36,9 +35,15 @@ export const SplashAction: ActionFunction<any> = async (
         );
         await navigate(nextRoute.routeId, nextRoute.params);
       }
+    } else {
+      await navigate(ROUTE.PHONE_NUMBER, {
+        mobileNumber: action?.payload?.mobileNumber,
+      });
     }
   } else {
-    await navigate(ROUTE.PHONE_NUMBER);
+    await navigate(ROUTE.PHONE_NUMBER, {
+      mobileNumber: action?.payload?.mobileNumber,
+    });
   }
   // } else {
   //   await navigate(ROUTE.LANDING_PAGE);
