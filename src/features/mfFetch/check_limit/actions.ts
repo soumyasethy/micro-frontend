@@ -54,12 +54,26 @@ export const autoTriggerOtp: ActionFunction<any> = async (
   _datastore,
   { ...props }
 ) => {
-  const user: User = await SharedPropsService.getUser();
-  const applicationId = user.linkedApplications[0].applicationId;
-  const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
-  const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-  const emailId =
-    `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+  const userType = await SharedPropsService.getUserType();
+  let phoneNumber = "";
+  let panNumberX = "";
+  let emailId = "";
+  let applicationId = "";
+  if (userType === "BORROWER") {
+    const user: User = await SharedPropsService.getUser();
+    panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    emailId =
+      `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+    if (!applicationId) {
+      applicationId = applicationId || user.linkedApplications[0].applicationId;
+    }
+  } else {
+    phoneNumber = (await SharedPropsService.getPartnerUser()).phoneNumber;
+    emailId = (await SharedPropsService.getPartnerUser()).emailId;
+    panNumberX = (await SharedPropsService.getPartnerUser()).panNumber;
+  }
+
   const isAutoTriggerOtp: boolean = await SharedPropsService.getConfig(
     ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP
   );
