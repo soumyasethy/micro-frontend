@@ -49,9 +49,12 @@ import {
   AssetRepositoryMap,
   AssetRepositoryType,
   ConfigTokens,
-  getPrimaryAssetRepository
+  getPrimaryAssetRepository,
+   getAppHeader
 } from "../../../configs/config";
 import {heightMap} from "../../../configs/height";
+
+import { partnerApi } from "../../../configs/api";
 
 export const template: (
   applicationId: string,
@@ -182,13 +185,18 @@ export const template: (
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.SM },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-      panItem: <ListItemProps & WidgetProps>{
-        title: "PAN Number",
-        subTitle: panNumber,
-        leadIconName: IconTokens.CreditCard,
-        trailIconName: isPanEditAllowed ? IconTokens.Edit : null,
-        subTitleLineHeight: 24,
-        action: isPanEditAllowed
+ 
+     
+        panItem: <ListItemProps & WidgetProps>{
+          title: "PAN Number",
+          subTitle: panNumber,
+          leadIconName: IconTokens.CreditCard,
+          // trailIconName: `${headTitle}` ? "" : IconTokens.Edit,
+
+          isDivider: true,
+          trailIconName: isPanEditAllowed  ? IconTokens.Edit : null,
+          subTitleLineHeight: 24,
+          action: isPanEditAllowed
           ? {
               routeId: ROUTE.MF_FETCH_PORTFOLIO,
               type: ACTION.EDIT_PAN,
@@ -199,6 +207,17 @@ export const template: (
               },
             }
           : null,
+          // action: isPanEditAllowed && headTitle === ''
+          //   ? {
+          //     routeId: ROUTE.MF_FETCH_PORTFOLIO,
+          //     type: ACTION.EDIT_PAN,
+          //     payload: <PanEditPayload>{
+          //       applicationId,
+          //       targetRoute: ROUTE.MF_FETCH_PORTFOLIO,
+          //       panNumber: panNumber,
+          //     },
+          //   }
+          // : null,
       },
       mobileItem: <ListItemProps & WidgetProps>{
         title: "Mobile Number (linked to investments)",
@@ -299,16 +318,47 @@ export const template: (
 };
 
 export const checkLimitMF: PageType<any> = {
-  onLoad: async (_, { setIsUserLoggedIn, assetRepository }) => {
-    const user: User = await SharedPropsService.getUser();
-    const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
-    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId = `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
-    const applicationId = user.linkedApplications[0].applicationId;
 
-    if(!assetRepository) {
-      assetRepository = await getPrimaryAssetRepository();
+  onLoad: async (
+    { network, asyncStorage, ...props },
+    { applicationId, email, panNumber, mobileNumber, headTitle }
+  ) => {
+    const userType = await SharedPropsService.getUserType();
+    let phoneNumber = "";
+    let panNumberX = "";
+    let emailId = "";
+    console.log("userType", userType);
+    if (userType === "BORROWER") {
+      const user: User = await SharedPropsService.getUser();
+      panNumberX =
+        panNumber || user.linkedBorrowerAccounts[0].accountHolderPAN;
+      phoneNumber =
+        mobileNumber || user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+      emailId = `${email || user.linkedBorrowerAccounts[0].accountHolderEmail
+        }`.toLowerCase();
+      if (!applicationId) {
+        applicationId = applicationId || user.linkedApplications[0].applicationId;
+      }
+      const assetRepository = await SharedPropsService.getAssetRepositoryType();
+    } else {
+      phoneNumber = await (await SharedPropsService.getPartnerUser()).phoneNumber;
+      emailId = await (await SharedPropsService.getPartnerUser()).emailId;
+      panNumberX = await (await SharedPropsService.getPartnerUser()).panNumber;
+      const assetRepository = headTitle;
+      // console.log(await SharedPropsService.getBasicData());
+      //       phoneNumber = await (await SharedPropsService.getBasicData()).mobileNumber;
+      //       emailId =await (await SharedPropsService.getBasicData()).email;
+      //       panNumberX = await (await SharedPropsService.getBasicData()).panNumber;
+      //       const assetRepository = headTitle;
     }
+    const assetRepository = await SharedPropsService.getAssetRepositoryType();
+    console.log("repo", assetRepository);
+    // return Promise.resolve(
+    //   template(applicationId, panNumberX, phoneNumber, emailId, headTitle,assetRepository)
+
+    // if(!assetRepository) {
+    //   assetRepository = await getPrimaryAssetRepository();
+    // }
 
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_PAN_EDIT_ALLOWED

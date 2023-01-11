@@ -44,10 +44,6 @@ export const template: (
     isDataUpdated: any,
     camsDate: string, camsAmount: Number, camsPortfolio: Number,
     karvyDate: string, karvyAmount: Number, karvyPortfolio: Number,
-
-    // conditionDataKAMS: {},
-    // conditionDataKARVY: {},
-    //  camsFetches: {},
     stepper: any,
     unlockedAmont: Number,
     stepResponseObject: StepResponseObject
@@ -147,6 +143,19 @@ export const template: (
                         routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
                         payload: {},
                     },
+                    leftTitle:<TypographyProps>{
+                        label:"Share",
+                        fontFamily:FontFamilyTokens.Inter,
+                        fontSize:FontSizeTokens.SM,
+                        color:ColorTokens.Primary_100,
+                        lineHeight:24,
+                
+                      },
+                      leftAction: {
+                        type: ACTION.SHARE,
+                        routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
+                        payload: {},
+                      },
                     // leftAction: {
                     //     type: ACTION.SHARE,
                     //     routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
@@ -460,7 +469,7 @@ export const template: (
                     size: SizeTypeTokens.SM
                 },
                 dateItemsKARVY: <TypographyProps>{
-                    label: "Last fetched on " + `${moment(karvyDate, "MMMM D")}`.substring(0, 10),
+                    label: "Last fetched on " + `${moment.unix(Number(karvyDate) / 1000).format("MMMM D")}`,
                     fontSize: FontSizeTokens.XS,
                     fontWeight: '400',
                     color: ColorTokens.Grey_Charcoal,
@@ -584,6 +593,50 @@ export const distributorPortfolioMF: PageType<any> = {
             { headers: await getAppHeader() }
         );
 
+       
+        let data1 = [];
+        var stepper_datas = [];
+
+        Object.keys(pledgeLimitResponse.data.partnerViewStepperMap).map(key=> {
+            const value = pledgeLimitResponse.data.partnerViewStepperMap[key];
+            const stepData:any = new Object();
+            if(value.isEditable === true){
+                stepData.title = value.verticalDisplayName;
+                stepData.subTitle = value.verticalDescription;
+                stepData.id = value.order;
+                stepData.horizontalTitle = value.horizontalDisplayName;
+                stepData.status = value.status;
+              data1.push(stepData);
+            }
+            })
+            stepper_datas = data1.sort(function (a, b) {
+              return a.id - b.id;
+            });
+
+            let filtered_stepper = [];
+           // let stepper_data = await SharedPropsService.getStepperData();
+           stepper_datas.forEach((item, index) => {
+                console.log("fetch item",item);
+                if (item.horizontalTitle === "Fetch Portfolio") {
+                    item.status = "IN_PROGRESS";
+                }
+                // if (item.horizontalTitle === "Bank details") {
+                //     item.status = "COMPLETED";
+                // }
+                if (item.horizontalTitle === "Select Portfolio") {
+                    item.status = "NOT_STARTED";
+                }
+                filtered_stepper.push(item);
+            })
+    
+            console.log("filtered_data",filtered_stepper);
+    
+            await SharedPropsService.setStepperData(filtered_stepper);
+
+
+           // await SharedPropsService.setStepperData(stepper_datas);
+      
+
 
         let unlockedAmont = 0;
         let isDataUpdated = "";
@@ -618,16 +671,7 @@ export const distributorPortfolioMF: PageType<any> = {
         }
         const applictaionId = await SharedPropsService.getApplicationId();
         let camsFetches = {}
-        let filtered_stepper = [];
-        let stepper_data = await SharedPropsService.getStepperData();
-        stepper_data.forEach((item, index) => {
-            if (item.horizontalTitle === "Fetch Portfolio") {
-                item.status = "IN_PROGRESS";
-            }
-            filtered_stepper.push(item);
-        })
-
-        await SharedPropsService.setStepperData(filtered_stepper);
+       
         return Promise.resolve(
             template(isDataUpdated, camsDate, camsAmount, camsPortfolio,
                 karvyDate, karvyAmount, karvyPortfolio

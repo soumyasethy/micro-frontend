@@ -7,7 +7,7 @@ import {
   PortfolioTogglePayload,
   SearchPortfolioPayload,
 } from "./types";
-import { CtaCardProps, ListProps } from "@voltmoney/schema";
+import { ColorTokens, CtaCardProps, FontFamilyTokens, FontSizeTokens, HeaderProps, ListProps, TypographyProps } from "@voltmoney/schema";
 import {
   AvailableCASItem,
   IsinLTVMap,
@@ -96,6 +96,33 @@ export const TriggerCTA: ActionFunction<CtaPayload> = async (
   // );
   navigate(ROUTE.INVESTOR);
   // navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
+};
+
+
+
+export const onCopy: ActionFunction<{}> = async (action, _datastore, { network,clipboard,setDatastore, ...props }): Promise<any> => {
+  const applicationId = await SharedPropsService.getApplicationId();
+  const Linkresponse = await network.get(
+      `${partnerApi.referalLink}${applicationId}`,
+      {
+        headers: await getAppHeader(),
+      }
+    );
+    const link = Linkresponse.data.link;
+
+  clipboard.set(link);
+  await setDatastore(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO, "header", <
+    HeaderProps
+  >{
+    leftTitle:<TypographyProps>{
+      label:"Copied share link",
+      fontFamily:FontFamilyTokens.Inter,
+      fontSize:FontSizeTokens.SM,
+      color:ColorTokens.Primary_100,
+      lineHeight:24,
+
+    },
+  });
 };
 
 export const goBack: ActionFunction<OtpPayload> = async (

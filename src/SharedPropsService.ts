@@ -43,11 +43,7 @@ type GlobalProps = {
   ref?: string;
   url?: string;
   initialAssetRepositoryType?: AssetRepositoryType;
-  assetRepositoryConfig?: {
-    [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
-  };
-  casListOriginal?: AvailableCASItem[];
-  appPlatform?: string;
+
   config?: {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
@@ -74,10 +70,19 @@ type GlobalProps = {
   bankData :BankData;
 
   basicData: BasicData;
-
   assetRepositoryType?: AssetRepositoryType;
 
-  stepperData?:any
+  stepperData?:any,
+  basicData_pan: string;
+  basicData_phone: string;
+  basicData_email: string;
+  basicData_dob: string;
+  casListOriginal?: AvailableCASItem[];
+  appPlatform?: string;
+  investorName?:string;
+  assetRepositoryConfig?: {
+    [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
+  };
 };
 
 let _globalProps: GlobalProps = {
@@ -92,6 +97,31 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
+  userType:USERTYPE.PARTNER,
+  applicationId:"",
+  bankCode:"",
+  bankName:"",
+  accountId:"",
+  pbankAccNo:"",
+  pconfirmAccNo:"",
+  pbankIfsc:"",
+  bankData:{
+    bankName: "",
+    bankCode:"",
+    accountNumber:"",
+    confirmAccountNumber:"",
+    bankIfsc:""
+  },
+  basicData:{
+    panNumber:"",
+    mobileNumber:"",
+    email:"",
+    dob:""
+  },
+  basicData_pan:"",
+  basicData_dob:"",
+  basicData_email:"",
+  basicData_phone:"",
   authCAS: null,
   ref: "",
   /*** Default asset repository */
@@ -127,28 +157,8 @@ let _globalProps: GlobalProps = {
   listItemDataCAS: [],
   desiredPortfolio: {},
  // userType:USERTYPE.BORROWER
-  userType:"PARTNER",
- // userType:USERTYPE.BORROWER
-  applicationId:"",
-  bankCode:"",
-  bankName:"",
-  accountId:"",
-  pbankAccNo:"",
-  pconfirmAccNo:"",
-  pbankIfsc:"",
-  bankData:{
-    bankName: "",
-    bankCode:"",
-    accountNumber:"",
-    confirmAccountNumber:"",
-    bankIfsc:""
-  },
-  basicData:{
-    panNumber:"",
-    mobileNumber:"",
-    email:""
-  },
-  stepperData: {}
+  stepperData: {},
+  investorName:""
 };
 
 export function setStepperData(StepperData) {
@@ -156,6 +166,13 @@ export function setStepperData(StepperData) {
 }
 export function getStepperData(): any {
   return _globalProps.stepperData;
+}
+
+export function setInvestorName(investorName: string) {
+  _globalProps.investorName = investorName;
+}
+export function getInvestorName(){
+  return _globalProps.investorName;
 }
 
 export function setBuildType(buildType) {
@@ -203,6 +220,36 @@ async function setBasicData(props: BasicData) {
 
 async function getBasicData() {
   return _globalProps.basicData;
+}
+
+async function setBasicDataPan(basicData_pan: string) {
+  _globalProps.basicData_pan = basicData_pan;
+}
+
+async function getBasicDataPan() {
+  return _globalProps.basicData_pan;
+}
+
+async function setBasicDataEmail(basicData_email: string) {
+  _globalProps.basicData_email = basicData_email;
+}
+
+async function getBasicDataEmail() {
+  return _globalProps.basicData_email;
+}
+async function setBasicDataDob(basicData_dob: string) {
+  _globalProps.basicData_dob = basicData_dob;
+}
+
+async function getBasicDataDob() {
+  return _globalProps.basicData_dob;
+}
+async function setBasicDataPhone(basicData_phone: string) {
+  _globalProps.basicData_phone = basicData_phone;
+}
+
+async function getBasicDataPhone() {
+  return _globalProps.basicData_phone;
 }
 
 
@@ -495,5 +542,15 @@ export default {
   setBasicData,
   getBasicData,
   setStepperData,
-  getStepperData
+  getStepperData,
+  setInvestorName,
+  getInvestorName,
+  getBasicDataDob,
+  setBasicDataDob,
+  getBasicDataEmail,
+  setBasicDataEmail,
+  getBasicDataPan,
+  setBasicDataPan,
+  getBasicDataPhone,
+  setBasicDataPhone
 };

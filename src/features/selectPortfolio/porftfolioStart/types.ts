@@ -5,7 +5,9 @@ export enum ACTION {
     ON_MODIFY = "ON_MODIFY",
     ON_SKIP = "ON_SKIP",
     GO_BACK = "GO_BACK",
+    BACK_BUTTON = "BACK_BUTTON",
     SHARE = "SHARE",
+    COPY = "COPY",
   }
   
   export type AssetsPayload = {

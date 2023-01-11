@@ -9,6 +9,7 @@ import { api, partnerApi } from "../../configs/api";
 import { getAppHeader } from "../../configs/config";
 
 let name: string = "";
+let email: string = "";
 
 export const saveName: ActionFunction<ContinuePayload> = async (
   action,
@@ -25,7 +26,8 @@ export const saveName: ActionFunction<ContinuePayload> = async (
   const response = await network.patch(
     `${partnerApi.accountAttributes}${accountId}`,
     {
-      partnerName: name
+      partnerName: name,
+      accountHolderEmail: email,
     },
     { headers: await getAppHeader() }
   );
@@ -46,12 +48,20 @@ export const saveName: ActionFunction<ContinuePayload> = async (
    // await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
   }
 };
-export const textOnChange: ActionFunction<NamePayload> = async (
+export const textOnChange_name: ActionFunction<NamePayload> = async (
   action,
   _datastore,
   {}
 ): Promise<any> => {
   name = action.payload.value;
+};
+
+export const textOnChange_email: ActionFunction<NamePayload> = async (
+  action,
+  _datastore,
+  {}
+): Promise<any> => {
+  email = action.payload.value;
 };
 
 export const goBack: ActionFunction<any> = async (

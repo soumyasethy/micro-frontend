@@ -2,9 +2,14 @@ import { ActionFunction } from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
+  ColorTokens,
+  FontFamilyTokens,
+  FontSizeTokens,
+  HeaderProps,
   IconTokens,
   InputStateToken,
   TextInputProps,
+  TypographyProps,
 } from "@voltmoney/schema";
 import {
   ACTION as ACTION_CURRENT,
@@ -22,6 +27,7 @@ import { api, partnerApi } from "../../../configs/api";
 import { APP_CONFIG, getAppHeader, RegexConfig } from "../../../configs/config";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { BankData } from "../../login/otp_verify/types";
+import { LinkPayload } from "../../investor/types";
 
 let bankAccountNumber = "";
 let bankName = "";
@@ -58,6 +64,29 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
   )
   .then(async (response) => {
     if(response.status == 200){
+
+
+      let data1 = [];
+      let stepper_data = [];
+      Object.keys(response.data.partnerViewStepperMap).map(key=> {
+        const value = response.data.partnerViewStepperMap[key];
+        const stepData:any = new Object();
+        if(value.isEditable === true){
+          console.log("value",value);
+            stepData.title = value.verticalDisplayName;
+            stepData.subTitle = value.verticalDescription;
+            stepData.id = value.order;
+            stepData.horizontalTitle = value.horizontalDisplayName;
+            stepData.status = value.status;
+            data1.push(stepData);
+        }
+        })
+        stepper_data = data1.sort(function (a, b) {
+          return a.id - b.id;
+        });
+        console.log("stepper_data",stepper_data);
+        await SharedPropsService.setStepperData(stepper_data);
+
       await SharedPropsService.setAccountId(response.data.updatedApplicationObj.accountId);
         await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
@@ -77,24 +106,7 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
       });
 
 
-    let data1 = [];
-    let stepper_data = [];
-    Object.keys(response.data.partnerViewStepperMap).map(key=> {
-      const value = response.data.partnerViewStepperMap[key];
-      const stepData:any = new Object();
-      if(value.isEditable === true){
-          stepData.title = value.verticalDisplayName;
-          stepData.subTitle = value.verticalDescription;
-          stepData.id = value.order;
-          stepData.horizontalTitle = value.horizontalDisplayName;
-          stepData.status = value.status;
-          data1.push(stepData);
-      }
-      })
-      stepper_data = data1.sort(function (a, b) {
-        return a.id - b.id;
-      });
-      await SharedPropsService.setStepperData(stepper_data);
+   
 
     }
       
@@ -112,6 +124,35 @@ await setDatastore(action.routeId, "continue", <ButtonProps>{
 });
 
   }
+};
+
+export const onShare: ActionFunction<LinkPayload> = async (
+  action,
+  _datastore,
+  { setDatastore,clipboard,network }
+): Promise<any> => {
+  const applicationId = await SharedPropsService.getApplicationId();
+  const Linkresponse = await network.get(
+      `${partnerApi.referalLink}${applicationId}`,
+      {
+        headers: await getAppHeader(),
+      }
+    );
+    const link = Linkresponse.data.link;
+
+  clipboard.set(link);
+  await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "header", <
+    HeaderProps
+  >{
+    leftTitle:<TypographyProps>{
+      label:"Copied share link",
+      fontFamily:FontFamilyTokens.Inter,
+      fontSize:FontSizeTokens.SM,
+      color:ColorTokens.Primary_100,
+      lineHeight:24,
+
+    },
+  });
 };
 
 export const goNext: ActionFunction<any> = async (

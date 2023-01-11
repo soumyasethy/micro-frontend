@@ -40,6 +40,7 @@ export interface BasicData {
   panNumber?: string;
   mobileNumber?: string;
   email?: string;
+  dob ?: string
 }
 
 export interface PartnerUser {

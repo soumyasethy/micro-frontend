@@ -2,8 +2,13 @@ import { ActionFunction } from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
+  ColorTokens,
+  FontFamilyTokens,
+  FontSizeTokens,
+  HeaderProps,
   IconTokens,
   StepperStateToken,
+  TypographyProps,
 } from "@voltmoney/schema";
 
 import {
@@ -174,6 +179,33 @@ export const onModify: ActionFunction<EditItemPayload> = async (
   });
 };
 
+
+
+export const onCopy: ActionFunction<{}> = async (action, _datastore, { network,clipboard,setDatastore, ...props }): Promise<any> => {
+  const applicationId = await SharedPropsService.getApplicationId();
+  const Linkresponse = await network.get(
+      `${partnerApi.referalLink}${applicationId}`,
+      {
+        headers: await getAppHeader(),
+      }
+    );
+    const link = Linkresponse.data.link;
+
+  clipboard.set(link);
+  await setDatastore(ROUTE.PORTFOLOIO_START, "header", <
+    HeaderProps
+  >{
+    leftTitle:<TypographyProps>{
+      label:"Copied share link",
+      fontFamily:FontFamilyTokens.Inter,
+      fontSize:FontSizeTokens.SM,
+      color:ColorTokens.Primary_100,
+      lineHeight:24,
+
+    },
+  });
+};
+
 export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore, {network, navigate,...props }): Promise<any> => {
  
   const applicationId = await SharedPropsService.getApplicationId();
@@ -203,7 +235,7 @@ export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore,
 export const goBackACtion: ActionFunction<amountPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage, goBack }
+  {goBack }
 ): Promise<any> => {
   console.log("here");
   goBack();

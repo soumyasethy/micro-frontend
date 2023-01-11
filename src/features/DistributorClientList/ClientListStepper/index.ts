@@ -228,10 +228,12 @@ export const DistributorClientListStepperMF: PageType<any> = {
       const value = stepperData[key]
       const stepData: any = new Object();
       stepData.title = value.verticalDisplayName;
-      stepData.subTitle = value.verticalDescription;
+      stepData.subTitle = value.status;
       stepData.id = value.order;
       stepData.status = value.status;
       stepData.isEditable = value.isEditable;
+      stepData.horizontalTitle = value.horizontalDisplayName;
+      stepData.message = "Steps pending on investor";
       //stepData.statusText = value.isEditable;
       data1.push(stepData);
     })
@@ -240,9 +242,35 @@ export const DistributorClientListStepperMF: PageType<any> = {
     data = data1.sort(function (a, b) {
       return a.id - b.id;
     });
+
+    let seperated_data = [];
+    data.forEach((item) =>{
+      console.log("item",item);
+      if(item.id === 3){
+        const stepData: any = new Object();
+        stepData.title = item.title;
+        stepData.subTitle =  (item.subTitle.charAt(0).toUpperCase() + item.subTitle.slice(1).toLowerCase()).replace("_"," ");
+        stepData.id = item.id;
+        stepData.status = item.status;
+        stepData.isEditable = item.isEditable;
+        stepData.horizontalTitle = item.horizontalTitle;
+        stepData.message = "Steps pending on investor";
+        seperated_data.push(stepData);
+      }else{
+        const stepData: any = new Object();
+        stepData.title = item.title;
+        stepData.subTitle = (item.subTitle.charAt(0).toUpperCase() + item.subTitle.slice(1).toLowerCase()).replace("_"," ");
+        stepData.id = item.id;
+        stepData.status = item.status;
+        stepData.isEditable = item.isEditable;
+        stepData.horizontalTitle = item.horizontalTitle;
+        seperated_data.push(stepData);
+      }
+    })
+
     const editableData = data.filter((value) => value.isEditable === true && (value.status === "IN_PROGRESS" || value.status === "NOT_STARTED"));
 
-    const templateX = await template(applicationId, name, data, totalSteps, completedSteps,editableData);
+    const templateX = await template(applicationId, name, seperated_data, totalSteps, completedSteps,editableData);
     return Promise.resolve(templateX);
   },
   actions: {

@@ -40,6 +40,7 @@ import {
   EditItem,
   SearchPortfolio,
   ClearSearchPortfolio,
+  onCopy,
 } from "./actions";
 import { StepResponseObject } from "../../mfPledge/unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
@@ -91,6 +92,19 @@ export const template: (
           title: "Create new application",
           action: {
             type: ACTION.BACK_BUTTON,
+            routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
+            payload: {},
+          },
+          leftTitle:<TypographyProps>{
+            label:"Share",
+            fontFamily:FontFamilyTokens.Inter,
+            fontSize:FontSizeTokens.SM,
+            color:ColorTokens.Primary_100,
+            lineHeight:24,
+    
+          },
+          leftAction: {
+            type: ACTION.COPY,
             routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
             payload: {},
           },
@@ -193,6 +207,8 @@ export const selectDistributorPortfolioMF: PageType<any> = {
     [ACTION.BACK_BUTTON]: goBack,
     [ACTION.TOGGLE_ITEM]: ToggleSelectAction,
     [ACTION.EDIT_ITEM]: EditItem,
+    [ACTION.COPY]: onCopy,
+
   },
   clearPrevious: true,
 };

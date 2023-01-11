@@ -51,6 +51,7 @@ import {
   NavigationSearchBankAction,
   NavigationSearchIFSCAction,
   onChangeInput,
+  onShare,
   savebankDetails,
   skipBankVerification,
   toggleCTA,
@@ -110,6 +111,19 @@ export const template: (
       stepperProps: <StepperProps>{
         data: stepper_data,
         type: StepperTypeTokens.HORIZONTAL,
+      },
+      leftTitle:<TypographyProps>{
+        label:"Share",
+        fontFamily:FontFamilyTokens.Inter,
+        fontSize:FontSizeTokens.SM,
+        color:ColorTokens.Primary_100,
+        lineHeight:24,
+
+      },
+      leftAction: {
+        type: ACTION.SHARE,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload: {},
       },
       title: "Create new application",
       action: {
@@ -350,6 +364,7 @@ export const distBankAccountAddMF: PageType<any> = {
     [ACTION.CHANGE_BANK_GO_BACK]: ChangeBankGoBackAction,
     [ACTION.NAV_STEPPER]: GoToStepper,
     [ACTION.NEXT_ROUTE]: goNext,
+    [ACTION.SHARE]: onShare,
   },
   clearPrevious: true,
 };
