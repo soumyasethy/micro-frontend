@@ -119,8 +119,8 @@ export const template = {
       color: ColorTokens.Grey_Charcoal,
       size: IconSizeTokens.XL,
       padding: {
-        top: SizeTypeTokens.XL,
-        right: SizeTypeTokens.SM,
+        top: SizeTypeTokens.XS,
+        right: SizeTypeTokens.XS,
       }
     },
     instructionCardIcon2: <IconProps> {
@@ -128,8 +128,8 @@ export const template = {
       color: ColorTokens.Grey_Charcoal,
       size: IconSizeTokens.XL,
       padding: {
-        top: SizeTypeTokens.SM,
-        right: SizeTypeTokens.SM,
+        top: SizeTypeTokens.XS,
+        right: SizeTypeTokens.XS,
       }
     },
     instructionText1: <TypographyProps>{
