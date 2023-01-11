@@ -192,7 +192,7 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
   },
-  clearPrevious: true,
+  clearPrevious: false,
   action: {
     type: ACTION.AUTO_FETCH_MY_PORTFOLIO,
     routeId: ROUTE.MF_FETCH_PORTFOLIO,

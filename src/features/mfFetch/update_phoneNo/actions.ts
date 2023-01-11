@@ -31,7 +31,7 @@ export const phoneOnChange: ActionFunction<ContinuePayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** update phoneNumber ****", action.payload.value);
+  // console.warn("**** update phoneNumber ****", action.payload.value);
   phoneNumber = action.payload.value;
 };
 export const emailOnChange: ActionFunction<ContinuePayload> = async (
@@ -39,6 +39,6 @@ export const emailOnChange: ActionFunction<ContinuePayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** update phoneNumber ****", action.payload.value);
+  // console.warn("**** update phoneNumber ****", action.payload.value);
   phoneNumber = action.payload.value;
 };
