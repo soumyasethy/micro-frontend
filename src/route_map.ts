@@ -62,6 +62,7 @@ import { DistributorClientListMF } from "./features/DistributorClientList/Client
 import { DistributorBasicDetailsInfo } from "./features/Dist_basicDetails/basicDetailsInfo";
 import { kycDocumentUploadMF } from "./features/kyc/kyc_document_upload";
 import { checkingLimitMf } from "./features/mfFetch/checking_limit";
+import { portfolioReadOnlyMF } from "./features/mfPledge/portfolio_readonly";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -126,4 +127,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]: DistributorBasicDetailsInfo,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
+  [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
 };
