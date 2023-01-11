@@ -70,7 +70,7 @@ export const template: (
         lineHeight: 18
       },
       columntitle2: <TypographyProps> {
-        label: "Credit limit    ",
+        label: "Credit limit     ",
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.XS,
         fontFamily: FontFamilyTokens.Inter,
