@@ -28,11 +28,12 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../routes";
 import { ACTION, ContinuePayload, NamePayload } from "./types";
-import { goBack, saveName, textOnChange } from "./actions";
+import { goBack, saveName, textOnChange_email, textOnChange_name } from "./actions";
 import { EnableDisableCTA } from "../login/phone_number/types";
 import { toggleCTA } from "../login/phone_number/actions";
 import SharedPropsService from "../../SharedPropsService";
 import { RegexConfig } from "../../configs/config";
+import { EmailPayload } from "../mfFetch/enter_email/types";
 
 export const template: (applicationId: string) => TemplateSchema = (
   applicationId
@@ -53,6 +54,8 @@ export const template: (applicationId: string) => TemplateSchema = (
         { id: "title", type: WIDGET.TEXT },
         { id: "space2", type: WIDGET.SPACE },
         { id: "input", type: WIDGET.INPUT },
+        { id: "space_input", type: WIDGET.SPACE },
+        { id: "input_email", type: WIDGET.INPUT },
         { id: "space3", type: WIDGET.SPACE },
       ],
     },
@@ -82,6 +85,7 @@ export const template: (applicationId: string) => TemplateSchema = (
         fontWeight: "600",
       },
       input: <TextInputProps & WidgetProps>{
+        isFocus:true,
         clearEnabled: false,
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
@@ -93,6 +97,40 @@ export const template: (applicationId: string) => TemplateSchema = (
           payload: <NamePayload>{ value: "", widgetId: "input" },
           routeId: ROUTE.ENTER_NAME,
         },
+        // errorAction: {
+        //   type: ACTION.DISABLE_CONTINUE,
+        //   routeId: ROUTE.ENTER_NAME,
+        //   payload: <EnableDisableCTA>{
+        //     value: false,
+        //     targetWidgetId: "continue",
+        //   },
+        // },
+        // successAction: {
+        //   type: ACTION.ENABLE_CONTINUE,
+        //   routeId: ROUTE.ENTER_NAME,
+        //   payload: <EnableDisableCTA>{
+        //     value: true,
+        //     targetWidgetId: "continue",
+        //   },
+        // },
+      },
+      space_input: <SpaceProps>{ size: SizeTypeTokens.MD },
+      input_email: <TextInputProps & WidgetProps>{
+        isFocus:false,
+        regex: RegexConfig.EMAIL,
+        isLowerCase: true,
+        clearEnabled: false,
+        type: InputTypeToken.EMAIL,
+        state: InputStateToken.DEFAULT,
+        title: "Email",
+        placeholder: "Enter email",
+        keyboardType: KeyboardTypeToken.email,
+        action: {
+          type: ACTION.ENTER_EMAIL,
+          payload: <EmailPayload>{ value: "", widgetId: "input" },
+          routeId: ROUTE.ENTER_NAME,
+        },
+        caption: { success: "", error: "Enter a valid email address" },
         errorAction: {
           type: ACTION.DISABLE_CONTINUE,
           routeId: ROUTE.ENTER_NAME,
@@ -135,7 +173,8 @@ export const nameMF: PageType<any> = {
   actions: {
     [ACTION.BACK]: goBack,
     [ACTION.CONTINUE]: saveName,
-    [ACTION.ENTER_NAME]: textOnChange,
+    [ACTION.ENTER_NAME]: textOnChange_name,
+    [ACTION.ENTER_EMAIL]: textOnChange_email,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
   },

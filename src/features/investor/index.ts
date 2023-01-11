@@ -265,7 +265,7 @@ export const investorMF: PageType<any> = {
             }
           );
           const link = Linkresponse.data.link;
-          const name = await (await SharedPropsService.getPartnerUser()).name;
+          const name = await SharedPropsService.getInvestorName();
         return Promise.resolve(template(link,name));
     },
     actions: {

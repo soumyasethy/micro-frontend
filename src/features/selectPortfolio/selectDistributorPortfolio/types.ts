@@ -7,6 +7,7 @@ export enum ACTION {
   BACK_BUTTON = "BACK_BUTTON",
   TOGGLE_ITEM = "TOGGLE_ITEM",
   EDIT_ITEM = "EDIT_ITEM",
+  COPY = "COPY",
 }
 
 export type OtpPayload = {

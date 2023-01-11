@@ -2,8 +2,13 @@ import { ActionFunction } from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
+  ColorTokens,
+  FontFamilyTokens,
+  FontSizeTokens,
+  HeaderProps,
   IconTokens,
   StepperStateToken,
+  TypographyProps,
 } from "@voltmoney/schema";
 
 import {
@@ -29,7 +34,7 @@ export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, 
   let stepper_data = [];
   response.forEach((item,index) => {
     console.log("item",item);
-    if(item.horizontalDisplayName === "Fetch portfolio"){
+    if(item.horizontalDisplayName === "Fetch Portfolio"){
       item.status = "COMPLETED";
     }
     data1.push(item);
@@ -62,8 +67,29 @@ export const onSkip: ActionFunction<{}> = async (action, _datastore, { navigate,
   await navigate(ROUTE.INVESTOR);
 };
 
-export const onShare: ActionFunction<{}> = async (action, _datastore, { ...props }): Promise<any> => {
-  console.log("Share");
+export const onShare: ActionFunction<{}> = async (action, _datastore, { network,clipboard,setDatastore, ...props }): Promise<any> => {
+  const applicationId = await SharedPropsService.getApplicationId();
+  const Linkresponse = await network.get(
+      `${partnerApi.referalLink}${applicationId}`,
+      {
+        headers: await getAppHeader(),
+      }
+    );
+    const link = Linkresponse.data.link;
+
+  clipboard.set(link);
+  await setDatastore(ROUTE.DISTRIBUTOR_PORTFOLIO, "header", <
+    HeaderProps
+  >{
+    leftTitle:<TypographyProps>{
+      label:"Copied share link",
+      fontFamily:FontFamilyTokens.Inter,
+      fontSize:FontSizeTokens.SM,
+      color:ColorTokens.Primary_100,
+      lineHeight:24,
+
+    },
+  });
 };
 
 export const onBack: ActionFunction<{}> = async (action, _datastore, { navigate }): Promise<any> => {
@@ -74,6 +100,7 @@ export const onBack: ActionFunction<{}> = async (action, _datastore, { navigate 
 export const goNext: ActionFunction<RepositoryPayload> = async (action, _datastore, { navigate, network }): Promise<any> => {
   const applictaionId = await SharedPropsService.getApplicationId();
   const accountId = await SharedPropsService.getAccountId();
+  
   const response = await network.get(
     `${partnerApi.userProfile}${accountId}`,
     { headers: await getAppHeader() }

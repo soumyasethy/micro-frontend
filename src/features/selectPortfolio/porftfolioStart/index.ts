@@ -34,7 +34,7 @@ import { ROUTE } from "../../../routes";
 import {
     ACTION, AssetsPayload, EditItemPayload,
 } from "./types";
-import { goBackACtion, onModify, onSave, onShare, onSkip } from "./actions";
+import { goBackACtion, onCopy, onModify, onSave, onShare, onSkip } from "./actions";
 import { StepResponseObject } from "../../fetchDistributorPortfolio/types";
 import SharedPropsService from "../../../SharedPropsService";
 
@@ -71,16 +71,30 @@ export const template: (
             leftCta: "Share",
             trailIcon: "Share",
             stepperProps: <StepperProps>{
-                data: stepper,
-                type: StepperTypeTokens.HORIZONTAL,
+              data: stepper,
+              type: StepperTypeTokens.HORIZONTAL,
             },
             title: "Create new application",
             action: {
-                type: ACTION.GO_BACK,
+              type: ACTION.BACK_BUTTON,
+              routeId: ROUTE.PORTFOLOIO_START,
+              payload: {},
+            },
+            leftTitle:<TypographyProps>{
+                label:"Share",
+                fontFamily:FontFamilyTokens.Inter,
+                fontSize:FontSizeTokens.SM,
+                color:ColorTokens.Primary_100,
+                lineHeight:24,
+        
+              },
+              leftAction: {
+                type: ACTION.COPY,
                 routeId: ROUTE.PORTFOLOIO_START,
                 payload: {},
-            },
-        },
+              },
+          },
+       
         space0: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
         space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
         midStack: <StackProps>{
@@ -236,17 +250,20 @@ export const portfolioStartMF: PageType<any> = {
         stepResponseObject }) => {
         console.log("stepResponseObject",stepResponseObject);
         const amount = stepResponseObject.availableCreditAmount;
-        let data1 = [];
+        let filtered_data = [];
         let stepper_data = await SharedPropsService.getStepperData();
         stepper_data.forEach((item, index) => {
           if (item.horizontalTitle === "Select Portfolio") {
             item.status = "IN_PROGRESS";
           }
-          data1.push(item);
+          if (item.horizontalTitle === "Fetch Portfolio") {
+            item.status = "COMPLETED";
+          }
+          filtered_data.push(item);
         })
     
-        await SharedPropsService.setStepperData(data1);
-        return Promise.resolve(template(data1, stepResponseObject,
+        await SharedPropsService.setStepperData(filtered_data);
+        return Promise.resolve(template(filtered_data, stepResponseObject,
             amount
             ));
     },
@@ -254,9 +271,9 @@ export const portfolioStartMF: PageType<any> = {
         [ACTION.ON_MODIFY]: onModify,
         [ACTION.ON_SAVE]: onSave,
         [ACTION.ON_SKIP]: onSkip,
-        [ACTION.GO_BACK]: goBackACtion,
+        [ACTION.BACK_BUTTON]: goBackACtion,
         [ACTION.SHARE]: onShare,
+        [ACTION.COPY]: onCopy,
     },
-
     clearPrevious: true,
 };

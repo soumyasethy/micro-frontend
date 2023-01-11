@@ -8,7 +8,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { getAppHeader, RegexConfig } from "../../../configs/config";
 import { ACTION, EnableDisableCTA } from "./types";
 import { InputPayload } from "./types";
-import { CalendarOnChange, goBack, onChangeInput, toggleCTA, triggerCTA } from "./actions";
+import { CalendarOnChange, goBack, onChangeInput, onChangeInput1, onChangeInput2, onChangeInput3, toggleCTA, triggerCTA } from "./actions";
 
 export const template: (
   stepper: StepperItem[],
@@ -75,11 +75,17 @@ export const template: (
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
         },
-        successAction: {
-          type: ACTION.ENABLE_CONTINUE,
-          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
-        },
+        // successAction: {
+        //   type: ACTION.CHANGE_INPUT_PAN,
+        //   routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        //   payload: <InputPayload>{
+        //     value: "",
+        //     widgetId: "panNumberInput"
+        //   }
+        //   // type: ACTION.ENABLE_CONTINUE,
+        //   // routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        //   // payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
+        // },
       },
 
       space0: <SpaceProps>{ size: SizeTypeTokens.Size32 },
@@ -127,8 +133,20 @@ export const template: (
         color: ColorTokens.Grey_Smoke,
         type: InputTypeToken.MOBILE,
         state: InputStateToken.DEFAULT,
+        // successAction: {
+        //   type: ACTION.CHANGE_INPUT_PHONE,
+        //   routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        //   payload: <InputPayload>{
+        //     value: "",
+        //     widgetId: "mobileNumberInput"
+        //   }
+        //   // type: ACTION.ENABLE_CONTINUE,
+        //   // routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        //   // payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
+        // },
         action: {
           type: ACTION.CHANGE_INPUT,
+         // type: ACTION.CHANGE_INPUT_PHONE,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: <InputPayload>{
             value: "",
@@ -157,6 +175,7 @@ export const template: (
         state: InputStateToken.DEFAULT,
         action: {
           type: ACTION.CHANGE_INPUT,
+         //type: ACTION.CHANGE_INPUT_EMAIL,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: <InputPayload>{
             value: "",
@@ -169,9 +188,15 @@ export const template: (
           payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
         },
         successAction: {
-          type: ACTION.ENABLE_CONTINUE,
+          type: ACTION.CHANGE_INPUT_EMAIL,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
+          payload: <InputPayload>{
+            value: "",
+            widgetId: "emailInput"
+          }
+          // type: ACTION.ENABLE_CONTINUE,
+          // routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+          // payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
         },
       },
       bottomStack: <StackProps>{
@@ -241,6 +266,8 @@ export const distBasicDetailsMF: PageType<any> = {
     if(data.panNumber !== "" && data.mobileNumber !== "" && data.email !== ""){
       isDisabled = "true";
     }
+    console.log(isDisabled);
+    console.log("isDisabled",data);
     const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
     return Promise.resolve(template(stepper,isDisabled,stepper_data));
   },
@@ -248,8 +275,12 @@ export const distBasicDetailsMF: PageType<any> = {
     [ACTION.ENTER_DOB]: onChangeInput,
     [ACTION.GO_BACK]: goBack,
     [ACTION.CHANGE_INPUT]: onChangeInput,
+    [ACTION.CHANGE_INPUT_PAN]: onChangeInput1,
+    [ACTION.CHANGE_INPUT_EMAIL]: onChangeInput2,
+    [ACTION.CHANGE_INPUT_PHONE]: onChangeInput3,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.TRIGGER_CTA]: triggerCTA,
   },
+  clearPrevious:true
 }

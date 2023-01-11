@@ -50,6 +50,10 @@ type GlobalProps = {
   pbankIfsc?:string;
   bankData :BankData;
   basicData: BasicData;
+  basicData_pan: string;
+  basicData_phone: string;
+  basicData_email: string;
+  basicData_dob: string;
   authCAS?: AuthCASModel;
   ref?: string;
   url?: string;
@@ -63,7 +67,8 @@ type GlobalProps = {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
   };
-  stepperData?:any
+  stepperData?:any,
+  investorName?:string
 };
 
 let _globalProps: GlobalProps = {
@@ -96,8 +101,13 @@ let _globalProps: GlobalProps = {
   basicData:{
     panNumber:"",
     mobileNumber:"",
-    email:""
+    email:"",
+    dob:""
   },
+  basicData_pan:"",
+  basicData_dob:"",
+  basicData_email:"",
+  basicData_phone:"",
   authCAS: null,
   ref: "",
   /*** Default asset repository */
@@ -123,7 +133,8 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true,
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
   },
-  stepperData: {}
+  stepperData: {},
+  investorName:""
 };
 
 export function setStepperData(StepperData) {
@@ -131,6 +142,13 @@ export function setStepperData(StepperData) {
 }
 export function getStepperData(): any {
   return _globalProps.stepperData;
+}
+
+export function setInvestorName(investorName: string) {
+  _globalProps.investorName = investorName;
+}
+export function getInvestorName(){
+  return _globalProps.investorName;
 }
 
 export function setBuildType(buildType) {
@@ -176,6 +194,36 @@ async function setBasicData(props: BasicData) {
 
 async function getBasicData() {
   return _globalProps.basicData;
+}
+
+async function setBasicDataPan(basicData_pan: string) {
+  _globalProps.basicData_pan = basicData_pan;
+}
+
+async function getBasicDataPan() {
+  return _globalProps.basicData_pan;
+}
+
+async function setBasicDataEmail(basicData_email: string) {
+  _globalProps.basicData_email = basicData_email;
+}
+
+async function getBasicDataEmail() {
+  return _globalProps.basicData_email;
+}
+async function setBasicDataDob(basicData_dob: string) {
+  _globalProps.basicData_dob = basicData_dob;
+}
+
+async function getBasicDataDob() {
+  return _globalProps.basicData_dob;
+}
+async function setBasicDataPhone(basicData_phone: string) {
+  _globalProps.basicData_phone = basicData_phone;
+}
+
+async function getBasicDataPhone() {
+  return _globalProps.basicData_phone;
 }
 
 
@@ -426,5 +474,15 @@ export default {
   setAuthCASResponse,
   getAuthCASResponse,
   setStepperData,
-  getStepperData
+  getStepperData,
+  setInvestorName,
+  getInvestorName,
+  getBasicDataDob,
+  setBasicDataDob,
+  getBasicDataEmail,
+  setBasicDataEmail,
+  getBasicDataPan,
+  setBasicDataPan,
+  getBasicDataPhone,
+  setBasicDataPhone
 };

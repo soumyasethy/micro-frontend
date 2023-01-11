@@ -4,6 +4,7 @@ export enum ACTION {
   MANAGE = "MANAGE",
   CTA="CTA",
   ON_CHANGE="ON_CHANGE",
+  ON_CHANGES="ON_CHANGES",
 }
 
 export type StepperPayload = {
