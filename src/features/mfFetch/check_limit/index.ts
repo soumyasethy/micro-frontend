@@ -14,6 +14,8 @@ import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   IconTokens,
   ListItemProps,
   SizeTypeTokens,
@@ -29,6 +31,7 @@ import {
   editMobileNumber,
   editPanNumber,
   fetchMyPortfolio,
+  goBack,
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
@@ -40,14 +43,16 @@ export const template: (
   phoneNumber: string,
   emailId: string,
   assetRepository: AssetRepositoryType,
-  isPanEditAllowed: boolean
-) => TemplateSchema = (
+  isPanEditAllowed: boolean,
+  isGoBackAllowed: boolean
+) => Promise<TemplateSchema> = async (
   applicationId,
   panNumber,
   phoneNumber,
   emailId,
   assetRepository,
-  isPanEditAllowed
+  isPanEditAllowed,
+  isGoBackAllowed
 ) => {
   return {
     layout: <Layout>{
@@ -55,6 +60,15 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
+        ...(isGoBackAllowed
+          ? [
+              {
+                id: "header",
+                type: WIDGET.HEADER,
+                position: POSITION.ABSOLUTE_TOP,
+              },
+            ]
+          : []),
         { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
@@ -62,6 +76,7 @@ export const template: (
         { id: "panItem", type: WIDGET.LIST_ITEM },
         { id: "mobileItem", type: WIDGET.LIST_ITEM },
         { id: "emailItem", type: WIDGET.LIST_ITEM },
+        { id: "spaceItem", type: WIDGET.SPACE },
         {
           id: "fetchCTA",
           type: WIDGET.BUTTON,
@@ -71,6 +86,16 @@ export const template: (
     },
     datastore: <Datastore>{
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      header: <HeaderProps>{
+        isBackButton: true,
+        title: "Back",
+        type: HeaderTypeTokens.DEFAULT,
+        action: {
+          type: ACTION.Go_BACK,
+          payload: {},
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
+        },
+      },
       title: <TypographyProps>{
         label: "Check available cash limit",
         fontSize: FontSizeTokens.XL,
@@ -149,40 +174,38 @@ export const template: (
           },
         },
       },
+      spaceItem: <SpaceProps>{ size: SizeTypeTokens.Size80 },
     },
   };
 };
 
 export const checkLimitMF: PageType<any> = {
-  onLoad: async (
-    { asyncStorage, ...props },
-    { applicationId, email, panNumber, mobileNumber }
-  ) => {
+  onLoad: async ({ asyncStorage, ...props }, {}) => {
     const user: User = await SharedPropsService.getUser();
-    const panNumberX =
-      panNumber || user.linkedBorrowerAccounts[0].accountHolderPAN;
-    const phoneNumber =
-      mobileNumber || user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId = `${
-      email || user.linkedBorrowerAccounts[0].accountHolderEmail
-    }`.toLowerCase();
-
-    if (!applicationId) {
-      applicationId = user.linkedApplications[0].applicationId;
-    }
+    const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    const emailId =
+      `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+    const applicationId = user.linkedApplications[0].applicationId;
     const assetRepository = await SharedPropsService.getAssetRepositoryType();
 
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_PAN_EDIT_ALLOWED
     );
+    const isGoBackAllowed: boolean = await SharedPropsService.getConfig(
+      ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
+    );
 
-    return template(
-      applicationId,
-      panNumberX,
-      phoneNumber,
-      emailId,
-      assetRepository,
-      isPanEditAllowed
+    return Promise.resolve(
+      template(
+        applicationId,
+        panNumberX,
+        phoneNumber,
+        emailId,
+        assetRepository,
+        isPanEditAllowed,
+        isGoBackAllowed
+      )
     );
   },
   actions: {
@@ -191,8 +214,9 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_PAN]: editPanNumber,
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
+    [ACTION.Go_BACK]: goBack,
   },
-  clearPrevious: false,
+  clearPrevious: true,
   action: {
     type: ACTION.AUTO_FETCH_MY_PORTFOLIO,
     routeId: ROUTE.MF_FETCH_PORTFOLIO,

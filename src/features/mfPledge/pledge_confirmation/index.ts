@@ -42,20 +42,26 @@ import { AvailableCASItem, StepResponseObject } from "../unlock_limit/types";
 import { getTotalLimit } from "../portfolio/actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
-import { AssetRepositoryType, getAppHeader } from "../../../configs/config";
+import { ConfigTokens, getAppHeader } from "../../../configs/config";
+import { commonTemplates } from "../../../configs/common";
+import { addCommasToNumber } from "../../../configs/utils";
 
 export const template: (
   totalAmount: number,
   totalCharges: number,
   processingFeesBreakUp: { [key in string]: number },
   stepResponseObject: StepResponseObject,
-  showOtpConfirmation: boolean
+  showOtpConfirmation: boolean,
+  minAmount: number,
+  maxAmount: number
 ) => TemplateSchema = (
   totalAmount = 0,
   totalCharges = 0,
   processingFeesBreakUp = {},
   stepResponseObject,
-  showOtpConfirmation = false
+  showOtpConfirmation = false,
+  minAmount,
+  maxAmount
 ) => {
   const listItemLayout = Object.keys(processingFeesBreakUp).map(
     (key, index) => {
@@ -166,10 +172,13 @@ export const template: (
               },
               {
                 id: "continueSpace",
-                type: WIDGET.CARD,
+                type: WIDGET.SPACE,
                 position: POSITION.ABSOLUTE_BOTTOM,
               },
             ]
+          : []),
+        ...(totalAmount < minAmount || totalAmount > maxAmount
+          ? commonTemplates.infoMessage("minAmountInfo", "").widgetItem
           : []),
         {
           id: "continue",
@@ -179,6 +188,11 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      ...commonTemplates.infoMessage(
+        "minAmountInfo",
+        `Minimum amount required to proceed ₹${addCommasToNumber(minAmount)}`,
+        "error"
+      ).datastore,
       otpConfirmInfo: <CardProps>{
         bgColor: ColorTokens.Secondary_05,
         width: StackWidth.FULL,
@@ -203,6 +217,7 @@ export const template: (
       },
       infoIconSpace: <SpaceProps>{ size: SizeTypeTokens.Size10 },
       continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      amountConfirmInfoSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       infoLabel: <TypographyProps>{
         label: "We will trigger 2 OTP’s to confirm your pledge",
         fontFamily: FontFamilyTokens.Inter,
@@ -493,7 +508,10 @@ export const template: (
       continue: <ButtonProps & WidgetProps>{
         fontFamily: FontFamilyTokens.Poppins,
         label: "Confirm & get OTP",
-        type: ButtonTypeTokens.LargeFilled,
+        type:
+          totalAmount < minAmount || totalAmount > maxAmount
+            ? ButtonTypeTokens.LargeOutline
+            : ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.PLEDGE_CONFIRMATION,
@@ -557,13 +575,22 @@ export const pledgeConfirmationMF: PageType<any> = {
     /*** show 2 otp confirmation if both Karvy and CAMS is present */
     const showOtpConfirmation: boolean = Object.keys(assetTypeMap).length > 1;
 
+    const minAmount = await SharedPropsService.getConfig(
+      ConfigTokens.MIN_AMOUNT_ALLOWED
+    );
+    const maxAmount = await SharedPropsService.getConfig(
+      ConfigTokens.MAX_AMOUNT_ALLOWED
+    );
+
     return Promise.resolve(
       template(
         totalAmount,
         totalCharges,
         processingFeesBreakUp,
         stepResponseObject as StepResponseObject,
-        showOtpConfirmation
+        showOtpConfirmation,
+        minAmount,
+        maxAmount
       )
     );
   },

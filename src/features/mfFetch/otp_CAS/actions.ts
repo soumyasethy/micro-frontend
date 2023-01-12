@@ -2,7 +2,11 @@ import { ActionFunction } from "@voltmoney/types";
 import { AuthCASPayload } from "./types";
 import { api } from "../../../configs/api";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
-import { AssetRepositoryMap, getAppHeader } from "../../../configs/config";
+import {
+  AssetRepositoryMap,
+  ConfigTokens,
+  getAppHeader,
+} from "../../../configs/config";
 import { nextStepId } from "../../../configs/utils";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
@@ -54,11 +58,16 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     await setDatastore(action.routeId, "input", <TextInputProps>{
       state: InputStateToken.SUCCESS,
     });
-    await goBack();
+    // await goBack();
 
     if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
       /**  enable animation again ***/
-      await SharedPropsService.setPledgeFirstTime(true);
+      const layoutType = await SharedPropsService.getConfig(
+        ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
+      );
+      /*** Don't run animation MF_FETCH is not full screen */
+      if (!layoutType) await SharedPropsService.setPledgeFirstTime(true);
+
       const nextRoute = await nextStepId(
         response.data.updatedApplicationObj.currentStepId
       );

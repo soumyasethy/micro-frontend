@@ -58,6 +58,8 @@ export const getMoreMfPortfolio: ActionFunction<
     const item = action.payload.casList[i];
     assetRepoMap[item.assetRepository] = true;
   }
+  /*** Change page view type LAYOUT.LIST to LAYOUT.MODAL */
+  await SharedPropsService.setConfig(ConfigTokens.IS_MF_FETCH_BACK_ALLOWED, true);
   /*** switch between assetRepositoryType */
   for (const assetRepositoryType of Object.keys(assetRepoMap)) {
     if (assetRepositoryType === AssetRepositoryType.KARVY) {

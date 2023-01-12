@@ -1,11 +1,20 @@
-import {ActionFunction} from "@voltmoney/types";
-import {ACTION, FetchPortfolioPayload, PanEditPayload} from "./types";
-import {api} from "../../../configs/api";
-import {ROUTE} from "../../../routes";
-import {User} from "../../login/otp_verify/types";
-import {ButtonProps, ButtonTypeTokens, InputStateToken, TextInputProps,} from "@voltmoney/schema";
+import { ActionFunction } from "@voltmoney/types";
+import { ACTION, FetchPortfolioPayload, PanEditPayload } from "./types";
+import { api } from "../../../configs/api";
+import { ROUTE } from "../../../routes";
+import { User } from "../../login/otp_verify/types";
+import {
+  ButtonProps,
+  ButtonTypeTokens,
+  InputStateToken,
+  TextInputProps,
+} from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import {AssetRepositoryMap, ConfigTokens, getAppHeader,} from "../../../configs/config";
+import {
+  AssetRepositoryMap,
+  ConfigTokens,
+  getAppHeader,
+} from "../../../configs/config";
 import _ from "lodash";
 
 let hasChangedInDetails = false;
@@ -42,6 +51,13 @@ export const editEmailId: ActionFunction<PanEditPayload> = async (
     applicationId: action.payload.applicationId,
   });
 };
+export const goBack: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
+};
 export const autoTriggerOtp: ActionFunction<any> = async (
   action,
   _datastore,
@@ -61,7 +77,10 @@ export const autoTriggerOtp: ActionFunction<any> = async (
   /*** Auto trigger is globally enabled. mostly this will be disabled,
    * and we are manually enabled it when user tries fetch more assets from UnlockLimit Page ***/
   if (isAutoTriggerOtp) {
-    await SharedPropsService.setConfig(ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP, false);
+    await SharedPropsService.setConfig(
+      ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP,
+      false
+    );
     fetchMyPortfolio(
       {
         routeId: ROUTE.MF_FETCH_PORTFOLIO,
