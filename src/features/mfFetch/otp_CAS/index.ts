@@ -35,8 +35,12 @@ import { ACTIONS, AuthCASPayload } from "./types";
 import { authCAS, goBack } from "./actions";
 import { FetchPortfolioPayload } from "../check_limit/types";
 import { fetchMyPortfolio } from "../check_limit/actions";
-import { AssetRepositoryMap } from "../../../configs/config";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+} from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
+import { User } from "../../login/otp_verify/types";
 
 export const template: (
   applicationId: string,
@@ -129,7 +133,10 @@ export const template: (
         size: SizeTypeTokens.SM,
       },
       subTitle2: <TypographyProps>{
-        label: `${phoneNumber}`.substring(3), //.substring(3).slice(0,3) + "*****" + `${phoneNumber}`.substring(3).slice(-2)
+        label:
+          assetRepository === AssetRepositoryType.CAMS
+            ? emailId
+            : `${phoneNumber}`.substring(3),
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
@@ -169,7 +176,12 @@ export const template: (
 };
 
 export const otpVerifyAuthCASMF: PageType<any> = {
-  onLoad: async (_, { applicationId, emailId, panNumber, phoneNumber }) => {
+  onLoad: async () => {
+    const user: User = await SharedPropsService.getUser();
+    const applicationId = user.linkedApplications[0].applicationId;
+    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
+    const panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     const assetRepository = await SharedPropsService.getAssetRepositoryType();
     return Promise.resolve(
       template(applicationId, assetRepository, emailId, panNumber, phoneNumber)
@@ -180,5 +192,5 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
     [ACTIONS.GO_BACK]: goBack,
   },
-  clearPrevious: false,
+  clearPrevious: true,
 };

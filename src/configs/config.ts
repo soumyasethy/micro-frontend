@@ -55,11 +55,11 @@ export const AssetRepositoryMap = {
     NAME: "Cams",
     OTP_LENGTH: 5,
     LIST: [],
-    isDisabled: true,
+    isDisabled: false,
   },
   [AssetRepositoryType.KARVY]: {
     VALUE: AssetRepositoryType.KARVY,
-    NAME: "Karvy",
+    NAME: "K-Fintech",
     OTP_LENGTH: 6,
     LIST: [],
     isDisabled: false,
@@ -85,4 +85,7 @@ export enum ConfigTokens {
   IS_MF_FETCH_AUTO_TRIGGER_OTP = "IS_MF_FETCH_AUTO_TRIGGER_OTP",
   IS_GOOGLE_LOGIN_ENABLED = "IS_GOOGLE_LOGIN_ENABLED",
   IS_KYC_PHOTO_VERIFICATION = "IS_KYC_PHOTO_VERIFICATION",
+  IS_MF_FETCH_BACK_ALLOWED = "IS_MF_FETCH_BACK_ALLOWED",
+  MIN_AMOUNT_ALLOWED = "MIN_AMOUNT_ALLOWED",
+  MAX_AMOUNT_ALLOWED = "MAX_AMOUNT_ALLOWED",
 }

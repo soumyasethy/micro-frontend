@@ -34,16 +34,22 @@ import { ROUTE } from "../../../routes";
 import { ACTION, OtpPledgePayload } from "./types";
 import { goBack, NavigateNext, resendOTP, verifyOTP } from "./actions";
 import { fetchUserRepo } from "./repo";
-import { AssetRepositoryMap } from "../../../configs/config";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+} from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
+import { User } from "../../login/otp_verify/types";
 export const template: (
   phoneNumber: string,
   assetRepository: string,
-  sendOtpForPledgeConfirmAction: Action<any>
+  sendOtpForPledgeConfirmAction: Action<any>,
+  emailId: string
 ) => TemplateSchema = (
   phoneNumber,
   assetRepository,
-  sendOtpForPledgeConfirmAction
+  sendOtpForPledgeConfirmAction,
+  emailId
 ) => ({
   layout: <Layout>{
     id: ROUTE.PLEDGE_VERIFY,
@@ -123,7 +129,10 @@ export const template: (
       size: SizeTypeTokens.SM,
     },
     subTitle2: <TypographyProps>{
-      label: phoneNumber.substring(3),
+      label:
+        assetRepository === AssetRepositoryType.CAMS
+          ? emailId
+          : phoneNumber.substring(3),
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
@@ -164,11 +173,17 @@ export const template: (
 
 export const pledgeVerifyMF: PageType<any> = {
   onLoad: async (_, { sendOtpForPledgeConfirmAction }) => {
-    const response = await fetchUserRepo();
-    const phoneNumber = response.user.phoneNumber;
+    const user: User = await SharedPropsService.getUser();
+    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
     const assetRepository = await SharedPropsService.getAssetRepositoryType();
     return Promise.resolve(
-      template(phoneNumber, assetRepository, sendOtpForPledgeConfirmAction)
+      template(
+        phoneNumber,
+        assetRepository,
+        sendOtpForPledgeConfirmAction,
+        emailId
+      )
     );
   },
 
@@ -178,5 +193,5 @@ export const pledgeVerifyMF: PageType<any> = {
     [ACTION.GO_BACK]: goBack,
     [ACTION.NAV_NEXT]: NavigateNext,
   },
-  clearPrevious: false,
+  clearPrevious: true,
 };

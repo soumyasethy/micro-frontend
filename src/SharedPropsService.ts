@@ -44,6 +44,9 @@ type GlobalProps = {
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
     [ConfigTokens.IS_KYC_PHOTO_VERIFICATION]?: boolean;
     [ConfigTokens.IS_GOOGLE_LOGIN_ENABLED]?: boolean;
+    [ConfigTokens.IS_MF_FETCH_BACK_ALLOWED]?: boolean;
+    [ConfigTokens.MIN_AMOUNT_ALLOWED]?: number;
+    [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
   };
 };
 
@@ -56,7 +59,7 @@ let _globalProps: GlobalProps = {
   authCAS: null,
   ref: "",
   /*** Default asset repository */
-  assetRepositoryType: AssetRepositoryType.KARVY,
+  assetRepositoryType: AssetRepositoryType.CAMS,
   assetRepositoryConfig: {
     /*** Sequence of fetching asset repository ***/
     [AssetRepositoryType.KARVY]: {
@@ -79,6 +82,9 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
     [ConfigTokens.IS_KYC_PHOTO_VERIFICATION]: false,
     [ConfigTokens.IS_GOOGLE_LOGIN_ENABLED]: false,
+    [ConfigTokens.IS_MF_FETCH_BACK_ALLOWED]: false,
+    [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
+    [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
   },
 };
 export function setBuildType(buildType) {
@@ -88,6 +94,7 @@ export function getBuildType(): BUILD_TYPE {
   return _globalProps.buildType;
 }
 export function setConfig(configId: ConfigTokens, configValue: any) {
+  // @ts-ignore
   _globalProps.config[configId] = configValue;
 }
 export function getConfig(configId?: ConfigTokens): any {
