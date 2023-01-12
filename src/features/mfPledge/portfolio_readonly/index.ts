@@ -28,20 +28,13 @@ export const template: (
       id: ROUTE.PORTFOLIO,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "rootStack", type: WIDGET.STACK},
+        { id: "title", type: WIDGET.TEXT },
+        { id: "space0", type: WIDGET.SPACE},
+        { id: "subtitleStack", type: WIDGET.STACK},
+        { id: "listItem", type: WIDGET.LIST },
       ],
     },
     datastore: <Datastore>{
-      rootStack: <StackProps> {
-        type: StackType.column,
-        alignItems: StackAlignItems.center,
-        widgetItems: [
-          { id: "title", type: WIDGET.TEXT },
-          { id: "space0", type: WIDGET.SPACE},
-          { id: "subtitleStack", type: WIDGET.STACK},
-          { id: "listItem", type: WIDGET.LIST },
-        ]
-      },
       subtitleStack: <StackProps> {
         type: StackType.row,
         width: StackWidth.FULL,
@@ -70,7 +63,7 @@ export const template: (
         lineHeight: 18
       },
       columntitle2: <TypographyProps> {
-        label: "Credit limit     ",
+        label: "Credit limit",
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.XS,
         fontFamily: FontFamilyTokens.Inter,
