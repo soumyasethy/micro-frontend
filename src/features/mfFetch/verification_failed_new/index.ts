@@ -119,7 +119,7 @@ export const template = {
       color: ColorTokens.Grey_Charcoal,
       size: IconSizeTokens.XL,
       padding: {
-        top: SizeTypeTokens.XS,
+        top: SizeTypeTokens.SM,
         right: SizeTypeTokens.XS,
       }
     },
@@ -128,7 +128,7 @@ export const template = {
       color: ColorTokens.Grey_Charcoal,
       size: IconSizeTokens.XL,
       padding: {
-        top: SizeTypeTokens.XS,
+        top: SizeTypeTokens.SM,
         right: SizeTypeTokens.XS,
       }
     },
