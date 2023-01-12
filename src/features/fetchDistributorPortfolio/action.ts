@@ -82,7 +82,7 @@ export const onShare: ActionFunction<{}> = async (action, _datastore, { network,
     HeaderProps
   >{
     leftTitle:<TypographyProps>{
-      label:"Copied share link",
+      label:"Copied to clipboard",
       fontFamily:FontFamilyTokens.Inter,
       fontSize:FontSizeTokens.SM,
       color:ColorTokens.Primary_100,

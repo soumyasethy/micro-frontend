@@ -145,7 +145,7 @@ export const onShare: ActionFunction<LinkPayload> = async (
     HeaderProps
   >{
     leftTitle:<TypographyProps>{
-      label:"Copied share link",
+      label:"Copied to clipboard",
       fontFamily:FontFamilyTokens.Inter,
       fontSize:FontSizeTokens.SM,
       color:ColorTokens.Primary_100,

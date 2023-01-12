@@ -173,7 +173,7 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
       })
       .finally(async () => {
         await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
-          label: "Get my portfolio",
+          label: "Verfiy by OTP",
           type: ButtonTypeTokens.LargeFilled,
           loading: false,
         });

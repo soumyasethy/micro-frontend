@@ -3,7 +3,8 @@ export enum ACTION {
   MANAGE = "MANAGE",
   CTA="CTA",
   GO_BACKAction="GO_BACKAction",
-  RESUME = "RESUME"
+  RESUME = "RESUME",
+  SHARE = "SHARE"
 }
 
 export type TestActionPayload = {};

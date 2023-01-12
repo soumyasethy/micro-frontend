@@ -62,7 +62,7 @@ export const SplashAction: ActionFunction<any> = async (
         await SharedPropsService.setUser(user);
         // await navigate(ROUTE.PORTFOLOIO_START);
         // return;
-        if (user.linkedPartnerAccounts[0].partnerName == null) {
+        if (user.linkedPartnerAccounts[0].partnerName == null || user.linkedPartnerAccounts[0].accountHolderEmail == null) {
           await navigate(ROUTE.ENTER_NAME);
         } else if (user.linkedPartnerAccounts[0].partnerName != null) {
           console.log(`user.linkedPartnerAccounts[0].partnerName`);

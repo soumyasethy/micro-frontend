@@ -87,14 +87,14 @@ export const template: (
         header: <HeaderProps & WidgetProps>{
           isBackButton: true,
           type: HeaderTypeTokens.DEFAULT,
-          title: `Fetch From ${headTitle}`,
+          title: `Fetch from ${headTitle}`,
           action: {
             type: ACTION.GO_BACK,
             routeId: ROUTE.MF_FETCH_PORTFOLIO,
             payload: {},
           },
         },
-        headerspace: <SpaceProps>{ size: SizeTypeTokens.XXL },
+        headerspace: <SpaceProps>{ size: SizeTypeTokens.MD },
         space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
         title: <TypographyProps>{
           label: "Check available cash limit",
@@ -162,8 +162,8 @@ export const template: (
           },
         },
         fetchCTA: <ButtonProps & WidgetProps>{
-          label: "Get my portfolio",
-          //  label: `${headTitle} ? Verify By OTP ? Get MY Portfolio`,
+          //label: "Get my portfolio",
+            label: `${headTitle}` ? "Verfiy by OTP" : "Get my portfolio",
           fontFamily: FontFamilyTokens.Poppins,
           width: ButtonWidthTypeToken.FULL,
           type: ButtonTypeTokens.LargeFilled,
