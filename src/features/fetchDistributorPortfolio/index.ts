@@ -44,11 +44,11 @@ export const template: (
     isDataUpdated: any,
     camsDate: string, camsAmount: Number, camsPortfolio: Number,
     karvyDate: string, karvyAmount: Number, karvyPortfolio: Number,
-    stepper: any,
+    filtered_stepper: any,
     unlockedAmont: Number,
     stepResponseObject: StepResponseObject
 ) => TemplateSchema = (isDataUpdated, camsDate, camsAmount, camsPortfolio,
-    karvyDate, karvyAmount, karvyPortfolio, stepper, unlockedAmont, stepResponseObject) => {
+    karvyDate, karvyAmount, karvyPortfolio, filtered_stepper, unlockedAmont, stepResponseObject) => {
         const _generateDSCAMS =
             camsAmount
                 ? {
@@ -134,7 +134,7 @@ export const template: (
                     leftCta: "Share",
                     trailIcon: "Share",
                     stepperProps: <StepperProps>{
-                        data: stepper,
+                        data: filtered_stepper,
                         type: StepperTypeTokens.HORIZONTAL,
                     },
                     title: "Create new application",
@@ -155,12 +155,7 @@ export const template: (
                         type: ACTION.SHARE,
                         routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
                         payload: {},
-                      },
-                    // leftAction: {
-                    //     type: ACTION.SHARE,
-                    //     routeId: ROUTE.DISTRIBUTOR_PORTFOLIO,
-                    //     payload: {},
-                    // },
+                      }
                 },
                 space0: <SpaceProps>{ size: SizeTypeTokens.SM },
                 space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
@@ -332,7 +327,7 @@ export const template: (
                     ],
                 },
                 headItemsCAMS: <TypographyProps>{
-                    label: `Fetch From CAMS`,
+                    label: `Fetch from CAMS`,
                     fontSize: FontSizeTokens.MD,
                     fontWeight: '600',
                     color: ColorTokens.Grey_Night,
@@ -458,7 +453,7 @@ export const template: (
                     ],
                 },
                 headItemsKARVY: <TypographyProps>{
-                    label: `Fetch From KARVY`,
+                    label: `Fetch from KARVY`,
                     fontSize: FontSizeTokens.MD,
                     fontWeight: '600',
                     color: ColorTokens.Grey_Night,
@@ -606,7 +601,7 @@ export const distributorPortfolioMF: PageType<any> = {
                 stepData.id = value.order;
                 stepData.horizontalTitle = value.horizontalDisplayName;
                 stepData.status = value.status;
-              data1.push(stepData);
+                data1.push(stepData);
             }
             })
             stepper_datas = data1.sort(function (a, b) {
@@ -616,7 +611,6 @@ export const distributorPortfolioMF: PageType<any> = {
             let filtered_stepper = [];
            // let stepper_data = await SharedPropsService.getStepperData();
            stepper_datas.forEach((item, index) => {
-                console.log("fetch item",item);
                 if (item.horizontalTitle === "Fetch Portfolio") {
                     item.status = "IN_PROGRESS";
                 }
@@ -628,14 +622,7 @@ export const distributorPortfolioMF: PageType<any> = {
                 }
                 filtered_stepper.push(item);
             })
-    
-            console.log("filtered_data",filtered_stepper);
-    
             await SharedPropsService.setStepperData(filtered_stepper);
-
-
-           // await SharedPropsService.setStepperData(stepper_datas);
-      
 
 
         let unlockedAmont = 0;

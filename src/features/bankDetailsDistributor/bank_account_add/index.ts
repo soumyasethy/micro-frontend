@@ -333,6 +333,9 @@ export const distBankAccountAddMF: PageType<any> = {
       if (item.horizontalTitle === "Bank details") {
         item.status = "IN_PROGRESS";
       }
+      if (item.horizontalTitle === "Select Portfolio") {
+        item.status = "NOT_STARTED";
+      }
       data1.push(item);
     })
 

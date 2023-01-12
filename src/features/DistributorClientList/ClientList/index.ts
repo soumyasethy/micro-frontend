@@ -274,7 +274,6 @@ export const template: (
         clArr.push(
           { id: `listSpace${index}`, type: WIDGET.SPACE },
           { id: `listItem${index}`, type: WIDGET.STACK },
-          { id: `listItemDividerWork${index}`, type: WIDGET.DIVIDER }
         )
       })
     }

@@ -1,4 +1,7 @@
+import { ColorTokens, FontFamilyTokens, FontSizeTokens, TypographyProps } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
+import { partnerApi } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { StepperPayload } from "../ClientList/types";
@@ -29,6 +32,31 @@ export const resumeSteps: ActionFunction<StepperPayload> = async (
     }
 
 };
+
+
+export const onShare: ActionFunction<{}> = async (action, _datastore, { network,clipboard,setDatastore, ...props }): Promise<any> => {
+    const applicationId = await SharedPropsService.getApplicationId();
+    const Linkresponse = await network.get(
+        `${partnerApi.referalLink}${applicationId}`,
+        {
+          headers: await getAppHeader(),
+        }
+      );
+      const link = Linkresponse.data.link;
+  
+    clipboard.set(link);
+    await setDatastore(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER, "shareTitle", <
+      TypographyProps
+    >{
+        shareTitle:<TypographyProps>{
+        label:"Copied to clipboard",
+        fontFamily:FontFamilyTokens.Inter,
+        fontSize:FontSizeTokens.SM,
+        color:ColorTokens.Primary_100,
+        lineHeight:24
+      },
+    });
+  };
 
 export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
     action,

@@ -53,10 +53,23 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
       const todate = new Date(dob);
       const month = action.payload.value.substring(3, 5);
       const date = action.payload.value.substring(0, 2);
+      const year = action.payload.value.substring(6);
+      if (year.length < 4) {
+        await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "calendarPicker", <CalendarProps>{
+          state: CalendarStateToken.ERROR
+        });
+        await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
+          type: ButtonTypeTokens.LargeOutline,
+        });
+        dob= "";
+      }
       if (parseInt(month) > 12 || parseInt(date) > 31) {
         await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "calendarPicker", <CalendarProps>{
           state: CalendarStateToken.ERROR
-        })
+        });
+        await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
+          type: ButtonTypeTokens.LargeOutline,
+        });
         dob = "";
       } else {
         await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "calendarPicker", <CalendarProps>{
@@ -75,7 +88,6 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
       break;
     }
     case "emailInput": {
-      console.log("emil");
       email = action.payload.value;
       await SharedPropsService.setBasicData({...data});
       ///  const data: BasicData = await SharedPropsService.getBasicData();
@@ -114,25 +126,9 @@ export const onChangeInput1: ActionFunction<InputPayload> = async (
   const emails = await SharedPropsService.getBasicDataEmail();
   const dobs = await SharedPropsService.getBasicDataDob();
   const phones = await SharedPropsService.getBasicDataPhone();
-  console.log("pan");
-  console.log(pans);
-  console.log(emails);
-  console.log(dobs);
-  console.log(phones);
-  // await SharedPropsService.setBasicData({
-  //   mobileNumber:data.mobileNumber,
-  //   email:data.email,
-  //   panNumber:action.payload.value,
-  //   dob:dob
-  // });
- // console.log("pan",data);
-//  data.panNumber = action.payload.value;
-//   await SharedPropsService.setBasicData(data);
-//  const custom_data = await SharedPropsService.getBasicData();
   if (
    emails !== "" &&
    phones !== ""   && pans !== "") {
-      console.log("pan");
     await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     })
@@ -151,25 +147,9 @@ export const onChangeInput2: ActionFunction<InputPayload> = async (
   const emails = await SharedPropsService.getBasicDataEmail();
   const dobs = await SharedPropsService.getBasicDataDob();
   const phones = await SharedPropsService.getBasicDataPhone();
-  console.log("email");
-  console.log(pans);
-  console.log(emails);
-  console.log(dobs);
-  console.log(phones);
-  // await SharedPropsService.setBasicData({
-  //   mobileNumber:data.mobileNumber,
-  //   email:data.email,
-  //   panNumber:action.payload.value,
-  //   dob:dob
-  // });
- // console.log("pan",data);
-//  data.panNumber = action.payload.value;
-//   await SharedPropsService.setBasicData(data);
-//  const custom_data = await SharedPropsService.getBasicData();
   if (
    emails !== "" &&
    phones !== "" &&  pans !== "") {
-      console.log("pan");
     await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     })
@@ -188,25 +168,9 @@ export const onChangeInput3: ActionFunction<InputPayload> = async (
   const emails = await SharedPropsService.getBasicDataEmail();
   const dobs = await SharedPropsService.getBasicDataDob();
   const phones = await SharedPropsService.getBasicDataPhone();
-  console.log("phone");
-  console.log(pans);
-  console.log(emails);
-  console.log(dobs);
-  console.log(phones);
-  // await SharedPropsService.setBasicData({
-  //   mobileNumber:data.mobileNumber,
-  //   email:data.email,
-  //   panNumber:action.payload.value,
-  //   dob:dob
-  // });
- // console.log("pan",data);
-//  data.panNumber = action.payload.value;
-//   await SharedPropsService.setBasicData(data);
-//  const custom_data = await SharedPropsService.getBasicData();
   if (
    emails !== "" &&
    phones !== ""  && pans !== "") {
-      console.log("pan");
     await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     })
@@ -225,25 +189,26 @@ export const onChangeInput4: ActionFunction<InputPayload> = async (
   const emails = await SharedPropsService.getBasicDataEmail();
   const dobs = await SharedPropsService.getBasicDataDob();
   const phones = await SharedPropsService.getBasicDataPhone();
-  // await SharedPropsService.setBasicData({
-  //   mobileNumber:data.mobileNumber,
-  //   email:data.email,
-  //   panNumber:action.payload.value,
-  //   dob:dob
-  // });
- // console.log("pan",data);
-//  data.panNumber = action.payload.value;
-//   await SharedPropsService.setBasicData(data);
-//  const custom_data = await SharedPropsService.getBasicData();
   if (
    emails !== "" &&
    phones !== "" && dobs !== ""  && pans !== "") {
-      console.log("pan");
     await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     })
   }
 
+};
+
+export const toggleCTA1: ActionFunction<EnableDisableCTA> = async (
+  action,
+  _datastore,
+  { setDatastore }
+): Promise<any> => {
+  await setDatastore(action.routeId, action.payload.targetWidgetId, <
+    ButtonProps
+    >{
+      type: ButtonTypeTokens.LargeOutline,
+    });
 };
 
 export const toggleCTA: ActionFunction<EnableDisableCTA> = async (

@@ -1,6 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ACTION, FetchPortfolioPayload, PanEditPayload } from "./types";
-import { api } from "../../../configs/api";
+import { api, partnerApi } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
 import {
@@ -124,51 +124,74 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   });
   const user: User = await SharedPropsService.getUser();
 
-  if (hasChangedInDetails) {
-    action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
-    action.payload.phoneNumber =
-      user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    action.payload.emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
-    if (!action.payload.applicationId) {
-      action.payload.applicationId = user.linkedApplications[0].applicationId;
+
+  const userType = await SharedPropsService.getUserType();
+  console.log(userType);
+  
+  if (userType == "BORROWER") {
+    // updataion after implement at correct place 
+    if (hasChangedInDetails) {
+      const user: User = await SharedPropsService.getUser();
+      action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+      action.payload.phoneNumber =
+        user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+      action.payload.emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
+      if (!action.payload.applicationId) {
+        action.payload.applicationId = user.linkedApplications[0].applicationId;
+      }
     }
+    await network
+      .post(
+        api.pledgeInit,
+        <FetchPortfolioPayload>{
+          ...action.payload,
+        },
+        {
+          headers: await getAppHeader(),
+        }
+      )
+      .then(async (response) => {
+        const user: User = await SharedPropsService.getUser();
+        user.linkedApplications[0].currentStepId =
+          response.data.updatedApplicationObj.currentStepId;
+        await SharedPropsService.setUser(user);
+        await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
+          ...action.payload,
+        });
+      })
+      .finally(async () => {
+        await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
+          label: "Get my portfolio",
+          type: ButtonTypeTokens.LargeFilled,
+          loading: false,
+        });
+      });
+  } else {
+    const applicationId = await SharedPropsService.getApplicationId()
+    await network
+      .post(
+        `${partnerApi.pledgeInit}`,
+        <FetchPortfolioPayload>{
+          ...action.payload,
+        },
+        { headers: await getAppHeader() }
+      )
+      .then(async (response) => {
+       
+        await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
+          ...action.payload,
+        });
+      })
+      .finally(async () => {
+        await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
+          label: "Verfiy by OTP",
+          type: ButtonTypeTokens.LargeFilled,
+          loading: false,
+        });
+      });
   }
-
-  const assetRepository: AssetRepositoryType = AssetRepositoryType[action.payload.assetRepository];
-
-  const response = await network.post(
-    api.pledgeInit,
-    <FetchPortfolioPayload>{
-      ...action.payload,
-      assetRepository: assetRepository,
-    },
-    {
-      headers: await getAppHeader(),
-    }
-  );
-  await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
-    label: "Get my portfolio",
-    type: ButtonTypeTokens.LargeFilled,
-    loading: false,
-  });
-
-  user.linkedApplications[0].currentStepId = _.get(
-    response,
-    "response.data.updatedApplicationObj.currentStepId",
-    response.data.updatedApplicationObj.currentStepId
-  );
-  await SharedPropsService.setUser(user);
-
-  /*** Reset to default asset repository type if the user has changed the asset repository type from the settings page */
-  await setDatastore(ROUTE.OTP_AUTH_CAS, "input", <TextInputProps>{
-    state: InputStateToken.DEFAULT,
-    charLimit: AssetRepositoryMap.get(assetRepository).OTP_LENGTH,
-  });
-  await setDatastore(ROUTE.OTP_AUTH_CAS, "subTitle", <TextInputProps>{
-    label: `${AssetRepositoryMap.get(assetRepository).NAME} depository has sent an OTP to `,
-  });
-  await navigate(ROUTE.OTP_AUTH_CAS, action.payload);
 };
+
 
 export const selectSource: ActionFunction<any> = async (
   action,

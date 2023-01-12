@@ -8,7 +8,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { getAppHeader, RegexConfig } from "../../../configs/config";
 import { ACTION, EnableDisableCTA } from "./types";
 import { InputPayload } from "./types";
-import { CalendarOnChange, goBack, onChangeInput, onChangeInput1, onChangeInput2, onChangeInput3, toggleCTA, triggerCTA } from "./actions";
+import { CalendarOnChange, goBack, onChangeInput, onChangeInput1, onChangeInput2, onChangeInput3, toggleCTA, toggleCTA1, triggerCTA } from "./actions";
 
 export const template: (
   stepper: StepperItem[],
@@ -100,9 +100,12 @@ export const template: (
           default: "Date of birth as per PAN",
         },
       errorAction: {
-        type: ACTION.ENTER_DOB,
+        type: ACTION.DISABLE_CONTINUE,
         routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-        payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
+        payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
+        // type: ACTION.ENTER_DOB,
+        // routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        // payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
       },
       successAction: {
         type: ACTION.ENTER_DOB,
@@ -278,7 +281,7 @@ export const distBasicDetailsMF: PageType<any> = {
     [ACTION.CHANGE_INPUT_PAN]: onChangeInput1,
     [ACTION.CHANGE_INPUT_EMAIL]: onChangeInput2,
     [ACTION.CHANGE_INPUT_PHONE]: onChangeInput3,
-    [ACTION.DISABLE_CONTINUE]: toggleCTA,
+    [ACTION.DISABLE_CONTINUE]: toggleCTA1,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.TRIGGER_CTA]: triggerCTA,
   },

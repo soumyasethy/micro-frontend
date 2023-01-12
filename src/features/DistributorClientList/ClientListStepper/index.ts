@@ -38,7 +38,7 @@ import {
 import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
 import { ROUTE } from "../../../routes";
 import { clientInProgressRepoData, clientPendingRepoData } from "./repo";
-import { goBackAction, onClickCTA, onManageCTA, onTrackCTA, resumeSteps } from "./actions";
+import { goBackAction, onClickCTA, onManageCTA, onShare, onTrackCTA, resumeSteps } from "./actions";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import { StepperPayload } from "../ClientList/types";
@@ -49,8 +49,8 @@ export const template: (
   data: any,
   totalSteps: string,
   completedSteps: string,
-  editableData:any
-) => Promise<TemplateSchema> = async (applicationId, name, data, totalSteps, completedSteps,editableData) => {
+  editableData: any
+) => Promise<TemplateSchema> = async (applicationId, name, data, totalSteps, completedSteps, editableData) => {
 
   return {
     layout: <Layout>{
@@ -75,31 +75,32 @@ export const template: (
         shadow: ShadowTypeTokens.E1,
         body: {
           widgetItems: [
-            { id: 'head1', type: WIDGET.STACK },
-            // { id: 'bottom', type: WIDGET.STACK },
-
+            { id: 'head1', type: WIDGET.STACK }
           ],
         },
       },
       head1: <StackProps>{
         type: StackType.column,
         width: StackWidth.CONTENT,
-
-        // alignItems: StackAlignItems.flexStart,
         widgetItems: [
           { id: 'head', type: WIDGET.STACK },
           { id: 'midSpace', type: WIDGET.SPACE },
           { id: 'bottom', type: WIDGET.STACK },
-
         ]
       },
       head: <StackProps>{
         type: StackType.row,
         width: StackWidth.CONTENT,
-        //  justifyContent: StackJustifyContent.flexStart,
-        // alignItems: StackAlignItems.flexStart,
+        justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
-
+          { id: 'icon', type: WIDGET.STACK },
+          { id: 'share', type: WIDGET.STACK },
+        ]
+      },
+      icon: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.CONTENT,
+        widgetItems: [
           { id: "IconSpace", type: WIDGET.SPACE },
           { id: "IconItem", type: WIDGET.BUTTON },
           { id: "title", type: WIDGET.TEXT },
@@ -114,7 +115,7 @@ export const template: (
         type: ButtonTypeTokens.SmallGhost,
         icon: <IconProps>{
           name: IconTokens.ChevronLeft,
-          size: IconSizeTokens.XL,
+          size: IconSizeTokens.LG,
           color: ColorTokens.Grey_Night
         },
         width: ButtonWidthTypeToken.CONTENT,
@@ -132,6 +133,44 @@ export const template: (
         fontWeight: "700",
         lineHeight: 24,
       },
+      share: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.CONTENT,
+        action: {
+          type: ACTION.SHARE,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
+          payload: {},
+        },
+        justifyContent: StackJustifyContent.flexEnd,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          { id: "ShareIconItem", type: WIDGET.ICON },
+          { id: "ShareSpace", type: WIDGET.SPACE },
+          { id: "shareTitle", type: WIDGET.TEXT },
+          { id: "ShareSpace1", type: WIDGET.SPACE },
+        ]
+      },
+      shareTitle: <TypographyProps>{
+        label: "Share",
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.SM,
+        color: ColorTokens.Primary_100,
+        lineHeight: 24,
+      },
+      ShareSpace: <SpaceProps>{
+        size: SizeTypeTokens.SM,
+        isHeaght: true
+      },
+      ShareSpace1: <SpaceProps>{
+        size: SizeTypeTokens.MD,
+        isHeaght: true
+      },
+      ShareIconItem: <IconProps>{
+        name: IconTokens.Share,
+        size: IconSizeTokens.LG,
+        color: ColorTokens.Primary_100
+      },
+
       midSpace: <SpaceProps>{
         size: SizeTypeTokens.SM,
         isHeaght: true
@@ -147,31 +186,6 @@ export const template: (
       headSpaces: <SpaceProps>{
         size: SizeTypeTokens.XXXXL,
         isHeaght: false
-      },
-      header: <HeaderProps>{
-        action: {
-          type: ACTION.GO_BACKAction,
-          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
-          payload: <{}>{},
-        },
-        title: `${name}`,
-        isBackButton: true,
-        type: HeaderTypeTokens.DEFAULT,
-        //subTitle: `${stepperData}`,
-        widgetItem: { id: "subtitleStack", type: WIDGET.STACK },
-        // rightWidgetItem: {
-        //   id: "rightHeaderStack", type: WIDGET.STACK
-        // }
-      },
-      subtitleStack: <StackProps>{
-        type: StackType.row,
-        width: StackWidth.CONTENT,
-        justifyContent: StackJustifyContent.flexStart,
-        alignItems: StackAlignItems.flexStart,
-        widgetItems: [
-          { id: "IconSpace", type: WIDGET.SPACE },
-          { id: "subtitle", type: WIDGET.TEXT },
-        ]
       },
       subtitle: <TypographyProps>{
         label: `${completedSteps}/${totalSteps} Completed`,
@@ -211,7 +225,7 @@ export const template: (
           type: ACTION.RESUME,
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
           payload: <StepperPayload>{
-            value:editableData
+            value: editableData
           },
         },
       },
@@ -244,22 +258,21 @@ export const DistributorClientListStepperMF: PageType<any> = {
     });
 
     let seperated_data = [];
-    data.forEach((item) =>{
-      console.log("item",item);
-      if(item.id === 3){
+    data.forEach((item) => {
+      if (item.id === 3) {
         const stepData: any = new Object();
         stepData.title = item.title;
-        stepData.subTitle =  (item.subTitle.charAt(0).toUpperCase() + item.subTitle.slice(1).toLowerCase()).replace("_"," ");
+        stepData.subTitle = (item.subTitle.charAt(0).toUpperCase() + item.subTitle.slice(1).toLowerCase()).replace("_", " ");
         stepData.id = item.id;
         stepData.status = item.status;
         stepData.isEditable = item.isEditable;
         stepData.horizontalTitle = item.horizontalTitle;
         stepData.message = "Steps pending on investor";
         seperated_data.push(stepData);
-      }else{
+      } else {
         const stepData: any = new Object();
         stepData.title = item.title;
-        stepData.subTitle = (item.subTitle.charAt(0).toUpperCase() + item.subTitle.slice(1).toLowerCase()).replace("_"," ");
+        stepData.subTitle = (item.subTitle.charAt(0).toUpperCase() + item.subTitle.slice(1).toLowerCase()).replace("_", " ");
         stepData.id = item.id;
         stepData.status = item.status;
         stepData.isEditable = item.isEditable;
@@ -270,7 +283,7 @@ export const DistributorClientListStepperMF: PageType<any> = {
 
     const editableData = data.filter((value) => value.isEditable === true && (value.status === "IN_PROGRESS" || value.status === "NOT_STARTED"));
 
-    const templateX = await template(applicationId, name, seperated_data, totalSteps, completedSteps,editableData);
+    const templateX = await template(applicationId, name, seperated_data, totalSteps, completedSteps, editableData);
     return Promise.resolve(templateX);
   },
   actions: {
@@ -279,6 +292,7 @@ export const DistributorClientListStepperMF: PageType<any> = {
     [ACTION.CTA]: onClickCTA,
     [ACTION.GO_BACKAction]: goBackAction,
     [ACTION.RESUME]: resumeSteps,
+    [ACTION.SHARE]: onShare,
   },
   clearPrevious: true,
 };
