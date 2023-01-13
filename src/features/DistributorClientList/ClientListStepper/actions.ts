@@ -1,4 +1,4 @@
-import { ColorTokens, FontFamilyTokens, FontSizeTokens, TypographyProps } from "@voltmoney/schema";
+import { ButtonProps, ColorTokens, FontFamilyTokens, FontSizeTokens, TypographyProps } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -18,45 +18,46 @@ export const resumeSteps: ActionFunction<StepperPayload> = async (
         navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
         return;
     } else
-    if (action.payload.value[0].title == "Bank Details") {
-        navigate(ROUTE.DIST_BANK_ACCOUNT_ADD);
-        return;
-    } else
-    if (action.payload.value[0].title == "Fetch Portfolio") {
-        navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-        return;
-    } else
-    if (action.payload.value[0].title == "Select Portfolio") {
-        navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-        return;
-    }
+        if (action.payload.value[0].title == "Bank Details") {
+            navigate(ROUTE.DIST_BANK_ACCOUNT_ADD);
+            return;
+        } else
+            if (action.payload.value[0].title == "Fetch Portfolio") {
+                navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
+                return;
+            } else
+                if (action.payload.value[0].title == "Select Portfolio") {
+                    navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
+                    return;
+                }
 
 };
 
 
-export const onShare: ActionFunction<{}> = async (action, _datastore, { network,clipboard,setDatastore, ...props }): Promise<any> => {
+export const onShare: ActionFunction<{}> = async (action, _datastore, { network, clipboard, setDatastore, ...props }): Promise<any> => {
     const applicationId = await SharedPropsService.getApplicationId();
     const Linkresponse = await network.get(
         `${partnerApi.referalLink}${applicationId}`,
         {
-          headers: await getAppHeader(),
+            headers: await getAppHeader(),
         }
-      );
-      const link = Linkresponse.data.link;
-  
+    );
+    const link = Linkresponse.data.link;
+
     clipboard.set(link);
-    await setDatastore(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER, "shareTitle", <
-      TypographyProps
-    >{
-        shareTitle:<TypographyProps>{
-        label:"Copied to clipboard",
-        fontFamily:FontFamilyTokens.Inter,
-        fontSize:FontSizeTokens.SM,
-        color:ColorTokens.Primary_100,
-        lineHeight:24
-      },
-    });
-  };
+    await setDatastore(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER, "ShareIconItem", <
+        ButtonProps
+        >{
+            label: "Copied to clipboard"
+        });
+    setTimeout(async () => {
+        await setDatastore(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER, "ShareIconItem", <
+            ButtonProps
+            >{
+                label: "Copy"
+            });
+    }, 5000);
+};
 
 export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
     action,

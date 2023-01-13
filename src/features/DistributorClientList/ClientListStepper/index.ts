@@ -35,12 +35,9 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
+import { ACTION} from "./types";
 import { ROUTE } from "../../../routes";
-import { clientInProgressRepoData, clientPendingRepoData } from "./repo";
 import { goBackAction, onClickCTA, onManageCTA, onShare, onTrackCTA, resumeSteps } from "./actions";
-import { partnerApi } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
 import { StepperPayload } from "../ClientList/types";
 
 export const template: (
@@ -144,32 +141,48 @@ export const template: (
         justifyContent: StackJustifyContent.flexEnd,
         alignItems: StackAlignItems.center,
         widgetItems: [
-          { id: "ShareIconItem", type: WIDGET.ICON },
-          { id: "ShareSpace", type: WIDGET.SPACE },
-          { id: "shareTitle", type: WIDGET.TEXT },
-          { id: "ShareSpace1", type: WIDGET.SPACE },
+          { id: "ShareIconItem", type: WIDGET.BUTTON },
+          // { id: "ShareIconItem", type: WIDGET.ICON },
+           { id: "ShareSpace", type: WIDGET.SPACE },
+          // { id: "shareTitle", type: WIDGET.TEXT },
+          // { id: "ShareSpace1", type: WIDGET.SPACE },
         ]
       },
-      shareTitle: <TypographyProps>{
-        label: "Share",
-        fontFamily: FontFamilyTokens.Inter,
-        fontSize: FontSizeTokens.SM,
-        color: ColorTokens.Primary_100,
-        lineHeight: 24,
+      ShareIconItem:<ButtonProps & WidgetProps>{
+        label: "Copy",
+        type: ButtonTypeTokens.SmallGhost,
+        width: ButtonWidthTypeToken.CONTENT,
+        icon:<IconProps>{
+          name: IconTokens.Share,
+            size: IconSizeTokens.LG,
+            color: ColorTokens.Primary_100
+        },
+        action: {
+          type: ACTION.SHARE,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
+          payload: {},
+        },
       },
+      // shareTitle: <TypographyProps>{
+      //   label: "Share",
+      //   fontFamily: FontFamilyTokens.Inter,
+      //   fontSize: FontSizeTokens.SM,
+      //   color: ColorTokens.Primary_100,
+      //   lineHeight: 24,
+      // },
       ShareSpace: <SpaceProps>{
-        size: SizeTypeTokens.SM,
-        isHeaght: true
+        size: SizeTypeTokens.XL,
+        isHeaght: false
       },
-      ShareSpace1: <SpaceProps>{
-        size: SizeTypeTokens.MD,
-        isHeaght: true
-      },
-      ShareIconItem: <IconProps>{
-        name: IconTokens.Share,
-        size: IconSizeTokens.LG,
-        color: ColorTokens.Primary_100
-      },
+      // ShareSpace1: <SpaceProps>{
+      //   size: SizeTypeTokens.MD,
+      //   isHeaght: true
+      // },
+      // ShareIconItem: <IconProps>{
+      //   name: IconTokens.Share,
+      //   size: IconSizeTokens.LG,
+      //   color: ColorTokens.Primary_100
+      // },
 
       midSpace: <SpaceProps>{
         size: SizeTypeTokens.SM,
