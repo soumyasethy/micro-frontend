@@ -15,6 +15,7 @@ export type LoginAction = {
   username: string;
   password?: string;
   isWhatsappEnabled?: boolean;
+  setIsUserLoggedIn?:(user: any) => void;
 };
 export type ResendOtp = {
   phoneNumber: string;

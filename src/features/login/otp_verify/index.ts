@@ -36,8 +36,9 @@ import { ContinuePayload } from "../phone_number/types";
 
 export const template: (
   phone_number: number,
-  isWhatsAppEnabled?: boolean
-) => TemplateSchema = (phone_number, isWhatsAppEnabled) => {
+  isWhatsAppEnabled?: boolean,
+  setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
+) => TemplateSchema = (phone_number, isWhatsAppEnabled, setIsUserLoggedIn) => {
   return {
     layout: <Layout>{
       id: ROUTE.OTP_VERIFY,
@@ -114,6 +115,7 @@ export const template: (
             isWhatsAppEnabled,
             value: "",
             widgetId: "input",
+            setIsUserLoggedIn,
           },
         },
         otpAction: {
@@ -134,8 +136,10 @@ export const template: (
 };
 
 export const otpVerifyMF: PageType<any> = {
-  onLoad: async (_, { phone_number, isWhatsAppEnabled }) => {
-    return Promise.resolve(template(phone_number, isWhatsAppEnabled));
+  onLoad: async (_, { phone_number, isWhatsAppEnabled, setIsUserLoggedIn }) => {
+    return Promise.resolve(
+      template(phone_number, isWhatsAppEnabled, setIsUserLoggedIn)
+    );
   },
   actions: {
     [ACTIONS.LoginWithCognito]: checkUserType,

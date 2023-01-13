@@ -1,18 +1,20 @@
-
-import { ActionFunction } from "@voltmoney/types";
-
 import { api, partnerApi } from "../../../configs/api";
+import SharedPropsService, { USERTYPE } from "../../../SharedPropsService";
+import { ActionFunction } from "@voltmoney/types";
+import { ACTION, FetchPortfolioPayload, PanEditPayload } from "./types";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
-
-import SharedPropsService, { USERTYPE } from "../../../SharedPropsService";
-
-
-import {ACTION, FetchPortfolioPayload, PanEditPayload} from "./types";
-
-import {ButtonProps, ButtonTypeTokens, InputStateToken, TextInputProps,} from "@voltmoney/schema";
-
-import {AssetRepositoryMap, ConfigTokens, getAppHeader,} from "../../../configs/config";
+import {
+  ButtonProps,
+  ButtonTypeTokens,
+  InputStateToken,
+  TextInputProps,
+} from "@voltmoney/schema";
+import {
+  AssetRepositoryMap,
+  ConfigTokens,
+  getAppHeader,
+} from "../../../configs/config";
 import _ from "lodash";
 
 let hasChangedInDetails = false;
@@ -49,6 +51,7 @@ export const editEmailId: ActionFunction<PanEditPayload> = async (
     applicationId: action.payload.applicationId,
   });
 };
+
 export const autoTriggerOtp: ActionFunction<any> = async (
   action,
   _datastore,
@@ -82,7 +85,10 @@ export const autoTriggerOtp: ActionFunction<any> = async (
   /*** Auto trigger is globally enabled. mostly this will be disabled,
    * and we are manually enabled it when user tries fetch more assets from UnlockLimit Page ***/
   if (isAutoTriggerOtp) {
-    await SharedPropsService.setConfig(ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP, false);
+    await SharedPropsService.setConfig(
+      ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP,
+      false
+    );
     fetchMyPortfolio(
       {
         routeId: ROUTE.MF_FETCH_PORTFOLIO,
@@ -186,7 +192,8 @@ export const goBack: ActionFunction<{}> = async (
   _datastore,
   { network,navigate, goBack }
 ): Promise<any> => {
-  goBack();
+  await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
+ // goBack();
  // need to discuss about this conflict to soumya
  /* if (hasChangedInDetails) {
     action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;

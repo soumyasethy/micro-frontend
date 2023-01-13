@@ -2,10 +2,12 @@ import { ActionFunction } from "@voltmoney/types";
 import { ACTIONS, AuthCASPayload } from "./types";
 import { api, partnerApi } from "../../../configs/api";
 import { ButtonProps, ButtonTypeTokens, ColorTokens, InputStateToken, TextInputProps } from "@voltmoney/schema";
+
 import {
   APP_CONFIG,
   AssetRepositoryMap,
   AssetRepositoryType,
+  ConfigTokens,
   getAppHeader,
 } from "../../../configs/config";
 import { nextStepId } from "../../../configs/utils";
@@ -37,75 +39,93 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
   console.log(userType);
   if (userType === "BORROWER") {
 
-    const response = await network.post(
-      api.authCAS,
-      {
-        applicationId: action.payload.applicationId,
-        otp: action.payload.value,
-        assetRepository: assetRepositoryType,
-      },
-      { headers: await getAppHeader() }
-    );
-    if (response.status === 200) {
-      /*** check available credit limit ***/
+//     const response = await network.post(
+//       api.authCAS,
+//       {
+//         applicationId: action.payload.applicationId,
+//         otp: action.payload.value,
+//         assetRepository: assetRepositoryType,
+//       },
+//       { headers: await getAppHeader() }
+//     );
+//     if (response.status === 200) {
+//       /*** check available credit limit ***/
 
-      const availableCreditAmount = _.get(
-        response,
-        "data.stepResponseObject.availableCreditAmount",
-        0
-      );
-      if (availableCreditAmount > 0) {
-        analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
-          ...AnalyticsEventTracker.borrower_mf_pull,
-        });
-        await SharedPropsService.setAuthCASResponse(response.data);
-      } else {
-        analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
-          ...AnalyticsEventTracker.borrower_mf_pull_failed,
-        });
-      }
 
-      await setDatastore(action.routeId, "input", <TextInputProps>{
-        state: InputStateToken.SUCCESS,
-      });
-      await goBack();
+//       const availableCreditAmount = _.get(
+//         response,
+//         "data.stepResponseObject.availableCreditAmount",
+//         0)
+//     await setDatastore(action.routeId, "input", <TextInputProps>{
+//       state: InputStateToken.SUCCESS,
+//     });
+//     // await goBack();
 
-      if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
-        /**  enable animation again ***/
-        await SharedPropsService.setPledgeFirstTime(true);
-        const nextRoute = await nextStepId(
-          response.data.updatedApplicationObj.currentStepId
-        );
-        if (availableCreditAmount > 0) {
-          analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
-            ...AnalyticsEventTracker.borrower_mf_pull,
-          });
-        } else {
-          analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
-            ...AnalyticsEventTracker.borrower_mf_pull_failed,
-          });
-        }
-        await setDatastore(action.routeId, "input", <TextInputProps>{
-          state: InputStateToken.SUCCESS,
-        });
-        await goBack();
+//     if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+//       /**  enable animation again ***/
+//       const layoutType = await SharedPropsService.getConfig(
+//         ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
+//       );
+//       /*** Don't run animation MF_FETCH is not full screen */
+//       if (!layoutType) await SharedPropsService.setPledgeFirstTime(true);
 
-        if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
-          const nextRoute = await nextStepId(
-            response.data.updatedApplicationObj.currentStepId
-          );
-          nextRoute.params = { ...nextRoute.params, response };
-          await navigate(nextRoute.routeId, nextRoute.params);
-        }
+//       const nextRoute = await nextStepId(
+//         response.data.updatedApplicationObj.currentStepId
+// >>>>>>> 9a8cad259ca06765edc4711c0906190e05dc9734
+//       );
+//       if (availableCreditAmount > 0) {
+//         analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
+//           ...AnalyticsEventTracker.borrower_mf_pull,
+//         });
+//         await SharedPropsService.setAuthCASResponse(response.data);
+//       } else {
+//         analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
+//           ...AnalyticsEventTracker.borrower_mf_pull_failed,
+//         });
+//       }
 
-      } else {
-        await setDatastore(action.routeId, "input", <TextInputProps>{
-          state: InputStateToken.ERROR,
-        });
-      }
-    }
+//       await setDatastore(action.routeId, "input", <TextInputProps>{
+//         state: InputStateToken.SUCCESS,
+//       });
+//       await goBack();
 
-  }else {
+//       if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+//         /**  enable animation again ***/
+//         await SharedPropsService.setPledgeFirstTime(true);
+//         const nextRoute = await nextStepId(
+//           response.data.updatedApplicationObj.currentStepId
+//         );
+//         if (availableCreditAmount > 0) {
+//           analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
+//             ...AnalyticsEventTracker.borrower_mf_pull,
+//           });
+//         } else {
+//           analytics(AnalyticsEventTracker.borrower_mf_pull_failed["Event Name"], {
+//             ...AnalyticsEventTracker.borrower_mf_pull_failed,
+//           });
+//         }
+//         await setDatastore(action.routeId, "input", <TextInputProps>{
+//           state: InputStateToken.SUCCESS,
+//         });
+//         await goBack();
+
+//         if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+//           const nextRoute = await nextStepId(
+//             response.data.updatedApplicationObj.currentStepId
+//           );
+//           nextRoute.params = { ...nextRoute.params, response };
+//           await navigate(nextRoute.routeId, nextRoute.params);
+//         }
+
+//       } else {
+//         await setDatastore(action.routeId, "input", <TextInputProps>{
+//           state: InputStateToken.ERROR,
+//         });
+//       }
+//     }
+  
+//   }
+}else {
     console.log("partner otp verify");
     const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
     const response = await network.post(

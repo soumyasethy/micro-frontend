@@ -42,8 +42,10 @@ import { checkUserType, goToPrivacy, sendOtp, textOnChange, toggleCTA, whatsappT
 import { RegexConfig } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
-export const template: TemplateSchema = {
 
+export const template: (mobileNumber?: string) => TemplateSchema = (
+  mobileNumber
+) => ({
   layout: <Layout>{
     id: ROUTE.PHONE_NUMBER,
     type: LAYOUTS.LIST,
@@ -128,6 +130,7 @@ export const template: TemplateSchema = {
       fontFamily: FontFamilyTokens.Inter
   },
     input: <TextInputProps & WidgetProps>{
+      value: mobileNumber ? `${mobileNumber}` : "",
       regex: RegexConfig.MOBILE,
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
@@ -191,19 +194,12 @@ export const template: TemplateSchema = {
     },
     space5: <SpaceProps>{ size: SizeTypeTokens.Size32 },
   },
-};
+});
 
 export const phoneNumberMF: PageType<any> = {
-  onLoad: async () => {
-    const usertype = await SharedPropsService.getUserType();
-   // const  date = moment(1672820952).format("DD-MM-YYYY");
-   // const date = new Date(1672820952);
-   
-    // const  dates = moment(date).format("DD-MM-YYYY");
-    // console.log("date",dates);
-    
-    console.log("usertype",usertype);
-    return Promise.resolve(template)
+
+  onLoad: async (_, { mobileNumber }) => {
+    return Promise.resolve(template(mobileNumber));
   },
   actions: {
     [ACTION.CONTINUE]: checkUserType,
@@ -214,6 +210,4 @@ export const phoneNumberMF: PageType<any> = {
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
     [ACTION.PRIVACY]: goToPrivacy,
   },
-
-
 };

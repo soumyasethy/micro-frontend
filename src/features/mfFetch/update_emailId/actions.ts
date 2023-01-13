@@ -34,6 +34,5 @@ export const emailOnChange: ActionFunction<ContinuePayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** update email id ****", action.payload.value);
   emailId = action.payload.value;
 };

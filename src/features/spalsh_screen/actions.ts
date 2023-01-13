@@ -4,6 +4,7 @@ import { nextStepId } from "../../configs/utils";
 import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
 import SharedPropsService from "../../SharedPropsService";
+
 import { getAppHeader } from "../../configs/config";
 
 export const SplashAction: ActionFunction<any> = async (
@@ -16,6 +17,7 @@ export const SplashAction: ActionFunction<any> = async (
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
   if (accessToken) {
     const body = {}; /*** NOT PASSING REF CODE HERE ***/
+
 
     console.warn("SplashAction body", body);
     const userType = await SharedPropsService.getUserType();
@@ -39,19 +41,14 @@ export const SplashAction: ActionFunction<any> = async (
             user.linkedApplications[0].currentStepId
           );
           await navigate(nextRoute.routeId, nextRoute.params);
+          // await navigate(ROUTE.PHONE_NUMBER);
+          //  await navigate(ROUTE.PHONE_NUMBER, {
+          //   mobileNumber: action?.payload?.mobileNumber,
+          // });
         }
-
-
-      } else {
-        await navigate(ROUTE.PHONE_NUMBER);
-
       }
 
-
     } else {
-      // const userContextResponses = await network.post(api.userContext, body, {
-      //   headers: await getAppHeader(),
-      // });
       const userContextResponse = await network.post(partnerApi.userContext, body, {
         headers: await getAppHeader(),
       });
@@ -65,7 +62,6 @@ export const SplashAction: ActionFunction<any> = async (
         if (user.linkedPartnerAccounts[0].partnerName == null || user.linkedPartnerAccounts[0].accountHolderEmail == null) {
           await navigate(ROUTE.ENTER_NAME);
         } else if (user.linkedPartnerAccounts[0].partnerName != null) {
-          console.log(`user.linkedPartnerAccounts[0].partnerName`);
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
         } else if (partnerUser !== '') {
           await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
@@ -73,10 +69,12 @@ export const SplashAction: ActionFunction<any> = async (
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
         }
       }
-
     }
-  } else {
-    await navigate(ROUTE.PHONE_NUMBER);
+  }
+  else {
+    await navigate(ROUTE.PHONE_NUMBER, {
+      mobileNumber: action?.payload?.mobileNumber,
+    });
   }
   // } else {
   //   await navigate(ROUTE.LANDING_PAGE);

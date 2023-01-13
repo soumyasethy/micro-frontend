@@ -19,6 +19,8 @@ export enum USERTYPE {
   PARTNER = "PARTNER"
 }
 
+import _ from "lodash";
+
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
   isPledgedRequired?: boolean;
@@ -66,6 +68,11 @@ type GlobalProps = {
   config?: {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
+    [ConfigTokens.IS_KYC_PHOTO_VERIFICATION]?: boolean;
+    [ConfigTokens.IS_GOOGLE_LOGIN_ENABLED]?: boolean;
+    [ConfigTokens.IS_MF_FETCH_BACK_ALLOWED]?: boolean;
+    [ConfigTokens.MIN_AMOUNT_ALLOWED]?: number;
+    [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
   };
   stepperData?:any,
   investorName?:string
@@ -111,7 +118,7 @@ let _globalProps: GlobalProps = {
   authCAS: null,
   ref: "",
   /*** Default asset repository */
-  assetRepositoryType: AssetRepositoryType.KARVY,
+  assetRepositoryType: AssetRepositoryType.CAMS,
   assetRepositoryConfig: {
     /*** Sequence of fetching asset repository ***/
     [AssetRepositoryType.KARVY]: {
@@ -132,6 +139,11 @@ let _globalProps: GlobalProps = {
   config: {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true,
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
+    [ConfigTokens.IS_KYC_PHOTO_VERIFICATION]: false,
+    [ConfigTokens.IS_GOOGLE_LOGIN_ENABLED]: false,
+    [ConfigTokens.IS_MF_FETCH_BACK_ALLOWED]: false,
+    [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
+    [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
   },
   stepperData: {},
   investorName:""
@@ -158,6 +170,7 @@ export function getBuildType(): BUILD_TYPE {
   return _globalProps.buildType;
 }
 export function setConfig(configId: ConfigTokens, configValue: any) {
+  // @ts-ignore
   _globalProps.config[configId] = configValue;
 }
 export function getConfig(configId?: ConfigTokens): any {
@@ -323,7 +336,7 @@ async function setUrlParams(url: string) {
     url.includes("utm_medium=") ||
     url.includes("utm_campaign=") ||
     url.includes("utm_content=") ||
-    url.includes("utm_id=") || 
+    url.includes("utm_id=") ||
     url.includes("utm_term=")
   ) {
     const urlWithDate = url + "&timestamp=" + new Date().getTime();
@@ -342,6 +355,13 @@ function getPropsValue(key?: string) {
 
 async function setUser(props: User) {
   _globalProps.user = await props;
+  _globalProps.config[ConfigTokens.IS_GOOGLE_LOGIN_ENABLED] = _.get(
+    props,
+    "linkedPlatformAccounts[0].platformCode",
+    ""
+  )
+    .toUpperCase()
+    .includes("VOLT");
 }
 
 async function getUser() {

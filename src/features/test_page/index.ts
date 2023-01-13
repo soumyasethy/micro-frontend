@@ -21,7 +21,7 @@ import { TestAction } from "./actions";
 export const template: TemplateSchema = {
   layout: <Layout>{
     id: ROUTE.TEST_PAGE,
-    type: LAYOUTS.MODAL,
+    type: LAYOUTS.LIST,
     widgets: [
       { id: "space1", type: WIDGET.SPACE },
       { id: "button", type: WIDGET.BUTTON },
@@ -31,7 +31,7 @@ export const template: TemplateSchema = {
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     button: <ButtonProps & WidgetProps>{
       label: "hello world",
-      loading: true,
+      loading: false,
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {

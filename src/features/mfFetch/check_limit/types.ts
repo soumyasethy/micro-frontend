@@ -5,6 +5,7 @@ export enum ACTION {
   EDIT_EMAIL = "EDIT_EMAIL",
   EDIT_MOBILE_NUMBER = "EDIT_MOBILE_NUMBER",
   GO_BACK = "GO_BACK",
+
 }
 export type PanEditPayload = {
   applicationId: string;

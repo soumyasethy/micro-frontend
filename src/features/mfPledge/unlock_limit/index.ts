@@ -12,7 +12,6 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
-  CardProps,
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,

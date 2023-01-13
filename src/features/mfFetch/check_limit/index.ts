@@ -46,15 +46,17 @@ export const template: (
   emailId: string,
   headTitle: string,
   assetRepository: AssetRepositoryType,
-  isPanEditAllowed: boolean
-) => TemplateSchema = (
+  isPanEditAllowed: boolean,
+  isGoBackAllowed: boolean
+) => Promise<TemplateSchema> = async (
   applicationId,
   panNumber,
   phoneNumber,
   emailId,
   headTitle,
   assetRepository,
-  isPanEditAllowed
+  isPanEditAllowed,
+  isGoBackAllowed
 ) => {
     return {
       layout: <Layout>{
@@ -63,12 +65,20 @@ export const template: (
         widgets: [
           ...(headTitle
             ? [
-              { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+              { id: "headerPartner", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
               { id: "headerspace", type: WIDGET.SPACE },
             ]
             : [
               { id: "space0", type: WIDGET.SPACE },
-              { id: "title", type: WIDGET.TEXT },
+              ...(isGoBackAllowed
+                ? [
+                    {
+                      id: "header",
+                      type: WIDGET.HEADER,
+                      position: POSITION.ABSOLUTE_TOP,
+                    },
+                  ]
+                : []),
               { id: "space1", type: WIDGET.SPACE },
               { id: "subTitle", type: WIDGET.TEXT },
               { id: "space2", type: WIDGET.SPACE },
@@ -84,7 +94,7 @@ export const template: (
         ],
       },
       datastore: <Datastore>{
-        header: <HeaderProps & WidgetProps>{
+        headerPartner: <HeaderProps & WidgetProps>{
           isBackButton: true,
           type: HeaderTypeTokens.DEFAULT,
           title: `Fetch from ${headTitle}`,
@@ -112,6 +122,18 @@ export const template: (
           fontWeight: "400",
           fontSize: FontSizeTokens.SM,
         },
+      header: <HeaderProps>{
+        isBackButton: true,
+        title: "Back",
+        type: HeaderTypeTokens.DEFAULT,
+        action: {
+          type: ACTION.GO_BACK,
+          payload: {},
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
+        },
+      },
+     
+    
 
         space1: <SpaceProps>{ size: SizeTypeTokens.SM },
         space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
@@ -181,8 +203,9 @@ export const template: (
             },
           },
         },
+        spaceItem: <SpaceProps>{ size: SizeTypeTokens.Size80 },
       },
-    };
+    }
   };
 
 export const checkLimitMF: PageType<any> = {
@@ -195,6 +218,7 @@ export const checkLimitMF: PageType<any> = {
     let panNumberX = "";
     let emailId = "";
     console.log("userType", userType);
+    let assetRepository;
     if (userType === "BORROWER") {
       const user: User = await SharedPropsService.getUser();
       panNumberX =
@@ -206,36 +230,33 @@ export const checkLimitMF: PageType<any> = {
       if (!applicationId) {
         applicationId = applicationId || user.linkedApplications[0].applicationId;
       }
-      const assetRepository = await SharedPropsService.getAssetRepositoryType();
+       assetRepository = await SharedPropsService.getAssetRepositoryType();
     } else {
       phoneNumber = await (await SharedPropsService.getPartnerUser()).phoneNumber;
       emailId = await (await SharedPropsService.getPartnerUser()).emailId;
       panNumberX = await (await SharedPropsService.getPartnerUser()).panNumber;
-      const assetRepository = headTitle;
-      // console.log(await SharedPropsService.getBasicData());
-      //       phoneNumber = await (await SharedPropsService.getBasicData()).mobileNumber;
-      //       emailId =await (await SharedPropsService.getBasicData()).email;
-      //       panNumberX = await (await SharedPropsService.getBasicData()).panNumber;
-      //       const assetRepository = headTitle;
+       assetRepository = headTitle;
     }
-    const assetRepository = await SharedPropsService.getAssetRepositoryType();
-    console.log("repo", assetRepository);
-    // return Promise.resolve(
-    //   template(applicationId, panNumberX, phoneNumber, emailId, headTitle,assetRepository)
-
 
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_PAN_EDIT_ALLOWED
     );
+    const isGoBackAllowed: boolean = await SharedPropsService.getConfig(
+      ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
+    );
 
-    return template(
-      applicationId,
-      panNumberX,
-      phoneNumber,
-      emailId,
-      headTitle,
-      assetRepository,
-      isPanEditAllowed
+
+    return Promise.resolve(
+      template(
+        applicationId,
+        panNumberX,
+        phoneNumber,
+        emailId,
+        headTitle,
+        assetRepository,
+        isPanEditAllowed,
+        isGoBackAllowed
+      )
     );
   },
   actions: {
@@ -245,6 +266,7 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
     [ACTION.GO_BACK]: goBack,
+
   },
 
   clearPrevious: true,

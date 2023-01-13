@@ -21,16 +21,17 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
     const user: User = await SharedPropsService.getUser();
     user.linkedBorrowerAccounts[0].accountHolderPhoneNumber = phoneNumber;
     await SharedPropsService.setUser(user);
+    await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.targetWidgetId, {
+      subTitle: phoneNumber.substring(3),
+    });
+    await goBack();
   } else {
     const partnerUser: PartnerUser = await SharedPropsService.getPartnerUser();
     partnerUser.phoneNumber = phoneNumber;
     await SharedPropsService.setPartnerUser(partnerUser);
   }
-  console.warn("action", action);
-  await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.targetWidgetId, {
-    subTitle: phoneNumber.substring(3),
-  });
-  await goBack();
+ 
+ 
 };
 
 export const phoneOnChange: ActionFunction<ContinuePayload> = async (
@@ -38,7 +39,6 @@ export const phoneOnChange: ActionFunction<ContinuePayload> = async (
   _datastore,
   { }
 ): Promise<any> => {
-  console.warn("**** update phoneNumber ****", action.payload.value);
   phoneNumber = action.payload.value;
 };
 export const emailOnChange: ActionFunction<ContinuePayload> = async (
@@ -46,6 +46,5 @@ export const emailOnChange: ActionFunction<ContinuePayload> = async (
   _datastore,
   { }
 ): Promise<any> => {
-  console.warn("**** update phoneNumber ****", action.payload.value);
   phoneNumber = action.payload.value;
 };

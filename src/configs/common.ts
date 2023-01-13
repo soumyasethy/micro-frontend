@@ -1,4 +1,9 @@
 import {
+  CardOrientation,
+  CardProps,
+  ColorTokens,
+  FontFamilyTokens,
+  FontSizeTokens,
   IconProps,
   IconTokens,
   ImageProps,
@@ -10,6 +15,7 @@ import {
   StackProps,
   StackType,
   StackWidth,
+  TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { assetsMap } from "./assets";
@@ -57,4 +63,59 @@ export const commonTemplates = {
       },
     },
   },
+  infoMessage: (id: string, message?: string, type?: "error" | "info") => ({
+    widgetItem: [
+      {
+        id: `otpConfirmInfo${id}`,
+        type: WIDGET.CARD,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      },
+      {
+        id: `continueSpace${id}`,
+        type: WIDGET.SPACE,
+        position: POSITION.ABSOLUTE_BOTTOM,
+      },
+    ],
+    datastore: <Datastore>{
+      [`otpConfirmInfo${id}`]: <CardProps>{
+        bgColor:
+          type === "error"
+            ? ColorTokens.System_Error_05
+            : ColorTokens.Secondary_05,
+        width: StackWidth.FULL,
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG,
+          left: SizeTypeTokens.LG,
+          right: SizeTypeTokens.LG,
+        },
+        bodyOrientation: CardOrientation.HORIZONTAL,
+        body: {
+          widgetItems: [
+            { id: `infoIcon${id}`, type: WIDGET.ICON },
+            { id: `infoIconSpace${id}`, type: WIDGET.SPACE },
+            { id: `infoLabel${id}`, type: WIDGET.TEXT },
+          ],
+        },
+      },
+      [`infoIcon${id}`]: <IconProps>{
+        name: IconTokens.InfoFilled,
+        color:
+          type === "error"
+            ? ColorTokens.System_Error
+            : ColorTokens.Secondary_100,
+      },
+      [`infoIconSpace${id}`]: <SpaceProps>{ size: SizeTypeTokens.Size10 },
+      [`continueSpace${id}`]: <SpaceProps>{ size: SizeTypeTokens.LG },
+      [`infoLabel${id}`]: <TypographyProps>{
+        label: `${message}`,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontColor:
+          type === "error" ? ColorTokens.System_Error : ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XS,
+        lineHeight: 18,
+      },
+    },
+  }),
 };

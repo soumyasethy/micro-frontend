@@ -5,7 +5,11 @@ import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
 import { StoreKey } from "./api";
-import { AssetRepositoryMap, AssetRepositoryType } from "./config";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+  ConfigTokens,
+} from "./config";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -64,8 +68,8 @@ export const stepperRepo = async () => {
       StepperStateToken.COMPLETED ||
       user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
         StepperStateToken.COMPLETED) &&
-    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.COMPLETED &&
+    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+    //   StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
@@ -81,8 +85,8 @@ export const stepperRepo = async () => {
       StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
       StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.NOT_STARTED &&
+    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+    //   StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
@@ -96,8 +100,8 @@ export const stepperRepo = async () => {
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
-    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-      StepperStateToken.PENDING_MANUAL_VERIFICATION ||
+    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
+    //   StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.PENDING_MANUAL_VERIFICATION ||
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
@@ -328,8 +332,12 @@ export const nextStepId = async (
     if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
       // ***  Comment Email Verify FLow since google login is not working ***//
       return {
-        routeId: ROUTE.EMAIL_VERIFY,
-        // routeId: ROUTE.ENTER_EMAIL,
+        // routeId: ROUTE.EMAIL_VERIFY,
+        routeId: (await SharedPropsService.getConfig(
+          ConfigTokens.IS_GOOGLE_LOGIN_ENABLED
+        ))
+          ? ROUTE.EMAIL_VERIFY
+          : ROUTE.ENTER_EMAIL,
         params: {
           applicationId: user.linkedBorrowerAccounts[0].accountId,
         },
@@ -355,7 +363,6 @@ export const nextStepId = async (
       };
     } else if (currentStepId === ROUTE.MF_PLEDGE_PORTFOLIO) {
       const isPledgeFirstTime = await SharedPropsService.isPledgeFirstTime();
-      console.warn("*** isPledgeFirstTime", isPledgeFirstTime);
       if (isPledgeFirstTime) {
         return {
           routeId: ROUTE.CHECKING_LIMIT,
@@ -483,8 +490,6 @@ export const getParameters: (url: string) => {
   let paramString = url.split("?")[1];
   let queryString = new URLSearchParams(paramString);
   for (let pair of queryString.entries()) {
-    console.log("Key is:" + pair[0]);
-    console.log("Value is:" + pair[1]);
     params[pair[0]] = pair[1];
   }
   return params;

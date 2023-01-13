@@ -65,7 +65,9 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
     const urlParams = `${await SharedPropsService.getUrlParams()}`.split("?");
     const requestUrl = `${api.login}${phoneNumber}`;
     const response = await network.get(
-      `${requestUrl}${urlParams.length > 1 ? `?${urlParams[1]}` : ""}`,
+      `${requestUrl}?enableWhatsapp=${isWhatsAppEnabled}${
+        urlParams.length > 1 ? `&${urlParams[1]}` : ""
+      }`,
       {
         headers: getAuthHeaders(),
       }

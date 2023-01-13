@@ -26,7 +26,9 @@ import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
 import { getParameters } from "../../configs/utils";
 
-const template: TemplateSchema = {
+const template: (setIsUserLoggedIn?: Function) => TemplateSchema = (
+  setIsUserLoggedIn
+) => ({
   layout: <Layout>{
     id: ROUTE.SPLASH_SCREEN,
     type: LAYOUTS.LIST,
@@ -56,10 +58,10 @@ const template: TemplateSchema = {
       },
     },
   },
-};
+});
 
 export const splashScreenMF: PageType<any> = {
-  onLoad: async (__, { ...props }) => {
+  onLoad: async ({ ...standardUtilities }, { setIsUserLoggedIn, ...props }) => {
     /*** Get all params sent via URL ****/
     //Example-1
     //http://localhost:3000/partner/dashboard/helloworld
@@ -69,6 +71,7 @@ export const splashScreenMF: PageType<any> = {
     // access route.params -> {ref_code: '12345'}
     const ref: string = _.get(props, "ref", null);
     const urlParams: string = _.get(props, "urlParams", null);
+    let mobileNumber = null;
     if (ref) {
       await SharedPropsService.setPartnerRefCode(ref);
     }
@@ -87,16 +90,37 @@ export const splashScreenMF: PageType<any> = {
         /*** setting app global api header here if not VOLT_MOBILE_APP ****/
         await SharedPropsService.setAppPlatform(customPlatform);
       }
-    }
 
-    return Promise.resolve(template);
+      /*** if ?user=8763666620 then autofill mobile number in login screen ****/
+      const isPreFillMobileNumber = urlParams.includes("user");
+
+      if (isPreFillMobileNumber) {
+        const params = getParameters(urlParams);
+        mobileNumber = params["user"];
+      }
+    }
+    setTimeout(
+      async () =>
+        await SplashAction(
+          {
+            type: ACTION.AUTH_NAV,
+            routeId: ROUTE.SPLASH_SCREEN,
+            payload: { setIsUserLoggedIn, mobileNumber },
+          },
+          {},
+          standardUtilities
+        ),
+      250
+    );
+
+    return Promise.resolve(template(setIsUserLoggedIn));
   },
   actions: {
     [ACTION.AUTH_NAV]: SplashAction,
   },
-  action: {
-    type: ACTION.AUTH_NAV,
-    payload: {},
-  },
+  // action: {
+  //   type: ACTION.AUTH_NAV,
+  //   payload: {},
+  // },
   bgColor: "#1434CB",
 };
