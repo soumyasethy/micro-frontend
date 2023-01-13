@@ -614,15 +614,13 @@ export const distributorPortfolioMF: PageType<any> = {
                 if (item.horizontalTitle === "Fetch Portfolio") {
                     item.status = "IN_PROGRESS";
                 }
-                // if (item.horizontalTitle === "Bank details") {
-                //     item.status = "COMPLETED";
-                // }
                 if (item.horizontalTitle === "Select Portfolio") {
                     item.status = "NOT_STARTED";
                 }
                 filtered_stepper.push(item);
-            })
-            await SharedPropsService.setStepperData(filtered_stepper);
+            });
+            await SharedPropsService.setStepperData(stepper_datas);
+           // await SharedPropsService.setStepperData(filtered_stepper);
 
 
         let unlockedAmont = 0;

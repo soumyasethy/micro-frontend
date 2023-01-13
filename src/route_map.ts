@@ -73,6 +73,7 @@ import { DistributorClientListStepperMF } from "./features/DistributorClientList
 import { unlockLimitLandingMF } from "./features/mfPledge/unlock_limit_landing";
 import { kycDocumentUploadMF } from "./features/kyc/kyc_document_upload";
 import { checkingLimitMf } from "./features/mfFetch/checking_limit";
+import { portfolioUnlockMF } from "./features/selectPortfolio/portfolioUnlock";
 
 
 export const ROUTE_MAP: RouteMap = {
@@ -151,4 +152,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]: distBasicDetailsMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
+  [ROUTE.PORTFOLIO_UNLOCK]: portfolioUnlockMF,
 };

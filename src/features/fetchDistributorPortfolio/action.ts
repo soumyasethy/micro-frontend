@@ -40,10 +40,12 @@ export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, 
     data1.push(item);
   });
   await SharedPropsService.setStepperData(data1);
-  await navigate(ROUTE.PORTFOLOIO_START,{
+  // await navigate(ROUTE.PORTFOLOIO_START,{
+  //   stepResponseObject: action.payload.value,
+  // });
+  await navigate(ROUTE.PORTFOLIO_UNLOCK,{
     stepResponseObject: action.payload.value,
   });
-
 
 
   // await navigate(ROUTE.PORTFOLOIO_START,{
