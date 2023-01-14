@@ -64,6 +64,7 @@ import { kycDocumentUploadMF } from "./features/kyc/kyc_document_upload";
 import { checkingLimitMf } from "./features/mfFetch/checking_limit";
 import { portfolioReadOnlyMF } from "./features/mfPledge/portfolio_readonly";
 import { verificationFailedMFNew } from "./features/mfFetch/verification_failed_new";
+import {unlockLimitLandingNewMF} from "./features/mfPledge/unlock_limit_landing_new";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -130,4 +131,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
   [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
   [ROUTE.VERIFICATION_FAILED_NEW]:verificationFailedMFNew,
+  [ROUTE.UNLOCK_LIMIT_LANDING_NEW]: unlockLimitLandingNewMF,
 };
