@@ -76,7 +76,6 @@ export const template: (
         { id: "panItem", type: WIDGET.LIST_ITEM },
         { id: "mobileItem", type: WIDGET.LIST_ITEM },
         { id: "emailItem", type: WIDGET.LIST_ITEM },
-        { id: "spaceItem", type: WIDGET.SPACE },
         {
           id: "fetchCTA",
           type: WIDGET.BUTTON,
@@ -174,13 +173,12 @@ export const template: (
           },
         },
       },
-      spaceItem: <SpaceProps>{ size: SizeTypeTokens.Size80 },
     },
   };
 };
 
 export const checkLimitMF: PageType<any> = {
-  onLoad: async ({ asyncStorage, ...props }, {}) => {
+  onLoad: async () => {
     const user: User = await SharedPropsService.getUser();
     const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
