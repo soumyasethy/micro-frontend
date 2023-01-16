@@ -37,6 +37,7 @@ export const template: () => TemplateSchema = () => {
         {
           id: "topSpace",
           type: WIDGET.SPACE,
+          position: POSITION.CENTER,
         },
         {
           id: "placeholder",
@@ -47,6 +48,7 @@ export const template: () => TemplateSchema = () => {
         {
           id: "placeholderSpace",
           type: WIDGET.SPACE,
+          position: POSITION.CENTER,
         },
         { id: "titleStack", type: WIDGET.STACK, position: POSITION.CENTER },
       ],

@@ -57,7 +57,7 @@ export const template: (
   return {
     layout: <Layout>{
       id: ROUTE.MF_FETCH_PORTFOLIO,
-      type: LAYOUTS.LIST,
+      type: isGoBackAllowed ? LAYOUTS.MODAL : LAYOUTS.LIST,
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
         ...(isGoBackAllowed
