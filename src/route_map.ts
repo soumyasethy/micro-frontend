@@ -65,6 +65,7 @@ import { checkingLimitMf } from "./features/mfFetch/checking_limit";
 import { portfolioReadOnlyMF } from "./features/mfPledge/portfolio_readonly";
 import { verificationFailedMFNew } from "./features/mfFetch/verification_failed_new";
 import {unlockLimitLandingNewMF} from "./features/mfPledge/unlock_limit_landing_new";
+import {portfolioMFV2} from "./features/mfPledge/portfolio_V2";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -100,7 +101,8 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.PLEDGE_LOADING]: pledgeLoadingMF,
   [ROUTE.UNLOCK_SUCCESS]: unlockSuccessMF,
   [ROUTE.MODIFY_LIMIT]: modifyLimitMF,
-  [ROUTE.PORTFOLIO]: portfolioMF,
+  //[ROUTE.PORTFOLIO]: portfolioMF,
+  [ROUTE.PORTFOLIO]: portfolioMFV2,
   [ROUTE.PLEDGED_AMOUNT]: pledgeAmountMF,
   [ROUTE.MODIFY_PLEDGED_AMOUNT]: modifyPledgeMF,
   [ROUTE.DASHBOARD]: dashboardMF,
