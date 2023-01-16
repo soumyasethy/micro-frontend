@@ -1,27 +1,32 @@
 import {
-  CtaCardProps,
+  ButtonProps,
+  ButtonTypeTokens,
+  ButtonWidthTypeToken,
+  CardProps,
+  ColorTokens,
+  FontFamilyTokens,
+  FontSizeTokens,
   IconTokens,
   ListItemDataProps,
   ListProps,
   ListTypeTokens,
+  StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
+  StackWidth,
+  TypographyProps,
+  WIDGET,
 } from "@voltmoney/schema";
-import {
-  ACTION,
-  CtaPayload,
-  EditItemPayload,
-  PortfolioTogglePayload,
-} from "./types";
-import { ROUTE } from "../../../routes";
-import { getActualLimit, getTotalLimit, getPortfolioValue } from "./actions";
-import { StepResponseObject } from "../unlock_limit/types";
-import { Datastore, WidgetProps } from "@voltmoney/types";
+import {ACTION, CtaPayload, EditItemPayload, PortfolioTogglePayload,} from "./types";
+import {ROUTE} from "../../../routes";
+import {getActualLimit, getPortfolioValue, getTotalLimit} from "./actions";
+import {StepResponseObject} from "../unlock_limit/types";
+import {Datastore, WidgetProps} from "@voltmoney/types";
 import SharedPropsService from "../../../SharedPropsService";
-import {
-  addCommasToNumber,
-  roundDownToNearestHundred,
-} from "../../../configs/utils";
+import {addCommasToNumber, roundDownToNearestHundred,} from "../../../configs/utils";
 
-export const portfolioListDatastoreBuilder = async (
+export const portfolioListDatastoreBuilderV2 = async (
   stepResponseObject: StepResponseObject,
   searchKeyword: string = ""
 ): Promise<Datastore> => {
@@ -109,6 +114,7 @@ export const portfolioListDatastoreBuilder = async (
 
   const datastoreObj: Datastore = {
     listItem: <ListProps & WidgetProps>props,
+    /*
     totalItem: <CtaCardProps>{
       label: "Total credit limit",
       info: addCommasToNumber(
@@ -127,6 +133,83 @@ export const portfolioListDatastoreBuilder = async (
         routeId: ROUTE.PORTFOLIO,
       },
     },
+    */
+    totalItem: <StackProps> {
+      type: StackType.column,
+      widgetItems: [
+        { id: 'totalCreditLineCard', type: WIDGET.CARD },
+        { id: 'ContinueButtonStack', type: WIDGET.STACK }
+      ]
+    },
+    ContinueButtonStack: <StackProps> {
+      type: StackType.column,
+      widgetItems: [
+          { id: 'ContinueButton', type: WIDGET.BUTTON }
+      ]
+    },
+    totalCreditLineCard: <CardProps> {
+      bgColor: ColorTokens.Grey_Milk_1,
+      width: '100%',
+      body: {
+        widgetItems: [
+          { id: 'totalCreditLimitText', type: WIDGET.TEXT },
+          { id: 'totalCreditLimitStack', type: WIDGET.STACK },
+        ]
+      }
+    },
+    totalCreditLimitStack: <StackProps>{
+      type: StackType.row,
+      justifyContent: StackJustifyContent.spaceBetween,
+      alignItems: StackAlignItems.flexEnd,
+      widgetItems: [
+        { id: 'outOfTextStack', type: WIDGET.STACK },
+        { id: 'edit_button', type: WIDGET.BUTTON }
+      ]
+    },
+    outOfTextStack: <StackProps> {
+      type: StackType.row,
+      width: StackWidth.CONTENT,
+      alignItems: StackAlignItems.center,
+      widgetItems: [
+        { id: 'outOfText1', type: WIDGET.TEXT },
+        { id: 'outOfText2', type: WIDGET.TEXT },
+      ]
+    },
+    outOfText1: <TypographyProps> {
+      label: '₹30,00,000 ',
+      fontFamily: FontFamilyTokens.Poppins,
+      fontWeight: '600',
+      fontSize: FontSizeTokens.XL,
+      color: ColorTokens.Grey_Night,
+    },
+    outOfText2: <TypographyProps> {
+      label: '/ ₹50,00,000',
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: '400',
+      fontSize: FontSizeTokens.XS,
+      color: ColorTokens.Grey_Charcoal,
+    },
+    edit_button: <ButtonProps> {
+      type: ButtonTypeTokens.MediumGhost,
+      label: 'Edit',
+    },
+    totalCreditLimitText: <TypographyProps> {
+      label: 'Total credit limit',
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: '400',
+      fontSize: FontSizeTokens.SM,
+      color: ColorTokens.Grey_Night,
+    },
+    ContinueButton: <ButtonProps> {
+      label: 'Confirm amount and assets',
+      type: ButtonTypeTokens.LargeFilled,
+      width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTION.PORTFOLIO,
+        payload: <CtaPayload>{ value: stepResponseObject },
+        routeId: ROUTE.PORTFOLIO,
+      },
+    }
   };
   return datastoreObj;
 };

@@ -99,7 +99,7 @@ export const template: (availableCreditAmount: number, stepResponseObject: StepR
         { id: 'bs_space0', type: WIDGET.SPACE },
         { id:'infoRow', type: WIDGET.STACK },
         { id: 'bs_space1', type: WIDGET.SPACE },
-        { id:'listItem', type: WIDGET.LIST },
+        { id: 'listItem', type: WIDGET.LIST },
         { id: 'bs_space2', type: WIDGET.SPACE },
       ]
     },

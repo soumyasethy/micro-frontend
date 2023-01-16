@@ -16,7 +16,7 @@ import {
 } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
-import { portfolioListDatastoreBuilder, togglePortfolio } from "./utils";
+import { portfolioListDatastoreBuilderV2, togglePortfolio } from "./utils";
 import {addCommasToNumber, roundDownToNearestHundred} from "../../../configs/utils";
 
 let portfolioSearchKeyword = "";
@@ -118,7 +118,7 @@ export const ToggleSelectAction: ActionFunction<
     action.payload.selectedMap[action.payload.value],
     action.payload.stepResponseObject
   );
-  const props = await portfolioListDatastoreBuilder(
+  const props = await portfolioListDatastoreBuilderV2(
     action.payload.stepResponseObject,
     portfolioSearchKeyword
   );
