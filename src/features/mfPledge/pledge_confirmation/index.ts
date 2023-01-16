@@ -110,7 +110,7 @@ export const template: (
       id: ROUTE.PLEDGE_CONFIRMATION,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         { id: "space0", type: WIDGET.SPACE },
         { id: "cardItem", type: WIDGET.CARD },
         { id: "space1", type: WIDGET.SPACE },
