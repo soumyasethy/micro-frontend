@@ -20,7 +20,7 @@ import {ACTION, OtpPayload, SearchPortfolioPayload} from "./types";
 import {ClearSearchPortfolio, EditItem, goBack, SearchPortfolio, ToggleSelectAction, TriggerCTA,} from "./actions";
 import {StepResponseObject} from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
-import {portfolioListDatastoreBuilder} from "./utils";
+import {portfolioListDatastoreBuilderV2} from "./utils";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -44,12 +44,11 @@ export const template: (
         { id: "listSpace", type: WIDGET.SPACE },
         {
           id: "totalItem",
-          type: WIDGET.CTACARD,
+          type: WIDGET.STACK,
           position: POSITION.STICKY_BOTTOM,
           padding: {
             left: 0,
             right: 0,
-            horizontal: 0,
           },
         },
       ],
@@ -118,7 +117,7 @@ export const template: (
       },
       inputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       listSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
-      ...(await portfolioListDatastoreBuilder(stepResponseObject)),
+      ...(await portfolioListDatastoreBuilderV2(stepResponseObject)),
       infoRow: <StackProps> {
         type: StackType.row,
         justifyContent: StackJustifyContent.spaceBetween,
