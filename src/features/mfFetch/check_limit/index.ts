@@ -29,6 +29,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -82,54 +83,54 @@ export const template: (
       style: {
         height: heightMap[ROUTE.MF_FETCH_PORTFOLIO]
       },
-      widgets: [
-        { id: "space0", type: WIDGET.SPACE },
-        ...(isGoBackAllowed
-          ? [
-              {
-                id: "headerStack",
-                type: WIDGET.STACK,
-                position: POSITION.ABSOLUTE_TOP,
-                padding: {
-                  right: 8,
-                  top: 8,
-                  bottom: 0,
-                  left: 0,
-                },
-              },
-            ]
-          : []),
-        { id: "title", type: WIDGET.TEXT },
-        { id: "space1", type: WIDGET.SPACE },
-        { id: "subTitle", type: WIDGET.TEXT },
-        { id: "space2", type: WIDGET.SPACE },
-        { id: "panItem", type: WIDGET.LIST_ITEM },
-        { id: "mobileItem", type: WIDGET.LIST_ITEM },
-        { id: "emailItem", type: WIDGET.LIST_ITEM },
-        { id: "space3", type: WIDGET.SPACE },
-        { id: "investmentInfoTooltip", type: WIDGET.MESSAGE },
-        { id: "space4", type: WIDGET.SPACE },
-        {
-          id: "fetchCTA",
-          type: WIDGET.BUTTON,
-          position: POSITION.ABSOLUTE_BOTTOM,
-        },
-        ...(isPanEditAllowed
-          ? [
-              {
-                id: "space5",
-                type: WIDGET.SPACE,
-                position: POSITION.ABSOLUTE_BOTTOM,
-              },
-              {
-                id: "camsCTAStack",
-                type: WIDGET.STACK,
-                position: POSITION.ABSOLUTE_BOTTOM,
-              },
-            ]
-          : []),
-      ],
+  widgets: [
+    { id: "space0", type: WIDGET.SPACE },
+    ...(isGoBackAllowed
+      ? [
+          {
+            id: "headerStack",
+            type: WIDGET.STACK,
+            position: POSITION.ABSOLUTE_TOP,
+            padding: {
+              right: 8,
+              top: 8,
+              bottom: 0,
+              left: 0,
+            },
+          },
+        ]
+      : []),
+    { id: "title", type: WIDGET.TEXT },
+    { id: "space1", type: WIDGET.SPACE },
+    { id: "subTitle", type: WIDGET.TEXT },
+    { id: "space2", type: WIDGET.SPACE },
+    { id: "panItem", type: WIDGET.LIST_ITEM },
+    { id: "mobileItem", type: WIDGET.LIST_ITEM },
+    { id: "emailItem", type: WIDGET.LIST_ITEM },
+    { id: "space3", type: WIDGET.SPACE },
+    { id: "investmentInfoTooltip", type: WIDGET.MESSAGE },
+    { id: "space4", type: WIDGET.SPACE },
+    {
+      id: "fetchCTA",
+      type: WIDGET.BUTTON,
+      position: POSITION.ABSOLUTE_BOTTOM,
     },
+    ...(isPanEditAllowed
+      ? [
+          {
+            id: "space5",
+            type: WIDGET.SPACE,
+            position: POSITION.ABSOLUTE_BOTTOM,
+          },
+          {
+            id: "camsCTAStack",
+            type: WIDGET.STACK,
+            position: POSITION.ABSOLUTE_BOTTOM,
+          },
+        ]
+      : []),
+  ],
+},
     datastore: <Datastore>{
       header: <HeaderProps>{
         isBackButton: true,
@@ -185,18 +186,13 @@ export const template: (
       },
       space1: <SpaceProps>{ size: SizeTypeTokens.SM },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
- 
-     
-        panItem: <ListItemProps & WidgetProps>{
-          title: "PAN Number",
-          subTitle: panNumber,
-          leadIconName: IconTokens.CreditCard,
-          // trailIconName: `${headTitle}` ? "" : IconTokens.Edit,
-
-          isDivider: true,
-          trailIconName: isPanEditAllowed  ? IconTokens.Edit : null,
-          subTitleLineHeight: 24,
-          action: isPanEditAllowed
+      panItem: <ListItemProps & WidgetProps>{
+        title: "PAN Number",
+        subTitle: panNumber,
+        leadIconName: IconTokens.CreditCard,
+        trailIconName: isPanEditAllowed ? IconTokens.Edit : null,
+        subTitleLineHeight: 24,
+        action: isPanEditAllowed
           ? {
               routeId: ROUTE.MF_FETCH_PORTFOLIO,
               type: ACTION.EDIT_PAN,
@@ -207,17 +203,6 @@ export const template: (
               },
             }
           : null,
-          // action: isPanEditAllowed && headTitle === ''
-          //   ? {
-          //     routeId: ROUTE.MF_FETCH_PORTFOLIO,
-          //     type: ACTION.EDIT_PAN,
-          //     payload: <PanEditPayload>{
-          //       applicationId,
-          //       targetRoute: ROUTE.MF_FETCH_PORTFOLIO,
-          //       panNumber: panNumber,
-          //     },
-          //   }
-          // : null,
       },
       mobileItem: <ListItemProps & WidgetProps>{
         title: "Mobile Number (linked to investments)",

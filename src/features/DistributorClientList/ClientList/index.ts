@@ -7,7 +7,6 @@ import {
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
-import moment from "moment";
 import _ from "lodash";
 import {
   ButtonProps,
@@ -36,7 +35,7 @@ import {
 } from "@voltmoney/schema";
 import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType, dataTypeClient } from "./types";
 import { ROUTE } from "../../../routes";
-import { appendData, appendDatas, notification, onClickCTA, onManageCTA, onTrackCTA, pendingTracks } from "./actions";
+import { appendData, appendDatas, onClickCTA, onManageCTA, onTrackCTA } from "./actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -151,7 +150,7 @@ export const template: (
     };
   }
 
-  const inProgressBuildDS = (index, name, utilizedAmount, fullAmount, applicationId) => {
+  const inProgressBuildDS = (index, name, principalOutStandingAmount, fullAmount, applicationId) => {
     return {
       [`ipListItem${index}`]: <StackProps>{
         type: StackType.column,
@@ -194,7 +193,7 @@ export const template: (
       },
       [`ipClientListTopSpace${index}`]: <SpaceProps>{ size: SizeTypeTokens.XL },
       [`ipClientListBottomText${index}`]: <TypographyProps>{
-        label: `Utilized Rs. ${utilizedAmount}/Rs. ${fullAmount}`,
+        label: `Utilized Rs. ${principalOutStandingAmount}/Rs. ${fullAmount}`,
         color: ColorTokens.Grey_Charcoal,
         lineHeight: 18,
         fontSize: FontSizeTokens.XS,
@@ -218,10 +217,10 @@ export const template: (
           type: ACTION.TRACK,
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
           payload: <ClientInProgressPayloadType>{
-            name: name,
-            utilizedAmount: utilizedAmount,
-            fullAmount: fullAmount,
-            applicationId: applicationId
+            // name: name,
+            // principalOutStandingAmount: principalOutStandingAmount,
+            // fullAmount: fullAmount,
+            // applicationId: applicationId
           }
         },
       },
@@ -244,7 +243,7 @@ export const template: (
   clientInProgressRepoData.forEach((client, index) => {
     inProgress_ds = {
       ...inProgress_ds,
-      ...inProgressBuildDS(index, client.borrowerAccountProfile.name, client.credit.actualLoanAmount, client.credit.approvedCreditAmount, client.creditApplication.applicationId),
+      ...inProgressBuildDS(index, client.borrowerAccountProfile.name, client.credit.principalOutStandingAmount, client.credit.approvedCreditAmount, client.creditApplication.applicationId),
     };
   });
 
@@ -302,9 +301,7 @@ export const template: (
   }
 
 
-
   return {
-
     layout: <Layout>{
       id: ROUTE.DISTRIBUTOR_CLIENT_LIST,
       type: LAYOUTS.LIST,
@@ -312,9 +309,7 @@ export const template: (
         {
           id: "header2", type: WIDGET.CARD, position: POSITION.ABSOLUTE_TOP,
         },
-       // (clientPendingRepoData.length > 0) || (clientInProgressRepoData.length > 0) ? { id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM } : {},
         (clientPendingRepoData.length > 0) ? { id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM } : {},
-        //(clientInProgressRepoData.length > 0) ? { id: "continueInProgressButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM } : {}
       ],
     },
     datastore: <Datastore>{
@@ -393,9 +388,18 @@ export const template: (
           }
         ],
         widgetItems: [
-          {
+         ...(`${clientPendingRepoData}` ?  
+          [{
             id: "tab", type: WIDGET.TABS,
+          }]
+          :
+          [
+            { id: `noDataPendingStackHeader`, type: WIDGET.STACK,padding:{
+              left:30,right:30
+            } 
+            //, position: POSITION.ABSOLUTE_CENTER 
           },
+          ]),
 
           //  { id: "InProgressStack", type: WIDGET.STACK }
           { id: `noDataEarningStackHeader`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER }
@@ -465,6 +469,17 @@ export const template: (
       topInProgressSpace: <SpaceProps>{
         size: SizeTypeTokens.Size30
       },
+      noDataPendingStackHeader: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.FULL,
+        // justifyContent: StackJustifyContent.center,
+        // alignItems: StackAlignItems.center,
+        widgetItems: [
+           { id: `noDataPendingStackSpace`, type: WIDGET.SPACE,position:POSITION.ABSOLUTE_CENTER},
+          { id: `noDataPendingStacks`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
+
+        ]
+      },
       noDataPendingStack: <StackProps>{
         type: StackType.row,
         width: StackWidth.FULL,
@@ -477,7 +492,7 @@ export const template: (
         ]
       },
       noDataPendingStackSpace: <SpaceProps>{
-        size: SizeTypeTokens.XL
+        size: SizeTypeTokens.Size32
       },
       noDataPendingStacks: <StackProps>{
         type: StackType.column,
@@ -561,7 +576,7 @@ export const template: (
         ]
       },
       noDataEarningStackSpace: <SpaceProps>{
-        size: SizeTypeTokens.XXXL
+        size: SizeTypeTokens.Size32
       },
       noDataEarningStack1Header: <StackProps>{
         type: StackType.column,
@@ -724,570 +739,7 @@ export const DistributorClientListMF: PageType<any> = {
     });
     const clientPendingRepoData = pendingData;
     const clientInProgressRepoData = inProgressData;
-
-
-
-
-
-  //For testing Purpose
-    // const response = {
-    //   "customerMetadataList": [
-    //     {
-    //       "borrowerAccountProfile": {
-    //         "name": "Completed user-1",
-    //         "panNumber": null,
-    //         "phoneNumber": "+917011791466",
-    //         "emailId": "an@gmail.com",
-    //         "bankDetails": null
-    //       },
-    //       "creditApplication": {
-    //         "applicationId": "e0105397-e6c6-4926-b8e5-99ff7ab064dc",
-    //         "accountId": "42c086d7-f358-4afc-be37-0aa3b3259265",
-    //         "applicationType": "CREDIT_AGAINST_SECURITIES_PARTNER",
-    //         "applicationState": "Completed",
-    //         "applicationApprovalStatus": null,
-    //         "creditAmount": null,
-    //         "lenderAccountId": "Bajaj",
-    //         "partnerAccountId": "c770f538-164e-4082-9fa2-12bf56f1e462",
-    //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-    //         "currentStepId": "MF_PLEDGE_PORTFOLIO",
-    //         "stepStatusMap": {
-    //           "MF_PLEDGE_PORTFOLIO": "NOT_STARTED",
-    //           "KYC_PHOTO_VERIFICATION": "NOT_STARTED",
-    //           "CREDIT_APPROVAL": "NOT_STARTED",
-    //           "BANK_ACCOUNT_VERIFICATION": "COMPLETED",
-    //           "KYC_ADDITIONAL_DETAILS": "NOT_STARTED",
-    //           "MF_FETCH_PORTFOLIO": "IN_PROGRESS",
-    //           "KYC_AADHAAR_VERIFICATION": "NOT_STARTED",
-    //           "KYC_SUMMARY": "NOT_STARTED",
-    //           "AGREEMENT_SIGN": "NOT_STARTED",
-    //           "KYC_PAN_VERIFICATION": "COMPLETED",
-    //           "KYC_CKYC": "NOT_STARTED",
-    //           "KYC_DOCUMENT_UPLOAD": "NOT_STARTED",
-    //           "MANDATE_SETUP": "NOT_STARTED"
-    //         },
-    //         "createdOn": 1672898239115,
-    //         "lastUpdatedOn": 1672898310946,
-    //         "completedOn": null
-    //       },
-    //       "partnerViewStepperMap": {
-    //         "SELECT_PORTFOLIO": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Select Portfolio",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Select Portfolio",
-    //           "order": 3,
-    //           "isEditable": true
-    //         },
-    //         "PLEDGE_PORTFOLIO": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Pledge Portfolio",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "Pledge Portfolio",
-    //           "order": 5,
-    //           "isEditable": false
-    //         },
-    //         "BANK_VERIFICATION": {
-    //           "status": "COMPLETED",
-    //           "verticalDisplayName": "Bank Details",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Bank details",
-    //           "order": 1,
-    //           "isEditable": true
-    //         },
-    //         "AUTOPAY_SETUP": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "eMandate",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "eMandate",
-    //           "order": 6,
-    //           "isEditable": false
-    //         },
-    //         "FETCH_PORTFOLIO": {
-    //           "status": "IN_PROGRESS",
-    //           "verticalDisplayName": "Fetch Portfolio",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Fetch Portfolio",
-    //           "order": 2,
-    //           "isEditable": true
-    //         },
-    //         "AGREEMENT_SIGN": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Sign Agreement",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "Sign Agreement",
-    //           "order": 7,
-    //           "isEditable": false
-    //         },
-    //         "BASIC_DETAILS": {
-    //           "status": "COMPLETED",
-    //           "verticalDisplayName": "Basic Details",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Basic Details",
-    //           "order": 0,
-    //           "isEditable": true
-    //         },
-    //         "KYC_VERIFICATION": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "KYC Verification",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "KYC Verification",
-    //           "order": 4,
-    //           "isEditable": false
-    //         }
-    //       },
-    //       "credit": {
-    //         "creditId": "8a8068a7857269c2018573393a1a0005",
-    //         "lenderCreditId": "9032904528",
-    //         "applicationId": "1098c651-ed3e-4b52-81bd-2f862bafbfb6",
-    //         "accountId": "f616a425-3b11-485b-a2d0-74c7b1fb8955",
-    //         "creditStatus": "APPROVED_NOT_DISBURSED",
-    //         "marginCallStatus": "NOT_REQUIRED",
-    //         "originalStartDate": 1672675408020,
-    //         "currentTermStartDate": 1672675408020,
-    //         "tenureInDays": 1,
-    //         "renewalDate": 1672761808020,
-    //         "totalValueOfAssetsPledged": 869557.42,
-    //         "approvedCreditAmount": 391200.00,
-    //         "actualLoanAmount": 391200.00,
-    //         "availableCreditAmount": 391200.00,
-    //         "principalOutStandingAmount": null,
-    //         "processingCharges": 999.00,
-    //         "processingChargeDetails": "{\"Processing Fee\":999}",
-    //         "currentApplicableInterestRate": 9.50,
-    //         "outstandingInterestDue": null,
-    //         "chargesDue": null,
-    //         "penalInterestDue": null,
-    //         "creditType": "CREDIT_LINE_LAMF",
-    //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-    //         "partnerAccountId": "59a56a65-508f-42a8-986d-f43a9e740d26",
-    //         "lendingPartnerId": "Bajaj",
-    //         "createdOn": 1672675408410,
-    //         "lastUpdatedOn": 1672675408500
-    //       },
-
-    //     },
-    //     {
-    //       "borrowerAccountProfile": {
-    //         "name": "Completed User-2",
-    //         "panNumber": null,
-    //         "phoneNumber": "+917011791466",
-    //         "emailId": "an@gmail.com",
-    //         "bankDetails": null
-    //       },
-    //       "partnerViewStepperMap": {
-    //         "SELECT_PORTFOLIO": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Select Portfolio",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Select Portfolio",
-    //           "order": 3,
-    //           "isEditable": true
-    //         },
-    //         "PLEDGE_PORTFOLIO": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Pledge Portfolio",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "Pledge Portfolio",
-    //           "order": 5,
-    //           "isEditable": false
-    //         },
-    //         "BANK_VERIFICATION": {
-    //           "status": "COMPLETED",
-    //           "verticalDisplayName": "Bank Details",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Bank details",
-    //           "order": 1,
-    //           "isEditable": true
-    //         },
-    //         "AUTOPAY_SETUP": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "eMandate",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "eMandate",
-    //           "order": 6,
-    //           "isEditable": false
-    //         },
-    //         "FETCH_PORTFOLIO": {
-    //           "status": "IN_PROGRESS",
-    //           "verticalDisplayName": "Fetch Portfolio",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Fetch Portfolio",
-    //           "order": 2,
-    //           "isEditable": true
-    //         },
-    //         "AGREEMENT_SIGN": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Sign Agreement",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "Sign Agreement",
-    //           "order": 7,
-    //           "isEditable": false
-    //         },
-    //         "BASIC_DETAILS": {
-    //           "status": "COMPLETED",
-    //           "verticalDisplayName": "Basic Details",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Basic Details",
-    //           "order": 0,
-    //           "isEditable": true
-    //         },
-    //         "KYC_VERIFICATION": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "KYC Verification",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "KYC Verification",
-    //           "order": 4,
-    //           "isEditable": false
-    //         }
-    //       },
-    //       "creditApplication": {
-    //         "applicationId": "e0105397-e6c6-4926-b8e5-99ff7ab064dc",
-    //         "accountId": "42c086d7-f358-4afc-be37-0aa3b3259265",
-    //         "applicationType": "CREDIT_AGAINST_SECURITIES_PARTNER",
-    //         "applicationState": "Completed",
-    //         "applicationApprovalStatus": null,
-    //         "creditAmount": null,
-    //         "lenderAccountId": "Bajaj",
-    //         "partnerAccountId": "c770f538-164e-4082-9fa2-12bf56f1e462",
-    //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-    //         "currentStepId": "MF_PLEDGE_PORTFOLIO",
-    //         "stepStatusMap": {
-    //           "MF_PLEDGE_PORTFOLIO": "NOT_STARTED",
-    //           "KYC_PHOTO_VERIFICATION": "NOT_STARTED",
-    //           "CREDIT_APPROVAL": "NOT_STARTED",
-    //           "BANK_ACCOUNT_VERIFICATION": "COMPLETED",
-    //           "KYC_ADDITIONAL_DETAILS": "NOT_STARTED",
-    //           "MF_FETCH_PORTFOLIO": "IN_PROGRESS",
-    //           "KYC_AADHAAR_VERIFICATION": "NOT_STARTED",
-    //           "KYC_SUMMARY": "NOT_STARTED",
-    //           "AGREEMENT_SIGN": "NOT_STARTED",
-    //           "KYC_PAN_VERIFICATION": "COMPLETED",
-    //           "KYC_CKYC": "NOT_STARTED",
-    //           "KYC_DOCUMENT_UPLOAD": "NOT_STARTED",
-    //           "MANDATE_SETUP": "NOT_STARTED"
-    //         },
-    //         "createdOn": 1672898239115,
-    //         "lastUpdatedOn": 1672898310946,
-    //         "completedOn": null
-    //       },
-    //       "credit": {
-    //         "creditId": "8a8068a7857269c2018573393a1a0005",
-    //         "lenderCreditId": "9032904528",
-    //         "applicationId": "1098c651-ed3e-4b52-81bd-2f862bafbfb6",
-    //         "accountId": "f616a425-3b11-485b-a2d0-74c7b1fb8955",
-    //         "creditStatus": "APPROVED_NOT_DISBURSED",
-    //         "marginCallStatus": "NOT_REQUIRED",
-    //         "originalStartDate": 1672675408020,
-    //         "currentTermStartDate": 1672675408020,
-    //         "tenureInDays": 1,
-    //         "renewalDate": 1672761808020,
-    //         "totalValueOfAssetsPledged": 869557.42,
-    //         "approvedCreditAmount": 391200.00,
-    //         "actualLoanAmount": 391200.00,
-    //         "availableCreditAmount": 391200.00,
-    //         "principalOutStandingAmount": null,
-    //         "processingCharges": 999.00,
-    //         "processingChargeDetails": "{\"Processing Fee\":999}",
-    //         "currentApplicableInterestRate": 9.50,
-    //         "outstandingInterestDue": null,
-    //         "chargesDue": null,
-    //         "penalInterestDue": null,
-    //         "creditType": "CREDIT_LINE_LAMF",
-    //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-    //         "partnerAccountId": "59a56a65-508f-42a8-986d-f43a9e740d26",
-    //         "lendingPartnerId": "Bajaj",
-    //         "createdOn": 1672675408410,
-    //         "lastUpdatedOn": 1672675408500
-    //       }
-    //     },
-    //     {
-    //       "borrowerAccountProfile": {
-    //         "name": "ANAMIKA KUMARI",
-    //         "panNumber": null,
-    //         "phoneNumber": "+917011791466",
-    //         "emailId": "an@gmail.com",
-    //         "bankDetails": null
-    //       },
-    //       "partnerViewStepperMap": {
-    //         "SELECT_PORTFOLIO": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Select Portfolio",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Select Portfolio",
-    //           "order": 3,
-    //           "isEditable": true
-    //         },
-    //         "PLEDGE_PORTFOLIO": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Pledge Portfolio",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "Pledge Portfolio",
-    //           "order": 5,
-    //           "isEditable": false
-    //         },
-    //         "BANK_VERIFICATION": {
-    //           "status": "COMPLETED",
-    //           "verticalDisplayName": "Bank Details",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Bank details",
-    //           "order": 1,
-    //           "isEditable": true
-    //         },
-    //         "AUTOPAY_SETUP": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "eMandate",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "eMandate",
-    //           "order": 6,
-    //           "isEditable": false
-    //         },
-    //         "FETCH_PORTFOLIO": {
-    //           "status": "IN_PROGRESS",
-    //           "verticalDisplayName": "Fetch Portfolio",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Fetch Portfolio",
-    //           "order": 2,
-    //           "isEditable": true
-    //         },
-    //         "AGREEMENT_SIGN": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Sign Agreement",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "Sign Agreement",
-    //           "order": 7,
-    //           "isEditable": false
-    //         },
-    //         "BASIC_DETAILS": {
-    //           "status": "COMPLETED",
-    //           "verticalDisplayName": "Basic Details",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Basic Details",
-    //           "order": 0,
-    //           "isEditable": true
-    //         },
-    //         "KYC_VERIFICATION": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "KYC Verification",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "KYC Verification",
-    //           "order": 4,
-    //           "isEditable": false
-    //         }
-    //       },
-    //       "creditApplication": {
-    //         "applicationId": "e0105397-e6c6-4926-b8e5-99ff7ab064dc",
-    //         "accountId": "42c086d7-f358-4afc-be37-0aa3b3259265",
-    //         "applicationType": "CREDIT_AGAINST_SECURITIES_PARTNER",
-    //         "applicationState": "IN_PROGRESS",
-    //         "applicationApprovalStatus": null,
-    //         "creditAmount": null,
-    //         "lenderAccountId": "Bajaj",
-    //         "partnerAccountId": "c770f538-164e-4082-9fa2-12bf56f1e462",
-    //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-    //         "currentStepId": "MF_PLEDGE_PORTFOLIO",
-    //         "stepStatusMap": {
-    //           "MF_PLEDGE_PORTFOLIO": "NOT_STARTED",
-    //           "KYC_PHOTO_VERIFICATION": "NOT_STARTED",
-    //           "CREDIT_APPROVAL": "NOT_STARTED",
-    //           "BANK_ACCOUNT_VERIFICATION": "COMPLETED",
-    //           "KYC_ADDITIONAL_DETAILS": "NOT_STARTED",
-    //           "MF_FETCH_PORTFOLIO": "IN_PROGRESS",
-    //           "KYC_AADHAAR_VERIFICATION": "NOT_STARTED",
-    //           "KYC_SUMMARY": "NOT_STARTED",
-    //           "AGREEMENT_SIGN": "NOT_STARTED",
-    //           "KYC_PAN_VERIFICATION": "COMPLETED",
-    //           "KYC_CKYC": "NOT_STARTED",
-    //           "KYC_DOCUMENT_UPLOAD": "NOT_STARTED",
-    //           "MANDATE_SETUP": "NOT_STARTED"
-    //         },
-    //         "createdOn": 1672898239115,
-    //         "lastUpdatedOn": 1672898310946,
-    //         "completedOn": null
-    //       },
-    //       "credit": {
-    //         "creditId": "8a8068a7857269c2018573393a1a0005",
-    //         "lenderCreditId": "9032904528",
-    //         "applicationId": "1098c651-ed3e-4b52-81bd-2f862bafbfb6",
-    //         "accountId": "f616a425-3b11-485b-a2d0-74c7b1fb8955",
-    //         "creditStatus": "APPROVED_NOT_DISBURSED",
-    //         "marginCallStatus": "NOT_REQUIRED",
-    //         "originalStartDate": 1672675408020,
-    //         "currentTermStartDate": 1672675408020,
-    //         "tenureInDays": 1,
-    //         "renewalDate": 1672761808020,
-    //         "totalValueOfAssetsPledged": 869557.42,
-    //         "approvedCreditAmount": 391200.00,
-    //         "actualLoanAmount": 391200.00,
-    //         "availableCreditAmount": 391200.00,
-    //         "principalOutStandingAmount": null,
-    //         "processingCharges": 999.00,
-    //         "processingChargeDetails": "{\"Processing Fee\":999}",
-    //         "currentApplicableInterestRate": 9.50,
-    //         "outstandingInterestDue": null,
-    //         "chargesDue": null,
-    //         "penalInterestDue": null,
-    //         "creditType": "CREDIT_LINE_LAMF",
-    //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-    //         "partnerAccountId": "59a56a65-508f-42a8-986d-f43a9e740d26",
-    //         "lendingPartnerId": "Bajaj",
-    //         "createdOn": 1672675408410,
-    //         "lastUpdatedOn": 1672675408500
-    //       }
-    //     },
-    //     {
-    //       "borrowerAccountProfile": {
-    //         "name": "Pending User-2",
-    //         "panNumber": null,
-    //         "phoneNumber": "+917011791466",
-    //         "emailId": "an@gmail.com",
-    //         "bankDetails": null
-    //       },
-    //       "partnerViewStepperMap": {
-    //         "SELECT_PORTFOLIO": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Select Portfolio",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Select Portfolio",
-    //           "order": 3,
-    //           "isEditable": true
-    //         },
-    //         "PLEDGE_PORTFOLIO": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Pledge Portfolio",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "Pledge Portfolio",
-    //           "order": 5,
-    //           "isEditable": false
-    //         },
-    //         "BANK_VERIFICATION": {
-    //           "status": "COMPLETED",
-    //           "verticalDisplayName": "Bank Details",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Bank details",
-    //           "order": 1,
-    //           "isEditable": true
-    //         },
-    //         "AUTOPAY_SETUP": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "eMandate",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "eMandate",
-    //           "order": 6,
-    //           "isEditable": false
-    //         },
-    //         "FETCH_PORTFOLIO": {
-    //           "status": "IN_PROGRESS",
-    //           "verticalDisplayName": "Fetch Portfolio",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Fetch Portfolio",
-    //           "order": 2,
-    //           "isEditable": true
-    //         },
-    //         "AGREEMENT_SIGN": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "Sign Agreement",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "Sign Agreement",
-    //           "order": 7,
-    //           "isEditable": false
-    //         },
-    //         "BASIC_DETAILS": {
-    //           "status": "COMPLETED",
-    //           "verticalDisplayName": "Basic Details",
-    //           "verticalDescription": "Some description around basic details",
-    //           "horizontalDisplayName": "Basic Details",
-    //           "order": 0,
-    //           "isEditable": true
-    //         },
-    //         "KYC_VERIFICATION": {
-    //           "status": "NOT_STARTED",
-    //           "verticalDisplayName": "KYC Verification",
-    //           "verticalDescription": "",
-    //           "horizontalDisplayName": "KYC Verification",
-    //           "order": 4,
-    //           "isEditable": false
-    //         }
-    //       },
-    //       "creditApplication": {
-    //         "applicationId": "e0105397-e6c6-4926-b8e5-99ff7ab064dc",
-    //         "accountId": "42c086d7-f358-4afc-be37-0aa3b3259265",
-    //         "applicationType": "CREDIT_AGAINST_SECURITIES_PARTNER",
-    //         "applicationState": "IN_PROGRESS",
-    //         "applicationApprovalStatus": null,
-    //         "creditAmount": null,
-    //         "lenderAccountId": "Bajaj",
-    //         "partnerAccountId": "c770f538-164e-4082-9fa2-12bf56f1e462",
-    //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-    //         "currentStepId": "MF_PLEDGE_PORTFOLIO",
-    //         "stepStatusMap": {
-    //           "MF_PLEDGE_PORTFOLIO": "NOT_STARTED",
-    //           "KYC_PHOTO_VERIFICATION": "NOT_STARTED",
-    //           "CREDIT_APPROVAL": "NOT_STARTED",
-    //           "BANK_ACCOUNT_VERIFICATION": "COMPLETED",
-    //           "KYC_ADDITIONAL_DETAILS": "NOT_STARTED",
-    //           "MF_FETCH_PORTFOLIO": "IN_PROGRESS",
-    //           "KYC_AADHAAR_VERIFICATION": "NOT_STARTED",
-    //           "KYC_SUMMARY": "NOT_STARTED",
-    //           "AGREEMENT_SIGN": "NOT_STARTED",
-    //           "KYC_PAN_VERIFICATION": "COMPLETED",
-    //           "KYC_CKYC": "NOT_STARTED",
-    //           "KYC_DOCUMENT_UPLOAD": "NOT_STARTED",
-    //           "MANDATE_SETUP": "NOT_STARTED"
-    //         },
-    //         "createdOn": 1672898239115,
-    //         "lastUpdatedOn": 1672898310946,
-    //         "completedOn": null
-    //       },
-    //       "credit": {
-    //         "creditId": "8a8068a7857269c2018573393a1a0005",
-    //         "lenderCreditId": "9032904528",
-    //         "applicationId": "1098c651-ed3e-4b52-81bd-2f862bafbfb6",
-    //         "accountId": "f616a425-3b11-485b-a2d0-74c7b1fb8955",
-    //         "creditStatus": "APPROVED_NOT_DISBURSED",
-    //         "marginCallStatus": "NOT_REQUIRED",
-    //         "originalStartDate": 1672675408020,
-    //         "currentTermStartDate": 1672675408020,
-    //         "tenureInDays": 1,
-    //         "renewalDate": 1672761808020,
-    //         "totalValueOfAssetsPledged": 869557.42,
-    //         "approvedCreditAmount": 391200.00,
-    //         "actualLoanAmount": 391200.00,
-    //         "availableCreditAmount": 391200.00,
-    //         "principalOutStandingAmount": null,
-    //         "processingCharges": 999.00,
-    //         "processingChargeDetails": "{\"Processing Fee\":999}",
-    //         "currentApplicableInterestRate": 9.50,
-    //         "outstandingInterestDue": null,
-    //         "chargesDue": null,
-    //         "penalInterestDue": null,
-    //         "creditType": "CREDIT_LINE_LAMF",
-    //         "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
-    //         "partnerAccountId": "59a56a65-508f-42a8-986d-f43a9e740d26",
-    //         "lendingPartnerId": "Bajaj",
-    //         "createdOn": 1672675408410,
-    //         "lastUpdatedOn": 1672675408500
-    //       }
-    //     }
-    //   ]
-    // };
-    // response.customerMetadataList.forEach((data, index) => {
-    //   //  console.log("data",data);
-    //   const status = data.creditApplication.applicationState;
-    //   if (status === "IN_PROGRESS") {
-    //     pendingData.push(data);
-    //   } else {
-    //     inProgressData.push(data);
-    //   }
-    // });
-    // console.log("pendingdata", pendingData);
-    // console.log("inProgressData", inProgressData);
-    // const clientPendingRepoData = pendingData;
-    // const clientInProgressRepoData = inProgressData;
-
     const clientEarningData = [];
-
-
     const user = await SharedPropsService.getUser();
     const templateX = await template(clientPendingRepoData, clientInProgressRepoData, clientEarningData);
     return Promise.resolve(templateX);

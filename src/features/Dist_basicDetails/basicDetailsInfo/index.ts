@@ -1,4 +1,4 @@
-import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, CalendarProps, CalendarStateToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, CalendarProps, CalendarStateToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperStateToken, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
 import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
 import { api, partnerApi } from "../../../configs/api";
 import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
@@ -90,6 +90,7 @@ export const template: (
 
       space0: <SpaceProps>{ size: SizeTypeTokens.Size32 },
       calendarPicker: <CalendarProps & WidgetProps>{
+        regex: RegexConfig.MOBILE,
         year: { title: "Year", value: "", placeholder: "YYYY" },
         month: { title: "Month", value: "", placeholder: "MM" },
         date: { title: "Date", value: "", placeholder: "DD" },
@@ -249,7 +250,7 @@ export const distBasicDetailsMF: PageType<any> = {
           stepData.subTitle = value.verticalDescription;
           stepData.horizontalTitle = value.horizontalDisplayName;
           stepData.id = value.order;
-          stepData.status = "IN_PROGRESS";
+          stepData.status = StepperStateToken.IN_PROGRESS;
       } else {
           stepData.title = value.verticalDisplayName;
           stepData.subTitle = value.verticalDescription;
@@ -264,7 +265,7 @@ export const distBasicDetailsMF: PageType<any> = {
       stepper_data = data1.sort(function (a, b) {
         return a.id - b.id;
       });
-      await SharedPropsService.setStepperData(stepper_data);
+    await SharedPropsService.setStepperData(stepper_data);
     let isDisabled = "";
     if(data.panNumber !== "" && data.mobileNumber !== "" && data.email !== ""){
       isDisabled = "true";

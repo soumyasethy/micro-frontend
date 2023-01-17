@@ -10,6 +10,7 @@ import {
   StepperStateToken,
   TypographyProps,
 } from "@voltmoney/schema";
+import {Share} from "react-native"
 
 import {
   ACTION, AmountPayload, RepositoryPayload
@@ -69,30 +70,40 @@ export const onSkip: ActionFunction<{}> = async (action, _datastore, { navigate,
   await navigate(ROUTE.INVESTOR);
 };
 
-export const onShare: ActionFunction<{}> = async (action, _datastore, { network,clipboard,setDatastore, ...props }): Promise<any> => {
-  const applicationId = await SharedPropsService.getApplicationId();
-  const Linkresponse = await network.get(
-      `${partnerApi.referalLink}${applicationId}`,
-      {
-        headers: await getAppHeader(),
-      }
-    );
-    const link = Linkresponse.data.link;
 
-  clipboard.set(link);
-  await setDatastore(ROUTE.DISTRIBUTOR_PORTFOLIO, "header", <
-    HeaderProps
-  >{
-    leftTitle:<TypographyProps>{
-      label:"Copied to clipboard",
-      fontFamily:FontFamilyTokens.Inter,
-      fontSize:FontSizeTokens.SM,
-      color:ColorTokens.Primary_100,
-      lineHeight:24,
+export const onShare: ActionFunction<{}> =
+    async (action, _datastore, { network, clipboard, setDatastore, ...props }): Promise<any> => {
 
-    },
-  });
-};
+        const applicationId = await SharedPropsService.getApplicationId();
+        const Linkresponse = await network.get(
+            `${partnerApi.referalLink}${applicationId}`,
+            {
+                headers: await getAppHeader(),
+            }
+        );
+        const link = Linkresponse.data.link;
+
+        // clipboard.set(link);
+
+        try {
+            const result = await Share.share({
+                message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n\nRegards,\n${name}`,
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+
+    };
 
 export const onBack: ActionFunction<{}> = async (action, _datastore, { navigate }): Promise<any> => {
   await navigate(ROUTE.BASIC_DETAILS_START)

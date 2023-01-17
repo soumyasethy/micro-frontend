@@ -28,6 +28,7 @@ import { APP_CONFIG, getAppHeader, RegexConfig } from "../../../configs/config";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { BankData } from "../../login/otp_verify/types";
 import { LinkPayload } from "../../investor/types";
+import {Share} from "react-native"
 
 let bankAccountNumber = "";
 let bankName = "";
@@ -126,34 +127,39 @@ await setDatastore(action.routeId, "continue", <ButtonProps>{
   }
 };
 
-export const onShare: ActionFunction<LinkPayload> = async (
-  action,
-  _datastore,
-  { setDatastore,clipboard,network }
-): Promise<any> => {
-  const applicationId = await SharedPropsService.getApplicationId();
-  const Linkresponse = await network.get(
-      `${partnerApi.referalLink}${applicationId}`,
-      {
-        headers: await getAppHeader(),
-      }
-    );
-    const link = Linkresponse.data.link;
+export const onShare: ActionFunction<{}> =
+    async (action, _datastore, { network, clipboard, setDatastore, ...props }): Promise<any> => {
 
-  clipboard.set(link);
-  await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "header", <
-    HeaderProps
-  >{
-    leftTitle:<TypographyProps>{
-      label:"Copied to clipboard",
-      fontFamily:FontFamilyTokens.Inter,
-      fontSize:FontSizeTokens.SM,
-      color:ColorTokens.Primary_100,
-      lineHeight:24,
+        const applicationId = await SharedPropsService.getApplicationId();
+        const Linkresponse = await network.get(
+            `${partnerApi.referalLink}${applicationId}`,
+            {
+                headers: await getAppHeader(),
+            }
+        );
+        const link = Linkresponse.data.link;
 
-    },
-  });
-};
+        // clipboard.set(link);
+
+        try {
+            const result = await Share.share({
+                message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n\nRegards,\n${name}`,
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+
+    };
 
 export const goNext: ActionFunction<any> = async (
   action,

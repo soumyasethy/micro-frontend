@@ -118,11 +118,12 @@ export const template: (
                         position: POSITION.ABSOLUTE_BOTTOM,
                     },
                     { id: "btnSpace", type: WIDGET.SPACE },
-                    {
+                    ...(`${isDataUpdated}` === '' 
+                    ?  [{
                         id: "skip",
                         type: WIDGET.BUTTON,
                         position: POSITION.ABSOLUTE_BOTTOM,
-                    },
+                    }] : [{}] ),
 
                 ],
             },
@@ -158,7 +159,7 @@ export const template: (
                       }
                 },
                 space0: <SpaceProps>{ size: SizeTypeTokens.SM },
-                space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+                space1: <SpaceProps>{ size: SizeTypeTokens.MD },
                 camsStack: <StackProps>{
                     type: StackType.row,
                     alignItems: StackAlignItems.flexStart,
