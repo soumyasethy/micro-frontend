@@ -211,6 +211,8 @@ export const portfolioListDatastoreBuilderV2 = async (
     edit_button: <ButtonProps> {
       type: ButtonTypeTokens.MediumGhost,
       label: 'Edit',
+      paddingHorizontal: SizeTypeTokens.NONE,
+      paddingVertical: SizeTypeTokens.NONE,
     },
     totalCreditLimitText: <TypographyProps> {
       label: 'Total credit limit',

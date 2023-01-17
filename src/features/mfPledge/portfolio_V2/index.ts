@@ -10,7 +10,10 @@ import {
   InputTypeToken,
   KeyboardTypeToken,
   SizeTypeTokens,
-  SpaceProps, StackJustifyContent, StackProps, StackType,
+  SpaceProps,
+  StackJustifyContent,
+  StackProps,
+  StackType,
   TextInputProps,
   TypographyProps,
   WIDGET,
@@ -30,7 +33,7 @@ export const template: (
       id: ROUTE.PORTFOLIO,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP},
         // { id: "inputItem", type: WIDGET.INPUT },
         { id: "inputSpace", type: WIDGET.SPACE },
         { id: "titleText", type: WIDGET.TEXT },
@@ -59,6 +62,10 @@ export const template: (
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         isBackButton: true,
         type: "DEFAULT",
+        margin: {
+          right: SizeTypeTokens.NONE,
+          left: SizeTypeTokens.NONE,
+        },
         action: {
           type: ACTION.BACK_BUTTON,
           payload: <OtpPayload>{
