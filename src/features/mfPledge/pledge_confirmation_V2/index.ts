@@ -29,7 +29,7 @@ import {
 } from "@voltmoney/schema";
 import {ROUTE} from "../../../routes";
 import {ACTION} from "./types";
-import {goBack, sendOtpForPledgeConfirm} from "./actions";
+import {goBack, goToFaq, sendOtpForPledgeConfirm} from "./actions";
 import {AvailableCASItem, StepResponseObject} from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import {api} from "../../../configs/api";
@@ -120,9 +120,14 @@ export const template: (
           { id: "headerRight", type: WIDGET.STACK },
         ],
       },
-      backButton: <IconProps>{
+      backButton: <IconProps & WidgetProps>{
         name: IconTokens.ChevronLeft,
         size: IconSizeTokens.XS,
+        action: {
+          type: ACTION.BACK_BUTTON,
+          routeId: ROUTE.PLEDGE_CONFIRMATION,
+          payload: {}
+        }
       },
       space0: <SpaceProps>{ size: SizeTypeTokens.LG },
       headerRight: <StackProps>{
@@ -143,8 +148,8 @@ export const template: (
         type: TagTypeTokens.DEFAULT,
         bgColor: ColorTokens.Primary_05,
         action: {
-          // type: ACTION.NAV_TO_CONTACT_US,
-          routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+          type: ACTION.NAV_TO_FAQ,
+          routeId: ROUTE.PLEDGE_CONFIRMATION,
           payload: {},
         },
       },
@@ -555,6 +560,7 @@ export const pledgeConfirmationMFV2: PageType<any> = {
   },
   actions: {
     [ACTION.PLEDGE_CONFIRMATION]: sendOtpForPledgeConfirm,
+    [ACTION.NAV_TO_FAQ]: goToFaq,
     [ACTION.BACK_BUTTON]: goBack,
   },
   clearPrevious: true,
