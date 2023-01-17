@@ -1,4 +1,4 @@
-import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, FontFamilyTokens, WIDGET } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, FontFamilyTokens, StepperStateToken, WIDGET } from "@voltmoney/schema";
 import { ActionFunction, Datastore, POSITION } from "@voltmoney/types";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -85,13 +85,6 @@ export const appendData: ActionFunction<dataTypeClient> = async (
                 [{ id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },]
             );
         }
-        // if (action.payload.InProgressData.length > 0) {
-        //     await appendWidgets(
-        //         ROUTE.DISTRIBUTOR_CLIENT_LIST,
-        //         datastore,
-        //         [{ id: "continueInProgressButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },]
-        //     );
-        // }
 
     }
 };
@@ -145,14 +138,6 @@ export const appendDatas: ActionFunction<dataTypeClient> = async (
         await removeWidgets(ROUTE.DISTRIBUTOR_CLIENT_LIST, [
             { id: "continueInProgressButton", type: WIDGET.BUTTON },
         ]);
-        // if (action.payload.InProgressData.length > 0) {
-        //     await appendWidgets(
-        //         ROUTE.DISTRIBUTOR_CLIENT_LIST,
-        //         datastore,
-        //         [{ id: "continueInProgressButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },]
-        //     );
-        // }
-
     }
 };
 export const pendingTracks: ActionFunction<ClientPendingPayloadType> = async (
@@ -212,6 +197,7 @@ export const onClickCTA: ActionFunction<any> = async (
 
     let data1 = [];
     let data = [];
+    let filtered_data = [];
 
     Object.keys(response.data.partnerViewStepperMap).map(key => {
         const value = response.data.partnerViewStepperMap[key];
@@ -229,7 +215,25 @@ export const onClickCTA: ActionFunction<any> = async (
         return a.id - b.id;
     });
 
-    await SharedPropsService.setStepperData(data);
+    data.forEach((item,index) => {
+        const stepData: any = new Object();
+        if(item.horizontalTitle === "Basic Details"){
+            stepData.title = item.title;
+            stepData.subTitle = item.subTitle;
+            stepData.id = item.id;
+            stepData.status = StepperStateToken.IN_PROGRESS;
+            stepData.horizontalTitle = item.horizontalTitle;
+            filtered_data.push(stepData);
+        }else{
+            stepData.title = item.title;
+            stepData.subTitle = item.subTitle;
+            stepData.id = item.id;
+            stepData.status = item.status;
+            stepData.horizontalTitle = item.horizontalTitle;
+            filtered_data.push(stepData);
+        }
+    });
+
+    await SharedPropsService.setStepperData(filtered_data);
     await navigate(ROUTE.BASIC_DETAILS_START);
-    // await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
 };

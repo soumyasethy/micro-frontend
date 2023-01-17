@@ -1,12 +1,11 @@
-import { ButtonProps, ColorTokens, FontFamilyTokens, FontSizeTokens, TypographyProps } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
-import { partnerApi } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
 import { ROUTE } from "../../../routes";
-import SharedPropsService from "../../../SharedPropsService";
 import { StepperPayload } from "../ClientList/types";
 import { ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
-
+import { Share } from 'react-native';
+import SharedPropsService from "../../../SharedPropsService";
+import { partnerApi } from "../../../configs/api";
+import { getAppHeader } from "../../../configs/config";
 
 export const resumeSteps: ActionFunction<StepperPayload> = async (
     action,
@@ -34,30 +33,39 @@ export const resumeSteps: ActionFunction<StepperPayload> = async (
 };
 
 
-export const onShare: ActionFunction<{}> = async (action, _datastore, { network, clipboard, setDatastore, ...props }): Promise<any> => {
-    const applicationId = await SharedPropsService.getApplicationId();
-    const Linkresponse = await network.get(
-        `${partnerApi.referalLink}${applicationId}`,
-        {
-            headers: await getAppHeader(),
-        }
-    );
-    const link = Linkresponse.data.link;
+export const onShare: ActionFunction<{}> =
+    async (action, _datastore, { network, clipboard, setDatastore, ...props }): Promise<any> => {
 
-    clipboard.set(link);
-    await setDatastore(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER, "ShareIconItem", <
-        ButtonProps
-        >{
-            label: "Copied to clipboard"
-        });
-    setTimeout(async () => {
-        await setDatastore(ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER, "ShareIconItem", <
-            ButtonProps
-            >{
-                label: "Copy"
+        const applicationId = await SharedPropsService.getApplicationId();
+        const Linkresponse = await network.get(
+            `${partnerApi.referalLink}${applicationId}`,
+            {
+                headers: await getAppHeader(),
+            }
+        );
+        const link = Linkresponse.data.link;
+
+        // clipboard.set(link);
+
+        try {
+            const result = await Share.share({
+                message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n\nRegards,\n${name}`,
             });
-    }, 5000);
-};
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+
+    };
 
 export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
     action,

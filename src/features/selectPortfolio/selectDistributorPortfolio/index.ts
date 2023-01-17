@@ -62,9 +62,9 @@ export const template: (
           { id: "spaceHeader", type: WIDGET.SPACE },
           { id: "spaceHeader1", type: WIDGET.SPACE },
           // 
-          { id: "heading", type: WIDGET.STACK },
-          { id: "inputSpace", type: WIDGET.SPACE },
-          { id: "inputItem", type: WIDGET.INPUT },
+         // { id: "heading", type: WIDGET.STACK },
+         // { id: "inputSpace", type: WIDGET.SPACE },
+         // { id: "inputItem", type: WIDGET.INPUT },
           { id: "listItem", type: WIDGET.LIST },
           { id: "listSpace", type: WIDGET.SPACE },
           {
@@ -109,8 +109,8 @@ export const template: (
             payload: {},
           },
         },
-        spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-        spaceHeader1: <SpaceProps>{ size: SizeTypeTokens.SM },
+        spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XL },
+        //spaceHeader1: <SpaceProps>{ size: SizeTypeTokens.SM },
         heading: <StackProps>{
           type: StackType.row,
           alignItems: StackAlignItems.center,

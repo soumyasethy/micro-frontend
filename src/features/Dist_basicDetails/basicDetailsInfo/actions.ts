@@ -275,14 +275,11 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
         const value = response.data.partnerViewStepperMap[key];
         const stepData: any = new Object();
         if (value.isEditable === true) {
-
           stepData.title = value.verticalDisplayName;
           stepData.subTitle = value.verticalDescription;
           stepData.id = value.order;
           stepData.horizontalTitle = value.horizontalDisplayName;
           stepData.status = value.status;
-
-
           data1.push(stepData);
         }
       })

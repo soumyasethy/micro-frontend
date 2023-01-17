@@ -192,8 +192,8 @@ export const goBack: ActionFunction<{}> = async (
   _datastore,
   { network,navigate, goBack }
 ): Promise<any> => {
-  await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
- // goBack();
+  //await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
+  goBack();
  // need to discuss about this conflict to soumya
  /* if (hasChangedInDetails) {
     action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;

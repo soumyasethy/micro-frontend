@@ -20,6 +20,11 @@ import {
   ListItemProps,
   SizeTypeTokens,
   SpaceProps,
+  StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
+  StackWidth,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -91,6 +96,8 @@ export const template: (
             type: WIDGET.BUTTON,
             position: POSITION.ABSOLUTE_BOTTOM,
           },
+          {id:"messageSpace",type:WIDGET.SPACE,position:POSITION.ABSOLUTE_BOTTOM},
+          {id:"messageStack",type:WIDGET.STACK,position:POSITION.ABSOLUTE_BOTTOM}
         ],
       },
       datastore: <Datastore>{
@@ -204,6 +211,25 @@ export const template: (
           },
         },
         spaceItem: <SpaceProps>{ size: SizeTypeTokens.Size80 },
+        messageSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+        messageStack:<StackProps>{
+          type: StackType.row,
+          width: StackWidth.FULL,
+          justifyContent: StackJustifyContent.center,
+          alignItems: StackAlignItems.center,
+          widgetItems: [
+            { id: 'message', type: WIDGET.TEXT },
+           // { id: 'headItem', type: WIDGET.TEXT },
+          ]
+        },
+        message:<TypographyProps>{
+          label: "OTP will be sent to investor for verification.",
+          numberOfLines: 1,
+          fontFamily: FontFamilyTokens.Inter,
+          color: ColorTokens.Grey_Charcoal,
+          fontWeight: "400",
+          fontSize: FontSizeTokens.SM,
+        }
       },
     }
   };

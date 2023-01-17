@@ -32,6 +32,7 @@ import {
   StackWidth,
   StepperItem,
   StepperProps,
+  StepperStateToken,
   StepperTypeTokens,
   TextInputProps,
   TextInputTypeToken,
@@ -331,7 +332,7 @@ export const distBankAccountAddMF: PageType<any> = {
     let stepper_data = await SharedPropsService.getStepperData();
     stepper_data.forEach((item, index) => {
       if (item.horizontalTitle === "Bank details") {
-        item.status = "IN_PROGRESS";
+        item.status = StepperStateToken.IN_PROGRESS;
       }
       if (item.horizontalTitle === "Select Portfolio") {
         item.status = "NOT_STARTED";
@@ -340,13 +341,6 @@ export const distBankAccountAddMF: PageType<any> = {
     })
 
     await SharedPropsService.setStepperData(data1);
-
-    //     data1.push(stepData);
-    //   }
-    //   })
-    //   stepper_data = data1.sort(function (a, b) {
-    //     return a.id - b.id;
-    //   });
 
 
 
