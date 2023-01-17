@@ -65,7 +65,7 @@ import { checkingLimitMf } from "./features/mfFetch/checking_limit";
 import { portfolioReadOnlyMF } from "./features/mfPledge/portfolio_readonly";
 import { verificationFailedMFNew } from "./features/mfFetch/verification_failed_new";
 import { unlockLimitLandingMFV2 } from "./features/mfPledge/unlock_limit_landing_V2";
-import { unlockLimitMFV2 } from "./features/mfPledge/unlock_limit_new";
+import { unlockLimitMFV2 } from "./features/mfPledge/unlock_limit_V2";
 import { setCreditLimitMf } from "./features/mfPledge/set_credit_limit";
 import { pledgeConfirmationMFV2 } from "./features/mfPledge/pledge_confirmation_new";
 import { portfolioMFV2 } from "./features/mfPledge/portfolio_V2";

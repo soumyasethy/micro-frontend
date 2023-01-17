@@ -158,7 +158,6 @@ export const unlockLimitLandingMFV2: PageType<any> = {
     const responseX = authCAS ? authCAS : await fetchPledgeLimitRepo();
     const stepResponseObject = responseX.stepResponseObject
     const availableCreditAmount: number = responseX.stepResponseObject.availableCreditAmount || 0;
-    /*** disable this page for next time ***/
     stepResponseObject.availableCAS.map((item, index) => {
       let key = `${item.isinNo}-${item.folioNo}`;
       item.pledgedUnits = item.totalAvailableUnits;
