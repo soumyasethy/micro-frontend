@@ -57,14 +57,14 @@ import { landingPageMF } from "./features/landing";
 import { transactionsMF } from "./features/mfPledge/transactions";
 import { privacyPolicyMF } from "./features/privacy_policy";
 import { kycAdditionalDetailsMF } from "./features/kyc/kyc_additional_details";
-import { unlockLimitLandingMF } from "./features/mfPledge/unlock_limit_landing";
+//import { unlockLimitLandingMF } from "./features/mfPledge/unlock_limit_landing";
 import { DistributorClientListMF } from "./features/DistributorClientList/ClientList";
 import { DistributorBasicDetailsInfo } from "./features/Dist_basicDetails/basicDetailsInfo";
 import { kycDocumentUploadMF } from "./features/kyc/kyc_document_upload";
 import { checkingLimitMf } from "./features/mfFetch/checking_limit";
 import { portfolioReadOnlyMF } from "./features/mfPledge/portfolio_readonly";
 import { verificationFailedMFNew } from "./features/mfFetch/verification_failed_new";
-import {unlockLimitLandingNewMF} from "./features/mfPledge/unlock_limit_landing_new";
+import { unlockLimitLandingMFV2 } from "./features/mfPledge/unlock_limit_landing_V2";
 import { unlockLimitMFV2 } from "./features/mfPledge/unlock_limit_new";
 import { setCreditLimitMf } from "./features/mfPledge/set_credit_limit";
 import { pledgeConfirmationMFV2 } from "./features/mfPledge/pledge_confirmation_new";
@@ -132,13 +132,13 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.TRANSACTIONS]: transactionsMF,
   [ROUTE.PRIVACY_POLICY]: privacyPolicyMF,
   [ROUTE.KYC_ADDITIONAL_DETAILS]: kycAdditionalDetailsMF,
-  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  //[ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMFV2,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
   [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]: DistributorBasicDetailsInfo,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
   [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
   [ROUTE.VERIFICATION_FAILED_NEW]:verificationFailedMFNew,
-  [ROUTE.UNLOCK_LIMIT_LANDING_NEW]: unlockLimitLandingNewMF,
   [ROUTE.SET_CREDIT_LIMIT]: setCreditLimitMf,
 };
