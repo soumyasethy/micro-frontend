@@ -38,8 +38,30 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack, sendOtpForPledgeConfirm } from "./actions";
+import {AvailableCASItem, StepResponseObject} from "../unlock_limit/types";
+import SharedPropsService from "../../../SharedPropsService";
+import {api} from "../../../configs/api";
+import {ConfigTokens, getAppHeader} from "../../../configs/config";
+import {getTotalLimit} from "../portfolio/actions";
+import _ from "lodash";
 
-export const template: () => TemplateSchema = () => {
+export const template: (
+    totalAmount: number,
+    totalCharges: number,
+    processingFeesBreakUp: { [key in string]: number },
+    stepResponseObject: StepResponseObject,
+    showOtpConfirmation: boolean,
+    minAmount: number,
+    maxAmount: number
+) => TemplateSchema = (
+    totalAmount = 0,
+    totalCharges = 0,
+    processingFeesBreakUp = {},
+    stepResponseObject,
+    showOtpConfirmation = false,
+    minAmount,
+    maxAmount
+) => {
   return {
     layout: <Layout>{
       id: ROUTE.PLEDGE_CONFIRMATION,
@@ -471,75 +493,72 @@ export const template: () => TemplateSchema = () => {
 };
 
 export const pledgeConfirmationMFV2: PageType<any> = {
-  onLoad: async (_, {}) => {
-    return Promise.resolve(template());
+  onLoad: async ({ network }, { stepResponseObject }) => {
+    /// Pledging
+    const mfPortfolioArray: AvailableCASItem[] = (
+        stepResponseObject as StepResponseObject
+    ).availableCAS;
+    mfPortfolioArray.forEach((_item, index) => {
+      mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
+    });
+
+    const applicationId = (await SharedPropsService.getUser())
+        .linkedApplications[0].applicationId;
+
+    /// fetch processing fee
+    const response = await network.post(
+        api.processingCharges,
+        {
+          applicationId: applicationId,
+          mutualFundPortfolioItems: mfPortfolioArray,
+        },
+        { headers: await getAppHeader() }
+    );
+
+    const processingFeesBreakUp = _.get(
+        response,
+        "data.stepResponseObject.processingChargesBreakup",
+        {}
+    );
+    const totalCharges = _.get(
+        response,
+        "data.stepResponseObject.totalCharges",
+        0
+    );
+
+    const totalAmount = getTotalLimit(
+        stepResponseObject.availableCAS,
+        stepResponseObject.isinNAVMap,
+        stepResponseObject.isinLTVMap
+    );
+
+    const assetTypeMap = {};
+    /*** check unique asset type */
+    mfPortfolioArray.forEach((item) => {
+      if (item.is_pledged) assetTypeMap[item.assetRepository] = true;
+    });
+    /*** show 2 otp confirmation if both Karvy and CAMS is present */
+    const showOtpConfirmation: boolean = Object.keys(assetTypeMap).length > 1;
+
+    const minAmount = await SharedPropsService.getConfig(
+        ConfigTokens.MIN_AMOUNT_ALLOWED
+    );
+    const maxAmount = await SharedPropsService.getConfig(
+        ConfigTokens.MAX_AMOUNT_ALLOWED
+    );
+
+    return Promise.resolve(
+        template(
+            totalAmount,
+            totalCharges,
+            processingFeesBreakUp,
+            stepResponseObject as StepResponseObject,
+            showOtpConfirmation,
+            minAmount,
+            maxAmount
+        )
+    );
   },
-  // onLoad: async ({ network }, { stepResponseObject }) => {
-  //   /// Pledging
-  //   const mfPortfolioArray: AvailableCASItem[] = (
-  //     stepResponseObject as StepResponseObject
-  //   ).availableCAS;
-  //   mfPortfolioArray.forEach((_item, index) => {
-  //     mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
-  //   });
-
-  //   const applicationId = (await SharedPropsService.getUser())
-  //     .linkedApplications[0].applicationId;
-
-  //   /// fetch processing fee
-  //   const response = await network.post(
-  //     api.processingCharges,
-  //     {
-  //       applicationId: applicationId,
-  //       mutualFundPortfolioItems: mfPortfolioArray,
-  //     },
-  //     { headers: await getAppHeader() }
-  //   );
-
-  //   const processingFeesBreakUp = _.get(
-  //     response,
-  //     "data.stepResponseObject.processingChargesBreakup",
-  //     {}
-  //   );
-  //   const totalCharges = _.get(
-  //     response,
-  //     "data.stepResponseObject.totalCharges",
-  //     0
-  //   );
-
-  //   const totalAmount = getTotalLimit(
-  //     stepResponseObject.availableCAS,
-  //     stepResponseObject.isinNAVMap,
-  //     stepResponseObject.isinLTVMap
-  //   );
-
-  //   const assetTypeMap = {};
-  //   /*** check unique asset type */
-  //   mfPortfolioArray.forEach((item) => {
-  //     if (item.is_pledged) assetTypeMap[item.assetRepository] = true;
-  //   });
-  //   /*** show 2 otp confirmation if both Karvy and CAMS is present */
-  //   const showOtpConfirmation: boolean = Object.keys(assetTypeMap).length > 1;
-
-  //   const minAmount = await SharedPropsService.getConfig(
-  //     ConfigTokens.MIN_AMOUNT_ALLOWED
-  //   );
-  //   const maxAmount = await SharedPropsService.getConfig(
-  //     ConfigTokens.MAX_AMOUNT_ALLOWED
-  //   );
-
-  //   return Promise.resolve(
-  //     template(
-  //       totalAmount,
-  //       totalCharges,
-  //       processingFeesBreakUp,
-  //       stepResponseObject as StepResponseObject,
-  //       showOtpConfirmation,
-  //       minAmount,
-  //       maxAmount
-  //     )
-  //   );
-  // },
   actions: {
     [ACTION.PLEDGE_CONFIRMATION]: sendOtpForPledgeConfirm,
     [ACTION.BACK_BUTTON]: goBack,

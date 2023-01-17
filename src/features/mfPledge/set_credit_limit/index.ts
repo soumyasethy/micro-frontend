@@ -298,9 +298,11 @@ export const template: (
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {
-        type: ACTION.EDIT_PORTFOLIO,
+        type: ACTION.GO_CONFIRM_PLEDGE,
         routeId: ROUTE.SET_CREDIT_LIMIT,
-        payload: {},
+        payload: {
+          stepResponseObject: stepResponseObject
+        },
       },
     },
   },

@@ -27,12 +27,13 @@ export const goBack: ActionFunction<any> = (
   });
 };
 
-export const goConfirmPledge: ActionFunction<any> = (
+export const goConfirmPledge: ActionFunction<any> = async(
   action,
   _datastore,
   { navigate, goBack, setDatastore }
 ) => {
-  navigate(ROUTE.PLEDGE_CONFIRMATION);
+  const stepResponseObject = action.payload.stepResponseObject
+  await navigate(ROUTE.PLEDGE_CONFIRMATION, {stepResponseObject});
 };
 
 export const goToEditPortFolio: ActionFunction<any> = async(
