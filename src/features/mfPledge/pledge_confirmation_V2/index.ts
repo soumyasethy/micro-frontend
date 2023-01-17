@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -35,9 +27,9 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
-import { goBack, sendOtpForPledgeConfirm } from "./actions";
+import {ROUTE} from "../../../routes";
+import {ACTION} from "./types";
+import {goBack, sendOtpForPledgeConfirm} from "./actions";
 import {AvailableCASItem, StepResponseObject} from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import {api} from "../../../configs/api";
@@ -81,15 +73,16 @@ export const template: (
           },
           position: POSITION.ABSOLUTE_TOP,
         },
-        {
-          id: "card3",
-          type: WIDGET.CARD,
-          padding: {
-            horizontal: 0,
-            vertical: 16,
-          },
-          position: POSITION.ABSOLUTE_TOP,
-        },
+        // {
+        //   id: "card3",
+        //   type: WIDGET.CARD,
+        //   padding: {
+        //     horizontal: 0,
+        //     vertical: 16,
+        //   },
+        //   position: POSITION.ABSOLUTE_TOP,
+        // },
+        { id: "card3Body", type: WIDGET.STACK },
         {
           id: "iconStack",
           type: WIDGET.STACK,
@@ -262,11 +255,12 @@ export const template: (
         fontWeight: "400",
         fontSize: FontSizeTokens.XS,
       },
-      card3: <CardProps>{
-        bgColor: ColorTokens.White,
-        body: { widgetItems: [{ id: "card3Body", type: WIDGET.STACK }] },
-      },
+      // card3: <CardProps>{
+      //   bgColor: ColorTokens.White,
+      //   body: { widgetItems: [{ id: "card3Body", type: WIDGET.STACK }] },
+      // },
       card3Body: <StackProps>{
+        // width: StackWidth.FULL,
         type: StackType.column,
         alignItems: StackAlignItems.flexStart,
         widgetItems: [
@@ -328,7 +322,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       processingFeeValue: <TypographyProps>{
-        label: "₹0",
+        label: `₹ ${processingFeesBreakUp['Processing Fee']}`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
@@ -340,8 +334,8 @@ export const template: (
       },
       space6: <SpaceProps>{ size: SizeTypeTokens.LG },
       interestRateStack: <StackProps>{
-        width: StackWidth.FULL,
         type: StackType.row,
+        width: StackWidth.FULL,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
@@ -356,7 +350,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       interestRateValue: <TypographyProps>{
-        label: "10.00%",
+        label: `${Math.ceil(((100 * stepResponseObject.interestRate) / 12) * 100) / 100}%`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
