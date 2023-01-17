@@ -620,6 +620,7 @@ export const distributorPortfolioMF: PageType<any> = {
                 }
                 filtered_stepper.push(item);
             });
+            console.log(filtered_stepper);
             await SharedPropsService.setStepperData(stepper_datas);
            // await SharedPropsService.setStepperData(filtered_stepper);
 

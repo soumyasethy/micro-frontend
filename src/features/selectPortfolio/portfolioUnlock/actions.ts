@@ -1,25 +1,17 @@
-import { ActionFunction } from "@voltmoney/types";
-import {
-  ColorTokens,
-  FontFamilyTokens,
-  FontSizeTokens,
-  HeaderProps,
-  TypographyProps,
-} from "@voltmoney/schema";
+import { ActionFunction, SCREEN_SIZE } from "@voltmoney/types";
 import {Share} from "react-native";
-
-import {
-  ACTION, AssetsPayload, EditItemPayload
+import { AssetsPayload
 } from "./types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
-import { AvailableCASItem, IsinLTVMap, IsinNAVMap, LimitPayload } from "../../fetchDistributorPortfolio/types";
+import { AvailableCASItem, IsinLTVMap, IsinNAVMap } from "../../fetchDistributorPortfolio/types";
 import { getTotalLimit } from "../selectDistributorPortfolio/actions";
 import { amountPayload } from "../pledged_amount/types";
-
+import { getScreenType } from "../../../configs/platfom-utils";
+import { Dimensions } from "react-native";
 
 export const onSave: ActionFunction<{}> = async (action, _datastore, {navigate, ...props }): Promise<any> => {
   await navigate(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO);
@@ -81,94 +73,12 @@ export const onSkip: ActionFunction<AssetsPayload> = async (action, _datastore, 
       let key = `${item.isinNo}-${item.folioNo}`;
       updateAvailableCASMap[key] = item;
     });
-  // } else {
-  //   stepResponseObject.availableCAS.map((item, index) => {
-  //     let key = `${item.isinNo}-${item.folioNo}`;
-  //     item.pledgedUnits = item.totalAvailableUnits;
-  //     updateAvailableCASMap[key] = item;
-  //   });
-  // }
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   await navigate(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO, {
     stepResponseObject: stepResponseObject,
     updateAvailableCASMap,
   });
-  
-  // await navigate(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,{
-  //   stepResponseObject: action.payload.value,
-  // });
- 
 };
-
-export const onModify: ActionFunction<EditItemPayload> = async (
-  action,
-  _datastore,
-  { navigate }
-): Promise<any> => {
-  let portfolioSearchKeyword = "";
- /* const selectedMap = {};
-  action.payload.stepResponseObject.availableCAS.forEach((item, index) => {
-    const key = `${item.isinNo}-${item.folioNo}`;
-    selectedMap[index] = updateAvailableCASMap[key].pledgedUnits > 0;
-    action.payload.stepResponseObject.availableCAS[index] = updateAvailableCASMap[key];
-
-    const title = `₹ ${addCommasToNumber(
-      roundDownToNearestHundred(
-        getTotalLimit(
-          [updateAvailableCASMap[key]],
-          stepResponseObject.isinNAVMap,
-          stepResponseObject.isinLTVMap
-        )
-      )
-    )}`;
-
-    const subTitle = `/ ₹ ${addCommasToNumber(
-      roundDownToNearestHundred(
-        getActualLimit(
-          [updateAvailableCASMap[key]],
-          stepResponseObject.isinNAVMap,
-          stepResponseObject.isinLTVMap
-        )
-      )
-    )}`;
-
-    listItemDataProps.push({
-      label: updateAvailableCASMap[key].schemeName,
-      info: "",
-      trailIcon: {
-        name:
-          updateAvailableCASMap[key].pledgedUnits > 0
-            ? IconTokens.CheckedSquare
-            : IconTokens.NotCheckedSquare,
-      },
-      trailTitle: title,
-      trailSubTitle: subTitle,
-      action: "edit",
-      trailIconAction: {
-        type: ACTION.EDIT_ITEM,
-        routeId: ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO,
-        payload: <EditItemPayload>{
-          stepResponseObject,
-          selectedMap: selectedMap,
-        },
-      },
-    });
-  });
-
-*/
-
-
-
-
-
-  navigate(ROUTE.MODIFY_PLEDGED_AMOUNT, {
-    index: action.payload.value,
-    stepResponseObject: action.payload.stepResponseObject,
-    selectedMap: action.payload.selectedMap,
-    portfolioSearchKeyword,
-  });
-};
-
 
 
 export const onCopy: ActionFunction<{}> =
@@ -182,26 +92,30 @@ export const onCopy: ActionFunction<{}> =
             }
         );
         const link = Linkresponse.data.link;
-
-        // clipboard.set(link);
-
-        try {
-            const result = await Share.share({
-                message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n\nRegards,\n${name}`,
-            });
-            if (result.action === Share.sharedAction) {
-                if (result.activityType) {
-                    // shared with activity type of result.activityType
-                } else {
-                    // shared
+        const screenType = getScreenType(Dimensions.get("window").width);
+        if (
+            screenType === SCREEN_SIZE.X_SMALL ||
+            screenType === SCREEN_SIZE.SMALL
+        ) {
+            try {
+                const result = await Share.share({
+                    message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n`,
+                });
+                if (result.action === Share.sharedAction) {
+                    if (result.activityType) {
+                        // shared with activity type of result.activityType
+                    } else {
+                        // shared
+                    }
+                } else if (result.action === Share.dismissedAction) {
+                    // dismissed
                 }
-            } else if (result.action === Share.dismissedAction) {
-                // dismissed
+            } catch (e) {
+                console.log(e);
             }
-        } catch (e) {
-            console.log(e);
+        } else {
+            clipboard.set(link);
         }
-
 
     };
 
@@ -218,13 +132,6 @@ export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore,
         },
         { headers: await getAppHeader() }
       );
-
-    //  const Linkresponse = await network.get(
-    //     `${partnerApi.referalLink}${applicationId}`,
-    //     {
-    //       headers: await getAppHeader(),
-    //     }
-    //   );
       navigate(ROUTE.INVESTOR);
     
 };

@@ -1,6 +1,6 @@
 import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, CalendarProps, CalendarStateToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperStateToken, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
 import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
-import { api, partnerApi } from "../../../configs/api";
+import {  partnerApi } from "../../../configs/api";
 import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
 import { ROUTE } from "../../../routes";
 import _ from "lodash";
@@ -8,7 +8,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { getAppHeader, RegexConfig } from "../../../configs/config";
 import { ACTION, EnableDisableCTA } from "./types";
 import { InputPayload } from "./types";
-import { CalendarOnChange, goBack, onChangeInput, onChangeInput1, onChangeInput2, onChangeInput3, toggleCTA, toggleCTA1, triggerCTA } from "./actions";
+import {  goBack, onChangeInput, onChangeInput2, toggleCTA, toggleCTA1, triggerCTA } from "./actions";
 
 export const template: (
   stepper: StepperItem[],
@@ -75,17 +75,6 @@ export const template: (
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
         },
-        // successAction: {
-        //   type: ACTION.CHANGE_INPUT_PAN,
-        //   routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-        //   payload: <InputPayload>{
-        //     value: "",
-        //     widgetId: "panNumberInput"
-        //   }
-        //   // type: ACTION.ENABLE_CONTINUE,
-        //   // routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-        //   // payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
-        // },
       },
 
       space0: <SpaceProps>{ size: SizeTypeTokens.Size32 },
@@ -104,9 +93,6 @@ export const template: (
         type: ACTION.DISABLE_CONTINUE,
         routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
         payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
-        // type: ACTION.ENTER_DOB,
-        // routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-        // payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
       },
       successAction: {
         type: ACTION.ENTER_DOB,
@@ -137,20 +123,8 @@ export const template: (
         color: ColorTokens.Grey_Smoke,
         type: InputTypeToken.MOBILE,
         state: InputStateToken.DEFAULT,
-        // successAction: {
-        //   type: ACTION.CHANGE_INPUT_PHONE,
-        //   routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-        //   payload: <InputPayload>{
-        //     value: "",
-        //     widgetId: "mobileNumberInput"
-        //   }
-        //   // type: ACTION.ENABLE_CONTINUE,
-        //   // routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-        //   // payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
-        // },
         action: {
           type: ACTION.CHANGE_INPUT,
-         // type: ACTION.CHANGE_INPUT_PHONE,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: <InputPayload>{
             value: "",
@@ -198,9 +172,6 @@ export const template: (
             value: "",
             widgetId: "emailInput"
           }
-          // type: ACTION.ENABLE_CONTINUE,
-          // routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          // payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
         },
       },
       bottomStack: <StackProps>{
@@ -279,9 +250,7 @@ export const distBasicDetailsMF: PageType<any> = {
     [ACTION.ENTER_DOB]: onChangeInput,
     [ACTION.GO_BACK]: goBack,
     [ACTION.CHANGE_INPUT]: onChangeInput,
-    [ACTION.CHANGE_INPUT_PAN]: onChangeInput1,
     [ACTION.CHANGE_INPUT_EMAIL]: onChangeInput2,
-    [ACTION.CHANGE_INPUT_PHONE]: onChangeInput3,
     [ACTION.DISABLE_CONTINUE]: toggleCTA1,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.TRIGGER_CTA]: triggerCTA,

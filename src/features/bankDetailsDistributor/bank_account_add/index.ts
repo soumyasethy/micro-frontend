@@ -113,12 +113,12 @@ export const template: (
         data: stepper_data,
         type: StepperTypeTokens.HORIZONTAL,
       },
-      leftTitle:<TypographyProps>{
-        label:"Share",
-        fontFamily:FontFamilyTokens.Inter,
-        fontSize:FontSizeTokens.SM,
-        color:ColorTokens.Primary_100,
-        lineHeight:24,
+      leftTitle: <TypographyProps>{
+        label: "Share",
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.SM,
+        color: ColorTokens.Primary_100,
+        lineHeight: 24,
 
       },
       leftAction: {
@@ -318,16 +318,7 @@ export const distBankAccountAddMF: PageType<any> = {
     const bankCode = await SharedPropsService.getBankCode();
     const bankName = await SharedPropsService.getBankName();
     const accountNumber = await SharedPropsService.getAccountNumber();
-    // const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-    // const applicationId = "";
-    // const response = await network.post(
-    //     partnerApi.stepperData,
-    //     {},
-    //     { headers: await getAppHeader() }
-    // );
-
-     let data1 = [];
-    // let stepper_data = [];
+    let data1 = [];
 
     let stepper_data = await SharedPropsService.getStepperData();
     stepper_data.forEach((item, index) => {
