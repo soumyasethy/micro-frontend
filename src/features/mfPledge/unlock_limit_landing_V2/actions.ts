@@ -9,6 +9,7 @@ export const continueLimit: ActionFunction<LimitPayload> = async (
   { navigate }
 ): Promise<any> => {
   const routeObj = await nextStepId(ROUTE.MF_PLEDGE_PORTFOLIO);
+  console.log(routeObj)
   await navigate(routeObj.routeId, routeObj.params);
   // await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
 };

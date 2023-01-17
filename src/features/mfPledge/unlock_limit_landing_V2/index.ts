@@ -1,4 +1,4 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema,} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   BottomSheetProps,
   ButtonProps,
@@ -30,7 +30,7 @@ export const template: (availableCreditAmount: number, stepResponseObject: StepR
   stepResponseObject
 ) => ({
   layout: <Layout>{
-    id: ROUTE.UNLOCK_LIMIT_LANDING_NEW,
+    id: ROUTE.UNLOCK_LIMIT_LANDING,
     type: LAYOUTS.LIST,
     widgets: [
       { id: 'topSpace', type:WIDGET.SPACE },
@@ -67,10 +67,15 @@ export const template: (availableCreditAmount: number, stepResponseObject: StepR
       afterOutOf: '60000',
       label: 'Available credit limit',
     },
-    continue: <ButtonProps>{
+    continue: <ButtonProps & WidgetProps>{
       label: 'continue',
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTION.UNLOCK_LIMIT,
+        routeId: ROUTE.UNLOCK_LIMIT_LANDING,
+        payload: {}
+      }
     },
     otherSourceStack: <StackProps>{
       type: StackType.column,
@@ -146,7 +151,7 @@ export const template: (availableCreditAmount: number, stepResponseObject: StepR
   },
 });
 
-export const unlockLimitLandingNewMF: PageType<any> = {
+export const unlockLimitLandingMFV2: PageType<any> = {
   onLoad: async () => {
     const updateAvailableCASMap = {};
     const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
