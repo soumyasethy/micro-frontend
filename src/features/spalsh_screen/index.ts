@@ -8,6 +8,7 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  ColorTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
@@ -26,9 +27,7 @@ import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
 import { getParameters } from "../../configs/utils";
 
-const template: (setIsUserLoggedIn?: Function) => TemplateSchema = (
-  setIsUserLoggedIn
-) => ({
+const template: (setIsUserLoggedIn?: Function) => TemplateSchema = () => ({
   layout: <Layout>{
     id: ROUTE.SPLASH_SCREEN,
     type: LAYOUTS.LIST,
@@ -113,7 +112,7 @@ export const splashScreenMF: PageType<any> = {
       250
     );
 
-    return Promise.resolve(template(setIsUserLoggedIn));
+    return Promise.resolve(template());
   },
   actions: {
     [ACTION.AUTH_NAV]: SplashAction,

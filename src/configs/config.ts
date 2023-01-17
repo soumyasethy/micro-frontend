@@ -1,4 +1,4 @@
-import SharedPropsService, { BUILD_TYPE } from "../SharedPropsService";
+import SharedPropsService from "../SharedPropsService";
 
 export const __isTest__ = false;
 export const __isMock__ = false;
