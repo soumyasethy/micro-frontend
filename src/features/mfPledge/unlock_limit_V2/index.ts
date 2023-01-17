@@ -62,6 +62,7 @@ import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
 import { AuthCASModel } from "../../../types/AuthCASModel";
+import {UpdateAvailableCASMap} from "../unlock_limit_V2/types";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -72,14 +73,16 @@ export const template: (
   stepResponseObject: StepResponseObject,
   shouldShowGetMorePortfolio: boolean,
   totalPortfolioAmount: number,
-  processingFeesBreakUp: { [key in string]: number }
+  processingFeesBreakUp: { [key in string]: number },
+  updateAvailableCASMap: UpdateAvailableCASMap
 ) => TemplateSchema = (
   availableCreditAmount,
   availableCAS,
   stepResponseObject,
   shouldShowGetMorePortfolio,
   totalPortfolioAmount,
-  processingFeesBreakUp = {}
+  processingFeesBreakUp = {},
+  updateAvailableCASMap
 ) => {
   const listItemLayout = Object.keys(processingFeesBreakUp).map(
     (key, index) => {
@@ -459,6 +462,8 @@ export const template: (
           type: ACTION.NAV_NEXT,
           payload: {
             maxAmount: availableCreditAmount,
+            stepResponseObject: stepResponseObject,
+            updateAvailableCASMap: updateAvailableCASMap
           },
         },
       },
@@ -542,9 +547,6 @@ export const unlockLimitMFV2: PageType<any> = {
     });
     await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
     //
-
-    console.log("stepResponseObject", stepResponseObject);
-
     /*** Show popup as soon as we land here if MF_PLEDGE_PORTFOLIO is PENDING_CALLBACK ***/
     const stepStatusMap: StepStatusMap =
       pledgeLimitResponse.data.updatedApplicationObj.stepStatusMap;
@@ -637,7 +639,8 @@ export const unlockLimitMFV2: PageType<any> = {
         stepResponseObject as StepResponseObject,
         isGetMorePortfolio,
         totalPortfolioAmount,
-        processingFeesBreakUp
+        processingFeesBreakUp,
+        updateAvailableCASMap,
       )
     );
   },

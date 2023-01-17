@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   BottomSheetProps,
   ButtonProps,
@@ -33,22 +25,24 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
-import { OnChangeSlider, goBack, goConfirmPledge } from "./action";
-import { addCommasToNumber } from "../../../configs/utils";
-import { portfolioListDatastoreBuilder } from "../portfolio_readonly/utils";
-import { StepResponseObject } from "../unlock_limit/types";
-import { AuthCASModel } from "../../../types/AuthCASModel";
+import {ROUTE} from "../../../routes";
+import {ACTION} from "./types";
+import {goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider} from "./action";
+import {addCommasToNumber} from "../../../configs/utils";
+import {portfolioListDatastoreBuilder} from "../portfolio_readonly/utils";
+import { StepResponseObject, UpdateAvailableCASMap} from "../unlock_limit/types";
+import {AuthCASModel} from "../../../types/AuthCASModel";
 import SharedPropsService from "../../../SharedPropsService";
-import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
+import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
 
 export const template: (
   maxAmount: number,
-  stepResponseObject: StepResponseObject
+  stepResponseObject: StepResponseObject,
+  updateAvailableCASMap: UpdateAvailableCASMap
 ) => Promise<TemplateSchema> = async (
   maxAmount: number,
-  stepResponseObject
+  stepResponseObject,
+  updateAvailableCASMap
 ) => ({
   layout: <Layout>{
     id: ROUTE.SET_CREDIT_LIMIT,
@@ -142,7 +136,7 @@ export const template: (
       ],
     },
     amount: <TypographyProps>{
-      label: `₹${addCommasToNumber(1000)}`,
+      label: `₹${addCommasToNumber(25000)}`,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
       fontSize: FontSizeTokens.XXXXL,
@@ -241,7 +235,7 @@ export const template: (
       widgetItems: [
         // { id: "leftSpace", type: WIDGET.SPACE },
         { id: "bottomSheetText", type: WIDGET.TEXT },
-        { id: "editText", type: WIDGET.TEXT },
+        { id: "editText", type: WIDGET.BUTTON },
         // { id: "rightSpace", type: WIDGET.SPACE },
       ],
     },
@@ -251,12 +245,19 @@ export const template: (
       fontSize: FontSizeTokens.MD,
       fontFamily: FontFamilyTokens.Poppins,
     },
-    editText: <TypographyProps>{
+    editText: <ButtonProps & WidgetProps>{
       label: "Edit",
-      fontWeight: "600",
-      fontSize: FontSizeTokens.SM,
-      fontFamily: FontFamilyTokens.Inter,
-      color: ColorTokens.Primary_100,
+      type: ButtonTypeTokens.MediumGhost,
+      paddingHorizontal: SizeTypeTokens.NONE,
+      paddingVertical: SizeTypeTokens.NONE,
+      action: {
+        type: ACTION.EDIT_PORTFOLIO,
+        payload: {
+          stepResponseObject: stepResponseObject,
+          updateAvailableCASMap: updateAvailableCASMap
+        },
+        routeId: ROUTE.SET_CREDIT_LIMIT
+      }
     },
     space5: <SpaceProps>{
       size: SizeTypeTokens.MD,
@@ -297,7 +298,7 @@ export const template: (
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {
-        type: ACTION.GO_CONFIRM_PLEDGE,
+        type: ACTION.EDIT_PORTFOLIO,
         routeId: ROUTE.SET_CREDIT_LIMIT,
         payload: {},
       },
@@ -307,7 +308,8 @@ export const template: (
 
 export const setCreditLimitMf: PageType<any> = {
   bgColor: "#F3F5FC",
-  onLoad: async (_, { maxAmount }) => {
+  onLoad: async (_, { maxAmount, stepResponseObject, updateAvailableCASMap }) => {
+    /*
     const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
     const pledgeLimitResponse = authCAS
       ? { data: authCAS }
@@ -315,11 +317,13 @@ export const setCreditLimitMf: PageType<any> = {
           data: response,
         }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
-    return Promise.resolve(template(maxAmount, stepResponseObject));
+     */
+    return Promise.resolve(template(maxAmount, stepResponseObject, updateAvailableCASMap));
   },
   actions: {
     [ACTION.ON_CHANGE_SLIDER]: OnChangeSlider,
     [ACTION.GO_BACK]: goBack,
     [ACTION.GO_CONFIRM_PLEDGE]: goConfirmPledge,
+    [ACTION.EDIT_PORTFOLIO]: goToEditPortFolio,
   },
 };

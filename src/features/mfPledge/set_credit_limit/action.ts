@@ -34,3 +34,13 @@ export const goConfirmPledge: ActionFunction<any> = (
 ) => {
   navigate(ROUTE.PLEDGE_CONFIRMATION);
 };
+
+export const goToEditPortFolio: ActionFunction<any> = async(
+    action,
+    _datastore,
+    { navigate, goBack, setDatastore }
+) => {
+  const stepResponseObject = action.payload.stepResponseObject
+  const updateAvailableCASMap = action.payload.updateAvailableCASMap
+  await navigate(ROUTE.PORTFOLIO, { stepResponseObject, updateAvailableCASMap });
+};

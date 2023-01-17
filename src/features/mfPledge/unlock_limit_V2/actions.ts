@@ -262,8 +262,10 @@ export const NavSliderAction: ActionFunction<any> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  navigate(ROUTE.SET_CREDIT_LIMIT, {
+  await navigate(ROUTE.SET_CREDIT_LIMIT, {
     maxAmount: action.payload.maxAmount,
+    updateAvailableCASMap: action.payload.updateAvailableCASMap,
+    stepResponseObject: action.payload.stepResponseObject,
   });
 };
 
