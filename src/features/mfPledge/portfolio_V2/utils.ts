@@ -10,6 +10,8 @@ import {
   ListItemDataProps,
   ListProps,
   ListTypeTokens,
+  SizeTypeTokens,
+  SpaceProps,
   StackAlignItems,
   StackJustifyContent,
   StackProps,
@@ -136,17 +138,26 @@ export const portfolioListDatastoreBuilderV2 = async (
     */
     totalItem: <StackProps> {
       type: StackType.column,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.center,
       widgetItems: [
         { id: 'totalCreditLineCard', type: WIDGET.CARD },
-        { id: 'ContinueButtonStack', type: WIDGET.STACK }
+        { id: 'totalItemSpace0', type: WIDGET.SPACE },
+        { id: 'ContinueButtonStack', type: WIDGET.STACK },
+        { id: 'totalItemSpace1', type: WIDGET.SPACE },
       ]
     },
     ContinueButtonStack: <StackProps> {
       type: StackType.column,
+      width: StackWidth.FULL,
+      justifyContent: StackJustifyContent.center,
+      alignItems: StackAlignItems.center,
       widgetItems: [
           { id: 'ContinueButton', type: WIDGET.BUTTON }
       ]
     },
+    totalItemSpace0: <SpaceProps> { size: SizeTypeTokens.LG },
+    totalItemSpace1: <SpaceProps> { size: SizeTypeTokens.XL },
     totalCreditLineCard: <CardProps> {
       bgColor: ColorTokens.Grey_Milk_1,
       width: '100%',
