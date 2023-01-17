@@ -65,7 +65,10 @@ import { checkingLimitMf } from "./features/mfFetch/checking_limit";
 import { portfolioReadOnlyMF } from "./features/mfPledge/portfolio_readonly";
 import { verificationFailedMFNew } from "./features/mfFetch/verification_failed_new";
 import {unlockLimitLandingNewMF} from "./features/mfPledge/unlock_limit_landing_new";
-import {portfolioMFV2} from "./features/mfPledge/portfolio_V2";
+import { unlockLimitMFV2 } from "./features/mfPledge/unlock_limit_new";
+import { setCreditLimitMf } from "./features/mfPledge/set_credit_limit";
+import { pledgeConfirmationMFV2 } from "./features/mfPledge/pledge_confirmation_new";
+import { portfolioMFV2 } from "./features/mfPledge/portfolio_V2";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -94,9 +97,12 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.ALERT_PAGE]: alertMF,
   [ROUTE.CAMERA_CAPTURE]: cameraCaptureMF,
   [ROUTE.SPLASH_SCREEN]: splashScreenMF,
-  [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMF,
+  // [ROUTE.MF_PLEDGE_PORTFOLIO_OLD]: unlockLimitMF,
+  [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMFV2,
   [ROUTE.PLEDGE_CONFIRMATION_LOADING]: pledgeConfirmationLoadingMF,
-  [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMF,
+  // [ROUTE.PLEDGE_CONFIRMATION_OLD]: pledgeConfirmationMF,
+  [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMFV2,
+  [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMFV2,
   [ROUTE.PLEDGE_VERIFY]: pledgeVerifyMF,
   [ROUTE.PLEDGE_LOADING]: pledgeLoadingMF,
   [ROUTE.UNLOCK_SUCCESS]: unlockSuccessMF,
@@ -134,4 +140,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
   [ROUTE.VERIFICATION_FAILED_NEW]:verificationFailedMFNew,
   [ROUTE.UNLOCK_LIMIT_LANDING_NEW]: unlockLimitLandingNewMF,
+  [ROUTE.SET_CREDIT_LIMIT]: setCreditLimitMf,
 };
