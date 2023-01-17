@@ -7,7 +7,7 @@ import {
   PortfolioTogglePayload,
   SearchPortfolioPayload,
 } from "./types";
-import { CtaCardProps, ListProps } from "@voltmoney/schema";
+import {CtaCardProps, ListProps, TypographyProps} from "@voltmoney/schema";
 import {
   AvailableCASItem,
   IsinLTVMap,
@@ -113,6 +113,7 @@ export const EditItem: ActionFunction<EditItemPayload> = async (
 export const ToggleSelectAction: ActionFunction<
   PortfolioTogglePayload
 > = async (action, _datastore, { setDatastore }): Promise<any> => {
+  console.log("Here payload: ", action)
   await togglePortfolio(
     action.payload.value,
     action.payload.selectedMap[action.payload.value],
@@ -125,8 +126,8 @@ export const ToggleSelectAction: ActionFunction<
   await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps & WidgetProps>{
     ...props.listItem,
   });
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    ...props.totalItem,
+  await setDatastore(ROUTE.PORTFOLIO, "outOfText1", <TypographyProps>{
+    ...props.outOfText1,
   });
 };
 
