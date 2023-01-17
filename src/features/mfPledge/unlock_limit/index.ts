@@ -336,7 +336,7 @@ export const unlockLimitMF: PageType<any> = {
         }
       }, APP_CONFIG.POLLING_INTERVAL);
     }
-    const isGetMorePortfolio = await isMorePortfolioRenderCheck();
+    const isGetMorePortfolio = true;//await isMorePortfolioRenderCheck();
     return Promise.resolve(
       template(
         availableCreditAmount,

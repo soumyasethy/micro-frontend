@@ -66,7 +66,7 @@ export const template: (
     return {
       layout: <Layout>{
         id: ROUTE.MF_FETCH_PORTFOLIO,
-        type: LAYOUTS.LIST,
+        type: isGoBackAllowed ? LAYOUTS.MODAL : LAYOUTS.LIST,
         widgets: [
           ...(headTitle
             ? [
@@ -232,6 +232,7 @@ export const template: (
         }
       },
     }
+
   };
 
 export const checkLimitMF: PageType<any> = {
@@ -243,7 +244,6 @@ export const checkLimitMF: PageType<any> = {
     let phoneNumber = "";
     let panNumberX = "";
     let emailId = "";
-    console.log("userType", userType);
     let assetRepository;
     if (userType === "BORROWER") {
       const user: User = await SharedPropsService.getUser();
@@ -263,6 +263,7 @@ export const checkLimitMF: PageType<any> = {
       panNumberX = await (await SharedPropsService.getPartnerUser()).panNumber;
        assetRepository = headTitle;
     }
+
 
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_PAN_EDIT_ALLOWED
