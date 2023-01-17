@@ -11,8 +11,6 @@ export const onTrackCTA: ActionFunction<ClientPendingPayloadType> = async (
     _datastore,
     { navigate, setDatastore }
 ): Promise<any> => {
-    console.log(action.payload);
-    console.log(action.payload.data);
     await SharedPropsService.setInvestorName(action.payload.name);
     await SharedPropsService.setAccountId(action.payload.data.accountId);
     await SharedPropsService.setApplicationId(action.payload.data.applicationId);
@@ -149,39 +147,16 @@ export const pendingTracks: ActionFunction<ClientPendingPayloadType> = async (
     const applicationId = action.payload.applicationId;
     await SharedPropsService.setApplicationId(applicationId);
     if (stepsData.currentStepId === "MF_PLEDGE_PORTFOLIO") {
-
         await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-        // go to fetch portfolio
     } else if (stepsData.currentStepId === "BANK_ACCOUNT_VERIFICATION") {
         await navigate(ROUTE.DIST_BANK_ACCOUNT_ADD);
-        // go to bank add
     } else if (stepsData.currentStepId === "MF_FETCH_PORTFOLIO") {
-        // go to fetch portfolio
         await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
     } else {
         await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
     }
 };
 
-export const notification: ActionFunction<ClientPendingPayloadType> = async (
-    action,
-    _datastore,
-    { setDatastore }
-): Promise<any> => {
-    console.warn(
-        "notification click"
-    );
-};
-
-export const onManageCTA: ActionFunction<ClientInProgressPayloadType> = async (
-    action,
-    _datastore,
-    { setDatastore }
-): Promise<any> => {
-    console.warn(
-        JSON.stringify(action.payload)
-    );
-};
 
 export const onClickCTA: ActionFunction<any> = async (
     action,

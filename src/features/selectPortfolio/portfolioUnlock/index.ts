@@ -34,7 +34,7 @@ import { ROUTE } from "../../../routes";
 import {
     ACTION, AssetsPayload, EditItemPayload,
 } from "./types";
-import { goBackACtion, onCopy, onModify, onSave, onShare, onSkip } from "./actions";
+import { goBackACtion, onCopy, onSave, onShare, onSkip } from "./actions";
 import { StepResponseObject } from "../../fetchDistributorPortfolio/types";
 import SharedPropsService from "../../../SharedPropsService";
 
@@ -273,7 +273,6 @@ export const portfolioUnlockMF: PageType<any> = {
             ));
     },
     actions: {
-        [ACTION.ON_MODIFY]: onModify,
         [ACTION.ON_SAVE]: onSave,
         [ACTION.ON_SKIP]: onSkip,
         [ACTION.BACK_BUTTON]: goBackACtion,

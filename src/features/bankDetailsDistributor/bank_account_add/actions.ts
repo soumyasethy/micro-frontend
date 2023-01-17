@@ -1,18 +1,11 @@
-import { ActionFunction } from "@voltmoney/types";
+import { ActionFunction, SCREEN_SIZE } from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
-  ColorTokens,
-  FontFamilyTokens,
-  FontSizeTokens,
-  HeaderProps,
-  IconTokens,
   InputStateToken,
   TextInputProps,
-  TypographyProps,
 } from "@voltmoney/schema";
 import {
-  ACTION as ACTION_CURRENT,
   InputPayload
 } from './types';
 import {
@@ -23,27 +16,26 @@ import {
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
-import { api, partnerApi } from "../../../configs/api";
-import { APP_CONFIG, getAppHeader, RegexConfig } from "../../../configs/config";
+import { partnerApi } from "../../../configs/api";
+import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import { EnableDisableCTA } from "../../login/phone_number/types";
 import { BankData } from "../../login/otp_verify/types";
-import { LinkPayload } from "../../investor/types";
-import {Share} from "react-native"
+import { Share } from "react-native"
+import { getScreenType } from "../../../configs/platfom-utils";
+import { Dimensions } from "react-native";
 
 let bankAccountNumber = "";
 let bankName = "";
 let confirmAccountNumber = "";
 let bankIfsc = "";
-let acc ="";
 
 
 
 export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
   action,
   _datastore,
-  { network, setDatastore, navigate,showPopup }
+  { network, setDatastore, navigate, showPopup }
 ): Promise<any> => {
-   console.log(confirmAccountNumber)
   if (bankName &&
     bankIfsc &&
     bankAccountNumber) {
@@ -52,114 +44,116 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
     const applicationId = await SharedPropsService.getApplicationId()
 
 
-  await network
-  .post(
-    `${partnerApi.bavAdd}`,
-    {
-      applicationId: applicationId,
-      bankAccountNumber: bankAccountNumber,
-      bankIfscCode: bankIfsc,
-      confirmedBankAccountNumber:confirmAccountNumber
-    },
-    { headers: await getAppHeader() }
-  )
-  .then(async (response) => {
-    if(response.status == 200){
-
-
-      let data1 = [];
-      let stepper_data = [];
-      Object.keys(response.data.partnerViewStepperMap).map(key=> {
-        const value = response.data.partnerViewStepperMap[key];
-        const stepData:any = new Object();
-        if(value.isEditable === true){
-          console.log("value",value);
-            stepData.title = value.verticalDisplayName;
-            stepData.subTitle = value.verticalDescription;
-            stepData.id = value.order;
-            stepData.horizontalTitle = value.horizontalDisplayName;
-            stepData.status = value.status;
-            data1.push(stepData);
-        }
-        })
-        stepper_data = data1.sort(function (a, b) {
-          return a.id - b.id;
-        });
-        console.log("stepper_data",stepper_data);
-        await SharedPropsService.setStepperData(stepper_data);
-
-      await SharedPropsService.setAccountId(response.data.updatedApplicationObj.accountId);
-        await showPopup({
-        autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
-        isAutoTriggerCta: true,
-        title: "Bank details saved succesfully",
-        subTitle: "You will be redirected to next step in few seconds",
-        type: "SUCCESS",
-        ctaLabel: "Continue",
-        primary: true,
-        ctaAction: {
-          type: ACTION.NEXT_ROUTE,
-          routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
-          payload: <{}>{
-           
-          },
+    await network
+      .post(
+        `${partnerApi.bavAdd}`,
+        {
+          applicationId: applicationId,
+          bankAccountNumber: bankAccountNumber,
+          bankIfscCode: bankIfsc,
+          confirmedBankAccountNumber: confirmAccountNumber
         },
+        { headers: await getAppHeader() }
+      )
+      .then(async (response) => {
+        if (response.status == 200) {
+
+
+          let data1 = [];
+          let stepper_data = [];
+          Object.keys(response.data.partnerViewStepperMap).map(key => {
+            const value = response.data.partnerViewStepperMap[key];
+            const stepData: any = new Object();
+            if (value.isEditable === true) {
+              stepData.title = value.verticalDisplayName;
+              stepData.subTitle = value.verticalDescription;
+              stepData.id = value.order;
+              stepData.horizontalTitle = value.horizontalDisplayName;
+              stepData.status = value.status;
+              data1.push(stepData);
+            }
+          })
+          stepper_data = data1.sort(function (a, b) {
+            return a.id - b.id;
+          });
+          await SharedPropsService.setStepperData(stepper_data);
+
+          await SharedPropsService.setAccountId(response.data.updatedApplicationObj.accountId);
+          await showPopup({
+            autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
+            isAutoTriggerCta: true,
+            title: "Bank details saved succesfully",
+            subTitle: "You will be redirected to next step in few seconds",
+            type: "SUCCESS",
+            ctaLabel: "Continue",
+            primary: true,
+            ctaAction: {
+              type: ACTION.NEXT_ROUTE,
+              routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+              payload: <{}>{
+
+              },
+            },
+          });
+
+
+
+
+        }
+
+      })
+      .catch(async (error) => {
+        console.log("error", error);
       });
 
 
-   
 
-    }
-      
-  })
-  .catch(async (error) => {
-    console.log("error",error);
-  });
-
-
-
-await setDatastore(action.routeId, "continue", <ButtonProps>{
-  label: "Continue",
-  type: ButtonTypeTokens.LargeFilled,
-  loading: false,
-});
+    await setDatastore(action.routeId, "continue", <ButtonProps>{
+      label: "Continue",
+      type: ButtonTypeTokens.LargeFilled,
+      loading: false,
+    });
 
   }
 };
 
 export const onShare: ActionFunction<{}> =
-    async (action, _datastore, { network, clipboard, setDatastore, ...props }): Promise<any> => {
+  async (action, _datastore, { network, clipboard, setDatastore, ...props }): Promise<any> => {
 
-        const applicationId = await SharedPropsService.getApplicationId();
-        const Linkresponse = await network.get(
-            `${partnerApi.referalLink}${applicationId}`,
-            {
-                headers: await getAppHeader(),
-            }
-        );
-        const link = Linkresponse.data.link;
-
-        // clipboard.set(link);
-
-        try {
-            const result = await Share.share({
-                message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n\nRegards,\n${name}`,
-            });
-            if (result.action === Share.sharedAction) {
-                if (result.activityType) {
-                    // shared with activity type of result.activityType
-                } else {
-                    // shared
-                }
-            } else if (result.action === Share.dismissedAction) {
-                // dismissed
-            }
-        } catch (e) {
-            console.log(e);
+    const applicationId = await SharedPropsService.getApplicationId();
+    const Linkresponse = await network.get(
+      `${partnerApi.referalLink}${applicationId}`,
+      {
+        headers: await getAppHeader(),
+      }
+    );
+    const link = Linkresponse.data.link;
+    const name = await SharedPropsService.getInvestorName();
+    const screenType = getScreenType(Dimensions.get("window").width);
+    if (
+      screenType === SCREEN_SIZE.X_SMALL ||
+      screenType === SCREEN_SIZE.SMALL
+    ) {
+      try {
+        const result = await Share.share({
+          message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n\nRegards,\n${name}`,
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
         }
-
-
-    };
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      clipboard.set(link);
+    }
+  };
 
 export const goNext: ActionFunction<any> = async (
   action,
@@ -175,15 +169,14 @@ export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.log("in toogle")
   await setDatastore(action.routeId, action.payload.targetWidgetId, <
     ButtonProps
-  >{
-    type:
-       bankName && bankAccountNumber && confirmAccountNumber && bankIfsc
-        ? ButtonTypeTokens.LargeFilled
-        : ButtonTypeTokens.LargeOutline,
-  });
+    >{
+      type:
+        bankName && bankAccountNumber && confirmAccountNumber && bankIfsc
+          ? ButtonTypeTokens.LargeFilled
+          : ButtonTypeTokens.LargeOutline,
+    });
 };
 
 
@@ -192,13 +185,12 @@ export const btnAction: ActionFunction<any> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.log("in btnAction")
-    await setDatastore(action.routeId, action.payload.targetWidgetId, <
-      ButtonProps
+  await setDatastore(action.routeId, action.payload.targetWidgetId, <
+    ButtonProps
     >{
       type: ButtonTypeTokens.LargeFilled,
     });
- 
+
 };
 
 
@@ -207,7 +199,7 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  
+
   switch (action.payload.widgetId) {
     case "bankInput": {
       bankName = action.payload.value;
@@ -232,30 +224,30 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
     }
     case "confirmAccountInput": {
       let confirmAccountNumbers = action.payload.value;
-      
+
       const bank: BankData = await SharedPropsService.getBankData();
-      
+
       await SharedPropsService.setBankData(bank);
       const acc_regex = bankAccountNumber;
       await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
-        regex:acc_regex
+        regex: acc_regex
       });
       await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
-        charLimit:bankAccountNumber.length
+        charLimit: bankAccountNumber.length
       });
-      if(confirmAccountNumbers === bankAccountNumber){
-         await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
-            state: InputStateToken.SUCCESS,
-          });
-          confirmAccountNumber = action.payload.value;
-          bank.confirmAccountNumber = confirmAccountNumber;
-       }else{
+      if (confirmAccountNumbers === bankAccountNumber) {
+        await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
+          state: InputStateToken.SUCCESS,
+        });
+        confirmAccountNumber = action.payload.value;
+        bank.confirmAccountNumber = confirmAccountNumber;
+      } else {
         await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
           state: InputStateToken.ERROR,
         });
         bank.confirmAccountNumber = "";
         confirmAccountNumber = "";
-       }
+      }
       break;
     }
   }
@@ -303,7 +295,7 @@ export const onChangeBankDetails: ActionFunction<
       props
     );
   }
-   
+
 };
 
 
@@ -346,25 +338,24 @@ export const onChangeIfscDetails: ActionFunction<InputNumberActionPayload> = asy
 export const onConfirmAccountNumber: ActionFunction<InputNumberActionPayload> = async (
   action,
   _datastore,
-  { setDatastore,...props }
+  { setDatastore, ...props }
 ): Promise<any> => {
   confirmAccountNumber = action.payload.value;
-   if(confirmAccountNumber === bankAccountNumber){
-     await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
-        state: InputStateToken.SUCCESS,
-      });
-   }else{
-    console.log("not matched")
+  if (confirmAccountNumber === bankAccountNumber) {
+    await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
+      state: InputStateToken.SUCCESS,
+    });
+  } else {
     await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "confirmAccountInput", <TextInputProps>{
       state: InputStateToken.ERROR,
     });
-   }
+  }
 };
 
 export const onChangeAccountNumber: ActionFunction<InputNumberActionPayload> = async (
   action,
   _datastore,
-  { setDatastore,...props }
+  { setDatastore, ...props }
 ): Promise<any> => {
   bankAccountNumber = action.payload.value;
   if (bankAccountNumber) {
@@ -378,7 +369,7 @@ export const onChangeAccountNumber: ActionFunction<InputNumberActionPayload> = a
         },
       },
       {},
-      {setDatastore,...props}
+      { setDatastore, ...props }
     );
   } else {
     await toggleCTA(
@@ -391,7 +382,7 @@ export const onChangeAccountNumber: ActionFunction<InputNumberActionPayload> = a
         },
       },
       {},
-      {setDatastore,...props}
+      { setDatastore, ...props }
     );
   }
 };
@@ -402,7 +393,6 @@ export const onChangeAccountNumber: ActionFunction<InputNumberActionPayload> = a
 export const NavigationSearchIFSCAction: ActionFunction<
   NavigationSearchIFSCActionPayload
 > = async (action, _datastore, { navigate }): Promise<any> => {
-  console.log(action.payload);
   await navigate(ROUTE.DIST_BANK_SEARCH_BRANCH, {
     bankCode: action.payload.bankCode,
     bankName: action.payload.bankName,
@@ -428,16 +418,16 @@ export const NavigationSearchBankAction: ActionFunction<
 export const skipBankVerification: ActionFunction<{}> = async (
   action,
   _datastore,
-  { setDatastore, navigate}
+  { setDatastore, navigate }
 ): Promise<any> => {
- 
+
   let filtered_stepper = [];
   let stepper_data = await SharedPropsService.getStepperData();
   stepper_data.forEach((item, index) => {
-      if (item.horizontalTitle === "Bank details") {
-          item.status = "NOT_STARTED";
-      }
-      filtered_stepper.push(item);
+    if (item.horizontalTitle === "Bank details") {
+      item.status = "NOT_STARTED";
+    }
+    filtered_stepper.push(item);
   })
 
   await SharedPropsService.setStepperData(filtered_stepper);
@@ -448,14 +438,14 @@ export const skipBankVerification: ActionFunction<{}> = async (
 export const ChangeBankGoBackAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate,goBack }
+  { navigate, goBack }
 ): Promise<any> => {
   await navigate(ROUTE.BASIC_DETAILS_START);
 };
 export const GoToStepper: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate,goBack }
+  { navigate, goBack }
 ): Promise<any> => {
   await goBack();
 };

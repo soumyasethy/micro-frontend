@@ -104,36 +104,6 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
       type: ButtonTypeTokens.LargeFilled,
     })
   }
-  // if (
-  //   panNumber &&
-  //   mobileNumber &&
-  //   email && dob) {
-  //   await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
-  //     type: ButtonTypeTokens.LargeFilled,
-  //   })
-  // }
-};
-
-
-export const onChangeInput1: ActionFunction<InputPayload> = async (
-  action,
-  _datastore,
-  { setDatastore }
-): Promise<any> => {
- // data = await SharedPropsService.getBasicData();
-  await SharedPropsService.setBasicDataPan(action.payload.value);
-  const pans = await SharedPropsService.getBasicDataPan();
-  const emails = await SharedPropsService.getBasicDataEmail();
-  const dobs = await SharedPropsService.getBasicDataDob();
-  const phones = await SharedPropsService.getBasicDataPhone();
-  if (
-   emails !== "" &&
-   phones !== ""   && pans !== "") {
-    await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
-      type: ButtonTypeTokens.LargeFilled,
-    })
-  }
-
 };
 
 
@@ -156,27 +126,6 @@ export const onChangeInput2: ActionFunction<InputPayload> = async (
   }
 };
 
-
-export const onChangeInput3: ActionFunction<InputPayload> = async (
-  action,
-  _datastore,
-  { setDatastore }
-): Promise<any> => {
-  
-  await SharedPropsService.setBasicDataPhone(action.payload.value);
-  const pans = await SharedPropsService.getBasicDataPan();
-  const emails = await SharedPropsService.getBasicDataEmail();
-  const dobs = await SharedPropsService.getBasicDataDob();
-  const phones = await SharedPropsService.getBasicDataPhone();
-  if (
-   emails !== "" &&
-   phones !== ""  && pans !== "") {
-    await setDatastore(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO, "continue", <ButtonProps>{
-      type: ButtonTypeTokens.LargeFilled,
-    })
-  }
-
-};
 
 export const onChangeInput4: ActionFunction<InputPayload> = async (
   action,

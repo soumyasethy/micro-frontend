@@ -35,7 +35,7 @@ import {
 } from "@voltmoney/schema";
 import { ACTION, ClientInProgressPayloadType, ClientPendingPayloadType, dataTypeClient } from "./types";
 import { ROUTE } from "../../../routes";
-import { appendData, appendDatas, onClickCTA, onManageCTA, onTrackCTA } from "./actions";
+import { appendData, appendDatas, onClickCTA, onTrackCTA } from "./actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -747,7 +747,6 @@ export const DistributorClientListMF: PageType<any> = {
   actions: {
     [ACTION.TRACK]: onTrackCTA,
     [ACTION.TRACK_PENDING]: onTrackCTA,
-    [ACTION.MANAGE]: onManageCTA,
     [ACTION.CTA]: onClickCTA,
     [ACTION.ON_CHANGE]: appendData,
     [ACTION.ON_CHANGES]: appendDatas

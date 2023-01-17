@@ -1,4 +1,4 @@
-import { ActionFunction } from "@voltmoney/types";
+import { ActionFunction, SCREEN_SIZE } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { StepperPayload } from "../ClientList/types";
 import { ClientInProgressPayloadType, ClientPendingPayloadType } from "./types";
@@ -6,6 +6,8 @@ import { Share } from 'react-native';
 import SharedPropsService from "../../../SharedPropsService";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
+import { getScreenType } from "../../../configs/platfom-utils";
+import { Dimensions } from "react-native";
 
 export const resumeSteps: ActionFunction<StepperPayload> = async (
     action,
@@ -44,24 +46,29 @@ export const onShare: ActionFunction<{}> =
             }
         );
         const link = Linkresponse.data.link;
-
-        // clipboard.set(link);
-
-        try {
-            const result = await Share.share({
-                message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n\nRegards,\n${name}`,
-            });
-            if (result.action === Share.sharedAction) {
-                if (result.activityType) {
-                    // shared with activity type of result.activityType
-                } else {
-                    // shared
+        const screenType = getScreenType(Dimensions.get("window").width);
+        if (
+            screenType === SCREEN_SIZE.X_SMALL ||
+            screenType === SCREEN_SIZE.SMALL
+        ) {
+            try {
+                const result = await Share.share({
+                    message: `Hi\n\nUse Volt to open a credit line(OD) against mutual funds in 5 minutes with trusted lenders such as Bajaj Finance.\n\nInterest rates starting at 9%. Use this link to apply now.\n${link}\n`,
+                });
+                if (result.action === Share.sharedAction) {
+                    if (result.activityType) {
+                        // shared with activity type of result.activityType
+                    } else {
+                        // shared
+                    }
+                } else if (result.action === Share.dismissedAction) {
+                    // dismissed
                 }
-            } else if (result.action === Share.dismissedAction) {
-                // dismissed
+            } catch (e) {
+                console.log(e);
             }
-        } catch (e) {
-            console.log(e);
+        } else {
+            clipboard.set(link);
         }
 
 
