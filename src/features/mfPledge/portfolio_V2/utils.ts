@@ -187,7 +187,15 @@ export const portfolioListDatastoreBuilderV2 = async (
       ]
     },
     outOfText1: <TypographyProps> {
-      label: '₹30,00,000 ',
+      label: addCommasToNumber(
+          roundDownToNearestHundred(
+              getTotalLimit(
+                  stepResponseObject.availableCAS,
+                  stepResponseObject.isinNAVMap,
+                  stepResponseObject.isinLTVMap
+              )
+          )
+      ),
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: '600',
       fontSize: FontSizeTokens.XL,
