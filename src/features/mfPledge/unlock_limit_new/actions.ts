@@ -124,7 +124,7 @@ export const ViewAllAction: ActionFunction<any> = async (
   _datastore,
   { setDatastore, appendWidgets, removeWidgets }
 ): Promise<any> => {
-  console.warn("**** View All Action Triggered ****", action);
+  console.warn("**** View All Action Triggered ****");
   await removeWidgets(ROUTE.MF_PLEDGE_PORTFOLIO, [
     { id: "chargesCard", type: WIDGET.CARD },
   ]);
@@ -182,7 +182,7 @@ export const ViewAllAction: ActionFunction<any> = async (
         fontSize: FontSizeTokens.SM,
       },
       processingChargeValue2: <TypographyProps>{
-        label: "₹ 100",
+        label: `₹${action.payload.processingFeesBreakUp['Processing Fee']}`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
@@ -207,7 +207,9 @@ export const ViewAllAction: ActionFunction<any> = async (
         fontSize: FontSizeTokens.SM,
       },
       interestP10KTextValue: <TypographyProps>{
-        label: "₹84/month",
+        label: `₹${
+          Math.ceil(((100 * action.payload.stepResponseObject.interestRate) / 12) * 100) / 100
+        }/month`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,

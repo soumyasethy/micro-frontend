@@ -26,3 +26,11 @@ export const goBack: ActionFunction<any> = (
     label: `₹${addCommasToNumber(1000)}`,
   });
 };
+
+export const goConfirmPledge: ActionFunction<any> = (
+  action,
+  _datastore,
+  { navigate, goBack, setDatastore }
+) => {
+  navigate(ROUTE.PLEDGE_CONFIRMATION);
+};

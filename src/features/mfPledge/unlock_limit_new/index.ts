@@ -349,7 +349,10 @@ export const template: (
         action: {
           type: ACTION.VIEW_ALL,
           routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-          payload: {},
+          payload: {
+            stepResponseObject: stepResponseObject,
+            processingFeesBreakUp: processingFeesBreakUp,
+          },
         },
       },
       Mspace2: <SpaceProps>{ size: SizeTypeTokens.XL },
@@ -504,6 +507,7 @@ export const template: (
 
 export const unlockLimitMFV2: PageType<any> = {
   onLoad: async ({ showPopup, network, goBack }) => {
+    const updateAvailableCASMap = {};
     const user: User = await SharedPropsService.getUser();
     const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
     const pledgeLimitResponse = authCAS
@@ -516,6 +520,7 @@ export const unlockLimitMFV2: PageType<any> = {
       { headers: await getAppHeader() }
     );*/
     /*** update authCAS in SharedPropsService if fetched from api ***/
+
     if (!authCAS && pledgeLimitResponse.data) {
       await SharedPropsService.setAuthCASResponse(pledgeLimitResponse.data);
     }
@@ -528,6 +533,16 @@ export const unlockLimitMFV2: PageType<any> = {
       pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
     await SharedPropsService.setCasListOriginal(availableCAS);
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
+
+    //
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      item.pledgedUnits = item.totalAvailableUnits;
+      updateAvailableCASMap[key] = item;
+    });
+    await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+    //
+
     console.log("stepResponseObject", stepResponseObject);
 
     /*** Show popup as soon as we land here if MF_PLEDGE_PORTFOLIO is PENDING_CALLBACK ***/
@@ -585,9 +600,9 @@ export const unlockLimitMFV2: PageType<any> = {
     const isGetMorePortfolio = await isMorePortfolioRenderCheck();
 
     const mfPortfolioArray: AvailableCASItem[] = (
-    stepResponseObject as StepResponseObject
+      stepResponseObject as StepResponseObject
     ).availableCAS;
-    
+
     mfPortfolioArray.forEach((_item, index) => {
       mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
     });

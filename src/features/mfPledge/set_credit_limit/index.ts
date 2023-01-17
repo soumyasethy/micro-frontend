@@ -35,11 +35,20 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { OnChangeSlider, goBack } from "./action";
+import { OnChangeSlider, goBack, goConfirmPledge } from "./action";
 import { addCommasToNumber } from "../../../configs/utils";
+import { portfolioListDatastoreBuilder } from "../portfolio_readonly/utils";
+import { StepResponseObject } from "../unlock_limit/types";
+import { AuthCASModel } from "../../../types/AuthCASModel";
+import SharedPropsService from "../../../SharedPropsService";
+import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
 
-export const template: (maxAmount: number) => TemplateSchema = (
-  maxAmount: number
+export const template: (
+  maxAmount: number,
+  stepResponseObject: StepResponseObject
+) => Promise<TemplateSchema> = async (
+  maxAmount: number,
+  stepResponseObject
 ) => ({
   layout: <Layout>{
     id: ROUTE.SET_CREDIT_LIMIT,
@@ -211,6 +220,11 @@ export const template: (maxAmount: number) => TemplateSchema = (
           id: "bottomStackText",
           type: WIDGET.TEXT,
         },
+        {
+          id: "space6",
+          type: WIDGET.SPACE,
+        },
+        { id: "listItem", type: WIDGET.LIST },
       ],
       padding: <PaddingProps>{
         horizontal: SizeTypeTokens.XS,
@@ -219,7 +233,7 @@ export const template: (maxAmount: number) => TemplateSchema = (
     bottomSheetStack: <StackProps>{
       type: StackType.row,
       justifyContent: StackJustifyContent.spaceBetween,
-      alignItems: StackAlignItems.stretch,
+      alignItems: StackAlignItems.center,
       padding: <PaddingProps>{
         horizontal: SizeTypeTokens.XS,
         vertical: SizeTypeTokens.XS,
@@ -253,6 +267,10 @@ export const template: (maxAmount: number) => TemplateSchema = (
       fontWeight: "400",
       fontSize: FontSizeTokens.SM,
     },
+    space6: <SpaceProps>{
+      size: SizeTypeTokens.MD,
+    },
+    ...(await portfolioListDatastoreBuilder(stepResponseObject)),
     ctaCard: <CardProps>{
       bgColor: ColorTokens.White,
       body: { widgetItems: [{ id: "ctaBody", type: WIDGET.STACK }] },
@@ -271,13 +289,18 @@ export const template: (maxAmount: number) => TemplateSchema = (
         },
       ],
     },
-    ctaButton: <ButtonProps>{
+    ctaButton: <ButtonProps & WidgetProps>{
       label: "Confirm amount and assets",
       fontWeight: "700",
       fontFamily: FontFamilyTokens.Inter,
       fontSize: FontSizeTokens.SM,
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      action: {
+        type: ACTION.GO_CONFIRM_PLEDGE,
+        routeId: ROUTE.SET_CREDIT_LIMIT,
+        payload: {},
+      },
     },
   },
 });
@@ -285,10 +308,18 @@ export const template: (maxAmount: number) => TemplateSchema = (
 export const setCreditLimitMf: PageType<any> = {
   bgColor: "#F3F5FC",
   onLoad: async (_, { maxAmount }) => {
-    return Promise.resolve(template(maxAmount));
+    const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
+    const pledgeLimitResponse = authCAS
+      ? { data: authCAS }
+      : await fetchPledgeLimitRepo().then((response) => ({
+          data: response,
+        }));
+    const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
+    return Promise.resolve(template(maxAmount, stepResponseObject));
   },
   actions: {
     [ACTION.ON_CHANGE_SLIDER]: OnChangeSlider,
     [ACTION.GO_BACK]: goBack,
+    [ACTION.GO_CONFIRM_PLEDGE]: goConfirmPledge,
   },
 };
