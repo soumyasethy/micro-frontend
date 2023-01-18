@@ -233,8 +233,7 @@ export const template: (
       space2: <SpaceProps>{ size: SizeTypeTokens.XL },
       divider: <DividerProps>{
         size: DividerSizeTokens.MD,
-        type: "solid",
-        color: ColorTokens.Black,
+        color: ColorTokens.Grey_Milk,
       },
       space3: <SpaceProps>{ size: SizeTypeTokens.XL },
       selectedLimitText2: <TypographyProps>{
@@ -250,7 +249,6 @@ export const template: (
         widgetItems: [
           { id: "ruppee2", type: WIDGET.TEXT },
           { id: "selectedLimitValueText3", type: WIDGET.TEXT },
-          { id: "selectedLimitValueText4", type: WIDGET.TEXT },
         ],
       },
       ruppee2: <TypographyProps>{
@@ -260,16 +258,12 @@ export const template: (
         fontSize: FontSizeTokens.MD,
       },
       selectedLimitValueText3: <TypographyProps>{
-        label: "60,00,000",
+        label: `${addCommasToNumber(
+          parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+        )}`,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
         fontSize: FontSizeTokens.MD,
-      },
-      selectedLimitValueText4: <TypographyProps>{
-        label: " out of ₹80,000",
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "400",
-        fontSize: FontSizeTokens.XS,
       },
       // card3: <CardProps>{
       //   bgColor: ColorTokens.White,
@@ -346,7 +340,7 @@ export const template: (
       space5: <SpaceProps>{ size: SizeTypeTokens.LG },
       divider2: <DividerProps>{
         size: DividerSizeTokens.MD,
-        type: "solid",
+        color: ColorTokens.Grey_Milk,
       },
       space6: <SpaceProps>{ size: SizeTypeTokens.LG },
       interestRateStack: <StackProps>{
@@ -376,7 +370,7 @@ export const template: (
       space7: <SpaceProps>{ size: SizeTypeTokens.LG },
       divider3: <DividerProps>{
         size: DividerSizeTokens.MD,
-        type: "solid",
+        color: ColorTokens.Grey_Milk,
       },
       space8: <SpaceProps>{ size: SizeTypeTokens.LG },
       autoPayStack: <StackProps>{
@@ -396,7 +390,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       autoPayValue: <TypographyProps>{
-        label: "7th of every month",
+        label: "5th of every month",
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
@@ -404,7 +398,7 @@ export const template: (
       space9: <SpaceProps>{ size: SizeTypeTokens.LG },
       divider4: <DividerProps>{
         size: DividerSizeTokens.MD,
-        type: "solid",
+        color: ColorTokens.Grey_Milk,
       },
       space10: <SpaceProps>{ size: SizeTypeTokens.LG },
       durationStack: <StackProps>{

@@ -83,8 +83,7 @@ export const template: (availableCreditAmount: number,
     amountCard: <LimitCardProps>{
       isView: false,
       limitAmount: `${addCommasToNumber(parseInt(availableCreditAmount.toString()))}`,
-      beforeOutOf: `${addCommasToNumber(30000)}`,
-      afterOutOf: `${addCommasToNumber(60000)}`,
+      fetchedAmount: `${addCommasToNumber(parseInt(stepResponseObject['totalPortfolioAmount'].toString()))}`,
       label: 'Available credit limit',
     },
     continue: <ButtonProps & WidgetProps>{
