@@ -333,8 +333,7 @@ export const template: (
 
 export const setCreditLimitMf: PageType<any> = {
   bgColor: "#F3F5FC",
-  onLoad: async (_, { maxAmount, stepResponseObject, updateAvailableCASMap }) => {
-    /*
+  onLoad: async (_, { maxAmount, updateAvailableCASMap }) => {
     const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
     const pledgeLimitResponse = authCAS
       ? { data: authCAS }
@@ -342,8 +341,6 @@ export const setCreditLimitMf: PageType<any> = {
           data: response,
         }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
-     */
-    console.log("StepResponseObject: ", stepResponseObject);
     return Promise.resolve(template(maxAmount, stepResponseObject, updateAvailableCASMap));
   },
   actions: {
@@ -353,5 +350,4 @@ export const setCreditLimitMf: PageType<any> = {
     [ACTION.EDIT_PORTFOLIO]: goToEditPortFolio,
     [ACTION.EDIT_LIMIT]: editSliderAmount,
   },
-  clearPrevious: true,
 };
