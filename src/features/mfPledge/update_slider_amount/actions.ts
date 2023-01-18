@@ -28,7 +28,8 @@ export const sliderAmountOnChange: ActionFunction<any> = async (
 ): Promise<any> => {
   editedAmount = action.payload.value;
   if(parseInt(editedAmount) >= 25000 && parseInt(editedAmount) <= action.payload.maxAmount) {
-    await setDatastore(
+    await SharedPropsService.setCreditLimit(parseInt(editedAmount))
+      await setDatastore(
         action.routeId,
         action.payload.targetWidgetId,
         <ButtonProps>{

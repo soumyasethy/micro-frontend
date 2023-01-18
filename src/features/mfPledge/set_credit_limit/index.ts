@@ -337,6 +337,7 @@ export const setCreditLimitMf: PageType<any> = {
         }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
      */
+    console.log("StepResponseObject: ", stepResponseObject);
     return Promise.resolve(template(maxAmount, stepResponseObject, updateAvailableCASMap));
   },
   actions: {
@@ -346,4 +347,5 @@ export const setCreditLimitMf: PageType<any> = {
     [ACTION.EDIT_PORTFOLIO]: goToEditPortFolio,
     [ACTION.EDIT_LIMIT]: editSliderAmount,
   },
+  clearPrevious: true,
 };
