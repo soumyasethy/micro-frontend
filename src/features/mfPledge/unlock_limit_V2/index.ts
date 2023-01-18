@@ -654,7 +654,7 @@ export const unlockLimitMFV2: PageType<any> = {
     [ACTION.NAV_NEXT]: NavSliderAction,
     [ACTION.NAV_TO_CONTACT_US]: NavToContactUs,
   },
-  clearPrevious: true,
+  clearPrevious: false,
   bgColor: "#F3F5FC",
   // action: {
   //   type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
