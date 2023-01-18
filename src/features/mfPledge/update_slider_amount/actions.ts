@@ -8,8 +8,9 @@ import {ButtonProps, ButtonTypeTokens, TextInputProps} from "@voltmoney/schema";
 import { addCommasToNumber } from "../../../configs/utils";
 import {AvailableCASItem, IsinLTVMap, IsinNAVMap} from "../unlock_limit/types";
 import {getTotalLimit} from "../portfolio/actions";
+import { ConfigValues } from "../../../configs/config";
 
-let editedAmount = "";
+let editedAmount = ConfigValues.MinimumAmountAllowed.toString();
 
 const getUpdateAvailableCAS = (
     amountRequired: number,

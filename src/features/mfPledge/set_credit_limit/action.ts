@@ -6,8 +6,9 @@ import SharedPropsService from "../../../SharedPropsService";
 import {AvailableCASItem, IsinLTVMap, IsinNAVMap} from "../unlock_limit/types";
 import {getTotalLimit} from "../portfolio/actions";
 import sharedPropsService from "../../../SharedPropsService";
+import { ConfigValues } from "../../../configs/config";
 
-let value = "";
+let value = ConfigValues.MinimumAmountAllowed.toString();
 
 const getUpdateAvailableCAS = (
     amountRequired: number,
@@ -49,7 +50,8 @@ export const OnChangeSlider: ActionFunction<any> = async(
   console.log(" *** OnChangeSlider payload *** ", action.payload.value);
   /** On change of value update updateAvailableCASMap **/
   const stepResponseObject = action.payload.stepResponseObject;
-  const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap()
+  const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap();
+  console.log(" *** OnChangeSlider value *** ", value);
   if (parseInt(value) > 0) {
     stepResponseObject.availableCAS.forEach((item, index) => {
       stepResponseObject.availableCAS[index].pledgedUnits =
@@ -92,12 +94,37 @@ export const goBack: ActionFunction<any> = async (
   await navigate(ROUTE.MF_PLEDGE_PORTFOLIO)
 };
 
+// changed here
 export const goConfirmPledge: ActionFunction<any> = async (
   action,
   _datastore,
   { navigate, goBack, setDatastore }
 ) => {
   const stepResponseObject = action.payload.stepResponseObject;
+  const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap();
+  if (parseInt(value) > 0) {
+    stepResponseObject.availableCAS.forEach((item, index) => {
+      stepResponseObject.availableCAS[index].pledgedUnits =
+          item.totalAvailableUnits;
+    });
+    stepResponseObject.availableCAS = getUpdateAvailableCAS(
+        parseInt(value),
+        stepResponseObject.availableCAS,
+        stepResponseObject.isinNAVMap,
+        stepResponseObject.isinLTVMap
+    );
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      updateAvailableCASMap[key] = item;
+    });
+  } else {
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      item.pledgedUnits = item.totalAvailableUnits;
+      updateAvailableCASMap[key] = item;
+    });
+  }
+  await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   await navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
 };
 

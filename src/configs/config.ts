@@ -90,3 +90,7 @@ export enum ConfigTokens {
   MIN_AMOUNT_ALLOWED = "MIN_AMOUNT_ALLOWED",
   MAX_AMOUNT_ALLOWED = "MAX_AMOUNT_ALLOWED",
 }
+
+export enum ConfigValues {
+  MinimumAmountAllowed = 25000,
+}

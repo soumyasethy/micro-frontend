@@ -10,8 +10,9 @@ import {
 import { getTotalLimit } from "../portfolio/actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import { ConfigValues } from "../../../configs/config";
 
-let amount: number = 0;
+let amount: number = ConfigValues.MinimumAmountAllowed
 const getUpdateAvailableCAS = (
   amountRequired: number,
   availableCAS: AvailableCASItem[],
