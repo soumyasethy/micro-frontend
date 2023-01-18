@@ -45,6 +45,7 @@ import { ConfigTokens, getAppHeader } from "../../../configs/config";
 import { getTotalLimit } from "../portfolio/actions";
 import _ from "lodash";
 import { addCommasToNumber } from "../../../configs/utils";
+import { OtpPayloadForPledgeConfirm } from "../pledge_confirmation/types";
 
 export const template: (
   totalAmount: number,
@@ -54,7 +55,7 @@ export const template: (
   showOtpConfirmation: boolean,
   minAmount: number,
   maxAmount: number
-) => TemplateSchema = (
+) => Promise<TemplateSchema> = async (
   totalAmount = 0,
   totalCharges = 0,
   processingFeesBreakUp = {},
@@ -82,15 +83,6 @@ export const template: (
           },
           position: POSITION.ABSOLUTE_TOP,
         },
-        // {
-        //   id: "card3",
-        //   type: WIDGET.CARD,
-        //   padding: {
-        //     horizontal: 0,
-        //     vertical: 16,
-        //   },
-        //   position: POSITION.ABSOLUTE_TOP,
-        // },
         { id: "card3Body", type: WIDGET.STACK },
         {
           id: "iconStack",
@@ -216,7 +208,7 @@ export const template: (
         color: ColorTokens.Secondary_100,
       },
       selectedLimitValueText: <TypographyProps>{
-        label: `${addCommasToNumber(25000)}`,
+        label: `${addCommasToNumber(await SharedPropsService.getCreditLimit())}`,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
         fontSize: FontSizeTokens.XXL,
@@ -232,8 +224,8 @@ export const template: (
       },
       space2: <SpaceProps>{ size: SizeTypeTokens.XL },
       divider: <DividerProps>{
-        size: DividerSizeTokens.MD,
-        color: ColorTokens.Grey_Milk,
+        size: DividerSizeTokens.SM,
+        color: ColorTokens.Grey_Chalk,
       },
       space3: <SpaceProps>{ size: SizeTypeTokens.XL },
       selectedLimitText2: <TypographyProps>{
@@ -265,12 +257,8 @@ export const template: (
         fontWeight: "700",
         fontSize: FontSizeTokens.MD,
       },
-      // card3: <CardProps>{
-      //   bgColor: ColorTokens.White,
-      //   body: { widgetItems: [{ id: "card3Body", type: WIDGET.STACK }] },
-      // },
       card3Body: <StackProps>{
-        // width: StackWidth.FULL,
+        width: StackWidth.FULL,
         type: StackType.column,
         alignItems: StackAlignItems.flexStart,
         widgetItems: [
@@ -339,8 +327,8 @@ export const template: (
       },
       space5: <SpaceProps>{ size: SizeTypeTokens.LG },
       divider2: <DividerProps>{
-        size: DividerSizeTokens.MD,
-        color: ColorTokens.Grey_Milk,
+        size: DividerSizeTokens.SM,
+        color: ColorTokens.Grey_Milk_1,
       },
       space6: <SpaceProps>{ size: SizeTypeTokens.LG },
       interestRateStack: <StackProps>{
@@ -369,8 +357,8 @@ export const template: (
       },
       space7: <SpaceProps>{ size: SizeTypeTokens.LG },
       divider3: <DividerProps>{
-        size: DividerSizeTokens.MD,
-        color: ColorTokens.Grey_Milk,
+        size: DividerSizeTokens.SM,
+        color: ColorTokens.Grey_Milk_1,
       },
       space8: <SpaceProps>{ size: SizeTypeTokens.LG },
       autoPayStack: <StackProps>{
@@ -397,8 +385,8 @@ export const template: (
       },
       space9: <SpaceProps>{ size: SizeTypeTokens.LG },
       divider4: <DividerProps>{
-        size: DividerSizeTokens.MD,
-        color: ColorTokens.Grey_Milk,
+        size: DividerSizeTokens.SM,
+        color: ColorTokens.Grey_Milk_1,
       },
       space10: <SpaceProps>{ size: SizeTypeTokens.LG },
       durationStack: <StackProps>{
@@ -489,9 +477,13 @@ export const template: (
         type: ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
-          type: "ACTION.GO_CONFIRM_PLEDGE",
-          routeId: ROUTE.SET_CREDIT_LIMIT,
-          payload: {},
+          type: ACTION.SEND_OTP_FOR_PLEDGE_CONFIRM,
+          routeId: ROUTE.PLEDGE_CONFIRMATION,
+          payload:<OtpPayloadForPledgeConfirm>{
+            value: stepResponseObject,
+            widgetId: "continue",
+            isResend: false,
+          },
         },
       },
     },
@@ -570,6 +562,7 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     [ACTION.PLEDGE_CONFIRMATION]: sendOtpForPledgeConfirm,
     [ACTION.NAV_TO_FAQ]: goToFaq,
     [ACTION.BACK_BUTTON]: goBack,
+    [ACTION.SEND_OTP_FOR_PLEDGE_CONFIRM]: sendOtpForPledgeConfirm,
   },
   clearPrevious: true,
 };
