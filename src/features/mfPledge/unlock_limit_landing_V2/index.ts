@@ -29,7 +29,7 @@ import {AvailableCASItem} from "../unlock_limit/types";
 import {api} from "../../../configs/api";
 import {APP_CONFIG, getAppHeader} from "../../../configs/config";
 import {NavigationNext} from "../../kyc/kyc_init/types";
-import {isMorePortfolioRenderCheck} from "../../../configs/utils";
+import {addCommasToNumber, isMorePortfolioRenderCheck} from "../../../configs/utils";
 import _ from "lodash";
 import { getMoreMfPortfolio } from "./actions";
 import { removeGetMorePortfolio } from "./actions";
@@ -82,15 +82,18 @@ export const template: (availableCreditAmount: number,
     },
     amountCard: <LimitCardProps>{
       isView: false,
-      limitAmount: `${availableCreditAmount}`,
-      beforeOutOf: '30000',
-      afterOutOf: '60000',
+      limitAmount: `${addCommasToNumber(parseInt(availableCreditAmount.toString()))}`,
+      beforeOutOf: `${addCommasToNumber(30000)}`,
+      afterOutOf: `${addCommasToNumber(60000)}`,
       label: 'Available credit limit',
     },
     continue: <ButtonProps & WidgetProps>{
-      label: 'continue',
+      label: 'Continue',
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: '700',
+      fontSize: FontSizeTokens.SM,
       action: {
         type: ACTION.UNLOCK_LIMIT,
         routeId: ROUTE.UNLOCK_LIMIT_LANDING,
@@ -109,14 +112,18 @@ export const template: (availableCreditAmount: number,
       label: 'Don’t see all your mutual funds?',
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: '400',
+      fontWeight: '600',
       color: ColorTokens.Grey_Charcoal,
-      lineHeight: 20,
+      lineHeight: 24,
     },
     infoButton: <ButtonProps & WidgetProps>{
       label: 'Get from other sources?',
       type: ButtonTypeTokens.MediumGhost,
+      fontSize: FontSizeTokens.SM,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: '600',
       width: ButtonWidthTypeToken.CONTENT,
+      labelColor: ColorTokens.Primary_100,
       action: {
         type: ACTION.GET_MORE_MF_PORTFOLIO,
         routeId: ROUTE.UNLOCK_LIMIT_LANDING,
@@ -141,7 +148,7 @@ export const template: (availableCreditAmount: number,
     bottomSheetText: <TypographyProps> {
       label: 'Credit limit on basis of these assets',
       fontSize: FontSizeTokens.MD,
-      fontFamily: FontFamilyTokens.Inter,
+      fontFamily: FontFamilyTokens.Poppins,
       fontWeight: '700',
       color: ColorTokens.Grey_Night,
       lineHeight: 24,
