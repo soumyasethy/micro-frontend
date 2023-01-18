@@ -234,6 +234,9 @@ export const portfolioListDatastoreBuilderV2 = async (
     ContinueButton: <ButtonProps>{
       label: "Confirm amount and assets",
       type: ButtonTypeTokens.LargeFilled,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "700",
+      fontSize: FontSizeTokens.SM,
       width: ButtonWidthTypeToken.FULL,
       action: {
         type: ACTION.PORTFOLIO,

@@ -113,7 +113,7 @@ export const template: (
     },
     selectText: <TypographyProps>{
       label: "Select the amount",
-      fontFamily: FontFamilyTokens.Inter,
+      fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "500",
       fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Night,
@@ -266,6 +266,8 @@ export const template: (
     },
     editText: <ButtonProps & WidgetProps>{
       label: "Edit",
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "600",
       type: ButtonTypeTokens.MediumGhost,
       paddingHorizontal: SizeTypeTokens.NONE,
       paddingVertical: SizeTypeTokens.NONE,
