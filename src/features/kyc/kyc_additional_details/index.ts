@@ -393,7 +393,7 @@ export const template: (
       },
       sbpace3: <SpaceProps>{ size: SizeTypeTokens.MD },
       disclaimer: <TypographyProps>{
-        label: "Don’t worry your data is secured with Volt",
+        label: "Your data is secure with us",
         color: ColorTokens.Secondary_100,
         fontSize: FontSizeTokens.XS,
       },

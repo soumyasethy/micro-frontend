@@ -25,7 +25,7 @@ export const template: (urlData: string) => TemplateSchema = (urlData) => ({
     id: ROUTE.LOAN_REPAYMENT,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
       {
         id: "webStack",
         type: WIDGET.STACK,

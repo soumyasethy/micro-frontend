@@ -154,7 +154,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     },
     space3: <SpaceProps>{ size: SizeTypeTokens.XS },
     tcText2: <TypographyProps>{
-      label: "Don’t worry your data is secured with Volt",
+      label: "Your data is secure with us",
       fontWeight: "500",
       fontFamily: FontFamilyTokens.Inter,
       fontSize: FontSizeTokens.XS,

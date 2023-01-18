@@ -167,7 +167,7 @@ export const template: (
       size: SizeTypeTokens.LG,
     },
     secureText: <TypographyProps>{
-      label: "Your data is secure with Volt",
+      label: "Your data is secure with us",
       color: ColorTokens.Secondary_100,
       fontSize: FontSizeTokens.XXS,
       fontFamily: FontFamilyTokens.Inter,

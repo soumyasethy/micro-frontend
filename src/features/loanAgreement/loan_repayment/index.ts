@@ -144,7 +144,7 @@ export const template: (
         routeId: ROUTE.LOAN_REPAYMENT,
       },
     },
-    btnSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+    btnSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     disclaimerStack: <StackProps>{
       type: StackType.row,
       justifyContent: StackJustifyContent.center,

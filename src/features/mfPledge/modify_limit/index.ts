@@ -61,7 +61,7 @@ export const template: (
       id: ROUTE.MODIFY_LIMIT,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         { id: "space0", type: WIDGET.SPACE },
         { id: "inputItem", type: WIDGET.INPUT },
         { id: "inputSpace", type: WIDGET.SPACE },

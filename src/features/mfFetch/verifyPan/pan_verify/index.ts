@@ -188,7 +188,7 @@ export const template: (
         fontSize: FontSizeTokens.XXS,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "500",
-        label: "Your data is secure with Volt",
+        label: "Your data is secure with us",
         color: ColorTokens.System_Happy,
       },
       disclaimerSpace: <SpaceProps>{ size: SizeTypeTokens.MD },

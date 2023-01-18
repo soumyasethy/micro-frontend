@@ -221,13 +221,14 @@ export const nextStepId = async (
   ) {
     if (!user.linkedBorrowerAccounts[0].accountHolderEmail) {
       // ***  Comment Email Verify FLow since google login is not working ***//
+
+      const isGoogleLoginEnabled = await SharedPropsService.getConfig(
+        ConfigTokens.IS_GOOGLE_LOGIN_ENABLED
+      );
+      console.warn("*** isGoogleLoginEnabled", isGoogleLoginEnabled);
       return {
         // routeId: ROUTE.EMAIL_VERIFY,
-        routeId: (await SharedPropsService.getConfig(
-          ConfigTokens.IS_GOOGLE_LOGIN_ENABLED
-        ))
-          ? ROUTE.EMAIL_VERIFY
-          : ROUTE.ENTER_EMAIL,
+        routeId: isGoogleLoginEnabled ? ROUTE.EMAIL_VERIFY : ROUTE.ENTER_EMAIL,
         params: {
           applicationId: user.linkedBorrowerAccounts[0].accountId,
         },

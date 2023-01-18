@@ -34,7 +34,7 @@ export const template: () => TemplateSchema = () => {
       id: ROUTE.CONTACT_US,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.FIXED_TOP },
+        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         { id: "topSpace", type: WIDGET.SPACE },
         { id: "info", type: WIDGET.TEXT },
         { id: "space0", type: WIDGET.SPACE },

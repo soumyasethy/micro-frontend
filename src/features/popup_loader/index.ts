@@ -62,13 +62,13 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
     id: ROUTE.ALERT_PAGE,
     type: LAYOUTS.MODAL,
     widgets: [
-      { id: "space1", type: WIDGET.SPACE },
-      { id: "alert", type: WIDGET.VERIFICATIONCARD },
-      // { id: "stack", type: WIDGET.STACK },
+      {
+        id: "alert",
+        type: WIDGET.VERIFICATIONCARD,
+      },
     ],
   },
   datastore: <Datastore>{
-    space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     alert: <VerificationCardProps & WidgetProps>{
       isAutoTriggerCta,
       autoTriggerTimerInMilliseconds,
@@ -89,22 +89,6 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
         ? VerificationCardButtonTypeToken.FULL
         : VerificationCardButtonTypeToken.OUTLINE,
     },
-    stack: <StackProps>{
-      type: StackType.row,
-      justifyContent: StackJustifyContent.center,
-      alignItems: StackAlignItems.center,
-      widgetItems: [
-        { id: "messageIcon", type: WIDGET.ICON },
-        { id: "iconSpace", type: WIDGET.SPACE },
-        { id: "message", type: WIDGET.TEXT },
-      ],
-    },
-    messageIcon: <IconProps>{ name: IconTokens.Fire, size: IconSizeTokens.MD },
-    iconSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
-    message: <TypographyProps>{
-      label: message,
-      fontSize: FontSizeTokens.XS,
-    },
   },
 });
 const alertPropsX: AlertNavProps = {
@@ -113,7 +97,7 @@ const alertPropsX: AlertNavProps = {
   iconName: IconTokens.Alert,
   primary: true,
   ctaLabel: "continue",
-  message: "Don’t worry your data is secured with Volt",
+  message: "Your data is secure with us",
   ctaAction: {
     type: ACTION.CLOSE_POPUP,
     routeId: ROUTE.ALERT_PAGE,
