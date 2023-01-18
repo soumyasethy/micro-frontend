@@ -69,6 +69,7 @@ import { unlockLimitMFV2 } from "./features/mfPledge/unlock_limit_V2";
 import { setCreditLimitMf } from "./features/mfPledge/set_credit_limit";
 import { pledgeConfirmationMFV2 } from "./features/mfPledge/pledge_confirmation_V2";
 import { portfolioMFV2 } from "./features/mfPledge/portfolio_V2";
+import { updateSliderAmountMF } from "./features/mfPledge/update_slider_amount";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -141,4 +142,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
   [ROUTE.VERIFICATION_FAILED_NEW]:verificationFailedMFNew,
   [ROUTE.SET_CREDIT_LIMIT]: setCreditLimitMf,
+  [ROUTE.UPDATE_SLIDER_AMOUNT]: updateSliderAmountMF
 };

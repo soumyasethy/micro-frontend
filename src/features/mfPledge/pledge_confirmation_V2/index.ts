@@ -1,4 +1,12 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -27,32 +35,33 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION} from "./types";
-import {goBack, goToFaq, sendOtpForPledgeConfirm} from "./actions";
-import {AvailableCASItem, StepResponseObject} from "../unlock_limit/types";
+import { ROUTE } from "../../../routes";
+import { ACTION } from "./types";
+import { goBack, goToFaq, sendOtpForPledgeConfirm } from "./actions";
+import { AvailableCASItem, StepResponseObject } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
-import {api} from "../../../configs/api";
-import {ConfigTokens, getAppHeader} from "../../../configs/config";
-import {getTotalLimit} from "../portfolio/actions";
+import { api } from "../../../configs/api";
+import { ConfigTokens, getAppHeader } from "../../../configs/config";
+import { getTotalLimit } from "../portfolio/actions";
 import _ from "lodash";
+import { addCommasToNumber } from "../../../configs/utils";
 
 export const template: (
-    totalAmount: number,
-    totalCharges: number,
-    processingFeesBreakUp: { [key in string]: number },
-    stepResponseObject: StepResponseObject,
-    showOtpConfirmation: boolean,
-    minAmount: number,
-    maxAmount: number
+  totalAmount: number,
+  totalCharges: number,
+  processingFeesBreakUp: { [key in string]: number },
+  stepResponseObject: StepResponseObject,
+  showOtpConfirmation: boolean,
+  minAmount: number,
+  maxAmount: number
 ) => TemplateSchema = (
-    totalAmount = 0,
-    totalCharges = 0,
-    processingFeesBreakUp = {},
-    stepResponseObject,
-    showOtpConfirmation = false,
-    minAmount,
-    maxAmount
+  totalAmount = 0,
+  totalCharges = 0,
+  processingFeesBreakUp = {},
+  stepResponseObject,
+  showOtpConfirmation = false,
+  minAmount,
+  maxAmount
 ) => {
   return {
     layout: <Layout>{
@@ -126,8 +135,8 @@ export const template: (
         action: {
           type: ACTION.BACK_BUTTON,
           routeId: ROUTE.PLEDGE_CONFIRMATION,
-          payload: {}
-        }
+          payload: {},
+        },
       },
       space0: <SpaceProps>{ size: SizeTypeTokens.LG },
       headerRight: <StackProps>{
@@ -207,14 +216,16 @@ export const template: (
         color: ColorTokens.Secondary_100,
       },
       selectedLimitValueText: <TypographyProps>{
-        label: "1,00,000",
+        label: `${addCommasToNumber(25000)}`,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
         fontSize: FontSizeTokens.XXL,
         color: ColorTokens.Secondary_100,
       },
       selectedLimitValueText2: <TypographyProps>{
-        label: " out of ₹30,00,000",
+        label: ` out of ₹${addCommasToNumber(
+          stepResponseObject["availableCreditAmount"]
+        )}`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
         fontSize: FontSizeTokens.XS,
@@ -293,7 +304,7 @@ export const template: (
         justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
           { id: "otherChargesText", type: WIDGET.TEXT },
-          { id: "viewMore", type: WIDGET.TEXT },
+          // { id: "viewMore", type: WIDGET.TEXT },
         ],
       },
       otherChargesText: <TypographyProps>{
@@ -302,13 +313,13 @@ export const template: (
         fontWeight: "500",
         fontSize: FontSizeTokens.MD,
       },
-      viewMore: <TypographyProps>{
-        label: "View more",
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "600",
-        fontSize: FontSizeTokens.SM,
-        color: ColorTokens.Primary_100,
-      },
+      // viewMore: <TypographyProps>{
+      //   label: "View more",
+      //   fontFamily: FontFamilyTokens.Inter,
+      //   fontWeight: "600",
+      //   fontSize: FontSizeTokens.SM,
+      //   color: ColorTokens.Primary_100,
+      // },
       space4: <SpaceProps>{ size: SizeTypeTokens.XL },
       processingFeeStack: <StackProps>{
         width: StackWidth.FULL,
@@ -327,7 +338,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       processingFeeValue: <TypographyProps>{
-        label: `₹ ${processingFeesBreakUp['Processing Fee']}`,
+        label: `₹${processingFeesBreakUp["Processing Fee"]}`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
@@ -355,7 +366,9 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       interestRateValue: <TypographyProps>{
-        label: `${Math.ceil(((100 * stepResponseObject.interestRate) / 12) * 100) / 100}%`,
+        label: `₹${
+          Math.ceil(((100 * stepResponseObject.interestRate) / 12) * 100) / 100
+        }/Month`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
@@ -493,42 +506,43 @@ export const template: (
 
 export const pledgeConfirmationMFV2: PageType<any> = {
   onLoad: async ({ network }, { stepResponseObject }) => {
+    // console.log("stepResponseObject", stepResponseObject['availableCreditAmount']);
     /// Pledging
     const mfPortfolioArray: AvailableCASItem[] = (
-        stepResponseObject as StepResponseObject
+      stepResponseObject as StepResponseObject
     ).availableCAS;
     mfPortfolioArray.forEach((_item, index) => {
       mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
     });
 
     const applicationId = (await SharedPropsService.getUser())
-        .linkedApplications[0].applicationId;
+      .linkedApplications[0].applicationId;
 
     /// fetch processing fee
     const response = await network.post(
-        api.processingCharges,
-        {
-          applicationId: applicationId,
-          mutualFundPortfolioItems: mfPortfolioArray,
-        },
-        { headers: await getAppHeader() }
+      api.processingCharges,
+      {
+        applicationId: applicationId,
+        mutualFundPortfolioItems: mfPortfolioArray,
+      },
+      { headers: await getAppHeader() }
     );
 
     const processingFeesBreakUp = _.get(
-        response,
-        "data.stepResponseObject.processingChargesBreakup",
-        {}
+      response,
+      "data.stepResponseObject.processingChargesBreakup",
+      {}
     );
     const totalCharges = _.get(
-        response,
-        "data.stepResponseObject.totalCharges",
-        0
+      response,
+      "data.stepResponseObject.totalCharges",
+      0
     );
 
     const totalAmount = getTotalLimit(
-        stepResponseObject.availableCAS,
-        stepResponseObject.isinNAVMap,
-        stepResponseObject.isinLTVMap
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
     );
 
     const assetTypeMap = {};
@@ -540,22 +554,22 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     const showOtpConfirmation: boolean = Object.keys(assetTypeMap).length > 1;
 
     const minAmount = await SharedPropsService.getConfig(
-        ConfigTokens.MIN_AMOUNT_ALLOWED
+      ConfigTokens.MIN_AMOUNT_ALLOWED
     );
     const maxAmount = await SharedPropsService.getConfig(
-        ConfigTokens.MAX_AMOUNT_ALLOWED
+      ConfigTokens.MAX_AMOUNT_ALLOWED
     );
 
     return Promise.resolve(
-        template(
-            totalAmount,
-            totalCharges,
-            processingFeesBreakUp,
-            stepResponseObject as StepResponseObject,
-            showOtpConfirmation,
-            minAmount,
-            maxAmount
-        )
+      template(
+        totalAmount,
+        totalCharges,
+        processingFeesBreakUp,
+        stepResponseObject as StepResponseObject,
+        showOtpConfirmation,
+        minAmount,
+        maxAmount
+      )
     );
   },
   actions: {
