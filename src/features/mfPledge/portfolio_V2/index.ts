@@ -24,6 +24,7 @@ import {ClearSearchPortfolio, EditItem, goBack, SearchPortfolio, ToggleSelectAct
 import {StepResponseObject} from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import {portfolioListDatastoreBuilderV2} from "./utils";
+import { addCommasToNumber } from "../../../configs/utils";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -88,7 +89,9 @@ export const template: (
       space1: <SpaceProps> { size: SizeTypeTokens.XL },
       space2: <SpaceProps> { size: SizeTypeTokens.XL},
       subTitleText: <TypographyProps> {
-        label: '₹60,00,000 out of ₹8,00,00,000  are selected for pledging.',
+        label: `${addCommasToNumber(
+          parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+        )} are selected for pledging.`,
         fontSize: FontSizeTokens.SM,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: '400',

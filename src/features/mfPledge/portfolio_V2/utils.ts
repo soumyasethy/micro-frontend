@@ -20,13 +20,21 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ACTION, CtaPayload, EditItemPayload, PortfolioTogglePayload,} from "./types";
-import {ROUTE} from "../../../routes";
-import {getActualLimit, getPortfolioValue, getTotalLimit} from "./actions";
-import {StepResponseObject} from "../unlock_limit/types";
-import {Datastore, WidgetProps} from "@voltmoney/types";
+import {
+  ACTION,
+  CtaPayload,
+  EditItemPayload,
+  PortfolioTogglePayload,
+} from "./types";
+import { ROUTE } from "../../../routes";
+import { getActualLimit, getPortfolioValue, getTotalLimit } from "./actions";
+import { StepResponseObject } from "../unlock_limit/types";
+import { Datastore, WidgetProps } from "@voltmoney/types";
 import SharedPropsService from "../../../SharedPropsService";
-import {addCommasToNumber, roundDownToNearestHundred,} from "../../../configs/utils";
+import {
+  addCommasToNumber,
+  roundDownToNearestHundred,
+} from "../../../configs/utils";
 
 export const portfolioListDatastoreBuilderV2 = async (
   stepResponseObject: StepResponseObject,
@@ -136,7 +144,7 @@ export const portfolioListDatastoreBuilderV2 = async (
       },
     },
     */
-    totalItem: <StackProps> {
+    totalItem: <StackProps>{
       type: StackType.column,
       alignItems: StackAlignItems.center,
       justifyContent: StackJustifyContent.center,
@@ -177,52 +185,54 @@ export const portfolioListDatastoreBuilderV2 = async (
         { id: 'edit_button', type: WIDGET.BUTTON }
       ]
     },
-    outOfTextStack: <StackProps> {
+    outOfTextStack: <StackProps>{
       type: StackType.row,
       width: StackWidth.CONTENT,
       alignItems: StackAlignItems.center,
       widgetItems: [
-        { id: 'outOfText1', type: WIDGET.TEXT },
-        { id: 'outOfText2', type: WIDGET.TEXT },
-      ]
+        { id: "outOfText1", type: WIDGET.TEXT },
+        { id: "outOfText2", type: WIDGET.TEXT },
+      ],
     },
-    outOfText1: <TypographyProps> {
+    outOfText1: <TypographyProps>{
       label: addCommasToNumber(
-          roundDownToNearestHundred(
-              getTotalLimit(
-                  stepResponseObject.availableCAS,
-                  stepResponseObject.isinNAVMap,
-                  stepResponseObject.isinLTVMap
-              )
+        roundDownToNearestHundred(
+          getTotalLimit(
+            stepResponseObject.availableCAS,
+            stepResponseObject.isinNAVMap,
+            stepResponseObject.isinLTVMap
           )
+        )
       ),
       fontFamily: FontFamilyTokens.Poppins,
-      fontWeight: '600',
+      fontWeight: "600",
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
     },
-    outOfText2: <TypographyProps> {
-      label: '/ ₹50,00,000',
+    outOfText2: <TypographyProps>{
+      label: `/ ₹${addCommasToNumber(
+        parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+      )}`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: '400',
+      fontWeight: "400",
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
     },
-    edit_button: <ButtonProps> {
+    edit_button: <ButtonProps>{
       type: ButtonTypeTokens.MediumGhost,
-      label: 'Edit',
+      label: "Edit",
       paddingHorizontal: SizeTypeTokens.NONE,
       paddingVertical: SizeTypeTokens.NONE,
     },
-    totalCreditLimitText: <TypographyProps> {
-      label: 'Total credit limit',
+    totalCreditLimitText: <TypographyProps>{
+      label: "Total credit limit",
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: '400',
+      fontWeight: "400",
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Night,
     },
-    ContinueButton: <ButtonProps> {
-      label: 'Confirm amount and assets',
+    ContinueButton: <ButtonProps>{
+      label: "Confirm amount and assets",
       type: ButtonTypeTokens.LargeFilled,
       width: ButtonWidthTypeToken.FULL,
       action: {
@@ -230,7 +240,7 @@ export const portfolioListDatastoreBuilderV2 = async (
         payload: <CtaPayload>{ value: stepResponseObject },
         routeId: ROUTE.PORTFOLIO,
       },
-    }
+    },
   };
   return datastoreObj;
 };

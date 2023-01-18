@@ -280,7 +280,9 @@ export const template: (
       size: SizeTypeTokens.MD,
     },
     bottomStackText: <TypographyProps>{
-      label: "₹60,00,000 out of ₹8,00,00,000  are selected for pledging.",
+      label: `₹${addCommasToNumber(
+        parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+      )} are selected for pledging.`,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
       fontSize: FontSizeTokens.SM,
