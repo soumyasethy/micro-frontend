@@ -22,7 +22,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { updateSliderAmount, sliderAmountOnChange, toggleCTA } from "./actions";
+import { updateSliderAmount, sliderAmountOnChange } from "./actions";
 import { RegexConfig } from "../../../configs/config";
 import {
   StepResponseObject,
@@ -79,22 +79,23 @@ export const template: (
       action: {
         type: ACTION.SLIDER_AMOUNT_ONCHANGE,
         payload: {
-          value: "",
-          targetWidgetId: "input",
+          value: '',
+          maxAmount: maxAmount,
+          targetWidgetId: "continue",
         },
         routeId: ROUTE.UPDATE_SLIDER_AMOUNT,
       },
-      caption: { error: "Enter a valid amount" },
-      errorAction: {
-        type: ACTION.DISABLE_CONTINUE,
-        routeId: ROUTE.UPDATE_SLIDER_AMOUNT,
-        payload: { targetWidgetId: "continue", minAmount: 25000 },
-      },
-      successAction: {
-        type: ACTION.ENABLE_CONTINUE,
-        routeId: ROUTE.UPDATE_SLIDER_AMOUNT,
-        payload: { targetWidgetId: "continue", minAmount: 25000 },
-      },
+      // caption: { error: "Enter a valid amount" },
+      // errorAction: {
+      //   type: ACTION.DISABLE_CONTINUE,
+      //   routeId: ROUTE.UPDATE_SLIDER_AMOUNT,
+      //   payload: { targetWidgetId: "continue", minAmount: 25000 },
+      // },
+      // successAction: {
+      //   type: ACTION.ENABLE_CONTINUE,
+      //   routeId: ROUTE.UPDATE_SLIDER_AMOUNT,
+      //   payload: { targetWidgetId: "continue", minAmount: 25000 },
+      // },
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.SM },
     space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
@@ -116,7 +117,7 @@ export const updateSliderAmountMF: PageType<any> = {
   actions: {
     [ACTION.EDIT_SLIDER_AMOUNT]: updateSliderAmount,
     [ACTION.SLIDER_AMOUNT_ONCHANGE]: sliderAmountOnChange,
-    [ACTION.ENABLE_CONTINUE]: toggleCTA,
-    [ACTION.DISABLE_CONTINUE]: toggleCTA,
+    //[ACTION.ENABLE_CONTINUE]: toggleCTA,
+    //[ACTION.DISABLE_CONTINUE]: toggleCTA,
   },
 };
