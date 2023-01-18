@@ -12,7 +12,7 @@ export const OnChangeSlider: ActionFunction<any> = (
 ) => {
   value = action.payload.value;
   setDatastore(ROUTE.SET_CREDIT_LIMIT, "amount", <TypographyProps>{
-    label: `₹${addCommasToNumber(parseInt(value))}`,
+    label: `${addCommasToNumber(parseInt(value))}`,
   });
 };
 
@@ -44,4 +44,16 @@ export const goToEditPortFolio: ActionFunction<any> = async(
   const stepResponseObject = action.payload.stepResponseObject
   const updateAvailableCASMap = action.payload.updateAvailableCASMap
   await navigate(ROUTE.PORTFOLIO, { stepResponseObject, updateAvailableCASMap });
+};
+
+export const editSliderAmount: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, ...props }
+): Promise<any> => {
+  await navigate(ROUTE.UPDATE_SLIDER_AMOUNT, {
+    maxAmount: action.payload.maxAmount,
+    stepResponseObject: action.payload.stepResponseObject,
+    updateAvailableCASMap: action.payload.updateAvailableCASMap,
+  });
 };

@@ -27,7 +27,7 @@ import {
 } from "@voltmoney/schema";
 import {ROUTE} from "../../../routes";
 import {ACTION} from "./types";
-import {goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider} from "./action";
+import {editSliderAmount, goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider} from "./action";
 import {addCommasToNumber} from "../../../configs/utils";
 import {portfolioListDatastoreBuilder} from "../portfolio_readonly/utils";
 import { StepResponseObject, UpdateAvailableCASMap} from "../unlock_limit/types";
@@ -86,7 +86,7 @@ export const template: (
     header: <HeaderProps & WidgetProps>{
       isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
-      title: "WIP",
+      title: "Set credit limit",
       action: {
         type: ACTION.GO_BACK,
         routeId: ROUTE.SET_CREDIT_LIMIT,
@@ -130,13 +130,20 @@ export const template: (
         horizontal: SizeTypeTokens.NONE,
       },
       widgetItems: [
+        { id: "rupee", type: WIDGET.TEXT },
         { id: "amount", type: WIDGET.TEXT },
         { id: "space", type: WIDGET.SPACE },
         { id: "icon", type: WIDGET.ICON },
       ],
     },
+    rupee: <TypographyProps>{
+      label: "₹",
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "700",
+      fontSize: FontSizeTokens.XXXXL,
+    },
     amount: <TypographyProps>{
-      label: `₹${addCommasToNumber(25000)}`,
+      label: `${addCommasToNumber(25000)}`,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
       fontSize: FontSizeTokens.XXXXL,
@@ -144,15 +151,24 @@ export const template: (
     space: <SpaceProps>{
       size: SizeTypeTokens.Size10,
     },
-    icon: <IconProps>{
+    icon: <IconProps & WidgetProps>{
       name: IconTokens.EditBlue,
       size: IconSizeTokens.XL,
+      action: {
+        type: ACTION.EDIT_LIMIT,
+        routeId: ROUTE.SET_CREDIT_LIMIT,
+        payload: {
+          maxAmount,
+          stepResponseObject,
+          updateAvailableCASMap,
+        },
+      }
     },
     space2: <SpaceProps>{
       size: SizeTypeTokens.XXXXXL,
     },
     slider: <CustomSliderProps & WidgetProps>{
-      mimimumValue: 25000,
+      minimumValue: 25000,
       maximumValue: maxAmount,
       step: 1000,
       paddingHorizontal: 10,
@@ -327,5 +343,6 @@ export const setCreditLimitMf: PageType<any> = {
     [ACTION.GO_BACK]: goBack,
     [ACTION.GO_CONFIRM_PLEDGE]: goConfirmPledge,
     [ACTION.EDIT_PORTFOLIO]: goToEditPortFolio,
+    [ACTION.EDIT_LIMIT]: editSliderAmount,
   },
 };

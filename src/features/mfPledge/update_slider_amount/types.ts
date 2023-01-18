@@ -1,0 +1,7 @@
+export enum ACTION {
+  EDIT_SLIDER_AMOUNT = "EDIT_SLIDER_AMOUNT",
+  SLIDER_AMOUNT_ONCHANGE = "SLIDER_AMOUNT_ONCHANGE",
+  DISABLE_CONTINUE = "DISABLE_CONTINUE",
+  ENABLE_CONTINUE = "ENABLE_CONTINUE",
+}
+export type UpdateMobileNumber = { value: string; targetWidgetId: string };
