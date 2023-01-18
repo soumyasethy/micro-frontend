@@ -176,7 +176,9 @@ export const template: (
       action: {
         type: ACTION.ON_CHANGE_SLIDER,
         routeId: ROUTE.SET_CREDIT_LIMIT,
-        payload: {},
+        payload: {
+          stepResponseObject: stepResponseObject
+        },
       },
     },
     space3: <SpaceProps>{
