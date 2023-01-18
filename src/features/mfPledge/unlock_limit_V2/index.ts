@@ -272,8 +272,9 @@ export const template: (
         limitAmount: addCommasToNumber(
           roundDownToNearestHundred(availableCreditAmount)
         ).toString(),
-        beforeOutOf: addCommasToNumber(20000).toString(),
-        afterOutOf: addCommasToNumber(80000).toString(),
+        fetchedAmount: `${addCommasToNumber(
+          parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+        )}`,
         isView: false,
       },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXL },
