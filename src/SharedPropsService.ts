@@ -48,6 +48,7 @@ type GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]?: number;
     [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
   };
+  creditLimit: number;
 };
 
 let _globalProps: GlobalProps = {
@@ -86,6 +87,7 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
   },
+  creditLimit: 25000,
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -270,6 +272,12 @@ async function setAuthCASResponse(data: AuthCASModel) {
 async function getAuthCASResponse() {
   return _globalProps.authCAS;
 }
+async function setCreditLimit(creditLimit: number) {
+  _globalProps.creditLimit = creditLimit;
+}
+async function getCreditLimit() {
+  return _globalProps.creditLimit;
+}
 
 export default {
   setBuildType,
@@ -304,4 +312,6 @@ export default {
   getConfig,
   setAuthCASResponse,
   getAuthCASResponse,
+  setCreditLimit,
+  getCreditLimit
 };

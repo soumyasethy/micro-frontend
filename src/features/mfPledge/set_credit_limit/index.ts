@@ -143,7 +143,7 @@ export const template: (
       fontSize: FontSizeTokens.XXXXL,
     },
     amount: <TypographyProps>{
-      label: `${addCommasToNumber(25000)}`,
+      label: `${addCommasToNumber(await SharedPropsService.getCreditLimit())}`,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
       fontSize: FontSizeTokens.XXXXL,
@@ -168,6 +168,7 @@ export const template: (
       size: SizeTypeTokens.XXXXXL,
     },
     slider: <CustomSliderProps & WidgetProps>{
+      value: await SharedPropsService.getCreditLimit(),
       minimumValue: 25000,
       maximumValue: maxAmount,
       step: 1000,
