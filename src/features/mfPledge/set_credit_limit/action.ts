@@ -46,7 +46,7 @@ export const OnChangeSlider: ActionFunction<any> = async(
   { navigate, goBack, setDatastore }
 ) => {
   value = action.payload.value;
-
+  console.log(" *** OnChangeSlider payload *** ", action.payload.value);
   /** On change of value update updateAvailableCASMap **/
   const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap()
@@ -108,17 +108,15 @@ export const goToEditPortFolio: ActionFunction<any> = async (
 ) => {
   const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap()
+  const editAmount = await SharedPropsService.getCreditLimit()
 
-  console.log("goToEditPortFolio, stepResponseObject", stepResponseObject)
-  console.log("goToEditPortFolio, updateAvailableCASMap", stepResponseObject)
-
-  if (parseInt(value) > 0) {
+  if (editAmount > 0) {
     stepResponseObject.availableCAS.forEach((item, index) => {
       stepResponseObject.availableCAS[index].pledgedUnits =
           item.totalAvailableUnits;
     });
     stepResponseObject.availableCAS = getUpdateAvailableCAS(
-        parseInt(value),
+        editAmount,
         stepResponseObject.availableCAS,
         stepResponseObject.isinNAVMap,
         stepResponseObject.isinLTVMap
