@@ -22,7 +22,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { updateSliderAmount, sliderAmountOnChange } from "./actions";
+import {updateSliderAmount, sliderAmountOnChange, getEditAmountOnLoad} from "./actions";
 import { RegexConfig } from "../../../configs/config";
 import {
   StepResponseObject,
@@ -117,7 +117,13 @@ export const updateSliderAmountMF: PageType<any> = {
   actions: {
     [ACTION.EDIT_SLIDER_AMOUNT]: updateSliderAmount,
     [ACTION.SLIDER_AMOUNT_ONCHANGE]: sliderAmountOnChange,
+    [ACTION.GET_EDIT_AMOUNT_ONLOAD]: getEditAmountOnLoad,
     //[ACTION.ENABLE_CONTINUE]: toggleCTA,
     //[ACTION.DISABLE_CONTINUE]: toggleCTA,
   },
+  action: {
+    type: ACTION.GET_EDIT_AMOUNT_ONLOAD,
+    payload: {},
+    routeId: ROUTE.UPDATE_SLIDER_AMOUNT
+  }
 };

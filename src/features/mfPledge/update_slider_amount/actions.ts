@@ -4,7 +4,7 @@ import { ContinuePayload } from "../../login/phone_number/types";
 import { User } from "../../login/otp_verify/types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
-import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import {ButtonProps, ButtonTypeTokens, TextInputProps} from "@voltmoney/schema";
 import { addCommasToNumber } from "../../../configs/utils";
 
 let editedAmount = "";
@@ -65,3 +65,17 @@ export const toggleCTA: ActionFunction<any> = async (
   );
 };
 */
+export const getEditAmountOnLoad: ActionFunction<any> = async (
+    action,
+    _datastore,
+    { setDatastore }
+): Promise<any> => {
+    const editAmount = await SharedPropsService.getCreditLimit()
+    await setDatastore(
+        ROUTE.UPDATE_SLIDER_AMOUNT,
+        "input",
+        <TextInputProps> {
+            value: `${editAmount}`
+        }
+    )
+}

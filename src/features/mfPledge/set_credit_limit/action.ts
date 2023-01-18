@@ -21,12 +21,12 @@ export const OnChangeSlider: ActionFunction<any> = (
   });
 };
 
-export const goBack: ActionFunction<any> = (
+export const goBack: ActionFunction<any> = async (
   action,
   _datastore,
   { navigate, goBack, setDatastore }
 ) => {
-  goBack();
+  await navigate(ROUTE.MF_PLEDGE_PORTFOLIO)
 };
 
 export const goConfirmPledge: ActionFunction<any> = async (
