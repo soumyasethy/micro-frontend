@@ -46,6 +46,35 @@ export const OnChangeSlider: ActionFunction<any> = async(
   { navigate, goBack, setDatastore }
 ) => {
   value = action.payload.value;
+
+  /** On change of value update updateAvailableCASMap **/
+  const stepResponseObject = action.payload.stepResponseObject;
+  const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap()
+  if (parseInt(value) > 0) {
+    stepResponseObject.availableCAS.forEach((item, index) => {
+      stepResponseObject.availableCAS[index].pledgedUnits =
+          item.totalAvailableUnits;
+    });
+    stepResponseObject.availableCAS = getUpdateAvailableCAS(
+        parseInt(value),
+        stepResponseObject.availableCAS,
+        stepResponseObject.isinNAVMap,
+        stepResponseObject.isinLTVMap
+    );
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      updateAvailableCASMap[key] = item;
+    });
+  } else {
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      item.pledgedUnits = item.totalAvailableUnits;
+      updateAvailableCASMap[key] = item;
+    });
+  }
+  await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+  /** **/
+
   await setDatastore(ROUTE.SET_CREDIT_LIMIT, "amount", <TypographyProps>{
     label: `${addCommasToNumber(parseInt(value))}`,
   });
@@ -106,7 +135,6 @@ export const goToEditPortFolio: ActionFunction<any> = async (
     });
   }
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
-
   await navigate(ROUTE.PORTFOLIO, {
     stepResponseObject,
     updateAvailableCASMap,
