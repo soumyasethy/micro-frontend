@@ -111,6 +111,7 @@ export const goConfirmPledge: ActionFunction<any> = async (
 ) => {
   const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap();
+  /*
   if (parseInt(value) > 0) {
     stepResponseObject.availableCAS.forEach((item, index) => {
       stepResponseObject.availableCAS[index].pledgedUnits =
@@ -133,6 +134,7 @@ export const goConfirmPledge: ActionFunction<any> = async (
       updateAvailableCASMap[key] = item;
     });
   }
+   */
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   await navigate(ROUTE.PLEDGE_CONFIRMATION, { stepResponseObject });
 };
