@@ -144,8 +144,8 @@ export const goToEditPortFolio: ActionFunction<any> = async (
 ) => {
   const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap()
-  const editAmount = await SharedPropsService.getCreditLimit()
-
+  //const editAmount = await SharedPropsService.getCreditLimit()
+  /*
   if (editAmount > 0) {
     stepResponseObject.availableCAS.forEach((item, index) => {
       stepResponseObject.availableCAS[index].pledgedUnits =
@@ -168,6 +168,7 @@ export const goToEditPortFolio: ActionFunction<any> = async (
       updateAvailableCASMap[key] = item;
     });
   }
+   */
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   await navigate(ROUTE.PORTFOLIO, {
     stepResponseObject,

@@ -28,13 +28,17 @@ import {
 } from "./types";
 import { ROUTE } from "../../../routes";
 import { getActualLimit, getPortfolioValue, getTotalLimit } from "./actions";
-import { StepResponseObject } from "../unlock_limit/types";
+import {AvailableCASItem, StepResponseObject} from "../unlock_limit/types";
 import { Datastore, WidgetProps } from "@voltmoney/types";
 import SharedPropsService from "../../../SharedPropsService";
 import {
   addCommasToNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
+import {User} from "../../login/otp_verify/types";
+import {AuthCASModel} from "../../../types/AuthCASModel";
+import {fetchPledgeLimitRepo} from "../unlock_limit_landing_V2/repo";
+import sharedPropsService from "../../../SharedPropsService";
 
 export const portfolioListDatastoreBuilderV2 = async (
   stepResponseObject: StepResponseObject,
@@ -260,6 +264,11 @@ export const togglePortfolio = async (
     ? updateAvailableCASMap[key].totalAvailableUnits
     : 0;
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+  await sharedPropsService.setCreditLimit(getTotalLimit(
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
+  ))
   return updateAvailableCASMap;
 };
 

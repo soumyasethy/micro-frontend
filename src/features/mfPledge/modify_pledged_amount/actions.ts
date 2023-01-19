@@ -6,6 +6,8 @@ import {
   customEditPortfolio,
   portfolioListDatastoreBuilder,
 } from "../portfolio/utils";
+import sharedPropsService from "../../../SharedPropsService";
+import {getTotalLimit} from "../portfolio/actions";
 let amount: number = 0;
 
 export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
@@ -13,6 +15,7 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
   _datastore,
   { setDatastore, goBack }
 ): Promise<any> => {
+  const stepResponseObject = action.payload.stepResponseObject
   await customEditPortfolio(
     action.payload.index,
     amount,
@@ -29,6 +32,7 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
   await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
     ...props.totalItem,
   });
+
   await goBack();
 };
 export const EditAmountAction: ActionFunction<AmountPayload> = async (

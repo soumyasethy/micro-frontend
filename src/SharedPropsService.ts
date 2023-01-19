@@ -281,7 +281,7 @@ async function setCreditLimit(creditLimit: number) {
 async function getCreditLimit() {
   return _globalProps.creditLimit;
 }
-async function setListItemDataCAS(listItemsDataCAS: ListItemDataProps) {
+async function setListItemDataCAS(listItemsDataCAS: any) {
   _globalProps.listItemDataCAS = listItemsDataCAS;
 }
 async function getListItemDataCAS() {

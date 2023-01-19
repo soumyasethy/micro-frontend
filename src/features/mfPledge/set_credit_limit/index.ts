@@ -335,7 +335,7 @@ export const template: (
 
 export const setCreditLimitMf: PageType<any> = {
   bgColor: "#F3F5FC",
-  onLoad: async (_, { maxAmount }) => {
+  onLoad: async (_) => {
     const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
     const pledgeLimitResponse = authCAS
       ? { data: authCAS }
@@ -344,10 +344,12 @@ export const setCreditLimitMf: PageType<any> = {
         }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
     const creditAmount = await sharedPropsService.getCreditLimit();
-    console.log("creditAmount: ", creditAmount)
-    const updateAvailableCASMap = {};
+    const updateAvailableCASMapSharedProps = await sharedPropsService.getAvailableCASMap();
+    const updateAvailableCASMap = updateAvailableCASMapSharedProps;
+
 
     if (creditAmount > 0) {
+      /*
       stepResponseObject.availableCAS.forEach((item, index) => {
         stepResponseObject.availableCAS[index].pledgedUnits =
             item.totalAvailableUnits;
@@ -362,6 +364,7 @@ export const setCreditLimitMf: PageType<any> = {
         let key = `${item.isinNo}-${item.folioNo}`;
         updateAvailableCASMap[key] = item;
       });
+       */
     } else {
       stepResponseObject.availableCAS.map((item, index) => {
         let key = `${item.isinNo}-${item.folioNo}`;
@@ -370,7 +373,7 @@ export const setCreditLimitMf: PageType<any> = {
       });
     }
     await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
-    return Promise.resolve(template(maxAmount, stepResponseObject, updateAvailableCASMap));
+    return Promise.resolve(template(stepResponseObject.availableCreditAmount, stepResponseObject, updateAvailableCASMap));
   },
   actions: {
     [ACTION.ON_CHANGE_SLIDER]: OnChangeSlider,
@@ -379,5 +382,4 @@ export const setCreditLimitMf: PageType<any> = {
     [ACTION.EDIT_PORTFOLIO]: goToEditPortFolio,
     [ACTION.EDIT_LIMIT]: editSliderAmount,
   },
-  clearPrevious: true,
 };
