@@ -8,6 +8,8 @@ import {
   FontFamilyTokens,
   FontSizeTokens, IconTokens,
   LimitCardProps,
+  LottieProps,
+  LottieTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -19,7 +21,7 @@ import {
 } from "@voltmoney/schema";
 import {ROUTE} from "../../../routes";
 import {ACTION, StepResponseObject} from "./types";
-import {continueLimit} from "./actions";
+import {continueLimit, onLoad} from "./actions";
 import {fetchPledgeLimitRepo} from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
 import {AuthCASModel} from "../../../types/AuthCASModel";
@@ -53,6 +55,7 @@ export const template: (availableCreditAmount: number,
     id: ROUTE.UNLOCK_LIMIT_LANDING,
     type: LAYOUTS.LIST,
     widgets: [
+      {id: 'lottie', type: WIDGET.LOTTIE, position: POSITION.ABSOLUTE_CENTER},
       { id: 'topSpace', type:WIDGET.SPACE },
       { id: 'congratulationsText', type: WIDGET.TEXT },
       { id: 'titleText', type: WIDGET.TEXT },
@@ -66,6 +69,11 @@ export const template: (availableCreditAmount: number,
     ],
   },
   datastore: <Datastore>{
+    lottie: <LottieProps> {
+      uri: LottieTokens.UnlockNew,
+      autoplay: true,
+      loop: false,
+    },
     congratulationsText: <TypographyProps>{
       label: 'Congratulations!',
       fontSize: FontSizeTokens.XL,
@@ -295,6 +303,12 @@ export const unlockLimitLandingMFV2: PageType<any> = {
     [ACTION.UNLOCK_LIMIT]: continueLimit,
     [ACTION.GET_MORE_MF_PORTFOLIO]: getMoreMfPortfolio,
     [ACTION.REMOVE_GET_MORE_MF_PORTFOLIO]: removeGetMorePortfolio,
+    [ACTION.ON_LOAD]: onLoad,
+  },
+  action: {
+    type: ACTION.ON_LOAD,
+    routeId: ROUTE.UNLOCK_LIMIT_LANDING,
+    payload: {},
   },
   clearPrevious: true,
 };

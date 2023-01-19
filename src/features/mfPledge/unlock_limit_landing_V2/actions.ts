@@ -83,3 +83,15 @@ export const removeGetMorePortfolio: ActionFunction<any> = async (
     ]);
   }
 };
+
+export const onLoad: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { removeWidgets }
+): Promise<any> => {
+  setTimeout(() => {
+    removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
+      { id: "lottie", type: WIDGET.LOTTIE },
+    ]);
+  }, 2000);
+};
