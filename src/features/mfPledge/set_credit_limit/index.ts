@@ -29,11 +29,13 @@ import {ROUTE} from "../../../routes";
 import {ACTION} from "./types";
 import {editSliderAmount, goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider} from "./action";
 import {addCommasToNumber} from "../../../configs/utils";
-import {portfolioListDatastoreBuilder} from "../portfolio_readonly/utils";
 import { StepResponseObject, UpdateAvailableCASMap} from "../unlock_limit/types";
 import {AuthCASModel} from "../../../types/AuthCASModel";
 import SharedPropsService from "../../../SharedPropsService";
 import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
+import {portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
+import sharedPropsService from "../../../SharedPropsService";
+import {getUpdateAvailableCAS} from "../modify_limit/actions";
 
 export const template: (
   maxAmount: number,
@@ -294,7 +296,7 @@ export const template: (
     space6: <SpaceProps>{
       size: SizeTypeTokens.MD,
     },
-    ...(await portfolioListDatastoreBuilder(stepResponseObject)),
+    ...(await portfolioListDatastoreBuilderSetCreditLimit(stepResponseObject)),
     ctaCard: <CardProps>{
       bgColor: ColorTokens.White,
       body: { widgetItems: [{ id: "ctaBody", type: WIDGET.STACK }] },
@@ -333,7 +335,7 @@ export const template: (
 
 export const setCreditLimitMf: PageType<any> = {
   bgColor: "#F3F5FC",
-  onLoad: async (_, { maxAmount, updateAvailableCASMap }) => {
+  onLoad: async (_, { maxAmount }) => {
     const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
     const pledgeLimitResponse = authCAS
       ? { data: authCAS }
@@ -341,6 +343,33 @@ export const setCreditLimitMf: PageType<any> = {
           data: response,
         }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
+    const creditAmount = await sharedPropsService.getCreditLimit();
+    console.log("creditAmount: ", creditAmount)
+    const updateAvailableCASMap = {};
+
+    if (creditAmount > 0) {
+      stepResponseObject.availableCAS.forEach((item, index) => {
+        stepResponseObject.availableCAS[index].pledgedUnits =
+            item.totalAvailableUnits;
+      });
+      stepResponseObject.availableCAS = getUpdateAvailableCAS(
+          creditAmount,
+          stepResponseObject.availableCAS,
+          stepResponseObject.isinNAVMap,
+          stepResponseObject.isinLTVMap
+      );
+      stepResponseObject.availableCAS.map((item, index) => {
+        let key = `${item.isinNo}-${item.folioNo}`;
+        updateAvailableCASMap[key] = item;
+      });
+    } else {
+      stepResponseObject.availableCAS.map((item, index) => {
+        let key = `${item.isinNo}-${item.folioNo}`;
+        item.pledgedUnits = item.totalAvailableUnits;
+        updateAvailableCASMap[key] = item;
+      });
+    }
+    await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
     return Promise.resolve(template(maxAmount, stepResponseObject, updateAvailableCASMap));
   },
   actions: {

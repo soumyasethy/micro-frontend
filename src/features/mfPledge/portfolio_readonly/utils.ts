@@ -20,11 +20,14 @@ import {
   addCommasToNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
+import sharedPropsService from "../../../SharedPropsService";
 
 export const portfolioListDatastoreBuilder = async (
   stepResponseObject: StepResponseObject,
   searchKeyword: string = ""
 ): Promise<Datastore> => {
+
+  console.log("stepResponseObject  ", await sharedPropsService.getAuthCASResponse())
   const selectedMap = {};
   const listItemDataProps: ListItemDataProps[] = [];
   const updateAvailableCASMap = await SharedPropsService.getAvailableCASMap();

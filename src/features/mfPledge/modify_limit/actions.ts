@@ -13,7 +13,7 @@ import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
 import { ConfigValues } from "../../../configs/config";
 
 let amount: number = ConfigValues.MinimumAmountAllowed
-const getUpdateAvailableCAS = (
+export const getUpdateAvailableCAS = (
   amountRequired: number,
   availableCAS: AvailableCASItem[],
   isinNavMap: IsinNAVMap,
