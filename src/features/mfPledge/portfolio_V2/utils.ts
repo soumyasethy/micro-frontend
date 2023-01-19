@@ -211,7 +211,7 @@ export const portfolioListDatastoreBuilderV2 = async (
     },
     outOfText2: <TypographyProps>{
       label: `/ ₹${addCommasToNumber(
-        parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+        parseInt(stepResponseObject["availableCreditAmount"].toString())
       )}`,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
