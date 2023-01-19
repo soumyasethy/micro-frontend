@@ -95,6 +95,7 @@ export const template: (availableCreditAmount: number,
       limitAmount: `${addCommasToNumber(parseInt(availableCreditAmount.toString()))}`,
       fetchedAmount: `${addCommasToNumber(parseInt(stepResponseObject['totalPortfolioAmount'].toString()))}`,
       label: 'Available credit limit',
+      showLottie: false
     },
     continue: <ButtonProps & WidgetProps>{
       label: 'Continue',
@@ -306,9 +307,9 @@ export const unlockLimitLandingMFV2: PageType<any> = {
     [ACTION.ON_LOAD]: onLoad,
   },
   action: {
-    type: ACTION.ON_LOAD,
     routeId: ROUTE.UNLOCK_LIMIT_LANDING,
     payload: {},
+    type: ACTION.ON_LOAD
   },
   clearPrevious: true,
 };

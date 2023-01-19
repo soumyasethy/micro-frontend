@@ -71,12 +71,14 @@ export const getMoreMfPortfolio: ActionFunction<
       { navigate, ...props }
   );
 };
+
 export const removeGetMorePortfolio: ActionFunction<any> = async (
     action,
     _datastore,
     { removeWidgets }
 ): Promise<any> => {
-  if (await isMorePortfolioRenderCheck()) {
+  console.log("isMorePortfolioRenderCheck: ", await isMorePortfolioRenderCheck())
+  if (!(await isMorePortfolioRenderCheck())) {
     console.log("Remove Widget")
     await removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
       { id: "otherSourceStack", type: WIDGET.STACK },
@@ -89,9 +91,18 @@ export const onLoad: ActionFunction<any> = async (
   _datastore,
   { removeWidgets }
 ): Promise<any> => {
-  setTimeout(() => {
-    removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
-      { id: "lottie", type: WIDGET.LOTTIE },
+  if (!(await isMorePortfolioRenderCheck())) {
+    console.log("Remove Widget")
+    await removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
+      { id: "otherSourceStack", type: WIDGET.STACK },
     ]);
-  }, 2000);
+  } else {
+    setTimeout(() => {
+      removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
+        { id: "lottie", type: WIDGET.LOTTIE },
+      ]);
+    }, 2000);
+  }
+  //console.log("isMorePortfolioRenderCheck: ", await isMorePortfolioRenderCheck())
+
 };
