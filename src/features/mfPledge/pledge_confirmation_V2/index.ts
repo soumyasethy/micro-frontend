@@ -208,7 +208,9 @@ export const template: (
         color: ColorTokens.Secondary_100,
       },
       selectedLimitValueText: <TypographyProps>{
-        label: `${addCommasToNumber(await SharedPropsService.getCreditLimit())}`,
+        label: `${addCommasToNumber(
+          await SharedPropsService.getCreditLimit()
+        )}`,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
         fontSize: FontSizeTokens.XXL,
@@ -348,9 +350,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       interestRateValue: <TypographyProps>{
-        label: `₹${
-          Math.ceil(((100 * stepResponseObject.interestRate) / 12) * 100) / 100
-        }/Month`,
+        label: `${stepResponseObject["interestRate"]}%`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
@@ -479,7 +479,7 @@ export const template: (
         action: {
           type: ACTION.SEND_OTP_FOR_PLEDGE_CONFIRM,
           routeId: ROUTE.PLEDGE_CONFIRMATION,
-          payload:<OtpPayloadForPledgeConfirm>{
+          payload: <OtpPayloadForPledgeConfirm>{
             value: stepResponseObject,
             widgetId: "continue",
             isResend: false,
@@ -492,7 +492,6 @@ export const template: (
 
 export const pledgeConfirmationMFV2: PageType<any> = {
   onLoad: async ({ network }, { stepResponseObject }) => {
-    // console.log("stepResponseObject", stepResponseObject['availableCreditAmount']);
     /// Pledging
     const mfPortfolioArray: AvailableCASItem[] = (
       stepResponseObject as StepResponseObject
