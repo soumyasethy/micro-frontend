@@ -11,6 +11,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  CardOrientation,
   CardProps,
   ColorTokens,
   DividerProps,
@@ -90,6 +91,15 @@ export const template: (
           position: POSITION.STICKY_BOTTOM,
         },
         { id: "spaceCard", type: WIDGET.SPACE },
+        ...(showOtpConfirmation
+          ? [
+              {
+                id: "otpConfirmInfo",
+                type: WIDGET.CARD,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+            ]
+          : []),
         {
           id: "ctaCard",
           type: WIDGET.CARD,
@@ -102,6 +112,37 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      otpConfirmInfo: <CardProps>{
+        bgColor: ColorTokens.Secondary_05,
+        width: StackWidth.FULL,
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG,
+          left: SizeTypeTokens.LG,
+          right: SizeTypeTokens.LG,
+        },
+        bodyOrientation: CardOrientation.HORIZONTAL,
+        body: {
+          widgetItems: [
+            { id: "infoIcon", type: WIDGET.ICON },
+            { id: "infoIconSpace", type: WIDGET.SPACE },
+            { id: "infoLabel", type: WIDGET.TEXT },
+          ],
+        },
+      },
+      infoIcon: <IconProps>{
+        name: IconTokens.InfoFilled,
+        color: ColorTokens.Secondary_100,
+      },
+      infoIconSpace: <SpaceProps>{ size: SizeTypeTokens.Size10 },
+      infoLabel: <TypographyProps>{
+        label: "We will trigger 2 OTP’s to confirm your pledge",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontColor: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XS,
+        lineHeight: 18,
+      },
       card: <CardProps>{
         bgColor: ColorTokens.White,
         body: { widgetItems: [{ id: "header", type: WIDGET.STACK }] },
@@ -492,6 +533,7 @@ export const template: (
 
 export const pledgeConfirmationMFV2: PageType<any> = {
   onLoad: async ({ network }, { stepResponseObject }) => {
+    console.log("stepResponseObject", stepResponseObject);
     /// Pledging
     const mfPortfolioArray: AvailableCASItem[] = (
       stepResponseObject as StepResponseObject
