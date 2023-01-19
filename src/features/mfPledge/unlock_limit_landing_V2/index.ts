@@ -281,7 +281,7 @@ export const unlockLimitLandingMFV2: PageType<any> = {
       updateAvailableCASMap[key] = item;
     });
     await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
-
+    await SharedPropsService.setCreditLimit(availableCreditAmount);
     return Promise.resolve(template(
         availableCreditAmount,
         availableCASX,
