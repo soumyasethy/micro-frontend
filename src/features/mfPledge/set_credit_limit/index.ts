@@ -292,6 +292,7 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
       fontSize: FontSizeTokens.SM,
+      color: ColorTokens.Grey_Charcoal
     },
     space6: <SpaceProps>{
       size: SizeTypeTokens.MD,

@@ -96,13 +96,13 @@ export const onLoad: ActionFunction<any> = async (
     await removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
       { id: "otherSourceStack", type: WIDGET.STACK },
     ]);
-  } else {
+  }
     setTimeout(() => {
       removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
         { id: "lottie", type: WIDGET.LOTTIE },
       ]);
     }, 2000);
-  }
+
   //console.log("isMorePortfolioRenderCheck: ", await isMorePortfolioRenderCheck())
 
 };
