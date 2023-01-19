@@ -87,6 +87,12 @@ export const OnChangeSlider: ActionFunction<any> = async(
   await setDatastore(ROUTE.SET_CREDIT_LIMIT, "slider", <TypographyProps>{
     value: SharedPropsService.getCreditLimit(),
   });
+
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomStackText", <TypographyProps> {
+      label: `₹${addCommasToNumber(parseInt(value))} out of ₹${addCommasToNumber(
+          parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+      )} are selected for pledging.`
+  })
 };
 
 export const goBack: ActionFunction<any> = async (
