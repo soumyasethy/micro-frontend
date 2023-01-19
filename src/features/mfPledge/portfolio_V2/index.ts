@@ -89,7 +89,7 @@ export const template: (
       space1: <SpaceProps> { size: SizeTypeTokens.XL },
       space2: <SpaceProps> { size: SizeTypeTokens.XL},
       subTitleText: <TypographyProps> {
-        label: `${addCommasToNumber(
+        label: `₹${addCommasToNumber(await SharedPropsService.getCreditLimit())} out of ₹${addCommasToNumber(
           parseInt(stepResponseObject["totalPortfolioAmount"].toString())
         )} are selected for pledging.`,
         fontSize: FontSizeTokens.SM,

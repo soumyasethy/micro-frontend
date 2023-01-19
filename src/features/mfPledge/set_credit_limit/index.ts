@@ -286,7 +286,7 @@ export const template: (
       size: SizeTypeTokens.MD,
     },
     bottomStackText: <TypographyProps>{
-      label: `₹${addCommasToNumber(
+      label: `₹${addCommasToNumber(await SharedPropsService.getCreditLimit())} out of ₹${addCommasToNumber(
         parseInt(stepResponseObject["totalPortfolioAmount"].toString())
       )} are selected for pledging.`,
       fontFamily: FontFamilyTokens.Inter,
