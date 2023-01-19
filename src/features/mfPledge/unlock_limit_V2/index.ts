@@ -137,11 +137,11 @@ export const template: (
           type: WIDGET.CARD,
           position: POSITION.ABSOLUTE_TOP,
         },
-        {
-          id: "Mspace0",
-          type: WIDGET.SPACE,
-          position: POSITION.ABSOLUTE_TOP,
-        },
+        // {
+        //   id: "Mspace0",
+        //   type: WIDGET.SPACE,
+        //   position: POSITION.ABSOLUTE_TOP,
+        // },
         {
           id: "creditLimitCard",
           type: WIDGET.CARD,
@@ -242,7 +242,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
       },
-      Mspace0: <SpaceProps>{ size: SizeTypeTokens.XL },
+      // Mspace0: <SpaceProps>{ size: SizeTypeTokens.XL },
       creditLimitCard: <CardProps>{
         bgColor: ColorTokens.White,
         body: { widgetItems: [{ id: "body", type: WIDGET.STACK }] },
