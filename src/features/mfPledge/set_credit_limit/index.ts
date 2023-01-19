@@ -36,6 +36,7 @@ import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
 import {portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
 import sharedPropsService from "../../../SharedPropsService";
 import {getUpdateAvailableCAS} from "../modify_limit/actions";
+// import { getPortfolioValue } from "../portfolio_readonly/actions";
 
 export const template: (
   maxAmount: number,
@@ -374,6 +375,13 @@ export const setCreditLimitMf: PageType<any> = {
       });
     }
     await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+    
+    // const portValue = getPortfolioValue(
+    //   stepResponseObject["availableCAS"],
+    //   stepResponseObject["isinNAVMap"]
+    // );
+  
+    // console.log("portValue", portValue);
     return Promise.resolve(template(stepResponseObject.availableCreditAmount, stepResponseObject, updateAvailableCASMap));
   },
   actions: {
