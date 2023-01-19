@@ -22,12 +22,9 @@ import {
 } from "../../../configs/utils";
 import sharedPropsService from "../../../SharedPropsService";
 
-export const portfolioListDatastoreBuilderSetCreditLimit = async (
+export const listItemDataBuilder = async(
     stepResponseObject: StepResponseObject,
-    searchKeyword: string = ""
-): Promise<Datastore> => {
-
-    console.log("stepResponseObject  ", await sharedPropsService.getAuthCASResponse())
+):Promise<any> => {
     const selectedMap = {};
     const listItemDataProps: ListItemDataProps[] = [];
     const updateAvailableCASMap = await SharedPropsService.getAvailableCASMap();
@@ -73,6 +70,61 @@ export const portfolioListDatastoreBuilderSetCreditLimit = async (
             trailSubTitle: subTitle,
             secondaryText: portfolioValue
         });
+    });
+    return listItemDataProps
+}
+
+export const portfolioListDatastoreBuilderSetCreditLimit = async (
+    stepResponseObject: StepResponseObject,
+    searchKeyword: string = ""
+): Promise<Datastore> => {
+
+    const selectedMap = {};
+    const listItemDataProps: ListItemDataProps[] = [];
+    const updateAvailableCASMap = await SharedPropsService.getAvailableCASMap();
+
+    stepResponseObject.availableCAS.forEach((item, index) => {
+        const key = `${item.isinNo}-${item.folioNo}`;
+        selectedMap[index] = updateAvailableCASMap[key].pledgedUnits > 0;
+        stepResponseObject.availableCAS[index] = updateAvailableCASMap[key];
+
+        const title = `₹ ${addCommasToNumber(
+            roundDownToNearestHundred(
+                getTotalLimit(
+                    [updateAvailableCASMap[key]],
+                    stepResponseObject.isinNAVMap,
+                    stepResponseObject.isinLTVMap
+                )
+            )
+        )}`;
+
+        const subTitle = `/ ₹ ${addCommasToNumber(
+            roundDownToNearestHundred(
+                getActualLimit(
+                    [updateAvailableCASMap[key]],
+                    stepResponseObject.isinNAVMap,
+                    stepResponseObject.isinLTVMap
+                )
+            )
+        )}`;
+
+        const portfolioValue = `Portfolio value ${addCommasToNumber(
+            roundDownToNearestHundred(
+                getPortfolioValue(
+                    [updateAvailableCASMap[key]],
+                    stepResponseObject.isinNAVMap,
+                )
+            )
+        )}`
+
+        listItemDataProps.push({
+            label: updateAvailableCASMap[key].schemeName,
+            info: "",
+            trailTitle: title,
+            trailSubTitle: subTitle,
+            secondaryText: portfolioValue
+        });
+        sharedPropsService.setListItemDataCAS(listItemDataProps)
     });
 
     const props = <ListProps & WidgetProps>{

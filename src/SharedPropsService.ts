@@ -11,6 +11,7 @@ import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
 import _ from "lodash";
+import {ListItemDataProps} from "@voltmoney/schema";
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
@@ -49,6 +50,7 @@ type GlobalProps = {
     [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
   };
   creditLimit: number;
+  listItemDataCAS: any;
 };
 
 let _globalProps: GlobalProps = {
@@ -88,6 +90,7 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
   },
   creditLimit: 25000,
+  listItemDataCAS: []
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -278,6 +281,12 @@ async function setCreditLimit(creditLimit: number) {
 async function getCreditLimit() {
   return _globalProps.creditLimit;
 }
+async function setListItemDataCAS(listItemsDataCAS: ListItemDataProps) {
+  _globalProps.listItemDataCAS = listItemsDataCAS;
+}
+async function getListItemDataCAS() {
+  return _globalProps.listItemDataCAS;
+}
 
 export default {
   setBuildType,
@@ -313,5 +322,7 @@ export default {
   setAuthCASResponse,
   getAuthCASResponse,
   setCreditLimit,
-  getCreditLimit
+  getCreditLimit,
+  setListItemDataCAS,
+  getListItemDataCAS,
 };

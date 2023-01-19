@@ -379,4 +379,5 @@ export const setCreditLimitMf: PageType<any> = {
     [ACTION.EDIT_PORTFOLIO]: goToEditPortFolio,
     [ACTION.EDIT_LIMIT]: editSliderAmount,
   },
+  clearPrevious: true,
 };

@@ -1,12 +1,14 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { TypographyProps } from "@voltmoney/schema";
+import {ListProps, TypographyProps} from "@voltmoney/schema";
 import { addCommasToNumber } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
 import {AvailableCASItem, IsinLTVMap, IsinNAVMap} from "../unlock_limit/types";
 import {getTotalLimit} from "../portfolio/actions";
 import sharedPropsService from "../../../SharedPropsService";
 import { ConfigValues } from "../../../configs/config";
+import {listItemDataBuilder, portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
+import {ACTION} from "./types";
 
 let value = ConfigValues.MinimumAmountAllowed.toString();
 
@@ -47,11 +49,9 @@ export const OnChangeSlider: ActionFunction<any> = async(
   { navigate, goBack, setDatastore }
 ) => {
   value = action.payload.value;
-  console.log(" *** OnChangeSlider payload *** ", action.payload.value);
   /** On change of value update updateAvailableCASMap **/
   const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap();
-  console.log(" *** OnChangeSlider value *** ", value);
   if (parseInt(value) > 0) {
     stepResponseObject.availableCAS.forEach((item, index) => {
       stepResponseObject.availableCAS[index].pledgedUnits =
@@ -76,7 +76,10 @@ export const OnChangeSlider: ActionFunction<any> = async(
   }
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   /** **/
-
+  const updatedListProps = await listItemDataBuilder(stepResponseObject)
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, 'listItem', <ListProps> {
+    data: updatedListProps
+  })
   await setDatastore(ROUTE.SET_CREDIT_LIMIT, "amount", <TypographyProps>{
     label: `${addCommasToNumber(parseInt(value))}`,
   });
