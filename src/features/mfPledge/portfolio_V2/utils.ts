@@ -182,7 +182,7 @@ export const portfolioListDatastoreBuilderV2 = async (
       alignItems: StackAlignItems.flexEnd,
       widgetItems: [
         { id: 'outOfTextStack', type: WIDGET.STACK },
-        { id: 'edit_button', type: WIDGET.BUTTON }
+        // { id: 'edit_button', type: WIDGET.BUTTON }
       ]
     },
     outOfTextStack: <StackProps>{
@@ -218,12 +218,12 @@ export const portfolioListDatastoreBuilderV2 = async (
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
     },
-    edit_button: <ButtonProps>{
-      type: ButtonTypeTokens.MediumGhost,
-      label: "Edit",
-      paddingHorizontal: SizeTypeTokens.NONE,
-      paddingVertical: SizeTypeTokens.NONE,
-    },
+    // edit_button: <ButtonProps>{
+    //   type: ButtonTypeTokens.MediumGhost,
+    //   label: "Edit",
+    //   paddingHorizontal: SizeTypeTokens.NONE,
+    //   paddingVertical: SizeTypeTokens.NONE,
+    // },
     totalCreditLimitText: <TypographyProps>{
       label: "Total credit limit",
       fontFamily: FontFamilyTokens.Inter,
