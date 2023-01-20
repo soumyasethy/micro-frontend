@@ -228,7 +228,7 @@ export const template: (
           fontFamily: FontFamilyTokens.Inter,
           color: ColorTokens.Grey_Charcoal,
           fontWeight: "400",
-          fontSize: FontSizeTokens.SM,
+          fontSize: FontSizeTokens.XS,
         }
       },
     }

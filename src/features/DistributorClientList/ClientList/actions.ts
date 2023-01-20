@@ -1,4 +1,4 @@
-import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, FontFamilyTokens, StepperStateToken, WIDGET } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, CtaCardProps, FontFamilyTokens, StepperStateToken, WIDGET } from "@voltmoney/schema";
 import { ActionFunction, Datastore, POSITION } from "@voltmoney/types";
 import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
@@ -59,6 +59,15 @@ export const appendData: ActionFunction<dataTypeClient> = async (
                 routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
             },
         },
+        continuePendingButtonCTA: <CtaCardProps>{
+            label: '',
+            info: '',
+            actionLabel: 'Create new application',
+            action: {
+                type: ACTION.CTA,
+                routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+            },
+        },
         continueInProgressButton: <ButtonProps>{
             fontFamily: FontFamilyTokens.Poppins,
             label: "Create new application",
@@ -72,15 +81,33 @@ export const appendData: ActionFunction<dataTypeClient> = async (
     };
     if (action.payload.value === 1) {
         await removeWidgets(ROUTE.DISTRIBUTOR_CLIENT_LIST, [
-            { id: "continuePendingButton", type: WIDGET.BUTTON },
-            { id: "continueInProgressButton", type: WIDGET.BUTTON },
+            // { id: "continuePendingButton", type: WIDGET.BUTTON },
+            {
+                id: "continuePendingButtonCTA", type: WIDGET.CTACARD, position: POSITION.STICKY_BOTTOM,
+                padding: {
+                    left: 0,
+                    right: 0,
+                    horizontal: 0,
+                }
+            },
+          //  { id: "continueInProgressButton", type: WIDGET.BUTTON },
         ]);
     } else {
         if (action.payload.PendingData.length > 0) {
             await appendWidgets(
                 ROUTE.DISTRIBUTOR_CLIENT_LIST,
                 datastore,
-                [{ id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },]
+                [
+                    //{ id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },
+                    {
+                        id: "continuePendingButtonCTA", type: WIDGET.CTACARD, position: POSITION.STICKY_BOTTOM,
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            horizontal: 0,
+                        }
+                    }
+                ]
             );
         }
 
@@ -103,6 +130,15 @@ export const appendDatas: ActionFunction<dataTypeClient> = async (
                 routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
             },
         },
+        continuePendingButtonCTA: <CtaCardProps>{
+            label: '',
+            info: '',
+            actionLabel: 'Create new application',
+            action: {
+                type: ACTION.CTA,
+                routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+            },
+        },
         continueInProgressButton: <ButtonProps>{
             fontFamily: FontFamilyTokens.Poppins,
             label: "Create new application",
@@ -116,13 +152,23 @@ export const appendDatas: ActionFunction<dataTypeClient> = async (
     };
     if (action.payload.value === 1) {
         await removeWidgets(ROUTE.DISTRIBUTOR_CLIENT_LIST, [
-            { id: "continuePendingButton", type: WIDGET.BUTTON },
+            // { id: "continuePendingButton", type: WIDGET.BUTTON },
+            {
+                id: "continuePendingButtonCTA", type: WIDGET.CTACARD, position: POSITION.STICKY_BOTTOM,
+                padding: {
+                    left: 0,
+                    right: 0,
+                    horizontal: 0,
+                }
+            }
         ]);
         if (action.payload.InProgressData.length > 0) {
             await appendWidgets(
                 ROUTE.DISTRIBUTOR_CLIENT_LIST,
                 datastore,
-                [{ id: "continueInProgressButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },]
+                [
+                  //  { id: "continueInProgressButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },
+                ]
             );
         }
     } else {
@@ -130,11 +176,21 @@ export const appendDatas: ActionFunction<dataTypeClient> = async (
             await appendWidgets(
                 ROUTE.DISTRIBUTOR_CLIENT_LIST,
                 datastore,
-                [{ id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },]
+                [
+                    //{ id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM },
+                    {
+                        id: "continuePendingButtonCTA", type: WIDGET.CTACARD, position: POSITION.STICKY_BOTTOM,
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            horizontal: 0,
+                        }
+                    }
+                ]
             );
         }
         await removeWidgets(ROUTE.DISTRIBUTOR_CLIENT_LIST, [
-            { id: "continueInProgressButton", type: WIDGET.BUTTON },
+          //  { id: "continueInProgressButton", type: WIDGET.BUTTON },
         ]);
     }
 };
@@ -164,12 +220,17 @@ export const onClickCTA: ActionFunction<any> = async (
     { network, setDatastore, navigate }
 ): Promise<any> => {
     const applicationId = "";
+    await setDatastore(action.routeId, "continue", <ButtonProps>{
+        loading: true,
+    });
     const response = await network.post(
         partnerApi.stepperData,
         {},
         { headers: await getAppHeader() }
     );
-
+    await setDatastore(action.routeId, "continue", <ButtonProps>{
+        loading: false,
+    });
     let data1 = [];
     let data = [];
     let filtered_data = [];
@@ -190,16 +251,16 @@ export const onClickCTA: ActionFunction<any> = async (
         return a.id - b.id;
     });
 
-    data.forEach((item,index) => {
+    data.forEach((item, index) => {
         const stepData: any = new Object();
-        if(item.horizontalTitle === "Basic Details"){
+        if (item.horizontalTitle === "Basic Details") {
             stepData.title = item.title;
             stepData.subTitle = item.subTitle;
             stepData.id = item.id;
             stepData.status = StepperStateToken.IN_PROGRESS;
             stepData.horizontalTitle = item.horizontalTitle;
             filtered_data.push(stepData);
-        }else{
+        } else {
             stepData.title = item.title;
             stepData.subTitle = item.subTitle;
             stepData.id = item.id;

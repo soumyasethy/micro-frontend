@@ -184,7 +184,7 @@ export const template: (
       },
       continue: <ButtonProps & WidgetProps>{
         type: `${isDisabled}` ? ButtonTypeTokens.LargeFilled:ButtonTypeTokens.LargeOutline,
-        label: "Save & Confirm",
+        label: "Save & Continue",
         width: ButtonWidthTypeToken.FULL,
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,

@@ -146,7 +146,7 @@ export const template: (
             justifyContent: StackJustifyContent.center,
             widgetItems: [
                 { id: "infoItems1", type: WIDGET.TEXT },
-                { id: "infoItems2", type: WIDGET.TEXT },
+                { id: "infoItems2", type: WIDGET.STACK },
                
             ],
         },
@@ -158,11 +158,29 @@ export const template: (
             lineHeight: 24,
             fontFamily: FontFamilyTokens.Inter
         },
-        infoItems2:<TypographyProps>{
-            label: `message to ${name}`,
+        infoItems2:<StackProps>{
+            type: StackType.row,
+            alignItems: StackAlignItems.center,
+            justifyContent: StackJustifyContent.center,
+            widgetItems: [
+                { id: "infoItems3", type: WIDGET.TEXT },
+                { id: "infoItems4", type: WIDGET.TEXT },
+               
+            ],
+        },
+        infoItems3:<TypographyProps>{
+            label: `message to `,
+            fontSize: FontSizeTokens.SM,
+            fontWeight: '400',
+            color: ColorTokens.Grey_Charcoal,
+            lineHeight: 24,
+            fontFamily: FontFamilyTokens.Inter
+        },
+        infoItems4:<TypographyProps>{
+            label: `${name}`,
             fontSize: FontSizeTokens.SM,
             fontWeight: '500',
-            color: ColorTokens.Grey_Charcoal,
+            color: ColorTokens.Grey_Night,
             lineHeight: 24,
             fontFamily: FontFamilyTokens.Inter
         },
@@ -181,36 +199,25 @@ export const template: (
         },
         insItems:<TypographyProps>{
             label: "Share link with investor",
-            fontSize: FontSizeTokens.XL,
+            fontSize: FontSizeTokens.MD,
             fontWeight: '600',
             color: ColorTokens.Grey_Night,
             lineHeight: 24,
             fontFamily: FontFamilyTokens.Inter
         },
         insSpace:<SpaceProps>{
-            size:SizeTypeTokens.XL
+            size:SizeTypeTokens.MD
         },
        
         share: <ButtonProps & WidgetProps>{
             label: "Share via WhatsApp",
-            type: ButtonTypeTokens.LargeSoftFilled,
+            type: ButtonTypeTokens.MediumSoftFilled,
             icon:<IconProps>{
                 name:IconTokens.Whatsapp,
                 size:IconSizeTokens.XL
             },
             labelColor: ColorTokens.Grey_Night,
             width: ButtonWidthTypeToken.FULL,
-            // onPress: () => {
-            //     const screenType = getScreenType(Dimensions.get("window").width);
-            //     if (
-            //       screenType === SCREEN_SIZE.X_SMALL ||
-            //       screenType === SCREEN_SIZE.SMALL
-            //     ) {
-            //       window.open(DeepLinks.MOBILE_WHATSAPP, "_parent"); //Linking.openURL(DeepLinks.MOBILE_WHATSAPP);
-            //     } else {
-            //       window.open(DeepLinks.WHATSAPP, "_blank"); //Linking.openURL(DeepLinks.WHATSAPP)
-            //     }
-            //   },
             action: {
                
                 type: ACTION.SHARE,
@@ -229,7 +236,7 @@ export const template: (
                 name:IconTokens.Copy,
                 size:IconSizeTokens.XL
             },
-            type: ButtonTypeTokens.LargeSoftFilled,
+            type: ButtonTypeTokens.MediumSoftFilled,
             width: ButtonWidthTypeToken.FULL,
             action: {
                 type: ACTION.ON_CLIPBOARD,
@@ -240,11 +247,11 @@ export const template: (
             },
         },
         copySpace: <SpaceProps>{
-            size: SizeTypeTokens.MD
+            size: SizeTypeTokens.XXXL
         },
         continue: <ButtonProps & WidgetProps>{
             label: "Back to client list",
-            type: ButtonTypeTokens.LargeGhost,
+            type: ButtonTypeTokens.MediumGhost,
             width: ButtonWidthTypeToken.FULL,
             action: {
                 type: ACTION.ON_CLIENT,

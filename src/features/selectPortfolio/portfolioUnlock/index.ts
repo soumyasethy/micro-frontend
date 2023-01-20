@@ -7,6 +7,7 @@ import {
     TemplateSchema,
     WidgetProps,
 } from "@voltmoney/types";
+import { Dimensions } from "react-native";
 import {
     ButtonProps,
     ButtonTypeTokens,
@@ -37,13 +38,15 @@ import {
 import { goBackACtion, onCopy, onSave, onShare, onSkip } from "./actions";
 import { StepResponseObject } from "../../fetchDistributorPortfolio/types";
 import SharedPropsService from "../../../SharedPropsService";
+import { getScreenType } from "../../../configs/platfom-utils";
 
 
 export const template: (
+    screenType:string,
      stepper:any,
     stepResponseObject:StepResponseObject,
     amount: string
-) => TemplateSchema = (
+) => TemplateSchema = (screenType,
     stepper,stepResponseObject, amount
     ) => ({
     layout: <Layout>{
@@ -85,7 +88,7 @@ export const template: (
               payload: {},
             },
             leftTitle:<TypographyProps>{
-                label:"Share",
+                label: `${screenType}` === "extra_small" ? "Share link" : "Copy link",
                 fontFamily:FontFamilyTokens.Inter,
                 fontSize:FontSizeTokens.SM,
                 color:ColorTokens.Primary_100,
@@ -252,6 +255,7 @@ export const template: (
 export const portfolioUnlockMF: PageType<any> = {
     onLoad: async ({ }, {
         stepResponseObject }) => {
+            const screenType = getScreenType(Dimensions.get("window").width);
         console.log("stepResponseObject",stepResponseObject);
         const amount = stepResponseObject.availableCreditAmount;
         let filtered_data = [];
@@ -267,7 +271,7 @@ export const portfolioUnlockMF: PageType<any> = {
         })
     
         await SharedPropsService.setStepperData(filtered_data);
-        return Promise.resolve(template(
+        return Promise.resolve(template(screenType,
              filtered_data, stepResponseObject,
              amount
             ));

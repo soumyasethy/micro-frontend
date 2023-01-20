@@ -7,6 +7,7 @@ import {
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
+import { Dimensions } from "react-native";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -30,7 +31,6 @@ import {
   StackProps,
   StackType,
   StackWidth,
-  StepperItem,
   StepperProps,
   StepperStateToken,
   StepperTypeTokens,
@@ -59,17 +59,16 @@ import {
 } from "./actions";
 import { BAVVerifyActionPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
-import { horizontalDistributorStepperRepo } from "../../../configs/utils";
-import { getAppHeader, RegexConfig } from "../../../configs/config";
-import { partnerApi } from "../../../configs/api";
+import { getScreenType } from "../../../configs/platfom-utils";
 
 export const template: (
+  screenType: string,
   bankCode: string,
   bankName: string,
   accountNumber: string,
   stepper_data: any,
   isDisabled: string,
-) => TemplateSchema = (bankCode, bankName = "BOB", accountNumber, stepper_data, isDisabled) => ({
+) => TemplateSchema = (screenType,bankCode, bankName = "BOB", accountNumber, stepper_data, isDisabled) => ({
   layout: <Layout>{
     id: ROUTE.DIST_BANK_ACCOUNT_ADD,
     type: LAYOUTS.LIST,
@@ -114,7 +113,7 @@ export const template: (
         type: StepperTypeTokens.HORIZONTAL,
       },
       leftTitle: <TypographyProps>{
-        label: "Share",
+        label: `${screenType}` === "extra_small" ? "Share link" : "Copy link",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.SM,
         color: ColorTokens.Primary_100,
@@ -148,7 +147,7 @@ export const template: (
       actionText: '',
       labelColor: ColorTokens.Grey_Charcoal,
       bgColor: ColorTokens.Grey_Milk,
-      alignText: MessageAlignType.FLEX_START,
+      alignText: MessageAlignType.CENTER,
       // alignText:"flex-start",
       icon: <IconProps>{
         name: IconTokens.Info,
@@ -173,7 +172,7 @@ export const template: (
     },
 
     bankInput: <TextInputProps & WidgetProps>{
-      isFocus: false,
+      isFocus: true,
       type: InputTypeToken.DEFAULT,
       state: InputStateToken.DEFAULT,
       title: "Bank Name",
@@ -217,6 +216,7 @@ export const template: (
       // regex: RegexConfig.MOBILE,
       type: InputTypeToken.DEFAULT,
       //  secureTextEntry:{true},
+      isFocus:false,
       secureTextEntry: false,
       title: "Confirm Account Number",
       placeholder: "Confirm Account number",
@@ -306,6 +306,7 @@ export const template: (
 
 export const distBankAccountAddMF: PageType<any> = {
   onLoad: async ({ network }, { }) => {
+    const screenType = getScreenType(Dimensions.get("window").width);
     const bankDetails = await SharedPropsService.getBankData();
     const name = await (await SharedPropsService.getBankData()).bankName;
     const bankIfsc = await (await SharedPropsService.getBankData()).bankIfsc;
@@ -322,7 +323,7 @@ export const distBankAccountAddMF: PageType<any> = {
 
     let stepper_data = await SharedPropsService.getStepperData();
     stepper_data.forEach((item, index) => {
-      if (item.horizontalTitle === "Bank details") {
+      if (item.horizontalTitle === "Bank Details") {
         item.status = StepperStateToken.IN_PROGRESS;
       }
       if (item.horizontalTitle === "Select Portfolio") {
@@ -336,7 +337,7 @@ export const distBankAccountAddMF: PageType<any> = {
 
 
 
-    return Promise.resolve(template(bankCode, bankName, accountNumber, data1, isDisabled));
+    return Promise.resolve(template(screenType, bankCode, bankName, accountNumber, data1, isDisabled));
   },
   actions: {
     [ACTION.NAVIGATION_SEARCH_IFSC]: NavigationSearchIFSCAction,

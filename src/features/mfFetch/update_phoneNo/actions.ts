@@ -29,6 +29,10 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
     const partnerUser: PartnerUser = await SharedPropsService.getPartnerUser();
     partnerUser.phoneNumber = phoneNumber;
     await SharedPropsService.setPartnerUser(partnerUser);
+    await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.targetWidgetId, {
+      subTitle: phoneNumber.substring(3),
+    });
+    await goBack();
   }
  
  
