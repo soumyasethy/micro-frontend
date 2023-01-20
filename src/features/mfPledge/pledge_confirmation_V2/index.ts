@@ -86,6 +86,15 @@ export const template: (
           position: POSITION.ABSOLUTE_TOP,
         },
         { id: "card3Body", type: WIDGET.STACK },
+        ...(showOtpConfirmation
+          ? [
+              {
+                id: "otpConfirmInfo",
+                type: WIDGET.CARD,
+                position: POSITION.STICKY_BOTTOM,
+              },
+            ]
+          : []),
         {
           id: "iconCard",
           type: WIDGET.CARD,
@@ -96,15 +105,6 @@ export const template: (
           position: POSITION.STICKY_BOTTOM,
         },
         // { id: "spaceCard", type: WIDGET.SPACE },
-        ...(showOtpConfirmation
-          ? [
-              {
-                id: "otpConfirmInfo",
-                type: WIDGET.CARD,
-                position: POSITION.ABSOLUTE_BOTTOM,
-              },
-            ]
-          : []),
         {
           id: "ctaCard",
           type: WIDGET.CARD,
@@ -120,6 +120,9 @@ export const template: (
       otpConfirmInfo: <CardProps>{
         bgColor: ColorTokens.Secondary_05,
         width: StackWidth.FULL,
+        margin: <PaddingProps>{
+          horizontal: SizeTypeTokens.XL,
+        },
         padding: <PaddingProps>{
           top: SizeTypeTokens.LG,
           bottom: SizeTypeTokens.LG,
@@ -530,8 +533,8 @@ export const template: (
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
         padding: <PaddingProps>{
-          top: SizeTypeTokens.Size10,
-          bottom: SizeTypeTokens.Size10,
+          top: SizeTypeTokens.XL,
+          bottom: SizeTypeTokens.XL,
         },
       },
       ctaBody: <StackProps>{
