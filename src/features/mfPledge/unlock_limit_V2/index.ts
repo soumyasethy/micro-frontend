@@ -148,8 +148,8 @@ export const template: (
           id: "creditLimitCard",
           type: WIDGET.CARD,
           padding: {
-            horizontal: 0,
-            all: 0,
+            horizontal: -16,
+            vertical: 0,
           },
         },
         {
@@ -160,8 +160,8 @@ export const template: (
           id: "chargesCard",
           type: WIDGET.CARD,
           padding: {
-            horizontal: 0,
-            all: 0,
+            horizontal: -16,
+            vertical: 0,
           },
         },
         {
@@ -172,8 +172,8 @@ export const template: (
           id: "promoCard",
           type: WIDGET.PROMOCARD,
           padding: {
-            horizontal: 0,
-            all: 0,
+            horizontal: -16,
+            vertical: 0,
           },
         },
         {
@@ -188,8 +188,8 @@ export const template: (
           id: "ctaCard",
           type: WIDGET.CARD,
           padding: {
-            horizontal: 0,
-            all: 0,
+            horizontal: -16,
+            vertical: 0,
           },
           position: POSITION.STICKY_BOTTOM,
         },
