@@ -64,6 +64,7 @@ import { NavigateNext } from "../pledge_verify/actions";
 import { AuthCASModel } from "../../../types/AuthCASModel";
 import {UpdateAvailableCASMap} from "../unlock_limit_V2/types";
 import sharedPropsService from "../../../SharedPropsService";
+import { getDesiredValue } from "../portfolio_readonly/actions";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -633,6 +634,13 @@ export const unlockLimitMFV2: PageType<any> = {
     );
 
     await sharedPropsService.setCreditLimit(availableCreditAmount)
+
+    const portValue = getDesiredValue(
+      stepResponseObject["availableCAS"],
+      stepResponseObject["isinNAVMap"]
+    );
+
+    await sharedPropsService.setDesiredPortfolio(portValue)
 
     return Promise.resolve(
       template(

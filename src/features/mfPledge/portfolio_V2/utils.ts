@@ -28,17 +28,18 @@ import {
 } from "./types";
 import { ROUTE } from "../../../routes";
 import { getActualLimit, getPortfolioValue, getTotalLimit } from "./actions";
-import {AvailableCASItem, StepResponseObject} from "../unlock_limit/types";
+import { AvailableCASItem, StepResponseObject } from "../unlock_limit/types";
 import { Datastore, WidgetProps } from "@voltmoney/types";
 import SharedPropsService from "../../../SharedPropsService";
 import {
   addCommasToNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
-import {User} from "../../login/otp_verify/types";
-import {AuthCASModel} from "../../../types/AuthCASModel";
-import {fetchPledgeLimitRepo} from "../unlock_limit_landing_V2/repo";
+import { User } from "../../login/otp_verify/types";
+import { AuthCASModel } from "../../../types/AuthCASModel";
+import { fetchPledgeLimitRepo } from "../unlock_limit_landing_V2/repo";
 import sharedPropsService from "../../../SharedPropsService";
+import { getDesiredValue } from "../portfolio_readonly/actions";
 
 export const portfolioListDatastoreBuilderV2 = async (
   stepResponseObject: StepResponseObject,
@@ -74,13 +75,13 @@ export const portfolioListDatastoreBuilderV2 = async (
     )}`;
 
     const portfolioValue = `Portfolio value ${addCommasToNumber(
-        roundDownToNearestHundred(
-            getPortfolioValue(
-                [updateAvailableCASMap[key]],
-                stepResponseObject.isinNAVMap,
-            )
+      roundDownToNearestHundred(
+        getPortfolioValue(
+          [updateAvailableCASMap[key]],
+          stepResponseObject.isinNAVMap
         )
-    )}`
+      )
+    )}`;
 
     listItemDataProps.push({
       label: updateAvailableCASMap[key].schemeName,
@@ -153,41 +154,39 @@ export const portfolioListDatastoreBuilderV2 = async (
       alignItems: StackAlignItems.center,
       justifyContent: StackJustifyContent.center,
       widgetItems: [
-        { id: 'totalCreditLineCard', type: WIDGET.CARD },
-        { id: 'totalItemSpace0', type: WIDGET.SPACE },
-        { id: 'ContinueButtonStack', type: WIDGET.STACK },
-        { id: 'totalItemSpace1', type: WIDGET.SPACE },
-      ]
+        { id: "totalCreditLineCard", type: WIDGET.CARD },
+        { id: "totalItemSpace0", type: WIDGET.SPACE },
+        { id: "ContinueButtonStack", type: WIDGET.STACK },
+        { id: "totalItemSpace1", type: WIDGET.SPACE },
+      ],
     },
-    ContinueButtonStack: <StackProps> {
+    ContinueButtonStack: <StackProps>{
       type: StackType.column,
       width: StackWidth.FULL,
       justifyContent: StackJustifyContent.center,
       alignItems: StackAlignItems.center,
-      widgetItems: [
-          { id: 'ContinueButton', type: WIDGET.BUTTON }
-      ]
+      widgetItems: [{ id: "ContinueButton", type: WIDGET.BUTTON }],
     },
-    totalItemSpace0: <SpaceProps> { size: SizeTypeTokens.LG },
-    totalItemSpace1: <SpaceProps> { size: SizeTypeTokens.XL },
-    totalCreditLineCard: <CardProps> {
+    totalItemSpace0: <SpaceProps>{ size: SizeTypeTokens.LG },
+    totalItemSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
+    totalCreditLineCard: <CardProps>{
       bgColor: ColorTokens.Grey_Milk_1,
-      width: '100%',
+      width: "100%",
       body: {
         widgetItems: [
-          { id: 'totalCreditLimitText', type: WIDGET.TEXT },
-          { id: 'totalCreditLimitStack', type: WIDGET.STACK },
-        ]
-      }
+          { id: "totalCreditLimitText", type: WIDGET.TEXT },
+          { id: "totalCreditLimitStack", type: WIDGET.STACK },
+        ],
+      },
     },
     totalCreditLimitStack: <StackProps>{
       type: StackType.row,
       justifyContent: StackJustifyContent.spaceBetween,
       alignItems: StackAlignItems.flexEnd,
       widgetItems: [
-        { id: 'outOfTextStack', type: WIDGET.STACK },
+        { id: "outOfTextStack", type: WIDGET.STACK },
         // { id: 'edit_button', type: WIDGET.BUTTON }
-      ]
+      ],
     },
     outOfTextStack: <StackProps>{
       type: StackType.row,
@@ -264,11 +263,19 @@ export const togglePortfolio = async (
     ? updateAvailableCASMap[key].totalAvailableUnits
     : 0;
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
-  await sharedPropsService.setCreditLimit(getTotalLimit(
+  await sharedPropsService.setCreditLimit(
+    getTotalLimit(
       stepResponseObject.availableCAS,
       stepResponseObject.isinNAVMap,
       stepResponseObject.isinLTVMap
-  ))
+    )
+  );
+  const portValue = getDesiredValue(
+    stepResponseObject.availableCAS,
+    stepResponseObject.isinNAVMap
+  );
+
+  await SharedPropsService.setDesiredPortfolio(portValue);
   return updateAvailableCASMap;
 };
 

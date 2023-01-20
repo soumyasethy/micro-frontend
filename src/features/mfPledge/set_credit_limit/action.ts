@@ -9,6 +9,7 @@ import sharedPropsService from "../../../SharedPropsService";
 import { ConfigValues } from "../../../configs/config";
 import {listItemDataBuilder, portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
 import {ACTION} from "./types";
+import { getDesiredValue } from "../portfolio_readonly/actions";
 
 let value = ConfigValues.MinimumAmountAllowed.toString();
 
@@ -88,8 +89,15 @@ export const OnChangeSlider: ActionFunction<any> = async(
     value: SharedPropsService.getCreditLimit(),
   });
 
+  const portValue = getDesiredValue(
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+  )
+
+  await SharedPropsService.setDesiredPortfolio(portValue);
+
   await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomStackText", <TypographyProps> {
-      label: `₹${addCommasToNumber(parseInt(value))} out of ₹${addCommasToNumber(
+      label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
           parseInt(stepResponseObject["totalPortfolioAmount"].toString())
       )} are selected for pledging.`
   })

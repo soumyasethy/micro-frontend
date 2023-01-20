@@ -18,6 +18,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { portfolioListDatastoreBuilderV2, togglePortfolio } from "./utils";
 import {addCommasToNumber, roundDownToNearestHundred} from "../../../configs/utils";
+import { getDesiredValue } from "../portfolio_readonly/actions";
 
 let portfolioSearchKeyword = "";
 let listBeforeSearchUI = [];
@@ -129,6 +130,20 @@ export const ToggleSelectAction: ActionFunction<
   await setDatastore(ROUTE.PORTFOLIO, "outOfText1", <TypographyProps>{
     ...props.outOfText1,
   });
+
+  const portValue = getDesiredValue(
+    action.payload.stepResponseObject.availableCAS,
+    action.payload.stepResponseObject.isinNAVMap
+  );
+
+  await SharedPropsService.setDesiredPortfolio(portValue);
+
+  await setDatastore(ROUTE.PORTFOLIO, "subTitleText", <TypographyProps>{
+    label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
+      parseInt(action.payload.stepResponseObject["totalPortfolioAmount"].toString())
+    )} are selected for pledging.`
+  });
+
 };
 
 export const SearchPortfolio: ActionFunction<SearchPortfolioPayload> = async (

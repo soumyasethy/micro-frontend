@@ -61,6 +61,21 @@ export const getPortfolioValue = (
   return sum;
 };
 
+export const getDesiredValue = (
+  availableCAS: AvailableCASItem[],
+  isinNavMap: IsinNAVMap,
+) => {
+let sum = 0;
+availableCAS.forEach((item) => {
+  sum =
+      sum +
+      roundDownToNearestHundred(
+          item.pledgedUnits * isinNavMap[item.isinNo]
+      );
+});
+return sum;
+};
+
 export const goBack: ActionFunction<OtpPayload> = async (
   action,
   _datastore,

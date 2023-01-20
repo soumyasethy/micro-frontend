@@ -238,7 +238,6 @@ export const template: (
         widgetItems: [
           { id: "ruppee", type: WIDGET.TEXT },
           { id: "selectedLimitValueText", type: WIDGET.TEXT },
-          { id: "selectedLimitValueText2", type: WIDGET.TEXT },
         ],
       },
       ruppee: <TypographyProps>{
@@ -256,14 +255,6 @@ export const template: (
         fontWeight: "700",
         fontSize: FontSizeTokens.XXL,
         color: ColorTokens.Secondary_100,
-      },
-      selectedLimitValueText2: <TypographyProps>{
-        label: ` out of ₹${addCommasToNumber(
-          stepResponseObject["availableCreditAmount"]
-        )}`,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "400",
-        fontSize: FontSizeTokens.XS,
       },
       space2: <SpaceProps>{ size: SizeTypeTokens.XL },
       divider: <DividerProps>{
@@ -284,6 +275,7 @@ export const template: (
         widgetItems: [
           { id: "ruppee2", type: WIDGET.TEXT },
           { id: "selectedLimitValueText3", type: WIDGET.TEXT },
+          { id: "selectedLimitValueText4", type: WIDGET.TEXT },
         ],
       },
       ruppee2: <TypographyProps>{
@@ -294,11 +286,16 @@ export const template: (
       },
       selectedLimitValueText3: <TypographyProps>{
         label: `${addCommasToNumber(
-          parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+          parseInt(await SharedPropsService.getDesiredPortfolio())
         )}`,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
         fontSize: FontSizeTokens.MD,
+      },
+      selectedLimitValueText4: <TypographyProps>{
+        label: ` out of ₹${addCommasToNumber(
+          parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+        )}`,
       },
       card3Body: <StackProps>{
         width: StackWidth.FULL,

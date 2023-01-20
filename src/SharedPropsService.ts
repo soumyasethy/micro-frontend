@@ -51,6 +51,7 @@ type GlobalProps = {
   };
   creditLimit: number;
   listItemDataCAS: any;
+  desiredPortfolio?: any;
 };
 
 let _globalProps: GlobalProps = {
@@ -90,7 +91,8 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
   },
   creditLimit: 25000,
-  listItemDataCAS: []
+  listItemDataCAS: [],
+  desiredPortfolio: {},
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -288,6 +290,14 @@ async function getListItemDataCAS() {
   return _globalProps.listItemDataCAS;
 }
 
+async function setDesiredPortfolio(desiredPortfolio: any) {
+  _globalProps.desiredPortfolio = desiredPortfolio;
+}
+
+async function getDesiredPortfolio() {
+  return _globalProps.desiredPortfolio;
+}
+
 export default {
   setBuildType,
   getBuildType,
@@ -325,4 +335,6 @@ export default {
   getCreditLimit,
   setListItemDataCAS,
   getListItemDataCAS,
+  setDesiredPortfolio,
+  getDesiredPortfolio,
 };
