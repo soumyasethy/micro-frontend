@@ -289,8 +289,8 @@ export const template: (
           { id: "lending", type: WIDGET.TEXT },
           { id: "space3", type: WIDGET.SPACE },
           { id: "bajaj", type: WIDGET.IMAGE },
-          { id: "space4", type: WIDGET.SPACE },
-          { id: "mirae", type: WIDGET.IMAGE },
+          // { id: "space4", type: WIDGET.SPACE },
+          // { id: "mirae", type: WIDGET.IMAGE },
         ],
       },
       lending: <TypographyProps>{
@@ -307,14 +307,14 @@ export const template: (
         resizeMode: ResizeModeToken.CONTAIN,
         padding: SizeTypeTokens.NONE,
       },
-      space4: <SpaceProps>{ size: SizeTypeTokens.MD },
-      mirae: <ImageProps>{
-        uri: "https://volt-images.s3.ap-south-1.amazonaws.com/mirae-assets.svg",
-        height: 19,
-        width: 77,
-        resizeMode: ResizeModeToken.CONTAIN,
-        padding: SizeTypeTokens.NONE,
-      },
+      // space4: <SpaceProps>{ size: SizeTypeTokens.MD },
+      // mirae: <ImageProps>{
+      //   uri: "https://volt-images.s3.ap-south-1.amazonaws.com/mirae-assets.svg",
+      //   height: 19,
+      //   width: 77,
+      //   resizeMode: ResizeModeToken.CONTAIN,
+      //   padding: SizeTypeTokens.NONE,
+      // },
       Mspace1: <SpaceProps>{ size: SizeTypeTokens.XL },
       chargesCard: <CardProps>{
         bgColor: ColorTokens.White,

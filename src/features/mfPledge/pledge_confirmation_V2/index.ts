@@ -474,8 +474,8 @@ export const template: (
           { id: "volt", type: WIDGET.ICON },
           { id: "space11", type: WIDGET.SPACE },
           { id: "bajaj", type: WIDGET.IMAGE },
-          { id: "space12", type: WIDGET.SPACE },
-          { id: "mirae", type: WIDGET.IMAGE },
+          // { id: "space12", type: WIDGET.SPACE },
+          // { id: "mirae", type: WIDGET.IMAGE },
         ],
       },
       volt: <IconProps>{
@@ -490,14 +490,14 @@ export const template: (
         resizeMode: ResizeModeToken.CONTAIN,
         padding: SizeTypeTokens.NONE,
       },
-      space12: <SpaceProps>{ size: SizeTypeTokens.MD },
-      mirae: <ImageProps>{
-        uri: "https://volt-images.s3.ap-south-1.amazonaws.com/mirae-assets.svg",
-        height: 22,
-        width: 80,
-        resizeMode: ResizeModeToken.CONTAIN,
-        padding: SizeTypeTokens.NONE,
-      },
+      // space12: <SpaceProps>{ size: SizeTypeTokens.MD },
+      // mirae: <ImageProps>{
+      //   uri: "https://volt-images.s3.ap-south-1.amazonaws.com/mirae-assets.svg",
+      //   height: 22,
+      //   width: 80,
+      //   resizeMode: ResizeModeToken.CONTAIN,
+      //   padding: SizeTypeTokens.NONE,
+      // },
       // spaceCard: <SpaceProps>{ size: SizeTypeTokens.LG },
       ctaText: <TypographyProps>{
         label: "Total amount",
