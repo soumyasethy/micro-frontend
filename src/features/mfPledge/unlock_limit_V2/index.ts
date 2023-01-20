@@ -294,7 +294,7 @@ export const template: (
         ],
       },
       lending: <TypographyProps>{
-        label: "Lending partners",
+        label: "Lending partner",
         fontWeight: "400",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.XS,
