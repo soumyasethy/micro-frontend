@@ -4,9 +4,11 @@ import {
   LAYOUTS,
   PageType,
   POSITION,
+  SCREEN_SIZE,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
+import { Dimensions } from "react-native";
 import _ from "lodash";
 import {
   ButtonProps,
@@ -22,6 +24,7 @@ import {
   IconTokens,
   ShadowTypeTokens,
   SizeTypeTokens,
+  SpaceOrientation,
   SpaceProps,
   StackAlignItems,
   StackJustifyContent,
@@ -37,15 +40,17 @@ import { ACTION } from "./types";
 import { ROUTE } from "../../../routes";
 import { goBackAction, onClickCTA, onManageCTA, onShare, onTrackCTA, resumeSteps } from "./actions";
 import { StepperPayload } from "../ClientList/types";
+import { getScreenType } from "../../../configs/platfom-utils";
 
 export const template: (
+  screenType: any,
   applicationId: string,
   name: string,
   data: any,
   totalSteps: string,
   completedSteps: string,
   editableData: any
-) => Promise<TemplateSchema> = async (applicationId, name, data, totalSteps, completedSteps, editableData) => {
+) => Promise<TemplateSchema> = async (screenType,applicationId, name, data, totalSteps, completedSteps, editableData) => {
 
   return {
     layout: <Layout>{
@@ -53,7 +58,7 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         {
-          id: "header2", type: WIDGET.CARD, position: POSITION.ABSOLUTE_TOP,
+          id: "header2", type: WIDGET.CARD, position: POSITION.ABSOLUTE_TOP
         },
         { id: "topSpace0", type: WIDGET.SPACE },
         { id: "stepper", type: WIDGET.STEPPER },
@@ -70,17 +75,23 @@ export const template: (
         shadow: ShadowTypeTokens.E1,
         body: {
           widgetItems: [
+            { id: 'headerSpace', type: WIDGET.SPACE },
             { id: 'head1', type: WIDGET.STACK }
           ],
         },
       },
+      headerSpace: <SpaceProps>{
+        size: SizeTypeTokens.LG,
+        isHeight:true
+      },
       head1: <StackProps>{
         type: StackType.column,
-        width: StackWidth.CONTENT,
+        width: StackWidth.FULL,
         widgetItems: [
           { id: 'head', type: WIDGET.STACK },
           { id: 'midSpace', type: WIDGET.SPACE },
           { id: 'bottom', type: WIDGET.STACK },
+          { id: 'bottomSpace', type: WIDGET.SPACE },
         ]
       },
       head: <StackProps>{
@@ -89,7 +100,9 @@ export const template: (
         justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
           { id: 'icon', type: WIDGET.STACK },
-          { id: 'share', type: WIDGET.STACK },
+          screenType === "extra_small"  ? { id: 'share', type: WIDGET.STACK } :
+          { id: 'ShareIconItem', type: WIDGET.BUTTON }
+          ,
         ]
       },
       icon: <StackProps>{
@@ -102,7 +115,9 @@ export const template: (
         ]
       },
       IconSpace: <SpaceProps>{
-        size: SizeTypeTokens.XL
+        size: SizeTypeTokens.XL,
+        isHeight:false,
+        orientation: SpaceOrientation.HORIZONTAL
       },
       IconItem: <ButtonProps & WidgetProps>{
         label: "",
@@ -136,15 +151,58 @@ export const template: (
           routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
           payload: {},
         },
-        justifyContent: StackJustifyContent.flexEnd,
-        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.flexStart,
+        alignItems: StackAlignItems.flexStart,
         widgetItems: [
-          { id: "ShareIconItem", type: WIDGET.BUTTON },
-          { id: "ShareSpace", type: WIDGET.SPACE },
+          { id: "shareSpace1", type: WIDGET.SPACE },
+            { id: "ShareIconItem1", type: WIDGET.BUTTON },
+          // { id: "shareSpace1", type: WIDGET.SPACE },
+          // { id: "shareIcon", type: WIDGET.ICON },
+          // { id: "shareSpace", type: WIDGET.SPACE },
+          // { id: "shareTitle", type: WIDGET.TEXT },
+
+          // { id: "ShareSpace", type: WIDGET.SPACE },
         ]
       },
+      shareIcon: <IconProps>{
+        name: IconTokens.Share,
+        size: IconSizeTokens.LG,
+        color: ColorTokens.Primary_100
+      },
+      ShareSpace: <SpaceProps>{
+        size: SizeTypeTokens.XXXL,
+        orientation: "horizontal"
+      },
+      shareTitle: <TypographyProps>{
+        label: `Share link`,
+        color: ColorTokens.Primary_100,
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.SM,
+        fontWeight: "500",
+        lineHeight: 24,
+      },
       ShareIconItem: <ButtonProps & WidgetProps>{
-        label: "Copy",
+        label: "Copy link",
+        type: ButtonTypeTokens.MediumGhost,
+        width: ButtonWidthTypeToken.CONTENT,
+        icon: <IconProps>{
+          name: IconTokens.Share,
+          size: IconSizeTokens.LG,
+          color: ColorTokens.Primary_100
+        },
+        action: {
+          type: ACTION.SHARE,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER,
+          payload: {},
+        },
+      },
+      shareSpace1: <SpaceProps>{
+        size: SizeTypeTokens.XXXXXXL,
+        isHeight:false
+        //orientation: SpaceOrientation.HORIZONTAL
+      },
+      ShareIconItem1: <ButtonProps & WidgetProps>{
+        label: "Share link",
         type: ButtonTypeTokens.SmallGhost,
         width: ButtonWidthTypeToken.CONTENT,
         icon: <IconProps>{
@@ -158,13 +216,12 @@ export const template: (
           payload: {},
         },
       },
-      ShareSpace: <SpaceProps>{
-        size: SizeTypeTokens.XL,
-        isHeaght: false
-      },
+      
+     
       midSpace: <SpaceProps>{
         size: SizeTypeTokens.SM,
-        isHeaght: true
+        isHeight:true,
+        orientation: SpaceOrientation.VERTICAL
       },
       bottom: <StackProps>{
         type: StackType.row,
@@ -176,7 +233,8 @@ export const template: (
       },
       headSpaces: <SpaceProps>{
         size: SizeTypeTokens.XXXXL,
-        isHeaght: false
+        isHeight:false,
+        orientation: SpaceOrientation.HORIZONTAL
       },
       subtitle: <TypographyProps>{
         label: `${completedSteps}/${totalSteps} Completed`,
@@ -186,8 +244,12 @@ export const template: (
         fontWeight: "400",
         lineHeight: 18,
       },
+      bottomSpace: <SpaceProps>{
+        size: SizeTypeTokens.SM,
+        orientation: SpaceOrientation.VERTICAL
+      },
       topSpace0: <SpaceProps>{
-        size: SizeTypeTokens.XXXL
+        size: SizeTypeTokens.MD
       },
 
       Icon: <IconProps>{
@@ -227,6 +289,8 @@ export const template: (
 
 export const DistributorClientListStepperMF: PageType<any> = {
   onLoad: async ({ network }, { applicationId, name, stepperData, totalSteps, completedSteps }) => {
+    const screenType = getScreenType(Dimensions.get("window").width);
+    console.log("screen",screenType);
     let data1 = [];
     let data = [];
     Object.keys(stepperData).map(key => {
@@ -274,7 +338,7 @@ export const DistributorClientListStepperMF: PageType<any> = {
 
     const editableData = data.filter((value) => value.isEditable === true && (value.status === "IN_PROGRESS" || value.status === "NOT_STARTED"));
 
-    const templateX = await template(applicationId, name, seperated_data, totalSteps, completedSteps, editableData);
+    const templateX = await template(screenType,applicationId, name, seperated_data, totalSteps, completedSteps, editableData);
     return Promise.resolve(templateX);
   },
   actions: {

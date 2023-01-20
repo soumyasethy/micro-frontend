@@ -7,6 +7,7 @@ import {
     TemplateSchema,
     WidgetProps,
 } from "@voltmoney/types";
+import { Dimensions } from "react-native";
 import {
     ButtonProps,
     ButtonTypeTokens,
@@ -38,16 +39,18 @@ import SharedPropsService from "../../SharedPropsService";
 import { partnerApi } from "../../configs/api";
 import { getAppHeader } from "../../configs/config";
 import moment from "moment";
+import { getScreenType } from "../../configs/platfom-utils";
 
 
 export const template: (
+    screenType:string,
     isDataUpdated: any,
     camsDate: string, camsAmount: Number, camsPortfolio: Number,
     karvyDate: string, karvyAmount: Number, karvyPortfolio: Number,
     filtered_stepper: any,
     unlockedAmont: Number,
     stepResponseObject: StepResponseObject
-) => TemplateSchema = (isDataUpdated, camsDate, camsAmount, camsPortfolio,
+) => TemplateSchema = (screenType,isDataUpdated, camsDate, camsAmount, camsPortfolio,
     karvyDate, karvyAmount, karvyPortfolio, filtered_stepper, unlockedAmont, stepResponseObject) => {
         const _generateDSCAMS =
             camsAmount
@@ -109,7 +112,7 @@ export const template: (
                             { id: "karvyStack", type: WIDGET.STACK },
                         ]),
                     { id: "karvySpace", type: WIDGET.SPACE },
-                    { id: "karvyDivider", type: WIDGET.DIVIDER },
+                   // { id: "karvyDivider", type: WIDGET.DIVIDER },
 
 
                     {
@@ -145,7 +148,7 @@ export const template: (
                         payload: {},
                     },
                     leftTitle:<TypographyProps>{
-                        label:"Share",
+                        label: `${screenType}` === "extra_small" ? "Share link" : "Copy link",
                         fontFamily:FontFamilyTokens.Inter,
                         fontSize:FontSizeTokens.SM,
                         color:ColorTokens.Primary_100,
@@ -583,6 +586,7 @@ export const template: (
 
 export const distributorPortfolioMF: PageType<any> = {
     onLoad: async ({ network }, { }) => {
+        const screenType = getScreenType(Dimensions.get("window").width);
         const applicationid = await SharedPropsService.getApplicationId();
         const pledgeLimitResponse = await network.get(
             `${partnerApi.pledgeLimit}${applicationid}`,
@@ -660,7 +664,7 @@ export const distributorPortfolioMF: PageType<any> = {
         let camsFetches = {}
        
         return Promise.resolve(
-            template(isDataUpdated, camsDate, camsAmount, camsPortfolio,
+            template(screenType,isDataUpdated, camsDate, camsAmount, camsPortfolio,
                 karvyDate, karvyAmount, karvyPortfolio
                 , filtered_stepper, unlockedAmont, stepResponseObject)
         );

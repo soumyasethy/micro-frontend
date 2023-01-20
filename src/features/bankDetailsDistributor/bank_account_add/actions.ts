@@ -57,8 +57,6 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
       )
       .then(async (response) => {
         if (response.status == 200) {
-
-
           let data1 = [];
           let stepper_data = [];
           Object.keys(response.data.partnerViewStepperMap).map(key => {
@@ -100,20 +98,15 @@ export const savebankDetails: ActionFunction<EnableDisableCTA> = async (
 
 
         }
-
       })
       .catch(async (error) => {
         console.log("error", error);
       });
-
-
-
-    await setDatastore(action.routeId, "continue", <ButtonProps>{
-      label: "Continue",
-      type: ButtonTypeTokens.LargeFilled,
-      loading: false,
-    });
-
+      await setDatastore(action.routeId, "continue", <ButtonProps>{
+        label: "Save & Continue",
+        type: ButtonTypeTokens.LargeFilled,
+        loading: false,
+      });
   }
 };
 
@@ -424,7 +417,7 @@ export const skipBankVerification: ActionFunction<{}> = async (
   let filtered_stepper = [];
   let stepper_data = await SharedPropsService.getStepperData();
   stepper_data.forEach((item, index) => {
-    if (item.horizontalTitle === "Bank details") {
+    if (item.horizontalTitle === "Bank Details") {
       item.status = "NOT_STARTED";
     }
     filtered_stepper.push(item);
@@ -440,7 +433,7 @@ export const ChangeBankGoBackAction: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await navigate(ROUTE.BASIC_DETAILS_START);
+  await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
 };
 export const GoToStepper: ActionFunction<any> = async (
   action,

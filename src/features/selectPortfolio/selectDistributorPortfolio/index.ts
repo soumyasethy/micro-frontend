@@ -45,11 +45,15 @@ import {
 import { StepResponseObject } from "../../mfPledge/unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
 import { portfolioListDatastoreBuilder } from "./utils";
+import { Dimensions } from "react-native";
+import { getScreenType } from "../../../configs/platfom-utils";
 
 export const template: (
+  screenType:string,
   stepResponseObject: StepResponseObject,
   stepper: any
 ) => Promise<TemplateSchema> = async (
+  screenType,
   stepResponseObject,
   stepper
 ) => {
@@ -96,7 +100,7 @@ export const template: (
             payload: {},
           },
           leftTitle:<TypographyProps>{
-            label:"Share",
+            label: `${screenType}` === "extra_small" ? "Share link" : "Copy link",
             fontFamily:FontFamilyTokens.Inter,
             fontSize:FontSizeTokens.SM,
             color:ColorTokens.Primary_100,
@@ -182,6 +186,7 @@ export const selectDistributorPortfolioMF: PageType<any> = {
     stepResponseObject
     , updateAvailableCASMap
   }) => {
+    const screenType = getScreenType(Dimensions.get("window").width);
     const applicationId = await SharedPropsService.getApplicationId();
     await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
     let data1 = [];
@@ -195,7 +200,7 @@ export const selectDistributorPortfolioMF: PageType<any> = {
     })
 
     await SharedPropsService.setStepperData(data1);
-    return Promise.resolve(await template(
+    return Promise.resolve(await template(screenType,
       stepResponseObject,
       data1
     ));

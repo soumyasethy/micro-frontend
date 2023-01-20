@@ -8,13 +8,20 @@ import { partnerApi } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import { getScreenType } from "../../../configs/platfom-utils";
 import { Dimensions } from "react-native";
+import { ButtonProps } from "@voltmoney/schema";
 
 export const resumeSteps: ActionFunction<StepperPayload> = async (
     action,
     _datastore,
-    { navigate }
+    { navigate ,setDatastore}
 ): Promise<any> => {
     console.log(action.payload.value);
+    await setDatastore(action.routeId, "continue", <ButtonProps>{
+        loading: true,
+    });
+    await setDatastore(action.routeId, "continue", <ButtonProps>{
+        loading: false,
+    });
     if (action.payload.value[0].title == "Basic Details") {
         navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
         return;

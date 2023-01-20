@@ -12,6 +12,7 @@ import { getTotalLimit } from "../selectDistributorPortfolio/actions";
 import { amountPayload } from "../pledged_amount/types";
 import { getScreenType } from "../../../configs/platfom-utils";
 import { Dimensions } from "react-native";
+import { ButtonProps } from "@voltmoney/schema";
 
 export const onSave: ActionFunction<{}> = async (action, _datastore, {navigate, ...props }): Promise<any> => {
   await navigate(ROUTE.SELECT_DISTRIBUTOR_PORTFOLIO);
@@ -119,7 +120,11 @@ export const onCopy: ActionFunction<{}> =
 
     };
 
-export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore, {network, navigate,...props }): Promise<any> => {
+export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore, {setDatastore,network, navigate,...props }): Promise<any> => {
+  
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: true,
+  });
   const applicationId = await SharedPropsService.getApplicationId();
   const portfolioItemList = action.payload.stepResponseObject.availableCAS;
 
@@ -132,6 +137,9 @@ export const onShare: ActionFunction<AssetsPayload> = async (action, _datastore,
         },
         { headers: await getAppHeader() }
       );
+      await setDatastore(action.routeId, "continue", <ButtonProps>{
+        loading: false,
+      });
       navigate(ROUTE.INVESTOR);
     
 };

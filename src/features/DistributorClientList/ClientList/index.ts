@@ -14,6 +14,7 @@ import {
   ButtonWidthTypeToken,
   CardProps,
   ColorTokens,
+  CtaCardProps,
   DividerProps,
   DividerSizeTokens,
   FontFamilyTokens,
@@ -49,7 +50,7 @@ export const template: (
   const pendingBuildDS = (index, name, totalSteps, completedStatus, applicationId, applicationData, stepperData) => {
     return {
       [`listSpace${index}`]: <SpaceProps>{
-        size: SizeTypeTokens.LG,
+        size: SizeTypeTokens.MD,
       },
 
 
@@ -66,7 +67,7 @@ export const template: (
       [`listItemDivider${index}`]: <DividerProps>{
         size: DividerSizeTokens.SM,
         margin: {
-          vertical: SizeTypeTokens.XL,
+          vertical: SizeTypeTokens.MD,
           horizontal: SizeTypeTokens.NONE,
         },
         color: ColorTokens.Grey_Milk_1,
@@ -105,7 +106,7 @@ export const template: (
       },
       [`clientListTopTrackButton${index}`]: <ButtonProps>{
         label: "Track",
-        type: ButtonTypeTokens.SmallGhost,
+        type: ButtonTypeTokens.MediumGhost,
         fontFamily: FontFamilyTokens.Inter,
         width: ButtonWidthTypeToken.CONTENT,
         action: {
@@ -294,7 +295,7 @@ export const template: (
       })
     } else {
       clArr1.push(
-        { id: `noDataEarningStack`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
+        { id: `noDataEarningStackInProgress`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
       )
     }
     return clArr1;
@@ -309,7 +310,13 @@ export const template: (
         {
           id: "header2", type: WIDGET.CARD, position: POSITION.ABSOLUTE_TOP,
         },
-        (clientPendingRepoData.length > 0) ? { id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM } : {},
+        // (clientPendingRepoData.length > 0) ? { id: "continuePendingButton", type: WIDGET.BUTTON, position: POSITION.ABSOLUTE_BOTTOM } : {},
+        (clientPendingRepoData.length > 0) ? { id: "continuePendingButtonCTA", type: WIDGET.CTACARD,position: POSITION.STICKY_BOTTOM,
+        padding: {
+          left: 0,
+          right: 0,
+          horizontal: 0,
+        }} : {},
       ],
     },
     datastore: <Datastore>{
@@ -335,7 +342,7 @@ export const template: (
         alignItems: StackAlignItems.flexStart,
         widgetItems: [
           { id: 'headingSpaceItem', type: WIDGET.SPACE },
-         // { id: 'headItem', type: WIDGET.TEXT },
+          // { id: 'headItem', type: WIDGET.TEXT },
         ]
       },
       headingSpaceItem: <SpaceProps>{
@@ -383,23 +390,24 @@ export const template: (
             disabled: false
           },
           {
-            label: "My Earnings",
+            label: "My earnings",
             disabled: false
           }
         ],
         widgetItems: [
-         ...(`${clientPendingRepoData}` ?  
-          [{
-            id: "tab", type: WIDGET.TABS,
-          }]
-          :
-          [
-            { id: `noDataPendingStackHeader`, type: WIDGET.STACK,padding:{
-              left:30,right:30
-            } 
-            //, position: POSITION.ABSOLUTE_CENTER 
-          },
-          ]),
+          ...(`${clientPendingRepoData}` ?
+            [{
+              id: "tab", type: WIDGET.TABS,
+            }]
+            :
+            [
+              {
+                id: `noDataPendingStackHeader`, type: WIDGET.STACK, padding: {
+                  left: 30, right: 30
+                }
+                //, position: POSITION.ABSOLUTE_CENTER 
+              },
+            ]),
 
           //  { id: "InProgressStack", type: WIDGET.STACK }
           { id: `noDataEarningStackHeader`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER }
@@ -475,7 +483,7 @@ export const template: (
         // justifyContent: StackJustifyContent.center,
         // alignItems: StackAlignItems.center,
         widgetItems: [
-           { id: `noDataPendingStackSpace`, type: WIDGET.SPACE,position:POSITION.ABSOLUTE_CENTER},
+          { id: `noDataPendingStackSpace`, type: WIDGET.SPACE, position: POSITION.ABSOLUTE_CENTER },
           { id: `noDataPendingStacks`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
 
         ]
@@ -564,6 +572,17 @@ export const template: (
 
         ]
       },
+      noDataEarningStackInProgress: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.center,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          //{ id: `noDataEarningStackSpace`, type: WIDGET.SPACE, position: POSITION.ABSOLUTE_CENTER },
+          { id: `noDataEarningInProgress`, type: WIDGET.STACK, position: POSITION.ABSOLUTE_CENTER },
+
+        ]
+      },
       noDataEarningStack: <StackProps>{
         type: StackType.row,
         width: StackWidth.FULL,
@@ -597,15 +616,50 @@ export const template: (
           { id: "button", type: WIDGET.BUTTON },
         ]
       },
+      noDataEarningInProgress: <StackProps>{
+        type: StackType.column,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.center,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          { id: "noEarningSpaces", type: WIDGET.SPACE },
+          { id: "noEarningSpaces1", type: WIDGET.SPACE },
+          { id: "noEarningSpaces2", type: WIDGET.SPACE },
+          { id: "noEarningIcon", type: WIDGET.ICON, position: POSITION.ABSOLUTE_CENTER },
+          { id: "noEarningSpace0", type: WIDGET.SPACE },
+          { id: "noEarningTitle", type: WIDGET.TEXT },
+          { id: "noEarningSpace1", type: WIDGET.SPACE },
+          { id: "noEarningSubtitleStack1", type: WIDGET.TEXT },
+          { id: "noEarningSubtitleStack2", type: WIDGET.TEXT },
+          { id: "buttonSpace", type: WIDGET.SPACE },
+          //  { id: "button", type: WIDGET.BUTTON },
+        ]
+      },
+      noEarningSubtitleStack1: <TypographyProps>{
+        label: "Earning will reflect as soon as your clients",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 24,
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400"
+      },
+      noEarningSubtitleStack2: <TypographyProps>{
+        label: "completes the loan application.",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 24,
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400"
+      },
       noDataEarningStack1: <StackProps>{
         type: StackType.column,
         width: StackWidth.FULL,
         justifyContent: StackJustifyContent.center,
         alignItems: StackAlignItems.center,
         widgetItems: [
-
           { id: "noEarningSpaces", type: WIDGET.SPACE },
           { id: "noEarningSpaces1", type: WIDGET.SPACE },
+          { id: "noEarningSpaces2", type: WIDGET.SPACE },
           { id: "noEarningIcon", type: WIDGET.ICON, position: POSITION.ABSOLUTE_CENTER },
           { id: "noEarningSpace0", type: WIDGET.SPACE },
           { id: "noEarningTitle", type: WIDGET.TEXT },
@@ -621,6 +675,9 @@ export const template: (
       },
       noEarningSpaces1: <SpaceProps>{
         size: SizeTypeTokens.XXXXXXL
+      },
+      noEarningSpaces2: <SpaceProps>{
+        size: SizeTypeTokens.XXXL
       },
       noEarningSpace0: <SpaceProps>{
         size: SizeTypeTokens.XL
@@ -672,7 +729,8 @@ export const template: (
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.CTA,
-          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
+          widgetId: "buttonn"
         },
       },
       button: <ButtonProps>{
@@ -682,7 +740,8 @@ export const template: (
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.CTA,
-          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
+          widgetId: "button"
         },
       },
       continuePendingButton: <ButtonProps>{
@@ -692,7 +751,8 @@ export const template: (
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.CTA,
-          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
+          widgetId: "continuePendingButton"
         },
       },
       continueInProgressButton: <ButtonProps>{
@@ -702,9 +762,20 @@ export const template: (
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.CTA,
-          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
+          widgetId: "continueInProgressButton"
         },
       },
+      continuePendingButtonCTA: <CtaCardProps>{
+        label: '',
+        info: '',
+        actionLabel: 'Create new application',
+        action: {
+          type: ACTION.CTA,
+          routeId: ROUTE.DISTRIBUTOR_CLIENT_LIST,
+          widgetId: "continuePendingButtonCTA"
+        },
+      }
     },
   }
 
@@ -712,7 +783,7 @@ export const template: (
 
 
 export const DistributorClientListMF: PageType<any> = {
-  onLoad: async ({ network },{}) => {
+  onLoad: async ({ network }, { }) => {
     const body = {};
     const partnerApplicatiionId = await SharedPropsService.getApplicationId();
     const userContextResponse = await network.post(partnerApi.userContext, body, {
@@ -722,13 +793,462 @@ export const DistributorClientListMF: PageType<any> = {
     const partnerAccountId = userContextResponse.data.linkedPartnerAccounts[0].accountId;
     const pendingData = [];
     const inProgressData = [];
+    /* For testing Purpose */
+//    const response = {
+//     "customerMetadataList": [
+//         {
+//             "borrowerAccountProfile": {
+//                 "name": "Anamika Kumari",
+//                 "panNumber": null,
+//                 "phoneNumber": "+917011791466",
+//                 "emailId": "ana@voltmoney.in",
+//                 "bankDetails": null
+//             },
+//             "creditApplication": {
+//                 "applicationId": "abcfdbd4-eb74-450f-847d-d09bace4f81d",
+//                 "accountId": "073096fb-4f5a-449e-872e-a04b46710bb9",
+//                 "applicationType": "CREDIT_AGAINST_SECURITIES_PARTNER",
+//                 "applicationState": "IN_PROGRESS",
+//                 "applicationApprovalStatus": null,
+//                 "creditAmount": null,
+//                 "lenderAccountId": "Bajaj",
+//                 "partnerAccountId": "7c82cb82-c666-4225-8361-f1a4da21cea0",
+//                 "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
+//                 "currentStepId": "MF_PLEDGE_PORTFOLIO",
+//                 "stepStatusMap": {
+//                     "KYC_ADDITIONAL_DETAILS": "NOT_STARTED",
+//                     "KYC_DOCUMENT_UPLOAD": "NOT_STARTED",
+//                     "CREDIT_APPROVAL": "NOT_STARTED",
+//                     "MANDATE_SETUP": "NOT_STARTED",
+//                     "BANK_ACCOUNT_VERIFICATION": "COMPLETED",
+//                     "MF_PLEDGE_PORTFOLIO": "NOT_STARTED",
+//                     "AGREEMENT_SIGN": "NOT_STARTED",
+//                     "KYC_PAN_VERIFICATION": "COMPLETED",
+//                     "MF_FETCH_PORTFOLIO": "COMPLETED",
+//                     "KYC_CKYC": "NOT_STARTED",
+//                     "KYC_SUMMARY": "NOT_STARTED",
+//                     "KYC_AADHAAR_VERIFICATION": "NOT_STARTED"
+//                 },
+//                 "createdOn": 1674112252418,
+//                 "lastUpdatedOn": 1674112809016,
+//                 "completedOn": null
+//             },
+//             "assetDetails": null,
+//             "partnerViewStepperMap": {
+//                 "FETCH_PORTFOLIO": {
+//                     "status": "COMPLETED",
+//                     "verticalDisplayName": "Fetch Portfolio",
+//                     "verticalDescription": "Fetch customer portfolio",
+//                     "horizontalDisplayName": "Fetch Portfolio",
+//                     "order": 2,
+//                     "isEditable": true
+//                 },
+//                 "KYC_VERIFICATION": {
+//                     "status": "NOT_STARTED",
+//                     "verticalDisplayName": "KYC Verification",
+//                     "verticalDescription": "",
+//                     "horizontalDisplayName": "KYC Verification",
+//                     "order": 4,
+//                     "isEditable": false
+//                 },
+//                 "BASIC_DETAILS": {
+//                     "status": "COMPLETED",
+//                     "verticalDisplayName": "Basic Details",
+//                     "verticalDescription": "Add basic details for customer",
+//                     "horizontalDisplayName": "Basic Details",
+//                     "order": 0,
+//                     "isEditable": true
+//                 },
+//                 "AGREEMENT_SIGN": {
+//                     "status": "NOT_STARTED",
+//                     "verticalDisplayName": "Sign Agreement",
+//                     "verticalDescription": "",
+//                     "horizontalDisplayName": "Sign Agreement",
+//                     "order": 7,
+//                     "isEditable": false
+//                 },
+//                 "BANK_VERIFICATION": {
+//                     "status": "COMPLETED",
+//                     "verticalDisplayName": "Bank Details",
+//                     "verticalDescription": "Provide bank account for receiving money",
+//                     "horizontalDisplayName": "Bank details",
+//                     "order": 1,
+//                     "isEditable": true
+//                 },
+//                 "PLEDGE_PORTFOLIO": {
+//                     "status": "NOT_STARTED",
+//                     "verticalDisplayName": "Pledge Portfolio",
+//                     "verticalDescription": "",
+//                     "horizontalDisplayName": "Pledge Portfolio",
+//                     "order": 5,
+//                     "isEditable": false
+//                 },
+//                 "SELECT_PORTFOLIO": {
+//                     "status": "NOT_STARTED",
+//                     "verticalDisplayName": "Select Portfolio",
+//                     "verticalDescription": "Select portfolio for pledging",
+//                     "horizontalDisplayName": "Select Portfolio",
+//                     "order": 3,
+//                     "isEditable": true
+//                 },
+//                 "AUTOPAY_SETUP": {
+//                     "status": "NOT_STARTED",
+//                     "verticalDisplayName": "eMandate",
+//                     "verticalDescription": "",
+//                     "horizontalDisplayName": "eMandate",
+//                     "order": 6,
+//                     "isEditable": false
+//                 }
+//             },
+//             "credit": null
+//         },
+//         {
+//           "borrowerAccountProfile": {
+//               "name": "Anamika Kumari",
+//               "panNumber": null,
+//               "phoneNumber": "+917011791466",
+//               "emailId": "ana@voltmoney.in",
+//               "bankDetails": null
+//           },
+//           "creditApplication": {
+//               "applicationId": "abcfdbd4-eb74-450f-847d-d09bace4f81d",
+//               "accountId": "073096fb-4f5a-449e-872e-a04b46710bb9",
+//               "applicationType": "CREDIT_AGAINST_SECURITIES_PARTNER",
+//               "applicationState": "COMPLETED",
+//               "applicationApprovalStatus": null,
+//               "creditAmount": null,
+//               "lenderAccountId": "Bajaj",
+//               "partnerAccountId": "7c82cb82-c666-4225-8361-f1a4da21cea0",
+//               "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
+//               "currentStepId": "MF_PLEDGE_PORTFOLIO",
+//               "stepStatusMap": {
+//                   "KYC_ADDITIONAL_DETAILS": "NOT_STARTED",
+//                   "KYC_DOCUMENT_UPLOAD": "NOT_STARTED",
+//                   "CREDIT_APPROVAL": "NOT_STARTED",
+//                   "MANDATE_SETUP": "NOT_STARTED",
+//                   "BANK_ACCOUNT_VERIFICATION": "COMPLETED",
+//                   "MF_PLEDGE_PORTFOLIO": "NOT_STARTED",
+//                   "AGREEMENT_SIGN": "NOT_STARTED",
+//                   "KYC_PAN_VERIFICATION": "COMPLETED",
+//                   "MF_FETCH_PORTFOLIO": "COMPLETED",
+//                   "KYC_CKYC": "NOT_STARTED",
+//                   "KYC_SUMMARY": "NOT_STARTED",
+//                   "KYC_AADHAAR_VERIFICATION": "NOT_STARTED"
+//               },
+//               "createdOn": 1674112252418,
+//               "lastUpdatedOn": 1674112809016,
+//               "completedOn": null
+//           },
+//           "assetDetails": null,
+//           "partnerViewStepperMap": {
+//               "FETCH_PORTFOLIO": {
+//                   "status": "COMPLETED",
+//                   "verticalDisplayName": "Fetch Portfolio",
+//                   "verticalDescription": "Fetch customer portfolio",
+//                   "horizontalDisplayName": "Fetch Portfolio",
+//                   "order": 2,
+//                   "isEditable": true
+//               },
+//               "KYC_VERIFICATION": {
+//                   "status": "NOT_STARTED",
+//                   "verticalDisplayName": "KYC Verification",
+//                   "verticalDescription": "",
+//                   "horizontalDisplayName": "KYC Verification",
+//                   "order": 4,
+//                   "isEditable": false
+//               },
+//               "BASIC_DETAILS": {
+//                   "status": "COMPLETED",
+//                   "verticalDisplayName": "Basic Details",
+//                   "verticalDescription": "Add basic details for customer",
+//                   "horizontalDisplayName": "Basic Details",
+//                   "order": 0,
+//                   "isEditable": true
+//               },
+//               "AGREEMENT_SIGN": {
+//                   "status": "NOT_STARTED",
+//                   "verticalDisplayName": "Sign Agreement",
+//                   "verticalDescription": "",
+//                   "horizontalDisplayName": "Sign Agreement",
+//                   "order": 7,
+//                   "isEditable": false
+//               },
+//               "BANK_VERIFICATION": {
+//                   "status": "COMPLETED",
+//                   "verticalDisplayName": "Bank Details",
+//                   "verticalDescription": "Provide bank account for receiving money",
+//                   "horizontalDisplayName": "Bank details",
+//                   "order": 1,
+//                   "isEditable": true
+//               },
+//               "PLEDGE_PORTFOLIO": {
+//                   "status": "NOT_STARTED",
+//                   "verticalDisplayName": "Pledge Portfolio",
+//                   "verticalDescription": "",
+//                   "horizontalDisplayName": "Pledge Portfolio",
+//                   "order": 5,
+//                   "isEditable": false
+//               },
+//               "SELECT_PORTFOLIO": {
+//                   "status": "NOT_STARTED",
+//                   "verticalDisplayName": "Select Portfolio",
+//                   "verticalDescription": "Select portfolio for pledging",
+//                   "horizontalDisplayName": "Select Portfolio",
+//                   "order": 3,
+//                   "isEditable": true
+//               },
+//               "AUTOPAY_SETUP": {
+//                   "status": "NOT_STARTED",
+//                   "verticalDisplayName": "eMandate",
+//                   "verticalDescription": "",
+//                   "horizontalDisplayName": "eMandate",
+//                   "order": 6,
+//                   "isEditable": false
+//               }
+//           },
+//           "credit":{
+//             "principalOutStandingAmount": 20000,
+//           }
+//       },
+//       {
+//         "borrowerAccountProfile": {
+//             "name": "Anamika Kumari",
+//             "panNumber": null,
+//             "phoneNumber": "+917011791466",
+//             "emailId": "ana@voltmoney.in",
+//             "bankDetails": null
+//         },
+//         "creditApplication": {
+//             "applicationId": "abcfdbd4-eb74-450f-847d-d09bace4f81d",
+//             "accountId": "073096fb-4f5a-449e-872e-a04b46710bb9",
+//             "applicationType": "CREDIT_AGAINST_SECURITIES_PARTNER",
+//             "applicationState": "COMPLETED",
+//             "applicationApprovalStatus": null,
+//             "creditAmount": null,
+//             "lenderAccountId": "Bajaj",
+//             "partnerAccountId": "7c82cb82-c666-4225-8361-f1a4da21cea0",
+//             "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
+//             "currentStepId": "MF_PLEDGE_PORTFOLIO",
+//             "stepStatusMap": {
+//                 "KYC_ADDITIONAL_DETAILS": "NOT_STARTED",
+//                 "KYC_DOCUMENT_UPLOAD": "NOT_STARTED",
+//                 "CREDIT_APPROVAL": "NOT_STARTED",
+//                 "MANDATE_SETUP": "NOT_STARTED",
+//                 "BANK_ACCOUNT_VERIFICATION": "COMPLETED",
+//                 "MF_PLEDGE_PORTFOLIO": "NOT_STARTED",
+//                 "AGREEMENT_SIGN": "NOT_STARTED",
+//                 "KYC_PAN_VERIFICATION": "COMPLETED",
+//                 "MF_FETCH_PORTFOLIO": "COMPLETED",
+//                 "KYC_CKYC": "NOT_STARTED",
+//                 "KYC_SUMMARY": "NOT_STARTED",
+//                 "KYC_AADHAAR_VERIFICATION": "NOT_STARTED"
+//             },
+//             "createdOn": 1674112252418,
+//             "lastUpdatedOn": 1674112809016,
+//             "completedOn": null
+//         },
+//         "assetDetails": null,
+//         "partnerViewStepperMap": {
+//             "FETCH_PORTFOLIO": {
+//                 "status": "COMPLETED",
+//                 "verticalDisplayName": "Fetch Portfolio",
+//                 "verticalDescription": "Fetch customer portfolio",
+//                 "horizontalDisplayName": "Fetch Portfolio",
+//                 "order": 2,
+//                 "isEditable": true
+//             },
+//             "KYC_VERIFICATION": {
+//                 "status": "NOT_STARTED",
+//                 "verticalDisplayName": "KYC Verification",
+//                 "verticalDescription": "",
+//                 "horizontalDisplayName": "KYC Verification",
+//                 "order": 4,
+//                 "isEditable": false
+//             },
+//             "BASIC_DETAILS": {
+//                 "status": "COMPLETED",
+//                 "verticalDisplayName": "Basic Details",
+//                 "verticalDescription": "Add basic details for customer",
+//                 "horizontalDisplayName": "Basic Details",
+//                 "order": 0,
+//                 "isEditable": true
+//             },
+//             "AGREEMENT_SIGN": {
+//                 "status": "NOT_STARTED",
+//                 "verticalDisplayName": "Sign Agreement",
+//                 "verticalDescription": "",
+//                 "horizontalDisplayName": "Sign Agreement",
+//                 "order": 7,
+//                 "isEditable": false
+//             },
+//             "BANK_VERIFICATION": {
+//                 "status": "COMPLETED",
+//                 "verticalDisplayName": "Bank Details",
+//                 "verticalDescription": "Provide bank account for receiving money",
+//                 "horizontalDisplayName": "Bank details",
+//                 "order": 1,
+//                 "isEditable": true
+//             },
+//             "PLEDGE_PORTFOLIO": {
+//                 "status": "NOT_STARTED",
+//                 "verticalDisplayName": "Pledge Portfolio",
+//                 "verticalDescription": "",
+//                 "horizontalDisplayName": "Pledge Portfolio",
+//                 "order": 5,
+//                 "isEditable": false
+//             },
+//             "SELECT_PORTFOLIO": {
+//                 "status": "NOT_STARTED",
+//                 "verticalDisplayName": "Select Portfolio",
+//                 "verticalDescription": "Select portfolio for pledging",
+//                 "horizontalDisplayName": "Select Portfolio",
+//                 "order": 3,
+//                 "isEditable": true
+//             },
+//             "AUTOPAY_SETUP": {
+//                 "status": "NOT_STARTED",
+//                 "verticalDisplayName": "eMandate",
+//                 "verticalDescription": "",
+//                 "horizontalDisplayName": "eMandate",
+//                 "order": 6,
+//                 "isEditable": false
+//             }
+//         },
+//         "credit":{
+//           "principalOutStandingAmount": 20000,
+//         }
+//     },
+//     {
+//       "borrowerAccountProfile": {
+//           "name": "Anamika Kumari",
+//           "panNumber": null,
+//           "phoneNumber": "+917011791466",
+//           "emailId": "ana@voltmoney.in",
+//           "bankDetails": null
+//       },
+//       "creditApplication": {
+//           "applicationId": "abcfdbd4-eb74-450f-847d-d09bace4f81d",
+//           "accountId": "073096fb-4f5a-449e-872e-a04b46710bb9",
+//           "applicationType": "CREDIT_AGAINST_SECURITIES_PARTNER",
+//           "applicationState": "IN_PROGRESS",
+//           "applicationApprovalStatus": null,
+//           "creditAmount": null,
+//           "lenderAccountId": "Bajaj",
+//           "partnerAccountId": "7c82cb82-c666-4225-8361-f1a4da21cea0",
+//           "platformAccountId": "90f48862-d7d1-47b2-aa3e-76613da4a3f6",
+//           "currentStepId": "MF_PLEDGE_PORTFOLIO",
+//           "stepStatusMap": {
+//               "KYC_ADDITIONAL_DETAILS": "NOT_STARTED",
+//               "KYC_DOCUMENT_UPLOAD": "NOT_STARTED",
+//               "CREDIT_APPROVAL": "NOT_STARTED",
+//               "MANDATE_SETUP": "NOT_STARTED",
+//               "BANK_ACCOUNT_VERIFICATION": "COMPLETED",
+//               "MF_PLEDGE_PORTFOLIO": "NOT_STARTED",
+//               "AGREEMENT_SIGN": "NOT_STARTED",
+//               "KYC_PAN_VERIFICATION": "COMPLETED",
+//               "MF_FETCH_PORTFOLIO": "COMPLETED",
+//               "KYC_CKYC": "NOT_STARTED",
+//               "KYC_SUMMARY": "NOT_STARTED",
+//               "KYC_AADHAAR_VERIFICATION": "NOT_STARTED"
+//           },
+//           "createdOn": 1674112252418,
+//           "lastUpdatedOn": 1674112809016,
+//           "completedOn": null
+//       },
+//       "assetDetails": null,
+//       "partnerViewStepperMap": {
+//           "FETCH_PORTFOLIO": {
+//               "status": "COMPLETED",
+//               "verticalDisplayName": "Fetch Portfolio",
+//               "verticalDescription": "Fetch customer portfolio",
+//               "horizontalDisplayName": "Fetch Portfolio",
+//               "order": 2,
+//               "isEditable": true
+//           },
+//           "KYC_VERIFICATION": {
+//               "status": "NOT_STARTED",
+//               "verticalDisplayName": "KYC Verification",
+//               "verticalDescription": "",
+//               "horizontalDisplayName": "KYC Verification",
+//               "order": 4,
+//               "isEditable": false
+//           },
+//           "BASIC_DETAILS": {
+//               "status": "COMPLETED",
+//               "verticalDisplayName": "Basic Details",
+//               "verticalDescription": "Add basic details for customer",
+//               "horizontalDisplayName": "Basic Details",
+//               "order": 0,
+//               "isEditable": true
+//           },
+//           "AGREEMENT_SIGN": {
+//               "status": "NOT_STARTED",
+//               "verticalDisplayName": "Sign Agreement",
+//               "verticalDescription": "",
+//               "horizontalDisplayName": "Sign Agreement",
+//               "order": 7,
+//               "isEditable": false
+//           },
+//           "BANK_VERIFICATION": {
+//               "status": "COMPLETED",
+//               "verticalDisplayName": "Bank Details",
+//               "verticalDescription": "Provide bank account for receiving money",
+//               "horizontalDisplayName": "Bank details",
+//               "order": 1,
+//               "isEditable": true
+//           },
+//           "PLEDGE_PORTFOLIO": {
+//               "status": "NOT_STARTED",
+//               "verticalDisplayName": "Pledge Portfolio",
+//               "verticalDescription": "",
+//               "horizontalDisplayName": "Pledge Portfolio",
+//               "order": 5,
+//               "isEditable": false
+//           },
+//           "SELECT_PORTFOLIO": {
+//               "status": "NOT_STARTED",
+//               "verticalDisplayName": "Select Portfolio",
+//               "verticalDescription": "Select portfolio for pledging",
+//               "horizontalDisplayName": "Select Portfolio",
+//               "order": 3,
+//               "isEditable": true
+//           },
+//           "AUTOPAY_SETUP": {
+//               "status": "NOT_STARTED",
+//               "verticalDisplayName": "eMandate",
+//               "verticalDescription": "",
+//               "horizontalDisplayName": "eMandate",
+//               "order": 6,
+//               "isEditable": false
+//           }
+//       },
+//       "credit": null
+//   }
+//     ],
+//     "nextToken": null
+// }
+//     response.customerMetadataList.forEach((data, index) => {
+//       //  console.log("data",data);
+//       const status = data.creditApplication.applicationState;
+//       if (status === "IN_PROGRESS") {
+//         pendingData.push(data);
+//       } else {
+//         inProgressData.push(data);
+//       }
+//     });
+//     console.log("pendingdata", pendingData);
+//     console.log("inProgressData", inProgressData);
+//     const clientPendingRepoData = pendingData;
+//     const clientInProgressRepoData = inProgressData;
+
+
     const response = await network.get(
       `${partnerApi.clientList}${partnerAccountId}/customers/all`,
       {
         headers: await getAppHeader(),
       }
     );
-    
+
     response.data.customerMetadataList.forEach((data, index) => {
       const status = data.creditApplication.applicationState;
       if (status === "IN_PROGRESS") {
@@ -751,5 +1271,5 @@ export const DistributorClientListMF: PageType<any> = {
     [ACTION.ON_CHANGE]: appendData,
     [ACTION.ON_CHANGES]: appendDatas
   },
-  clearPrevious:true
+  clearPrevious: true
 };

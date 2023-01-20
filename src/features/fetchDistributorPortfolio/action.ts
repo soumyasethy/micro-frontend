@@ -10,10 +10,12 @@ import { partnerApi } from "../../configs/api";
 import { AssetRepositoryType, getAppHeader } from "../../configs/config";
 import { getScreenType } from "../../configs/platfom-utils";
 import { Dimensions } from "react-native";
+import { ButtonProps } from "@voltmoney/schema";
 
-export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
- 
-  
+export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, {setDatastore, navigate, ...props }): Promise<any> => {
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: true,
+  });
   const response = await SharedPropsService.getStepperData();
   let data1 = [];
   let stepper_data = [];
@@ -24,17 +26,12 @@ export const onSave: ActionFunction<AmountPayload> = async (action, _datastore, 
     data1.push(item);
   });
   await SharedPropsService.setStepperData(data1);
-  // await navigate(ROUTE.PORTFOLOIO_START,{
-  //   stepResponseObject: action.payload.value,
-  // });
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: false,
+  });
   await navigate(ROUTE.PORTFOLIO_UNLOCK,{
     stepResponseObject: action.payload.value,
   });
-
-
-  // await navigate(ROUTE.PORTFOLOIO_START,{
-  //   amount:action.payload.value
-  // });
 };
 
 export const onSkip: ActionFunction<{}> = async (action, _datastore, { navigate, ...props }): Promise<any> => {
@@ -92,7 +89,7 @@ export const onShare: ActionFunction<{}> =
     };
 
 export const onBack: ActionFunction<{}> = async (action, _datastore, { navigate }): Promise<any> => {
-  await navigate(ROUTE.BASIC_DETAILS_START)
+  await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST)
 };
 
 

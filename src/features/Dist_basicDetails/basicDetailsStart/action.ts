@@ -18,55 +18,6 @@ export const Go_Next_Action: ActionFunction<{ stepId?: string }> = async (
   console.warn("**** NextStep Action triggered ****", action);
   // 
   const stepper = await SharedPropsService.getStepperData();
-  // await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
-
-  // stepper.forEach((item,index) => { 
-  //   if(item.status === "IN_PROGRESS"){
-  //     console.log(item);
-  //     if(item.title == "Basic Details"){
-  //       console.log("Basic log item",item);
-  //       navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
-  //       return;
-  //     }else
-  //     if(item.title == "Bank Details"){
-  //       console.log("Bank log item",item);
-  //       navigate(ROUTE.DIST_BANK_ACCOUNT_ADD);
-  //       return;
-  //     }else
-  //     if(item.title == "Fetch Portfolio"){
-  //       navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-  //       return;
-  //     }else
-  //     if(item.title == "Select Portfolio"){
-  //        navigate(ROUTE.PORTFOLOIO_START);
-  //        return;
-  //     } 
-
-  //   }else if(item.status === "COMPLETED") {
-  //       console.log("complete log item",item);
-  //   }else{
-  //     console.log("else log item",item);
-  //       navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
-  //   }
-  //     // if(item.title == "Basic Details"){
-  //     //   navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
-  //     //   return;
-  //     // }
-  //     // if(item.title == "Bank Details"){
-  //     //   navigate(ROUTE.DIST_BANK_ACCOUNT_ADD);
-  //     //   return;
-  //     // }
-  //     // if(item.title == "Fetch Portfolio"){
-  //     //   // const account_id = await SharedPropsService.getAccountId();
-  //     //   // navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-  //     //   return;
-  //     // }
-  //     // if(item.title == "Select Portfolio"){
-  //     //    //navigate(ROUTE.PORTFOLOIO_START);
-  //     //    return;
-  //     // } 
-
-  // });
 
   const nextroute = stepper.filter((value) => value.status === "IN_PROGRESS");
   if (nextroute.length > 0) {
@@ -90,12 +41,6 @@ export const Go_Next_Action: ActionFunction<{ stepId?: string }> = async (
   } else {
     await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
   }
-
-  // const routeObj = action.payload.stepId
-  //   ? await nextStepCredStepper(action.payload.stepId)
-  //   : await nextStepCredStepper();
-  // console.warn("**** NextStep Route ****", routeObj);
-  // await navigate(routeObj.routeId, routeObj.params);
 };
 
 export const saveName: ActionFunction<ContinuePayload> = async (

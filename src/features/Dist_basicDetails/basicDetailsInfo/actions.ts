@@ -7,6 +7,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { ACTION, EnableDisableCTA, InputPayload } from "./types";
 import moment from "moment";
 import { BasicData } from "../../login/otp_verify/types";
+import { navigate } from "../../afterUnlock/dashboard/actions";
 
 let panNumber = "";
 let mobileNumber = "";
@@ -202,7 +203,7 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
         { headers: await getAppHeader() }
       )
     await setDatastore(action.routeId, "continue", <ButtonProps>{
-      label: "Continue",
+      label: "Save & Continue",
       type: ButtonTypeTokens.LargeFilled,
       loading: false,
     });
@@ -246,7 +247,8 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
 export const goBack: ActionFunction<any> = async (
   action,
   _datastore,
-  { goBack }
+  { goBack,navigate }
 ): Promise<any> => {
-  await goBack();
+  await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
+ // await goBack();
 };
