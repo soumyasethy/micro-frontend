@@ -179,7 +179,7 @@ export const template: (
           payload: {},
         },
       },
-      space0: <SpaceProps>{ size: SizeTypeTokens.LG },
+      space0: <SpaceProps>{ size: SizeTypeTokens.MD },
       headerRight: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,
