@@ -299,7 +299,7 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.XS,
       },
-      space3: <SpaceProps>{ size: SizeTypeTokens.XL },
+      space3: <SpaceProps>{ size: SizeTypeTokens.Size10 },
       bajaj: <ImageProps>{
         uri: "https://volt-images.s3.ap-south-1.amazonaws.com/bajaj.svg",
         height: 14,
