@@ -531,6 +531,7 @@ export const template: (
         justifyContent: StackJustifyContent.spaceBetween,
         padding: <PaddingProps>{
           top: SizeTypeTokens.Size10,
+          bottom: SizeTypeTokens.Size10,
         },
       },
       ctaBody: <StackProps>{
