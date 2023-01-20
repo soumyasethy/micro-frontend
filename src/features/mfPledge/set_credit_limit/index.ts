@@ -273,8 +273,8 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
       type: ButtonTypeTokens.MediumGhost,
-      paddingHorizontal: SizeTypeTokens.NONE,
-      paddingVertical: SizeTypeTokens.NONE,
+      paddingHorizontal: SizeTypeTokens.Size6,
+      paddingVertical: SizeTypeTokens.Size6,
       action: {
         type: ACTION.EDIT_PORTFOLIO,
         payload: {
