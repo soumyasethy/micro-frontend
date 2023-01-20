@@ -63,6 +63,7 @@ import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
 import { AuthCASModel } from "../../../types/AuthCASModel";
 import {UpdateAvailableCASMap} from "../unlock_limit_V2/types";
+import sharedPropsService from "../../../SharedPropsService";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -631,7 +632,7 @@ export const unlockLimitMFV2: PageType<any> = {
       {}
     );
 
-    console.log("processingFeesBreakUp", processingFeesBreakUp);
+    await sharedPropsService.setCreditLimit(availableCreditAmount)
 
     return Promise.resolve(
       template(
