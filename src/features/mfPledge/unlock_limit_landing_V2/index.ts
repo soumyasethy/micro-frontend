@@ -149,6 +149,7 @@ export const template: (availableCreditAmount: number,
       }
     },
     bottomSheet: <BottomSheetProps>{
+      initialOffset: 0.35,
       widgetItems: [
         { id:'bottomSheetText', type: WIDGET.TEXT },
         { id: 'bs_space0', type: WIDGET.SPACE },

@@ -245,6 +245,7 @@ export const template: (
       padding: <PaddingProps>{
         horizontal: SizeTypeTokens.XS,
       },
+      initialOffset: 0.4,
     },
     bottomSheetStack: <StackProps>{
       type: StackType.row,
