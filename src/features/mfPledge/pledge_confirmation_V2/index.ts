@@ -23,6 +23,7 @@ import {
   IconSizeTokens,
   IconTokens,
   ImageProps,
+  PaddingProps,
   ResizeModeToken,
   SizeTypeTokens,
   SpaceProps,
@@ -86,11 +87,15 @@ export const template: (
         },
         { id: "card3Body", type: WIDGET.STACK },
         {
-          id: "iconStack",
-          type: WIDGET.STACK,
+          id: "iconCard",
+          type: WIDGET.CARD,
+          padding: {
+            horizontal: 0,
+            all: 0,
+          },
           position: POSITION.STICKY_BOTTOM,
         },
-        { id: "spaceCard", type: WIDGET.SPACE },
+        // { id: "spaceCard", type: WIDGET.SPACE },
         ...(showOtpConfirmation
           ? [
               {
@@ -115,7 +120,7 @@ export const template: (
       otpConfirmInfo: <CardProps>{
         bgColor: ColorTokens.Secondary_05,
         width: StackWidth.FULL,
-        padding: {
+        padding: <PaddingProps>{
           top: SizeTypeTokens.LG,
           bottom: SizeTypeTokens.LG,
           left: SizeTypeTokens.LG,
@@ -291,11 +296,16 @@ export const template: (
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
         fontSize: FontSizeTokens.MD,
+        color: ColorTokens.Grey_Night,
       },
       selectedLimitValueText4: <TypographyProps>{
         label: ` out of ₹${addCommasToNumber(
           parseInt(stepResponseObject["totalPortfolioAmount"].toString())
         )}`,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontSize: FontSizeTokens.XS,
+        color: ColorTokens.Grey_Night,
       },
       card3Body: <StackProps>{
         width: StackWidth.FULL,
@@ -450,6 +460,9 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       iconStack: <StackProps>{
+        padding: <PaddingProps>{
+          horizontal: SizeTypeTokens.NONE,
+        },
         width: StackWidth.FULL,
         type: StackType.row,
         alignItems: StackAlignItems.center,
@@ -482,18 +495,43 @@ export const template: (
         resizeMode: ResizeModeToken.CONTAIN,
         padding: SizeTypeTokens.NONE,
       },
-      spaceCard: <SpaceProps>{ size: SizeTypeTokens.LG },
+      // spaceCard: <SpaceProps>{ size: SizeTypeTokens.LG },
       ctaText: <TypographyProps>{
         label: "Total amount",
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
         fontSize: FontSizeTokens.SM,
       },
+      iconCard: <CardProps>{
+        bgColor: ColorTokens.White,
+        body: { widgetItems: [{ id: "iconBody", type: WIDGET.STACK }] },
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        padding: <PaddingProps>{
+          vertical: SizeTypeTokens.NONE,
+          horizontal: SizeTypeTokens.NONE,
+        },
+      },
+      iconBody: <StackProps>{
+        width: StackWidth.FULL,
+        type: StackType.column,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.center,
+        widgetItems: [
+          {
+            id: "iconStack",
+            type: WIDGET.STACK,
+          },
+        ],
+      },
       ctaCard: <CardProps>{
         bgColor: ColorTokens.White,
         body: { widgetItems: [{ id: "ctaBody", type: WIDGET.STACK }] },
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
+        padding: <PaddingProps>{
+          top: SizeTypeTokens.Size10,
+        },
       },
       ctaBody: <StackProps>{
         width: StackWidth.FULL,
