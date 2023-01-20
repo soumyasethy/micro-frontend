@@ -20,7 +20,6 @@ export const photoInitRepo = async () => {
   return await fetch(`${api.photoInit}`, requestOptions)
     .then((response) => response.json())
     .then((response) => {
-      console.warn(response);
       return response.stepResponseObject;
     })
     .catch((error) => {

@@ -215,9 +215,9 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.Go_BACK]: goBack,
   },
   clearPrevious: true,
-  action: {
-    type: ACTION.AUTO_FETCH_MY_PORTFOLIO,
-    routeId: ROUTE.MF_FETCH_PORTFOLIO,
-    payload: {},
-  },
+  // action: {
+  //   type: ACTION.AUTO_FETCH_MY_PORTFOLIO,
+  //   routeId: ROUTE.MF_FETCH_PORTFOLIO,
+  //   payload: {},
+  // },
 };

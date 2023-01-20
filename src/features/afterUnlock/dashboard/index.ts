@@ -417,7 +417,6 @@ export const template: (
 
 export const dashboardMF: PageType<any> = {
   onLoad: async ({ network }, { ...params }) => {
-    console.warn("Dashboard Navigation params", params);
     const userContextResponse = await network.post(
       api.userContext,
       {},

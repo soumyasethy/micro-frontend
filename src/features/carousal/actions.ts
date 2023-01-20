@@ -7,7 +7,6 @@ export const GoToNumber: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  console.warn("**** Test Action Triggered ****", action);
   // await goBack();
   await SharedPropsService.setOnboarding(true);
   navigate(ROUTE.PHONE_NUMBER, {});

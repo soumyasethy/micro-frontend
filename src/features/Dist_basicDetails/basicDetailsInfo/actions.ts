@@ -67,15 +67,6 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
         email ) {
             
         await setDatastore(action.routeId, "continue", <ButtonProps>{loading: true});
-
-        console.warn("Data Object: " + JSON.stringify({
-            panNumber,
-            fullName,
-            mobileNumber,
-            email
-        }));
-        
-
         setTimeout(async()=> {
             await setDatastore(action.routeId, "continue", <ButtonProps>{loading: false});
         }, 2000);

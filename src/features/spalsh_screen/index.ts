@@ -98,7 +98,7 @@ export const splashScreenMF: PageType<any> = {
         mobileNumber = params["user"];
       }
     }
-    setTimeout(
+     setTimeout(
       async () =>
         await SplashAction(
           {

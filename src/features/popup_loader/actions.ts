@@ -5,6 +5,5 @@ export const ClosePopup: ActionFunction<any> = async (
   _datastore,
   { goBack }
 ): Promise<any> => {
-  console.warn("**** ClosePopup ****", action);
   await goBack();
 };

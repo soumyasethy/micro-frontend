@@ -78,7 +78,6 @@ export const BavVerifyManualAction: ActionFunction<
   _datastore,
   { setDatastore, network, showPopup, goBack }
 ): Promise<any> => {
-  console.warn("_datastore", _datastore);
   if (!bankAccountNumber || !bankIfsc) return;
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,

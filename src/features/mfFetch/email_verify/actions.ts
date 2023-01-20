@@ -15,7 +15,6 @@ export const loginGoogle: ActionFunction<any> = async (
   _datastore,
   { navigate }
 ): Promise<any> => {
-  console.warn("loginGoogle action", action.payload.value.profileObj.email);
   // const responseWeb = await signInGoogleWeb();
   // console.warn("responseWeb-->", responseWeb);
   // const response: GoogleLoginResponse = await signInGoogle();

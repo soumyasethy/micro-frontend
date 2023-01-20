@@ -22,7 +22,6 @@ export const onChangeAadhar: ActionFunction<AadharInputPayload> = async (
   _datastore,
   {}
 ): Promise<any> => {
-  console.warn("**** Test Action Triggered ****", action);
   aadharNumber = action.payload.value;
 };
 export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
@@ -30,7 +29,6 @@ export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
   _datastore,
   { setDatastore }
 ): Promise<any> => {
-  console.warn("action", action);
   await setDatastore(action.routeId, action.payload.targetWidgetId, <
     ButtonProps
   >{

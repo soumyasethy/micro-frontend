@@ -56,7 +56,7 @@ export const template: (
       { id: "subTitle", type: WIDGET.TEXT },
       { id: "subTitleSpace", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
-      { id: "inputSpace", type: WIDGET.SPACE },
+      // { id: "inputSpace", type: WIDGET.SPACE },
     ],
   },
   datastore: <Datastore>{

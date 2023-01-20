@@ -239,7 +239,6 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         }, APP_CONFIG.POLLING_INTERVAL);
       }
     } else {
-      console.warn("***** CHECKING FOR NOT PLEDGED");
       await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
         isAutoTriggerCta: true,

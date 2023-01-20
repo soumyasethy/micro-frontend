@@ -81,7 +81,7 @@ export const autoTriggerOtp: ActionFunction<any> = async (
       ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP,
       false
     );
-    fetchMyPortfolio(
+    await fetchMyPortfolio(
       {
         routeId: ROUTE.MF_FETCH_PORTFOLIO,
         type: ACTION.FETCH_MY_PORTFOLIO,
@@ -152,9 +152,5 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   await setDatastore(ROUTE.OTP_AUTH_CAS, "subTitle", <TextInputProps>{
     label: `${AssetRepositoryMap[assetRepositoryType].NAME} depository has sent an OTP to `,
   });
-
-  await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
-    ...action.payload,
-    assetRepository: await SharedPropsService.getAssetRepositoryType(),
-  });
+  await navigate(ROUTE.OTP_AUTH_CAS, action.payload);
 };

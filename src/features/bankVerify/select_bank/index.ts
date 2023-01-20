@@ -39,7 +39,6 @@ export const template: (BanksRepo: {
   ALLBANKS: { [key in string]: string };
   POPULAR: { [key in string]: string };
 }) => Promise<TemplateSchema> = async (BanksRepo) => {
-  console.warn("****** Bank Repo template ******", BanksRepo);
   return {
     layout: <Layout>{
       id: ROUTE.BANK_SELECT,

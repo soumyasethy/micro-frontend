@@ -225,7 +225,6 @@ export const nextStepId = async (
       const isGoogleLoginEnabled = await SharedPropsService.getConfig(
         ConfigTokens.IS_GOOGLE_LOGIN_ENABLED
       );
-      console.warn("*** isGoogleLoginEnabled", isGoogleLoginEnabled);
       return {
         // routeId: ROUTE.EMAIL_VERIFY,
         routeId: isGoogleLoginEnabled ? ROUTE.EMAIL_VERIFY : ROUTE.ENTER_EMAIL,

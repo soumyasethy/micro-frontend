@@ -33,7 +33,7 @@ type GlobalProps = {
   authCAS?: AuthCASModel;
   ref?: string;
   url?: string;
-  assetRepositoryType?: AssetRepositoryType;
+  initialAssetRepositoryType?: AssetRepositoryType;
   assetRepositoryConfig?: {
     [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
   };
@@ -59,7 +59,7 @@ let _globalProps: GlobalProps = {
   authCAS: null,
   ref: "",
   /*** Default asset repository */
-  assetRepositoryType: AssetRepositoryType.CAMS,
+  initialAssetRepositoryType: AssetRepositoryType.CAMS,
   assetRepositoryConfig: {
     /*** Sequence of fetching asset repository ***/
     [AssetRepositoryType.KARVY]: {
@@ -104,10 +104,10 @@ export function getConfig(configId?: ConfigTokens): any {
 async function setAssetRepositoryType(
   assetRepositoryType: AssetRepositoryType
 ) {
-  _globalProps.assetRepositoryType = assetRepositoryType;
+  _globalProps.initialAssetRepositoryType = assetRepositoryType;
 }
 async function getAssetRepositoryType() {
-  return _globalProps.assetRepositoryType;
+  return _globalProps.initialAssetRepositoryType;
 }
 async function getAssetRepositoryFetchMap() {
   return _globalProps.assetRepositoryConfig;
@@ -119,7 +119,7 @@ async function setAssetRepositoryFetchMap(
   if (type) {
     _globalProps.assetRepositoryConfig[type] = value;
   } else {
-    _globalProps.assetRepositoryConfig[_globalProps.assetRepositoryType] =
+    _globalProps.assetRepositoryConfig[_globalProps.initialAssetRepositoryType] =
       value;
   }
 }
