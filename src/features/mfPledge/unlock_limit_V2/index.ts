@@ -180,10 +180,10 @@ export const template: (
           id: "Mspace3",
           type: WIDGET.SPACE,
         },
-        {
-          id: "Mspace4",
-          type: WIDGET.SPACE,
-        },
+        // {
+        //   id: "Mspace4",
+        //   type: WIDGET.SPACE,
+        // },
         {
           id: "ctaCard",
           type: WIDGET.CARD,
@@ -395,8 +395,8 @@ export const template: (
         ],
         heading: "Why Volt?",
       },
-      Mspace3: <SpaceProps>{ size: SizeTypeTokens.Size80 },
-      Mspace4: <SpaceProps>{ size: SizeTypeTokens.Size80 },
+      Mspace3: <SpaceProps>{ size: SizeTypeTokens.XL },
+      // Mspace4: <SpaceProps>{ size: SizeTypeTokens.Size80 },
       ctaCard: <CardProps>{
         bgColor: ColorTokens.White,
         body: { widgetItems: [{ id: "ctaBody", type: WIDGET.STACK }] },
