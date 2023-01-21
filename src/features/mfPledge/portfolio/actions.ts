@@ -7,7 +7,7 @@ import {
   PortfolioTogglePayload,
   SearchPortfolioPayload,
 } from "./types";
-import { CtaCardProps, ListProps } from "@voltmoney/schema";
+import { ButtonTypeTokens, ColorTokens, CtaCardProps, ListProps } from "@voltmoney/schema";
 import {
   AvailableCASItem,
   IsinLTVMap,
@@ -22,6 +22,19 @@ import { roundDownToNearestHundred } from "../../../configs/utils";
 let portfolioSearchKeyword = "";
 let listBeforeSearchUI = [];
 
+export const getTotalLimitWithoutRounding = (
+  availableCAS: AvailableCASItem[],
+  isinNavMap: IsinNAVMap,
+  isinLTVMap: IsinLTVMap
+) => {
+  let sum = 0;
+  availableCAS.forEach((item) => {
+    sum =
+      sum +
+        item.pledgedUnits * isinNavMap[item.isinNo] * isinLTVMap[item.isinNo]
+  });
+  return sum;
+};
 export const getTotalLimit = (
   availableCAS: AvailableCASItem[],
   isinNavMap: IsinNAVMap,
@@ -105,11 +118,21 @@ export const ToggleSelectAction: ActionFunction<
     action.payload.stepResponseObject,
     portfolioSearchKeyword
   );
+  if(props.totalItem['info'] < 25000) {
+    await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+      ...props.totalItem,
+      buttonType: ButtonTypeTokens.LargeOutline,
+      labelColor: ColorTokens.Grey_Charcoal
+    });
+  } else {
+    await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
+      ...props.totalItem,
+      labelColor: ColorTokens.White,
+      buttonType: ButtonTypeTokens.LargeFilled,
+    });
+  }
   await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps & WidgetProps>{
     ...props.listItem,
-  });
-  await setDatastore(ROUTE.PORTFOLIO, "totalItem", <CtaCardProps>{
-    ...props.totalItem,
   });
 };
 
