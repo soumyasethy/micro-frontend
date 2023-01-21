@@ -341,6 +341,10 @@ export const roundDownToNearestHundred = (num: number) => {
   return Math.floor(num / 100) * 100;
 };
 
+export const ceilToNearestHundred = (num: number) => {
+  return Math.ceil(num / 100) * 100;
+};
+
 export const maskBankAccountNumber = (accountNo: string) => {
   if (accountNo.length > 4) {
     let showString = accountNo.slice(accountNo.length - 4);

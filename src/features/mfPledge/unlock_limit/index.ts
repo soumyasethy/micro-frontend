@@ -84,7 +84,7 @@ export const template: (
       {
         id: "getMorePortfolio",
         type: WIDGET.SUGGESTION_CARD,
-        padding: { horizontal: 0 },
+        padding: { horizontal: -16 },
       },
       {
         id: "promoCardTopSpace",
@@ -94,7 +94,7 @@ export const template: (
       {
         id: "promoCard",
         type: WIDGET.PROMOCARD,
-        padding: { horizontal: 0 },
+        padding: { horizontal: -16 },
       },
     ],
   },
