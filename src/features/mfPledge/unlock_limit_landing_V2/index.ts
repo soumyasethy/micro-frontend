@@ -150,11 +150,13 @@ export const template: (availableCreditAmount: number,
     },
     bottomSheet: <BottomSheetProps>{
       initialOffset: 0.35,
-      widgetItems: [
+      finalOffSet: 0.85,
+      widgetHeaderItems: [
         { id:'bottomSheetText', type: WIDGET.TEXT },
         { id: 'bs_space0', type: WIDGET.SPACE },
         { id:'infoRow', type: WIDGET.STACK },
-        { id: 'bs_space1', type: WIDGET.SPACE },
+      ],
+      widgetItems: [
         { id: 'listItem', type: WIDGET.LIST },
         { id: 'bs_space2', type: WIDGET.SPACE },
       ]

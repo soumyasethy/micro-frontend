@@ -218,7 +218,7 @@ export const template: (
       size: SizeTypeTokens.XXL,
     },
     bottomSheet: <BottomSheetProps>{
-      widgetItems: [
+      widgetHeaderItems: [
         {
           id: "bottomSheetStack",
           type: WIDGET.STACK,
@@ -236,16 +236,19 @@ export const template: (
           id: "bottomStackText",
           type: WIDGET.TEXT,
         },
-        {
-          id: "space6",
-          type: WIDGET.SPACE,
-        },
+      ],
+      widgetItems: [
+        // {
+        //   id: "space6",
+        //   type: WIDGET.SPACE,
+        // },
         { id: "listItem", type: WIDGET.LIST },
       ],
       padding: <PaddingProps>{
         horizontal: SizeTypeTokens.XS,
       },
       initialOffset: 0.4,
+      finalOffSet: 0.85,
     },
     bottomSheetStack: <StackProps>{
       type: StackType.row,
