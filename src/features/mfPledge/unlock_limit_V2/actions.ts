@@ -248,8 +248,8 @@ export const ViewAllAction: ActionFunction<any> = async (
         id: "chargesCard2",
         type: WIDGET.CARD,
         padding: {
-          horizontal: 0,
-          all: 0,
+          horizontal: -16,
+          vertical: 0,
         },
       },
     ],
