@@ -145,9 +145,16 @@ export const customEditPortfolio = async (
   const item = stepResponseObject.availableCAS[index];
   const key = `${item.isinNo}-${item.folioNo}`;
 
-  updateAvailableCASMap[key].pledgedUnits =
-    amount /
-    (stepResponseObject.isinNAVMap[updateAvailableCASMap[key].isinNo] *
-      stepResponseObject.isinLTVMap[updateAvailableCASMap[key].isinNo]);
+  updateAvailableCASMap[key].pledgedUnits = Math.min(
+    // ceil number after 7 decimal places
+    Math.ceil(
+      (amount /
+        (stepResponseObject.isinNAVMap[updateAvailableCASMap[key].isinNo] *
+          stepResponseObject.isinLTVMap[updateAvailableCASMap[key].isinNo])) *
+        Math.pow(10, 10)
+    ) / Math.pow(10, 10),
+    item["totalAvailableUnits"]
+  );
+  
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
 };
