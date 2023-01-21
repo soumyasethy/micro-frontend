@@ -53,7 +53,7 @@ export const template: (
       { id: "amountSpace", type: WIDGET.SPACE },
       { id: "timeStack", type: WIDGET.STACK },
       { id: "timeSpace", type: WIDGET.SPACE },
-       { id: "messageStack", type: WIDGET.STACK },
+      { id: "messageStack", type: WIDGET.STACK },
       { id: "messageSpace", type: WIDGET.SPACE },
 
       { id: "info", type: WIDGET.INFO },
@@ -122,7 +122,7 @@ export const template: (
       justifyContent: StackJustifyContent.center,
       widgetItems: [{ id: "message", type: WIDGET.TEXT }],
     },
-    
+
     message: <TypographyProps>{
       label: `We’re processing your withdrawal request. It should be deposited in XXXX ${accountNumber.substring(
         accountNumber.length - 4,

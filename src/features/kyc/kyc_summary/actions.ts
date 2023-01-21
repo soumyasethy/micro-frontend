@@ -53,7 +53,7 @@ export const verifyKycSummary: ActionFunction<any> = async (
 
     await showPopup({
       autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
-      isAutoTriggerCta: true,
+      isAutoTriggerCta: false,
       title: "KYC done successfully!",
       subTitle: "You will be redirected to next step in few seconds",
       type: "SUCCESS",

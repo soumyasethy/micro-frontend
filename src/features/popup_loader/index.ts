@@ -66,9 +66,14 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
         id: "alert",
         type: WIDGET.VERIFICATIONCARD,
       },
+      {
+        id: "space",
+        type: WIDGET.SPACE,
+      },
     ],
   },
   datastore: <Datastore>{
+    space: <SpaceProps>{ size: SizeTypeTokens.Size80 },
     alert: <VerificationCardProps & WidgetProps>{
       isAutoTriggerCta,
       autoTriggerTimerInMilliseconds,

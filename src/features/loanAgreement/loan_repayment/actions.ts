@@ -77,7 +77,7 @@ export const AutoPayPoll: ActionFunction<LimitPayload> = async (
 export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { navigate, openNewTab, showPopup, hidePopup }
+  { openNewTab, showPopup, hidePopup, ...props }
 ): Promise<any> => {
   if (action.payload.value) {
     // /** manually opening tab to avoid popup blocker **/
@@ -107,7 +107,7 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
 export const PollMandateStatus: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate, showPopup, hidePopup }
+  { showPopup, hidePopup }
 ): Promise<any> => {
   const applicationId = (await SharedPropsService.getUser())
     .linkedApplications[0].applicationId;
@@ -188,4 +188,3 @@ export const NavLoanRepayment: ActionFunction<any> = async (
   await goBack();
   await navigate(ROUTE.LOAN_REPAYMENT);
 };
-

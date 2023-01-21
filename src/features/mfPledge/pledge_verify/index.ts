@@ -33,7 +33,6 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, OtpPledgePayload } from "./types";
 import { goBack, NavigateNext, resendOTP, verifyOTP } from "./actions";
-import { fetchUserRepo } from "./repo";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
@@ -63,7 +62,6 @@ export const template: (
       { id: "subTitleStack", type: WIDGET.STACK },
       { id: "space1", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
-      { id: "inputSpace", type: WIDGET.SPACE },
     ],
   },
   datastore: <Datastore>{
@@ -160,7 +158,6 @@ export const template: (
         routeId: ROUTE.PLEDGE_VERIFY,
       },
     },
-    inputSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     message: <TypographyProps>{
       label: "Resend OTP in 30 secs",
       fontSize: FontSizeTokens.XS,

@@ -317,7 +317,7 @@ export const unlockLimitMF: PageType<any> = {
           await goBack();
           await showPopup({
             autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-            isAutoTriggerCta: true,
+            isAutoTriggerCta: false,
             title: "Limit unlocked successfully!",
             subTitle: "You will be redirected to next step in few seconds",
             type: "SUCCESS",

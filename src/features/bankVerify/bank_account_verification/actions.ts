@@ -87,7 +87,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
     await updateStepStatusMap(stepStatusMap);
     await showPopup({
       autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
-      isAutoTriggerCta: true,
+      isAutoTriggerCta: false,
       type: "SUCCESS",
       title: "Account verified successfully!",
       subTitle: "You will be redirected to next step in few seconds",
