@@ -1,12 +1,14 @@
 import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   BottomSheetProps,
+  BottomSheetType,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
   FontFamilyTokens,
-  FontSizeTokens, IconTokens,
+  FontSizeTokens,
+  IconTokens,
   LimitCardProps,
   LottieProps,
   LottieTokens,
@@ -15,13 +17,14 @@ import {
   StackAlignItems,
   StackJustifyContent,
   StackProps,
-  StackType, StepperStateToken,
+  StackType,
+  StepperStateToken,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import {ROUTE} from "../../../routes";
 import {ACTION, StepResponseObject} from "./types";
-import {continueLimit, onLoad} from "./actions";
+import {continueLimit, getMoreMfPortfolio, onLoad, removeGetMorePortfolio} from "./actions";
 import {fetchPledgeLimitRepo} from "./repo";
 import SharedPropsService from "../../../SharedPropsService";
 import {AuthCASModel} from "../../../types/AuthCASModel";
@@ -33,8 +36,6 @@ import {APP_CONFIG, getAppHeader} from "../../../configs/config";
 import {NavigationNext} from "../../kyc/kyc_init/types";
 import {addCommasToNumber, isMorePortfolioRenderCheck} from "../../../configs/utils";
 import _ from "lodash";
-import { getMoreMfPortfolio } from "./actions";
-import { removeGetMorePortfolio } from "./actions";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -149,6 +150,7 @@ export const template: (availableCreditAmount: number,
       }
     },
     bottomSheet: <BottomSheetProps>{
+      type: BottomSheetType.WEB,
       initialOffset: 0.35,
       finalOffSet: 0.85,
       widgetHeaderItems: [

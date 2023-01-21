@@ -1,6 +1,7 @@
 import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   BottomSheetProps,
+  BottomSheetType,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -29,13 +30,12 @@ import {ROUTE} from "../../../routes";
 import {ACTION} from "./types";
 import {editSliderAmount, goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider} from "./action";
 import {addCommasToNumber} from "../../../configs/utils";
-import { StepResponseObject, UpdateAvailableCASMap} from "../unlock_limit/types";
+import {StepResponseObject, UpdateAvailableCASMap} from "../unlock_limit/types";
 import {AuthCASModel} from "../../../types/AuthCASModel";
 import SharedPropsService from "../../../SharedPropsService";
+import sharedPropsService from "../../../SharedPropsService";
 import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
 import {portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
-import sharedPropsService from "../../../SharedPropsService";
-import {getUpdateAvailableCAS} from "../modify_limit/actions";
 // import { getPortfolioValue } from "../portfolio_readonly/actions";
 
 export const template: (
@@ -218,6 +218,7 @@ export const template: (
       size: SizeTypeTokens.XXL,
     },
     bottomSheet: <BottomSheetProps>{
+      type: BottomSheetType.WEB,
       widgetHeaderItems: [
         {
           id: "bottomSheetStack",
