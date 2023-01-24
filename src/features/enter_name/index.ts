@@ -114,7 +114,7 @@ export const template: (applicationId: string) => TemplateSchema = (
         //   },
         // },
       },
-      space_input: <SpaceProps>{ size: SizeTypeTokens.MD },
+      space_input: <SpaceProps>{ size: SizeTypeTokens.XXL },
       input_email: <TextInputProps & WidgetProps>{
         isFocus:false,
         regex: RegexConfig.EMAIL,
