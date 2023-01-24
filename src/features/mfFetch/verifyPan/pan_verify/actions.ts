@@ -27,6 +27,8 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
     loading: true,
   });
 
+  await SharedPropsService.setUserDob(dob);
+
   await network
     .post(
       api.panVerify,

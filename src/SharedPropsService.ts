@@ -48,6 +48,7 @@ type GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]?: number;
     [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
   };
+  userDob ?: string;
 };
 
 let _globalProps: GlobalProps = {
@@ -86,6 +87,7 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
   },
+  userDob: ""
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -264,6 +266,13 @@ async function setAppPlatform(type: string) {
 async function getAppPlatform() {
   return _globalProps.appPlatform;
 }
+async function setUserDob(type: string) {
+  _globalProps.userDob = type;
+}
+async function getUserDob() {
+  return _globalProps.userDob;
+}
+
 async function setAuthCASResponse(data: AuthCASModel) {
   _globalProps.authCAS = data;
 }
@@ -304,4 +313,6 @@ export default {
   getConfig,
   setAuthCASResponse,
   getAuthCASResponse,
+  setUserDob,
+  getUserDob
 };

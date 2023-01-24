@@ -205,6 +205,8 @@ export const panVerifyMF: PageType<any> = {
   onLoad: async ({ asyncStorage }, { applicationId, targetRoute }) => {
     const user: User = await SharedPropsService.getUser();
     const prefilledPanNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const myDob = await SharedPropsService.getUserDob();
+    console.log(myDob);
     return Promise.resolve(
       template(applicationId, targetRoute, prefilledPanNumber)
     );
