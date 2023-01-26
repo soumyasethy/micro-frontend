@@ -1,7 +1,13 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
-  BottomSheetProps,
-  BottomSheetType,
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
+import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -26,16 +32,25 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION} from "./types";
-import {editSliderAmount, goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider} from "./action";
-import {addCommasToNumber} from "../../../configs/utils";
-import {StepResponseObject, UpdateAvailableCASMap} from "../unlock_limit/types";
-import {AuthCASModel} from "../../../types/AuthCASModel";
+import { ROUTE } from "../../../routes";
+import { ACTION } from "./types";
+import {
+  editSliderAmount,
+  goBack,
+  goConfirmPledge,
+  goToEditPortFolio,
+  OnChangeSlider,
+} from "./action";
+import { addCommasToNumber } from "../../../configs/utils";
+import {
+  StepResponseObject,
+  UpdateAvailableCASMap,
+} from "../unlock_limit/types";
+import { AuthCASModel } from "../../../types/AuthCASModel";
 import SharedPropsService from "../../../SharedPropsService";
 import sharedPropsService from "../../../SharedPropsService";
-import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
-import {portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
+import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
+import { portfolioListDatastoreBuilderSetCreditLimit } from "./utils";
 // import { getPortfolioValue } from "../portfolio_readonly/actions";
 
 export const template: (
@@ -69,11 +84,20 @@ export const template: (
       { id: "minMaxStack", type: WIDGET.STACK },
       { id: "space4", type: WIDGET.SPACE },
       {
-        id: "bottomSheet",
-        type: WIDGET.BOTTOMSHEET,
-        position: POSITION.STICKY_BOTTOM,
-        padding: { left: 0, right: 0 },
+        id: "bottomSheetStack",
+        type: WIDGET.STACK,
+        padding: {
+          left: 0,
+          right: 0,
+        },
       },
+      // {
+      //   id: "bottomSheet",
+      //   type: WIDGET.BOTTOMSHEET,
+      //   position: POSITION.STICKY_BOTTOM,
+      //   padding: { left: 0, right: 0 },
+      // },
+      { id: "listItem", type: WIDGET.LIST },
       {
         id: "ctaCard",
         type: WIDGET.CARD,
@@ -165,7 +189,7 @@ export const template: (
           stepResponseObject,
           updateAvailableCASMap,
         },
-      }
+      },
     },
     space2: <SpaceProps>{
       size: SizeTypeTokens.XXXXXL,
@@ -180,7 +204,7 @@ export const template: (
         type: ACTION.ON_CHANGE_SLIDER,
         routeId: ROUTE.SET_CREDIT_LIMIT,
         payload: {
-          stepResponseObject: stepResponseObject
+          stepResponseObject: stepResponseObject,
         },
       },
     },
@@ -217,40 +241,40 @@ export const template: (
     space4: <SpaceProps>{
       size: SizeTypeTokens.XXL,
     },
-    bottomSheet: <BottomSheetProps>{
-      type: BottomSheetType.WEB,
-      widgetHeaderItems: [
-        {
-          id: "bottomSheetStack",
-          type: WIDGET.STACK,
-          padding: {
-            left: 10,
-            right: 10,
-            horizontal: 10,
-          },
-        },
-        {
-          id: "space5",
-          type: WIDGET.SPACE,
-        },
-        {
-          id: "bottomStackText",
-          type: WIDGET.TEXT,
-        },
-      ],
-      widgetItems: [
-        // {
-        //   id: "space6",
-        //   type: WIDGET.SPACE,
-        // },
-        { id: "listItem", type: WIDGET.LIST },
-      ],
-      padding: <PaddingProps>{
-        horizontal: SizeTypeTokens.XS,
-      },
-      initialOffset: 0.4,
-      finalOffSet: 0.85,
-    },
+    // bottomSheet: <BottomSheetProps>{
+    //   type: BottomSheetType.WEB,
+    //   widgetHeaderItems: [
+    //     {
+    //       id: "bottomSheetStack",
+    //       type: WIDGET.STACK,
+    //       padding: {
+    //         left: 10,
+    //         right: 10,
+    //         horizontal: 10,
+    //       },
+    //     },
+    //     {
+    //       id: "space5",
+    //       type: WIDGET.SPACE,
+    //     },
+    //     {
+    //       id: "bottomStackText",
+    //       type: WIDGET.TEXT,
+    //     },
+    //   ],
+    //   widgetItems: [
+    //     // {
+    //     //   id: "space6",
+    //     //   type: WIDGET.SPACE,
+    //     // },
+    //     { id: "listItem", type: WIDGET.LIST },
+    //   ],
+    //   padding: <PaddingProps>{
+    //     horizontal: SizeTypeTokens.XS,
+    //   },
+    //   initialOffset: 0.4,
+    //   finalOffSet: 0.85,
+    // },
     bottomSheetStack: <StackProps>{
       type: StackType.row,
       justifyContent: StackJustifyContent.spaceBetween,
@@ -283,22 +307,24 @@ export const template: (
         type: ACTION.EDIT_PORTFOLIO,
         payload: {
           stepResponseObject: stepResponseObject,
-          updateAvailableCASMap: updateAvailableCASMap
+          updateAvailableCASMap: updateAvailableCASMap,
         },
-        routeId: ROUTE.SET_CREDIT_LIMIT
-      }
+        routeId: ROUTE.SET_CREDIT_LIMIT,
+      },
     },
     space5: <SpaceProps>{
       size: SizeTypeTokens.MD,
     },
     bottomStackText: <TypographyProps>{
-      label: `₹${addCommasToNumber(await SharedPropsService.getDesiredPortfolio())} out of ₹${addCommasToNumber(
+      label: `₹${addCommasToNumber(
+        await SharedPropsService.getDesiredPortfolio()
+      )} out of ₹${addCommasToNumber(
         parseInt(stepResponseObject["totalPortfolioAmount"].toString())
       )} are selected for pledging.`,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
       fontSize: FontSizeTokens.SM,
-      color: ColorTokens.Grey_Charcoal
+      color: ColorTokens.Grey_Charcoal,
     },
     space6: <SpaceProps>{
       size: SizeTypeTokens.MD,
@@ -333,7 +359,7 @@ export const template: (
         type: ACTION.GO_CONFIRM_PLEDGE,
         routeId: ROUTE.SET_CREDIT_LIMIT,
         payload: {
-          stepResponseObject: stepResponseObject
+          stepResponseObject: stepResponseObject,
         },
       },
     },
@@ -351,9 +377,9 @@ export const setCreditLimitMf: PageType<any> = {
         }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
     const creditAmount = await sharedPropsService.getCreditLimit();
-    const updateAvailableCASMapSharedProps = await sharedPropsService.getAvailableCASMap();
+    const updateAvailableCASMapSharedProps =
+      await sharedPropsService.getAvailableCASMap();
     const updateAvailableCASMap = updateAvailableCASMapSharedProps;
-
 
     if (creditAmount > 0) {
       /*
@@ -380,14 +406,20 @@ export const setCreditLimitMf: PageType<any> = {
       });
     }
     await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
-    
+
     // const portValue = getPortfolioValue(
     //   stepResponseObject["availableCAS"],
     //   stepResponseObject["isinNAVMap"]
     // );
-  
+
     // console.log("portValue", portValue);
-    return Promise.resolve(template(stepResponseObject.availableCreditAmount, stepResponseObject, updateAvailableCASMap));
+    return Promise.resolve(
+      template(
+        stepResponseObject.availableCreditAmount,
+        stepResponseObject,
+        updateAvailableCASMap
+      )
+    );
   },
   actions: {
     [ACTION.ON_CHANGE_SLIDER]: OnChangeSlider,
