@@ -117,7 +117,6 @@ export const template: (
         parseInt(stepResponseObject["totalPortfolioAmount"].toString())
       )}`,
       label: "Available credit limit",
-      showLottie: false,
     },
     continue: <ButtonProps & WidgetProps>{
       label: "Continue",

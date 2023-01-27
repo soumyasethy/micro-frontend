@@ -51,7 +51,6 @@ import SharedPropsService from "../../../SharedPropsService";
 import sharedPropsService from "../../../SharedPropsService";
 import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
 import { portfolioListDatastoreBuilderSetCreditLimit } from "./utils";
-// import { getPortfolioValue } from "../portfolio_readonly/actions";
 
 export const template: (
   maxAmount: number,
