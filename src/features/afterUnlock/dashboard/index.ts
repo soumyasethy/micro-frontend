@@ -60,12 +60,15 @@ export const template: (
   actualLoanAmount: number,
   repaymentAmount: number,
   isPendingDisbursalApproval: boolean,
-  amountPercentage: number
+  amountPercentage: number,
+  isPendingDisbursalStatement: boolean
 ) => TemplateSchema = (
   availableCreditAmount,
   actualLoanAmount,
   repaymentAmount,
-  isPendingDisbursalApproval
+  isPendingDisbursalApproval,
+  amountPercentage: number,
+  isPendingDisbursalStatement: boolean
 ) => {
   return {
     layout: <Layout>{
@@ -81,6 +84,15 @@ export const template: (
           ? [
               {
                 id: "message",
+                type: WIDGET.MESSAGE,
+                position: POSITION.FIXED_TOP,
+              },
+            ]
+          : []),
+        ...(isPendingDisbursalStatement
+          ? [
+              {
+                id: "message2",
                 type: WIDGET.MESSAGE,
                 position: POSITION.FIXED_TOP,
               },
@@ -239,6 +251,12 @@ export const template: (
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.System_Warning_BG,
       },
+      message2: <MessageProps>{
+        label:
+          "Your previous withdrawal request is in progress, meanwhile you cannot request raise new request.",
+        labelColor: ColorTokens.Grey_Charcoal,
+        bgColor: ColorTokens.System_Warning_BG,
+      },
       amountItem: <AmountCardProps>{
         title: "Available cash",
         subTitle: `${availableCreditAmount}`.replace(
@@ -264,9 +282,10 @@ export const template: (
       cardSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       continue: <ButtonProps & WidgetProps>{
         label: "Withdraw now",
-        type: isPendingDisbursalApproval
-          ? ButtonTypeTokens.LargeOutline
-          : ButtonTypeTokens.LargeFilled,
+        type:
+          isPendingDisbursalApproval || isPendingDisbursalStatement
+            ? ButtonTypeTokens.LargeOutline
+            : ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.DASHBOARD,
@@ -443,6 +462,9 @@ export const dashboardMF: PageType<any> = {
     let isPendingDisbursalApproval =
       user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_APPROVAL";
 
+    let isPendingDisbursalStatement =
+      user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_SETTLEMENT";
+
     let amountPercentage = Math.round(
       (availableCreditAmount * 100) / actualLoanAmount
     );
@@ -453,7 +475,8 @@ export const dashboardMF: PageType<any> = {
         actualLoanAmount,
         repaymentAmount,
         isPendingDisbursalApproval,
-        amountPercentage
+        amountPercentage,
+        isPendingDisbursalStatement
       )
     );
   },
