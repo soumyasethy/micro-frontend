@@ -15,7 +15,7 @@ import { AnalyticsEventTracker } from "../../../configs/constants";
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, network, goBack, analytics }
+  { navigate, setDatastore, network, analytics }
 ): Promise<any> => {
   const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
