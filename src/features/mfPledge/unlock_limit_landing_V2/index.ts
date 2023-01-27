@@ -81,6 +81,10 @@ export const template: (
       { id: "continue", type: WIDGET.BUTTON },
       { id: "space3", type: WIDGET.SPACE },
       { id: "otherSourceStack", type: WIDGET.STACK },
+      { id: "space4", type: WIDGET.SPACE },
+      { id: "bottomSheetStack", type: WIDGET.STACK },
+      { id: "bs_space0", type: WIDGET.SPACE },
+      { id: "infoRow", type: WIDGET.STACK },
       // { id: 'bottomSheet', type: WIDGET.BOTTOMSHEET, position: POSITION.STICKY_BOTTOM, padding: { left: 0, right: 0 }},
       { id: "bs_space2", type: WIDGET.SPACE },
       { id: "listItem", type: WIDGET.LIST },
@@ -183,6 +187,12 @@ export const template: (
     bs_space0: <SpaceProps>{ size: SizeTypeTokens.XL },
     bs_space1: <SpaceProps>{ size: SizeTypeTokens.MD },
     bs_space2: <SpaceProps>{ size: SizeTypeTokens.MD },
+    bottomSheetStack: <StackProps>{
+      type: StackType.row,
+      justifyContent: StackJustifyContent.center,
+      alignItems: StackAlignItems.center,
+      widgetItems: [{ id: "bottomSheetText", type: WIDGET.TEXT }],
+    },
     bottomSheetText: <TypographyProps>{
       label: "Credit limit on basis of these assets",
       fontSize: FontSizeTokens.MD,
@@ -220,6 +230,7 @@ export const template: (
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     space2: <SpaceProps>{ size: SizeTypeTokens.XL },
     space3: <SpaceProps>{ size: SizeTypeTokens.XL },
+    space4: <SpaceProps>{ size: SizeTypeTokens.XL },
   },
 });
 
