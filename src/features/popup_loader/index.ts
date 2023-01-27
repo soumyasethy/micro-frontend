@@ -4,22 +4,15 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
 import {
   ColorTokens,
-  FontSizeTokens,
-  IconProps,
-  IconSizeTokens,
   IconTokens,
   SizeTypeTokens,
   SpaceProps,
-  StackAlignItems,
-  StackJustifyContent,
-  StackProps,
-  StackType,
-  TypographyProps,
   VerificationCardButtonTypeToken,
   VerificationCardProps,
   VerificationCardTypeTokens,
@@ -65,11 +58,12 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
       {
         id: "alert",
         type: WIDGET.VERIFICATIONCARD,
+        position: POSITION.ABSOLUTE_BOTTOM,
       },
-      {
-        id: "space",
-        type: WIDGET.SPACE,
-      },
+      // {
+      //   id: "space",
+      //   type: WIDGET.SPACE,
+      // },
     ],
   },
   datastore: <Datastore>{

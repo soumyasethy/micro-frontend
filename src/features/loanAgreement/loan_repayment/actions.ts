@@ -128,41 +128,35 @@ export const PollMandateStatus: ActionFunction<any> = async (
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
           hidePopup();
-          const refTimer = setInterval(async () => {
-            clearInterval(refTimer);
-            showPopup({
-              isAutoTriggerCta: false,
-              type: "SUCCESS",
-              title: "AutoPay setup successful!",
-              subTitle:
-                "Interest charges will be paid automatically every month.",
-              ctaLabel: "Proceed to review agreement",
-              ctaAction: {
-                type: ACTION.GO_LOAN_AGREEMENT,
-                routeId: ROUTE.LOAN_REPAYMENT,
-                payload: {},
-              },
-            });
-          }, APP_CONFIG.MODAL_TRIGGER_TIMEOUT);
+          showPopup({
+            isAutoTriggerCta: false,
+            type: "SUCCESS",
+            title: "AutoPay setup successful!",
+            subTitle:
+              "Interest charges will be paid automatically every month.",
+            ctaLabel: "Proceed to review agreement",
+            ctaAction: {
+              type: ACTION.GO_LOAN_AGREEMENT,
+              routeId: ROUTE.LOAN_REPAYMENT,
+              payload: {},
+            },
+          });
         } else if (response.stepResponseObject.toLowerCase() === "failed") {
           clearInterval(timer);
           hidePopup();
-          const refTimer = setInterval(async () => {
-            clearInterval(refTimer);
-            showPopup({
-              isAutoTriggerCta: false,
-              type: "FAILED",
-              title: "AutoPay setup failed!",
-              subTitle:
-                "Bank account must be linked for AutoPay. Please try again.",
-              ctaLabel: "Continue to try again",
-              ctaAction: {
-                type: ACTION.GO_LOAN_REPAYMENT,
-                routeId: ROUTE.LOAN_REPAYMENT,
-                payload: {},
-              },
-            });
-          }, APP_CONFIG.MODAL_TRIGGER_TIMEOUT);
+          showPopup({
+            isAutoTriggerCta: false,
+            type: "FAILED",
+            title: "AutoPay setup failed!",
+            subTitle:
+              "Bank account must be linked for AutoPay. Please try again.",
+            ctaLabel: "Continue to try again",
+            ctaAction: {
+              type: ACTION.GO_LOAN_REPAYMENT,
+              routeId: ROUTE.LOAN_REPAYMENT,
+              payload: {},
+            },
+          });
         }
       });
   };

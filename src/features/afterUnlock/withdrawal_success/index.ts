@@ -3,6 +3,7 @@ import {
   Layout,
   LAYOUTS,
   PageType,
+  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -32,7 +33,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { goBack, Done } from "./action";
+import { Done, goBack } from "./action";
 import moment from "moment";
 
 export const template: (
@@ -55,7 +56,6 @@ export const template: (
       { id: "timeSpace", type: WIDGET.SPACE },
       { id: "messageStack", type: WIDGET.STACK },
       { id: "messageSpace", type: WIDGET.SPACE },
-
       { id: "info", type: WIDGET.INFO },
       { id: "infoSpace", type: WIDGET.SPACE },
       {
