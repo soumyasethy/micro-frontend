@@ -12,7 +12,7 @@ import {
   PortfolioTogglePayload,
 } from "./types";
 import { ROUTE } from "../../../routes";
-import { getActualLimit, getTotalLimit } from "./actions";
+import {getActualLimit, getPortfolioValue, getTotalLimit} from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import { Datastore, WidgetProps } from "@voltmoney/types";
 import SharedPropsService from "../../../SharedPropsService";
@@ -26,6 +26,8 @@ export const portfolioListDatastoreBuilder = async (
   stepResponseObject: StepResponseObject,
   searchKeyword: string = ""
 ): Promise<Datastore> => {
+
+  console.log("stepResponseObject  ", await sharedPropsService.getAuthCASResponse())
   const selectedMap = {};
   const listItemDataProps: ListItemDataProps[] = [];
   const updateAvailableCASMap = await SharedPropsService.getAvailableCASMap();
@@ -55,26 +57,21 @@ export const portfolioListDatastoreBuilder = async (
       )
     )}`;
 
+    const portfolioValue = `Portfolio value ${addCommasToNumber(
+        roundDownToNearestHundred(
+            getPortfolioValue(
+                [updateAvailableCASMap[key]],
+                stepResponseObject.isinNAVMap,
+            )
+        )
+    )}`
+
     listItemDataProps.push({
       label: updateAvailableCASMap[key].schemeName,
       info: "",
-      trailIcon: {
-        name:
-          updateAvailableCASMap[key].pledgedUnits > 0
-            ? IconTokens.CheckedSquare
-            : IconTokens.NotCheckedSquare,
-      },
       trailTitle: title,
       trailSubTitle: subTitle,
-      action: "edit",
-      trailIconAction: {
-        type: ACTION.EDIT_ITEM,
-        routeId: ROUTE.PORTFOLIO,
-        payload: <EditItemPayload>{
-          stepResponseObject,
-          selectedMap: selectedMap,
-        },
-      },
+      secondaryText: portfolioValue
     });
   });
 
@@ -99,7 +96,10 @@ export const portfolioListDatastoreBuilder = async (
   };
 
   const datastoreObj: Datastore = {
-    listItem: <ListProps & WidgetProps>props,
+    listItem: <ListProps & WidgetProps>{
+      hideCheck: true,
+      ...props
+    },
     totalItem: <CtaCardProps>{
       label: "Total credit limit",
       info: addCommasToNumber(
@@ -122,6 +122,7 @@ export const portfolioListDatastoreBuilder = async (
   return datastoreObj;
 };
 
+/*
 export const togglePortfolio = async (
   index: number,
   isPledged: boolean,
@@ -151,9 +152,5 @@ export const customEditPortfolio = async (
     (stepResponseObject.isinNAVMap[updateAvailableCASMap[key].isinNo] *
       stepResponseObject.isinLTVMap[updateAvailableCASMap[key].isinNo]);
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
-  await sharedPropsService.setCreditLimit(getTotalLimit(
-      stepResponseObject.availableCAS,
-      stepResponseObject.isinNAVMap,
-      stepResponseObject.isinLTVMap
-  ))
 };
+*/
