@@ -253,7 +253,7 @@ export const template: (
       },
       message2: <MessageProps>{
         label:
-          "Your previous withdrawal request is in progress, meanwhile you cannot request raise new request.",
+          "Your previous withdrawal request is in progress, meanwhile you cannot raise another request.",
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.System_Warning_BG,
       },
