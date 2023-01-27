@@ -50,6 +50,7 @@ import {
   isMorePortfolioRenderCheck,
 } from "../../../configs/utils";
 import _ from "lodash";
+import { commonTemplates } from "../../../configs/common";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -80,7 +81,9 @@ export const template: (
       { id: "space2", type: WIDGET.SPACE },
       { id: "continue", type: WIDGET.BUTTON },
       { id: "space3", type: WIDGET.SPACE },
-      { id: "otherSourceStack", type: WIDGET.STACK },
+      shouldShowGetMorePortfolio
+        ? { id: "otherSourceStack", type: WIDGET.STACK }
+        : { id: "skip", type: WIDGET.SPACE },
       // { id: 'bottomSheet', type: WIDGET.BOTTOMSHEET, position: POSITION.STICKY_BOTTOM, padding: { left: 0, right: 0 }},
       { id: "bs_space2", type: WIDGET.SPACE },
       { id: "listItem", type: WIDGET.LIST },
@@ -139,36 +142,13 @@ export const template: (
         { id: "infoButton", type: WIDGET.BUTTON },
       ],
     },
-    infoText: <TypographyProps>{
-      label: "Don’t see all your mutual funds?",
-      fontSize: FontSizeTokens.SM,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "600",
-      color: ColorTokens.Grey_Charcoal,
-      lineHeight: 24,
-    },
-    infoButton: <ButtonProps & WidgetProps>{
-      padding: {
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
+    ...commonTemplates.fetchMoreFromOtherSource("otherSourceStack", {
+      type: ACTION.GET_MORE_MF_PORTFOLIO,
+      routeId: ROUTE.UNLOCK_LIMIT_LANDING,
+      payload: {
+        casList: stepResponseObject.availableCAS,
       },
-      label: "Get from other sources?",
-      type: ButtonTypeTokens.MediumGhost,
-      fontSize: FontSizeTokens.SM,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "600",
-      width: ButtonWidthTypeToken.CONTENT,
-      labelColor: ColorTokens.Primary_100,
-      action: {
-        type: ACTION.GET_MORE_MF_PORTFOLIO,
-        routeId: ROUTE.UNLOCK_LIMIT_LANDING,
-        payload: {
-          casList: stepResponseObject.availableCAS,
-        },
-      },
-    },
+    }).datastore,
     // bottomSheet: <BottomSheetProps>{
     //   type: BottomSheetType.WEB,
     //   initialOffset: 0.35,
@@ -225,6 +205,9 @@ export const template: (
 
 export const unlockLimitLandingMFV2: PageType<any> = {
   onLoad: async ({ showPopup, network, goBack }) => {
+    /*** disable this page for next time to stop Animation ***/
+    await SharedPropsService.setPledgeFirstTime(false);
+
     const updateAvailableCASMap = {};
     const user: User = await SharedPropsService.getUser();
     const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();

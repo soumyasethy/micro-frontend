@@ -165,7 +165,7 @@ export const template: (
 };
 
 export const modifyLimitMF: PageType<any> = {
-  onLoad: async ({}, { stepResponseObject }) => {
+  onLoad: async (_, { stepResponseObject }) => {
     return Promise.resolve(template(stepResponseObject));
   },
   actions: {
