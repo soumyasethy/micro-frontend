@@ -79,7 +79,6 @@ export const template: (
                   left: 0,
                 },
               },
-              { id: "space3", type: WIDGET.SPACE },
             ]
           : []),
         { id: "title", type: WIDGET.TEXT },
@@ -89,6 +88,7 @@ export const template: (
         { id: "panItem", type: WIDGET.LIST_ITEM },
         { id: "mobileItem", type: WIDGET.LIST_ITEM },
         { id: "emailItem", type: WIDGET.LIST_ITEM },
+        { id: "space3", type: WIDGET.SPACE },
         {
           id: "fetchCTA",
           type: WIDGET.BUTTON,
