@@ -235,7 +235,7 @@ export const template: (
       },
       message: <MessageProps>{
         label:
-          "Your previous withdrawal request is in progress, meanwhile you cannot request raise new request.",
+          "Your verification is in progress. Meanwhile you can’t withdraw the amount",
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.System_Warning_BG,
       },
