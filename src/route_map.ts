@@ -103,7 +103,6 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.PLEDGE_CONFIRMATION_LOADING]: pledgeConfirmationLoadingMF,
   // [ROUTE.PLEDGE_CONFIRMATION_OLD]: pledgeConfirmationMF,
   [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMFV2,
-  [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMFV2,
   [ROUTE.PLEDGE_VERIFY]: pledgeVerifyMF,
   [ROUTE.PLEDGE_LOADING]: pledgeLoadingMF,
   [ROUTE.UNLOCK_SUCCESS]: unlockSuccessMF,

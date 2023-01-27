@@ -62,9 +62,10 @@ import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
 import { AuthCASModel } from "../../../types/AuthCASModel";
-import {UpdateAvailableCASMap} from "../unlock_limit_V2/types";
+import { UpdateAvailableCASMap } from "../unlock_limit_V2/types";
 import sharedPropsService from "../../../SharedPropsService";
 import { getDesiredValue } from "../portfolio_readonly/actions";
+import { commonTemplates } from "../../../configs/common";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -258,10 +259,20 @@ export const template: (
           { id: "creditLimit", type: WIDGET.TEXT },
           { id: "space1", type: WIDGET.SPACE },
           { id: "limitCard", type: WIDGET.LIMIT_CARD },
+          shouldShowGetMorePortfolio
+            ? { id: "otherSourceStack", type: WIDGET.STACK }
+            : { id: "skip", type: WIDGET.SPACE },
           { id: "space2", type: WIDGET.SPACE },
           { id: "lendingStack", type: WIDGET.STACK },
         ],
       },
+      ...commonTemplates.fetchMoreFromOtherSource("otherSourceStack", {
+        type: ACTION.GET_MORE_MF_PORTFOLIO,
+        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+        payload: {
+          casList: stepResponseObject.availableCAS,
+        },
+      }).datastore,
       creditLimit: <TypographyProps>{
         label: "Your credit limit",
         fontSize: FontSizeTokens.MD,
@@ -466,7 +477,7 @@ export const template: (
           payload: {
             maxAmount: availableCreditAmount,
             stepResponseObject: stepResponseObject,
-            updateAvailableCASMap: updateAvailableCASMap
+            updateAvailableCASMap: updateAvailableCASMap,
           },
         },
       },
@@ -633,14 +644,14 @@ export const unlockLimitMFV2: PageType<any> = {
       {}
     );
 
-    await sharedPropsService.setCreditLimit(availableCreditAmount)
+    await sharedPropsService.setCreditLimit(availableCreditAmount);
 
     const portValue = getDesiredValue(
       stepResponseObject["availableCAS"],
       stepResponseObject["isinNAVMap"]
     );
 
-    await sharedPropsService.setDesiredPortfolio(portValue)
+    await sharedPropsService.setDesiredPortfolio(portValue);
 
     return Promise.resolve(
       template(
@@ -650,7 +661,7 @@ export const unlockLimitMFV2: PageType<any> = {
         isGetMorePortfolio,
         totalPortfolioAmount,
         processingFeesBreakUp,
-        updateAvailableCASMap,
+        updateAvailableCASMap
       )
     );
   },
