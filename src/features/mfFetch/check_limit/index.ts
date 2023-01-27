@@ -14,12 +14,16 @@ import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
-  HeaderProps,
-  HeaderTypeTokens,
+  IconAlignmentTokens,
+  IconSizeTokens,
   IconTokens,
   ListItemProps,
   SizeTypeTokens,
   SpaceProps,
+  StackAlignItems,
+  StackJustifyContent,
+  StackProps,
+  StackType,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -60,15 +64,26 @@ export const template: (
       type: isGoBackAllowed ? LAYOUTS.MODAL : LAYOUTS.LIST,
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
-        ...(isGoBackAllowed
-          ? [
-              {
-                id: "header",
-                type: WIDGET.HEADER,
-                position: POSITION.ABSOLUTE_TOP,
-              },
-            ]
-          : []),
+        // ...(isGoBackAllowed
+        //   ? [
+        //       {
+        //         id: "headerStack",
+        //         type: WIDGET.STACK,
+        //         position: POSITION.ABSOLUTE_TOP,
+        //       },
+        //     ]
+        //   : []),
+        {
+          id: "headerStack",
+          type: WIDGET.STACK,
+          position: POSITION.ABSOLUTE_TOP,
+          padding: {
+            right: 8,
+            top: 8,
+            bottom: 0,
+            left: 0,
+          },
+        },
         { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
@@ -76,6 +91,7 @@ export const template: (
         { id: "panItem", type: WIDGET.LIST_ITEM },
         { id: "mobileItem", type: WIDGET.LIST_ITEM },
         { id: "emailItem", type: WIDGET.LIST_ITEM },
+        { id: "space3", type: WIDGET.SPACE },
         {
           id: "fetchCTA",
           type: WIDGET.BUTTON,
@@ -85,10 +101,26 @@ export const template: (
     },
     datastore: <Datastore>{
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-      header: <HeaderProps>{
-        isBackButton: true,
-        title: "Back",
-        type: HeaderTypeTokens.DEFAULT,
+      headerStack: <StackProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.flexEnd,
+        justifyContent: StackJustifyContent.flexEnd,
+        widgetItems: [{ id: "leadIcon", type: WIDGET.BUTTON }],
+      },
+      leadIcon: <ButtonProps & WidgetProps>{
+        label: "",
+        type: ButtonTypeTokens.SmallGhost,
+        width: ButtonWidthTypeToken.CONTENT,
+        stack: <StackProps>{
+          type: StackType.row,
+          alignItems: StackAlignItems.flexStart,
+          justifyContent: StackJustifyContent.flexStart,
+        },
+        icon: {
+          name: IconTokens.Cancel,
+          align: IconAlignmentTokens.right,
+          size: IconSizeTokens.XXXXL,
+        },
         action: {
           type: ACTION.Go_BACK,
           payload: {},
@@ -173,6 +205,7 @@ export const template: (
           },
         },
       },
+      space3: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     },
   };
 };
