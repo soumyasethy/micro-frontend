@@ -14,6 +14,8 @@ import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  HeaderProps,
+  HeaderTypeTokens,
   IconAlignmentTokens,
   IconSizeTokens,
   IconTokens,
@@ -64,26 +66,22 @@ export const template: (
       type: isGoBackAllowed ? LAYOUTS.MODAL : LAYOUTS.LIST,
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
-        // ...(isGoBackAllowed
-        //   ? [
-        //       {
-        //         id: "headerStack",
-        //         type: WIDGET.STACK,
-        //         position: POSITION.ABSOLUTE_TOP,
-        //       },
-        //     ]
-        //   : []),
-        {
-          id: "headerStack",
-          type: WIDGET.STACK,
-          position: POSITION.ABSOLUTE_TOP,
-          padding: {
-            right: 8,
-            top: 8,
-            bottom: 0,
-            left: 0,
-          },
-        },
+        ...(isGoBackAllowed
+          ? [
+              {
+                id: "headerStack",
+                type: WIDGET.STACK,
+                position: POSITION.ABSOLUTE_TOP,
+                padding: {
+                  right: 8,
+                  top: 8,
+                  bottom: 0,
+                  left: 0,
+                },
+              },
+              { id: "space3", type: WIDGET.SPACE },
+            ]
+          : []),
         { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
@@ -91,7 +89,6 @@ export const template: (
         { id: "panItem", type: WIDGET.LIST_ITEM },
         { id: "mobileItem", type: WIDGET.LIST_ITEM },
         { id: "emailItem", type: WIDGET.LIST_ITEM },
-        { id: "space3", type: WIDGET.SPACE },
         {
           id: "fetchCTA",
           type: WIDGET.BUTTON,
@@ -100,6 +97,15 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      header: <HeaderProps>{
+        isBackButton: true,
+        title: "Back",
+        type: HeaderTypeTokens.DEFAULT,
+        action: {
+          type: ACTION.Go_BACK,
+          payload: {},
+        },
+      },
       space0: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       headerStack: <StackProps>{
         type: StackType.row,

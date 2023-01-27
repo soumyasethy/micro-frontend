@@ -48,7 +48,13 @@ import {
   MARITAL_STATUS,
   MaritalStatusPayload,
 } from "./types";
-import { onChangeInput, onSelect, toggleCTA, triggerCTA, GoBackAction } from "./actions";
+import {
+  GoBackAction,
+  onChangeInput,
+  onSelect,
+  toggleCTA,
+  triggerCTA,
+} from "./actions";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import { getAppHeader } from "../../../configs/config";
 import { api } from "../../../configs/api";
@@ -92,6 +98,7 @@ export const template: (
         { id: "motherNameTitle", type: WIDGET.TEXT },
         { id: "motherNameSpace", type: WIDGET.SPACE },
         { id: "motherNameStack", type: WIDGET.STACK },
+        { id: "space1", type: WIDGET.SPACE },
         {
           id: "stackBottom",
           type: WIDGET.STACK,
@@ -397,6 +404,7 @@ export const template: (
         color: ColorTokens.Secondary_100,
         fontSize: FontSizeTokens.XS,
       },
+      space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
     },
   };
 };
