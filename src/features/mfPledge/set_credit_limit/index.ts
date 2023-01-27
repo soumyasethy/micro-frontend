@@ -13,7 +13,6 @@ import {
   ButtonWidthTypeToken,
   CardProps,
   ColorTokens,
-  CustomSliderProps,
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
@@ -23,6 +22,7 @@ import {
   IconTokens,
   PaddingProps,
   SizeTypeTokens,
+  SliderBaseProps,
   SpaceProps,
   StackAlignItems,
   StackJustifyContent,
@@ -78,7 +78,7 @@ export const template: (
       { id: "space2", type: WIDGET.SPACE },
       {
         id: "slider",
-        type: WIDGET.CUSTOM_SLIDER,
+        type: WIDGET.SLIDER,
       },
       { id: "space3", type: WIDGET.SPACE },
       { id: "minMaxStack", type: WIDGET.STACK },
@@ -194,7 +194,7 @@ export const template: (
     space2: <SpaceProps>{
       size: SizeTypeTokens.XXXXXL,
     },
-    slider: <CustomSliderProps & WidgetProps>{
+    slider: <SliderBaseProps & WidgetProps>{
       value: await SharedPropsService.getCreditLimit(),
       minimumValue: 25000,
       maximumValue: maxAmount,
