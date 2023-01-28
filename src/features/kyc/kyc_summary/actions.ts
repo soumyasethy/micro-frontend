@@ -83,8 +83,9 @@ export const NavigateNext: ActionFunction<NavigationNext> = async (
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
   action,
   _datastore,
-  { navigate }
+  { goBack, navigate }
 ): Promise<any> => {
+  // await goBack();
   await navigate(ROUTE.KYC_STEPPER);
 };
 
