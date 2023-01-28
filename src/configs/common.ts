@@ -29,9 +29,6 @@ import {
   WidgetItem,
   WidgetProps,
 } from "@voltmoney/types";
-import { ACTION } from "../features/mfPledge/unlock_limit_landing_V2/types";
-import { ROUTE } from "../routes";
-import { AvailableCASItem } from "../features/mfPledge/unlock_limit/types";
 
 export const commonTemplates = {
   poweredBy: {
@@ -130,10 +127,7 @@ export const commonTemplates = {
       },
     },
   }),
-  fetchMoreFromOtherSource: (
-    id: string,
-    action?: Action<any>
-  ) => ({
+  fetchMoreFromOtherSource: (id: string, action?: Action<any>) => ({
     layout: { id, type: WIDGET.STACK },
     datastore: {
       otherSourceStack: <StackProps>{
@@ -141,10 +135,12 @@ export const commonTemplates = {
         alignItems: StackAlignItems.center,
         width: StackWidth.FULL,
         widgetItems: [
+          { id: "otherSourceSpace", type: WIDGET.SPACE },
           { id: "infoText", type: WIDGET.TEXT },
           { id: "infoButton", type: WIDGET.BUTTON },
         ],
       },
+      otherSourceSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       infoText: <TypographyProps>{
         label: "Don’t see all your mutual funds?",
         fontSize: FontSizeTokens.SM,
