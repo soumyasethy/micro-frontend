@@ -394,3 +394,12 @@ export const getParameters: (url: string) => {
   }
   return params;
 };
+
+export const isLimitMoreThanPledgeThreshold = async () => {
+  const pledgeThreshold = await SharedPropsService.getCreditLimit();
+  if (pledgeThreshold > 25000) {
+    return true;
+  } else {
+    return false;
+  }
+};

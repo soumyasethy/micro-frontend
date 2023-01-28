@@ -4,6 +4,8 @@ import { ACTION, GetMoreMfPortfolioPayload, LimitPayload } from "./types";
 import SharedPropsService from "../../../SharedPropsService";
 import { AssetRepositoryType, ConfigTokens } from "../../../configs/config";
 import {
+  ButtonProps,
+  ButtonTypeTokens,
   CardProps,
   ColorTokens,
   FontFamilyTokens,
@@ -18,10 +20,15 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { isMorePortfolioRenderCheck } from "../../../configs/utils";
+import {
+  isLimitMoreThanPledgeThreshold,
+  isMorePortfolioRenderCheck,
+} from "../../../configs/utils";
 import { SelectAssets } from "../modify_limit/actions";
-import { AssetsPayload } from "../modify_limit/types";
-import { ACTION as MODIFY_LIMIT_ACTION } from "../modify_limit/types";
+import {
+  ACTION as MODIFY_LIMIT_ACTION,
+  AssetsPayload,
+} from "../modify_limit/types";
 
 export const continueLimit: ActionFunction<LimitPayload> = async (
   action,
@@ -182,7 +189,7 @@ export const ViewAllAction: ActionFunction<any> = async (
         fontSize: FontSizeTokens.SM,
       },
       processingChargeValue2: <TypographyProps>{
-        label: `₹${action.payload.processingFeesBreakUp['Processing Fee']}`,
+        label: `₹${action.payload.processingFeesBreakUp["Processing Fee"]}`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
@@ -208,7 +215,9 @@ export const ViewAllAction: ActionFunction<any> = async (
       },
       interestP10KTextValue: <TypographyProps>{
         label: `₹${
-          Math.ceil(((100 * action.payload.stepResponseObject.interestRate) / 12) * 100) / 100
+          Math.ceil(
+            ((100 * action.payload.stepResponseObject.interestRate) / 12) * 100
+          ) / 100
         }/month`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
@@ -275,4 +284,18 @@ export const NavToContactUs: ActionFunction<any> = async (
   { navigate }
 ): Promise<any> => {
   navigate(ROUTE.CONTACT_US);
+};
+
+export const checkLimit: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, setDatastore }
+): Promise<any> => {
+  if (!(await isLimitMoreThanPledgeThreshold())) {
+    await setDatastore(ROUTE.MF_PLEDGE_PORTFOLIO, "ctaButton", <ButtonProps>{
+      type: ButtonTypeTokens.LargeOutline,
+    });
+  }
+
+  //console.log("isMorePortfolioRenderCheck: ", await isMorePortfolioRenderCheck())
 };

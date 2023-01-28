@@ -11,6 +11,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  CardOrientation,
   CardProps,
   ColorTokens,
   FontFamilyTokens,
@@ -40,6 +41,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION, AvailableCASItem, StepResponseObject } from "./types";
 import {
+  checkLimit,
   continueLimit,
   getMoreMfPortfolio,
   NavSliderAction,
@@ -59,12 +61,12 @@ import { api } from "../../../configs/api";
 import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import sharedPropsService from "../../../SharedPropsService";
-import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { AuthCASModel } from "../../../types/AuthCASModel";
 import { UpdateAvailableCASMap } from "../unlock_limit_V2/types";
 import { getDesiredValue } from "../portfolio_readonly/actions";
 import { commonTemplates } from "../../../configs/common";
+import { NavigationNext } from "../../kyc/kyc_init/types";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -76,7 +78,8 @@ export const template: (
   shouldShowGetMorePortfolio: boolean,
   totalPortfolioAmount: number,
   processingFeesBreakUp: { [key in string]: number },
-  updateAvailableCASMap: UpdateAvailableCASMap
+  updateAvailableCASMap: UpdateAvailableCASMap,
+  showLessLimit: boolean
 ) => TemplateSchema = (
   availableCreditAmount,
   availableCAS,
@@ -84,7 +87,8 @@ export const template: (
   shouldShowGetMorePortfolio,
   totalPortfolioAmount,
   processingFeesBreakUp = {},
-  updateAvailableCASMap
+  updateAvailableCASMap,
+  showLessLimit = false
 ) => {
   const listItemLayout = Object.keys(processingFeesBreakUp).map(
     (key, index) => {
@@ -139,6 +143,20 @@ export const template: (
           type: WIDGET.CARD,
           position: POSITION.ABSOLUTE_TOP,
         },
+        ...(showLessLimit
+          ? [
+              {
+                id: "showLessLimitCard",
+                type: WIDGET.CARD,
+                position: POSITION.ABSOLUTE_TOP,
+              },
+              {
+                id: "continueSpace",
+                type: WIDGET.SPACE,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+            ]
+          : []),
         // {
         //   id: "Mspace0",
         //   type: WIDGET.SPACE,
@@ -196,6 +214,38 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      showLessLimitCard: <CardProps>{
+        bgColor: ColorTokens.Red_10,
+        width: StackWidth.FULL,
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG,
+          left: SizeTypeTokens.LG,
+          right: SizeTypeTokens.LG,
+        },
+        bodyOrientation: CardOrientation.HORIZONTAL,
+        body: {
+          widgetItems: [
+            { id: "infoIcon", type: WIDGET.ICON },
+            { id: "infoIconSpace", type: WIDGET.SPACE },
+            { id: "infoLabel", type: WIDGET.TEXT },
+          ],
+        },
+      },
+      infoIcon: <IconProps>{
+        name: IconTokens.InfoFilled,
+        color: ColorTokens.Red_50,
+      },
+      infoIconSpace: <SpaceProps>{ size: SizeTypeTokens.Size10 },
+      continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      infoLabel: <TypographyProps>{
+        label: "Minimum amount required to proceed is ₹25,000",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontColor: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XS,
+        lineHeight: 18,
+      },
       card: <CardProps>{
         bgColor: ColorTokens.White,
         body: { widgetItems: [{ id: "header", type: WIDGET.STACK }] },
@@ -652,6 +702,12 @@ export const unlockLimitMFV2: PageType<any> = {
 
     await sharedPropsService.setDesiredPortfolio(portValue);
 
+    let showLessLimit: boolean;
+
+    availableCreditAmount < 25000
+      ? (showLessLimit = true)
+      : (showLessLimit = false);
+
     return Promise.resolve(
       template(
         availableCreditAmount,
@@ -660,7 +716,8 @@ export const unlockLimitMFV2: PageType<any> = {
         isGetMorePortfolio,
         totalPortfolioAmount,
         processingFeesBreakUp,
-        updateAvailableCASMap
+        updateAvailableCASMap,
+        showLessLimit
       )
     );
   },
@@ -673,12 +730,13 @@ export const unlockLimitMFV2: PageType<any> = {
     [ACTION.VIEW_ALL]: ViewAllAction,
     [ACTION.NAV_NEXT]: NavSliderAction,
     [ACTION.NAV_TO_CONTACT_US]: NavToContactUs,
+    [ACTION.CHECK_LIMIT]: checkLimit,
   },
   clearPrevious: false,
   bgColor: "#F3F5FC",
-  // action: {
-  //   type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
-  //   routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-  //   payload: {},
-  // },
+  action: {
+    type: ACTION.CHECK_LIMIT,
+    routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+    payload: {},
+  },
 };
