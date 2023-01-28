@@ -20,6 +20,7 @@ import {
   addCommasToNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
+import sharedPropsService from "../../../SharedPropsService";
 
 export const portfolioListDatastoreBuilder = async (
   stepResponseObject: StepResponseObject,
@@ -150,4 +151,9 @@ export const customEditPortfolio = async (
     (stepResponseObject.isinNAVMap[updateAvailableCASMap[key].isinNo] *
       stepResponseObject.isinLTVMap[updateAvailableCASMap[key].isinNo]);
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+  await sharedPropsService.setCreditLimit(getTotalLimit(
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
+  ))
 };

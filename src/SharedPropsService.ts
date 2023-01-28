@@ -11,6 +11,7 @@ import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
 import _ from "lodash";
+import {ListItemDataProps} from "@voltmoney/schema";
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
@@ -49,6 +50,9 @@ type GlobalProps = {
     [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
   };
   userDob ?: string;
+  creditLimit: number;
+  listItemDataCAS: any;
+  desiredPortfolio?: any;
 };
 
 let _globalProps: GlobalProps = {
@@ -87,7 +91,10 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
   },
-  userDob: ""
+  userDob: "",
+  creditLimit: 25000,
+  listItemDataCAS: [],
+  desiredPortfolio: {},
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -279,6 +286,26 @@ async function setAuthCASResponse(data: AuthCASModel) {
 async function getAuthCASResponse() {
   return _globalProps.authCAS;
 }
+async function setCreditLimit(creditLimit: number) {
+  _globalProps.creditLimit = creditLimit;
+}
+async function getCreditLimit() {
+  return _globalProps.creditLimit;
+}
+async function setListItemDataCAS(listItemsDataCAS: any) {
+  _globalProps.listItemDataCAS = listItemsDataCAS;
+}
+async function getListItemDataCAS() {
+  return _globalProps.listItemDataCAS;
+}
+
+async function setDesiredPortfolio(desiredPortfolio: any) {
+  _globalProps.desiredPortfolio = desiredPortfolio;
+}
+
+async function getDesiredPortfolio() {
+  return _globalProps.desiredPortfolio;
+}
 
 export default {
   setBuildType,
@@ -314,5 +341,11 @@ export default {
   setAuthCASResponse,
   getAuthCASResponse,
   setUserDob,
-  getUserDob
+  getUserDob,
+  setCreditLimit,
+  getCreditLimit,
+  setListItemDataCAS,
+  getListItemDataCAS,
+  setDesiredPortfolio,
+  getDesiredPortfolio,
 };

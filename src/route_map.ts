@@ -57,11 +57,19 @@ import { landingPageMF } from "./features/landing";
 import { transactionsMF } from "./features/mfPledge/transactions";
 import { privacyPolicyMF } from "./features/privacy_policy";
 import { kycAdditionalDetailsMF } from "./features/kyc/kyc_additional_details";
-import { unlockLimitLandingMF } from "./features/mfPledge/unlock_limit_landing";
+//import { unlockLimitLandingMF } from "./features/mfPledge/unlock_limit_landing";
 import { DistributorClientListMF } from "./features/DistributorClientList/ClientList";
 import { DistributorBasicDetailsInfo } from "./features/Dist_basicDetails/basicDetailsInfo";
 import { kycDocumentUploadMF } from "./features/kyc/kyc_document_upload";
 import { checkingLimitMf } from "./features/mfFetch/checking_limit";
+import { portfolioReadOnlyMF } from "./features/mfPledge/portfolio_readonly";
+import { verificationFailedMFNew } from "./features/mfFetch/verification_failed_new";
+import { unlockLimitLandingMFV2 } from "./features/mfPledge/unlock_limit_landing_V2";
+import { unlockLimitMFV2 } from "./features/mfPledge/unlock_limit_V2";
+import { setCreditLimitMf } from "./features/mfPledge/set_credit_limit";
+import { pledgeConfirmationMFV2 } from "./features/mfPledge/pledge_confirmation_V2";
+import { portfolioMFV2 } from "./features/mfPledge/portfolio_V2";
+import { updateSliderAmountMF } from "./features/mfPledge/update_slider_amount";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -90,14 +98,17 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.ALERT_PAGE]: alertMF,
   [ROUTE.CAMERA_CAPTURE]: cameraCaptureMF,
   [ROUTE.SPLASH_SCREEN]: splashScreenMF,
-  [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMF,
+  // [ROUTE.MF_PLEDGE_PORTFOLIO_OLD]: unlockLimitMF,
+  [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMFV2,
   [ROUTE.PLEDGE_CONFIRMATION_LOADING]: pledgeConfirmationLoadingMF,
-  [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMF,
+  // [ROUTE.PLEDGE_CONFIRMATION_OLD]: pledgeConfirmationMF,
+  [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMFV2,
   [ROUTE.PLEDGE_VERIFY]: pledgeVerifyMF,
   [ROUTE.PLEDGE_LOADING]: pledgeLoadingMF,
   [ROUTE.UNLOCK_SUCCESS]: unlockSuccessMF,
   [ROUTE.MODIFY_LIMIT]: modifyLimitMF,
-  [ROUTE.PORTFOLIO]: portfolioMF,
+  //[ROUTE.PORTFOLIO]: portfolioMF,
+  [ROUTE.PORTFOLIO]: portfolioMFV2,
   [ROUTE.PLEDGED_AMOUNT]: pledgeAmountMF,
   [ROUTE.MODIFY_PLEDGED_AMOUNT]: modifyPledgeMF,
   [ROUTE.DASHBOARD]: dashboardMF,
@@ -121,9 +132,14 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.TRANSACTIONS]: transactionsMF,
   [ROUTE.PRIVACY_POLICY]: privacyPolicyMF,
   [ROUTE.KYC_ADDITIONAL_DETAILS]: kycAdditionalDetailsMF,
-  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  //[ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMFV2,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
   [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]: DistributorBasicDetailsInfo,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
+  [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
+  [ROUTE.VERIFICATION_FAILED_NEW]:verificationFailedMFNew,
+  [ROUTE.SET_CREDIT_LIMIT]: setCreditLimitMf,
+  [ROUTE.UPDATE_SLIDER_AMOUNT]: updateSliderAmountMF
 };

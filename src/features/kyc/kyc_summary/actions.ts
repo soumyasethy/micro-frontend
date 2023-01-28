@@ -17,6 +17,7 @@ import { api } from "../../../configs/api";
 import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import { User } from "../../login/otp_verify/types";
 import { AnalyticsEventTracker } from "../../../configs/constants";
+
 export const verifyKycSummary: ActionFunction<any> = async (
   action,
   _datastore,
@@ -53,7 +54,7 @@ export const verifyKycSummary: ActionFunction<any> = async (
 
     await showPopup({
       autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
-      isAutoTriggerCta: true,
+      isAutoTriggerCta: false,
       title: "KYC done successfully!",
       subTitle: "You will be redirected to next step in few seconds",
       type: "SUCCESS",
@@ -82,9 +83,10 @@ export const NavigateNext: ActionFunction<NavigationNext> = async (
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
   action,
   _datastore,
-  { goBack }
+  { goBack, navigate }
 ): Promise<any> => {
-  await goBack();
+  // await goBack();
+  await navigate(ROUTE.KYC_STEPPER);
 };
 
 export const ToggleKYCSummaryCTA: ActionFunction<ToggleKYCVerifyCTA> = async (

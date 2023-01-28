@@ -1,4 +1,7 @@
 import {
+  ButtonProps,
+  ButtonTypeTokens,
+  ButtonWidthTypeToken,
   CardOrientation,
   CardProps,
   ColorTokens,
@@ -19,7 +22,13 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { assetsMap } from "./assets";
-import { Datastore, POSITION, WidgetItem } from "@voltmoney/types";
+import {
+  Action,
+  Datastore,
+  POSITION,
+  WidgetItem,
+  WidgetProps,
+} from "@voltmoney/types";
 
 export const commonTemplates = {
   poweredBy: {
@@ -115,6 +124,46 @@ export const commonTemplates = {
           type === "error" ? ColorTokens.System_Error : ColorTokens.Grey_Night,
         fontSize: FontSizeTokens.XS,
         lineHeight: 18,
+      },
+    },
+  }),
+  fetchMoreFromOtherSource: (id: string, action?: Action<any>) => ({
+    layout: { id, type: WIDGET.STACK },
+    datastore: {
+      otherSourceStack: <StackProps>{
+        type: StackType.column,
+        alignItems: StackAlignItems.center,
+        width: StackWidth.FULL,
+        widgetItems: [
+          { id: "otherSourceSpace", type: WIDGET.SPACE },
+          { id: "infoText", type: WIDGET.TEXT },
+          { id: "infoButton", type: WIDGET.BUTTON },
+        ],
+      },
+      otherSourceSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      infoText: <TypographyProps>{
+        label: "Don’t see all your mutual funds?",
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        color: ColorTokens.Grey_Charcoal,
+        lineHeight: 24,
+      },
+      infoButton: <ButtonProps & WidgetProps>{
+        padding: {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+        },
+        label: "Get from other sources?",
+        type: ButtonTypeTokens.MediumGhost,
+        fontSize: FontSizeTokens.SM,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        width: ButtonWidthTypeToken.CONTENT,
+        labelColor: ColorTokens.Primary_100,
+        action: action,
       },
     },
   }),

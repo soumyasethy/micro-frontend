@@ -126,7 +126,7 @@ export const BavVerifyManualAction: ActionFunction<
   if (stepStatusMap.BANK_ACCOUNT_VERIFICATION === StepperStateToken.COMPLETED) {
     await showPopup({
       autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-      isAutoTriggerCta: true,
+      isAutoTriggerCta: false,
       type: "SUCCESS",
       title: "Account verified successfully!",
       subTitle: "You will be redirected to next step in few seconds",

@@ -155,7 +155,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         /*** show success popup ***/
         await showPopup({
           autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-          isAutoTriggerCta: true,
+          isAutoTriggerCta: false,
           title: `₹ ${addCommasToNumber(
             roundDownToNearestHundred(
               _.get(
@@ -213,7 +213,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
             await goBack();
             await showPopup({
               autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-              isAutoTriggerCta: true,
+              isAutoTriggerCta: false,
               title: `₹ ${addCommasToNumber(
                 roundDownToNearestHundred(
                   _.get(
@@ -241,7 +241,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     } else {
       await showPopup({
         autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-        isAutoTriggerCta: true,
+        isAutoTriggerCta: false,
         title: `₹ ${addCommasToNumber(
           roundDownToNearestHundred(
             _.get(
@@ -251,8 +251,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
             )
           )
         )} unlocked successfully!`,
-        subTitle:
-          "We will be sending one more otp to unlock the remaining amount",
+        subTitle: "Please continue to unlock the remaining amount",
         type: "SUCCESS",
         ctaLabel: "Continue",
         primary: true,
