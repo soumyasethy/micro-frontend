@@ -51,15 +51,18 @@ import SharedPropsService from "../../../SharedPropsService";
 import sharedPropsService from "../../../SharedPropsService";
 import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
 import { portfolioListDatastoreBuilderSetCreditLimit } from "./utils";
+import { getDesiredValue } from "../portfolio_readonly/actions";
 
 export const template: (
   maxAmount: number,
   stepResponseObject: StepResponseObject,
-  updateAvailableCASMap: UpdateAvailableCASMap
+  updateAvailableCASMap: UpdateAvailableCASMap,
+  portValue: number
 ) => Promise<TemplateSchema> = async (
   maxAmount: number,
   stepResponseObject,
-  updateAvailableCASMap
+  updateAvailableCASMap,
+  portValue: number
 ) => ({
   layout: <Layout>{
     id: ROUTE.SET_CREDIT_LIMIT,
@@ -84,6 +87,15 @@ export const template: (
       { id: "space4", type: WIDGET.SPACE },
       {
         id: "bottomSheetStack",
+        type: WIDGET.STACK,
+        padding: {
+          left: 0,
+          right: 0,
+        },
+      },
+      { id: "space11", type: WIDGET.SPACE },
+      {
+        id: "bottomSheetStack2",
         type: WIDGET.STACK,
         padding: {
           left: 0,
@@ -296,7 +308,7 @@ export const template: (
       fontFamily: FontFamilyTokens.Poppins,
     },
     editText: <ButtonProps & WidgetProps>{
-      label: "Edit",
+      label: "Edit selection",
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
       type: ButtonTypeTokens.MediumGhost,
@@ -310,6 +322,31 @@ export const template: (
         },
         routeId: ROUTE.SET_CREDIT_LIMIT,
       },
+    },
+    space11: <SpaceProps>{
+      size: SizeTypeTokens.LG,
+    },
+    bottomSheetStack2: <StackProps>{
+      type: StackType.row,
+      justifyContent: StackJustifyContent.spaceBetween,
+      alignItems: StackAlignItems.center,
+      padding: <PaddingProps>{
+        horizontal: SizeTypeTokens.XS,
+        vertical: SizeTypeTokens.XS,
+      },
+      widgetItems: [
+        // { id: "leftSpace", type: WIDGET.SPACE },
+        { id: "bottomSheetText2", type: WIDGET.TEXT },
+      ],
+    },
+    bottomSheetText2: <TypographyProps>{
+      label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
+        parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+      )} are selected for pledging.`,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "400",
+      fontSize: FontSizeTokens.SM,
+      color: ColorTokens.Grey_Charcoal,
     },
     space5: <SpaceProps>{
       size: SizeTypeTokens.MD,
@@ -412,11 +449,20 @@ export const setCreditLimitMf: PageType<any> = {
     // );
 
     // console.log("portValue", portValue);
+
+    const portValue = getDesiredValue(
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap
+    );
+
+    await SharedPropsService.setDesiredPortfolio(portValue);
+
     return Promise.resolve(
       template(
         stepResponseObject.availableCreditAmount,
         stepResponseObject,
-        updateAvailableCASMap
+        updateAvailableCASMap,
+        portValue
       )
     );
   },

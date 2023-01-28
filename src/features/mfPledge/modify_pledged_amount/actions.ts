@@ -50,6 +50,16 @@ export const ModifyAmountAction: ActionFunction<ModifyAmountPayload> = async (
     )} are selected for pledging.`,
   });
 
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomSheetText2", <
+    TypographyProps
+  >{
+    label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
+      parseInt(
+        action.payload.stepResponseObject["totalPortfolioAmount"].toString()
+      )
+    )} are selected for pledging.`,
+  });
+
   await goBack();
 };
 export const EditAmountAction: ActionFunction<AmountPayload> = async (

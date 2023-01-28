@@ -7,7 +7,7 @@ import {
   PortfolioTogglePayload,
   SearchPortfolioPayload,
 } from "./types";
-import {CtaCardProps, ListProps, TypographyProps} from "@voltmoney/schema";
+import { ListProps, TypographyProps } from "@voltmoney/schema";
 import {
   AvailableCASItem,
   IsinLTVMap,
@@ -17,7 +17,10 @@ import {
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { portfolioListDatastoreBuilderV2, togglePortfolio } from "./utils";
-import {addCommasToNumber, roundDownToNearestHundred} from "../../../configs/utils";
+import {
+  addCommasToNumber,
+  roundDownToNearestHundred,
+} from "../../../configs/utils";
 import { getDesiredValue } from "../portfolio_readonly/actions";
 
 let portfolioSearchKeyword = "";
@@ -56,22 +59,20 @@ export const getActualLimit = (
   return sum;
 };
 
-
 export const getPortfolioValue = (
-    availableCAS: AvailableCASItem[],
-    isinNavMap: IsinNAVMap,
+  availableCAS: AvailableCASItem[],
+  isinNavMap: IsinNAVMap
 ) => {
   let sum = 0;
   availableCAS.forEach((item) => {
     sum =
-        sum +
-        roundDownToNearestHundred(
-            item.totalAvailableUnits * isinNavMap[item.isinNo]
-        );
+      sum +
+      roundDownToNearestHundred(
+        item.totalAvailableUnits * isinNavMap[item.isinNo]
+      );
   });
   return sum;
 };
-
 
 export const TriggerCTA: ActionFunction<CtaPayload> = async (
   action,
@@ -114,7 +115,7 @@ export const EditItem: ActionFunction<EditItemPayload> = async (
 export const ToggleSelectAction: ActionFunction<
   PortfolioTogglePayload
 > = async (action, _datastore, { setDatastore }): Promise<any> => {
-  console.log("Here payload: ", action)
+  console.log("Here payload: ", action);
   await togglePortfolio(
     action.payload.value,
     action.payload.selectedMap[action.payload.value],
@@ -140,10 +141,21 @@ export const ToggleSelectAction: ActionFunction<
 
   await setDatastore(ROUTE.PORTFOLIO, "subTitleText", <TypographyProps>{
     label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
-      parseInt(action.payload.stepResponseObject["totalPortfolioAmount"].toString())
-    )} are selected for pledging.`
+      parseInt(
+        action.payload.stepResponseObject["totalPortfolioAmount"].toString()
+      )
+    )} are selected for pledging.`,
   });
 
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomSheetText2", <
+    TypographyProps
+  >{
+    label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
+      parseInt(
+        action.payload.stepResponseObject["totalPortfolioAmount"].toString()
+      )
+    )} are selected for pledging.`,
+  });
 };
 
 export const SearchPortfolio: ActionFunction<SearchPortfolioPayload> = async (

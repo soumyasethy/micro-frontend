@@ -1,33 +1,29 @@
 import {
   CtaCardProps,
-  IconTokens,
   ListItemDataProps,
   ListProps,
   ListTypeTokens,
 } from "@voltmoney/schema";
-import {
-  ACTION,
-  CtaPayload,
-  EditItemPayload,
-  PortfolioTogglePayload,
-} from "./types";
+import { ACTION, CtaPayload, PortfolioTogglePayload } from "./types";
 import { ROUTE } from "../../../routes";
-import {getActualLimit, getPortfolioValue, getTotalLimit} from "./actions";
+import { getActualLimit, getPortfolioValue, getTotalLimit } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import { Datastore, WidgetProps } from "@voltmoney/types";
 import SharedPropsService from "../../../SharedPropsService";
+import sharedPropsService from "../../../SharedPropsService";
 import {
   addCommasToNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
-import sharedPropsService from "../../../SharedPropsService";
 
 export const portfolioListDatastoreBuilder = async (
   stepResponseObject: StepResponseObject,
   searchKeyword: string = ""
 ): Promise<Datastore> => {
-
-  console.log("stepResponseObject  ", await sharedPropsService.getAuthCASResponse())
+  console.log(
+    "stepResponseObject  ",
+    await sharedPropsService.getAuthCASResponse()
+  );
   const selectedMap = {};
   const listItemDataProps: ListItemDataProps[] = [];
   const updateAvailableCASMap = await SharedPropsService.getAvailableCASMap();
@@ -57,21 +53,21 @@ export const portfolioListDatastoreBuilder = async (
       )
     )}`;
 
-    const portfolioValue = `Portfolio value ${addCommasToNumber(
-        roundDownToNearestHundred(
-            getPortfolioValue(
-                [updateAvailableCASMap[key]],
-                stepResponseObject.isinNAVMap,
-            )
+    const portfolioValue = `Value ${addCommasToNumber(
+      roundDownToNearestHundred(
+        getPortfolioValue(
+          [updateAvailableCASMap[key]],
+          stepResponseObject.isinNAVMap
         )
-    )}`
+      )
+    )}`;
 
     listItemDataProps.push({
       label: updateAvailableCASMap[key].schemeName,
       info: "",
       trailTitle: title,
       trailSubTitle: subTitle,
-      secondaryText: portfolioValue
+      secondaryText: portfolioValue,
     });
   });
 
@@ -98,7 +94,7 @@ export const portfolioListDatastoreBuilder = async (
   const datastoreObj: Datastore = {
     listItem: <ListProps & WidgetProps>{
       hideCheck: true,
-      ...props
+      ...props,
     },
     totalItem: <CtaCardProps>{
       label: "Total credit limit",
