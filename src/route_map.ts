@@ -143,7 +143,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
   [ROUTE.VERIFICATION_FAILED_NEW]:verificationFailedMFNew,
   [ROUTE.SET_CREDIT_LIMIT]: setCreditLimitMf,
-  [ROUTE.UPDATE_SLIDER_AMOUNT]: updateSliderAmountMF
+  [ROUTE.UPDATE_SLIDER_AMOUNT]: updateSliderAmountMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD_POA]: kycDocumentUploadPOAMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD_POI]: kycDocumentUploadPOIMF,
 };
