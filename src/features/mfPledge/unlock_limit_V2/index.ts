@@ -42,11 +42,11 @@ import { ACTION, AvailableCASItem, StepResponseObject } from "./types";
 import {
   continueLimit,
   getMoreMfPortfolio,
-  selectPortfolio,
-  removeGetMorePortfolio,
-  ViewAllAction,
   NavSliderAction,
   NavToContactUs,
+  removeGetMorePortfolio,
+  selectPortfolio,
+  ViewAllAction,
 } from "./actions";
 import { fetchPledgeLimitRepo } from "./repo";
 import {
@@ -58,12 +58,11 @@ import { StepStatusMap, User } from "../../login/otp_verify/types";
 import { api } from "../../../configs/api";
 import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
+import sharedPropsService from "../../../SharedPropsService";
 import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
-import { NavigateNext } from "../pledge_verify/actions";
 import { AuthCASModel } from "../../../types/AuthCASModel";
 import { UpdateAvailableCASMap } from "../unlock_limit_V2/types";
-import sharedPropsService from "../../../SharedPropsService";
 import { getDesiredValue } from "../portfolio_readonly/actions";
 import { commonTemplates } from "../../../configs/common";
 
@@ -189,7 +188,7 @@ export const template: (
           id: "ctaCard",
           type: WIDGET.CARD,
           padding: {
-            horizontal: -16,
+            horizontal: 0,
             vertical: 0,
           },
           position: POSITION.STICKY_BOTTOM,
