@@ -64,8 +64,13 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
     response,
     "data.updatedApplicationObj.stepStatusMap"
   );
-  user.linkedApplications[0].currentStepId = currentStepId;
-  user.linkedApplications[0].stepStatusMap = stepStatusMap;
+
+  if (currentStepId || stepStatusMap === undefined) {
+    return;
+  } else {
+    user.linkedApplications[0].currentStepId = currentStepId;
+    user.linkedApplications[0].stepStatusMap = stepStatusMap;
+  }
 
   if (currentStepId) {
     await SharedPropsService.setUser(user);
