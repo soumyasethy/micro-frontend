@@ -11,6 +11,7 @@ import { nextStepId } from "../../../configs/utils";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
 import { AnalyticsEventTracker } from "../../../configs/constants";
+import { ROUTE } from "../../../routes";
 
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
@@ -78,6 +79,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     await setDatastore(action.routeId, "input", <TextInputProps>{
       state: InputStateToken.ERROR,
     });
+    await navigate(ROUTE.MF_FETCH_PORTFOLIO);
   }
 };
 

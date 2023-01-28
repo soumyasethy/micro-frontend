@@ -89,6 +89,7 @@ export const template: (applicationId: string) => TemplateSchema = (
       // },
       input: <TextInputProps & WidgetProps>{
         regex: RegexConfig.EMAIL,
+        isFocus:true,
         isLowerCase: true,
         clearEnabled: false,
         type: InputTypeToken.EMAIL,

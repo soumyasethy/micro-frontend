@@ -121,6 +121,7 @@ export const template: (mobileNumber?: string) => TemplateSchema = (
     },
     input: <TextInputProps & WidgetProps>{
       value: mobileNumber ? `${mobileNumber}` : "",
+      isFocus:true,
       regex: RegexConfig.MOBILE,
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
