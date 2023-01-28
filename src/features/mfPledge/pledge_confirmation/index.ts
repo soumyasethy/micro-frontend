@@ -118,50 +118,26 @@ export const template: (
         {
           id: "interestBlock",
           type: WIDGET.CARD,
-          padding: {
-            left: 16,
-            right: 16,
-          },
         },
         {
           id: "interestDivider",
           type: WIDGET.DIVIDER,
-          padding: {
-            left: 16,
-            right: 16,
-          },
         },
         {
           id: "autoPayBlock",
           type: WIDGET.CARD,
-          padding: {
-            left: 16,
-            right: 16,
-          },
         },
         {
           id: "autoPayDivider",
           type: WIDGET.DIVIDER,
-          padding: {
-            left: 16,
-            right: 16,
-          },
         },
         {
           id: "tenureBlock",
           type: WIDGET.CARD,
-          padding: {
-            left: 16,
-            right: 16,
-          },
         },
         {
           id: "tenureDivider",
           type: WIDGET.DIVIDER,
-          padding: {
-            left: 16,
-            right: 16,
-          },
         },
         ...(showOtpConfirmation
           ? [
