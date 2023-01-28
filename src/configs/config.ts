@@ -1,7 +1,13 @@
 import SharedPropsService from "../SharedPropsService";
+import { getScreenType } from "../configs/platfom-utils";
+import { Dimensions } from "react-native";
+import { SCREEN_SIZE } from "@voltmoney/types";
 
 export const __isTest__ = false;
 export const __isMock__ = false;
+
+export const screenType = getScreenType(Dimensions.get("window").width);
+
 export const defaultAuthHeaders = () => {
   const headers = new Headers();
   headers.append("X-EntityType", "BORROWER");
@@ -10,6 +16,11 @@ export const defaultAuthHeaders = () => {
     __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP"
   );
   headers.append("Content-Type", "application/json");
+  if (screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL) {
+    headers.append("X-DeviceType", "Mobile");
+  } else {
+    headers.append("X-DeviceType", "Desktop");
+  }
   return headers;
 };
 export const defaultHeaders = async () => {
@@ -24,6 +35,11 @@ export const defaultHeaders = async () => {
     `Bearer ${await SharedPropsService.getToken()}`
   );
   headers.append("Content-Type", "application/json");
+  if (screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL) {
+    headers.append("X-DeviceType", "Mobile");
+  } else {
+    headers.append("X-DeviceType", "Desktop");
+  }
   return headers;
 };
 
@@ -31,12 +47,20 @@ export const getAuthHeaders = () => ({
   "X-EntityType": "BORROWER",
   "X-AppPlatform": __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP",
   "Content-Type": "application/json",
+  "X-DeviceType":
+    screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL
+      ? "Mobile"
+      : "Desktop",
 });
 export const getAppHeader = async () => ({
   "X-AppMode": "INVESTOR_VIEW",
   "X-AppPlatform": await SharedPropsService.getAppPlatform(),
   Authorization: `Bearer ${await SharedPropsService.getToken()}`,
   "Content-Type": "application/json",
+  "X-DeviceType":
+    screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL
+      ? "Mobile"
+      : "Desktop",
 });
 
 export const APP_CONFIG = {
