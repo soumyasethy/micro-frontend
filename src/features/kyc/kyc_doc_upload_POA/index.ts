@@ -42,9 +42,6 @@ import {
   onPageLoad,
   triggerAction,
 } from "./actions";
-import SharedPropsService from "../../../SharedPropsService";
-import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
 
 export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
@@ -63,9 +60,9 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         { id: "secondarySubTitle", type: WIDGET.TEXT },
         { id: "subTitleSpace", type: WIDGET.SPACE },
         { id: "dropDownSpace", type: WIDGET.SPACE },
-        // { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
-        // { id: "frontSideSpace", type: WIDGET.SPACE },
-        // { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
+        { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
+        { id: "frontSideSpace", type: WIDGET.SPACE },
+        { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
         {
           id: "stackBottom",
           type: WIDGET.STACK,
@@ -76,7 +73,33 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     datastore: <Datastore>{
       topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       dropDownSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-      // frontSideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      frontSide: <DocumentPickerProps & WidgetProps>{
+        titleLabel: "Front side",
+        ctaLabel: "Upload",
+        state: DocumentPickerState.DEFAULT,
+        action: {
+          type: ACTION.SELECT_DOCUMENT,
+          routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
+          payload: <DocumentUploadPayload>{
+            value: { content: null, name: null },
+            widgetID: "frontSide",
+          },
+        },
+      },
+      backSide: <DocumentPickerProps & WidgetProps>{
+        titleLabel: "Back side",
+        ctaLabel: "Upload",
+        state: DocumentPickerState.DEFAULT,
+        action: {
+          type: ACTION.SELECT_DOCUMENT,
+          routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
+          payload: <DocumentUploadPayload>{
+            value: { content: null, name: null },
+            widgetID: "backSide",
+          },
+        },
+      },
+      frontSideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       header: <HeaderProps & WidgetProps>{
         title: "Aadhaar Verification",
         type: HeaderTypeTokens.verification,
@@ -172,86 +195,8 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
 };
 
 export const kycDocumentUploadPOAMF: PageType<any> = {
-  onLoad: async ({ setDatastore, appendWidgets, removeWidgets, network }) => {
+  onLoad: async ({}) => {
     const stepper: StepperItem[] = await horizontalStepperRepo();
-
-    let documentUploadUrlMap = {
-      frontDocURL: null,
-      backDocURL: null,
-    };
-
-    const validation = {
-      isFrontDocUploaded: false,
-      isBackDocUploaded: false,
-    };
-
-    validation.isFrontDocUploaded = false;
-    validation.isBackDocUploaded = false;
-    await setDatastore(ROUTE.KYC_DOCUMENT_UPLOAD_POA, "continue", <ButtonProps>{
-      type: ButtonTypeTokens.LargeOutline,
-    }); // reset continue button
-
-    const applicationId = (await SharedPropsService.getUser())
-      .linkedApplications[0].applicationId;
-
-    const documentUrlResponse = await network.post(
-      `${api.kycDocumentPOA}${applicationId}`,
-      { documentType: "AADHAAR" },
-      { headers: await getAppHeader() }
-    );
-
-    console.log("documentUrlResponse", documentUrlResponse);
-    documentUploadUrlMap = documentUrlResponse.data.stepResponseObject;
-    await removeWidgets(ROUTE.KYC_DOCUMENT_UPLOAD_POA, [
-      { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
-      { id: "frontSideSpace", type: WIDGET.SPACE },
-      { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
-    ]);
-
-    const datastore: Datastore = {
-      frontSide: <DocumentPickerProps & WidgetProps>{
-        titleLabel: "Front side",
-        ctaLabel: "Upload",
-        state: DocumentPickerState.DEFAULT,
-        action: {
-          type: ACTION.SELECT_DOCUMENT,
-          routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
-          payload: <DocumentUploadPayload>{
-            value: { content: null, name: null },
-            widgetID: "frontSide",
-          },
-        },
-      },
-    };
-
-    if (documentUploadUrlMap.backDocURL !== null) {
-      datastore["frontSideSpace"] = <SpaceProps>{ size: SizeTypeTokens.XXXL };
-      datastore["backSide"] = <DocumentPickerProps & WidgetProps>{
-        titleLabel: "Back side",
-        ctaLabel: "Upload",
-        state: DocumentPickerState.DEFAULT,
-        action: {
-          type: ACTION.SELECT_DOCUMENT,
-          routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
-          payload: <DocumentUploadPayload>{
-            value: { content: null, name: null },
-            widgetID: "backSide",
-          },
-        },
-      };
-    }
-
-    await appendWidgets(
-      ROUTE.KYC_DOCUMENT_UPLOAD_POA,
-      datastore,
-      [
-        { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
-        { id: "frontSideSpace", type: WIDGET.SPACE },
-        { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
-      ],
-      "dropDownSpace"
-    );
-
     return Promise.resolve(template(stepper));
   },
   actions: {
@@ -261,4 +206,9 @@ export const kycDocumentUploadPOAMF: PageType<any> = {
     [ACTION.TRIGGER_CTA]: triggerAction,
   },
   clearPrevious: true,
+  action: {
+    type: ACTION.ON_PAGE_LOAD,
+    routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
+    payload: {},
+  },
 };

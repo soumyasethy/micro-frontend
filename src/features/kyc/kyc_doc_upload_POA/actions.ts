@@ -1,6 +1,6 @@
-import { ActionFunction, Datastore, WidgetProps } from "@voltmoney/types";
+import { ActionFunction } from "@voltmoney/types";
 import { AadharInitPayload } from "../kyc_init/types";
-import { ACTION, DocumentUploadPayload } from "./types";
+import { DocumentUploadPayload } from "./types";
 import { DropDownPayload } from "../kyc_additional_details/types";
 import { ROUTE } from "../../../routes";
 import {
@@ -8,9 +8,6 @@ import {
   ButtonTypeTokens,
   DocumentPickerProps,
   DocumentPickerState,
-  SizeTypeTokens,
-  SpaceProps,
-  WIDGET,
 } from "@voltmoney/schema";
 import { api } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
@@ -65,9 +62,16 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
     "data.updatedApplicationObj.stepStatusMap"
   );
 
-  if (currentStepId || stepStatusMap === undefined) {
+  console.log("currentStepId", currentStepId);
+  console.log("stepStatusMap", stepStatusMap);
+
+  if (
+    currentStepId == undefined ||
+    currentStepId == "KYC_DOCUMENT_UPLOAD_POA"
+  ) {
     return;
   } else {
+    console.log("else condition");
     user.linkedApplications[0].currentStepId = currentStepId;
     user.linkedApplications[0].stepStatusMap = stepStatusMap;
   }
@@ -75,6 +79,7 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
   if (currentStepId) {
     await SharedPropsService.setUser(user);
     const routeObj = await nextStepCredStepper();
+    console.log("routeObj", routeObj);
     await navigate(routeObj.routeId, routeObj.params);
   }
 };
@@ -157,57 +162,56 @@ export const onPageLoad: ActionFunction<DropDownPayload> = async (
     { headers: await getAppHeader() }
   );
 
-  console.log("documentUrlResponse", documentUrlResponse);
   documentUploadUrlMap = documentUrlResponse.data.stepResponseObject;
-  await removeWidgets(ROUTE.KYC_DOCUMENT_UPLOAD_POA, [
-    { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
-    { id: "frontSideSpace", type: WIDGET.SPACE },
-    { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
-  ]);
-
-  const datastore: Datastore = {
-    frontSide: <DocumentPickerProps & WidgetProps>{
-      titleLabel: "Front side",
-      ctaLabel: "Upload",
-      state: DocumentPickerState.DEFAULT,
-      action: {
-        type: ACTION.SELECT_DOCUMENT,
-        routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
-        payload: <DocumentUploadPayload>{
-          value: { content: null, name: null },
-          widgetID: "frontSide",
-        },
-      },
-    },
-  };
-
-  if (documentUploadUrlMap.backDocURL !== null) {
-    datastore["frontSideSpace"] = <SpaceProps>{ size: SizeTypeTokens.XXXL };
-    datastore["backSide"] = <DocumentPickerProps & WidgetProps>{
-      titleLabel: "Back side",
-      ctaLabel: "Upload",
-      state: DocumentPickerState.DEFAULT,
-      action: {
-        type: ACTION.SELECT_DOCUMENT,
-        routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
-        payload: <DocumentUploadPayload>{
-          value: { content: null, name: null },
-          widgetID: "backSide",
-        },
-      },
-    };
-  }
-
-  await appendWidgets(
-    ROUTE.KYC_DOCUMENT_UPLOAD_POA,
-    datastore,
-    [
-      { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
-      { id: "frontSideSpace", type: WIDGET.SPACE },
-      { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
-    ],
-    "dropDownSpace"
-  );
+  // await removeWidgets(ROUTE.KYC_DOCUMENT_UPLOAD_POA, [
+  //   { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
+  //   { id: "frontSideSpace", type: WIDGET.SPACE },
+  //   { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
+  // ]);
+  //
+  // const datastore: Datastore = {
+  //   frontSide: <DocumentPickerProps & WidgetProps>{
+  //     titleLabel: "Front side",
+  //     ctaLabel: "Upload",
+  //     state: DocumentPickerState.DEFAULT,
+  //     action: {
+  //       type: ACTION.SELECT_DOCUMENT,
+  //       routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
+  //       payload: <DocumentUploadPayload>{
+  //         value: { content: null, name: null },
+  //         widgetID: "frontSide",
+  //       },
+  //     },
+  //   },
+  // };
+  //
+  // if (documentUploadUrlMap.backDocURL !== null) {
+  //   datastore["frontSideSpace"] = <SpaceProps>{ size: SizeTypeTokens.XXXL };
+  //   datastore["backSide"] = <DocumentPickerProps & WidgetProps>{
+  //     titleLabel: "Back side",
+  //     ctaLabel: "Upload",
+  //     state: DocumentPickerState.DEFAULT,
+  //     action: {
+  //       type: ACTION.SELECT_DOCUMENT,
+  //       routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA,
+  //       payload: <DocumentUploadPayload>{
+  //         value: { content: null, name: null },
+  //         widgetID: "backSide",
+  //       },
+  //     },
+  //   };
+  // }
+  //
+  // await appendWidgets(
+  //   ROUTE.KYC_DOCUMENT_UPLOAD_POA,
+  //   datastore,
+  //   [
+  //     { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
+  //     { id: "frontSideSpace", type: WIDGET.SPACE },
+  //     { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
+  //   ],
+  //   "dropDownSpace"
+  // );
 };
 
 const getContentType = (fileExtension) => {

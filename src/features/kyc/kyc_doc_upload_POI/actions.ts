@@ -1,6 +1,6 @@
-import { ActionFunction, Datastore, WidgetProps } from "@voltmoney/types";
+import { ActionFunction } from "@voltmoney/types";
 import { AadharInitPayload } from "../kyc_init/types";
-import { ACTION, DocumentUploadPayload } from "./types";
+import { DocumentUploadPayload } from "./types";
 import { DropDownPayload } from "../kyc_additional_details/types";
 import { ROUTE } from "../../../routes";
 import {
@@ -8,16 +8,13 @@ import {
   ButtonTypeTokens,
   DocumentPickerProps,
   DocumentPickerState,
-  SizeTypeTokens,
-  SpaceProps,
-  WIDGET,
 } from "@voltmoney/schema";
 import { api } from "../../../configs/api";
 import SharedPropsService from "../../../SharedPropsService";
-import _ from "lodash";
 import { StepStatusMap, User } from "../../login/otp_verify/types";
 import { getAppHeader } from "../../../configs/config";
 import { nextStepCredStepper } from "../../../configs/utils";
+import _ from "lodash";
 
 let documentUploadUrlMap = {
   frontDocURL: null,
@@ -65,7 +62,13 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
     "data.updatedApplicationObj.stepStatusMap"
   );
 
-  if (currentStepId || stepStatusMap === undefined) {
+  console.log("currentStepId", currentStepId);
+  console.log("stepStatusMap", stepStatusMap);
+
+  if (
+    currentStepId == undefined ||
+    currentStepId == "KYC_DOCUMENT_UPLOAD_POI"
+  ) {
     return;
   } else {
     user.linkedApplications[0].currentStepId = currentStepId;
@@ -152,55 +155,52 @@ export const onPageLoad: ActionFunction<DropDownPayload> = async (
 
   console.log("documentUrlResponse", documentUrlResponse);
   documentUploadUrlMap = documentUrlResponse.data.stepResponseObject;
-  await removeWidgets(ROUTE.KYC_DOCUMENT_UPLOAD_POI, [
-    { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
-    { id: "frontSideSpace", type: WIDGET.SPACE },
-    { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
-  ]);
 
-  const datastore: Datastore = {
-    frontSide: <DocumentPickerProps & WidgetProps>{
-      titleLabel: "Front side",
-      ctaLabel: "Upload",
-      state: DocumentPickerState.DEFAULT,
-      action: {
-        type: ACTION.SELECT_DOCUMENT,
-        routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POI,
-        payload: <DocumentUploadPayload>{
-          value: { content: null, name: null },
-          widgetID: "frontSide",
-        },
-      },
-    },
-  };
+  // await SharedPropsService.setDocumentUploadUrlMap(documentUploadUrlMap);
 
-  if (documentUploadUrlMap.backDocURL !== null) {
-    datastore["frontSideSpace"] = <SpaceProps>{ size: SizeTypeTokens.XXXL };
-    datastore["backSide"] = <DocumentPickerProps & WidgetProps>{
-      titleLabel: "Back side",
-      ctaLabel: "Upload",
-      state: DocumentPickerState.DEFAULT,
-      action: {
-        type: ACTION.SELECT_DOCUMENT,
-        routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POI,
-        payload: <DocumentUploadPayload>{
-          value: { content: null, name: null },
-          widgetID: "backSide",
-        },
-      },
-    };
-  }
+  // const datastore: Datastore = {
+  //   frontSide: <DocumentPickerProps & WidgetProps>{
+  //     titleLabel: "Front side",
+  //     ctaLabel: "Upload",
+  //     state: DocumentPickerState.DEFAULT,
+  //     action: {
+  //       type: ACTION.SELECT_DOCUMENT,
+  //       routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POI,
+  //       payload: <DocumentUploadPayload>{
+  //         value: { content: null, name: null },
+  //         widgetID: "frontSide",
+  //       },
+  //     },
+  //   },
+  // };
 
-  await appendWidgets(
-    ROUTE.KYC_DOCUMENT_UPLOAD_POI,
-    datastore,
-    [
-      { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
-      { id: "frontSideSpace", type: WIDGET.SPACE },
-      { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
-    ],
-    "dropDownSpace"
-  );
+  // if (documentUploadUrlMap.backDocURL !== null) {
+  //   datastore["frontSideSpace"] = <SpaceProps>{ size: SizeTypeTokens.XXXL };
+  //   datastore["backSide"] = <DocumentPickerProps & WidgetProps>{
+  //     titleLabel: "Back side",
+  //     ctaLabel: "Upload",
+  //     state: DocumentPickerState.DEFAULT,
+  //     action: {
+  //       type: ACTION.SELECT_DOCUMENT,
+  //       routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POI,
+  //       payload: <DocumentUploadPayload>{
+  //         value: { content: null, name: null },
+  //         widgetID: "backSide",
+  //       },
+  //     },
+  //   };
+  // }
+
+  // await appendWidgets(
+  //   ROUTE.KYC_DOCUMENT_UPLOAD_POI,
+  //   datastore,
+  //   [
+  //     { id: "frontSide", type: WIDGET.DOCUMENT_PICKER },
+  //     { id: "frontSideSpace", type: WIDGET.SPACE },
+  //     { id: "backSide", type: WIDGET.DOCUMENT_PICKER },
+  //   ],
+  //   "dropDownSpace"
+  // );
 };
 
 const getContentType = (fileExtension) => {
