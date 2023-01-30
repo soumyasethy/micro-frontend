@@ -64,35 +64,15 @@ export const stepperRepo = async () => {
   const user = await SharedPropsService.getUser();
 
   if (
-    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-      StepperStateToken.COMPLETED ||
-      user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
-        StepperStateToken.COMPLETED) &&
-    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-    //   StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
-      StepperStateToken.COMPLETED &&
-    (user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
-      StepperStateToken.COMPLETED ||
-      user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
-        StepperStateToken.SKIPPED)
+      StepperStateToken.COMPLETED
   ) {
     KYC_VERIFICATION = StepperStateToken.COMPLETED;
   } else if (
-    user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-      StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
-      StepperStateToken.NOT_STARTED &&
-    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-    //   StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
-      StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
-      StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
-      StepperStateToken.NOT_STARTED
+    StepperStateToken.NOT_STARTED
   ) {
     KYC_VERIFICATION = StepperStateToken.NOT_STARTED;
   } else if (
