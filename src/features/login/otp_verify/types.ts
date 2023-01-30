@@ -15,7 +15,7 @@ export type LoginAction = {
   username: string;
   password?: string;
   isWhatsappEnabled?: boolean;
-  setIsUserLoggedIn?:(user: any) => void;
+  setIsUserLoggedIn?: (user: any) => void;
 };
 export type ResendOtp = {
   phoneNumber: string;
@@ -95,6 +95,8 @@ export interface StepStatusMap {
   BANK_ACCOUNT_VERIFICATION?: StepperStateToken;
   KYC_ADDITIONAL_DETAILS?: StepperStateToken;
   KYC_DOCUMENT_UPLOAD?: StepperStateToken;
+  KYC_DOCUMENT_UPLOAD_POI?: StepperStateToken;
+  KYC_DOCUMENT_UPLOAD_POA?: StepperStateToken;
 }
 
 export interface LinkedBorrowerAccount {
