@@ -1,7 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { OtpPayloadForPledgeConfirm } from "./types";
-import { ButtonProps, ButtonTypeTokens } from "@voltmoney/schema";
+import {ButtonProps, ButtonTypeTokens, VerificationCardProps} from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import {
   AssetRepositoryMap,
@@ -19,6 +19,14 @@ export const sendOtpForPledgeConfirm: ActionFunction<
   _datastore,
   { analytics, network, navigate, setDatastore }
 ): Promise<any> => {
+  await setDatastore(
+      ROUTE.ALERT_PAGE,
+      "alert",
+      <VerificationCardProps> {
+        loading: true
+      }
+  )
+
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     label: "",
     type: ButtonTypeTokens.LargeOutline,
