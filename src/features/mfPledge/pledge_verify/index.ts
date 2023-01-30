@@ -39,6 +39,7 @@ import {
 } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
+
 export const template: (
   phoneNumber: string,
   assetRepository: string,
@@ -138,6 +139,8 @@ export const template: (
     },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     input: <TextInputProps & WidgetProps>{
+      resendTimer:
+        AssetRepositoryMap[assetRepository].OTP_LENGTH == 5 ? 60 : 15,
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
       charLimit: AssetRepositoryMap[assetRepository].OTP_LENGTH,
@@ -157,13 +160,6 @@ export const template: (
         payload: <OtpPledgePayload>{ assetRepository },
         routeId: ROUTE.PLEDGE_VERIFY,
       },
-    },
-    message: <TypographyProps>{
-      label: "Resend OTP in 30 secs",
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Grey_Charcoal,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
     },
   },
 });
