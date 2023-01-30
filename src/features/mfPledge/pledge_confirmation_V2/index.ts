@@ -561,7 +561,7 @@ export const template: (
           routeId: ROUTE.PLEDGE_CONFIRMATION,
           payload: <OtpPayloadForPledgeConfirm>{
             value: stepResponseObject,
-            widgetId: "continue",
+            widgetId: "ctaButton",
             isResend: false,
           },
         },
