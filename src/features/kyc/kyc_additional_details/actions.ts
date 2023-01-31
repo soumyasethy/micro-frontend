@@ -35,19 +35,19 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
 ): Promise<any> => {
   switch (action.payload.widgetID) {
     case "fatherFirstNameInput": {
-      fatherFirstName = action.payload.value;
+      fatherFirstName = action.payload.value.trim();
       break;
     }
     case "fatherLastNameInput": {
-      fatherLastName = action.payload.value;
+      fatherLastName = action.payload.value.trim();
       break;
     }
     case "motherFirstNameInput": {
-      motherFirstName = action.payload.value;
+      motherFirstName = action.payload.value.trim();
       break;
     }
     case "motherLastNameInput": {
-      motherLastName = action.payload.value;
+      motherLastName = action.payload.value.trim();
       break;
     }
   }
@@ -62,6 +62,10 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   ) {
     await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
+    });
+  } else {
+    await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeOutline,
     });
   }
 };
