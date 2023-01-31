@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -38,7 +30,7 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
+import {ROUTE} from "../../../routes";
 import {
   ACTION,
   DropDownPayload,
@@ -48,16 +40,10 @@ import {
   MARITAL_STATUS,
   MaritalStatusPayload,
 } from "./types";
-import {
-  GoBackAction,
-  onChangeInput,
-  onSelect,
-  toggleCTA,
-  triggerCTA,
-} from "./actions";
-import { horizontalStepperRepo } from "../../../configs/utils";
-import { getAppHeader } from "../../../configs/config";
-import { api } from "../../../configs/api";
+import {GoBackAction, onChangeInput, onSelect, toggleCTA, triggerCTA,} from "./actions";
+import {horizontalStepperRepo} from "../../../configs/utils";
+import {getAppHeader} from "../../../configs/config";
+import {api} from "../../../configs/api";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
 
@@ -99,6 +85,7 @@ export const template: (
         { id: "motherNameSpace", type: WIDGET.SPACE },
         { id: "motherNameStack", type: WIDGET.STACK },
         { id: "space1", type: WIDGET.SPACE },
+        { id: "space2", type: WIDGET.SPACE },
         {
           id: "stackBottom",
           type: WIDGET.STACK,
@@ -156,6 +143,7 @@ export const template: (
           payload: <KycAdditionalDetailsPayload>{},
         },
       },
+      space2: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
       spaceContinue: <SpaceProps>{ size: SizeTypeTokens.MD },
       martialStatusStack: <StackProps>{
         width: StackWidth.FULL,
