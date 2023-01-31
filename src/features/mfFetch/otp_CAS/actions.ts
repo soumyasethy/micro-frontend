@@ -16,7 +16,7 @@ import { ROUTE } from "../../../routes";
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, network, analytics }
+  { navigate, setDatastore, network, analytics, showPopup, hidePopup }
 ): Promise<any> => {
   const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
@@ -81,6 +81,22 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     });
     await navigate(ROUTE.MF_FETCH_PORTFOLIO);
   }
+  // else {
+  //   console.log("response", response.data.message);
+  //   showPopup({
+  //     isAutoTriggerCta: false,
+  //     type: "DEFAULT",
+  //     title: "Verification failed",
+  //     subTitle: _.get(response, "response.message", false),
+  //     ctaLabel: "Continue to try again",
+  //     ctaAction: {
+  //       type: ACTIONS.NAV_TO_FETCH,
+  //       routeId: ROUTE.OTP_AUTH_CAS,
+  //       payload: {},
+  //     },
+  //   });
+  //   // await navigate(ROUTE.MF_FETCH_PORTFOLIO);
+  // }
 };
 
 export const goBack: ActionFunction<any> = async (
@@ -89,4 +105,12 @@ export const goBack: ActionFunction<any> = async (
   { goBack }
 ): Promise<any> => {
   goBack();
+};
+
+export const navToFetch: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  navigate(ROUTE.MF_FETCH_PORTFOLIO);
 };
