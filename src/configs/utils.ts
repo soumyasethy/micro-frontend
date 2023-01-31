@@ -121,29 +121,28 @@ export const stepperRepo = async () => {
           ? message
           : "",
     },
-
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      step: "3",
-      title: "Setup AutoPay",
-      subTitle: "Link your account for hassle-free repayments",
-      horizontalTitle: "AutoPay",
-      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
-      message:
-        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
-    },
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d74",
-      step: "4",
+      step: "3",
       title: "Review Agreement",
       subTitle: "Verify the key usage terms and confirm",
       horizontalTitle: "Agreement",
       status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
       message:
         user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d72",
+      step: "4",
+      title: "Setup AutoPay",
+      subTitle: "Link your account for hassle-free repayments",
+      horizontalTitle: "AutoPay",
+      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      message:
+        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
         StepperStateToken.PENDING_MANUAL_VERIFICATION
           ? message
           : "",
@@ -180,12 +179,12 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
   } else if (currentStepId === ROUTE.BANK_ACCOUNT_VERIFICATION) {
     return { routeId: ROUTE.BANK_ACCOUNT_VERIFICATION, params: {} };
   } else if (
-    currentStepId === "MANDATE_SETUP" ||
+    currentStepId === "AGREEMENT_SIGN" ||
     currentStepId === "CREDIT_APPROVAL"
   ) {
+    return { routeId: ROUTE.LOAN_AGREEMENT_POLLING, params: {} };
+  } else if (currentStepId === "MANDATE_SETUP") {
     return { routeId: ROUTE.LOAN_AUTOPAY, params: {} };
-  } else if (currentStepId === "AGREEMENT_SIGN") {
-    return { routeId: ROUTE.LOAN_AGREEMENT, params: {} };
   }
 };
 

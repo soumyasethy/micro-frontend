@@ -26,14 +26,11 @@ import { kycDigiLockerMF } from "./features/kyc/kyc_init";
 import { alertMF } from "./features/popup_loader";
 import { cameraCaptureMF } from "./features/kyc/kyc_photo_upload";
 import { splashScreenMF } from "./features/spalsh_screen";
-import { unlockLimitMF } from "./features/mfPledge/unlock_limit";
 import { pledgeVerifyMF } from "./features/mfPledge/pledge_verify";
 import { pledgeLoadingMF } from "./features/mfPledge/pledge_loading";
 import { pledgeConfirmationLoadingMF } from "./features/mfPledge/pledge_confirmation_loader";
-import { pledgeConfirmationMF } from "./features/mfPledge/pledge_confirmation";
 import { unlockSuccessMF } from "./features/mfPledge/unlock_success";
 import { modifyLimitMF } from "./features/mfPledge/modify_limit";
-import { portfolioMF } from "./features/mfPledge/portfolio";
 import { pledgeAmountMF } from "./features/mfPledge/pledged_amount";
 import { modifyPledgeMF } from "./features/mfPledge/modify_pledged_amount";
 import { dashboardMF } from "./features/afterUnlock/dashboard";
@@ -72,6 +69,7 @@ import { portfolioMFV2 } from "./features/mfPledge/portfolio_V2";
 import { updateSliderAmountMF } from "./features/mfPledge/update_slider_amount";
 import { kycDocumentUploadPOAMF } from "./features/kyc/kyc_doc_upload_POA";
 import { kycDocumentUploadPOIMF } from "./features/kyc/kyc_doc_upload_POI";
+import { loanAgreementPollingMF } from "./features/loanAgreement/loan_agreemnet_poll";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -141,9 +139,10 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
   [ROUTE.PORTFOLIO_READONLY]: portfolioReadOnlyMF,
-  [ROUTE.VERIFICATION_FAILED_NEW]:verificationFailedMFNew,
+  [ROUTE.VERIFICATION_FAILED_NEW]: verificationFailedMFNew,
   [ROUTE.SET_CREDIT_LIMIT]: setCreditLimitMf,
   [ROUTE.UPDATE_SLIDER_AMOUNT]: updateSliderAmountMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD_POA]: kycDocumentUploadPOAMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD_POI]: kycDocumentUploadPOIMF,
+  [ROUTE.LOAN_AGREEMENT_POLLING]: loanAgreementPollingMF,
 };
