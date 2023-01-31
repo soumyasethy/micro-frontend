@@ -69,7 +69,7 @@ import { portfolioMFV2 } from "./features/mfPledge/portfolio_V2";
 import { updateSliderAmountMF } from "./features/mfPledge/update_slider_amount";
 import { kycDocumentUploadPOAMF } from "./features/kyc/kyc_doc_upload_POA";
 import { kycDocumentUploadPOIMF } from "./features/kyc/kyc_doc_upload_POI";
-import { loanAgreementPollingMF } from "./features/loanAgreement/loan_agreemnet_poll";
+import { loanAgreementPollingMF } from "./features/loanAgreement/loan_agreement_poll";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
