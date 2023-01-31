@@ -134,9 +134,9 @@ export const PollMandateStatus: ActionFunction<any> = async (
             title: "AutoPay setup successful!",
             subTitle:
               "Interest charges will be paid automatically every month.",
-            ctaLabel: "Proceed to review agreement",
+            ctaLabel: "Proceed to dashboard",
             ctaAction: {
-              type: ACTION.GO_LOAN_AGREEMENT,
+              type: ACTION.GO_T0_DASHBOARD,
               routeId: ROUTE.LOAN_REPAYMENT,
               payload: {},
             },
@@ -181,4 +181,13 @@ export const NavLoanRepayment: ActionFunction<any> = async (
 ): Promise<any> => {
   await goBack();
   await navigate(ROUTE.LOAN_REPAYMENT);
+};
+
+export const GoToDashboard: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, goBack }
+): Promise<any> => {
+  await goBack();
+  await navigate(ROUTE.DASHBOARD);
 };

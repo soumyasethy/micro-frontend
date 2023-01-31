@@ -93,9 +93,9 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
             title: "Agreement submitted!",
             subTitle:
               "Congratulations! Your loan application is created successfully.",
-            ctaLabel: "Go to dashboard",
+            ctaLabel: "Go to AutoPay",
             ctaAction: {
-              type: ACTION.GO_TO_DASHBOARD,
+              type: ACTION.GO_TO_AUTOPAY,
               routeId: ROUTE.LOAN_AGREEMENT,
               payload: {},
             },
@@ -111,7 +111,7 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
               "Bank account must be linked for AutoPay. Please try again.",
             ctaLabel: "Continue to try again",
             ctaAction: {
-              type: ACTION.GO_TO_DASHBOARD,
+              type: ACTION.GO_TO_AUTOPAY,
               routeId: ROUTE.LOAN_AGREEMENT,
               payload: {},
             },
@@ -124,13 +124,13 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
   }, APP_CONFIG.POLLING_INTERVAL);
 };
 
-export const NavToDashboard: ActionFunction<any> = async (
+export const NavToAutoPay: ActionFunction<any> = async (
   action,
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
   await goBack();
-  await navigate(ROUTE.DASHBOARD);
+  await navigate(ROUTE.LOAN_AUTOPAY);
 };
 
 export const NavToLoanAgreement: ActionFunction<any> = async (

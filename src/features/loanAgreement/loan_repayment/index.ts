@@ -39,12 +39,13 @@ import { ACTION, LimitPayload } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import {
   authenticateRepayment,
-  goBack,
   AutoPayPoll,
-  openLinkInNewTab,
-  PollMandateStatus,
+  goBack,
+  GoToDashboard,
   NavLoanAgreement,
   NavLoanRepayment,
+  openLinkInNewTab,
+  PollMandateStatus,
 } from "./actions";
 
 export const template: (
@@ -55,7 +56,11 @@ export const template: (
     id: ROUTE.LOAN_REPAYMENT,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+      {
+        id: "headerStack",
+        type: WIDGET.HEADER,
+        position: POSITION.ABSOLUTE_TOP,
+      },
       { id: "headerSpace", type: WIDGET.SPACE },
       { id: "headItem", type: WIDGET.TEXT },
       { id: "headSpace", type: WIDGET.SPACE },
@@ -186,5 +191,6 @@ export const loanRepaymentMF: PageType<any> = {
     [ACTION.POLL_MANDATE_STATUS]: PollMandateStatus,
     [ACTION.GO_LOAN_AGREEMENT]: NavLoanAgreement,
     [ACTION.GO_LOAN_REPAYMENT]: NavLoanRepayment,
+    [ACTION.GO_T0_DASHBOARD]: GoToDashboard,
   },
 };

@@ -3,7 +3,7 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
-import { IconTokens, StepperStateToken } from "@voltmoney/schema";
+import { IconTokens } from "@voltmoney/schema";
 import { ACTION } from "../loan_webView/types";
 import { User } from "../../login/otp_verify/types";
 
@@ -35,7 +35,7 @@ export const AgreementStatusAction: ActionFunction<any> = async (
             title: "Agreement submitted!",
             subTitle:
               "Congratulations! Your loan application is created successfully.",
-            ctaLabel: "Go to dashboard",
+            ctaLabel: "Go to AutoPay",
             ctaAction: action,
           });
         } else if (response.stepResponseObject.toLowerCase() === "failed") {
