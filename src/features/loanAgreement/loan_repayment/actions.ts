@@ -1,8 +1,7 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { ACTION, LimitPayload } from "./types";
-import { fetchLinkRepo } from "./repo";
-import { ButtonProps, IconTokens } from "@voltmoney/schema";
+import { IconTokens } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
@@ -36,71 +35,67 @@ export const authenticateRepayment: ActionFunction<LimitPayload> = async (
 export const goBack: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { goBack }
+  { goBack, navigate }
 ): Promise<any> => {
-  goBack();
+  await navigate(ROUTE.KYC_STEPPER, {});
 };
 
-export const AutoPayPoll: ActionFunction<LimitPayload> = async (
-  action,
-  _datastore,
-  props
-): Promise<any> => {
-  await props.setDatastore(ROUTE.LOAN_REPAYMENT, "btnItem", <ButtonProps>{
-    loading: true,
-  });
-  const timer = setInterval(async () => {
-    const response = await fetchLinkRepo();
-    if (response.stepResponseObject)
-      stepResponseObject = response.stepResponseObject;
-    if (stepResponseObject) {
-      await props.setDatastore(ROUTE.LOAN_REPAYMENT, "btnItem", <ButtonProps>{
-        loading: false,
-      });
-      clearInterval(timer);
-      await authenticateRepayment(
-        {
-          type: ACTION.REPAYMENT,
-          payload: <LimitPayload>{
-            value: stepResponseObject,
-            widgetId: "input",
-          },
-          routeId: ROUTE.LOAN_REPAYMENT,
-        },
-        {},
-        props
-      );
-    }
-  }, 2000);
-};
+// export const AutoPayPoll: ActionFunction<LimitPayload> = async (
+//   action,
+//   _datastore,
+//   props
+// ): Promise<any> => {
+//   await props.setDatastore(ROUTE.LOAN_REPAYMENT, "btnItem", <ButtonProps>{
+//     loading: true,
+//   });
+//   const timer = setInterval(async () => {
+//     const response = await fetchLinkRepo();
+//     if (response.stepResponseObject)
+//       stepResponseObject = response.stepResponseObject;
+//     if (stepResponseObject) {
+//       await props.setDatastore(ROUTE.LOAN_REPAYMENT, "btnItem", <ButtonProps>{
+//         loading: false,
+//       });
+//       clearInterval(timer);
+//       await authenticateRepayment(
+//         {
+//           type: ACTION.REPAYMENT,
+//           payload: <LimitPayload>{
+//             value: stepResponseObject,
+//             widgetId: "input",
+//           },
+//           routeId: ROUTE.LOAN_REPAYMENT,
+//         },
+//         {},
+//         props
+//       );
+//     }
+//   }, 2000);
+// };
 
 export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { openNewTab, showPopup, hidePopup, ...props }
+  { navigate, openNewTab, showPopup, hidePopup }
 ): Promise<any> => {
   if (action.payload.value) {
     // /** manually opening tab to avoid popup blocker **/
     openNewTab(action.payload.value);
 
     hidePopup();
-
-    const timer = setInterval(async () => {
-      clearInterval(timer);
-      showPopup({
-        isAutoTriggerCta: true,
-        type: "DEFAULT",
-        iconName: IconTokens.Redirecting,
-        title: "Waiting for response",
-        subTitle: "Please wait while we process your request",
-        ctaAction: {
-          type: ACTION.POLL_MANDATE_STATUS,
-          routeId: ROUTE.LOAN_REPAYMENT,
-          payload: {},
-        },
-        primary: false,
-      });
-    }, APP_CONFIG.MODAL_TRIGGER_TIMEOUT);
+    showPopup({
+      isAutoTriggerCta: true,
+      type: "DEFAULT",
+      iconName: IconTokens.Redirecting,
+      title: "Waiting for response",
+      subTitle: "Please wait while we process your request",
+      ctaAction: {
+        type: ACTION.POLL_MANDATE_STATUS,
+        routeId: ROUTE.LOAN_REPAYMENT,
+        payload: {},
+      },
+      primary: false,
+    });
   }
 };
 
@@ -120,8 +115,6 @@ export const PollMandateStatus: ActionFunction<any> = async (
         return response.json();
       })
       .then(async (response) => {
-        console.log("PollMandateStatus response", response);
-        /// handle response
         if (response.stepResponseObject.toLowerCase() === "finished") {
           clearInterval(timer);
           const user: User = await SharedPropsService.getUser();
@@ -170,7 +163,6 @@ export const NavLoanAgreement: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await goBack();
   await navigate(ROUTE.LOAN_AGREEMENT);
 };
 
@@ -179,7 +171,6 @@ export const NavLoanRepayment: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await goBack();
   await navigate(ROUTE.LOAN_REPAYMENT);
 };
 
@@ -188,6 +179,5 @@ export const GoToDashboard: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await goBack();
   await navigate(ROUTE.DASHBOARD);
 };

@@ -39,7 +39,6 @@ import { ACTION, LimitPayload } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import {
   authenticateRepayment,
-  AutoPayPoll,
   goBack,
   GoToDashboard,
   NavLoanAgreement,
@@ -186,7 +185,7 @@ export const loanRepaymentMF: PageType<any> = {
   actions: {
     [ACTION.REPAYMENT]: authenticateRepayment,
     [ACTION.GO_BACK]: goBack,
-    [ACTION.LINK_POLL]: AutoPayPoll,
+    // [ACTION.LINK_POLL]: AutoPayPoll,
     [ACTION.OPEN_TAB]: openLinkInNewTab,
     [ACTION.POLL_MANDATE_STATUS]: PollMandateStatus,
     [ACTION.GO_LOAN_AGREEMENT]: NavLoanAgreement,

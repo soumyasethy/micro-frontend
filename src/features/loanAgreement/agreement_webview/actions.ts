@@ -29,7 +29,7 @@ export const AgreementStatusAction: ActionFunction<any> = async (
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
 
-          await goBack();
+          // await goBack();
           await showPopup({
             type: "SUCCESS",
             title: "Agreement submitted!",
@@ -40,7 +40,7 @@ export const AgreementStatusAction: ActionFunction<any> = async (
           });
         } else if (response.stepResponseObject.toLowerCase() === "failed") {
           clearInterval(timerRef);
-          await goBack();
+          // await goBack();
           await navigate(ROUTE.ALERT_PAGE, {
             alertProps: {
               iconName: IconTokens.Failed,
@@ -69,7 +69,7 @@ export const GoNextSuccess: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await goBack();
+  // await goBack();
   await navigate(ROUTE.DASHBOARD);
 };
 export const GoNextFailed: ActionFunction<any> = async (
