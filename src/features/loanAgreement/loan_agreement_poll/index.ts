@@ -32,6 +32,7 @@ import {
   StackType,
   StepperItem,
   StepperProps,
+  StepperStateToken,
   StepperTypeTokens,
   TypographyProps,
   WIDGET,
@@ -47,7 +48,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
   stepper
 ) => ({
   layout: <Layout>{
-    id: ROUTE.LOAN_AUTOPAY,
+    id: ROUTE.LOAN_AGREEMENT_POLLING,
     type: LAYOUTS.LIST,
     widgets: [
       {
@@ -148,7 +149,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       ],
     },
     titleItem: <TypographyProps>{
-      label: "Generating AutoPay link",
+      label: "Generating Agreement link",
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.SM,
       lineHeight: 24,
@@ -196,12 +197,31 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
   },
 });
 
-export const loanAutoPayMF: PageType<any> = {
+export const loanAgreementPollingMF: PageType<any> = {
   onLoad: async (utils) => {
     const user: User = await SharedPropsService.getUser();
+    user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
+      StepperStateToken.IN_PROGRESS;
+    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
+      StepperStateToken.NOT_STARTED;
+    await SharedPropsService.setUser(user);
+
+    // let user: User = await SharedPropsService.getUser();
+    // const onboardingPartnerCode = user.user.onboardingPartnerCode;
+    // const relationshipManagerCode = user.user.onboardingRelationshipManagerCode;
+    // const updateUserProfileResponse = await utils.network.post(
+    //   `${api.userContext}`,
+    //   {
+    //     onboardingPartnerCode: onboardingPartnerCode,
+    //     relationshipManagerCode: relationshipManagerCode,
+    //   },
+    //   { headers: await getAppHeader() }
+    // );
+    //
     // user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
     //   StepperStateToken.IN_PROGRESS;
-    await SharedPropsService.setUser(user);
+    // console.log("updateUserProfileResponse", updateUserProfileResponse);
+    // await sharedPropsService.setUser(updateUserProfileResponse.data);
 
     const stepper: StepperItem[] = await horizontalStepperRepo();
     MandateLinkPoll(

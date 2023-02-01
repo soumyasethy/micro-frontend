@@ -16,7 +16,7 @@ export const authenticateRepayment: ActionFunction<LimitPayload> = async (
     showPopup({
       type: "DEFAULT",
       iconName: IconTokens.Redirecting,
-      title: "Redirecting you for agreement",
+      title: "Please click continue for agreement",
       subTitle: "Return to Volt after successful completion",
       ctaLabel: "Continue",
       ctaAction: {
@@ -76,7 +76,10 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
     await fetch(`${api.agreementStatus}${applicationId}`, {
       headers: await defaultHeaders(),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        // console.log("Loan WebView response status", response.status);
+        return response.json();
+      })
       .then(async (response) => {
         /// handle response
 
@@ -88,7 +91,6 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
           hidePopup();
           showPopup({
             isAutoTriggerCta: false,
-
             type: "SUCCESS",
             title: "Agreement submitted!",
             subTitle:
@@ -129,7 +131,6 @@ export const NavToAutoPay: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await goBack();
   await navigate(ROUTE.LOAN_AUTOPAY);
 };
 
@@ -138,6 +139,5 @@ export const NavToLoanAgreement: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await goBack();
   await navigate(ROUTE.LOAN_AGREEMENT);
 };

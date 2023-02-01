@@ -51,6 +51,7 @@ import {
 } from "../../../configs/utils";
 import _ from "lodash";
 import { commonTemplates } from "../../../configs/common";
+import {TextConstants} from "../../../configs/constants";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -283,7 +284,7 @@ export const unlockLimitLandingMFV2: PageType<any> = {
             autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
             isAutoTriggerCta: true,
             title: "Limit unlocked successfully!",
-            subTitle: "You will be redirected to next step in few seconds",
+            subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
             type: "SUCCESS",
             ctaLabel: "Continue",
             primary: true,

@@ -16,7 +16,7 @@ import _ from "lodash";
 import { api } from "../../../configs/api";
 import { APP_CONFIG, getAppHeader } from "../../../configs/config";
 import { User } from "../../login/otp_verify/types";
-import { AnalyticsEventTracker } from "../../../configs/constants";
+import {AnalyticsEventTracker, TextConstants} from "../../../configs/constants";
 
 export const verifyKycSummary: ActionFunction<any> = async (
   action,
@@ -56,7 +56,7 @@ export const verifyKycSummary: ActionFunction<any> = async (
       autoTriggerTimerInMilliseconds: APP_CONFIG.AUTO_REDIRECT,
       isAutoTriggerCta: false,
       title: "KYC done successfully!",
-      subTitle: "You will be redirected to next step in few seconds",
+      subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
       type: "SUCCESS",
       ctaLabel: "Continue",
       primary: true,

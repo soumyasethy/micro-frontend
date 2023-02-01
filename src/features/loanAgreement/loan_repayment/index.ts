@@ -39,7 +39,6 @@ import { ACTION, LimitPayload } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import {
   authenticateRepayment,
-  AutoPayPoll,
   goBack,
   GoToDashboard,
   NavLoanAgreement,
@@ -47,6 +46,7 @@ import {
   openLinkInNewTab,
   PollMandateStatus,
 } from "./actions";
+import { fetchLinkRepo } from "./repo";
 
 export const template: (
   stepper: StepperItem[],
@@ -178,15 +178,19 @@ export const template: (
 });
 
 export const loanRepaymentMF: PageType<any> = {
-  onLoad: async ({}, { url }) => {
+  onLoad: async ({}) => {
     const stepper: StepperItem[] = await horizontalStepperRepo();
+
+    const responseX = await fetchLinkRepo();
+    const url = responseX.stepResponseObject;
+
     return Promise.resolve(template(stepper, url));
   },
 
   actions: {
     [ACTION.REPAYMENT]: authenticateRepayment,
     [ACTION.GO_BACK]: goBack,
-    [ACTION.LINK_POLL]: AutoPayPoll,
+    // [ACTION.LINK_POLL]: AutoPayPoll,
     [ACTION.OPEN_TAB]: openLinkInNewTab,
     [ACTION.POLL_MANDATE_STATUS]: PollMandateStatus,
     [ACTION.GO_LOAN_AGREEMENT]: NavLoanAgreement,

@@ -86,6 +86,7 @@ export const template: (
       },
       headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       amountItem: <TextInputProps & WidgetProps>{
+        onlyNumeric: true,
         placeholder: "",
         type: InputTypeToken.DEFAULT,
         title: "Enter amount",

@@ -46,3 +46,7 @@ export const AnalyticsEventTracker = {
       "When user completes the KYC verification and click on KYC succesful modal",
   },
 };
+
+export const TextConstants = {
+  "GENERIC_PROCEED_MESSAGE" : "Please click continue to proceed."
+}
