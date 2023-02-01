@@ -34,13 +34,13 @@ export const template: () => TemplateSchema = () => {
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
-        { id: "topSpace", type: WIDGET.SPACE },
+        // { id: "topSpace", type: WIDGET.SPACE },
         {
           id: "detailScreen",
           type: WIDGET.STACK,
           padding: {
-            left: 16,
-            right: 16,
+            left: 0,
+            right: 0,
           },
         },
       ],
@@ -52,6 +52,7 @@ export const template: () => TemplateSchema = () => {
         type: HeaderTypeTokens.HEADERCTA,
         leftCta: "Contact Us",
         leftProps: {
+          bgColor: ColorTokens.Primary_05,
           label: "Contact Us",
           type: TagTypeTokens.SECONDARY,
           labelColor: ColorTokens.Primary_100,
@@ -92,6 +93,7 @@ export const template: () => TemplateSchema = () => {
             padding: {
               left: 0,
               right: 0,
+              top: 0,
             },
           },
         ],
