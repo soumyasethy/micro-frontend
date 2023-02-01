@@ -58,4 +58,5 @@ export const api = {
   documentValidatePOA: `${config.URL}/app/borrower/application/kyc/document/poa/validate/`,
   kycDocumentPOI: `${config.URL}/app/borrower/application/kyc/document/poi/`,
   documentValidatePOI: `${config.URL}/app/borrower/application/kyc/document/poi/validate/`,
+  getListOfDisbursalByCreditId: `${config.URL}/app/borrower/lms/disbursal/credit/`,
 };

@@ -64,6 +64,7 @@ export interface LinkedCreditItem {
   lendingPartnerId: string;
   createdOn: number;
   lastUpdatedOn: number;
+  disbursalRequestAllowed: boolean;
 }
 
 export interface LinkedApplication {
