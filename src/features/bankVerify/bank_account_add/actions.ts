@@ -24,6 +24,7 @@ import {
   updateCurrentStepId,
   updateStepStatusMap,
 } from "../../../configs/utils";
+import {TextConstants} from "../../../configs/constants";
 
 let bankAccountNumber = "";
 let bankIfsc = "";
@@ -129,7 +130,7 @@ export const BavVerifyManualAction: ActionFunction<
       isAutoTriggerCta: false,
       type: "SUCCESS",
       title: "Account verified successfully!",
-      subTitle: "You will be redirected to next step in few seconds",
+      subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
       ctaLabel: "Continue",
       ctaAction: {
         type: ACTION_CURRENT.GO_NEXT,

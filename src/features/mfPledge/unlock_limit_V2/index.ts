@@ -67,6 +67,7 @@ import { UpdateAvailableCASMap } from "../unlock_limit_V2/types";
 import { getDesiredValue } from "../portfolio_readonly/actions";
 import { commonTemplates } from "../../../configs/common";
 import { NavigationNext } from "../../kyc/kyc_init/types";
+import {TextConstants} from "../../../configs/constants";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -647,7 +648,7 @@ export const unlockLimitMFV2: PageType<any> = {
             autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
             isAutoTriggerCta: true,
             title: "Limit unlocked successfully!",
-            subTitle: "You will be redirected to next step in few seconds",
+            subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
             type: "SUCCESS",
             ctaLabel: "Continue",
             primary: true,
