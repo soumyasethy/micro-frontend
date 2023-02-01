@@ -162,6 +162,11 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     return { routeId: ROUTE.DASHBOARD, params: {} };
   }
 
+  const stepStatusMap = user.linkedApplications[0].stepStatusMap;
+
+  console.log("currentStepId", currentStepId);
+  console.log("stepStatusMap", stepStatusMap);
+
   if (currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION) {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
   } else if (currentStepId === ROUTE.KYC_PHOTO_VERIFICATION) {
@@ -178,15 +183,17 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     return { routeId: ROUTE.KYC_SUMMARY, params: {} };
   } else if (currentStepId === ROUTE.BANK_ACCOUNT_VERIFICATION) {
     return { routeId: ROUTE.BANK_ACCOUNT_VERIFICATION, params: {} };
-  } else if (
-    currentStepId === "AGREEMENT_SIGN" ||
-    currentStepId === "CREDIT_APPROVAL"
-  ) {
+  } else if (stepStatusMap.AGREEMENT_SIGN === StepperStateToken.NOT_STARTED) {
     return { routeId: ROUTE.LOAN_AGREEMENT_POLLING, params: {} };
-  } else if (currentStepId === "MANDATE_SETUP") {
+  } else if (stepStatusMap.AGREEMENT_SIGN === StepperStateToken.IN_PROGRESS) {
+    return { routeId: ROUTE.LOAN_AGREEMENT, params: {} };
+  } else if (stepStatusMap.MANDATE_SETUP === StepperStateToken.IN_PROGRESS) {
+    return { routeId: ROUTE.LOAN_REPAYMENT, params: {} };
+  } else if (stepStatusMap.MANDATE_SETUP === StepperStateToken.NOT_STARTED) {
     return { routeId: ROUTE.LOAN_AUTOPAY, params: {} };
   }
 };
+// stepStatusMap.MANDATE_SETUP === "IN_PROGRESS"
 
 export const nextStepId = async (
   currentStepId: string

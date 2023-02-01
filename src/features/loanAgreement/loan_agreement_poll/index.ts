@@ -203,7 +203,7 @@ export const loanAgreementPollingMF: PageType<any> = {
     user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
       StepperStateToken.IN_PROGRESS;
     user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
-      StepperStateToken.IN_PROGRESS;
+      StepperStateToken.NOT_STARTED;
     await SharedPropsService.setUser(user);
 
     // let user: User = await SharedPropsService.getUser();

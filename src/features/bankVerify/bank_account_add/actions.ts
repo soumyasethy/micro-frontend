@@ -125,10 +125,10 @@ export const BavVerifyManualAction: ActionFunction<
   }
 
   if (stepStatusMap.BANK_ACCOUNT_VERIFICATION === StepperStateToken.COMPLETED) {
-    user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
-      StepperStateToken.IN_PROGRESS;
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
-      StepperStateToken.IN_PROGRESS;
+    // user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN =
+    //   StepperStateToken.IN_PROGRESS;
+    // user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
+    //   StepperStateToken.IN_PROGRESS;
     await showPopup({
       autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
       isAutoTriggerCta: false,

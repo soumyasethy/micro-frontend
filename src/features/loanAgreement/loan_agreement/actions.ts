@@ -16,7 +16,7 @@ export const authenticateRepayment: ActionFunction<LimitPayload> = async (
     showPopup({
       type: "DEFAULT",
       iconName: IconTokens.Redirecting,
-      title: "Redirecting you for agreement",
+      title: "Please click continue for agreement",
       subTitle: "Return to Volt after successful completion",
       ctaLabel: "Continue",
       ctaAction: {

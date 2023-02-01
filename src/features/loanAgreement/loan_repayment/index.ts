@@ -46,6 +46,7 @@ import {
   openLinkInNewTab,
   PollMandateStatus,
 } from "./actions";
+import { fetchLinkRepo } from "./repo";
 
 export const template: (
   stepper: StepperItem[],
@@ -177,8 +178,12 @@ export const template: (
 });
 
 export const loanRepaymentMF: PageType<any> = {
-  onLoad: async ({}, { url }) => {
+  onLoad: async ({}) => {
     const stepper: StepperItem[] = await horizontalStepperRepo();
+
+    const responseX = await fetchLinkRepo();
+    const url = responseX.stepResponseObject;
+
     return Promise.resolve(template(stepper, url));
   },
 
