@@ -101,6 +101,7 @@ export const template: (
           },
           position: POSITION.ABSOLUTE_TOP,
         },
+        { id: "card3Body", type: WIDGET.STACK },
         {
           id: "iconCard",
           type: WIDGET.CARD,
@@ -110,8 +111,8 @@ export const template: (
           },
           position: POSITION.STICKY_BOTTOM,
         },
-        { id: "card3Body", type: WIDGET.STACK },
-        ...(showLessLimit && showOtpConfirmation
+
+        ...(showOtpConfirmation
           ? [
               {
                 id: "otpConfirmInfo",
@@ -156,6 +157,7 @@ export const template: (
         color: ColorTokens.Red_50,
       },
       infoIconSpace2: <SpaceProps>{ size: SizeTypeTokens.Size10 },
+      continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       infoLabel2: <TypographyProps>{
         label: "Minimum amount required to proceed is ₹25,000",
         fontFamily: FontFamilyTokens.Inter,
@@ -680,12 +682,6 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     (await SharedPropsService.getCreditLimit()) < 25000
       ? (showLessLimit = true)
       : (showLessLimit = false);
-
-    // if (showLessLimit === true) {
-    //   await setDatastore(ROUTE.PLEDGE_CONFIRMATION, "ctaButton", <ButtonProps>{
-    //     type: ButtonTypeTokens.LargeOutline,
-    //   });
-    // }
 
     return Promise.resolve(
       template(

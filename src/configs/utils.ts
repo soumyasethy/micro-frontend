@@ -389,6 +389,7 @@ export const isLimitMoreThanPledgeThreshold = async () => {
   }
 };
 
-export const replaceCommas = (str) => {
-  return str.replace(/,/g, "");
+
+export const removeCommasFromNumber = (num: string) => {
+  return num.replace(/,/g, "");
 };

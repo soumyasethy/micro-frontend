@@ -36,7 +36,7 @@ export const PollMandateStatus: ActionFunction<any> = async (
             type: "SUCCESS",
             title: "AutoPay setup successful!",
             subTitle:
-              "Interest charges will be paid automatically every month.",
+              "Interest charges will be deducted automatically every month.",
             ctaLabel: "Proceed to dashboard",
             ctaAction: {
               ...action,
