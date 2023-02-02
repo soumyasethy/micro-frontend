@@ -32,11 +32,10 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../../routes";
-import { ACTION, ContinuePayload, InputPayload } from "./types";
-import { CalendarOnChange, PanOnChange, toggleCTA, verifyPan } from "./actions";
-import { EnableDisableCTA } from "../../../login/phone_number/types";
-import { User } from "../../../login/otp_verify/types";
+import {ROUTE} from "../../../../routes";
+import {ACTION, ContinuePayload, InputPayload} from "./types";
+import {toggleCTA, ValidateForm, verifyPan} from "./actions";
+import {User} from "../../../login/otp_verify/types";
 import SharedPropsService from "../../../../SharedPropsService";
 import { defaultHeaders, RegexConfig } from "../../../../configs/config";
 import { api } from "../../../../configs/api";
@@ -132,55 +131,27 @@ export const template: (
         keyboardType: KeyboardTypeToken.default,
         isUpperCase: true,
         action: {
-          type: ACTION.ENTER_PAN,
+          type: ACTION.VALIDATE_FORM,
           payload: <InputPayload>{ value: "", widgetId: "input" },
           routeId: ROUTE.KYC_PAN_VERIFICATION,
         },
         caption: {
           success: "",
           error: "Enter a valid PAN. eg: ABCDE1234F",
-        },
-        errorAction: {
-          type: ACTION.DISABLE_CONTINUE,
-          routeId: ROUTE.KYC_PAN_VERIFICATION,
-          payload: <EnableDisableCTA>{
-            value: false,
-            targetWidgetId: "continue",
-          },
-        },
-        successAction: {
-          type: ACTION.ENABLE_CONTINUE,
-          routeId: ROUTE.KYC_PAN_VERIFICATION,
-          payload: <EnableDisableCTA>{
-            value: true,
-            targetWidgetId: "continue",
-          },
-        },
+        }
       },
       calendarPicker: <CalendarProps & WidgetProps>{
-        year: {
-          title: "Year",
-          value: `${dob.substring(6)}`,
-          placeholder: "YYYY",
-        },
-        month: {
-          title: "Month",
-          value: `${dob.substring(3, 5)}`,
-          placeholder: "MM",
-        },
-        date: {
-          title: "Date",
-          value: `${dob.substring(0, 2)}`,
-          placeholder: "DD",
-        },
+        year: { title: "Year", value: `${dob.substring(6)}`, placeholder: "YYYY" },
+        month: { title: "Month", value: `${dob.substring(3,5)}`, placeholder: "MM" },
+        date: { title: "Date", value: `${dob.substring(0,2)}`, placeholder: "DD" },
         state: CalendarStateToken.DEFAULT,
         caption: {
           success: "",
-          error: "Please select a proper date",
+          error: "Age should be between 18 and 65",
           default: "Date of birth as per PAN",
         },
         action: {
-          type: ACTION.ENTER_DOB,
+          type: ACTION.VALIDATE_FORM,
           payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
           routeId: ROUTE.KYC_PAN_VERIFICATION,
         },
@@ -231,32 +202,23 @@ export const panVerifyMF: PageType<any> = {
   ) => {
     const user: User = await SharedPropsService.getUser();
     const prefilledPanNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
-    // const myDob = await SharedPropsService.getUserDob();
-    // console.log(myDob);
+    const sharedPropDOB = await SharedPropsService.getUserDob();
     const accountId = user.linkedBorrowerAccounts[0].accountId;
     const requestOptions = {
       method: "GET",
       headers: await defaultHeaders(),
     };
 
-    const response = await fetch(
-      `${api.userProfile}${accountId}`,
-      requestOptions
-    )
+    const response =  await fetch(`${api.userProfile}${accountId}`, requestOptions)
       .then((response) => response.json())
       .catch((error) => console.log("error", error));
-    let dob = "";
-    if (
-      response.dob === "" ||
-      response.dob === null ||
-      response.dob === "null"
-    ) {
-      dob = "";
-    } else {
-      dob = moment.unix(Number(response?.dob) / 1000).format("DD-MM-yyyy");
-    }
+      let dob = "";
+      if(response.dob === '' || response.dob === null || response.dob === 'null'){
+       dob = sharedPropDOB;
+      } else{
+        dob =  moment.unix(Number(response?.dob) / 1000).format("DD-MM-yyyy");
+      }
 
-    console.log(response);
     return Promise.resolve(
       template(
         applicationId,
@@ -269,8 +231,7 @@ export const panVerifyMF: PageType<any> = {
   },
   actions: {
     [ACTION.VERIFY_PAN]: verifyPan,
-    [ACTION.ENTER_PAN]: PanOnChange,
-    [ACTION.ENTER_DOB]: CalendarOnChange,
+    [ACTION.VALIDATE_FORM]: ValidateForm,
     [ACTION.ENABLE_CONTINUE]: toggleCTA,
     [ACTION.DISABLE_CONTINUE]: toggleCTA,
   },
