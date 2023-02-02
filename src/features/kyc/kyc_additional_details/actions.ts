@@ -20,6 +20,7 @@ import _ from "lodash";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
+import {nextStepCredStepper} from "../../../configs/utils";
 
 let martialStatus: MARITAL_STATUS = null;
 let fatherFirstName = "";
@@ -172,7 +173,7 @@ export const triggerCTA: ActionFunction<KycAdditionalDetailsPayload> = async (
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
   action,
   _datastore,
-  { goBack }
+  { goBack, navigate }
 ): Promise<any> => {
-  await goBack();
+  await navigate(ROUTE.KYC_STEPPER)
 };
