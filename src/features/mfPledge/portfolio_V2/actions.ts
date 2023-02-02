@@ -7,7 +7,12 @@ import {
   PortfolioTogglePayload,
   SearchPortfolioPayload,
 } from "./types";
-import { ListProps, TypographyProps } from "@voltmoney/schema";
+import {
+  ButtonProps,
+  ButtonTypeTokens,
+  ListProps,
+  TypographyProps,
+} from "@voltmoney/schema";
 import {
   AvailableCASItem,
   IsinLTVMap,
@@ -19,6 +24,7 @@ import _ from "lodash";
 import { portfolioListDatastoreBuilderV2, togglePortfolio } from "./utils";
 import {
   addCommasToNumber,
+  removeCommasFromNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
 import { getDesiredValue } from "../portfolio_readonly/actions";
@@ -115,7 +121,6 @@ export const EditItem: ActionFunction<EditItemPayload> = async (
 export const ToggleSelectAction: ActionFunction<
   PortfolioTogglePayload
 > = async (action, _datastore, { setDatastore }): Promise<any> => {
-  console.log("Here payload: ", action);
   await togglePortfolio(
     action.payload.value,
     action.payload.selectedMap[action.payload.value],
@@ -125,6 +130,15 @@ export const ToggleSelectAction: ActionFunction<
     action.payload.stepResponseObject,
     portfolioSearchKeyword
   );
+  if (parseInt(removeCommasFromNumber(props.outOfText1["label"])) < 25000) {
+    await setDatastore(ROUTE.PORTFOLIO, "ContinueButton", <ButtonProps>{
+      type: ButtonTypeTokens.LargeOutline,
+    });
+  } else {
+    await setDatastore(ROUTE.PORTFOLIO, "ContinueButton", <ButtonProps>{
+      type: ButtonTypeTokens.LargeFilled,
+    });
+  }
   await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps & WidgetProps>{
     ...props.listItem,
   });
