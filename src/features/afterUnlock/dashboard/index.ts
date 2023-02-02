@@ -486,15 +486,14 @@ export const dashboardMF: PageType<any> = {
       // /* */
 
       if(listOfDisbursal) {
+        isPendingDisbursalStatement = false;
+        isPendingDisbursalApproval = true;
         listOfDisbursal.every((disbursalItem) => {
           if(disbursalItem.disbursalStatus === CreditDisbursalStatus.APPROVED || disbursalItem.disbursalStatus === CreditDisbursalStatus.REQUESTED) {
             isPendingDisbursalStatement = true;
             isPendingDisbursalApproval = false;
             amountDisbursal = disbursalItem.amount;
             return false;
-          } else {
-            isPendingDisbursalStatement = false;
-            isPendingDisbursalApproval = true;
           }
           return true;
         })}
