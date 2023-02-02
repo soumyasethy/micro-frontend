@@ -56,7 +56,8 @@ export const template: (
   stepResponseObject: StepResponseObject,
   showOtpConfirmation: boolean,
   minAmount: number,
-  maxAmount: number
+  maxAmount: number,
+  showLessLimit: boolean
 ) => Promise<TemplateSchema> = async (
   totalAmount = 0,
   totalCharges = 0,
@@ -64,7 +65,8 @@ export const template: (
   stepResponseObject,
   showOtpConfirmation = false,
   minAmount,
-  maxAmount
+  maxAmount,
+  showLessLimit = false
 ) => {
   return {
     layout: <Layout>{
@@ -76,6 +78,20 @@ export const template: (
           type: WIDGET.CARD,
           position: POSITION.ABSOLUTE_TOP,
         },
+        ...(showLessLimit
+          ? [
+              {
+                id: "showLessLimitCard",
+                type: WIDGET.CARD,
+                position: POSITION.ABSOLUTE_TOP,
+              },
+              {
+                id: "continueSpace",
+                type: WIDGET.SPACE,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+            ]
+          : []),
         {
           id: "card2",
           type: WIDGET.CARD,
@@ -85,16 +101,6 @@ export const template: (
           },
           position: POSITION.ABSOLUTE_TOP,
         },
-        { id: "card3Body", type: WIDGET.STACK },
-        ...(showOtpConfirmation
-          ? [
-              {
-                id: "otpConfirmInfo",
-                type: WIDGET.CARD,
-                position: POSITION.STICKY_BOTTOM,
-              },
-            ]
-          : []),
         {
           id: "iconCard",
           type: WIDGET.CARD,
@@ -104,6 +110,16 @@ export const template: (
           },
           position: POSITION.STICKY_BOTTOM,
         },
+        { id: "card3Body", type: WIDGET.STACK },
+        ...(showLessLimit && showOtpConfirmation
+          ? [
+              {
+                id: "otpConfirmInfo",
+                type: WIDGET.CARD,
+                position: POSITION.STICKY_BOTTOM,
+              },
+            ]
+          : []),
         // { id: "spaceCard", type: WIDGET.SPACE },
         {
           id: "ctaCard",
@@ -117,6 +133,37 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      showLessLimitCard: <CardProps>{
+        bgColor: ColorTokens.Red_10,
+        width: StackWidth.FULL,
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG,
+          left: SizeTypeTokens.LG,
+          right: SizeTypeTokens.LG,
+        },
+        bodyOrientation: CardOrientation.HORIZONTAL,
+        body: {
+          widgetItems: [
+            { id: "infoIcon2", type: WIDGET.ICON },
+            { id: "infoIconSpace2", type: WIDGET.SPACE },
+            { id: "infoLabel2", type: WIDGET.TEXT },
+          ],
+        },
+      },
+      infoIcon2: <IconProps>{
+        name: IconTokens.InfoFilled,
+        color: ColorTokens.Red_50,
+      },
+      infoIconSpace2: <SpaceProps>{ size: SizeTypeTokens.Size10 },
+      infoLabel2: <TypographyProps>{
+        label: "Minimum amount required to proceed is ₹25,000",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontColor: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XS,
+        lineHeight: 18,
+      },
       otpConfirmInfo: <CardProps>{
         bgColor: ColorTokens.Secondary_05,
         width: StackWidth.FULL,
@@ -554,7 +601,9 @@ export const template: (
         fontWeight: "700",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.SM,
-        type: ButtonTypeTokens.LargeFilled,
+        type: showLessLimit
+          ? ButtonTypeTokens.LargeOutline
+          : ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.SEND_OTP_FOR_PLEDGE_CONFIRM,
@@ -571,7 +620,7 @@ export const template: (
 };
 
 export const pledgeConfirmationMFV2: PageType<any> = {
-  onLoad: async ({ network }, { stepResponseObject }) => {
+  onLoad: async ({ network, setDatastore }, { stepResponseObject }) => {
     console.log("stepResponseObject", stepResponseObject);
     /// Pledging
     const mfPortfolioArray: AvailableCASItem[] = (
@@ -626,6 +675,18 @@ export const pledgeConfirmationMFV2: PageType<any> = {
       ConfigTokens.MAX_AMOUNT_ALLOWED
     );
 
+    let showLessLimit: boolean;
+
+    (await SharedPropsService.getCreditLimit()) < 25000
+      ? (showLessLimit = true)
+      : (showLessLimit = false);
+
+    // if (showLessLimit === true) {
+    //   await setDatastore(ROUTE.PLEDGE_CONFIRMATION, "ctaButton", <ButtonProps>{
+    //     type: ButtonTypeTokens.LargeOutline,
+    //   });
+    // }
+
     return Promise.resolve(
       template(
         totalAmount,
@@ -634,7 +695,8 @@ export const pledgeConfirmationMFV2: PageType<any> = {
         stepResponseObject as StepResponseObject,
         showOtpConfirmation,
         minAmount,
-        maxAmount
+        maxAmount,
+        showLessLimit
       )
     );
   },
