@@ -12,6 +12,42 @@ import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
 import { AnalyticsEventTracker } from "../../../configs/constants";
 import { ROUTE } from "../../../routes";
+import { User } from "../../login/otp_verify/types";
+
+export const fetchMyPortfolio: ActionFunction<AuthCASPayload> = async (
+  action,
+  _datastore,
+  { network, navigate, setDatastore }
+): Promise<any> => {
+ 
+  const user: User = await SharedPropsService.getUser();
+
+    const panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const phoneNumber =
+      user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
+      const applicationId = user.linkedApplications[0].applicationId;
+    
+  const response = await network.post(
+    api.pledgeInit,
+    {
+      applicationId:applicationId,
+      emailId:emailId,
+      panNumber:panNumber,
+      phoneNumber:phoneNumber,
+      assetRepository: await SharedPropsService.getAssetRepositoryType(),
+    },
+    {
+      headers: await getAppHeader(),
+    }
+  );
+  if (_.get(response, "data.status") === "SUCCESS") {
+    await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
+      state: InputStateToken.DEFAULT,
+    });
+  }
+};
+
 
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
