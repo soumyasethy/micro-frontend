@@ -101,7 +101,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
   datastore: <Datastore>{
     headerStack: <HeaderProps & WidgetProps>{
       leadIcon: "https://reactnative.dev/img/tiny_logo.png",
-      title: "Setup AutoPay",
+      title: "Setup Agreement",
       isBackButton: true,
       type: HeaderTypeTokens.verification,
       stepperProps: <StepperProps>{
