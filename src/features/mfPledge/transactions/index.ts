@@ -212,16 +212,16 @@ export const template: TemplateSchema = {
                   align: IconAlignmentTokens.left,
                 },
               },
-              {
-                id: "4",
-                title: "Refer & Earn",
-                status: BottomTabStateToken.NOT_SELECTED,
-                icon: {
-                  name: IconTokens.GiftOutline,
-                  size: IconSizeTokens.XL,
-                  align: IconAlignmentTokens.left,
-                },
-              },
+              // {
+              //   id: "4",
+              //   title: "Refer & Earn",
+              //   status: BottomTabStateToken.NOT_SELECTED,
+              //   icon: {
+              //     name: IconTokens.GiftOutline,
+              //     size: IconSizeTokens.XL,
+              //     align: IconAlignmentTokens.left,
+              //   },
+              // },
             ],
           },
 
