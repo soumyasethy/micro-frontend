@@ -7,7 +7,6 @@ import {
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
-import _ from "lodash";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -22,6 +21,7 @@ import {
   IconProps,
   IconSizeTokens,
   IconTokens,
+  PaddingProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -35,6 +35,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack, goToPrivacy } from "./actions";
+
 export const template: () => TemplateSchema = () => {
   return {
     layout: <Layout>{
@@ -51,8 +52,8 @@ export const template: () => TemplateSchema = () => {
           id: "detailScreen",
           type: WIDGET.STACK,
           padding: {
-            left: 16,
-            right: 16,
+            left: 0,
+            right: 0,
           },
         },
       ],
@@ -73,7 +74,7 @@ export const template: () => TemplateSchema = () => {
           routeId: ROUTE.ABOUTUS,
         },
       },
-      space0: <SpaceProps> {size: SizeTypeTokens.XL},
+      space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       detailScreen: <StackProps>{
         widgetItems: [
           { id: "Card1", type: WIDGET.CARD },
@@ -92,6 +93,9 @@ export const template: () => TemplateSchema = () => {
         action: {
           payload: {},
           type: ACTION.GO_TO_PRIVACY,
+        },
+        padding: <PaddingProps>{
+          right: SizeTypeTokens.XL,
         },
       },
       startDetails: <StackProps>{
@@ -182,6 +186,10 @@ export const template: () => TemplateSchema = () => {
           payload: {},
           type: ACTION.GO_TO_PRIVACY,
         },
+        padding: <PaddingProps>{
+          right: SizeTypeTokens.XL,
+          top: SizeTypeTokens.XL,
+        },
       },
       privacyDetails: <StackProps>{
         type: StackType.row,
@@ -200,7 +208,7 @@ export const template: () => TemplateSchema = () => {
           { id: "privacyName", type: WIDGET.ICON },
           { id: "privacySpace", type: WIDGET.SPACE },
           { id: "titleprivacy", type: WIDGET.TEXT },
-        ]
+        ],
       },
       privacyName: <IconProps>{
         name: IconTokens.Locked,
