@@ -208,17 +208,13 @@ export const ViewAllAction: ActionFunction<any> = async (
         ],
       },
       interestP10KText: <TypographyProps>{
-        label: "Interest per ₹10,000",
+        label: "Interest rate",
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
         fontSize: FontSizeTokens.SM,
       },
       interestP10KTextValue: <TypographyProps>{
-        label: `₹${
-          Math.ceil(
-            ((100 * action.payload.stepResponseObject.interestRate) / 12) * 100
-          ) / 100
-        }/month`,
+        label: `${action.payload.stepResponseObject.interestRate}%`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
