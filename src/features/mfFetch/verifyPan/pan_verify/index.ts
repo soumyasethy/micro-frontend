@@ -46,8 +46,15 @@ export const template: (
   applicationId: string,
   targetRoute: string,
   prefilledPanNumber: string,
-  dob: string
-) => TemplateSchema = (applicationId, targetRoute, prefilledPanNumber, dob) => {
+  dob: string,
+  setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
+) => TemplateSchema = (
+  applicationId,
+  targetRoute,
+  prefilledPanNumber,
+  dob,
+  setIsUserLoggedIn
+) => {
   return {
     layout: <Layout>{
       id: ROUTE.KYC_PAN_VERIFICATION,
@@ -95,6 +102,7 @@ export const template: (
             widgetId: "input",
             applicationId,
             targetRoute: targetRoute,
+            setIsUserLoggedIn,
           },
           routeId: ROUTE.KYC_PAN_VERIFICATION,
         },
@@ -150,9 +158,21 @@ export const template: (
         },
       },
       calendarPicker: <CalendarProps & WidgetProps>{
-        year: { title: "Year", value: `${dob.substring(6)}`, placeholder: "YYYY" },
-        month: { title: "Month", value: `${dob.substring(3,5)}`, placeholder: "MM" },
-        date: { title: "Date", value: `${dob.substring(0,2)}`, placeholder: "DD" },
+        year: {
+          title: "Year",
+          value: `${dob.substring(6)}`,
+          placeholder: "YYYY",
+        },
+        month: {
+          title: "Month",
+          value: `${dob.substring(3, 5)}`,
+          placeholder: "MM",
+        },
+        date: {
+          title: "Date",
+          value: `${dob.substring(0, 2)}`,
+          placeholder: "DD",
+        },
         state: CalendarStateToken.DEFAULT,
         caption: {
           success: "",
@@ -205,30 +225,46 @@ export const template: (
 };
 
 export const panVerifyMF: PageType<any> = {
-  onLoad: async ({ asyncStorage }, { applicationId, targetRoute }) => {
+  onLoad: async (
+    { asyncStorage },
+    { applicationId, targetRoute, setIsUserLoggedIn }
+  ) => {
     const user: User = await SharedPropsService.getUser();
     const prefilledPanNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
-   // const myDob = await SharedPropsService.getUserDob();
-   // console.log(myDob);
+    // const myDob = await SharedPropsService.getUserDob();
+    // console.log(myDob);
     const accountId = user.linkedBorrowerAccounts[0].accountId;
     const requestOptions = {
       method: "GET",
       headers: await defaultHeaders(),
     };
 
-    const response =  await fetch(`${api.userProfile}${accountId}`, requestOptions)
+    const response = await fetch(
+      `${api.userProfile}${accountId}`,
+      requestOptions
+    )
       .then((response) => response.json())
       .catch((error) => console.log("error", error));
-      let dob = "";
-      if(response.dob === '' || response.dob === null || response.dob === 'null'){
-       dob = "";
-      }else{
-        dob =  moment.unix(Number(response?.dob) / 1000).format("DD-MM-yyyy");
-      }
-     
-console.log(response);
+    let dob = "";
+    if (
+      response.dob === "" ||
+      response.dob === null ||
+      response.dob === "null"
+    ) {
+      dob = "";
+    } else {
+      dob = moment.unix(Number(response?.dob) / 1000).format("DD-MM-yyyy");
+    }
+
+    console.log(response);
     return Promise.resolve(
-      template(applicationId, targetRoute, prefilledPanNumber ,dob)
+      template(
+        applicationId,
+        targetRoute,
+        prefilledPanNumber,
+        dob,
+        setIsUserLoggedIn
+      )
     );
   },
   actions: {

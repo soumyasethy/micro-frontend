@@ -11,7 +11,6 @@ import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
 import _ from "lodash";
-import {ListItemDataProps} from "@voltmoney/schema";
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
@@ -49,7 +48,7 @@ type GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]?: number;
     [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
   };
-  userDob ?: string;
+  userDob?: string;
   creditLimit: number;
   listItemDataCAS: any;
   desiredPortfolio?: any;
@@ -128,8 +127,9 @@ async function setAssetRepositoryFetchMap(
   if (type) {
     _globalProps.assetRepositoryConfig[type] = value;
   } else {
-    _globalProps.assetRepositoryConfig[_globalProps.initialAssetRepositoryType] =
-      value;
+    _globalProps.assetRepositoryConfig[
+      _globalProps.initialAssetRepositoryType
+    ] = value;
   }
 }
 /*** End Asset repository ***/

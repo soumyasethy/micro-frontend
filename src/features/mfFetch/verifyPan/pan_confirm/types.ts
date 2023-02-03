@@ -14,4 +14,5 @@ export type ContinuePayload = {
   panNumber?: string;
   targetRoute?: string;
   currentStepId?: string;
+  setIsUserLoggedIn?: (user: any) => void;
 };

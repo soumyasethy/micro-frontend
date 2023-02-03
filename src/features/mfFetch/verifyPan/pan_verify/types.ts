@@ -15,4 +15,5 @@ export type ContinuePayload = {
   widgetId: string;
   applicationId: string;
   targetRoute?: string;
+  setIsUserLoggedIn?: (user: any) => void;
 };

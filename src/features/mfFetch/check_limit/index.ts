@@ -50,7 +50,8 @@ export const template: (
   emailId: string,
   assetRepository: AssetRepositoryType,
   isPanEditAllowed: boolean,
-  isGoBackAllowed: boolean
+  isGoBackAllowed: boolean,
+  setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
 ) => Promise<TemplateSchema> = async (
   applicationId,
   panNumber,
@@ -58,7 +59,8 @@ export const template: (
   emailId,
   assetRepository,
   isPanEditAllowed,
-  isGoBackAllowed
+  isGoBackAllowed,
+  setIsUserLoggedIn
 ) => {
   return {
     layout: <Layout>{
@@ -217,7 +219,7 @@ export const template: (
 };
 
 export const checkLimitMF: PageType<any> = {
-  onLoad: async () => {
+  onLoad: async (_, { setIsUserLoggedIn }) => {
     const user: User = await SharedPropsService.getUser();
     const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
@@ -241,7 +243,8 @@ export const checkLimitMF: PageType<any> = {
         emailId,
         assetRepository,
         isPanEditAllowed,
-        isGoBackAllowed
+        isGoBackAllowed,
+        setIsUserLoggedIn
       )
     );
   },

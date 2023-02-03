@@ -12,6 +12,7 @@ import SharedPropsService from "../../../../SharedPropsService";
 import { getAppHeader } from "../../../../configs/config";
 import moment from "moment";
 import { EnableDisableCTA } from "../../../login/phone_number/types";
+import { User } from "../../../login/otp_verify/types";
 
 let pan: string = "";
 let dob: string = "";
@@ -56,11 +57,27 @@ export const verifyPan: ActionFunction<ContinuePayload> = async (
           await SharedPropsService.getUser()
         ).linkedApplications[0].currentStepId = currentStepId;
 
+        const userContextResponse = await network.post(
+          api.userContext,
+          {
+            onboardingPartnerCode: await SharedPropsService.getPartnerRefCode(),
+          },
+          { headers: await getAppHeader() }
+        );
+        const user: User = userContextResponse.data;
+        await SharedPropsService.setUser(user);
+        action?.payload?.setIsUserLoggedIn(user);
+
+        // const user = await SharedPropsService.getUser();
+        // await SharedPropsService.setUser(user);
+        // action?.payload?.setIsUserLoggedIn(user);
+
         await navigate(ROUTE.PAN_CONFIRM_NAME, {
           name: response?.data.stepResponseObject?.fullName,
           panNumber: response?.data.stepResponseObject?.panNumber,
           targetRoute: action.payload.targetRoute,
           currentStepId,
+          setIsUserLoggedIn: action?.payload?.setIsUserLoggedIn,
         });
       }
     })
