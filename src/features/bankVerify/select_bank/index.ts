@@ -93,7 +93,7 @@ export const template: (BanksRepo: {
           })),
         ],
         otherItem: [
-          ...Object.keys(BanksRepo.ALLBANKS).map((key) => ({
+          ...Object.keys(BanksRepo.ALLBANKS).sort().map((key) => ({
             label: BanksRepo.ALLBANKS[key],
             image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
             defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,

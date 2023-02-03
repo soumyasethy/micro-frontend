@@ -276,18 +276,18 @@ export const template: (
         progressLabel:
           `${Math.trunc((availableCreditAmount / actualLoanAmount) * 100)}` +
           "% of total limit available",
-        warning: "Recommended to use as per limit",
+        //warning: "Recommended to use as per limit",
         chipText: "",
         type: AmountCardTypeTokens.wallet,
         progressFillPercentage: `${
-          (availableCreditAmount * 100) / actualLoanAmount
+          (Math.max(availableCreditAmount, 0) * 100) / actualLoanAmount
         }%`,
       },
       cardSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       continue: <ButtonProps & WidgetProps>{
         label: "Withdraw now",
         type:
-          isDisbursalRequestAllowed
+            (isDisbursalRequestAllowed && (availableCreditAmount > 0))
             ? ButtonTypeTokens.LargeFilled
             : ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
@@ -415,23 +415,23 @@ export const template: (
             //   routeId: ROUTE.DASHBOARD,
             // },
           },
-          {
-            id: "4",
-            title: "Refer & Earn",
-            status: BottomTabStateToken.NOT_SELECTED,
-            icon: {
-              name: IconTokens.GiftOutline,
-              size: IconSizeTokens.XL,
-              align: IconAlignmentTokens.left,
-            },
-            // action: {
-            //   type: ACTION.TRANSACTION,
-            //   payload: <NavPayload>{
-            //     value: 'earn',
-            //   },
-            //   routeId: ROUTE.DASHBOARD,
-            // },
-          },
+          // {
+          //   id: "4",
+          //   title: "Refer & Earn",
+          //   status: BottomTabStateToken.NOT_SELECTED,
+          //   icon: {
+          //     name: IconTokens.GiftOutline,
+          //     size: IconSizeTokens.XL,
+          //     align: IconAlignmentTokens.left,
+          //   },
+          //   action: {
+          //     type: ACTION.TRANSACTION,
+          //     payload: <NavPayload>{
+          //       value: 'earn',
+          //     },
+          //     routeId: ROUTE.DASHBOARD,
+          //   },
+          // },
         ],
       },
     },

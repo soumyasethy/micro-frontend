@@ -27,8 +27,8 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { Go_Next_Action } from "./actions";
-import { stepperRepo } from "../../../configs/utils";
+import {Go_Next_Action} from "./actions";
+import {stepperRepo, updateUserContextFromApi} from "../../../configs/utils";
 
 export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   layout: <Layout>{
@@ -91,7 +91,8 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
 });
 
 export const kycStepperMF: PageType<any> = {
-  onLoad: async () => {
+  onLoad: async ({network}) => {
+    await updateUserContextFromApi(network)
     return Promise.resolve(template(await stepperRepo()));
   },
   actions: {

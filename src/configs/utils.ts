@@ -4,12 +4,14 @@ import { StepStatusMap, User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
-import { StoreKey } from "./api";
+import {api, StoreKey} from "./api";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
-  ConfigTokens,
+  ConfigTokens, getAppHeader,
 } from "./config";
+import sharedPropsService from "../SharedPropsService";
+import {StandardUtilities} from "@voltmoney/types";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -388,6 +390,21 @@ export const isLimitMoreThanPledgeThreshold = async () => {
     return false;
   }
 };
+
+export const updateUserContextFromApi = async (network: StandardUtilities["network"]) => {
+  let user: User = await SharedPropsService.getUser();
+  const onboardingPartnerCode = user.user.onboardingPartnerCode;
+  const relationshipManagerCode = user.user.onboardingRelationshipManagerCode;
+  const updateUserProfileResponse = await network.post(
+      `${api.userContext}`,
+      {
+        "onboardingPartnerCode": onboardingPartnerCode,
+        "relationshipManagerCode": relationshipManagerCode
+      },
+      { headers: await getAppHeader() }
+  );
+  await sharedPropsService.setUser(updateUserProfileResponse.data)
+}
 
 
 export const removeCommasFromNumber = (num: string) => {
