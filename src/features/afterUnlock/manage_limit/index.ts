@@ -195,9 +195,9 @@ export const template: TemplateSchema = {
               {
                 id: "2",
                 title: "Transactions",
-                status: BottomTabStateToken.SELECTED,
+                status: BottomTabStateToken.NOT_SELECTED,
                 icon: {
-                  name: IconTokens.TransactionNotSelected,
+                  name: IconTokens.RuppeFile,
                   size: IconSizeTokens.XL,
                   align: IconAlignmentTokens.left,
                 },
@@ -205,9 +205,9 @@ export const template: TemplateSchema = {
               {
                 id: "3",
                 title: "Manage Limit",
-                status: BottomTabStateToken.NOT_SELECTED,
+                status: BottomTabStateToken.SELECTED,
                 icon: {
-                  name: IconTokens.ManageLimit,
+                  name: IconTokens.ManageLimitSelected,
                   size: IconSizeTokens.XL,
                   align: IconAlignmentTokens.left,
                 },

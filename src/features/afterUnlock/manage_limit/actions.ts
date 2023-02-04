@@ -25,7 +25,6 @@ export const getURL: ActionFunction<manageLimitPayload> = async (
         headers: await getAppHeader()
       }
   )
-  console.log("response: ", response);
   if(response.status === 200) {
     await setDatastore(action.routeId, "continue", <ButtonProps>{
       loading: false,
@@ -57,7 +56,7 @@ export const navigation: ActionFunction<NavPayload> = async (
   if (action.payload.value === 0) {
     await navigate(ROUTE.DASHBOARD);
   }
-  if (action.payload.value === 2) {
+  if (action.payload.value === 1) {
     await navigate(ROUTE.TRANSACTIONS)
   }
 };
