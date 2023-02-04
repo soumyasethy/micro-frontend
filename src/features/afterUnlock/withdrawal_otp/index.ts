@@ -31,8 +31,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, DisbursementOTPPayload } from "./types";
-import { goBack, DisbursalVerifyAction } from "./action";
-import { CreateDisbursementRequest } from "../withdraw_amount/action";
+import { goBack, DisbursalVerifyAction, CreateDisbursementRequest } from "./action";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (
@@ -131,7 +130,10 @@ export const template: (
       },
       otpAction: {
         type: ACTION.RESEND_WITHDRAWAL_OTP,
-        payload: <DisbursementOTPPayload>{ value: "", widgetId: "input" },
+        payload: <DisbursementOTPPayload>{
+          disbursalAmount
+          // value: "", widgetId: "input" 
+          },
         routeId: ROUTE.WITHDRAWAL_OTP,
       },
     },
