@@ -1,5 +1,3 @@
-import { StepResponseObject } from "../unlock_limit/types";
-
 export enum ACTION {
   TRANSACTION = "TRANSACTION",
   NAVIGATION = "NAVIGATION",
@@ -7,7 +5,7 @@ export enum ACTION {
   MENU = "MENU"
 }
 
-export type transactionPayload = {
+export type manageLimitPayload = {
   value: string;
   widgetId: string;
   isResend?: boolean;

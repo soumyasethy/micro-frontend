@@ -10,25 +10,29 @@ export const navigate: ActionFunction<NavPayload> = async (
   { navigate, showPopup }
 ): Promise<any> => {
   if (action.payload.value === 1) {
+    console.log("Action here 1")
     await navigate(ROUTE.TRANSACTIONS);
   }
   if (action.payload.value === 2) {
-    await navigate(ROUTE.ALERT_PAGE, {
-      alertProps: <AlertNavProps>{
-        type: "DEFAULT",
-        iconName: IconTokens.Sound,
-        title: "Coming soon",
-        subTitle: "",
-        ctaLabel: "Got It",
-        ctaAction: {
-          type: ACTION.MENU,
-          routeId: ROUTE.DASHBOARD,
-          payload: {},
-        },
-      },
-    });
+    console.log("Action here 2")
+    // await navigate(ROUTE.ALERT_PAGE, {
+    //   alertProps: <AlertNavProps>{
+    //     type: "DEFAULT",
+    //     iconName: IconTokens.Sound,
+    //     title: "Coming soon",
+    //     subTitle: "",
+    //     ctaLabel: "Got It",
+    //     ctaAction: {
+    //       type: ACTION.MENU,
+    //       routeId: ROUTE.DASHBOARD,
+    //       payload: {},
+    //     },
+    //   },
+    // });
+    await navigate(ROUTE.MANAGE_LIMIT, {})
   }
   if (action.payload.value === 3) {
+    console.log("Action here 3")
     await navigate(ROUTE.ALERT_PAGE, {
       alertProps: <AlertNavProps>{
         type: "DEFAULT",

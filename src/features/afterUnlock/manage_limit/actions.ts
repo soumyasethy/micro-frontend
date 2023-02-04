@@ -1,98 +1,52 @@
 import { ButtonProps, IconTokens } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
 import { api } from "../../../configs/api";
-import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
+import {APP_CONFIG, defaultHeaders, getAppHeader} from "../../../configs/config";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { AlertNavProps } from "../../popup_loader/types";
-import { ACTION, NavPayload, transactionPayload } from "./types";
+import { ACTION, NavPayload, manageLimitPayload } from "./types";
+import sharedPropsService from "../../../SharedPropsService";
+import {User} from "../../login/otp_verify/types";
 
-export const getURL: ActionFunction<transactionPayload> = async (
+export const getURL: ActionFunction<manageLimitPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, asyncStorage, showPopup }
+  { setDatastore, network, showPopup }
 ): Promise<any> => {
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  const requestOptions = {
-    method: "GET",
-    headers: await defaultHeaders(),
-  };
-  const accountId = (await SharedPropsService.getUser())
-    .linkedBorrowerAccounts[0].accountId;
-  await fetch(`${api.pdfEmail}${accountId}`, requestOptions)
-    .then((response) => {
-      response.json();
-      if (response.status === 200) {
-        setDatastore(action.routeId, "continue", <ButtonProps>{
-          loading: false,
-        });
-        showPopup({
-          autoTriggerTimerInMilliseconds: APP_CONFIG.MODAL_TRIGGER_TIMEOUT,
-          type: "SUCCESS",
-          title: "Email sent successfully",
-          subTitle: "Transaction details have been sent to your email address.",
-          ctaLabel: "Continue",
-          ctaAction: {
-            type: ACTION.MENU,
-            routeId: ROUTE.TRANSACTIONS,
-            payload: {},
-          },
-          primary: false,
-        });
-      } else {
-        setDatastore(action.routeId, "continue", <ButtonProps>{
-          loading: false,
-        });
-        showPopup({
-          autoTriggerTimerInMilliseconds: APP_CONFIG.MODAL_TRIGGER_TIMEOUT,
-          type: "FAILED",
-          title: "Email sent unsuccessfully",
-          subTitle: "Transaction details were not sent to your email address.",
-          ctaLabel: "Try again later",
-          ctaAction: {
-            type: ACTION.MENU,
-            routeId: ROUTE.TRANSACTIONS,
-            payload: {},
-          },
-          primary: false,
-        });
+  const user: User = await sharedPropsService.getUser()
+  const accountId = user.linkedBorrowerAccounts[0].accountId;
+  const response = await network.get(
+    `${api.pdfHoldingStatement}${accountId}`,
+      {
+        headers: await getAppHeader()
       }
-    })
-    .catch((error) => async () => {
-      console.log("error", error);
-      await setDatastore(action.routeId, "continue", <ButtonProps>{
-        loading: false,
-      });
-      showPopup({
-        autoTriggerTimerInMilliseconds: APP_CONFIG.MODAL_TRIGGER_TIMEOUT,
-        type: "FAILED",
-        title: "Email sent unsuccessfully",
-        subTitle: "Transaction details were not sent to your email address.",
-        ctaLabel: "Try again later",
-        ctaAction: {
-          type: ACTION.MENU,
-          routeId: ROUTE.TRANSACTIONS,
-          payload: {},
-        },
-        primary: false,
-      });
+  )
+  console.log("response: ", response);
+  if(response.status === 200) {
+    await setDatastore(action.routeId, "continue", <ButtonProps>{
+      loading: false,
     });
-
-  // const image = await fetch(`${url_data[0].documentPath}`);
-  // const imageBlog = await image.blob();
-  // const imageURL = URL.createObjectURL(imageBlog);
-
-  // const anchor = document.createElement("a");
-  // anchor.href = imageURL;
-  // anchor.download = "voltMoney_transaction";
-
-  // document.body.appendChild(anchor);
-  // anchor.click();
-  // document.body.removeChild(anchor);
-
-  // URL.revokeObjectURL(imageURL);
+    showPopup({
+      autoTriggerTimerInMilliseconds: APP_CONFIG.MODAL_TRIGGER_TIMEOUT,
+      type: "SUCCESS",
+      title: "Email sent successfully",
+      subTitle: "Account holding details have been sent to your email address.",
+      ctaLabel: "Continue",
+      ctaAction: {
+        type: ACTION.MENU,
+        routeId: ROUTE.MANAGE_LIMIT,
+        payload: {},
+      },
+      primary: false,
+    });
+  }
+  await setDatastore(action.routeId, "continue", <ButtonProps>{
+    loading: false,
+  });
 };
 
 export const navigation: ActionFunction<NavPayload> = async (
@@ -104,36 +58,7 @@ export const navigation: ActionFunction<NavPayload> = async (
     await navigate(ROUTE.DASHBOARD);
   }
   if (action.payload.value === 2) {
-    await navigate(ROUTE.ALERT_PAGE, {
-      alertProps: <AlertNavProps>{
-        type: "DEFAULT",
-        iconName: IconTokens.Sound,
-        title: "Coming soon",
-        subTitle: "",
-        ctaLabel: "Got It",
-        ctaAction: {
-          type: ACTION.MENU,
-          routeId: ROUTE.TRANSACTIONS,
-          payload: {},
-        },
-      },
-    });
-  }
-  if (action.payload.value === 3) {
-    await navigate(ROUTE.ALERT_PAGE, {
-      alertProps: <AlertNavProps>{
-        type: "DEFAULT",
-        iconName: IconTokens.Sound,
-        title: "Coming soon",
-        subTitle: "",
-        ctaLabel: "Got It",
-        ctaAction: {
-          type: ACTION.MENU,
-          routeId: ROUTE.TRANSACTIONS,
-          payload: {},
-        },
-      },
-    });
+    await navigate(ROUTE.TRANSACTIONS)
   }
 };
 

@@ -36,13 +36,13 @@ import { ROUTE } from "../../../routes";
 import {
     ACTION,
     NavPayload,
-    transactionPayload,
+    manageLimitPayload,
 } from "./types";
 import {  getURL, goBack, navigation } from "./actions";
 
 export const template: TemplateSchema = {
     layout: <Layout>{
-        id: ROUTE.TRANSACTIONS,
+        id: ROUTE.MANAGE_LIMIT,
         type: LAYOUTS.LIST,
         widgets: [
             {
@@ -86,14 +86,14 @@ export const template: TemplateSchema = {
     },
     datastore: <Datastore>{
         headerStack: <HeaderProps>{
-            title: "Transactions",
+            title: "Manage Limit",
             leadIcon: "https://reactnative.dev/img/tiny_logo.png",
             isBackButton: false,
             type: HeaderTypeTokens.DEFAULT,
         },
         headSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
         title: <TypographyProps>{
-            label: "Get transactions Pdf",
+            label: "Get Holding Statement Pdf",
             fontSize: FontSizeTokens.MD,
             lineHeight:24,
             color: ColorTokens.Grey_Night,
@@ -141,19 +141,19 @@ export const template: TemplateSchema = {
         // },
         toInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
         continue: <ButtonProps & WidgetProps>{
-            label: "Email statement",
+            label: "Email Holding Statement",
             labelColor:ColorTokens.White,
             fontFamily: FontFamilyTokens.Poppins,
             type: ButtonTypeTokens.LargeFilled,
             width: ButtonWidthTypeToken.FULL,
             action: {
                 type: ACTION.EMAIL,
-                payload: <transactionPayload>{
+                payload: <manageLimitPayload>{
                     value: "",
                     widgetId: "continue",
                     isResend: false,
                 },
-                routeId: ROUTE.TRANSACTIONS,
+                routeId: ROUTE.MANAGE_LIMIT,
             },
         },
         cardNav: <CardProps>{
@@ -178,7 +178,7 @@ export const template: TemplateSchema = {
               payload: <NavPayload>{
                // value: 'dashboard',
               },
-              routeId: ROUTE.TRANSACTIONS,
+              routeId: ROUTE.MANAGE_LIMIT,
             },
             data: [
               {
@@ -228,7 +228,7 @@ export const template: TemplateSchema = {
     },
 };
 
-export const transactionsMF: PageType<any> = {
+export const manageLimitMF: PageType<any> = {
     onLoad: async () => Promise.resolve(template),
     actions: {
         [ACTION.EMAIL]: getURL,
