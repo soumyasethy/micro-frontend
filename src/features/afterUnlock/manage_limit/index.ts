@@ -93,7 +93,7 @@ export const template: TemplateSchema = {
         },
         headSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
         title: <TypographyProps>{
-            label: "Get Holding Statement Pdf",
+            label: "Get holding statement Pdf",
             fontSize: FontSizeTokens.MD,
             lineHeight:24,
             color: ColorTokens.Grey_Night,
