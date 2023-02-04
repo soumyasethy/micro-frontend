@@ -141,7 +141,7 @@ export const template: TemplateSchema = {
         // },
         toInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
         continue: <ButtonProps & WidgetProps>{
-            label: "Email Holding Statement",
+            label: "Email holding statement",
             labelColor:ColorTokens.White,
             fontFamily: FontFamilyTokens.Poppins,
             type: ButtonTypeTokens.LargeFilled,
