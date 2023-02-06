@@ -1,12 +1,13 @@
-import { Linking, Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 import {
   Datastore,
   Layout,
   LAYOUTS,
+  OpenNewTabTargetType,
   PageType,
   POSITION,
-  TemplateSchema,
   SCREEN_SIZE,
+  TemplateSchema,
 } from "@voltmoney/types";
 import {
   BorderRadiusTokens,
@@ -27,8 +28,11 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { goBack } from "./actions";
 import { DeepLinks } from "../../../configs/config";
-import {getScreenType} from "../../../configs/platfom-utils";
-export const template: () => TemplateSchema = () => {
+import { getScreenType } from "../../../configs/platfom-utils";
+
+export const template: (
+  openNewTab: (url: string, openNewTabType: OpenNewTabTargetType) => void
+) => TemplateSchema = (openNewTab) => {
   return {
     layout: <Layout>{
       id: ROUTE.CONTACT_US,
@@ -114,9 +118,9 @@ export const template: () => TemplateSchema = () => {
             screenType === SCREEN_SIZE.X_SMALL ||
             screenType === SCREEN_SIZE.SMALL
           ) {
-            window.open(DeepLinks.MOBILE_WHATSAPP, "_parent"); //Linking.openURL(DeepLinks.MOBILE_WHATSAPP);
+            openNewTab(DeepLinks.MOBILE_WHATSAPP, OpenNewTabTargetType.parent);
           } else {
-            window.open(DeepLinks.WHATSAPP, "_blank"); //Linking.openURL(DeepLinks.WHATSAPP)
+            openNewTab(DeepLinks.WHATSAPP, OpenNewTabTargetType.blank);
           }
         },
       },
@@ -154,7 +158,7 @@ export const template: () => TemplateSchema = () => {
         title: "Call",
         leadIconName: IconTokens.Phone,
         onPress: () => {
-          window.open(DeepLinks.CALL, "_parent"); //Linking.openURL(DeepLinks.CALL);
+          openNewTab(DeepLinks.CALL, OpenNewTabTargetType.parent);
         },
       },
 
@@ -189,7 +193,7 @@ export const template: () => TemplateSchema = () => {
         subTitle: "Email us at support@voltmoney.in",
         leadIconName: IconTokens.Email,
         onPress: () => {
-          window.open(DeepLinks.MAILTO, "_parent"); //Linking.openURL(DeepLinks.MAILTO);
+          openNewTab(DeepLinks.MAILTO, OpenNewTabTargetType.parent);
         },
       },
     },
@@ -197,8 +201,8 @@ export const template: () => TemplateSchema = () => {
 };
 
 export const contactUsMF: PageType<any> = {
-  onLoad: async () => {
-    return Promise.resolve(template());
+  onLoad: async ({ openNewTab }) => {
+    return Promise.resolve(template(openNewTab));
   },
 
   actions: {
