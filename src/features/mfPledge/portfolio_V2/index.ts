@@ -11,9 +11,11 @@ import {
   KeyboardTypeToken,
   SizeTypeTokens,
   SpaceProps,
+  StackAlignItems,
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
   TextInputProps,
   TypographyProps,
   WIDGET,
@@ -35,15 +37,13 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP},
-        // { id: "inputItem", type: WIDGET.INPUT },
-        { id: "inputSpace", type: WIDGET.SPACE },
         { id: "titleText", type: WIDGET.TEXT },
         { id: "space0", type: WIDGET.SPACE },
         { id: "subTitleText", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
-        { id: "divider0", type: WIDGET.DIVIDER },
-        { id: "space2", type: WIDGET.SPACE },
         { id: "infoRow", type: WIDGET.STACK },
+        { id: "space2", type: WIDGET.SPACE },
+        { id: "divider0", type: WIDGET.DIVIDER },
         { id: "listItem", type: WIDGET.LIST },
         { id: "listSpace", type: WIDGET.SPACE },
         {
@@ -59,7 +59,7 @@ export const template: (
     },
     datastore: <Datastore>{
       header: <HeaderProps>{
-        title: "Set Credit Limit",
+        title: "Set credit limit",
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         isBackButton: true,
         type: "DEFAULT",
@@ -86,8 +86,8 @@ export const template: (
         lineHeight: 24
       },
       space0: <SpaceProps> { size: SizeTypeTokens.MD },
-      space1: <SpaceProps> { size: SizeTypeTokens.XL },
-      space2: <SpaceProps> { size: SizeTypeTokens.XL},
+      space1: <SpaceProps> { size: SizeTypeTokens.LG },
+      space2: <SpaceProps> { size: SizeTypeTokens.LG},
       subTitleText: <TypographyProps> {
         label: `₹${addCommasToNumber(await SharedPropsService.getDesiredPortfolio())} out of ₹${addCommasToNumber(
           parseInt(stepResponseObject["totalPortfolioAmount"].toString())
@@ -130,14 +130,41 @@ export const template: (
       ...(await portfolioListDatastoreBuilderV2(stepResponseObject)),
       infoRow: <StackProps> {
         type: StackType.row,
+        width:StackWidth.FULL,
         justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
-          { id:"col1Header", type: WIDGET.TEXT },
-          { id:"col2Header", type: WIDGET.TEXT }
+          { id:"col1Headers", type: WIDGET.STACK },
+          { id:"col2Headers", type: WIDGET.STACK }
         ]
       },
+      col1Headers: <StackProps> {
+        type:"row",
+        justifyContent:StackJustifyContent.flexStart,
+        alignItems:StackAlignItems.flexStart,
+        width:StackWidth.FULL,
+        widgetItems: [
+          { id:"col1Header", type: WIDGET.TEXT },
+          { id:"col1Space", type: WIDGET.SPACE },
+        ]
+      },
+      col2Headers: <StackProps> {
+        type:"row",
+        justifyContent:StackJustifyContent.flexEnd,
+        alignItems:StackAlignItems.flexEnd,
+        width:StackWidth.FULL,
+        widgetItems: [
+          { id:"col2Header", type: WIDGET.TEXT },
+          { id:"col2Space", type: WIDGET.SPACE },
+        ]
+      },
+      col1Space:<SpaceProps>{
+        size:SizeTypeTokens.XXXL
+      },
+      col2Space:<SpaceProps>{
+        size:SizeTypeTokens.XXXL
+      },
       col1Header: <TypographyProps> {
-        label: 'Asset details',
+        label: 'Mutual fund',
         fontSize: FontSizeTokens.XS,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: '500',
