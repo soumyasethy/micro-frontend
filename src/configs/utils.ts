@@ -4,12 +4,14 @@ import { StepStatusMap, User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
-import { StoreKey } from "./api";
+import {api, StoreKey} from "./api";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
-  ConfigTokens,
+  ConfigTokens, getAppHeader,
 } from "./config";
+import sharedPropsService from "../SharedPropsService";
+import {StandardUtilities} from "@voltmoney/types";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -64,35 +66,15 @@ export const stepperRepo = async () => {
   const user = await SharedPropsService.getUser();
 
   if (
-    (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-      StepperStateToken.COMPLETED ||
-      user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
-        StepperStateToken.COMPLETED) &&
-    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-    //   StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
       StepperStateToken.COMPLETED &&
     user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
-      StepperStateToken.COMPLETED &&
-    (user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
-      StepperStateToken.COMPLETED ||
-      user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
-        StepperStateToken.SKIPPED)
+      StepperStateToken.COMPLETED
   ) {
     KYC_VERIFICATION = StepperStateToken.COMPLETED;
   } else if (
-    user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
-      StepperStateToken.NOT_STARTED &&
     user.linkedApplications[0].stepStatusMap.KYC_CKYC ===
-      StepperStateToken.NOT_STARTED &&
-    // user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION ===
-    //   StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY ===
-      StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.KYC_ADDITIONAL_DETAILS ===
-      StepperStateToken.NOT_STARTED &&
-    user.linkedApplications[0].stepStatusMap.KYC_DOCUMENT_UPLOAD ===
-      StepperStateToken.NOT_STARTED
+    StepperStateToken.NOT_STARTED
   ) {
     KYC_VERIFICATION = StepperStateToken.NOT_STARTED;
   } else if (
@@ -141,29 +123,28 @@ export const stepperRepo = async () => {
           ? message
           : "",
     },
-
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      step: "3",
-      title: "Setup AutoPay",
-      subTitle: "Link your account for hassle-free repayments",
-      horizontalTitle: "AutoPay",
-      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
-      message:
-        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
-        StepperStateToken.PENDING_MANUAL_VERIFICATION
-          ? message
-          : "",
-    },
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d74",
-      step: "4",
+      step: "3",
       title: "Review Agreement",
       subTitle: "Verify the key usage terms and confirm",
       horizontalTitle: "Agreement",
       status: user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN,
       message:
         user.linkedApplications[0].stepStatusMap.AGREEMENT_SIGN ===
+        StepperStateToken.PENDING_MANUAL_VERIFICATION
+          ? message
+          : "",
+    },
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d72",
+      step: "4",
+      title: "Setup AutoPay",
+      subTitle: "Link your account for hassle-free repayments",
+      horizontalTitle: "AutoPay",
+      status: user.linkedApplications[0].stepStatusMap.MANDATE_SETUP,
+      message:
+        user.linkedApplications[0].stepStatusMap.MANDATE_SETUP ===
         StepperStateToken.PENDING_MANUAL_VERIFICATION
           ? message
           : "",
@@ -183,25 +164,35 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     return { routeId: ROUTE.DASHBOARD, params: {} };
   }
 
+  const stepStatusMap = user.linkedApplications[0].stepStatusMap;
+
+  console.log("currentStepId", currentStepId);
+  console.log("stepStatusMap", stepStatusMap);
+
   if (currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION) {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
   } else if (currentStepId === ROUTE.KYC_PHOTO_VERIFICATION) {
     return { routeId: ROUTE.KYC_PHOTO_VERIFICATION, params: {} };
   } else if (currentStepId === ROUTE.KYC_ADDITIONAL_DETAILS) {
     return { routeId: ROUTE.KYC_ADDITIONAL_DETAILS, params: {} };
+  } else if (currentStepId === ROUTE.KYC_DOCUMENT_UPLOAD_POA) {
+    return { routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POA, params: {} };
+  } else if (currentStepId === ROUTE.KYC_DOCUMENT_UPLOAD_POI) {
+    return { routeId: ROUTE.KYC_DOCUMENT_UPLOAD_POI, params: {} };
   } else if (currentStepId === ROUTE.KYC_DOCUMENT_UPLOAD) {
     return { routeId: ROUTE.KYC_DOCUMENT_UPLOAD, params: {} };
   } else if (currentStepId === ROUTE.KYC_SUMMARY) {
     return { routeId: ROUTE.KYC_SUMMARY, params: {} };
   } else if (currentStepId === ROUTE.BANK_ACCOUNT_VERIFICATION) {
     return { routeId: ROUTE.BANK_ACCOUNT_VERIFICATION, params: {} };
-  } else if (
-    currentStepId === "MANDATE_SETUP" ||
-    currentStepId === "CREDIT_APPROVAL"
-  ) {
-    return { routeId: ROUTE.LOAN_AUTOPAY, params: {} };
-  } else if (currentStepId === "AGREEMENT_SIGN") {
+  } else if (stepStatusMap.AGREEMENT_SIGN === StepperStateToken.NOT_STARTED) {
+    return { routeId: ROUTE.LOAN_AGREEMENT_POLLING, params: {} };
+  } else if (stepStatusMap.AGREEMENT_SIGN === StepperStateToken.IN_PROGRESS) {
     return { routeId: ROUTE.LOAN_AGREEMENT, params: {} };
+  } else if (stepStatusMap.MANDATE_SETUP === StepperStateToken.IN_PROGRESS) {
+    return { routeId: ROUTE.LOAN_REPAYMENT, params: {} };
+  } else if (stepStatusMap.MANDATE_SETUP === StepperStateToken.NOT_STARTED) {
+    return { routeId: ROUTE.LOAN_AUTOPAY, params: {} };
   }
 };
 
@@ -274,7 +265,9 @@ export const nextStepId = async (
       currentStepId === "BANK_ACCOUNT_VERIFICATION" ||
       currentStepId === "MANDATE_SETUP" ||
       currentStepId === "CREDIT_APPROVAL" ||
-      currentStepId === "AGREEMENT_SIGN"
+      currentStepId === "AGREEMENT_SIGN" ||
+      currentStepId === "KYC_DOCUMENT_UPLOAD_POA" ||
+      currentStepId === "KYC_DOCUMENT_UPLOAD_POI"
     ) {
       return { routeId: ROUTE.KYC_STEPPER, params: {} };
     }
@@ -341,6 +334,10 @@ export const roundDownToNearestHundred = (num: number) => {
   return Math.floor(num / 100) * 100;
 };
 
+export const ceilToNearestHundred = (num: number) => {
+  return Math.ceil(num / 100) * 100;
+};
+
 export const maskBankAccountNumber = (accountNo: string) => {
   if (accountNo.length > 4) {
     let showString = accountNo.slice(accountNo.length - 4);
@@ -383,4 +380,33 @@ export const getParameters: (url: string) => {
     params[pair[0]] = pair[1];
   }
   return params;
+};
+
+export const isLimitMoreThanPledgeThreshold = async () => {
+  const pledgeThreshold = await SharedPropsService.getCreditLimit();
+  if (pledgeThreshold > 25000) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const updateUserContextFromApi = async (network: StandardUtilities["network"]) => {
+  let user: User = await SharedPropsService.getUser();
+  const onboardingPartnerCode = user.user.onboardingPartnerCode;
+  const relationshipManagerCode = user.user.onboardingRelationshipManagerCode;
+  const updateUserProfileResponse = await network.post(
+      `${api.userContext}`,
+      {
+        "onboardingPartnerCode": onboardingPartnerCode,
+        "relationshipManagerCode": relationshipManagerCode
+      },
+      { headers: await getAppHeader() }
+  );
+  await sharedPropsService.setUser(updateUserProfileResponse.data)
+}
+
+
+export const removeCommasFromNumber = (num: string) => {
+  return num.replace(/,/g, "");
 };

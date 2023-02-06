@@ -4,7 +4,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import { ACTION, GoNextType } from "./types";
-import { IconTokens, StepperStateToken } from "@voltmoney/schema";
+import { IconTokens } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
 
 export const PollMandateStatus: ActionFunction<any> = async (
@@ -36,8 +36,8 @@ export const PollMandateStatus: ActionFunction<any> = async (
             type: "SUCCESS",
             title: "AutoPay setup successful!",
             subTitle:
-              "Interest charges will be paid automatically every month.",
-            ctaLabel: "Proceed to review agreement",
+              "Interest charges will be deducted automatically every month.",
+            ctaLabel: "Proceed to dashboard",
             ctaAction: {
               ...action,
               payload: <GoNextType>{

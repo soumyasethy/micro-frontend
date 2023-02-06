@@ -41,7 +41,7 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, CreditPayload, NavPayload, RepaymentPayload } from "./types";
+import {ACTION, CreditDisbursalStatus, CreditPayload, NavPayload, RepaymentPayload} from "./types";
 import {
   goBack,
   navigate,
@@ -61,14 +61,18 @@ export const template: (
   repaymentAmount: number,
   isPendingDisbursalApproval: boolean,
   amountPercentage: number,
-  isPendingDisbursalStatement: boolean
+  isPendingDisbursalStatement: boolean,
+  isDisbursalRequestAllowed: boolean,
+  amountDisbursal: number
 ) => TemplateSchema = (
   availableCreditAmount,
   actualLoanAmount,
   repaymentAmount,
   isPendingDisbursalApproval,
   amountPercentage: number,
-  isPendingDisbursalStatement: boolean
+  isPendingDisbursalStatement: boolean,
+  isDisbursalRequestAllowed: boolean,
+  amountDisbursal: number
 ) => {
   return {
     layout: <Layout>{
@@ -253,7 +257,7 @@ export const template: (
       },
       message2: <MessageProps>{
         label:
-          "Your previous withdrawal request is in progress, meanwhile you cannot raise another request.",
+          `Your previous withdrawal request of Rs.${amountDisbursal} is in progress, meanwhile you cannot raise another request.`,
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.System_Warning_BG,
       },
@@ -272,20 +276,20 @@ export const template: (
         progressLabel:
           `${Math.trunc((availableCreditAmount / actualLoanAmount) * 100)}` +
           "% of total limit available",
-        warning: "Recommended to use as per limit",
+        //warning: "Recommended to use as per limit",
         chipText: "",
         type: AmountCardTypeTokens.wallet,
         progressFillPercentage: `${
-          (availableCreditAmount * 100) / actualLoanAmount
+          (Math.max(availableCreditAmount, 0) * 100) / actualLoanAmount
         }%`,
       },
       cardSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       continue: <ButtonProps & WidgetProps>{
         label: "Withdraw now",
         type:
-          isPendingDisbursalApproval || isPendingDisbursalStatement
-            ? ButtonTypeTokens.LargeOutline
-            : ButtonTypeTokens.LargeFilled,
+            (isDisbursalRequestAllowed && (availableCreditAmount > 0))
+            ? ButtonTypeTokens.LargeFilled
+            : ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
         action: {
           type: ACTION.DASHBOARD,
@@ -411,23 +415,23 @@ export const template: (
             //   routeId: ROUTE.DASHBOARD,
             // },
           },
-          {
-            id: "4",
-            title: "Refer & Earn",
-            status: BottomTabStateToken.NOT_SELECTED,
-            icon: {
-              name: IconTokens.GiftOutline,
-              size: IconSizeTokens.XL,
-              align: IconAlignmentTokens.left,
-            },
-            // action: {
-            //   type: ACTION.TRANSACTION,
-            //   payload: <NavPayload>{
-            //     value: 'earn',
-            //   },
-            //   routeId: ROUTE.DASHBOARD,
-            // },
-          },
+          // {
+          //   id: "4",
+          //   title: "Refer & Earn",
+          //   status: BottomTabStateToken.NOT_SELECTED,
+          //   icon: {
+          //     name: IconTokens.GiftOutline,
+          //     size: IconSizeTokens.XL,
+          //     align: IconAlignmentTokens.left,
+          //   },
+          //   action: {
+          //     type: ACTION.TRANSACTION,
+          //     payload: <NavPayload>{
+          //       value: 'earn',
+          //     },
+          //     routeId: ROUTE.DASHBOARD,
+          //   },
+          // },
         ],
       },
     },
@@ -458,12 +462,42 @@ export const dashboardMF: PageType<any> = {
       0
     );
     await SharedPropsService.setUser(user);
-    //let repaymentAmount = actualLoanAmount - availableCreditAmount;
-    let isPendingDisbursalApproval =
-      user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_APPROVAL";
 
-    let isPendingDisbursalStatement =
-      user.linkedCredits[0].creditStatus === "PENDING_DISBURSAL_SETTLEMENT";
+    let isPendingDisbursalApproval = false;
+    let isPendingDisbursalStatement = false;
+    let amountDisbursal = 0;
+
+    let isDisbursalRequestAllowed = user.linkedCredits[0].disbursalRequestAllowed;
+
+    /*made it false to check */
+    // isDisbursalRequestAllowed = false;
+
+    let creditId = user.linkedCredits[0].creditId;
+    if(!isDisbursalRequestAllowed) {
+      const listOfDisbursalResponse = await network.get(
+          `${api.getListOfDisbursalByCreditId}${creditId}`,
+          { headers: await getAppHeader() }
+      )
+      let listOfDisbursal = listOfDisbursalResponse.data;
+
+      // /*made it false to check */
+      // listOfDisbursal[0].disbursalStatus = "REJECTED";
+      // listOfDisbursal[1].disbursalStatus = "REQUESTED";
+      // /* */
+
+      if(listOfDisbursal) {
+        isPendingDisbursalStatement = false;
+        isPendingDisbursalApproval = true;
+        listOfDisbursal.every((disbursalItem) => {
+          if(disbursalItem.disbursalStatus === CreditDisbursalStatus.APPROVED || disbursalItem.disbursalStatus === CreditDisbursalStatus.REQUESTED) {
+            isPendingDisbursalStatement = true;
+            isPendingDisbursalApproval = false;
+            amountDisbursal = disbursalItem.amount;
+            return false;
+          }
+          return true;
+        })}
+    }
 
     let amountPercentage = Math.round(
       (availableCreditAmount * 100) / actualLoanAmount
@@ -476,7 +510,9 @@ export const dashboardMF: PageType<any> = {
         repaymentAmount,
         isPendingDisbursalApproval,
         amountPercentage,
-        isPendingDisbursalStatement
+        isPendingDisbursalStatement,
+        isDisbursalRequestAllowed,
+          amountDisbursal
       )
     );
   },

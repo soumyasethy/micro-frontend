@@ -54,4 +54,10 @@ export const api = {
   pdfEmail: `${config.URL}/app/borrower/lms/transactions/email/`,
   digioKycESignInitiateRequest: `${config.URL}/app/borrower/application/kyc/digio/init/`,
   digioKycCheckRequestStatus: `${config.URL}/app/borrower/application/kyc/digio/status/`,
+  kycDocumentPOA: `${config.URL}/app/borrower/application/kyc/document/poa/`,
+  documentValidatePOA: `${config.URL}/app/borrower/application/kyc/document/poa/validate/`,
+  kycDocumentPOI: `${config.URL}/app/borrower/application/kyc/document/poi/`,
+  documentValidatePOI: `${config.URL}/app/borrower/application/kyc/document/poi/validate/`,
+  getListOfDisbursalByCreditId: `${config.URL}/app/borrower/lms/disbursal/credit/`,
+  pdfHoldingStatement: `${config.URL}/app/borrower/lms/holdingStatement/email/`,
 };

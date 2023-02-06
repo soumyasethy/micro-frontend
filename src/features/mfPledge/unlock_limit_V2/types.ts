@@ -7,6 +7,7 @@ export enum ACTION {
   NAV_PORTFOLIO = "NAV_PORTFOLIO",
   VIEW_ALL = "VIEW_ALL",
   NAV_TO_CONTACT_US = "NAV_TO_CONTACT_US",
+  CHECK_LIMIT = "CHECK_LIMIT",
 }
 
 export type ContinuePayload = {

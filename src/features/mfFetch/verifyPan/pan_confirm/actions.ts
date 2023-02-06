@@ -14,6 +14,7 @@ export const confirmPan: ActionFunction<ContinuePayload> = async (
   const user: User = await SharedPropsService.getUser();
   user.linkedBorrowerAccounts[0].accountHolderPAN = action.payload.panNumber;
   await SharedPropsService.setUser(user);
+  action?.payload?.setIsUserLoggedIn(user);
   await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.widgetId, <
     ListItemProps
   >{

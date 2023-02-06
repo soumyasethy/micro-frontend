@@ -3,7 +3,7 @@ import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
-import { IconTokens, StepperStateToken } from "@voltmoney/schema";
+import { IconTokens } from "@voltmoney/schema";
 import { ACTION } from "../loan_webView/types";
 import { User } from "../../login/otp_verify/types";
 
@@ -29,18 +29,18 @@ export const AgreementStatusAction: ActionFunction<any> = async (
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
 
-          await goBack();
+          // await goBack();
           await showPopup({
             type: "SUCCESS",
             title: "Agreement submitted!",
             subTitle:
               "Congratulations! Your loan application is created successfully.",
-            ctaLabel: "Go to dashboard",
+            ctaLabel: "Go to AutoPay",
             ctaAction: action,
           });
         } else if (response.stepResponseObject.toLowerCase() === "failed") {
           clearInterval(timerRef);
-          await goBack();
+          // await goBack();
           await navigate(ROUTE.ALERT_PAGE, {
             alertProps: {
               iconName: IconTokens.Failed,
@@ -69,7 +69,7 @@ export const GoNextSuccess: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack }
 ): Promise<any> => {
-  await goBack();
+  // await goBack();
   await navigate(ROUTE.DASHBOARD);
 };
 export const GoNextFailed: ActionFunction<any> = async (

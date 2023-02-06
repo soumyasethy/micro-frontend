@@ -156,7 +156,7 @@ export const commonTemplates = {
           left: 0,
           right: 0,
         },
-        label: "Get from other sources?",
+        label: "Get more portfolio",
         type: ButtonTypeTokens.MediumGhost,
         fontSize: FontSizeTokens.SM,
         fontFamily: FontFamilyTokens.Inter,

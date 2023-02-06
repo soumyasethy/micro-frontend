@@ -11,7 +11,6 @@ import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
 import _ from "lodash";
-import {ListItemDataProps} from "@voltmoney/schema";
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
@@ -49,6 +48,7 @@ type GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]?: number;
     [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
   };
+  userDob?: string;
   creditLimit: number;
   listItemDataCAS: any;
   desiredPortfolio?: any;
@@ -90,6 +90,7 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
   },
+  userDob: "",
   creditLimit: 25000,
   listItemDataCAS: [],
   desiredPortfolio: {},
@@ -126,8 +127,9 @@ async function setAssetRepositoryFetchMap(
   if (type) {
     _globalProps.assetRepositoryConfig[type] = value;
   } else {
-    _globalProps.assetRepositoryConfig[_globalProps.initialAssetRepositoryType] =
-      value;
+    _globalProps.assetRepositoryConfig[
+      _globalProps.initialAssetRepositoryType
+    ] = value;
   }
 }
 /*** End Asset repository ***/
@@ -271,6 +273,13 @@ async function setAppPlatform(type: string) {
 async function getAppPlatform() {
   return _globalProps.appPlatform;
 }
+async function setUserDob(type: string) {
+  _globalProps.userDob = type;
+}
+async function getUserDob() {
+  return _globalProps.userDob;
+}
+
 async function setAuthCASResponse(data: AuthCASModel) {
   _globalProps.authCAS = data;
 }
@@ -331,6 +340,8 @@ export default {
   getConfig,
   setAuthCASResponse,
   getAuthCASResponse,
+  setUserDob,
+  getUserDob,
   setCreditLimit,
   getCreditLimit,
   setListItemDataCAS,

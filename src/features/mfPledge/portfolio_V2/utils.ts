@@ -28,17 +28,14 @@ import {
 } from "./types";
 import { ROUTE } from "../../../routes";
 import { getActualLimit, getPortfolioValue, getTotalLimit } from "./actions";
-import { AvailableCASItem, StepResponseObject } from "../unlock_limit/types";
+import { StepResponseObject } from "../unlock_limit/types";
 import { Datastore, WidgetProps } from "@voltmoney/types";
 import SharedPropsService from "../../../SharedPropsService";
+import sharedPropsService from "../../../SharedPropsService";
 import {
   addCommasToNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
-import { User } from "../../login/otp_verify/types";
-import { AuthCASModel } from "../../../types/AuthCASModel";
-import { fetchPledgeLimitRepo } from "../unlock_limit_landing_V2/repo";
-import sharedPropsService from "../../../SharedPropsService";
 import { getDesiredValue } from "../portfolio_readonly/actions";
 
 export const portfolioListDatastoreBuilderV2 = async (
@@ -74,7 +71,7 @@ export const portfolioListDatastoreBuilderV2 = async (
       )
     )}`;
 
-    const portfolioValue = `Portfolio value ${addCommasToNumber(
+    const portfolioValue = `Value ${addCommasToNumber(
       roundDownToNearestHundred(
         getPortfolioValue(
           [updateAvailableCASMap[key]],

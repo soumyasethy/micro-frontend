@@ -11,11 +11,48 @@ import { nextStepId } from "../../../configs/utils";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
 import { AnalyticsEventTracker } from "../../../configs/constants";
+import { ROUTE } from "../../../routes";
+import { User } from "../../login/otp_verify/types";
+
+export const fetchMyPortfolio: ActionFunction<AuthCASPayload> = async (
+  action,
+  _datastore,
+  { network, navigate, setDatastore }
+): Promise<any> => {
+ 
+  const user: User = await SharedPropsService.getUser();
+
+    const panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const phoneNumber =
+      user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
+      const applicationId = user.linkedApplications[0].applicationId;
+    
+  const response = await network.post(
+    api.pledgeInit,
+    {
+      applicationId:applicationId,
+      emailId:emailId,
+      panNumber:panNumber,
+      phoneNumber:phoneNumber,
+      assetRepository: await SharedPropsService.getAssetRepositoryType(),
+    },
+    {
+      headers: await getAppHeader(),
+    }
+  );
+  if (_.get(response, "data.status") === "SUCCESS") {
+    await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
+      state: InputStateToken.DEFAULT,
+    });
+  }
+};
+
 
 export const authCAS: ActionFunction<AuthCASPayload> = async (
   action,
   _datastore,
-  { navigate, setDatastore, network, analytics }
+  { navigate, setDatastore, network, analytics, showPopup, hidePopup }
 ): Promise<any> => {
   const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
@@ -78,6 +115,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     await setDatastore(action.routeId, "input", <TextInputProps>{
       state: InputStateToken.ERROR,
     });
+    // await navigate(ROUTE.MF_FETCH_PORTFOLIO);
   }
 };
 
@@ -87,4 +125,12 @@ export const goBack: ActionFunction<any> = async (
   { goBack }
 ): Promise<any> => {
   goBack();
+};
+
+export const navToFetch: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate }
+): Promise<any> => {
+  navigate(ROUTE.MF_FETCH_PORTFOLIO);
 };

@@ -39,7 +39,14 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
 import { fetchLinkRepo } from "./repo";
-import { NavToDashboard, NavToLoanAgreement, PollAgreementStatusAction, authenticateRepayment, goBack, openLinkInNewTab } from "./actions";
+import {
+  authenticateRepayment,
+  goBack,
+  NavToAutoPay,
+  NavToLoanAgreement,
+  openLinkInNewTab,
+  PollAgreementStatusAction,
+} from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 
@@ -51,7 +58,11 @@ export const template: (
     id: ROUTE.LOAN_AGREEMENT,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+      {
+        id: "headerStack",
+        type: WIDGET.HEADER,
+        position: POSITION.ABSOLUTE_TOP,
+      },
       { id: "headerSpace", type: WIDGET.SPACE },
       // { id: "contentStack",type: WIDGET.STACK},
       { id: "headItem", type: WIDGET.TEXT },
@@ -193,7 +204,7 @@ export const loanAgreementMF: PageType<any> = {
     [ACTION.REPAYMENT]: authenticateRepayment,
     [ACTION.GO_BACK]: goBack,
     [ACTION.OPEN_TAB]: openLinkInNewTab,
-    [ACTION.GO_TO_DASHBOARD]: NavToDashboard,
+    [ACTION.GO_TO_AUTOPAY]: NavToAutoPay,
     [ACTION.POLL_AGREEMENT_STATUS]: PollAgreementStatusAction,
     [ACTION.GO_TO_LOAN_AGREEMENT]: NavToLoanAgreement,
   },

@@ -120,7 +120,9 @@ export const template: (mobileNumber?: string) => TemplateSchema = (
       fontWeight: "400",
     },
     input: <TextInputProps & WidgetProps>{
+      onlyNumeric: true,
       value: mobileNumber ? `${mobileNumber}` : "",
+      isFocus: true,
       regex: RegexConfig.MOBILE,
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,

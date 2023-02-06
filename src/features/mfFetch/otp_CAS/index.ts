@@ -32,9 +32,8 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
-import { authCAS, goBack } from "./actions";
+import { authCAS, fetchMyPortfolio, goBack, navToFetch } from "./actions";
 import { FetchPortfolioPayload } from "../check_limit/types";
-import { fetchMyPortfolio } from "../check_limit/actions";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
@@ -159,12 +158,12 @@ export const template: (
         },
         otpAction: {
           type: ACTIONS.RESEND_OTP_AUTH_CAS,
-          payload: <FetchPortfolioPayload>{
-            applicationId,
-            assetRepository,
-            emailId,
-            panNumber,
-            phoneNumber,
+          payload: <AuthCASPayload>{
+            // applicationId,
+            // assetRepository,
+            // emailId,
+            // panNumber,
+            // phoneNumber,
           },
           routeId: ROUTE.OTP_AUTH_CAS,
         },
@@ -191,6 +190,7 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.AUTH_CAS]: authCAS,
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
     [ACTIONS.GO_BACK]: goBack,
+    [ACTIONS.NAV_TO_FETCH]: navToFetch,
   },
   clearPrevious: true,
 };

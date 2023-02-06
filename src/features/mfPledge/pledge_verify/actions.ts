@@ -25,7 +25,7 @@ import {
   addCommasToNumber,
   roundDownToNearestHundred,
 } from "../../../configs/utils";
-import { AnalyticsEventTracker } from "../../../configs/constants";
+import {AnalyticsEventTracker, TextConstants} from "../../../configs/constants";
 
 export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   action,
@@ -165,7 +165,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
               )
             )
           )} unlocked successfully!`,
-          subTitle: "You will be redirected to next step in few seconds",
+          subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
           type: "SUCCESS",
           ctaLabel: "Continue",
           primary: true,
@@ -223,7 +223,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
                   )
                 )
               )} unlocked successfully!`,
-              subTitle: "You will be redirected to next step in few seconds",
+              subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
               type: "SUCCESS",
               ctaLabel: "Continue",
               primary: true,

@@ -54,6 +54,7 @@ import { NavigationNext } from "../../kyc/kyc_init/types";
 import _ from "lodash";
 import { NavigateNext } from "../pledge_verify/actions";
 import { AuthCASModel } from "../../../types/AuthCASModel";
+import {TextConstants} from "../../../configs/constants";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -84,7 +85,7 @@ export const template: (
       {
         id: "getMorePortfolio",
         type: WIDGET.SUGGESTION_CARD,
-        padding: { horizontal: 0 },
+        padding: { horizontal: -16 },
       },
       {
         id: "promoCardTopSpace",
@@ -94,7 +95,7 @@ export const template: (
       {
         id: "promoCard",
         type: WIDGET.PROMOCARD,
-        padding: { horizontal: 0 },
+        padding: { horizontal: -16 },
       },
     ],
   },
@@ -319,7 +320,7 @@ export const unlockLimitMF: PageType<any> = {
             autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
             isAutoTriggerCta: false,
             title: "Limit unlocked successfully!",
-            subTitle: "You will be redirected to next step in few seconds",
+            subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
             type: "SUCCESS",
             ctaLabel: "Continue",
             primary: true,

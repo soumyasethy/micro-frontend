@@ -34,9 +34,10 @@ import { toggleCTA } from "../../login/phone_number/actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { RegexConfig } from "../../../configs/config";
 
-export const template: (applicationId: string) => TemplateSchema = (
-  applicationId
-) => {
+export const template: (
+  applicationId: string,
+  setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
+) => TemplateSchema = (applicationId, setIsUserLoggedIn) => {
   return {
     layout: <Layout>{
       id: ROUTE.ENTER_EMAIL,
@@ -70,6 +71,7 @@ export const template: (applicationId: string) => TemplateSchema = (
             value: "",
             widgetId: "input",
             applicationId,
+            setIsUserLoggedIn,
           },
           routeId: ROUTE.ENTER_EMAIL,
         },
@@ -89,6 +91,7 @@ export const template: (applicationId: string) => TemplateSchema = (
       // },
       input: <TextInputProps & WidgetProps>{
         regex: RegexConfig.EMAIL,
+        isFocus: true,
         isLowerCase: true,
         clearEnabled: false,
         type: InputTypeToken.EMAIL,
@@ -136,10 +139,10 @@ export const template: (applicationId: string) => TemplateSchema = (
 };
 
 export const emailMF: PageType<any> = {
-  onLoad: async (_, { applicationId }) => {
+  onLoad: async (_, { applicationId, setIsUserLoggedIn }) => {
     applicationId = (await SharedPropsService.getUser())
       .linkedBorrowerAccounts[0].accountId;
-    return Promise.resolve(template(applicationId));
+    return Promise.resolve(template(applicationId, setIsUserLoggedIn));
   },
   actions: {
     [ACTION.BACK]: goBack,

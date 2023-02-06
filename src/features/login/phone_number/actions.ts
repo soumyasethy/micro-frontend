@@ -16,7 +16,7 @@ import { getAuthHeaders } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
 let phoneNumber: string = "";
-let isWhatsAppEnabled: boolean = false;
+let isWhatsAppEnabled: boolean = true;
 
 export const toggleCTA: ActionFunction<EnableDisableCTA> = async (
   action,

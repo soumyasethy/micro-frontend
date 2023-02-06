@@ -21,6 +21,13 @@ export type RepaymentPayload = {
   repaymentAmount: string;
 };
 
+export enum CreditDisbursalStatus {
+  APPROVED = "APPROVED",
+  REQUESTED = "REQUESTED",
+  REJECTED = "REJECTED",
+  SETTLED = "SETTLED",
+}
+
 export type creditData = {
   linkedCredits: [
     {

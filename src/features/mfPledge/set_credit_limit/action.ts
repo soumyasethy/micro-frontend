@@ -1,23 +1,26 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import {ListProps, TypographyProps} from "@voltmoney/schema";
+import { ListProps, TypographyProps } from "@voltmoney/schema";
 import { addCommasToNumber } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
-import {AvailableCASItem, IsinLTVMap, IsinNAVMap} from "../unlock_limit/types";
-import {getTotalLimit} from "../portfolio/actions";
 import sharedPropsService from "../../../SharedPropsService";
+import {
+  AvailableCASItem,
+  IsinLTVMap,
+  IsinNAVMap,
+} from "../unlock_limit/types";
+import { getTotalLimit } from "../portfolio/actions";
 import { ConfigValues } from "../../../configs/config";
-import {listItemDataBuilder, portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
-import {ACTION} from "./types";
+import { listItemDataBuilder } from "./utils";
 import { getDesiredValue } from "../portfolio_readonly/actions";
 
 let value = ConfigValues.MinimumAmountAllowed.toString();
 
 const getUpdateAvailableCAS = (
-    amountRequired: number,
-    availableCAS: AvailableCASItem[],
-    isinNavMap: IsinNAVMap,
-    isinLTVMap: IsinLTVMap
+  amountRequired: number,
+  availableCAS: AvailableCASItem[],
+  isinNavMap: IsinNAVMap,
+  isinLTVMap: IsinLTVMap
 ) => {
   const updateAvailableCAS = [];
   for (let i = 0; i < availableCAS.length; i++) {
@@ -44,7 +47,7 @@ const getUpdateAvailableCAS = (
   return updateAvailableCAS;
 };
 
-export const OnChangeSlider: ActionFunction<any> = async(
+export const OnChangeSlider: ActionFunction<any> = async (
   action,
   _datastore,
   { navigate, goBack, setDatastore }
@@ -56,13 +59,13 @@ export const OnChangeSlider: ActionFunction<any> = async(
   if (parseInt(value) > 0) {
     stepResponseObject.availableCAS.forEach((item, index) => {
       stepResponseObject.availableCAS[index].pledgedUnits =
-          item.totalAvailableUnits;
+        item.totalAvailableUnits;
     });
     stepResponseObject.availableCAS = getUpdateAvailableCAS(
-        parseInt(value),
-        stepResponseObject.availableCAS,
-        stepResponseObject.isinNAVMap,
-        stepResponseObject.isinLTVMap
+      parseInt(value),
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
     );
     stepResponseObject.availableCAS.map((item, index) => {
       let key = `${item.isinNo}-${item.folioNo}`;
@@ -77,10 +80,10 @@ export const OnChangeSlider: ActionFunction<any> = async(
   }
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   /** **/
-  const updatedListProps = await listItemDataBuilder(stepResponseObject)
-  await setDatastore(ROUTE.SET_CREDIT_LIMIT, 'listItem', <ListProps> {
-    data: updatedListProps
-  })
+  const updatedListProps = await listItemDataBuilder(stepResponseObject);
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "listItem", <ListProps>{
+    data: updatedListProps,
+  });
   await setDatastore(ROUTE.SET_CREDIT_LIMIT, "amount", <TypographyProps>{
     label: `${addCommasToNumber(parseInt(value))}`,
   });
@@ -90,17 +93,29 @@ export const OnChangeSlider: ActionFunction<any> = async(
   });
 
   const portValue = getDesiredValue(
-      stepResponseObject.availableCAS,
-      stepResponseObject.isinNAVMap,
-  )
+    stepResponseObject.availableCAS,
+    stepResponseObject.isinNAVMap
+  );
 
   await SharedPropsService.setDesiredPortfolio(portValue);
 
-  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomStackText", <TypographyProps> {
-      label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
-          parseInt(stepResponseObject["totalPortfolioAmount"].toString())
-      )} are selected for pledging.`
-  })
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomStackText", <
+    TypographyProps
+  >{
+    label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
+      parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+    )} are selected for pledging.`,
+  });
+
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomSheetText2", <
+    TypographyProps
+  >{
+    label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
+      parseInt(
+        action.payload.stepResponseObject["totalPortfolioAmount"].toString()
+      )
+    )} are selected for pledging.`,
+  });
 };
 
 export const goBack: ActionFunction<any> = async (
@@ -108,7 +123,7 @@ export const goBack: ActionFunction<any> = async (
   _datastore,
   { navigate, goBack, setDatastore }
 ) => {
-  await navigate(ROUTE.MF_PLEDGE_PORTFOLIO)
+  await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
 };
 
 // changed here
@@ -153,7 +168,7 @@ export const goToEditPortFolio: ActionFunction<any> = async (
   { navigate, goBack, setDatastore }
 ) => {
   const stepResponseObject = action.payload.stepResponseObject;
-  const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap()
+  const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap();
   //const editAmount = await SharedPropsService.getCreditLimit()
   /*
   if (editAmount > 0) {
@@ -191,7 +206,7 @@ export const editSliderAmount: ActionFunction<any> = async (
   _datastore,
   { navigate, ...props }
 ): Promise<any> => {
-  const updateAvailableCASMap = await SharedPropsService.getAvailableCASMap()
+  const updateAvailableCASMap = await SharedPropsService.getAvailableCASMap();
   await navigate(ROUTE.UPDATE_SLIDER_AMOUNT, {
     maxAmount: action.payload.maxAmount,
     stepResponseObject: action.payload.stepResponseObject,

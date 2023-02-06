@@ -97,6 +97,7 @@ export const template: (
       placeholder: "Search by branch or IFSC",
       type: InputTypeToken.SEARCH,
       title: "Search",
+      isFocus: false,
       state: InputStateToken.DEFAULT,
       keyboardType: KeyboardTypeToken.default,
       caption: { success: "", error: "" },

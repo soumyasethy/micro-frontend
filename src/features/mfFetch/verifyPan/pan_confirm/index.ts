@@ -3,7 +3,6 @@ import {
   Layout,
   LAYOUTS,
   PageType,
-  POSITION,
   TemplateSchema,
   WidgetProps,
 } from "@voltmoney/types";
@@ -32,12 +31,14 @@ export const template: (
   name: string,
   panNumber: string,
   targetRoute: string,
-  currentStepId: string
+  currentStepId: string,
+  setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
 ) => TemplateSchema = (
   name = "Test Name",
   panNumber,
   targetRoute,
-  currentStepId
+  currentStepId,
+  setIsUserLoggedIn
 ) => {
   return {
     layout: <Layout>{
@@ -81,6 +82,7 @@ export const template: (
             panNumber,
             currentStepId,
             widgetId: "panItem",
+            setIsUserLoggedIn,
           },
           routeId: ROUTE.PAN_CONFIRM_NAME,
         },
@@ -116,9 +118,12 @@ export const template: (
 };
 
 export const panConfirmMF: PageType<any> = {
-  onLoad: async (_, { name, panNumber, targetRoute, currentStepId }) => {
+  onLoad: async (
+    _,
+    { name, panNumber, targetRoute, currentStepId, setIsUserLoggedIn }
+  ) => {
     return Promise.resolve(
-      template(name, panNumber, targetRoute, currentStepId)
+      template(name, panNumber, targetRoute, currentStepId, setIsUserLoggedIn)
     );
   },
   actions: {

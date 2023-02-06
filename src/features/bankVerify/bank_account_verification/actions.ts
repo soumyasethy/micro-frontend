@@ -22,6 +22,7 @@ import {
   updateCurrentStepId,
   updateStepStatusMap,
 } from "../../../configs/utils";
+import {TextConstants} from "../../../configs/constants";
 
 let selectedWidget = undefined;
 let ifscCode = undefined;
@@ -90,7 +91,7 @@ export const BavVerifyAction: ActionFunction<BAVVerifyActionPayload> = async (
       isAutoTriggerCta: false,
       type: "SUCCESS",
       title: "Account verified successfully!",
-      subTitle: "You will be redirected to next step in few seconds",
+      subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
       ctaLabel: "Continue",
       ctaAction: {
         type: ACTION.GO_NEXT,

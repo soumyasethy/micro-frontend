@@ -48,7 +48,18 @@ export const saveEmailId: ActionFunction<ContinuePayload> = async (
     analytics(AnalyticsEventTracker.borrower_sign_up["Event Name"], {
       ...AnalyticsEventTracker.borrower_sign_up,
     });
+    // await SharedPropsService.setUser(updatedUser);
+    // action?.payload?.setIsUserLoggedIn(updatedUser);
+
+    const userContextResponse = await network.post(
+      api.userContext,
+      { onboardingPartnerCode: await SharedPropsService.getPartnerRefCode() },
+      { headers: await getAppHeader() }
+    );
+    const user: User = userContextResponse.data;
     await SharedPropsService.setUser(updatedUser);
+    action?.payload?.setIsUserLoggedIn(user);
+
     const route = await nextStepId(
       updatedUser.linkedApplications[0].currentStepId
     );

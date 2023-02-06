@@ -20,6 +20,7 @@ import _ from "lodash";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
+import {nextStepCredStepper} from "../../../configs/utils";
 
 let martialStatus: MARITAL_STATUS = null;
 let fatherFirstName = "";
@@ -35,19 +36,19 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
 ): Promise<any> => {
   switch (action.payload.widgetID) {
     case "fatherFirstNameInput": {
-      fatherFirstName = action.payload.value;
+      fatherFirstName = action.payload.value.trim();
       break;
     }
     case "fatherLastNameInput": {
-      fatherLastName = action.payload.value;
+      fatherLastName = action.payload.value.trim();
       break;
     }
     case "motherFirstNameInput": {
-      motherFirstName = action.payload.value;
+      motherFirstName = action.payload.value.trim();
       break;
     }
     case "motherLastNameInput": {
-      motherLastName = action.payload.value;
+      motherLastName = action.payload.value.trim();
       break;
     }
   }
@@ -62,6 +63,10 @@ export const onChangeInput: ActionFunction<InputPayload> = async (
   ) {
     await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
+    });
+  } else {
+    await setDatastore(ROUTE.KYC_ADDITIONAL_DETAILS, "continue", <ButtonProps>{
+      type: ButtonTypeTokens.LargeOutline,
     });
   }
 };
@@ -168,7 +173,7 @@ export const triggerCTA: ActionFunction<KycAdditionalDetailsPayload> = async (
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
   action,
   _datastore,
-  { goBack }
+  { goBack, navigate }
 ): Promise<any> => {
-  await goBack();
+  await navigate(ROUTE.KYC_STEPPER)
 };

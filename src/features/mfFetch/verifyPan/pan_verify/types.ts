@@ -1,6 +1,5 @@
 export enum ACTION {
-  ENTER_PAN = "ENTER_PAN",
-  ENTER_DOB = "ENTER_DOB",
+  VALIDATE_FORM = "VALIDATE_FORM",
   VERIFY_PAN = "VERIFY_PAN",
   ENABLE_CONTINUE = "ENABLE_CONTINUE",
   DISABLE_CONTINUE = "DISABLE_CONTINUE",
@@ -15,4 +14,5 @@ export type ContinuePayload = {
   widgetId: string;
   applicationId: string;
   targetRoute?: string;
+  setIsUserLoggedIn?: (user: any) => void;
 };

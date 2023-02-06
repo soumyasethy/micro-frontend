@@ -20,7 +20,6 @@ import {
   IconTokens,
   MessageAlignType,
   MessageProps,
-  MessageTypeTokens,
   ProgressIndicatorProps,
   ProgressIndicatorTypeTokens,
   ShimmerIconProps,
@@ -28,14 +27,11 @@ import {
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
-  StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
-  StackWidth,
   StepperItem,
   StepperProps,
-  StepperStateToken,
   StepperTypeTokens,
   TypographyProps,
   WIDGET,
@@ -43,7 +39,7 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { horizontalStepperRepo } from "../../../configs/utils";
-import { MandateLinkPoll, GetMandateLink, goBack } from "./actions";
+import { goBack, MandateLinkPoll } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 
@@ -54,7 +50,11 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     id: ROUTE.LOAN_AUTOPAY,
     type: LAYOUTS.LIST,
     widgets: [
-      { id: "headerStack", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+      {
+        id: "headerStack",
+        type: WIDGET.HEADER,
+        position: POSITION.ABSOLUTE_TOP,
+      },
       { id: "headerSpace", type: WIDGET.SPACE },
       { id: "headerSpace1", type: WIDGET.SPACE },
       { id: "iconStack", type: WIDGET.STACK },
@@ -199,8 +199,8 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
 export const loanAutoPayMF: PageType<any> = {
   onLoad: async (utils) => {
     const user: User = await SharedPropsService.getUser();
-    user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
-      StepperStateToken.IN_PROGRESS;
+    // user.linkedApplications[0].stepStatusMap.MANDATE_SETUP =
+    //   StepperStateToken.IN_PROGRESS;
     await SharedPropsService.setUser(user);
 
     const stepper: StepperItem[] = await horizontalStepperRepo();
