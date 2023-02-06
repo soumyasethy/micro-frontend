@@ -114,9 +114,9 @@ export const goBack: ActionFunction<any> = async (
 };
 
 export const goToFaq: ActionFunction<any> = async (
-    action,
-    _datastore,
-    { goBack, navigate }
+  action,
+  _datastore,
+  { navigate }
 ): Promise<any> => {
-  await navigate(ROUTE.FAQ)
+  await navigate(ROUTE.FAQ);
 };

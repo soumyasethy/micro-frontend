@@ -151,7 +151,12 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
 
       if (mfPledgePortfolioStatus === "COMPLETED") {
         /*** close previous popup ***/
-        await goBack();
+        if (
+          AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length > 0 &&
+          AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length > 0
+        ) {
+          await goBack();
+        }
         /*** show success popup ***/
         await showPopup({
           autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
@@ -184,7 +189,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         mfPledgePortfolioStatus === StepperStateToken.PENDING_CALLBACK
       ) {
         /*** close previous popup ***/
-        await goBack();
+        // await goBack();
         /*** show popup for pending callback ***/
         await showPopup({
           title: `Pledging...`,
