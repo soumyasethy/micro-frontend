@@ -5,6 +5,32 @@ import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
+import _ from "lodash";
+
+export const CreateDisbursementRequest: ActionFunction<
+DisbursementOTPPayload
+> = async (
+  action,
+  _datastore,
+  { network, navigate, setDatastore }
+): Promise<any> => {
+  
+  const resendOtpResponse = await network.post(
+    api.lmsDisbursal,
+    {
+      creditId: (
+        await SharedPropsService.getUser()
+      ).linkedCredits[0].creditId,
+      disbursalAmount: action.payload.disbursalAmount,
+    },
+    { headers: await getAppHeader() }
+  );
+  if (_.get(resendOtpResponse, "data.status") === "SUCCESS") {
+    await setDatastore(ROUTE.WITHDRAWAL_OTP, "input", <TextInputProps>{
+      state: InputStateToken.DEFAULT,
+    });
+  }
+};
 
 export const DisbursalVerifyAction: ActionFunction<
   DisbursementOTPPayload
