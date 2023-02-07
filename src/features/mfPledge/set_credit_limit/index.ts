@@ -93,16 +93,18 @@ export const template: (
         id: "bottomCard",
         type: WIDGET.NOTCH,
         padding: {
-        //  horizontal: -16,
+          horizontal: -16,
           vertical:0
         },
-        position: POSITION.STICKY_BOTTOM,
+        //position: POSITION.STICKY_BOTTOM,
       },
       {
         id: "ctaCard",
         type: WIDGET.CARD,
         padding: {
           horizontal: 0,
+          top:-16,
+          bottom:0,
           all: 0,
         },
         position: POSITION.STICKY_BOTTOM,
