@@ -4,6 +4,7 @@ import {
   LottieProps,
   LottieSizeTokens,
   LottieTokens,
+  PaddingProps, PaddingSizeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -52,22 +53,22 @@ export const buildDataStore = () => {
   let datastoreMap = {};
   const titleMap = {
     1: "Setting up a secure connection",
-    2: "Getting your portfolio details ",
+    2: "Getting your portfolio details",
     3: "Calculating your credit limit",
   };
   /*** Need to add 3 list item stacks in the datastore */
   [1, 2, 3].forEach((i) => {
     const item = {
-      [`titleSpace${i}`]: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      [`titleSpace${i}`]: <SpaceProps>{ size: SizeTypeTokens.Size32 },
       [`listItemStack${i}`]: <StackProps>{
         type: StackType.row,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.center,
-        width: StackWidth.CONTENT,
+        alignItems: StackAlignItems.stretch,
+        justifyContent: StackJustifyContent.spaceBetween,
+        width: StackWidth.FULL,
         widgetItems: [
-          { id: `itemIcon${i}`, type: WIDGET.LOTTIE },
-          { id: `itemIconSpace${i}`, type: WIDGET.SPACE },
           { id: `itemLabel${i}`, type: WIDGET.TEXT },
+          { id: `itemIconSpace${i}`, type: WIDGET.SPACE },
+          { id: `itemIcon${i}`, type: WIDGET.LOTTIE },
         ],
       },
       [`itemLabel${i}`]: <TypographyProps>{

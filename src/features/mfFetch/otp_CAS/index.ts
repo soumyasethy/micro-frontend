@@ -81,7 +81,7 @@ export const template: (
         ],
       },
       title: <TypographyProps>{
-        label: "Enter OTP",
+        label: `${AssetRepositoryMap[assetRepository].NAME} has sent OTP via ${AssetRepositoryMap[assetRepository].MODE_OF_COMM}`,
         fontSize: FontSizeTokens.XL,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
@@ -122,7 +122,7 @@ export const template: (
         ],
       },
       subTitle: <TypographyProps>{
-        label: `${AssetRepositoryMap[assetRepository].NAME} depository has sent an OTP to `,
+        label: `Check your ${AssetRepositoryMap[assetRepository].MODE_OF_COMM.toLowerCase()}:`,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
