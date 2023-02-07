@@ -34,7 +34,7 @@ export const AgreementStatusAction: ActionFunction<any> = async (
             type: "SUCCESS",
             title: "Agreement submitted!",
             subTitle:
-              "Congratulations! Your loan application is created successfully.",
+              "Continue to setup AutoPay to make your interest payments automatically",
             ctaLabel: "Go to AutoPay",
             ctaAction: action,
           });
