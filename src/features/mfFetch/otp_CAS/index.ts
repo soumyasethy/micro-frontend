@@ -14,6 +14,7 @@ import {
   FontFamilyTokens,
   FontSizeTokens,
   IconAlignmentTokens,
+  IconProps,
   IconSizeTokens,
   IconTokens,
   InputStateToken,
@@ -33,7 +34,6 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
 import { authCAS, fetchMyPortfolio, goBack, navToFetch } from "./actions";
-import { FetchPortfolioPayload } from "../check_limit/types";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
@@ -63,20 +63,25 @@ export const template: (
           id: "headerStack",
           type: WIDGET.STACK,
         },
-        // { id: "title", type: WIDGET.TEXT },
+        { id: "space0", type: WIDGET.SPACE },
+        { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
+        // { id: "icon", type: WIDGET.ICON },
         { id: "subTitleStack", type: WIDGET.STACK },
         { id: "space2", type: WIDGET.SPACE },
         { id: "input", type: WIDGET.INPUT },
       ],
     },
     datastore: <Datastore>{
+      space0: <SpaceProps>{
+        size: SizeTypeTokens.Size6,
+      },
       headerStack: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
-          { id: "title", type: WIDGET.TEXT },
+          { id: "icon", type: WIDGET.ICON },
           { id: "leadIcon", type: WIDGET.BUTTON },
         ],
       },
@@ -111,36 +116,49 @@ export const template: (
           routeId: ROUTE.OTP_AUTH_CAS,
         },
       },
+      icon: <IconProps & WidgetProps>{
+        name:
+          assetRepository === AssetRepositoryType.CAMS
+            ? IconTokens.OTPEmail
+            : IconTokens.SMS,
+        size: IconSizeTokens.Size52,
+      },
       subTitleStack: <StackProps & WidgetProps>{
-        type: StackType.column,
+        type: StackType.row,
         alignItems: StackAlignItems.flexStart,
         justifyContent: StackJustifyContent.flexStart,
         widgetItems: [
           { id: "subTitle", type: WIDGET.TEXT },
-          { id: "subTitleSpace", type: WIDGET.SPACE },
-          { id: "subTitle2", type: WIDGET.TEXT },
+          // { id: "subTitleSpace", type: WIDGET.SPACE },
+          // { id: "subTitle2", type: WIDGET.TEXT },
         ],
       },
       subTitle: <TypographyProps>{
-        label: `Check your ${AssetRepositoryMap[assetRepository].MODE_OF_COMM.toLowerCase()}:`,
-        color: ColorTokens.Grey_Charcoal,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "400",
-        fontSize: FontSizeTokens.SM,
-      },
-      subTitleSpace: <SpaceProps>{
-        size: SizeTypeTokens.SM,
-      },
-      subTitle2: <TypographyProps>{
-        label:
+        label: `Check your ${AssetRepositoryMap[
+          assetRepository
+        ].MODE_OF_COMM.toLowerCase()}: ${
           assetRepository === AssetRepositoryType.CAMS
             ? emailId
-            : `${phoneNumber}`.substring(3),
+            : phoneNumber.substring(3)
+        }`,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "600",
         fontSize: FontSizeTokens.SM,
+        fontWeight: "600",
       },
+      // subTitleSpace: <SpaceProps>{
+      //   size: SizeTypeTokens.SM,
+      // },
+      // subTitle2: <TypographyProps>{
+      //   label:
+      //     assetRepository === AssetRepositoryType.CAMS
+      //       ? emailId
+      //       : `${phoneNumber}`.substring(3),
+      //   color: ColorTokens.Grey_Charcoal,
+      //   fontFamily: FontFamilyTokens.Inter,
+      //   fontWeight: "600",
+      //   fontSize: FontSizeTokens.SM,
+      // },
       input: <TextInputProps & TextInputOtpProps & WidgetProps>{
         title: "Enter OTP",
         type: InputTypeToken.OTP,
