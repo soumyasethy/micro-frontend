@@ -79,7 +79,7 @@ export const splashScreenMF: PageType<any> = {
       /*** get params for custom api header if present in url
        *** example, voltmoney.in/partnerplatform?platform=VOLT_MOBILE_APP ****/
 
-      const partnerPlatform = urlParams.includes("partnerplatform");
+      const partnerPlatform = urlParams.toLowerCase().includes("partnerplatform");
       const platform = urlParams.includes("platform");
 
       if (partnerPlatform && platform) {
