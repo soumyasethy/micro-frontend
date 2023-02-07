@@ -80,6 +80,7 @@ export const AssetRepositoryMap = {
     OTP_LENGTH: 5,
     LIST: [],
     isDisabled: false,
+    MODE_OF_COMM: "email"
   },
   [AssetRepositoryType.KARVY]: {
     VALUE: AssetRepositoryType.KARVY,
@@ -87,6 +88,7 @@ export const AssetRepositoryMap = {
     OTP_LENGTH: 6,
     LIST: [],
     isDisabled: false,
+    MODE_OF_COMM: "phone"
   },
 };
 

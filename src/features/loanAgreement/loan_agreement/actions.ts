@@ -94,7 +94,7 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
             type: "SUCCESS",
             title: "Agreement submitted!",
             subTitle:
-              "Congratulations! Your loan application is created successfully.",
+              "Continue to setup AutoPay to make your interest payments automatically",
             ctaLabel: "Go to AutoPay",
             ctaAction: {
               type: ACTION.GO_TO_AUTOPAY,

@@ -8,7 +8,6 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
-  ColorTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
@@ -84,7 +83,10 @@ export const splashScreenMF: PageType<any> = {
       const platform = urlParams.includes("platform");
 
       if (partnerPlatform && platform) {
-        const params = getParameters(urlParams);
+        const params =
+          standardUtilities.metaData?.platform.OS === "web"
+            ? getParameters(urlParams)
+            : {};
         const customPlatform = params["platform"];
         /*** setting app global api header here if not VOLT_MOBILE_APP ****/
         await SharedPropsService.setAppPlatform(customPlatform);
@@ -93,12 +95,15 @@ export const splashScreenMF: PageType<any> = {
       /*** if ?user=8763666620 then autofill mobile number in login screen ****/
       const isPreFillMobileNumber = urlParams.includes("user");
 
-      if (isPreFillMobileNumber) {
+      if (
+        isPreFillMobileNumber &&
+        standardUtilities.metaData?.platform.OS === "web"
+      ) {
         const params = getParameters(urlParams);
         mobileNumber = params["user"];
       }
     }
-     setTimeout(
+    setTimeout(
       async () =>
         await SplashAction(
           {

@@ -22,6 +22,7 @@ import {
   IconSizeTokens,
   IconTokens,
   ListItemProps,
+  MessageProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -94,6 +95,8 @@ export const template: (
         { id: "mobileItem", type: WIDGET.LIST_ITEM },
         { id: "emailItem", type: WIDGET.LIST_ITEM },
         { id: "space3", type: WIDGET.SPACE },
+        { id: "investmentInfoTooltip", type: WIDGET.MESSAGE },
+        { id: "space4", type: WIDGET.SPACE },
         {
           id: "fetchCTA",
           type: WIDGET.BUTTON,
@@ -102,7 +105,7 @@ export const template: (
         ...(isPanEditAllowed
           ? [
               {
-                id: "space4",
+                id: "space5",
                 type: WIDGET.SPACE,
                 position: POSITION.ABSOLUTE_BOTTOM,
               },
@@ -161,14 +164,13 @@ export const template: (
         numberOfLines: 1,
       },
       subTitle: <TypographyProps>{
-        label: "Cash limit is calculated using your MF portfolio",
+        label: "Cash limit is calculated using your mutual fund portfolio",
         numberOfLines: 1,
         fontFamily: FontFamilyTokens.Inter,
         color: ColorTokens.Grey_Charcoal,
         fontWeight: "400",
         fontSize: FontSizeTokens.SM,
       },
-
       space1: <SpaceProps>{ size: SizeTypeTokens.SM },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       panItem: <ListItemProps & WidgetProps>{
@@ -190,7 +192,7 @@ export const template: (
           : null,
       },
       mobileItem: <ListItemProps & WidgetProps>{
-        title: "Mobile Number",
+        title: "Mobile Number (linked to investments)",
         subTitle: `${phoneNumber}`.substring(3),
         leadIconName: IconTokens.Phone,
         trailIconName: IconTokens.Edit,
@@ -202,7 +204,7 @@ export const template: (
         },
       },
       emailItem: <ListItemProps & WidgetProps>{
-        title: "Email",
+        title: "Email (linked to investments)",
         subTitle: emailId,
         leadIconName: IconTokens.Email,
         trailIconName: IconTokens.Edit,
@@ -213,6 +215,17 @@ export const template: (
           payload: { targetWidgetId: "emailItem" },
         },
       },
+      investmentInfoTooltip: <MessageProps>{
+        label: "Use mobile number & email linked to your investments.",
+        labelColor: ColorTokens.Grey_Charcoal,
+        bgColor: ColorTokens.Grey_Milk_1,
+        icon: <IconProps>{
+          name: IconTokens.Info,
+          size: IconSizeTokens.SM,
+          color: ColorTokens.Grey_Charcoal,
+        },
+      },
+      space4: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
       fetchCTA: <ButtonProps & WidgetProps>{
         label: "Get my portfolio",
         fontFamily: FontFamilyTokens.Poppins,
@@ -230,7 +243,7 @@ export const template: (
           },
         },
       },
-      space3: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+      space3: <SpaceProps>{ size: SizeTypeTokens.XL },
       camsCTAStack: <StackProps>{
         type: StackType.row,
         alignItems: StackAlignItems.center,
@@ -239,7 +252,7 @@ export const template: (
           { id: "text", type: WIDGET.TEXT },
           { id: "space", type: WIDGET.SPACE },
           { id: "icon", type: WIDGET.ICON },
-          { id: "space5", type: WIDGET.SPACE },
+          { id: "space6", type: WIDGET.SPACE },
           { id: "editText", type: WIDGET.BUTTON },
         ],
       },
@@ -257,7 +270,7 @@ export const template: (
         size: IconSizeTokens.XXL,
         align: IconAlignmentTokens.left,
       },
-      space4: <SpaceProps>{ size: SizeTypeTokens.XL },
+      space5: <SpaceProps>{ size: SizeTypeTokens.XL },
       editText: <ButtonBaseProps & WidgetProps>{
         label: "Edit",
         fontFamily: FontFamilyTokens.Inter,
@@ -271,7 +284,7 @@ export const template: (
           payload: {},
         },
       },
-      space5: <SpaceProps>{ size: SizeTypeTokens.Size10 },
+      space6: <SpaceProps>{ size: SizeTypeTokens.Size10 },
     },
   };
 };
