@@ -8,6 +8,7 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  ButtonBaseProps,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -17,6 +18,7 @@ import {
   HeaderProps,
   HeaderTypeTokens,
   IconAlignmentTokens,
+  IconProps,
   IconSizeTokens,
   IconTokens,
   ListItemProps,
@@ -38,6 +40,7 @@ import {
   editPanNumber,
   fetchMyPortfolio,
   goBack,
+  selectSource,
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
@@ -96,6 +99,20 @@ export const template: (
           type: WIDGET.BUTTON,
           position: POSITION.ABSOLUTE_BOTTOM,
         },
+        ...(isPanEditAllowed
+          ? [
+              {
+                id: "space4",
+                type: WIDGET.SPACE,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+              {
+                id: "camsCTAStack",
+                type: WIDGET.STACK,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+            ]
+          : []),
       ],
     },
     datastore: <Datastore>{
@@ -214,6 +231,47 @@ export const template: (
         },
       },
       space3: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+      camsCTAStack: <StackProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.center,
+        widgetItems: [
+          { id: "text", type: WIDGET.TEXT },
+          { id: "space", type: WIDGET.SPACE },
+          { id: "icon", type: WIDGET.ICON },
+          { id: "space5", type: WIDGET.SPACE },
+          { id: "editText", type: WIDGET.BUTTON },
+        ],
+      },
+      text: <TypographyProps>{
+        label: "Getting portfolio from",
+        fontFamily: FontFamilyTokens.Inter,
+        color: ColorTokens.Grey_Charcoal,
+        fontWeight: "400",
+        fontSize: FontSizeTokens.XXS,
+        lineHeight: 16,
+      },
+      space: <SpaceProps>{ size: SizeTypeTokens.SM },
+      icon: <IconProps>{
+        name: assetRepository === "CAMS" ? IconTokens.Cams : IconTokens.Kfin,
+        size: IconSizeTokens.XXL,
+        align: IconAlignmentTokens.left,
+      },
+      space4: <SpaceProps>{ size: SizeTypeTokens.XL },
+      editText: <ButtonBaseProps & WidgetProps>{
+        label: "Edit",
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.XS,
+        type: ButtonTypeTokens.MediumGhost,
+        paddingHorizontal: SizeTypeTokens.NONE,
+        paddingVertical: SizeTypeTokens.NONE,
+        action: {
+          type: ACTION.SELECT_SOURCE,
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
+          payload: {},
+        },
+      },
+      space5: <SpaceProps>{ size: SizeTypeTokens.Size10 },
     },
   };
 };
@@ -255,6 +313,7 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
     [ACTION.Go_BACK]: goBack,
+    [ACTION.SELECT_SOURCE]: selectSource,
   },
   clearPrevious: true,
   // action: {
