@@ -154,3 +154,11 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   });
   await navigate(ROUTE.OTP_AUTH_CAS, action.payload);
 };
+
+export const selectSource: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, ...props }
+): Promise<any> => {
+  await navigate(ROUTE.SELECT_SOURCE, action.payload);
+};

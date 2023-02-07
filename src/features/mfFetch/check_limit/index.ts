@@ -8,6 +8,7 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  ButtonBaseProps,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -16,10 +17,12 @@ import {
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
-  IconAlignmentTokens, IconProps,
+  IconAlignmentTokens,
+  IconProps,
   IconSizeTokens,
   IconTokens,
-  ListItemProps, MessageProps,
+  ListItemProps,
+  MessageProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -38,6 +41,7 @@ import {
   editPanNumber,
   fetchMyPortfolio,
   goBack,
+  selectSource,
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
@@ -91,13 +95,27 @@ export const template: (
         { id: "mobileItem", type: WIDGET.LIST_ITEM },
         { id: "emailItem", type: WIDGET.LIST_ITEM },
         { id: "space3", type: WIDGET.SPACE },
-        { id: "investmentInfoTooltip", type: WIDGET.MESSAGE},
+        { id: "investmentInfoTooltip", type: WIDGET.MESSAGE },
         { id: "space4", type: WIDGET.SPACE },
         {
           id: "fetchCTA",
           type: WIDGET.BUTTON,
           position: POSITION.ABSOLUTE_BOTTOM,
         },
+        ...(isPanEditAllowed
+          ? [
+              {
+                id: "space5",
+                type: WIDGET.SPACE,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+              {
+                id: "camsCTAStack",
+                type: WIDGET.STACK,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+            ]
+          : []),
       ],
     },
     datastore: <Datastore>{
@@ -205,7 +223,7 @@ export const template: (
           name: IconTokens.Info,
           size: IconSizeTokens.SM,
           color: ColorTokens.Grey_Charcoal,
-        }
+        },
       },
       space4: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
       fetchCTA: <ButtonProps & WidgetProps>{
@@ -226,6 +244,47 @@ export const template: (
         },
       },
       space3: <SpaceProps>{ size: SizeTypeTokens.XL },
+      camsCTAStack: <StackProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.center,
+        widgetItems: [
+          { id: "text", type: WIDGET.TEXT },
+          { id: "space", type: WIDGET.SPACE },
+          { id: "icon", type: WIDGET.ICON },
+          { id: "space6", type: WIDGET.SPACE },
+          { id: "editText", type: WIDGET.BUTTON },
+        ],
+      },
+      text: <TypographyProps>{
+        label: "Getting portfolio from",
+        fontFamily: FontFamilyTokens.Inter,
+        color: ColorTokens.Grey_Charcoal,
+        fontWeight: "400",
+        fontSize: FontSizeTokens.XXS,
+        lineHeight: 16,
+      },
+      space: <SpaceProps>{ size: SizeTypeTokens.SM },
+      icon: <IconProps>{
+        name: assetRepository === "CAMS" ? IconTokens.Cams : IconTokens.Kfin,
+        size: IconSizeTokens.XXL,
+        align: IconAlignmentTokens.left,
+      },
+      space5: <SpaceProps>{ size: SizeTypeTokens.XL },
+      editText: <ButtonBaseProps & WidgetProps>{
+        label: "Edit",
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.XS,
+        type: ButtonTypeTokens.MediumGhost,
+        paddingHorizontal: SizeTypeTokens.NONE,
+        paddingVertical: SizeTypeTokens.NONE,
+        action: {
+          type: ACTION.SELECT_SOURCE,
+          routeId: ROUTE.MF_FETCH_PORTFOLIO,
+          payload: {},
+        },
+      },
+      space6: <SpaceProps>{ size: SizeTypeTokens.Size10 },
     },
   };
 };
@@ -267,6 +326,7 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.EDIT_MOBILE_NUMBER]: editMobileNumber,
     [ACTION.EDIT_EMAIL]: editEmailId,
     [ACTION.Go_BACK]: goBack,
+    [ACTION.SELECT_SOURCE]: selectSource,
   },
   clearPrevious: true,
   // action: {

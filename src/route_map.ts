@@ -70,7 +70,8 @@ import { updateSliderAmountMF } from "./features/mfPledge/update_slider_amount";
 import { kycDocumentUploadPOAMF } from "./features/kyc/kyc_doc_upload_POA";
 import { kycDocumentUploadPOIMF } from "./features/kyc/kyc_doc_upload_POI";
 import { loanAgreementPollingMF } from "./features/loanAgreement/loan_agreement_poll";
-import {manageLimitMF} from "./features/afterUnlock/manage_limit";
+import { manageLimitMF } from "./features/afterUnlock/manage_limit";
+import { selectSourceMF } from "./features/mfFetch/select_source";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -147,4 +148,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.KYC_DOCUMENT_UPLOAD_POI]: kycDocumentUploadPOIMF,
   [ROUTE.LOAN_AGREEMENT_POLLING]: loanAgreementPollingMF,
   [ROUTE.MANAGE_LIMIT]: manageLimitMF,
+  [ROUTE.SELECT_SOURCE]: selectSourceMF,
 };

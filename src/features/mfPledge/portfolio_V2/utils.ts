@@ -10,6 +10,7 @@ import {
   ListItemDataProps,
   ListProps,
   ListTypeTokens,
+  ShadowTypeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -167,7 +168,8 @@ export const portfolioListDatastoreBuilderV2 = async (
     totalItemSpace0: <SpaceProps>{ size: SizeTypeTokens.LG },
     totalItemSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
     totalCreditLineCard: <CardProps>{
-      bgColor: ColorTokens.Grey_Milk_1,
+      bgColor: ColorTokens.Primary_05,
+      shadow:ShadowTypeTokens.E6,
       width: "100%",
       body: {
         widgetItems: [
@@ -195,7 +197,7 @@ export const portfolioListDatastoreBuilderV2 = async (
       ],
     },
     outOfText1: <TypographyProps>{
-      label: addCommasToNumber(
+      label: ` ₹${addCommasToNumber(
         roundDownToNearestHundred(
           getTotalLimit(
             stepResponseObject.availableCAS,
@@ -203,11 +205,12 @@ export const portfolioListDatastoreBuilderV2 = async (
             stepResponseObject.isinLTVMap
           )
         )
-      ),
+      )}`,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "600",
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
+      lineHeight:28
     },
     outOfText2: <TypographyProps>{
       label: `/ ₹${addCommasToNumber(
@@ -217,6 +220,7 @@ export const portfolioListDatastoreBuilderV2 = async (
       fontWeight: "400",
       fontSize: FontSizeTokens.XS,
       color: ColorTokens.Grey_Charcoal,
+      lineHeight: 18
     },
     // edit_button: <ButtonProps>{
     //   type: ButtonTypeTokens.MediumGhost,
@@ -225,11 +229,12 @@ export const portfolioListDatastoreBuilderV2 = async (
     //   paddingVertical: SizeTypeTokens.NONE,
     // },
     totalCreditLimitText: <TypographyProps>{
-      label: "Total credit limit",
+      label: "Selected credit limit",
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Night,
+      lineHeight: 24
     },
     ContinueButton: <ButtonProps>{
       label: "Confirm amount and assets",
