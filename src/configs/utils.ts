@@ -1,6 +1,5 @@
 import { StepperItem, StepperStateToken } from "@voltmoney/schema";
 import SharedPropsService from "../SharedPropsService";
-import sharedPropsService from "../SharedPropsService";
 import { StepStatusMap, User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -416,7 +415,7 @@ export const updateUserContextFromApi = async (
     },
     { headers: await getAppHeader() }
   );
-  await sharedPropsService.setUser(updateUserProfileResponse.data);
+  await SharedPropsService.setUser(updateUserProfileResponse.data);
 };
 
 export const removeCommasFromNumber = (num: string) => {
