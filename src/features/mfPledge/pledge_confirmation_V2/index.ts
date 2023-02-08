@@ -118,6 +118,11 @@ export const template: (
           },
           position: POSITION.STICKY_BOTTOM,
         },
+        {
+          id: "spaceCard",
+          type: WIDGET.SPACE,
+          position: POSITION.STICKY_BOTTOM,
+        },
         ...(showOtpConfirmation
           ? [
               {
@@ -574,16 +579,18 @@ export const template: (
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.center,
         widgetItems: [
-          { id: "volt", type: WIDGET.ICON },
+          { id: "lendingTXT", type: WIDGET.TEXT },
           { id: "space11", type: WIDGET.SPACE },
           { id: "bajaj", type: WIDGET.IMAGE },
           // { id: "space12", type: WIDGET.SPACE },
           // { id: "mirae", type: WIDGET.IMAGE },
         ],
       },
-      volt: <IconProps>{
-        name: IconTokens.VoltFull,
-        size: IconSizeTokens.XXXXXXL,
+      lendingTXT: <TypographyProps>{
+        label: "Lending partner",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontSize: FontSizeTokens.XS,
       },
       space11: <SpaceProps>{ size: SizeTypeTokens.MD },
       bajaj: <ImageProps>{
@@ -672,6 +679,7 @@ export const template: (
           },
         },
       },
+      spaceCard: <SpaceProps>{ size: SizeTypeTokens.LG },
     },
   };
 };
