@@ -15,6 +15,7 @@ import {
   FontFamilyTokens,
   FontSizeTokens,
   IconAlignmentTokens,
+  IconProps,
   IconSizeTokens,
   IconTokens,
   InputStateToken,
@@ -59,6 +60,8 @@ export const template: (
         id: "headerStack",
         type: WIDGET.STACK,
       },
+      { id: "space0", type: WIDGET.SPACE },
+      { id: "title", type: WIDGET.TEXT },
       { id: "titleSpace", type: WIDGET.SPACE },
       { id: "subTitleStack", type: WIDGET.STACK },
       { id: "space1", type: WIDGET.SPACE },
@@ -66,12 +69,15 @@ export const template: (
     ],
   },
   datastore: <Datastore>{
+    space0: <SpaceProps>{
+      size: SizeTypeTokens.Size6,
+    },
     headerStack: <StackProps>{
       type: StackType.row,
       alignItems: StackAlignItems.center,
       justifyContent: StackJustifyContent.spaceBetween,
       widgetItems: [
-        { id: "title", type: WIDGET.TEXT },
+        { id: "icon", type: WIDGET.ICON },
         { id: "leadIcon", type: WIDGET.BUTTON },
       ],
     },
@@ -105,6 +111,13 @@ export const template: (
         },
         routeId: ROUTE.PLEDGE_VERIFY,
       },
+    },
+    icon: <IconProps & WidgetProps>{
+      name:
+        assetRepository === AssetRepositoryType.CAMS
+          ? IconTokens.OTPEmail
+          : IconTokens.SMS,
+      size: IconSizeTokens.Size52,
     },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     subTitleStack: <StackProps & WidgetProps>{

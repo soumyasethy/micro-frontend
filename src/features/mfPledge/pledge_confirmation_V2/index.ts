@@ -416,7 +416,7 @@ export const template: (
         ],
       },
       processingFeeText: <TypographyProps>{
-        label: "Processing fee",
+        label: "Processing fee (excl. GST)",
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
         fontSize: FontSizeTokens.SM,
