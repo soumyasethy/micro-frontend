@@ -48,6 +48,9 @@ import { getTotalLimit } from "../portfolio/actions";
 import _ from "lodash";
 import { addCommasToNumber } from "../../../configs/utils";
 import { OtpPayloadForPledgeConfirm } from "../pledge_confirmation/types";
+import { AuthCASModel } from "../../../types/AuthCASModel";
+import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
+import { getDesiredValue } from "../portfolio_readonly/actions";
 
 export const template: (
   totalAmount: number,
@@ -57,7 +60,9 @@ export const template: (
   showOtpConfirmation: boolean,
   minAmount: number,
   maxAmount: number,
-  showLessLimit: boolean
+  showLessLimit: boolean,
+  mfPortfolioArray,
+  pledgeInProgress: boolean
 ) => Promise<TemplateSchema> = async (
   totalAmount = 0,
   totalCharges = 0,
@@ -66,7 +71,9 @@ export const template: (
   showOtpConfirmation = false,
   minAmount,
   maxAmount,
-  showLessLimit = false
+  showLessLimit = false,
+  mfPortfolioArray,
+  pledgeInProgress = false
 ) => {
   return {
     layout: <Layout>{
@@ -111,11 +118,19 @@ export const template: (
           },
           position: POSITION.STICKY_BOTTOM,
         },
-
         ...(showOtpConfirmation
           ? [
               {
                 id: "otpConfirmInfo",
+                type: WIDGET.CARD,
+                position: POSITION.STICKY_BOTTOM,
+              },
+            ]
+          : []),
+        ...(pledgeInProgress
+          ? [
+              {
+                id: "showPledgeInProgressCard",
                 type: WIDGET.CARD,
                 position: POSITION.STICKY_BOTTOM,
               },
@@ -134,6 +149,40 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
+      showPledgeInProgressCard: <CardProps>{
+        bgColor: ColorTokens.Secondary_05,
+        width: StackWidth.FULL,
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG,
+          left: SizeTypeTokens.LG,
+          right: SizeTypeTokens.LG,
+        },
+        bodyOrientation: CardOrientation.HORIZONTAL,
+        body: {
+          widgetItems: [
+            { id: "infoIcon3", type: WIDGET.ICON },
+            { id: "infoIconSpace3", type: WIDGET.SPACE },
+            { id: "infoLabel3", type: WIDGET.TEXT },
+          ],
+        },
+      },
+      infoIcon3: <IconProps>{
+        name: IconTokens.InfoFilled,
+        color: ColorTokens.Secondary_100,
+      },
+      infoIconSpace3: <SpaceProps>{ size: SizeTypeTokens.Size10 },
+      continueSpace2: <SpaceProps>{ size: SizeTypeTokens.LG },
+      infoLabel3: <TypographyProps>{
+        label: `Rs. ${addCommasToNumber(
+          stepResponseObject.approvedCreditAmount
+        )} were pledged successfully. We require 1 OTP to pledge remaining portfolio.`,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontColor: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XS,
+        lineHeight: 18,
+      },
       showLessLimitCard: <CardProps>{
         bgColor: ColorTokens.Red_10,
         width: StackWidth.FULL,
@@ -212,12 +261,17 @@ export const template: (
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
         // padding: { horizontal: SizeTypeTokens.LG },
-        widgetItems: [
-          { id: "backButton", type: WIDGET.ICON },
-          { id: "space0", type: WIDGET.SPACE },
-          { id: "title", type: WIDGET.TEXT },
-          { id: "headerRight", type: WIDGET.STACK },
-        ],
+        widgetItems: pledgeInProgress
+          ? [
+              { id: "title", type: WIDGET.TEXT },
+              { id: "headerRight", type: WIDGET.STACK },
+            ]
+          : [
+              { id: "backButton", type: WIDGET.ICON },
+              { id: "space0", type: WIDGET.SPACE },
+              { id: "title", type: WIDGET.TEXT },
+              { id: "headerRight", type: WIDGET.STACK },
+            ],
       },
       backButton: <IconProps & WidgetProps>{
         name: IconTokens.ChevronLeft,
@@ -614,6 +668,7 @@ export const template: (
             value: stepResponseObject,
             widgetId: "ctaButton",
             isResend: false,
+            portFolioArray: mfPortfolioArray,
           },
         },
       },
@@ -623,14 +678,32 @@ export const template: (
 
 export const pledgeConfirmationMFV2: PageType<any> = {
   onLoad: async ({ network, setDatastore }, { stepResponseObject }) => {
-    console.log("stepResponseObject", stepResponseObject);
-    /// Pledging
-    const mfPortfolioArray: AvailableCASItem[] = (
-      stepResponseObject as StepResponseObject
-    ).availableCAS;
-    mfPortfolioArray.forEach((_item, index) => {
-      mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
-    });
+    let pledgeInProgress = false;
+    let mfPortfolioArray: AvailableCASItem[] = [];
+    // call pledge limit api if stepResponseObject is null
+    if (stepResponseObject === undefined || stepResponseObject === null) {
+      pledgeInProgress = true;
+      const authCAS: AuthCASModel =
+        await SharedPropsService.getAuthCASResponse();
+      const pledgeLimitResponse = authCAS
+        ? { data: authCAS }
+        : await fetchPledgeLimitRepo().then((response) => ({
+            data: response,
+          }));
+      stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
+    }
+
+    if (!pledgeInProgress) {
+      /// Pledging
+      mfPortfolioArray = (stepResponseObject as StepResponseObject)
+        .availableCAS;
+      mfPortfolioArray.forEach((_item, index) => {
+        mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
+      });
+    } else {
+      mfPortfolioArray = (stepResponseObject as StepResponseObject)
+        .tobePledgedPortfolio;
+    }
 
     const applicationId = (await SharedPropsService.getUser())
       .linkedApplications[0].applicationId;
@@ -644,6 +717,35 @@ export const pledgeConfirmationMFV2: PageType<any> = {
       },
       { headers: await getAppHeader() }
     );
+
+    if (!pledgeInProgress) {
+      // save portfolio to backend
+      const savePortfolioResponse = await network.post(
+        api.savePortfolio,
+        {
+          applicationId: applicationId,
+          portfolioItemList: mfPortfolioArray,
+        },
+        { headers: await getAppHeader() }
+      );
+    }
+
+    const portValue = getDesiredValue(
+      mfPortfolioArray,
+      stepResponseObject.isinNAVMap
+    );
+
+    const desiredLimit = getTotalLimit(
+      mfPortfolioArray,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
+    );
+
+    if (pledgeInProgress) {
+      await SharedPropsService.setCreditLimit(desiredLimit);
+    }
+
+    await SharedPropsService.setDesiredPortfolio(portValue);
 
     const processingFeesBreakUp = _.get(
       response,
@@ -679,9 +781,11 @@ export const pledgeConfirmationMFV2: PageType<any> = {
 
     let showLessLimit: boolean;
 
-    (await SharedPropsService.getCreditLimit()) < 25000
-      ? (showLessLimit = true)
-      : (showLessLimit = false);
+    if (!pledgeInProgress) {
+      (await SharedPropsService.getCreditLimit()) < 25000
+        ? (showLessLimit = true)
+        : (showLessLimit = false);
+    }
 
     return Promise.resolve(
       template(
@@ -692,7 +796,9 @@ export const pledgeConfirmationMFV2: PageType<any> = {
         showOtpConfirmation,
         minAmount,
         maxAmount,
-        showLessLimit
+        showLessLimit,
+        mfPortfolioArray,
+        pledgeInProgress
       )
     );
   },

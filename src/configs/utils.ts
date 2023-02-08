@@ -4,14 +4,14 @@ import { StepStatusMap, User } from "../features/login/otp_verify/types";
 import { ROUTE } from "../routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AlertNavProps } from "../features/popup_loader/types";
-import {api, StoreKey} from "./api";
+import { api, StoreKey } from "./api";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
-  ConfigTokens, getAppHeader,
+  ConfigTokens,
+  getAppHeader,
 } from "./config";
-import sharedPropsService from "../SharedPropsService";
-import {StandardUtilities} from "@voltmoney/types";
+import { StandardUtilities } from "@voltmoney/types";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -200,6 +200,7 @@ export const nextStepId = async (
   currentStepId: string
 ): Promise<{ routeId: string; params: object }> => {
   const user: User = await SharedPropsService.getUser();
+  const stepStatusMap = user.linkedApplications[0].stepStatusMap;
 
   if (user.linkedApplications[0].applicationState === "COMPLETED") {
     return { routeId: ROUTE.DASHBOARD, params: {} };
@@ -250,10 +251,19 @@ export const nextStepId = async (
           params: {},
         };
       } else {
-        return {
-          routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-          params: {},
-        };
+        if (
+          stepStatusMap.MF_PLEDGE_PORTFOLIO === StepperStateToken.IN_PROGRESS
+        ) {
+          return {
+            routeId: ROUTE.PLEDGE_CONFIRMATION,
+            params: {},
+          };
+        } else {
+          return {
+            routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+            params: {},
+          };
+        }
       }
     } else if (
       currentStepId === "KYC_CKYC" ||
@@ -391,21 +401,22 @@ export const isLimitMoreThanPledgeThreshold = async () => {
   }
 };
 
-export const updateUserContextFromApi = async (network: StandardUtilities["network"]) => {
+export const updateUserContextFromApi = async (
+  network: StandardUtilities["network"]
+) => {
   let user: User = await SharedPropsService.getUser();
   const onboardingPartnerCode = user.user.onboardingPartnerCode;
   const relationshipManagerCode = user.user.onboardingRelationshipManagerCode;
   const updateUserProfileResponse = await network.post(
-      `${api.userContext}`,
-      {
-        "onboardingPartnerCode": onboardingPartnerCode,
-        "relationshipManagerCode": relationshipManagerCode
-      },
-      { headers: await getAppHeader() }
+    `${api.userContext}`,
+    {
+      onboardingPartnerCode: onboardingPartnerCode,
+      relationshipManagerCode: relationshipManagerCode,
+    },
+    { headers: await getAppHeader() }
   );
-  await sharedPropsService.setUser(updateUserProfileResponse.data)
-}
-
+  await SharedPropsService.setUser(updateUserProfileResponse.data);
+};
 
 export const removeCommasFromNumber = (num: string) => {
   return num.replace(/,/g, "");
