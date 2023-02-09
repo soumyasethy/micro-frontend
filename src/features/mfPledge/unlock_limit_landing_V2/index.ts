@@ -51,7 +51,7 @@ import {
 } from "../../../configs/utils";
 import _ from "lodash";
 import { commonTemplates } from "../../../configs/common";
-import {TextConstants} from "../../../configs/constants";
+import { TextConstants } from "../../../configs/constants";
 
 /*** This will be used to auto trigger removeGetMorePortfolio action when user has already pledged both CAMS and KARVY from UI */
 let availableCASX: AvailableCASItem[];
@@ -176,7 +176,7 @@ export const template: (
       widgetItems: [{ id: "bottomSheetText", type: WIDGET.TEXT }],
     },
     bottomSheetText: <TypographyProps>{
-      label: "Credit limit on basis of these assets",
+      label: "Credit limit by mutual fund",
       fontSize: FontSizeTokens.MD,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
@@ -192,7 +192,7 @@ export const template: (
       ],
     },
     col1Header: <TypographyProps>{
-      label: "Asset details",
+      label: "Mutual fund",
       fontSize: FontSizeTokens.XS,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "500",
@@ -200,7 +200,7 @@ export const template: (
       lineHeight: 18,
     },
     col2Header: <TypographyProps>{
-      label: "Credit limit",
+      label: "Available credit limit",
       fontSize: FontSizeTokens.XS,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "500",
