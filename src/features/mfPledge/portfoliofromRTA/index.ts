@@ -32,7 +32,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { getMoreMfPortfolio, goBackAction, portfolioListDatastoreBuilder } from "./actions";
+import { getMoreMfPortfolio, goBackAction, portfolioListDatastoreBuilder } from "./action";
 import SharedPropsService from "../../../SharedPropsService";
 import { AvailableCASItem } from "../../mfPledge/unlock_limit/types";
 import { StepResponseObject } from "../../mfPledge/unlock_limit_landing_V2/types";

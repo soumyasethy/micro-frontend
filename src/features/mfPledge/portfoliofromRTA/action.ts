@@ -129,7 +129,7 @@ export const getMoreMfPortfolio: ActionFunction<
     true
   );
   /*** Go to re-fetch portfolio from other Asset Type **/
-  await navigate(ROUTE.PORTFOLIO_FROM_RTA);
+  await navigate(ROUTE.MF_FETCH_PORTFOLIO);
   /*** remove fetch more asset type option from UI */
   // await removeGetMorePortfolio(
   //   {
