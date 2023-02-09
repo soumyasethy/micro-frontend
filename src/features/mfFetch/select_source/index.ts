@@ -116,7 +116,7 @@ export const template: (
         ],
       },
       subTitle: <TypographyProps>{
-        label: `CAMS & KFintech are authorised by SEBI to maintain`,
+        label: `CAMS & KFintech are regulated entity which maintain`,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
@@ -126,7 +126,7 @@ export const template: (
         size: SizeTypeTokens.SM,
       },
       subTitle2: <TypographyProps>{
-        label: `central records of MF portfolio.`,
+        label: `records of mutual investments.`,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",

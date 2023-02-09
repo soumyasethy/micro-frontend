@@ -1,11 +1,16 @@
-import {Datastore, Layout, LAYOUTS, PageType, TemplateSchema,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  TemplateSchema,
+} from "@voltmoney/types";
 import {
   ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
   SizeTypeTokens,
   SpaceProps,
-  StackAlignItems,
   StackJustifyContent,
   StackProps,
   StackType,
@@ -13,12 +18,12 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION} from "./types";
-import {goBack,} from "./actions";
-import {StepResponseObject} from "../unlock_limit/types";
+import { ROUTE } from "../../../routes";
+import { ACTION } from "./types";
+import { goBack } from "./actions";
+import { StepResponseObject } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
-import {portfolioListDatastoreBuilder} from "./utils";
+import { portfolioListDatastoreBuilder } from "./utils";
 
 export const template: (
   stepResponseObject: StepResponseObject
@@ -29,51 +34,51 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "title", type: WIDGET.TEXT },
-        { id: "space0", type: WIDGET.SPACE},
-        { id: "subtitleStack", type: WIDGET.STACK},
+        { id: "space0", type: WIDGET.SPACE },
+        { id: "subtitleStack", type: WIDGET.STACK },
         { id: "listItem", type: WIDGET.LIST },
       ],
     },
     datastore: <Datastore>{
-      subtitleStack: <StackProps> {
+      subtitleStack: <StackProps>{
         type: StackType.row,
         width: StackWidth.FULL,
         justifyContent: StackJustifyContent.spaceBetween,
         padding: {
-          right: SizeTypeTokens.XL
+          right: SizeTypeTokens.XL,
         },
         widgetItems: [
           { id: "columntitle1", type: WIDGET.TEXT },
           { id: "columntitle2", type: WIDGET.TEXT },
-        ]
+        ],
       },
-      title: <TypographyProps> {
-        label: "Credit limit on basis of these assets",
+      title: <TypographyProps>{
+        label: "Credit limit by mutual fund",
         fontSize: FontSizeTokens.MD,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
-        lineHeight: 24
+        lineHeight: 24,
       },
-      columntitle1: <TypographyProps> {
-        label: "Asset details",
+      columntitle1: <TypographyProps>{
+        label: "Mutual fund",
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.XS,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "500",
-        lineHeight: 18
+        lineHeight: 18,
       },
-      columntitle2: <TypographyProps> {
-        label: "Credit limit",
+      columntitle2: <TypographyProps>{
+        label: "Available credit limit",
         color: ColorTokens.Grey_Charcoal,
         fontSize: FontSizeTokens.XS,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "500",
-        lineHeight: 18
+        lineHeight: 18,
       },
       ...(await portfolioListDatastoreBuilder(stepResponseObject)),
-      space0: <SpaceProps> {
-        size: SizeTypeTokens.XL
-      }
+      space0: <SpaceProps>{
+        size: SizeTypeTokens.XL,
+      },
     },
   };
 };

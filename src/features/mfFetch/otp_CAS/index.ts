@@ -86,7 +86,7 @@ export const template: (
         ],
       },
       title: <TypographyProps>{
-        label: `${AssetRepositoryMap[assetRepository].NAME} has sent OTP via ${AssetRepositoryMap[assetRepository].MODE_OF_COMM}`,
+        label: `${AssetRepositoryMap[assetRepository].NAME} has sent an OTP`, //${AssetRepositoryMap[assetRepository].MODE_OF_COMM}
         fontSize: FontSizeTokens.XL,
         color: ColorTokens.Grey_Night,
         fontFamily: FontFamilyTokens.Poppins,
@@ -130,35 +130,32 @@ export const template: (
         widgetItems: [
           { id: "subTitle", type: WIDGET.TEXT },
           // { id: "subTitleSpace", type: WIDGET.SPACE },
-          // { id: "subTitle2", type: WIDGET.TEXT },
+          { id: "subTitle2", type: WIDGET.TEXT },
         ],
       },
       subTitle: <TypographyProps>{
-        label: `Check your ${AssetRepositoryMap[
-          assetRepository
-        ].MODE_OF_COMM.toLowerCase()}: ${
-          assetRepository === AssetRepositoryType.CAMS
-            ? emailId
-            : phoneNumber.substring(3)
-        }`,
+        // Check your ${AssetRepositoryMap[
+        //   assetRepository
+        // ].MODE_OF_COMM.toLowerCase()}:
+        label: `OTP sent to `,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.SM,
-        fontWeight: "600",
+        fontWeight: "500",
       },
       // subTitleSpace: <SpaceProps>{
       //   size: SizeTypeTokens.SM,
       // },
-      // subTitle2: <TypographyProps>{
-      //   label:
-      //     assetRepository === AssetRepositoryType.CAMS
-      //       ? emailId
-      //       : `${phoneNumber}`.substring(3),
-      //   color: ColorTokens.Grey_Charcoal,
-      //   fontFamily: FontFamilyTokens.Inter,
-      //   fontWeight: "600",
-      //   fontSize: FontSizeTokens.SM,
-      // },
+      subTitle2: <TypographyProps>{
+        label:
+          assetRepository === AssetRepositoryType.CAMS
+            ? emailId
+            : `${phoneNumber}`.substring(3),
+        color: ColorTokens.Grey_Charcoal,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        fontSize: FontSizeTokens.SM,
+      },
       input: <TextInputProps & TextInputOtpProps & WidgetProps>{
         title: "Enter OTP",
         type: InputTypeToken.OTP,
