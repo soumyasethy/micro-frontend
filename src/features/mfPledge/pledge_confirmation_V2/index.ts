@@ -688,6 +688,7 @@ export const pledgeConfirmationMFV2: PageType<any> = {
   onLoad: async ({ network, setDatastore }, { stepResponseObject }) => {
     let pledgeInProgress = false;
     let mfPortfolioArray: AvailableCASItem[] = [];
+    let portfolioForComputingProcessingCharge: AvailableCASItem[];
     // call pledge limit api if stepResponseObject is null
     if (stepResponseObject === undefined || stepResponseObject === null) {
       pledgeInProgress = true;
@@ -701,42 +702,44 @@ export const pledgeConfirmationMFV2: PageType<any> = {
       stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
     }
 
+    const applicationId = (await SharedPropsService.getUser())
+        .linkedApplications[0].applicationId;
+
     if (!pledgeInProgress) {
-      /// Pledging
       mfPortfolioArray = (stepResponseObject as StepResponseObject)
         .availableCAS;
       mfPortfolioArray.forEach((_item, index) => {
         mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
       });
+     portfolioForComputingProcessingCharge = mfPortfolioArray;
+
+      /// Pledging has not started save portfolio to backend
+      const savePortfolioResponse = await network.post(
+          api.savePortfolio,
+          {
+            applicationId: applicationId,
+            portfolioItemList: mfPortfolioArray,
+          },
+          { headers: await getAppHeader() }
+      );
     } else {
       mfPortfolioArray = (stepResponseObject as StepResponseObject)
         .tobePledgedPortfolio;
-    }
 
-    const applicationId = (await SharedPropsService.getUser())
-      .linkedApplications[0].applicationId;
+     portfolioForComputingProcessingCharge = [...mfPortfolioArray];
+     portfolioForComputingProcessingCharge.push(...(stepResponseObject as StepResponseObject)
+         .pledgedPortfolio);
+    }
 
     /// fetch processing fee
     const response = await network.post(
       api.processingCharges,
       {
         applicationId: applicationId,
-        mutualFundPortfolioItems: mfPortfolioArray,
+        mutualFundPortfolioItems: portfolioForComputingProcessingCharge,
       },
       { headers: await getAppHeader() }
     );
-
-    if (!pledgeInProgress) {
-      // save portfolio to backend
-      const savePortfolioResponse = await network.post(
-        api.savePortfolio,
-        {
-          applicationId: applicationId,
-          portfolioItemList: mfPortfolioArray,
-        },
-        { headers: await getAppHeader() }
-      );
-    }
 
     const portValue = getDesiredValue(
       mfPortfolioArray,
@@ -747,6 +750,12 @@ export const pledgeConfirmationMFV2: PageType<any> = {
       mfPortfolioArray,
       stepResponseObject.isinNAVMap,
       stepResponseObject.isinLTVMap
+    );
+
+    const totalAmount = getTotalLimit(
+        stepResponseObject.availableCAS,
+        stepResponseObject.isinNAVMap,
+        stepResponseObject.isinLTVMap
     );
 
     if (pledgeInProgress) {
@@ -764,12 +773,6 @@ export const pledgeConfirmationMFV2: PageType<any> = {
       response,
       "data.stepResponseObject.totalCharges",
       0
-    );
-
-    const totalAmount = getTotalLimit(
-      stepResponseObject.availableCAS,
-      stepResponseObject.isinNAVMap,
-      stepResponseObject.isinLTVMap
     );
 
     const assetTypeMap = {};
