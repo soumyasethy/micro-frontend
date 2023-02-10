@@ -21,6 +21,7 @@ import {
 import { ROUTE } from "../../routes";
 import { ACTION, AlertNavProps } from "./types";
 import { ClosePopup } from "./actions";
+import { heightMap } from "../../configs/height";
 
 const _applyType = (
   type: "SUCCESS" | "FAILED" | "IN_PROGRESS" | "LOADING" | "DEFAULT"
@@ -54,6 +55,9 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
   layout: <Layout>{
     id: ROUTE.ALERT_PAGE,
     type: LAYOUTS.MODAL,
+    style: {
+      height: heightMap[ROUTE.ALERT_PAGE],
+    },
     widgets: [
       {
         id: "alert",
