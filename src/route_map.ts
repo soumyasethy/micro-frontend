@@ -70,8 +70,10 @@ import { updateSliderAmountMF } from "./features/mfPledge/update_slider_amount";
 import { kycDocumentUploadPOAMF } from "./features/kyc/kyc_doc_upload_POA";
 import { kycDocumentUploadPOIMF } from "./features/kyc/kyc_doc_upload_POI";
 import { loanAgreementPollingMF } from "./features/loanAgreement/loan_agreement_poll";
-import { manageLimitMF } from "./features/afterUnlock/manage_limit";
 import { selectSourceMF } from "./features/mfFetch/select_source";
+import {manageLimitMF} from "./features/afterUnlock/manage_limit";
+import { setCreditLimitMf2 } from "./features/mfPledge/set_credit_limit_v2";
+import { portfoliofromRTAMf } from "./features/mfPledge/portfoliofromRTA";
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -102,6 +104,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.SPLASH_SCREEN]: splashScreenMF,
   // [ROUTE.MF_PLEDGE_PORTFOLIO_OLD]: unlockLimitMF,
   [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMFV2,
+ //[ROUTE.MF_PLEDGE_PORTFOLIO]: setCreditLimitMf2,
   [ROUTE.PLEDGE_CONFIRMATION_LOADING]: pledgeConfirmationLoadingMF,
   // [ROUTE.PLEDGE_CONFIRMATION_OLD]: pledgeConfirmationMF,
   [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMFV2,
@@ -149,4 +152,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.LOAN_AGREEMENT_POLLING]: loanAgreementPollingMF,
   [ROUTE.MANAGE_LIMIT]: manageLimitMF,
   [ROUTE.SELECT_SOURCE]: selectSourceMF,
+  [ROUTE.SET_CREDIT_LIMIT2]: setCreditLimitMf2,
+ // [ROUTE.SET_CREDIT_LIMIT2]: setCreditLimitMf2,
+  [ROUTE.PORTFOLIO_FROM_RTA]: portfoliofromRTAMf,
 };
