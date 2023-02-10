@@ -35,6 +35,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { Done, goBack } from "./action";
 import moment from "moment";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   disbursalAmount: string,
@@ -43,6 +44,9 @@ export const template: (
   layout: <Layout>{
     id: ROUTE.WITHDRAWAL_SUCCESS,
     type: LAYOUTS.MODAL,
+    style: {
+      height: heightMap[ROUTE.WITHDRAWAL_SUCCESS]
+    },
     widgets: [
       {
         id: "success",

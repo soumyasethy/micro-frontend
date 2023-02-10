@@ -35,6 +35,7 @@ import { EditAmountAction, ModifyAmountAction, goBack } from "./actions";
 import { StepResponseObject } from "../unlock_limit/types";
 import { getActualLimit, getTotalLimit } from "../portfolio/actions";
 import { roundDownToNearestHundred } from "../../../configs/utils";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   index: number,
@@ -51,6 +52,9 @@ export const template: (
     layout: <Layout>{
       id: ROUTE.MODIFY_PLEDGED_AMOUNT,
       type: LAYOUTS.MODAL,
+      style: {
+        height: heightMap[ROUTE.MODIFY_PLEDGED_AMOUNT]
+      },
       widgets: [
         {
           id: "headerStack",

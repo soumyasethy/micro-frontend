@@ -26,11 +26,15 @@ import { EnableDisableCTA } from "../../login/phone_number/types";
 import { emailOnChange, updateEmailId } from "./actions";
 import { toggleCTA } from "../../login/phone_number/actions";
 import SharedPropsService from "../../../SharedPropsService";
+import {heightMap} from "../../../configs/height";
 
 export const template: (email: String) => TemplateSchema = (email) => ({
   layout: <Layout>{
     id: ROUTE.UPDATE_EMAIL_ID,
     type: LAYOUTS.MODAL,
+    style: {
+      height: heightMap[ROUTE.UPDATE_EMAIL_ID]
+    },
     widgets: [
       { id: "space1", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },

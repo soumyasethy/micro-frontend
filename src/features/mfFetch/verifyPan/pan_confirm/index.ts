@@ -26,6 +26,7 @@ import {
 import { ROUTE } from "../../../../routes";
 import { ACTION, ContinuePayload } from "./types";
 import { changePanNo, confirmPan } from "./actions";
+import {heightMap} from "../../../../configs/height";
 
 export const template: (
   name: string,
@@ -44,6 +45,9 @@ export const template: (
     layout: <Layout>{
       id: ROUTE.PAN_CONFIRM_NAME,
       type: LAYOUTS.MODAL,
+      style: {
+        height: heightMap[ROUTE.PAN_CONFIRM_NAME]
+      },
       widgets: [{ id: "stack_root", type: WIDGET.STACK }],
     },
     datastore: <Datastore>{

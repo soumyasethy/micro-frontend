@@ -6,7 +6,7 @@ type HeightMapType = {
 
 export const heightMap: HeightMapType = {
   [ROUTE.PAN_CONFIRM_NAME]: 185,
-  [ROUTE.ALERT_PAGE]: 245,
+  [ROUTE.ALERT_PAGE]: 258,
   [ROUTE.WITHDRAWAL_SUCCESS]: 519,
   [ROUTE.WITHDRAWAL_OTP]: 265,
   [ROUTE.LOAN_AUTOPAY]: 258,
@@ -16,4 +16,5 @@ export const heightMap: HeightMapType = {
   [ROUTE.UPDATE_PHONE_NUMBER]: 176,
   [ROUTE.UPDATE_EMAIL_ID]: 176,
   [ROUTE.MODIFY_PLEDGED_AMOUNT]: 247,
+  [ROUTE.SELECT_SOURCE]: 256,
 };
