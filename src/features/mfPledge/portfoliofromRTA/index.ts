@@ -115,32 +115,62 @@ export const template: (
       },
       bodyOrientation: CardOrientation.HORIZONTAL,
       body: {
-        widgetItems: [{ id: "stack2", type: WIDGET.STACK }],
+        widgetItems: [
+          { id: "stack2", type: WIDGET.STACK }
+        ],
       },
     },
     stack2: <StackProps>{
       width: StackWidth.FULL,
       type: StackType.row,
-      justifyContent: StackJustifyContent.spaceBetween,
-      alignItems: StackAlignItems.center,
+       justifyContent: StackJustifyContent.spaceBetween,
+      widgetItems: [
+        { id: "head", type: WIDGET.STACK },
+        { id: "headSpace", type: WIDGET.SPACE },
+        { id: "tail", type: WIDGET.STACK },
+       
+      ],
+    },
+    head: <StackProps>{
+      width: StackWidth.FULL,
+      type: StackType.column,
       widgetItems: [
         { id: "Value", type: WIDGET.TEXT },
-        { id: "AvailableCreditLimit", type: WIDGET.TEXT },
+        { id: "Value2", type: WIDGET.TEXT },
+       
       ],
+    },
+    headSpace:<SpaceProps>{
+      size:SizeTypeTokens.XXXL
+    },
+    tail: <StackProps>{
+      width: StackWidth.FULL,
+      type: StackType.column,
+      widgetItems: [
+        { id: "AvailableCreditLimit", type: WIDGET.TEXT },
+        { id: "AvailableCreditLimit2", type: WIDGET.TEXT },
+       
+      ],
+    },
+  
+    AvailableCreditLimitSpace:<SpaceProps>{
+      size:SizeTypeTokens.LG
     },
     Value: <TypographyProps>{
       label: `Value`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "300",
+      fontWeight: "400",
       fontColor: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.XS,
+      lineHeight:16
     },
     AvailableCreditLimit: <TypographyProps>{
-      label: `Available Credit Limit`,
+      label: `Available credit limit`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "300",
+      fontWeight: "400",
       fontColor: ColorTokens.Grey_Charcoal,
-      fontSize: FontSizeTokens.XS,
+      fontSize: FontSizeTokens.SM,
+      lineHeight: 18
     },
     creditLimitCard2: <CardProps>{
       borderBottomRightRadius: BorderRadiusTokens.BR3,
@@ -158,35 +188,27 @@ export const template: (
         widgetItems: [{ id: "stack3", type: WIDGET.STACK }],
       },
     },
-    stack3: <StackProps>{
-      width: StackWidth.FULL,
-      type: StackType.row,
-      justifyContent: StackJustifyContent.spaceBetween,
-      alignItems: StackAlignItems.center,
-      widgetItems: [
-        { id: "Value2", type: WIDGET.TEXT },
-        { id: "AvailableCreditLimit2", type: WIDGET.TEXT },
-      ],
-    },
     Value2: <TypographyProps>{
       label: `₹${addCommasToNumber(availableAmount)}`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "700",
+      fontWeight: "500",
       fontColor: ColorTokens.Grey_Night,
-      fontSize: FontSizeTokens.XS,
+      fontSize: FontSizeTokens.SM,
+      lineHeight:18
     },
     AvailableCreditLimit2: <TypographyProps>{
       label: `₹${addCommasToNumber(totalPortfolio)}`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "700",
+      fontWeight: "500",
       fontColor: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XS,
+      lineHeight:16
     },
     space: <SpaceProps>{
       size: SizeTypeTokens.XL,
     },
     text: <TypographyProps>{
-      label: `Credit limit by mutual fund holding`,
+      label: `Credit limit by mutual fund`,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "400",
       fontSize: FontSizeTokens.MD,
@@ -206,7 +228,7 @@ export const template: (
       ],
     },
     mfText: <TypographyProps>{
-      label: `Mutual Fund`,
+      label: `Mutual fund`,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
       fontSize: FontSizeTokens.XS,

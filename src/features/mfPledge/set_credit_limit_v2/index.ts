@@ -415,7 +415,7 @@ export const template: (
                         },
                         {
                             label: 'From KFintech',
-                            limitAmount: camsAmount === 0 ? 'No portfolio fetched' : `Value: ₹ ${addCommasToNumber(camsAmount)}`,
+                            limitAmount: KFintechAmount === 0 ? 'No portfolio fetched' : `Value: ₹ ${addCommasToNumber(KFintechAmount)}`,
                             secondrylabel: 'From KFintech',
                             payload: "KARVY",
                             fetchedAmount: 'Value: ₹20,00,000',
@@ -510,8 +510,8 @@ export const template: (
                     fontFamily: FontFamilyTokens.Poppins,
                     fontWeight: "700",
                     width: ButtonWidthTypeToken.FULL,
-                    type: camsAmount !== 0 || KFintechAmount !== 0 ? ButtonTypeTokens.MediumFilled : ButtonTypeTokens.MediumSoftFilled,
-                    labelColor: camsAmount !== 0 || KFintechAmount !== 0 ? ColorTokens.White : ColorTokens.Primary_100,
+                    type: camsAmount !== 0 && KFintechAmount !== 0 ? ButtonTypeTokens.MediumFilled : ButtonTypeTokens.MediumSoftFilled,
+                    labelColor: camsAmount !== 0 && KFintechAmount !== 0 ? ColorTokens.White : ColorTokens.Primary_100,
                     action: {
                         type: ACTION.NAV_NEXT,
                         routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
