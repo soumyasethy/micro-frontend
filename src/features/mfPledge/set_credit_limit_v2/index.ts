@@ -296,7 +296,7 @@ return{
             type: AccordionTypeTokens.LIST,
         },
         worksTitle:<TypographyProps>{
-            label: "How it works?",
+            label: "Benefits for you",
             fontFamily: FontFamilyTokens.Poppins,
             color: ColorTokens.Grey_Night,
             fontWeight: "600",
@@ -772,7 +772,7 @@ return{
                     { id: "typo", type: WIDGET.TEXT }
                 ]
             },
-            title: 'How it works?',
+            title: 'Benefits for you',
             description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
             icon: IconTokens.DownArrow,
             type: AccordionTypeTokens.LIST,
