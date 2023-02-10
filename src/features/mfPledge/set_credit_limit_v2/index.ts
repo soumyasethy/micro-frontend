@@ -56,6 +56,7 @@ import {
     goKfin,
     goPortfolio,
     goToEditPortFolio,
+    goToNext,
     OnChangeSlider,
 } from "./action";
 import { addCommasToNumber, isMorePortfolioRenderCheck, roundDownToNearestHundred } from "../../../configs/utils";
@@ -78,6 +79,7 @@ import { commonTemplates } from "../../../configs/common";
 let availableCASX: AvailableCASItem[];
 
 export const template: (
+    activeIndexs: number,
     availableCreditAmount: number,
     availableCAS: AvailableCASItem[],
     stepResponseObject: StepResponseObject,
@@ -89,6 +91,7 @@ export const template: (
     camsAmount: number,
     KFintech: number
 ) => Promise<TemplateSchema> = async (
+    activeIndexs,
     availableCreditAmount,
     availableCAS,
     stepResponseObject,
@@ -100,48 +103,6 @@ export const template: (
     camsAmount,
     KFintechAmount
 ) => {
-    const listItemLayout = Object.keys(processingFeesBreakUp).map(
-        (key, index) => {
-          return {
-            id: `list_${index}`,
-            type: WIDGET.LIST_ITEM,
-            padding: {
-              // left:0,
-            },
-          };
-        }
-      );
-    
-      const listLayoutDs = {};
-      Object.keys(processingFeesBreakUp).forEach((key, index) => {
-        console.log("key", processingFeesBreakUp);
-        listLayoutDs[`list_${index}`] = <ListItemProps>{
-          customTitle: <TypographyProps>{
-            label: `${key}`,
-            color: ColorTokens.Grey_Night,
-            fontWeight: "400",
-            fontSize: FontSizeTokens.SM,
-            fontFamily: FontFamilyTokens.Inter,
-            lineHeight: 24,
-          },
-    
-          isDivider: true,
-          trailLabel: <TypographyProps>{
-            label: `₹${processingFeesBreakUp[key] || 0}`.replace(
-              /\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g,
-              ","
-            ),
-            color: ColorTokens.Grey_Night,
-            fontWeight: "600",
-            subTitle: "",
-            fontSize: FontSizeTokens.SM,
-            fontFamily: FontFamilyTokens.Inter,
-            lineHeight: 24,
-          },
-          onPress: () => {},
-        };
-        return listLayoutDs;
-      });
     
 return{
     layout: <Layout>{
@@ -174,16 +135,16 @@ return{
             },
         },
         trial: <AccordionProps>{
+            activeIndex: activeIndexs,
             data: [
                 {
                     id: 1,
-                    title: {
+                    header: {
                         widgetItems: [
                             { id: "portfolioTitle", type: WIDGET.TEXT },
                         ]
                     },
-                    toggleIndex:0,
-                    data: {
+                    body: {
                         widgetItems: [
                             { id: "portfolioCard", type: WIDGET.CARD },
                             // { id: "portfolioValue", type: WIDGET.STACK },
@@ -195,53 +156,32 @@ return{
                             // { id: "cardSpaces", type: WIDGET.SPACE },
                         ]
 
-                    },
-                    activeIndex: false,
-                    isAction: true,
-                    actionLabel: "Continue to set credit limit",
-                    actionType: (camsAmount !== 0 && KFintechAmount !== 0) ? ButtonTypeTokens.MediumFilled : ButtonTypeTokens.MediumSoftFilled,
-                    actionLabelColor:(camsAmount !== 0 && KFintechAmount !== 0) ? ColorTokens.White : ColorTokens.Primary_100,
-                    isNext: true
+                    }
                 },
                 {
                     id: 2,
-                    toggleIndex:0,
-                    title: {
+                    header: {
                         widgetItems: [
                             { id: "CreditTitle", type: WIDGET.TEXT },
                         ]
                     },
-                    data: {
+                    body: {
                         widgetItems: [
                             { id: "amountCard", type: WIDGET.LIMIT_CARD },
                             { id: "amountSpaces", type: WIDGET.SPACE },
+                            { id: "amountcontinue", type: WIDGET.BUTTON },
                         ]
 
                     },
-                    activeIndex: false,
-                    actionLabel: "Continue",
-                    isAction: true,
-                    actionType: ButtonTypeTokens.MediumFilled,
-                    actionLabelColor: ColorTokens.White,
-                    isNext:false,
-                    refreshAction:{
-                        type: ACTION.PORTFOLIO,
-                        // payload:<pagePayload>{
-                        //     value: null,
-                        //     widgetID: "contentCard",
-                        // },
-                        routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-                    }
                 },
                 {
                     id: 3,
-                    toggleIndex:0,
-                    title: {
+                    header: {
                         widgetItems: [
                             { id: "InterestTitle", type: WIDGET.TEXT },
                         ]
                     },
-                    data: {
+                    body: {
                         widgetItems: [
                             { id: "processingFeeStack", type: WIDGET.STACK },
                             { id: "space5", type: WIDGET.SPACE },
@@ -257,26 +197,19 @@ return{
                             { id: "space10", type: WIDGET.SPACE },
                             { id: "durationStack", type: WIDGET.STACK },
                             { id: "durationSpaces", type: WIDGET.SPACE },
-                            // { id: "durationcontinue", type: WIDGET.BUTTON },
+                           //  { id: "durationcontinue", type: WIDGET.BUTTON },
                         ]
 
                     },
-                    activeIndex: false,
-                    //actionLabel: "Got it",
-                    isAction: false,
-                    // actionType: ButtonTypeTokens.MediumSoftFilled,
-                    // actionLabelColor: ColorTokens.Primary_100,
-                    isNext:true
                 },
                 {
                     id: 4,
-                    toggleIndex:0,
-                    title: {
+                    header: {
                         widgetItems: [
                             { id: "worksTitle", type: WIDGET.TEXT },
                         ]
                     },
-                    data: {
+                    body: {
                         widgetItems: [
                               {
                                 id: "promoCard",
@@ -289,8 +222,6 @@ return{
                         ]
 
                     },
-                    activeIndex: false,
-                    isAction: false,
                 }
             ],
             type: AccordionTypeTokens.LIST,
@@ -327,17 +258,17 @@ return{
             fontSize: FontSizeTokens.MD,
             lineHeight: 24
         },
-        portfolioAccordion: <AccordionProps>{
-            body: {
-                widgetItems: [
-                    { id: "portfolioCard", type: WIDGET.CARD },
-                ]
-            },
-            title: 'Check portfolio credit limit',
-            description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
-            icon: IconTokens.DownArrow,
-            type: AccordionTypeTokens.LIST,
-        },
+        // portfolioAccordion: <AccordionProps>{
+        //     body: {
+        //         widgetItems: [
+        //             { id: "portfolioCard", type: WIDGET.CARD },
+        //         ]
+        //     },
+        //     title: 'Check portfolio credit limit',
+        //     description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
+        //     icon: IconTokens.DownArrow,
+        //     type: AccordionTypeTokens.LIST,
+        // },
         portfolioCard:<CardProps>{
             width: StackWidth.FULL,
             padding: {
@@ -354,6 +285,7 @@ return{
                     { id: "sourceSpaces", type: WIDGET.SPACE },
                     { id: "contentCard", type: WIDGET.LIMIT_CARD },
                     { id: "cardSpaces", type: WIDGET.SPACE },
+                    { id: "continue", type: WIDGET.BUTTON },
               ],
             },
         },
@@ -444,7 +376,7 @@ return{
             size: SizeTypeTokens.MD
         },
         key3: <TypographyProps>{
-            label: "source",
+            label: "SOURCE",
             fontFamily: FontFamilyTokens.Inter,
             color: ColorTokens.Grey_Charcoal,
             fontWeight: "400",
@@ -495,19 +427,19 @@ return{
         portfolioSpace: <SpaceProps>{
             size: SizeTypeTokens.XL,
         },
-        creditAccordion: <AccordionProps>{
-            body: {
-                widgetItems: [
-                    { id: "amountCard", type: WIDGET.LIMIT_CARD },
-                    { id: "amountSpaces", type: WIDGET.SPACE },
-                    { id: "amountcontinue", type: WIDGET.BUTTON },
-                ]
-            },
-            title: 'Set credit limit',
-            description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
-            icon: IconTokens.DownArrow,
-            type: AccordionTypeTokens.LIST,
-        },
+        // creditAccordion: <AccordionProps>{
+        //     body: {
+        //         widgetItems: [
+        //             { id: "amountCard", type: WIDGET.LIMIT_CARD },
+        //             { id: "amountSpaces", type: WIDGET.SPACE },
+        //             { id: "amountcontinue", type: WIDGET.BUTTON },
+        //         ]
+        //     },
+        //     title: 'Set credit limit',
+        //     description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
+        //     icon: IconTokens.DownArrow,
+        //     type: AccordionTypeTokens.LIST,
+        // },
         amountCard: <LimitCardProps>{
             label: 'Available credit limit',
             limitAmount: `${addCommasToNumber(availableCreditAmount)}`,
@@ -525,59 +457,66 @@ return{
             fontFamily: FontFamilyTokens.Inter,
             fontWeight: "700",
             width: ButtonWidthTypeToken.FULL,
-            type: ButtonTypeTokens.LargeFilled,
+            type: ButtonTypeTokens.MediumFilled,
             labelColor: ColorTokens.White,
             action: {
+                type: ACTION.PORTFOLIO,
                 routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+                payload: {},
             },
+            
         },
         cardSpaces: <SpaceProps>{
             size: SizeTypeTokens.XL,
         },
         continue: <ButtonProps>{
             label: "Continue to set credit limit",
-            fontFamily: FontFamilyTokens.Inter,
+            fontFamily: FontFamilyTokens.Poppins,
             fontWeight: "700",
             width: ButtonWidthTypeToken.FULL,
-            type: ButtonTypeTokens.LargeFilled,
-            labelColor: ColorTokens.White,
+            type: camsAmount !== 0 || KFintechAmount !== 0 ? ButtonTypeTokens.MediumSoftFilled : ButtonTypeTokens.MediumFilled,
+            labelColor:camsAmount !== 0 || KFintechAmount !== 0 ? ColorTokens.Primary_100 : ColorTokens.White,
             action: {
+                type: ACTION.NAV_NEXT,
                 routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
+                payload: {
+                    value: 2
+                },
             },
         },
         creditSpace: <SpaceProps>{
             size: SizeTypeTokens.XL,
         },
-        interestAccordion: <AccordionProps>{
-            body: {
-                widgetItems: [
-                    { id: "processingFeeStack", type: WIDGET.STACK },
-                    { id: "space5", type: WIDGET.SPACE },
-                    { id: "divider2", type: WIDGET.DIVIDER },
-                    { id: "space6", type: WIDGET.SPACE },
-                    { id: "interestRateStack", type: WIDGET.STACK },
-                    { id: "space7", type: WIDGET.SPACE },
-                    { id: "divider3", type: WIDGET.DIVIDER },
-                    { id: "space8", type: WIDGET.SPACE },
-                    { id: "autoPayStack", type: WIDGET.STACK },
-                    { id: "space9", type: WIDGET.SPACE },
-                    { id: "divider4", type: WIDGET.DIVIDER },
-                    { id: "space10", type: WIDGET.SPACE },
-                    { id: "durationStack", type: WIDGET.STACK },
-                    { id: "divider5", type: WIDGET.DIVIDER },
-                  //  { id: "durationSpaces", type: WIDGET.SPACE },
-                  //  { id: "durationcontinue", type: WIDGET.BUTTON },
+        // interestAccordion: <AccordionProps>{
+        //     body: {
+        //         widgetItems: [
+        //             { id: "processingFeeStack", type: WIDGET.STACK },
+        //             { id: "space5", type: WIDGET.SPACE },
+        //             { id: "divider2", type: WIDGET.DIVIDER },
+        //             { id: "space6", type: WIDGET.SPACE },
+        //             { id: "interestRateStack", type: WIDGET.STACK },
+        //             { id: "space7", type: WIDGET.SPACE },
+        //             { id: "divider3", type: WIDGET.DIVIDER },
+        //             { id: "space8", type: WIDGET.SPACE },
+        //             { id: "autoPayStack", type: WIDGET.STACK },
+        //             { id: "space9", type: WIDGET.SPACE },
+        //             { id: "divider4", type: WIDGET.DIVIDER },
+        //             { id: "space10", type: WIDGET.SPACE },
+        //             { id: "durationStack", type: WIDGET.STACK },
+        //             { id: "divider5", type: WIDGET.DIVIDER },
+        //           //  { id: "durationSpaces", type: WIDGET.SPACE },
+        //           //  { id: "durationcontinue", type: WIDGET.BUTTON },
 
-                ]
-            },
-            title: 'Interest and other charges',
-            description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
-            icon: IconTokens.DownArrow,
-            type: AccordionTypeTokens.LIST,
-            // action:{
+        //         ]
+        //     },
+        //     title: 'Interest and other charges',
+        //     description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
+        //     icon: IconTokens.DownArrow,
+        //     type: AccordionTypeTokens.LIST,
+        //     // action:{
 
-            // }
-        },
+        //     // }
+        // },
         processingFeeStack: <StackProps>{
             width: StackWidth.FULL,
             type: StackType.row,
@@ -766,17 +705,17 @@ return{
         interestSpace: <SpaceProps>{
             size: SizeTypeTokens.XL,
         },
-        workAccordion: <AccordionProps>{
-            body: {
-                widgetItems: [
-                    { id: "typo", type: WIDGET.TEXT }
-                ]
-            },
-            title: 'Benefits for you',
-            description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
-            icon: IconTokens.DownArrow,
-            type: AccordionTypeTokens.LIST,
-        },
+        // workAccordion: <AccordionProps>{
+        //     body: {
+        //         widgetItems: [
+        //             { id: "typo", type: WIDGET.TEXT }
+        //         ]
+        //     },
+        //     title: 'Benefits for you',
+        //     description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
+        //     icon: IconTokens.DownArrow,
+        //     type: AccordionTypeTokens.LIST,
+        // },
         workSpace: <SpaceProps>{
             size: SizeTypeTokens.XL,
         },
@@ -924,8 +863,17 @@ return{
 
 export const setCreditLimitMf2: PageType<any> = {
     bgColor: "#F3F5FC",
-    onLoad: async ({ showPopup, network, goBack }) => {
-
+    onLoad: async ({ showPopup, network, goBack },{activeIndex}) => {
+       
+        let activeIndexs;
+        if(activeIndex === null || activeIndex === 0 || activeIndex === undefined || activeIndex === ""){
+            console.log("activeIndex null");
+            activeIndexs = 1;
+        }else{
+            console.log("activeIndex val");
+            activeIndexs = activeIndex;
+        }
+      
         const updateAvailableCASMap = {};
         const user: User = await SharedPropsService.getUser();
         const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
@@ -1072,6 +1020,7 @@ export const setCreditLimitMf2: PageType<any> = {
 
         return Promise.resolve(
             template(
+                activeIndexs,
                 availableCreditAmount,
                 availableCASX,
                 stepResponseObject as StepResponseObject,
@@ -1094,5 +1043,7 @@ export const setCreditLimitMf2: PageType<any> = {
         [ACTION.NAV_PORTFOLIO]: goKfin,
         [ACTION.PORTFOLIO]: goPortfolio,
         [ACTION.GET_MORE_MF_PORTFOLIO]: getMoreMfPortfolio,
+        [ACTION.NAV_NEXT]: goToNext,
     },
+    clearPrevious:true
 };
