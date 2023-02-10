@@ -47,7 +47,7 @@ import {
     WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, amountPayload, pagePayload } from "./types";
+import { ACTION, amountPayload, GetMoreMfPortfolioPayload, pagePayload } from "./types";
 import {
     editSliderAmount,
     getMoreMfPortfolio,
@@ -60,7 +60,6 @@ import {
 } from "./action";
 import { addCommasToNumber, isMorePortfolioRenderCheck, roundDownToNearestHundred } from "../../../configs/utils";
 import {
-    GetMoreMfPortfolioPayload,
     StepResponseObject,
     UpdateAvailableCASMap,
 } from "../unlock_limit/types";
@@ -263,10 +262,10 @@ return{
 
                     },
                     activeIndex: false,
-                    actionLabel: "Got it",
-                    isAction: true,
-                    actionType: ButtonTypeTokens.MediumSoftFilled,
-                    actionLabelColor: ColorTokens.Primary_100,
+                    //actionLabel: "Got it",
+                    isAction: false,
+                    // actionType: ButtonTypeTokens.MediumSoftFilled,
+                    // actionLabelColor: ColorTokens.Primary_100,
                     isNext:true
                 },
                 {
@@ -279,54 +278,7 @@ return{
                     },
                     data: {
                         widgetItems: [
-                            {
-                                id: "card",
-                                type: WIDGET.CARD,
-                                position: POSITION.ABSOLUTE_TOP,
-                              },
-                              ...(showLessLimit
-                                ? [
-                                    {
-                                      id: "showLessLimitCard",
-                                      type: WIDGET.CARD,
-                                      position: POSITION.ABSOLUTE_TOP,
-                                    },
-                                    {
-                                      id: "continueSpace",
-                                      type: WIDGET.SPACE,
-                                      position: POSITION.ABSOLUTE_BOTTOM,
-                                    },
-                                  ]
-                                : []),
-                              // {
-                              //   id: "Mspace0",
-                              //   type: WIDGET.SPACE,
-                              //   position: POSITION.ABSOLUTE_TOP,
-                              // },
-                              {
-                                id: "creditLimitCard",
-                                type: WIDGET.CARD,
-                                padding: {
-                                  horizontal: -16,
-                                  vertical: 0,
-                                },
-                              },
-                              {
-                                id: "Mspace1",
-                                type: WIDGET.SPACE,
-                              },
-                              {
-                                id: "chargesCard",
-                                type: WIDGET.CARD,
-                                padding: {
-                                  horizontal: -16,
-                                  vertical: 0,
-                                },
-                              },
-                              {
-                                id: "Mspace2",
-                                type: WIDGET.SPACE,
-                              },
+                           
                               {
                                 id: "promoCard",
                                 type: WIDGET.PROMOCARD,
@@ -335,23 +287,7 @@ return{
                                   vertical: 0,
                                 },
                               },
-                              {
-                                id: "Mspace3",
-                                type: WIDGET.SPACE,
-                              },
-                              // {
-                              //   id: "Mspace4",
-                              //   type: WIDGET.SPACE,
-                              // },
-                              {
-                                id: "ctaCard",
-                                type: WIDGET.CARD,
-                                padding: {
-                                  horizontal: 0,
-                                  vertical: 0,
-                                },
-                                position: POSITION.STICKY_BOTTOM,
-                              },
+                             
                         ]
 
                     },
@@ -542,6 +478,9 @@ return{
                 type: ACTION.GET_MORE_MF_PORTFOLIO,
                 payload: <GetMoreMfPortfolioPayload>{
                     casList: stepResponseObject.availableCAS,
+                    value: null,
+                    widgetID: "contentCard",
+                   
                 },
                 routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
             },
@@ -628,8 +567,9 @@ return{
                     { id: "divider4", type: WIDGET.DIVIDER },
                     { id: "space10", type: WIDGET.SPACE },
                     { id: "durationStack", type: WIDGET.STACK },
-                    { id: "durationSpaces", type: WIDGET.SPACE },
-                    { id: "durationcontinue", type: WIDGET.BUTTON },
+                    { id: "divider5", type: WIDGET.DIVIDER },
+                  //  { id: "durationSpaces", type: WIDGET.SPACE },
+                  //  { id: "durationcontinue", type: WIDGET.BUTTON },
                 ]
             },
             title: 'Interest and other charges',
@@ -661,8 +601,9 @@ return{
             size: SizeTypeTokens.MD
         },
         processingFeeText: <TypographyProps>{
-            label: "Processing fee",
+            label: "Processing fee (excl. GST)",
             fontFamily: FontFamilyTokens.Inter,
+            color:ColorTokens.Grey_Night,
             fontWeight: "400",
             fontSize: FontSizeTokens.SM,
         },
@@ -701,6 +642,7 @@ return{
         },
         interestRateText: <TypographyProps>{
             label: "Interest rate",
+            color:ColorTokens.Grey_Night,
             fontFamily: FontFamilyTokens.Inter,
             fontWeight: "400",
             fontSize: FontSizeTokens.SM,
@@ -730,16 +672,28 @@ return{
         autoPayTextStack: <StackProps>{
             width: StackWidth.FULL,
             type: StackType.row,
+            alignItems:StackAlignItems.center,
             widgetItems: [
                 { id: "autoPayTextSpace", type: WIDGET.SPACE },
                 { id: "autoPayText", type: WIDGET.TEXT },
+                { id: "autoPayTextSpace1", type: WIDGET.SPACE },
+                { id: "autoPayIcon", type: WIDGET.ICON },
             ],
         },
         autoPayTextSpace: <SpaceProps>{
             size: SizeTypeTokens.MD
         },
+        autoPayTextSpace1: <SpaceProps>{
+            size: SizeTypeTokens.XS
+        },
+        autoPayIcon:<IconProps>{
+            name:IconTokens.Info,
+            color:ColorTokens.Grey_Charcoal,
+            size:IconSizeTokens.MD
+        },
         autoPayText: <TypographyProps>{
             label: "Interest autopay",
+            color:ColorTokens.Grey_Night,
             fontFamily: FontFamilyTokens.Inter,
             fontWeight: "400",
             fontSize: FontSizeTokens.SM,
@@ -752,6 +706,10 @@ return{
         },
         space9: <SpaceProps>{ size: SizeTypeTokens.LG },
         divider4: <DividerProps>{
+            size: DividerSizeTokens.SM,
+            color: ColorTokens.Grey_Milk_1,
+        },
+        divider5: <DividerProps>{
             size: DividerSizeTokens.SM,
             color: ColorTokens.Grey_Milk_1,
         },
@@ -783,6 +741,7 @@ return{
             fontFamily: FontFamilyTokens.Inter,
             fontWeight: "400",
             fontSize: FontSizeTokens.SM,
+            color:ColorTokens.Grey_Night
         },
         durationValue: <TypographyProps>{
             label: "12 months",
@@ -922,113 +881,7 @@ return{
               { id: "lendingStack", type: WIDGET.STACK },
             ],
           },
-          ...commonTemplates.fetchMoreFromOtherSource("otherSourceStack", {
-            type: ACTION.GET_MORE_MF_PORTFOLIO,
-            routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-            payload: {
-              casList: stepResponseObject.availableCAS,
-            },
-          }).datastore,
-          creditLimit: <TypographyProps>{
-            label: "Your credit limit",
-            fontSize: FontSizeTokens.MD,
-            fontWeight: "700",
-            fontFamily: FontFamilyTokens.Poppins,
-          },
-          space111: <SpaceProps>{ size: SizeTypeTokens.XL },
-          limitCard: <LimitCardProps & WidgetProps>{
-            label: "Available credit limit",
-            limitAmount: addCommasToNumber(
-              roundDownToNearestHundred(availableCreditAmount)
-            ).toString(),
-            fetchedAmount: `${addCommasToNumber(
-              parseInt(stepResponseObject["totalPortfolioAmount"].toString())
-            )}`,
-            isView: false,
-          },
-          space222: <SpaceProps>{ size: SizeTypeTokens.XXL },
-          lendingStack: <StackProps>{
-            width: StackWidth.FULL,
-            type: StackType.row,
-            alignItems: StackAlignItems.center,
-            justifyContent: StackJustifyContent.center,
-            widgetItems: [
-              { id: "lending", type: WIDGET.TEXT },
-              { id: "space33", type: WIDGET.SPACE },
-              { id: "bajaj", type: WIDGET.IMAGE },
-              // { id: "space4", type: WIDGET.SPACE },
-              // { id: "mirae", type: WIDGET.IMAGE },
-            ],
-          },
-          lending: <TypographyProps>{
-            label: "Lending partner",
-            fontWeight: "400",
-            fontFamily: FontFamilyTokens.Inter,
-            fontSize: FontSizeTokens.XS,
-          },
-          space33: <SpaceProps>{ size: SizeTypeTokens.Size10 },
-          bajaj: <ImageProps>{
-            uri: "https://volt-images.s3.ap-south-1.amazonaws.com/bajaj.svg",
-            height: 14,
-            width: 52,
-            resizeMode: ResizeModeToken.CONTAIN,
-            padding: SizeTypeTokens.NONE,
-          },
-          // space4: <SpaceProps>{ size: SizeTypeTokens.MD },
-          // mirae: <ImageProps>{
-          //   uri: "https://volt-images.s3.ap-south-1.amazonaws.com/mirae-assets.svg",
-          //   height: 19,
-          //   width: 77,
-          //   resizeMode: ResizeModeToken.CONTAIN,
-          //   padding: SizeTypeTokens.NONE,
-          // },
-          Mspace1: <SpaceProps>{ size: SizeTypeTokens.XL },
-          chargesCard: <CardProps>{
-            bgColor: ColorTokens.White,
-            body: { widgetItems: [{ id: "chargesBody", type: WIDGET.STACK }] },
-            alignItems: StackAlignItems.center,
-            justifyContent: StackJustifyContent.spaceBetween,
-          },
-          chargesBody: <StackProps>{
-            width: StackWidth.FULL,
-            type: StackType.column,
-            widgetItems: [
-              { id: "charges", type: WIDGET.TEXT },
-              { id: "space55", type: WIDGET.SPACE },
-              { id: "interestRate", type: WIDGET.TEXT },
-              { id: "space66", type: WIDGET.SPACE },
-              { id: "viewAll", type: WIDGET.BUTTON },
-            ],
-          },
-          charges: <TypographyProps>{
-            label: "Interest and other charges",
-            fontSize: FontSizeTokens.MD,
-            fontWeight: "700",
-            fontFamily: FontFamilyTokens.Poppins,
-          },
-          space55: <SpaceProps>{ size: SizeTypeTokens.XL },
-          interestRate: <TypographyProps>{
-            label: "Interest rates starting @ 9%",
-            fontFamily: FontFamilyTokens.Inter,
-            fontWeight: "400",
-            fontSize: FontSizeTokens.SM,
-          },
-          space66: <SpaceProps>{ size: SizeTypeTokens.XL },
-          viewAll: <ButtonProps & WidgetProps>{
-            label: "View all charges",
-            type: ButtonTypeTokens.MediumGhost,
-            paddingHorizontal: SizeTypeTokens.NONE,
-            paddingVertical: SizeTypeTokens.NONE,
-            action: {
-              type: ACTION.VIEW_ALL,
-              routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-              payload: {
-                stepResponseObject: stepResponseObject,
-                processingFeesBreakUp: processingFeesBreakUp,
-              },
-            },
-          },
-          Mspace2: <SpaceProps>{ size: SizeTypeTokens.XL },
+        
           promoCard: <PromoCardProps>{
             data: [
               {
@@ -1062,120 +915,7 @@ return{
             ],
             heading: "Benefits for you",
           },
-          Mspace3: <SpaceProps>{ size: SizeTypeTokens.XL },
-          // Mspace4: <SpaceProps>{ size: SizeTypeTokens.Size80 },
-          ctaCard: <CardProps>{
-            bgColor: ColorTokens.White,
-            body: { widgetItems: [{ id: "ctaBody", type: WIDGET.STACK }] },
-            alignItems: StackAlignItems.center,
-            justifyContent: StackJustifyContent.spaceBetween,
-          },
-          ctaBody: <StackProps>{
-            width: StackWidth.FULL,
-            type: StackType.column,
-            alignItems: StackAlignItems.center,
-            justifyContent: StackJustifyContent.center,
-            widgetItems: [
-              {
-                id: "ctaTextStack",
-                type: WIDGET.STACK,
-              },
-              { id: "space77", type: WIDGET.SPACE },
-              {
-                id: "ctaButton",
-                type: WIDGET.BUTTON,
-              },
-            ],
-          },
-          ctaTextStack: <StackProps>{
-            width: StackWidth.FULL,
-            type: StackType.row,
-            alignItems: StackAlignItems.center,
-            justifyContent: StackJustifyContent.center,
-            widgetItems: [
-              {
-                id: "icon",
-                type: WIDGET.ICON,
-              },
-              {
-                id: "space8",
-                type: WIDGET.SPACE,
-              },
-              {
-                id: "secureText",
-                type: WIDGET.TEXT,
-              },
-            ],
-          },
-          space77: <SpaceProps>{ size: SizeTypeTokens.MD },
-          icon: <IconProps>{
-            name: IconTokens.ShieldRuppee,
-            color: ColorTokens.System_Happy,
-            size: IconSizeTokens.LG,
-          },
-          space88: <SpaceProps>{ size: SizeTypeTokens.SM },
-          secureText: <TypographyProps>{
-            label: "100% safe and secure",
-            fontWeight: "500",
-            fontFamily: FontFamilyTokens.Inter,
-            fontSize: FontSizeTokens.XS,
-            color: ColorTokens.System_Happy,
-          },
-          ctaButton: <ButtonProps & WidgetProps>{
-            label: "Set credit limit",
-            fontWeight: "700",
-            fontFamily: FontFamilyTokens.Inter,
-            fontSize: FontSizeTokens.SM,
-            type: ButtonTypeTokens.LargeFilled,
-            width: ButtonWidthTypeToken.FULL,
-            action: {
-              type: ACTION.NAV_NEXT,
-              payload: {
-                maxAmount: availableCreditAmount,
-                stepResponseObject: stepResponseObject,
-                updateAvailableCASMap: updateAvailableCASMap,
-              },
-            },
-          },
-          // unlockItem: <ButtonProps & WidgetProps>{
-          //   label: "Unlock limit",
-          //   fontFamily: FontFamilyTokens.Inter,
-          //   type: ButtonTypeTokens.LargeFilled,
-          //   icon: {
-          //     name: IconTokens.Lock,
-          //     align: IconAlignmentTokens.left,
-          //   },
-          //   width: ButtonWidthTypeToken.FULL,
-          //   action: {
-          //     type: ACTION.UNLOCK_LIMIT,
-          //     payload: <LimitPayload>{
-          //       value: stepResponseObject,
-          //       widgetId: "continue",
-          //       isResend: false,
-          //     },
-          //     routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-          //   },
-          // },
-          // modifyItem: <ButtonProps & WidgetProps>{
-          //   label: "Modify Limit",
-          //   fontFamily: FontFamilyTokens.Inter,
-          //   type: ButtonTypeTokens.LargeGhost,
-          //   width: ButtonWidthTypeToken.FULL,
-          //   icon: {
-          //     name: IconTokens.ChervonDownRight,
-          //     align: IconAlignmentTokens.right,
-          //     size: IconSizeTokens.XL,
-          //   },
-          //   action: {
-          //     type: ACTION.MODIFY_LIMIT,
-          //     payload: {
-          //       value: stepResponseObject,
-          //       widgetId: "continue",
-          //       isResend: false,
-          //     },
-          //     routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-          //   },
-          // },
+         
     },
 }
 };

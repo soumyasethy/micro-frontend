@@ -1,3 +1,5 @@
+import { AvailableCASItem } from "../unlock_limit/types";
+
 export enum ACTION {
     ON_CHANGE_SLIDER = "ON_CHANGE_SLIDER",
     GO_BACK = "GO_BACK",
@@ -15,6 +17,12 @@ export enum ACTION {
     NAV_TO_CONTACT_US = "NAV_TO_CONTACT_US",
     CHECK_LIMIT = "CHECK_LIMIT",
   }
+
+  export type GetMoreMfPortfolioPayload = { 
+    casList: AvailableCASItem[] ,
+    value?: string;
+    widgetID: string;
+  };
 
   export type amountPayload = {
     availabeLimit: number;
