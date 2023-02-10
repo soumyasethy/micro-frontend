@@ -28,6 +28,7 @@ import {
   StepResponseObject,
   UpdateAvailableCASMap,
 } from "../unlock_limit/types";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   maxAmount: number,
@@ -41,6 +42,9 @@ export const template: (
   layout: <Layout>{
     id: ROUTE.UPDATE_SLIDER_AMOUNT,
     type: LAYOUTS.MODAL,
+    style: {
+      height: heightMap[ROUTE.UPDATE_SLIDER_AMOUNT]
+    },
     widgets: [
       { id: "space1", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
