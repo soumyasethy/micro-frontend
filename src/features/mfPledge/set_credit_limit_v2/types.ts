@@ -18,6 +18,13 @@ export enum ACTION {
     CHECK_LIMIT = "CHECK_LIMIT",
   }
 
+
+
+  export type accordionData = { 
+    activeIndex ?: number,
+  };
+
+
   export type GetMoreMfPortfolioPayload = { 
     casList: AvailableCASItem[] ,
     value?: string;

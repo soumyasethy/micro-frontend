@@ -37,6 +37,17 @@ export const goPortfolio: ActionFunction<pagePayload> = async (
   await navigate(ROUTE.SET_CREDIT_LIMIT);
 };
 
+export const goToNext: ActionFunction<any> = async (
+  action,
+  _datastore,
+  { navigate, goBack, setDatastore }
+) => {
+  console.log(action.payload.value);
+  await navigate(ROUTE.MF_PLEDGE_PORTFOLIO,{
+    activeIndex:action.payload.value
+  });
+};
+
 export const getMoreMfPortfolio: ActionFunction<
   GetMoreMfPortfolioPayload
 > = async (action, _datastore, { navigate, ...props }): Promise<any> => {
