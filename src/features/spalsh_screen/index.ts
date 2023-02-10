@@ -8,6 +8,7 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  ColorTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
@@ -26,7 +27,9 @@ import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
 import { getParameters } from "../../configs/utils";
 
-const template: (setIsUserLoggedIn?: Function) => TemplateSchema = () => ({
+const template: (isPartnerPlatform) => TemplateSchema = (
+  isPartnerPlatform
+) => ({
   layout: <Layout>{
     id: ROUTE.SPLASH_SCREEN,
     type: LAYOUTS.LIST,
@@ -45,7 +48,7 @@ const template: (setIsUserLoggedIn?: Function) => TemplateSchema = () => ({
       type: StackType.column,
       justifyContent: StackJustifyContent.center,
       alignItems: StackAlignItems.center,
-      widgetItems: [{ id: "icon", type: WIDGET.ICON }],
+      widgetItems: isPartnerPlatform ? [] : [{ id: "icon", type: WIDGET.ICON }],
     },
     icon: <IconProps & WidgetProps>{
       name: IconTokens.Volt,
@@ -70,6 +73,7 @@ export const splashScreenMF: PageType<any> = {
     const ref: string = _.get(props, "ref", null);
     const urlParams: string = _.get(props, "urlParams", null);
     let mobileNumber = null;
+    let isPartnerPlatform: boolean = false;
     if (ref) {
       await SharedPropsService.setPartnerRefCode(ref);
     }
@@ -79,10 +83,13 @@ export const splashScreenMF: PageType<any> = {
       /*** get params for custom api header if present in url
        *** example, voltmoney.in/partnerplatform?platform=VOLT_MOBILE_APP ****/
 
-      const partnerPlatform = urlParams.toLowerCase().includes("partnerplatform");
+      const partnerPlatform = urlParams
+        .toLowerCase()
+        .includes("partnerplatform");
       const platform = urlParams.includes("platform");
 
       if (partnerPlatform && platform) {
+        isPartnerPlatform = true;
         const params =
           standardUtilities.metaData?.platform.OS === "web"
             ? getParameters(urlParams)
@@ -116,8 +123,7 @@ export const splashScreenMF: PageType<any> = {
         ),
       250
     );
-
-    return Promise.resolve(template());
+    return Promise.resolve(template(isPartnerPlatform));
   },
   actions: {
     [ACTION.AUTH_NAV]: SplashAction,
