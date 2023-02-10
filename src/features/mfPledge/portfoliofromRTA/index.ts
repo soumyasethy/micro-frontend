@@ -39,9 +39,9 @@ import { StepResponseObject } from "../../mfPledge/unlock_limit_landing_V2/types
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import moment from "moment";
-import { addCommasToNumber } from "../../../../lib";
 import { User } from "../../login/otp_verify/types";
 import { GetMoreMfPortfolioPayload } from "../unlock_limit_V2/types";
+import { addCommasToNumber } from "../../../configs/utils";
 
 export const template: (
   stepResponseObject: StepResponseObject,
