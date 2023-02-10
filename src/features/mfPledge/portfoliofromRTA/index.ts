@@ -8,6 +8,7 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  BorderRadiusTokens,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -32,7 +33,11 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import { getMoreMfPortfolio, goBackAction, portfolioListDatastoreBuilder } from "./action";
+import {
+  getMoreMfPortfolio,
+  goBackAction,
+  portfolioListDatastoreBuilder,
+} from "./action";
 import SharedPropsService from "../../../SharedPropsService";
 import { AvailableCASItem } from "../../mfPledge/unlock_limit/types";
 import { StepResponseObject } from "../../mfPledge/unlock_limit_landing_V2/types";
@@ -98,6 +103,8 @@ export const template: (
       },
     },
     creditLimitCard: <CardProps>{
+      borderTopRightRadius: BorderRadiusTokens.BR3,
+      borderTopLeftRadius: BorderRadiusTokens.BR3,
       bgColor: ColorTokens.Grey_Milk_1,
       width: StackWidth.FULL,
       padding: {
@@ -136,6 +143,8 @@ export const template: (
       fontSize: FontSizeTokens.XS,
     },
     creditLimitCard2: <CardProps>{
+      borderBottomRightRadius: BorderRadiusTokens.BR3,
+      borderBottomLeftRadius: BorderRadiusTokens.BR3,
       bgColor: ColorTokens.Grey_Milk_1,
       width: StackWidth.FULL,
       padding: {
@@ -254,10 +263,10 @@ export const template: (
       action: {
         type: ACTION.GET_MORE_MF_PORTFOLIO,
         payload: <GetMoreMfPortfolioPayload>{
-            casList: stepResponseObject.availableCAS,
+          casList: stepResponseObject.availableCAS,
         },
         routeId: ROUTE.PORTFOLIO_FROM_RTA,
-    },
+      },
     },
   },
 });
@@ -265,15 +274,14 @@ export const template: (
 export const portfoliofromRTAMf: PageType<any> = {
   onLoad: async ({ network }, { pageType }) => {
     const updateAvailableCASMap = {};
-     const user: User = await SharedPropsService.getUser();
+    const user: User = await SharedPropsService.getUser();
     // const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
     // const pledgeLimitResponse = authCAS
     //   ? { data: authCAS }
     //   : await fetchPledgeLimitRepo().then((response) => ({
     //       data: response,
     //     }));
-    console.log("page",pageType);
-   
+
     const pledgeLimitResponse = await network.get(
       `${api.pledgeLimit}${user.linkedApplications[0].applicationId}`,
       { headers: await getAppHeader() }
