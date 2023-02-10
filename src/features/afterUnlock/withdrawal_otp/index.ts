@@ -33,6 +33,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION, DisbursementOTPPayload } from "./types";
 import { goBack, DisbursalVerifyAction, CreateDisbursementRequest } from "./action";
 import SharedPropsService from "../../../SharedPropsService";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   disbursalAmount: string,
@@ -46,6 +47,9 @@ export const template: (
   layout: <Layout>{
     id: ROUTE.WITHDRAWAL_OTP,
     type: LAYOUTS.MODAL,
+    style: {
+      height: heightMap[ROUTE.WITHDRAWAL_OTP]
+    },
     widgets: [
       {
         id: "headerStack",

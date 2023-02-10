@@ -46,6 +46,7 @@ import {
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 import { AssetRepositoryType, ConfigTokens } from "../../../configs/config";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   applicationId: string,
@@ -70,6 +71,9 @@ export const template: (
     layout: <Layout>{
       id: ROUTE.MF_FETCH_PORTFOLIO,
       type: isGoBackAllowed ? LAYOUTS.MODAL : LAYOUTS.LIST,
+      style: {
+        height: heightMap[ROUTE.MF_FETCH_PORTFOLIO]
+      },
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
         ...(isGoBackAllowed

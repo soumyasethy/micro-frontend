@@ -40,6 +40,7 @@ import {
 } from "./actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { AssetRepositoryType } from "../../../configs/config";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   assetRepository: AssetRepositoryType
@@ -48,6 +49,9 @@ export const template: (
     layout: <Layout>{
       id: ROUTE.SELECT_SOURCE,
       type: LAYOUTS.MODAL,
+      style: {
+        height: heightMap[ROUTE.SELECT_SOURCE]
+      },
       widgets: [
         {
           id: "headerStack",

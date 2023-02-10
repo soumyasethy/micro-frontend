@@ -27,11 +27,15 @@ import { updateMobileNumber, phoneOnChange } from "./actions";
 import { toggleCTA } from "../../login/phone_number/actions";
 import SharedPropsService from "../../../SharedPropsService";
 import { RegexConfig } from "../../../configs/config";
+import {heightMap} from "../../../configs/height";
 
 export const template: (prevMob: string) => TemplateSchema = (prevMob) => ({
   layout: <Layout>{
     id: ROUTE.UPDATE_PHONE_NUMBER,
     type: LAYOUTS.MODAL,
+    style: {
+      height: heightMap[ROUTE.UPDATE_PHONE_NUMBER]
+    },
     widgets: [
       { id: "space1", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },

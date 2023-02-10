@@ -40,6 +40,7 @@ import {
 } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   phoneNumber: string,
@@ -55,6 +56,9 @@ export const template: (
   layout: <Layout>{
     id: ROUTE.PLEDGE_VERIFY,
     type: LAYOUTS.MODAL,
+    style: {
+      height: heightMap[ROUTE.PLEDGE_VERIFY]
+    },
     widgets: [
       {
         id: "headerStack",

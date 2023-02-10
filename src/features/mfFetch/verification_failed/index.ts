@@ -27,11 +27,15 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTIONS } from "./types";
 import { goBack } from "./actions";
+import {heightMap} from "../../../configs/height";
 
 export const template = {
   layout: <Layout>{
     id: ROUTE.OTP_AUTH_CAS,
     type: LAYOUTS.MODAL,
+    style: {
+      height: heightMap[ROUTE.OTP_AUTH_CAS]
+    },
     widgets: [{ id: "stack", type: WIDGET.STACK }],
   },
   datastore: <Datastore>{

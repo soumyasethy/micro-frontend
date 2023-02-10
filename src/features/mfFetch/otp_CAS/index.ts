@@ -40,6 +40,7 @@ import {
 } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   applicationId: string,
@@ -58,6 +59,9 @@ export const template: (
     layout: <Layout>{
       id: ROUTE.OTP_AUTH_CAS,
       type: LAYOUTS.MODAL,
+      style: {
+        height: heightMap[ROUTE.OTP_AUTH_CAS]
+      },
       widgets: [
         {
           id: "headerStack",
