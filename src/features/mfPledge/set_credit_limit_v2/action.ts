@@ -15,7 +15,6 @@ import { listItemDataBuilder } from "./utils";
 import { getDesiredValue } from "../portfolio_readonly/actions";
 import { removeGetMorePortfolio } from "../unlock_limit_V2/actions";
 import { GetMoreMfPortfolioPayload, pagePayload } from "./types";
-
 let value = ConfigValues.MinimumAmountAllowed.toString();
 
 export const goKfin: ActionFunction<pagePayload> = async (
@@ -44,6 +43,7 @@ export const getMoreMfPortfolio: ActionFunction<
   /*** check if the user has pledged any mf portfolio */
 console.log("action",action.payload);
   
+
   const assetRepoMap = {};
   /*** Get unique asset repository from the cas list */
   for (let i = 0; i < action.payload.casList.length; i++) {
@@ -60,11 +60,10 @@ console.log("action",action.payload);
     if (assetType === AssetRepositoryType.KARVY) {
       await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
     } else if (assetType === AssetRepositoryType.CAMS) {
+
       await SharedPropsService.setAssetRepositoryType(
-        AssetRepositoryType.KARVY
-      );
-    }
- 
+              AssetRepositoryType.KARVY
+            );
   // for (const assetRepositoryType of Object.keys(assetRepoMap)) {
   //   if (assetRepositoryType === AssetRepositoryType.KARVY) {
   //     await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
@@ -74,6 +73,7 @@ console.log("action",action.payload);
   //     );
   //   }
   // }
+  }
   /*** disable pan edit option */
   await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
   /*** Enable auto otp trigger when user lands on MF_Fetch */

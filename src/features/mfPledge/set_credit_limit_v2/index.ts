@@ -278,7 +278,6 @@ return{
                     },
                     data: {
                         widgetItems: [
-                           
                               {
                                 id: "promoCard",
                                 type: WIDGET.PROMOCARD,
@@ -287,7 +286,6 @@ return{
                                   vertical: 0,
                                 },
                               },
-                             
                         ]
 
                     },
@@ -480,7 +478,6 @@ return{
                     casList: stepResponseObject.availableCAS,
                     value: null,
                     widgetID: "contentCard",
-                   
                 },
                 routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
             },
@@ -570,6 +567,7 @@ return{
                     { id: "divider5", type: WIDGET.DIVIDER },
                   //  { id: "durationSpaces", type: WIDGET.SPACE },
                   //  { id: "durationcontinue", type: WIDGET.BUTTON },
+
                 ]
             },
             title: 'Interest and other charges',
@@ -683,6 +681,7 @@ return{
         autoPayTextSpace: <SpaceProps>{
             size: SizeTypeTokens.MD
         },
+
         autoPayTextSpace1: <SpaceProps>{
             size: SizeTypeTokens.XS
         },
@@ -709,6 +708,7 @@ return{
             size: DividerSizeTokens.SM,
             color: ColorTokens.Grey_Milk_1,
         },
+
         divider5: <DividerProps>{
             size: DividerSizeTokens.SM,
             color: ColorTokens.Grey_Milk_1,
@@ -882,6 +882,7 @@ return{
             ],
           },
         
+       
           promoCard: <PromoCardProps>{
             data: [
               {
@@ -915,7 +916,8 @@ return{
             ],
             heading: "Benefits for you",
           },
-         
+
+      
     },
 }
 };
