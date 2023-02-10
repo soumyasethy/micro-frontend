@@ -32,6 +32,7 @@ import {
     ImageSizeTokens,
     LimitCardProps,
     LimitCardTypeTokens,
+    PromoCardProps,
     SizeTypeTokens,
     SpaceProps,
     StackAlignItems,
@@ -44,34 +45,26 @@ import {
     TypographyProps,
     WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTION, amountPayload, GetMoreMfPortfolioPayload, pagePayload } from "./types";
+import {ROUTE} from "../../../routes";
+import {accordionData, ACTION, GetMoreMfPortfolioPayload, pagePayload} from "./types";
 import {
-    editSliderAmount,
     getMoreMfPortfolio,
     goBack,
-    goConfirmPledge,
     goKfin,
     goPortfolio,
-    goToEditPortFolio,
     goToNext,
-    OnChangeSlider,
 } from "./action";
-import { addCommasToNumber, isMorePortfolioRenderCheck, roundDownToNearestHundred } from "../../../configs/utils";
-import {
-    StepResponseObject,
-    UpdateAvailableCASMap,
-} from "../unlock_limit/types";
-import { AuthCASModel, StepStatusMap } from "../../../types/AuthCASModel";
+import {addCommasToNumber, isMorePortfolioRenderCheck} from "../../../configs/utils";
+import {StepResponseObject, UpdateAvailableCASMap,} from "../unlock_limit/types";
+import {AuthCASModel, StepStatusMap} from "../../../types/AuthCASModel";
 import SharedPropsService from "../../../SharedPropsService";
 import sharedPropsService from "../../../SharedPropsService";
-import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
-import { getDesiredValue } from "../portfolio_readonly/actions";
-import { User } from "../../login/otp_verify/types";
-import { AvailableCASItem } from "../unlock_limit_landing_V2/types";
-import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
-import { commonTemplates } from "../../../configs/common";
+import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
+import {getDesiredValue} from "../portfolio_readonly/actions";
+import {User} from "../../login/otp_verify/types";
+import {AvailableCASItem} from "../unlock_limit_landing_V2/types";
+import {api} from "../../../configs/api";
+import {AssetRepositoryType, getAppHeader} from "../../../configs/config";
 
 
 let availableCASX: AvailableCASItem[];
@@ -391,10 +384,10 @@ export const template: (
                             label: 'From CAMS',
                             limitAmount: camsAmount === 0 ? 'No portfolio fetched' : `Value: ₹ ${addCommasToNumber(camsAmount)}`,
                             secondrylabel: 'From KFintech',
-                            payload: "CAMS",
+                            payload: AssetRepositoryType.CAMS,
                             fetchedAmount: 'Value: ₹20,00,000',
                             isSecondryAction: true,
-                            isPrimaryAction: camsAmount === 0 ? false : true,
+                            isPrimaryAction: camsAmount !== 0,
                             refreshAction: {
                                 type: ACTION.NAV_PORTFOLIO,
                                 payload: <pagePayload>{
@@ -408,15 +401,16 @@ export const template: (
                             label: 'From KFintech',
                             limitAmount: KFintechAmount === 0 ? 'No portfolio fetched' : `Value: ₹ ${addCommasToNumber(KFintechAmount)}`,
                             secondrylabel: 'From KFintech',
-                            payload: "KARVY",
+                            payload: AssetRepositoryType.KARVY,
                             fetchedAmount: 'Value: ₹20,00,000',
                             isSecondryAction: true,
-                            isPrimaryAction: KFintechAmount === 0 ? false : true,
+                            isPrimaryAction: KFintechAmount !== 0,
                             refreshAction: {
                                 type: ACTION.NAV_PORTFOLIO,
                                 payload: <pagePayload>{
                                     value: null,
                                     widgetID: "contentCard",
+                                    assetRepository: AssetRepositoryType.KARVY
                                 },
                                 routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
                             }
@@ -506,8 +500,8 @@ export const template: (
                     action: {
                         type: ACTION.NAV_NEXT,
                         routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-                        payload: {
-                            value: 2
+                        payload: <accordionData>{
+                            activeIndex: 2
                         },
                     },
                 },
@@ -861,7 +855,7 @@ export const template: (
                     { id: "promoStack4", type: WIDGET.STACK },
                     ],
                     },
-                    
+
                     promoStack: <StackProps>{
                     type: StackType.row,
                     alignItems: StackAlignItems.flexStart,
@@ -1013,7 +1007,7 @@ export const template: (
                     fontSize: FontSizeTokens.XS,
                     numberOfLines:2
                     },
-                    
+
                     image: <ImageProps>{
                     uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAOuSURBVHgBlVVdiBtVFP7uzcxssm6SadaudjWS+AObrSIt9cm/rlWXotIHoaCgFMQXfVlfKtpWC32oCtLYUvAH7GMriIqwyrKW1rrUF6Gt7o+0uJvuuu1uaJppOplkfm/vhM1kEia72Q9C7rn3nO8799yTE4I1wCbHH3BC9Hd3bcAYimR25rAO0LUcTLAE/0q5HwnSmcrMrymsA6sKHBmZk7/8bmDrciFSWNlKaWr32N73pt8aGbmQqvuxy6dfs6dPz9kzv33VykGCiLP7rj4VouQQX2537XSyjJ1PX/POv/65F7PXJchRe/SD1/OMAS97GTvkUbL5uam6LbSSH/tofh8cHPKLKyWxyefFbWVcmnUw/ITyEvPtM8Ms21X1Eb6cCrzB0QPzJ/jGnlbR+/o07Hp+EavB0bQaGw1HYNns1a7HXvih6QbH9i98zHPYExSckA2sBdrd3TBERLz9Wub75x8CYQfbBd9/r4aOwF+DVTSF3i6/rf8znvEEKCXfrha3aWMVncDRdZ69KNOenmcFge5194SjBxa3MGY/ExggUiTCOsJddif8vP5h1G/iGMZyTYAxZxdpbVZuF9NRFB+Oo7eyiHXBceCUVZCu8PvW9Hg/DRG21X9uxiUsPHkPCgMyHIHgYqwfN51w5wKUgkZjIJLEl6E0dRjbVLtViMB4PA79lT44CakhyChOaoNYLwgjEzojb1BenoQjS6gM93GBGM+AIBZtdv7PknFOT3ZEbFoEZy9Gl8jkje2RzFBO0LdtmDQHow/6ncQQ0MPbWvV151g1jc3iDfTSSlvyhbyI78/KWCoK/+7I7q51BjUz0bkgZ1dA9E2IChNwSssEEusmxeifcRz/8W4sFwXeIyRXP6Pc+gltEO9ptv2l0qohXMtHcHXxLpwcTeKPvxu/ZErYWH0txP7HX6UkFDDIrQJCm1KxWRNTFxoPVTYtb807PPfpkcFTnti7Q0QlFj5EGwSVauJWv2e70/SW0ZhVhJBv/PHeT+zwFXYGK/O/FRZ/roLCnQ2GxBUFck71zhQ+HkqG6WX/WXYw7Y/1/tGkKt7k6eSCBNxSbVB1JCeWmshLPHM/OX/QodbYpiFxeIalEMIvfNdrFzdr6ZICcUZtCizpBpSV0nDiy5xo+JNsJreqQEPIPshb4Z1Q3tjYdf4mqNp4RNNhKFarqNq1Nlf4gP7CgpHNZrcoQVyBAi4+P15IikulHbynd9uMDFQsO62ZJie28jzsPI88ZzL9RDviOu4A5zhsmkEc0QAAAAAASUVORK5CYII=',
                     borderRadius:BorderRadiusTokens.BR5,
@@ -1163,8 +1157,6 @@ export const setCreditLimitMf2: PageType<any> = {
             mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
         });
 
-        console.log("mfPortfolioArray", mfPortfolioArray);
-
         const applicationId = (await SharedPropsService.getUser())
             .linkedApplications[0].applicationId;
 
@@ -1177,7 +1169,6 @@ export const setCreditLimitMf2: PageType<any> = {
             { headers: await getAppHeader() }
         );
 
-        console.log("response", response);
         const processingFeesBreakUp = _.get(
             response,
             "data.stepResponseObject.processingChargesBreakup",
@@ -1199,16 +1190,11 @@ export const setCreditLimitMf2: PageType<any> = {
             ? (showLessLimit = true)
             : (showLessLimit = false);
 
-        console.log("processing fee");
-        console.log(processingFeesBreakUp)
-
         let camsAmount = 0;
         let KFintechAmount = 0;
-        console.log("cams amount", pledgeLimitResponse.data.stepResponseObject);
         camsAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.CAMS.availablePortfolioAmount || 0;
         KFintechAmount = pledgeLimitResponse.data.stepResponseObject.repositoryAssetMetadataMap.KARVY.availablePortfolioAmount || 0;
 
-        console.log("cams amount", camsAmount);
 
         return Promise.resolve(
             template(
@@ -1227,11 +1213,7 @@ export const setCreditLimitMf2: PageType<any> = {
         );
     },
     actions: {
-        [ACTION.ON_CHANGE_SLIDER]: OnChangeSlider,
         [ACTION.GO_BACK]: goBack,
-        [ACTION.GO_CONFIRM_PLEDGE]: goConfirmPledge,
-        [ACTION.EDIT_PORTFOLIO]: goToEditPortFolio,
-        [ACTION.EDIT_LIMIT]: editSliderAmount,
         [ACTION.NAV_PORTFOLIO]: goKfin,
         [ACTION.PORTFOLIO]: goPortfolio,
         [ACTION.GET_MORE_MF_PORTFOLIO]: getMoreMfPortfolio,

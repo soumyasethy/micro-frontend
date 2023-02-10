@@ -2,3 +2,5 @@
 /package-lock.json
 lib
 /yarn.lock
+
+*DS_Store*

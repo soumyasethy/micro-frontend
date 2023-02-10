@@ -673,8 +673,6 @@ export const unlockLimitMFV2: PageType<any> = {
       mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
     });
 
-    console.log("mfPortfolioArray", mfPortfolioArray);
-
     const applicationId = (await SharedPropsService.getUser())
       .linkedApplications[0].applicationId;
 
@@ -687,7 +685,6 @@ export const unlockLimitMFV2: PageType<any> = {
       { headers: await getAppHeader() }
     );
 
-    console.log("response", response);
     const processingFeesBreakUp = _.get(
       response,
       "data.stepResponseObject.processingChargesBreakup",

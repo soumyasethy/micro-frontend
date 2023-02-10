@@ -98,29 +98,12 @@ export const goBackAction: ActionFunction<any> = async (
 export const getMoreMfPortfolio: ActionFunction<
   GetMoreMfPortfolioPayload
 > = async (action, _datastore, { navigate, ...props }): Promise<any> => {
-  /*** check if the user has pledged any mf portfolio */
-  console.log("more mf portfolio");
-  const assetRepoMap = {};
-  /*** Get unique asset repository from the cas list */
-  for (let i = 0; i < action.payload.casList.length; i++) {
-    const item = action.payload.casList[i];
-    assetRepoMap[item.assetRepository] = true;
-  }
   /*** Change page view type LAYOUT.LIST to LAYOUT.MODAL */
   await SharedPropsService.setConfig(
     ConfigTokens.IS_MF_FETCH_BACK_ALLOWED,
     true
   );
-  /*** switch between assetRepositoryType */
-  for (const assetRepositoryType of Object.keys(assetRepoMap)) {
-    if (assetRepositoryType === AssetRepositoryType.KARVY) {
-      await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
-    } else if (assetRepositoryType === AssetRepositoryType.CAMS) {
-      await SharedPropsService.setAssetRepositoryType(
-        AssetRepositoryType.KARVY
-      );
-    }
-  }
+
   /*** disable pan edit option */
   await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
   /*** Enable auto otp trigger when user lands on MF_Fetch */
@@ -129,16 +112,8 @@ export const getMoreMfPortfolio: ActionFunction<
     true
   );
   /*** Go to re-fetch portfolio from other Asset Type **/
-  await navigate(ROUTE.MF_FETCH_PORTFOLIO);
-  /*** remove fetch more asset type option from UI */
-  // await removeGetMorePortfolio(
-  //   {
-  //     type: ACTION.REMOVE_GET_MORE_MF_PORTFOLIO,
-  //     routeId: ROUTE.MF_PLEDGE_PORTFOLIO,
-  //     payload: {},
-  //   },
-  //   {},
-  //   { navigate, ...props }
-  // );
+  await navigate(ROUTE.MF_FETCH_PORTFOLIO, {setIsUserLoggedIn: true,
+    assetRepository: action.payload.assetRepository });
+
 };
 

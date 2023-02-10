@@ -53,13 +53,13 @@ export const template: (
   formattedDate: string,
   availableAmount: number,
   totalPortfolio: number,
-  pageType: string
+  assetRepository: string
 ) => Promise<TemplateSchema> = async (
   stepResponseObject,
   formattedDate,
   availableAmount,
   totalPortfolio,
-  pageType
+  assetRepository
 ) => ({
   layout: <Layout>{
     id: ROUTE.PORTFOLIO_FROM_RTA,
@@ -95,7 +95,7 @@ export const template: (
     header: <HeaderProps & WidgetProps>{
       isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
-      title: `Portfolio from ${pageType}`,
+      title: `Portfolio from ${assetRepository}`,
       action: {
         type: ACTION.GO_BACK,
         routeId: ROUTE.PORTFOLIO_FROM_RTA,
@@ -246,7 +246,7 @@ export const template: (
       size: DividerSizeTokens.SM,
       color: ColorTokens.Grey_Milk_1,
     },
-    ...(await portfolioListDatastoreBuilder(stepResponseObject, pageType)),
+    ...(await portfolioListDatastoreBuilder(stepResponseObject, assetRepository)),
     ctaCard: <CardProps>{
       bgColor: ColorTokens.White,
       width: StackWidth.FULL,
@@ -286,6 +286,7 @@ export const template: (
         type: ACTION.GET_MORE_MF_PORTFOLIO,
         payload: <GetMoreMfPortfolioPayload>{
           casList: stepResponseObject.availableCAS,
+          assetRepository: assetRepository
         },
         routeId: ROUTE.PORTFOLIO_FROM_RTA,
       },
@@ -294,22 +295,15 @@ export const template: (
 });
 
 export const portfoliofromRTAMf: PageType<any> = {
-  onLoad: async ({ network }, { pageType }) => {
+  onLoad: async ({ network }, { assetRepository }) => {
     const updateAvailableCASMap = {};
     const user: User = await SharedPropsService.getUser();
-    // const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
-    // const pledgeLimitResponse = authCAS
-    //   ? { data: authCAS }
-    //   : await fetchPledgeLimitRepo().then((response) => ({
-    //       data: response,
-    //     }));
 
     const pledgeLimitResponse = await network.get(
       `${api.pledgeLimit}${user.linkedApplications[0].applicationId}`,
       { headers: await getAppHeader() }
     );
     /*** update authCAS in SharedPropsService if fetched from api ***/
-    // if (!authCAS && pledgeLimitResponse.data) {
     await SharedPropsService.setAuthCASResponse(pledgeLimitResponse.data);
 
     const availableCAS: AvailableCASItem[] =
@@ -317,20 +311,21 @@ export const portfoliofromRTAMf: PageType<any> = {
     await SharedPropsService.setCasListOriginal(availableCAS);
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
 
-    const date =
-      stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate;
+    const date = assetRepository === "CAMS"
+        ? stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate
+        : stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
 
     const formattedDate = moment.unix(Number(date)).format("DD MMM, YYYY");
 
     const availableAmount =
-      pageType === "CAMS"
+        assetRepository === "CAMS"
         ? stepResponseObject.repositoryAssetMetadataMap.CAMS
             .availableCreditAmount
         : stepResponseObject.repositoryAssetMetadataMap.KARVY
             .availableCreditAmount;
 
     const totalPortfolio =
-      pageType === "CAMS"
+        assetRepository === "CAMS"
         ? stepResponseObject.repositoryAssetMetadataMap.CAMS
             .availablePortfolioAmount
         : stepResponseObject.repositoryAssetMetadataMap.KARVY
@@ -348,7 +343,7 @@ export const portfoliofromRTAMf: PageType<any> = {
         formattedDate,
         availableAmount,
         totalPortfolio,
-        pageType
+        assetRepository
       )
     );
   },

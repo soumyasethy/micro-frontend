@@ -3,7 +3,7 @@ import { AuthCASPayload } from "./types";
 import { api } from "../../../configs/api";
 import { InputStateToken, TextInputProps } from "@voltmoney/schema";
 import {
-  AssetRepositoryMap,
+  AssetRepositoryMap, AssetRepositoryType,
   ConfigTokens,
   getAppHeader,
 } from "../../../configs/config";
@@ -35,7 +35,7 @@ export const fetchMyPortfolio: ActionFunction<AuthCASPayload> = async (
       emailId:emailId,
       panNumber:panNumber,
       phoneNumber:phoneNumber,
-      assetRepository: await SharedPropsService.getAssetRepositoryType(),
+      assetRepository: action.payload.assetRepository,
     },
     {
       headers: await getAppHeader(),
@@ -54,10 +54,10 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
   _datastore,
   { navigate, setDatastore, network, analytics, showPopup, hidePopup }
 ): Promise<any> => {
-  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
+  const assetRepositoryType = AssetRepositoryType[action.payload.assetRepository];
   if (
     action.payload.value.length !==
-    AssetRepositoryMap[assetRepositoryType].OTP_LENGTH
+    AssetRepositoryMap.get(assetRepositoryType).OTP_LENGTH
   ) {
     return;
   }
@@ -115,7 +115,6 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
     await setDatastore(action.routeId, "input", <TextInputProps>{
       state: InputStateToken.ERROR,
     });
-    // await navigate(ROUTE.MF_FETCH_PORTFOLIO);
   }
 };
 

@@ -33,13 +33,12 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   { setDatastore, showPopup, network, goBack, analytics, ...props }
 ): Promise<any> => {
   /** get current asset repository globally**/
-  const assetRepositoryType: AssetRepositoryType =
-    await SharedPropsService.getAssetRepositoryType();
+  const assetRepositoryType = AssetRepositoryType[action.payload.assetRepository];
 
   /** reject if otp length is not matching as config */
   if (
     action.payload.value.length !==
-    AssetRepositoryMap[assetRepositoryType].OTP_LENGTH
+    AssetRepositoryMap.get(assetRepositoryType).OTP_LENGTH
   ) {
     return;
   }
@@ -71,6 +70,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
       state: InputStateToken.SUCCESS,
     });
     await goBack();
+    AssetRepositoryMap.get(assetRepositoryType).IS_PLEDGED = true;
     /*** update user application obj ***/
     user.linkedApplications[0] = _.get(
       authPledgeResponse,
@@ -80,48 +80,29 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
     /*** update user obj ***/
     await SharedPropsService.setUser(user);
 
-    /*** Mark current asset repository pledging as completed ***/
-    const assetRepositoryMap =
-      await SharedPropsService.getAssetRepositoryFetchMap();
-    /*** Current asset repository type item ***/
-    const assetRepositoryConfigItemType: AssetRepositoryConfigItemType =
-      assetRepositoryMap[assetRepositoryType];
-    /*** mark pledging in current asset repo ***/
-    assetRepositoryConfigItemType.isPledged = true;
-    /*** update globally asset repository map ***/
-    await SharedPropsService.setAssetRepositoryFetchMap(
-      assetRepositoryConfigItemType
-    );
-
     /*** update UI manually for next asset repository since we are not re-building the page ***/
     if (
-      assetRepositoryType === AssetRepositoryType.KARVY &&
-      AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length > 0
+      assetRepositoryType === AssetRepositoryType.KARVY
     ) {
-      await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
       await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
         state: InputStateToken.DEFAULT,
-        charLimit: AssetRepositoryMap[AssetRepositoryType.CAMS].OTP_LENGTH,
+        charLimit: AssetRepositoryMap.get(AssetRepositoryType.CAMS).OTP_LENGTH,
       });
       await setDatastore(ROUTE.PLEDGE_VERIFY, "subTitle", <TypographyProps>{
         label: `${AssetRepositoryType.CAMS} has sent ${
-          AssetRepositoryMap[AssetRepositoryType.CAMS].OTP_LENGTH
+          AssetRepositoryMap.get(AssetRepositoryType.CAMS).OTP_LENGTH
         }-digit OTP was sent on `,
       });
     } else if (
-      assetRepositoryType === AssetRepositoryType.CAMS &&
-      AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length > 0
+      assetRepositoryType === AssetRepositoryType.CAMS
     ) {
-      await SharedPropsService.setAssetRepositoryType(
-        AssetRepositoryType.KARVY
-      );
       await setDatastore(ROUTE.PLEDGE_VERIFY, "input", <TextInputProps>{
         state: InputStateToken.DEFAULT,
-        charLimit: AssetRepositoryMap[AssetRepositoryType.KARVY].OTP_LENGTH,
+        charLimit: AssetRepositoryMap.get(AssetRepositoryType.KARVY).OTP_LENGTH,
       });
       await setDatastore(ROUTE.PLEDGE_VERIFY, "subTitle", <TypographyProps>{
         label: `${AssetRepositoryType.KARVY} has sent ${
-          AssetRepositoryMap[AssetRepositoryType.KARVY].OTP_LENGTH
+          AssetRepositoryMap.get(AssetRepositoryType.KARVY).OTP_LENGTH
         }-digit OTP was sent on `,
       });
     }
@@ -132,16 +113,10 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
 
     /*** check whether all asset repository is pledged or not ***/
     if (
-      (refreshedAssetRepositoryMap[AssetRepositoryType.KARVY].isPledged &&
-        AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length > 0 &&
-        refreshedAssetRepositoryMap[AssetRepositoryType.CAMS].isPledged &&
-        AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length > 0) ||
-      (refreshedAssetRepositoryMap[AssetRepositoryType.KARVY].isPledged &&
-        AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length > 0 &&
-        AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length === 0) ||
-      (refreshedAssetRepositoryMap[AssetRepositoryType.CAMS].isPledged &&
-        AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length > 0 &&
-        AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length === 0)
+      (AssetRepositoryMap.get(AssetRepositoryType.KARVY).IS_PLEDGED ||
+        AssetRepositoryMap.get(AssetRepositoryType.KARVY).LIST.length === 0) &&
+        (AssetRepositoryMap.get(AssetRepositoryType.CAMS).IS_PLEDGED ||
+        AssetRepositoryMap.get(AssetRepositoryType.CAMS).LIST.length === 0)
     ) {
       /*** if all pledged then continue normal flow ***/
       const mfPledgePortfolioStatus = _.get(
@@ -151,12 +126,8 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
 
       if (mfPledgePortfolioStatus === "COMPLETED") {
         /*** close previous popup ***/
-        if (
-          AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length > 0 &&
-          AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length > 0
-        ) {
           await goBack();
-        }
+
         /*** show success popup ***/
         await showPopup({
           autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
@@ -293,7 +264,7 @@ export const resendOTP: ActionFunction<OtpPledgePayload> = async (
   _datastore,
   { setDatastore, network }
 ): Promise<any> => {
-  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
+  const assetRepositoryType = action.payload.assetRepository;
   const resendOtpResponse = await network.post(
     api.pledgeCreate,
     {
@@ -301,7 +272,7 @@ export const resendOTP: ActionFunction<OtpPledgePayload> = async (
         await SharedPropsService.getUser()
       ).linkedApplications[0].applicationId,
       assetRepository: assetRepositoryType,
-      portfolioItemList: AssetRepositoryMap[assetRepositoryType].LIST,
+      portfolioItemList: AssetRepositoryMap.get(AssetRepositoryType[assetRepositoryType]).LIST,
     },
     { headers: await getAppHeader() }
   );

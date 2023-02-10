@@ -44,7 +44,7 @@ import {heightMap} from "../../../configs/height";
 
 export const template: (
   phoneNumber: string,
-  assetRepository: string,
+  assetRepository: AssetRepositoryType,
   sendOtpForPledgeConfirmAction: Action<any>,
   emailId: string
 ) => TemplateSchema = (
@@ -135,7 +135,7 @@ export const template: (
       ],
     },
     subTitle: <TypographyProps>{
-      label: `${AssetRepositoryMap[assetRepository].NAME} has sent ${AssetRepositoryMap[assetRepository].OTP_LENGTH}-digit OTP was sent on `,
+      label: `${AssetRepositoryMap.get(assetRepository).NAME} has sent ${AssetRepositoryMap.get(assetRepository).OTP_LENGTH}-digit OTP was sent on `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
@@ -157,10 +157,10 @@ export const template: (
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     input: <TextInputProps & WidgetProps>{
       resendTimer:
-        AssetRepositoryMap[assetRepository].OTP_LENGTH == 5 ? 60 : 15,
+        AssetRepositoryMap.get(assetRepository).OTP_LENGTH == 5 ? 60 : 15,
       type: InputTypeToken.OTP,
       state: InputStateToken.DEFAULT,
-      charLimit: AssetRepositoryMap[assetRepository].OTP_LENGTH,
+      charLimit: AssetRepositoryMap.get(assetRepository).OTP_LENGTH,
       keyboardType: KeyboardTypeToken.numberPad,
       action: {
         type: ACTION.PLEDGE_VERIFY,
@@ -182,11 +182,12 @@ export const template: (
 });
 
 export const pledgeVerifyMF: PageType<any> = {
-  onLoad: async (_, { sendOtpForPledgeConfirmAction }) => {
+  onLoad: async (_, { assetRepository, sendOtpForPledgeConfirmAction }) => {
     const user: User = await SharedPropsService.getUser();
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
-    const assetRepository = await SharedPropsService.getAssetRepositoryType();
+
+    console.log(assetRepository, sendOtpForPledgeConfirmAction);
     return Promise.resolve(
       template(
         phoneNumber,

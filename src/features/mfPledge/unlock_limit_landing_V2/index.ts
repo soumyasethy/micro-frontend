@@ -155,17 +155,6 @@ export const template: (
         casList: stepResponseObject.availableCAS,
       },
     }).datastore,
-    // bottomSheet: <BottomSheetProps>{
-    //   type: BottomSheetType.WEB,
-    //   initialOffset: 0.35,
-    //   finalOffSet: 0.85,
-    //   widgetHeaderItems: [
-    //     { id: "bottomSheetText", type: WIDGET.TEXT },
-    //     { id: "bs_space0", type: WIDGET.SPACE },
-    //     { id: "infoRow", type: WIDGET.STACK },
-    //   ],
-    //   widgetItems: [],
-    // },
     bs_space0: <SpaceProps>{ size: SizeTypeTokens.XL },
     bs_space1: <SpaceProps>{ size: SizeTypeTokens.MD },
     bs_space2: <SpaceProps>{ size: SizeTypeTokens.MD },
@@ -229,10 +218,6 @@ export const unlockLimitLandingMFV2: PageType<any> = {
       : await fetchPledgeLimitRepo().then((response) => ({
           data: response,
         }));
-    /* const pledgeLimitResponse = await network.get(
-      `${api.pledgeLimit}${user.linkedApplications[0].applicationId}`,
-      { headers: await getAppHeader() }
-    );*/
     /*** update authCAS in SharedPropsService if fetched from api ***/
     if (!authCAS && pledgeLimitResponse.data) {
       await SharedPropsService.setAuthCASResponse(pledgeLimitResponse.data);

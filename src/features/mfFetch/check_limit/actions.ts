@@ -11,9 +11,9 @@ import {
 } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import {
-  AssetRepositoryMap,
+  AssetRepositoryMap, AssetRepositoryType,
   ConfigTokens,
-  getAppHeader,
+  getAppHeader, getPrimaryAssetRepository,
 } from "../../../configs/config";
 import _ from "lodash";
 
@@ -72,7 +72,7 @@ export const autoTriggerOtp: ActionFunction<any> = async (
   const isAutoTriggerOtp: boolean = await SharedPropsService.getConfig(
     ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP
   );
-  const assetRepository = await SharedPropsService.getAssetRepositoryType();
+  const assetRepository = await getPrimaryAssetRepository();
 
   /*** Auto trigger is globally enabled. mostly this will be disabled,
    * and we are manually enabled it when user tries fetch more assets from UnlockLimit Page ***/
@@ -119,11 +119,14 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
       action.payload.applicationId = user.linkedApplications[0].applicationId;
     }
   }
+
+  const assetRepository: AssetRepositoryType = AssetRepositoryType[action.payload.assetRepository];
+
   const response = await network.post(
     api.pledgeInit,
     <FetchPortfolioPayload>{
       ...action.payload,
-      assetRepository: await SharedPropsService.getAssetRepositoryType(),
+      assetRepository: assetRepository,
     },
     {
       headers: await getAppHeader(),
@@ -142,15 +145,13 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   );
   await SharedPropsService.setUser(user);
 
-  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
-
   /*** Reset to default asset repository type if the user has changed the asset repository type from the settings page */
   await setDatastore(ROUTE.OTP_AUTH_CAS, "input", <TextInputProps>{
     state: InputStateToken.DEFAULT,
-    charLimit: AssetRepositoryMap[assetRepositoryType].OTP_LENGTH,
+    charLimit: AssetRepositoryMap.get(assetRepository).OTP_LENGTH,
   });
   await setDatastore(ROUTE.OTP_AUTH_CAS, "subTitle", <TextInputProps>{
-    label: `${AssetRepositoryMap[assetRepositoryType].NAME} depository has sent an OTP to `,
+    label: `${AssetRepositoryMap.get(assetRepository).NAME} depository has sent an OTP to `,
   });
   await navigate(ROUTE.OTP_AUTH_CAS, action.payload);
 };
