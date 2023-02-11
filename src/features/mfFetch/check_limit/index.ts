@@ -306,13 +306,9 @@ export const checkLimitMF: PageType<any> = {
     const emailId = `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
     const applicationId = user.linkedApplications[0].applicationId;
 
-    console.log("Got repo ", assetRepository);
-
     if(!assetRepository) {
       assetRepository = await getPrimaryAssetRepository();
     }
-
-    console.log("Updated repo ", assetRepository);
 
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_PAN_EDIT_ALLOWED

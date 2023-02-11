@@ -731,8 +731,6 @@ export const pledgeConfirmationMFV2: PageType<any> = {
          .pledgedPortfolio);
     }
 
-    console.log("Reached here", mfPortfolioArray);
-
     /// fetch processing fee
     const response = await network.post(
       api.processingCharges,

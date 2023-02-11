@@ -187,7 +187,6 @@ export const pledgeVerifyMF: PageType<any> = {
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
 
-    console.log(assetRepository, sendOtpForPledgeConfirmAction);
     return Promise.resolve(
       template(
         phoneNumber,

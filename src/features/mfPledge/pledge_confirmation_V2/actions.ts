@@ -27,8 +27,6 @@ export const sendOtpForPledgeConfirm: ActionFunction<
     loading: true,
   });
 
-  console.log("now inside function sendOtpForPledgeConfirm");
-
   await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
     label: "",
     type: ButtonTypeTokens.LargeOutline,
@@ -58,9 +56,6 @@ export const sendOtpForPledgeConfirm: ActionFunction<
       AssetRepositoryMap.get(AssetRepositoryType.CAMS).IS_PLEDGED) {
     primaryType = AssetRepositoryType.KARVY;
   }
-
-  console.log("Got primary type", primaryType);
-  console.log("AssetRepositoryMap", AssetRepositoryMap);
 
   const body = {
     applicationId: applicationId,
