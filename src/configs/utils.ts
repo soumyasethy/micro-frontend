@@ -375,8 +375,8 @@ export const isMorePortfolioRenderCheck = async () => {
   return !(
     Object.keys(assetRepoMap).length === 2 ||
     (Object.keys(assetRepoMap).length == 1 &&
-      (AssetRepositoryMap[AssetRepositoryType.CAMS].isDisabled ||
-        AssetRepositoryMap[AssetRepositoryType.KARVY].isDisabled))
+      (AssetRepositoryMap.get(AssetRepositoryType.CAMS).isDisabled ||
+        AssetRepositoryMap.get(AssetRepositoryType.KARVY).isDisabled))
   );
 };
 

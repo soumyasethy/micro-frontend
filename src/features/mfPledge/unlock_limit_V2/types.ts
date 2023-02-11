@@ -1,3 +1,5 @@
+import {AssetRepositoryType} from "../../../configs/config";
+
 export enum ACTION {
   UNLOCK_LIMIT = "UNLOCK_LIMIT",
   GET_MORE_MF_PORTFOLIO = "GET_MORE_MF_PORTFOLIO",
@@ -15,7 +17,10 @@ export type ContinuePayload = {
   widgetId: string;
   isResend?: boolean;
 };
-export type GetMoreMfPortfolioPayload = { casList: AvailableCASItem[] };
+export type GetMoreMfPortfolioPayload = {
+  casList: AvailableCASItem[],
+  assetRepository: AssetRepositoryType
+};
 
 export type LimitPayload = {
   value: StepResponseObject;

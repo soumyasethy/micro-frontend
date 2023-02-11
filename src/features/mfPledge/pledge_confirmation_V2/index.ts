@@ -141,7 +141,6 @@ export const template: (
               },
             ]
           : []),
-        // { id: "spaceCard", type: WIDGET.SPACE },
         {
           id: "ctaCard",
           type: WIDGET.CARD,
@@ -689,6 +688,7 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     let pledgeInProgress = false;
     let mfPortfolioArray: AvailableCASItem[] = [];
     let portfolioForComputingProcessingCharge: AvailableCASItem[];
+
     // call pledge limit api if stepResponseObject is null
     if (stepResponseObject === undefined || stepResponseObject === null) {
       pledgeInProgress = true;
@@ -814,7 +814,6 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     );
   },
   actions: {
-    [ACTION.PLEDGE_CONFIRMATION]: sendOtpForPledgeConfirm,
     [ACTION.NAV_TO_FAQ]: goToFaq,
     [ACTION.BACK_BUTTON]: goBack,
     [ACTION.SEND_OTP_FOR_PLEDGE_CONFIRM]: sendOtpForPledgeConfirm,

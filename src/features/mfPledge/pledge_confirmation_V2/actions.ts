@@ -10,7 +10,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
-  getAppHeader,
+  getAppHeader, getPrimaryAssetRepository,
 } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
@@ -33,56 +33,36 @@ export const sendOtpForPledgeConfirm: ActionFunction<
     loading: true,
   });
 
-  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
-  AssetRepositoryMap[assetRepositoryType].LIST = [];
+  AssetRepositoryMap.get(AssetRepositoryType.CAMS).LIST = [];
+  AssetRepositoryMap.get(AssetRepositoryType.KARVY).LIST = [];
+
+  let primaryType = await getPrimaryAssetRepository();
+
   action.payload.portFolioArray.forEach((item) => {
     if (item.pledgedUnits > 0) {
-      AssetRepositoryMap[item.assetRepository.toUpperCase()].LIST.push({
+      AssetRepositoryMap.get(AssetRepositoryType[item.assetRepository]).LIST.push({
         ...item,
         is_pledged: true,
       });
     }
   });
+
   const applicationId = (await SharedPropsService.getUser())
     .linkedApplications[0].applicationId;
 
-  /*** check if the user has selected both karvy and cams ***/
-  const assetRepositoryConfig =
-    await SharedPropsService.getAssetRepositoryFetchMap();
-
-  /*** update the config if the user has selected both karvy and cams ***/
-  for (const assetType of Object.keys(AssetRepositoryType)) {
-    assetRepositoryConfig[assetType].isPledgedRequired =
-      AssetRepositoryMap[assetType].LIST.length > 0;
-    await SharedPropsService.setAssetRepositoryFetchMap(
-      assetRepositoryConfig[assetType],
-      assetType as AssetRepositoryType
-    );
+  /**** check if user has empty cams portfolio then switch asset repository type ****/
+  if (
+      AssetRepositoryMap.get(AssetRepositoryType.CAMS).LIST.length === 0 ||
+      AssetRepositoryMap.get(AssetRepositoryType.CAMS).IS_PLEDGED) {
+    primaryType = AssetRepositoryType.KARVY;
   }
 
   const body = {
     applicationId: applicationId,
-    assetRepository: assetRepositoryType,
-    portfolioItemList: AssetRepositoryMap[assetRepositoryType].LIST,
+    assetRepository: primaryType,
+    portfolioItemList: AssetRepositoryMap.get(primaryType).LIST,
   };
-  /**** check if user has empty portfolio then switch asset repository type ****/
-  if (
-    assetRepositoryType === AssetRepositoryType.KARVY &&
-    AssetRepositoryMap[AssetRepositoryType.KARVY].LIST.length === 0
-  ) {
-    body["assetRepository"] = AssetRepositoryType.CAMS;
-    body["portfolioItemList"] =
-      AssetRepositoryMap[AssetRepositoryType.CAMS].LIST;
-    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
-  } else if (
-    assetRepositoryType === AssetRepositoryType.CAMS &&
-    AssetRepositoryMap[AssetRepositoryType.CAMS].LIST.length === 0
-  ) {
-    body["assetRepository"] = AssetRepositoryType.KARVY;
-    body["portfolioItemList"] =
-      AssetRepositoryMap[AssetRepositoryType.KARVY].LIST;
-    await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.KARVY);
-  }
+
   /** actual api call with body */
   const response = await network.post(api.pledgeCreate, body, {
     headers: await getAppHeader(),
@@ -93,7 +73,7 @@ export const sendOtpForPledgeConfirm: ActionFunction<
       ...AnalyticsEventTracker.borrower_mf_pledge_init,
     });
     await navigate(ROUTE.PLEDGE_VERIFY, {
-      assetRepository: AssetRepositoryMap[assetRepositoryType].NAME,
+      assetRepository: primaryType,
       sendOtpForPledgeConfirmAction: action,
     });
   }

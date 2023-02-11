@@ -31,15 +31,12 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTIONS } from "./types";
 import {
-  authCAS,
   confirmCTA,
-  fetchMyPortfolio,
   goBack,
-  navToFetch,
   toggleRadio,
 } from "./actions";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryType } from "../../../configs/config";
+import {AssetRepositoryType, getPrimaryAssetRepository} from "../../../configs/config";
 import {heightMap} from "../../../configs/height";
 
 export const template: (
@@ -226,15 +223,11 @@ export const template: (
 
 export const selectSourceMF: PageType<any> = {
   onLoad: async () => {
-    const assetRepository = await SharedPropsService.getAssetRepositoryType();
-    console.log("assetRepository", assetRepository);
+    const assetRepository = await getPrimaryAssetRepository();
     return Promise.resolve(template(assetRepository));
   },
   actions: {
-    [ACTIONS.AUTH_CAS]: authCAS,
-    [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
     [ACTIONS.GO_BACK]: goBack,
-    [ACTIONS.NAV_TO_FETCH]: navToFetch,
     [ACTIONS.TOGGLE_RADIO]: toggleRadio,
     [ACTIONS.CONFIRM]: confirmCTA,
   },

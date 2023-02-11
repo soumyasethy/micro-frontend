@@ -2,6 +2,7 @@ import SharedPropsService from "../SharedPropsService";
 import { getScreenType } from "../configs/platfom-utils";
 import { Dimensions } from "react-native";
 import { SCREEN_SIZE } from "@voltmoney/types";
+import {IconTokens} from "@voltmoney/schema";
 
 export const __isTest__ = false;
 export const __isMock__ = false;
@@ -73,23 +74,37 @@ export enum AssetRepositoryType {
   CAMS = "CAMS",
   KARVY = "KARVY",
 }
-export const AssetRepositoryMap = {
-  [AssetRepositoryType.CAMS]: {
+export const AssetRepositoryMap = new Map([
+  [
+      AssetRepositoryType.CAMS, {
     value: AssetRepositoryType.CAMS,
     NAME: "CAMS",
     OTP_LENGTH: 5,
     LIST: [],
     isDisabled: false,
     MODE_OF_COMM: "email",
-  },
-  [AssetRepositoryType.KARVY]: {
+    PRIORITY: 1,
+    ICON: IconTokens.Cams,
+    IS_PLEDGED: false
+  }],
+  [
+      AssetRepositoryType.KARVY, {
     VALUE: AssetRepositoryType.KARVY,
     NAME: "K-Fintech",
     OTP_LENGTH: 6,
     LIST: [],
     isDisabled: false,
     MODE_OF_COMM: "phone",
-  },
+    PRIORITY: 2,
+    ICON: IconTokens.Kfin,
+    IS_PLEDGED: false
+  }
+  ]]);
+
+export const getPrimaryAssetRepository = async () => {
+  let [priorityMap] = new Map([...AssetRepositoryMap.entries()]
+      .sort((a,b) => a[1].PRIORITY - b[1].PRIORITY));
+  return priorityMap[0];
 };
 
 export enum RegexConfig {

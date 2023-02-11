@@ -45,7 +45,12 @@ import {
 } from "./actions";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
-import { AssetRepositoryType, ConfigTokens } from "../../../configs/config";
+import {
+  AssetRepositoryMap,
+  AssetRepositoryType,
+  ConfigTokens,
+  getPrimaryAssetRepository
+} from "../../../configs/config";
 import {heightMap} from "../../../configs/height";
 
 export const template: (
@@ -270,7 +275,7 @@ export const template: (
       },
       space: <SpaceProps>{ size: SizeTypeTokens.SM },
       icon: <IconProps>{
-        name: assetRepository === "CAMS" ? IconTokens.Cams : IconTokens.Kfin,
+        name: AssetRepositoryMap.get(assetRepository).ICON,
         size: IconSizeTokens.XXL,
         align: IconAlignmentTokens.left,
       },
@@ -294,14 +299,16 @@ export const template: (
 };
 
 export const checkLimitMF: PageType<any> = {
-  onLoad: async (_, { setIsUserLoggedIn }) => {
+  onLoad: async (_, { setIsUserLoggedIn, assetRepository }) => {
     const user: User = await SharedPropsService.getUser();
     const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId =
-      `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+    const emailId = `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
     const applicationId = user.linkedApplications[0].applicationId;
-    const assetRepository = await SharedPropsService.getAssetRepositoryType();
+
+    if(!assetRepository) {
+      assetRepository = await getPrimaryAssetRepository();
+    }
 
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_PAN_EDIT_ALLOWED
@@ -333,9 +340,4 @@ export const checkLimitMF: PageType<any> = {
     [ACTION.SELECT_SOURCE]: selectSource,
   },
   clearPrevious: true,
-  // action: {
-  //   type: ACTION.AUTO_FETCH_MY_PORTFOLIO,
-  //   routeId: ROUTE.MF_FETCH_PORTFOLIO,
-  //   payload: {},
-  // },
 };
