@@ -187,6 +187,8 @@ export const pledgeVerifyMF: PageType<any> = {
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
 
+    await SharedPropsService.setAssetRepositoryType(assetRepository);
+
     return Promise.resolve(
       template(
         phoneNumber,

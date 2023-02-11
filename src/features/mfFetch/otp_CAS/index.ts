@@ -185,7 +185,7 @@ export const template: (
 
 export const otpVerifyAuthCASMF: PageType<any> = {
   onLoad: async  (_, { assetRepository })  => {
-    console.log("action.payload otp_cas ", AssetRepositoryType[assetRepository]);
+    await SharedPropsService.setAssetRepositoryType(assetRepository);
     const user: User = await SharedPropsService.getUser();
     const applicationId = user.linkedApplications[0].applicationId;
     const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
@@ -201,5 +201,5 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.NAV_TO_FETCH]: navToFetch,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };

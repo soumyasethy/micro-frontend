@@ -54,7 +54,7 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
   _datastore,
   { navigate, setDatastore, network, analytics, showPopup, hidePopup }
 ): Promise<any> => {
-  const assetRepositoryType = AssetRepositoryType[action.payload.assetRepository];
+  let assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
   if (
     action.payload.value.length !==
     AssetRepositoryMap.get(assetRepositoryType).OTP_LENGTH

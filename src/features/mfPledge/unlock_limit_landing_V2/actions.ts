@@ -58,7 +58,7 @@ export const getMoreMfPortfolio: ActionFunction<
       true
   );
   /*** Go to re-fetch portfolio from other Asset Type **/
-  await navigate(ROUTE.MF_FETCH_PORTFOLIO, {assetRepository: assetRepoType});
+  await navigate(ROUTE.MF_FETCH_PORTFOLIO, {setIsUserLoggedIn: true, assetRepository: assetRepoType});
   /*** remove fetch more asset type option from UI */
   await removeGetMorePortfolio(
       {

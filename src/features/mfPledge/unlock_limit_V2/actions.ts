@@ -84,16 +84,7 @@ export const getMoreMfPortfolio: ActionFunction<
     ConfigTokens.IS_MF_FETCH_BACK_ALLOWED,
     true
   );
-  /*** switch between assetRepositoryType */
-  for (const assetRepositoryType of Object.keys(assetRepoMap)) {
-    if (assetRepositoryType === AssetRepositoryType.KARVY) {
-      await SharedPropsService.setAssetRepositoryType(AssetRepositoryType.CAMS);
-    } else if (assetRepositoryType === AssetRepositoryType.CAMS) {
-      await SharedPropsService.setAssetRepositoryType(
-        AssetRepositoryType.KARVY
-      );
-    }
-  }
+
   /*** disable pan edit option */
   await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
   /*** Enable auto otp trigger when user lands on MF_Fetch */
