@@ -411,8 +411,6 @@ export const template: (
       viewAll: <ButtonProps & WidgetProps>{
         label: "View all charges",
         type: ButtonTypeTokens.MediumGhost,
-        paddingHorizontal: SizeTypeTokens.NONE,
-        paddingVertical: SizeTypeTokens.NONE,
         action: {
           type: ACTION.VIEW_ALL,
           routeId: ROUTE.MF_PLEDGE_PORTFOLIO,

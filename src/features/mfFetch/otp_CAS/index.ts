@@ -99,11 +99,6 @@ export const template: (
         label: "",
         type: ButtonTypeTokens.SmallGhost,
         width: ButtonWidthTypeToken.CONTENT,
-        stack: <StackProps>{
-          type: StackType.row,
-          alignItems: StackAlignItems.flexStart,
-          justifyContent: StackJustifyContent.flexStart,
-        },
         icon: {
           name: IconTokens.Cancel,
           align: IconAlignmentTokens.right,
