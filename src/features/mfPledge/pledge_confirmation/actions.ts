@@ -6,7 +6,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
-  getAppHeader,
+  getAppHeader, getPrimaryAssetRepository,
 } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
@@ -25,8 +25,8 @@ export const sendOtpForPledgeConfirm: ActionFunction<
     loading: true,
   });
 
-  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
-  AssetRepositoryMap[assetRepositoryType].LIST = [];
+  const assetRepositoryType = await getPrimaryAssetRepository();
+  AssetRepositoryMap.get(assetRepositoryType).LIST = [];
   action.payload.value.availableCAS.forEach((item) => {
     if (item.pledgedUnits > 0) {
       AssetRepositoryMap[item.assetRepository.toUpperCase()].LIST.push({

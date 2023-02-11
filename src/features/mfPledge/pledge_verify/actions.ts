@@ -33,7 +33,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
   { setDatastore, showPopup, network, goBack, analytics, ...props }
 ): Promise<any> => {
   /** get current asset repository globally**/
-  const assetRepositoryType = AssetRepositoryType[action.payload.assetRepository];
+  const assetRepositoryType = AssetRepositoryType[await SharedPropsService.getAssetRepositoryType()];
 
   /** reject if otp length is not matching as config */
   if (
