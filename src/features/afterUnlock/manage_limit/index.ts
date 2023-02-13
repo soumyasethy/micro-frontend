@@ -136,7 +136,10 @@ export const template: (creditStatus: string) => TemplateSchema = (
       toInputSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
       continue: <ButtonProps & WidgetProps>{
         label: "Email holding statement",
-        labelColor: ColorTokens.White,
+        labelColor:
+          creditStatus === "PENDING_DISBURSAL_APPROVAL"
+            ? ColorTokens.Grey_Charcoal
+            : ColorTokens.White,
         fontFamily: FontFamilyTokens.Poppins,
         type:
           creditStatus === "PENDING_DISBURSAL_APPROVAL"
