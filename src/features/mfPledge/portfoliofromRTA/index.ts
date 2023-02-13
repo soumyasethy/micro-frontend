@@ -21,6 +21,7 @@ import {
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
+  ShadowTypeTokens,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -95,7 +96,10 @@ export const template: (
     header: <HeaderProps & WidgetProps>{
       isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
-      title: `Portfolio from ${assetRepository}`,
+      title:
+        assetRepository === "KARVY"
+          ? `Portfolio from KFintech`
+          : `Portfolio from ${assetRepository}`,
       action: {
         type: ACTION.GO_BACK,
         routeId: ROUTE.PORTFOLIO_FROM_RTA,
@@ -154,15 +158,15 @@ export const template: (
     Value: <TypographyProps>{
       label: `Value`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
+      fontWeight: "100",
       fontColor: ColorTokens.Grey_Charcoal,
-      fontSize: FontSizeTokens.XS,
+      fontSize: FontSizeTokens.SM,
       lineHeight: 16,
     },
     AvailableCreditLimit: <TypographyProps>{
       label: `Available credit limit`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "400",
+      fontWeight: "100",
       fontColor: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       lineHeight: 18,
@@ -184,17 +188,17 @@ export const template: (
       },
     },
     Value2: <TypographyProps>{
-      label: `₹${addCommasToNumber(availableAmount)}`,
+      label: `₹${addCommasToNumber(totalPortfolio)}`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "500",
+      fontWeight: "800",
       fontColor: ColorTokens.Grey_Night,
-      fontSize: FontSizeTokens.SM,
+      fontSize: FontSizeTokens.XS,
       lineHeight: 18,
     },
     AvailableCreditLimit2: <TypographyProps>{
-      label: `₹${addCommasToNumber(totalPortfolio)}`,
+      label: `₹${addCommasToNumber(availableAmount)}`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "500",
+      fontWeight: "800",
       fontColor: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XS,
       lineHeight: 16,
@@ -246,6 +250,7 @@ export const template: (
       assetRepository
     )),
     ctaCard: <CardProps>{
+      shadow: ShadowTypeTokens.E5,
       bgColor: ColorTokens.White,
       width: StackWidth.FULL,
       bodyOrientation: CardOrientation.HORIZONTAL,
@@ -259,16 +264,38 @@ export const template: (
       justifyContent: StackJustifyContent.spaceBetween,
       alignItems: StackAlignItems.center,
       widgetItems: [
-        { id: "ctaText", type: WIDGET.TEXT },
+        { id: "ctaTextStack", type: WIDGET.STACK },
         { id: "ctaSpace", type: WIDGET.SPACE },
         { id: "ctaButton", type: WIDGET.BUTTON },
       ],
     },
-    ctaText: <TypographyProps>{
-      label: `Last fetched on ${formattedDate}`,
+    ctaTextStack: <StackProps>{
+      width: StackWidth.FULL,
+      type: StackType.row,
+      justifyContent: StackJustifyContent.center,
+      alignItems: StackAlignItems.center,
+      widgetItems: [
+        { id: "ctaText1", type: WIDGET.TEXT },
+        { id: "ctaSpace2", type: WIDGET.SPACE },
+        { id: "ctaText2", type: WIDGET.TEXT },
+      ],
+    },
+    ctaText1: <TypographyProps>{
+      label: `Last fetched on`,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "600",
+      fontWeight: "400",
       fontSize: FontSizeTokens.XS,
+      color: ColorTokens.Grey_Charcoal,
+    },
+    ctaSpace2: <SpaceProps>{
+      size: SizeTypeTokens.XS,
+    },
+    ctaText2: <TypographyProps>{
+      label: `${formattedDate}`,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "800",
+      fontSize: FontSizeTokens.XS,
+      color: ColorTokens.Grey_Night,
     },
     ctaSpace: <SpaceProps>{
       size: SizeTypeTokens.MD,
@@ -316,7 +343,7 @@ export const portfoliofromRTAMf: PageType<any> = {
         ? stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate
         : stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
 
-    const formattedDate = moment.unix(Number(date)).format("DD MMM, YYYY");
+    const formattedDate = moment.unix(Number(date)).format("DD MMMM, YYYY");
 
     const availableAmount =
       assetRepository === "CAMS"

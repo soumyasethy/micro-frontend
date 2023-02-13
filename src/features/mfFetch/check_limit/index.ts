@@ -49,9 +49,9 @@ import {
   AssetRepositoryMap,
   AssetRepositoryType,
   ConfigTokens,
-  getPrimaryAssetRepository
+  getPrimaryAssetRepository,
 } from "../../../configs/config";
-import {heightMap} from "../../../configs/height";
+import { heightMap } from "../../../configs/height";
 
 export const template: (
   applicationId: string,
@@ -77,7 +77,7 @@ export const template: (
       id: ROUTE.MF_FETCH_PORTFOLIO,
       type: isGoBackAllowed ? LAYOUTS.MODAL : LAYOUTS.LIST,
       style: {
-        height: heightMap[ROUTE.MF_FETCH_PORTFOLIO]
+        height: heightMap[ROUTE.MF_FETCH_PORTFOLIO],
       },
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
@@ -174,7 +174,7 @@ export const template: (
       },
       subTitle: <TypographyProps>{
         label: "Cash limit is calculated using your mutual fund portfolio",
-        numberOfLines: 1,
+        numberOfLines: 2,
         fontFamily: FontFamilyTokens.Inter,
         color: ColorTokens.Grey_Charcoal,
         fontWeight: "400",
@@ -303,10 +303,11 @@ export const checkLimitMF: PageType<any> = {
     const user: User = await SharedPropsService.getUser();
     const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId = `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+    const emailId =
+      `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
     const applicationId = user.linkedApplications[0].applicationId;
 
-    if(!assetRepository) {
+    if (!assetRepository) {
       assetRepository = await getPrimaryAssetRepository();
     }
 
