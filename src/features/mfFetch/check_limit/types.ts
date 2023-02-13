@@ -7,6 +7,7 @@ export enum ACTION {
   Go_BACK = "Go_BACK",
   SELECT_SOURCE = "SELECT_SOURCE",
   GO_BACK = "GO_BACK",
+
 }
 export type PanEditPayload = {
   applicationId: string;

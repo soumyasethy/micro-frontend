@@ -1,16 +1,20 @@
 
+
+import { BankData, User ,PartnerUser, BasicData} from "./features/login/otp_verify/types";
+
 import {
   __isMock__,
   AssetRepositoryType,
   ConfigTokens,
 } from "./configs/config";
-import { BankData, User ,PartnerUser, BasicData} from "./features/login/otp_verify/types";
 import { MockUser } from "./mock/MockUser";
 import { MockToken } from "./mock/MockToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
+
+
 import _ from "lodash";
 
 export enum USERTYPE {
@@ -31,7 +35,6 @@ export enum BUILD_TYPE {
   PARTNER_STAGING = "PARTNER_STAGING",
 }
 
-
 type GlobalProps = {
   buildType: BUILD_TYPE;
   user: User;
@@ -39,6 +42,7 @@ type GlobalProps = {
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
+ 
   authCAS?: AuthCASModel;
   ref?: string;
   url?: string;
@@ -98,6 +102,7 @@ let _globalProps: GlobalProps = {
   availableAuthCasMap: {},
   accountNumber: "",
   userType:USERTYPE.BORROWER,
+
   applicationId:"",
   bankCode:"",
   bankName:"",
@@ -501,8 +506,24 @@ export default {
   setAccountNumber,
   setPledgeFirstTime,
   isPledgeFirstTime,
+  setUserType,
+  getUserType,
   setPartnerRefCode,
   getPartnerRefCode,
+  setApplicationId,
+  getApplicationId,
+  setBankCode,
+  getBankCode,
+  setBankName,
+  getBankName,
+  getAccountId,
+  setAccountId,
+  setPartnerUser,
+  getPartnerUser,
+  setBankData,
+  getBankData,
+  setBasicData,
+  getBasicData,
   setAssetRepositoryType,
   getAssetRepositoryType,
   getAssetRepositoryFetchMap,
@@ -525,22 +546,6 @@ export default {
   getListItemDataCAS,
   setDesiredPortfolio,
   getDesiredPortfolio,
-  setUserType,
-  getUserType,
-  setApplicationId,
-  getApplicationId,
-  setBankCode,
-  getBankCode,
-  setBankName,
-  getBankName,
-  getAccountId,
-  setAccountId,
-  setPartnerUser,
-  getPartnerUser,
-  setBankData,
-  getBankData,
-  setBasicData,
-  getBasicData,
   setStepperData,
   getStepperData,
   setInvestorName,

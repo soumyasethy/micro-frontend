@@ -54,6 +54,7 @@ export const getAuthHeaders = () => ({
       : "Desktop",
 });
 export const getAppHeader = async () => ({
+
   "X-AppMode": "INVESTOR_VIEW",
   "X-AppPlatform": await SharedPropsService.getAppPlatform(),
   //"X-AppMode": "INVESTOR_VIEW",
@@ -98,6 +99,8 @@ export const PartnerAssetRepositoryMap = {
   },
 };
 
+
+
 export const AssetRepositoryMap = new Map([
   [
       AssetRepositoryType.CAMS, {
@@ -138,6 +141,7 @@ export enum RegexConfig {
   PAN = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",
   AADHAR = "^[2-9]{1}[0-9]{11}$",
   ONLY_NUMBER = "^[0-9]*$",
+
 }
 
 export enum DeepLinks {

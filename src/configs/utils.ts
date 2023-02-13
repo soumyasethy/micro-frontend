@@ -261,6 +261,7 @@ export const distributorStepperRepo = async () => {
     },
   ];
 
+
 // <<<<<<< HEAD
 //   const data: StepperItem[] = [
 //     {
@@ -320,7 +321,7 @@ export const distributorStepperRepo = async () => {
 // =======
 //   return distributorData;
 // >>>>>>> 0db1fb8 (fetch portfolio)
- };
+};
 export const horizontalDistributorStepperRepo = distributorStepperRepo;
 
 export const nextStepCredStepper = async (currentStepId?: string) => {

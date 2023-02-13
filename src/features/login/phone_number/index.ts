@@ -43,8 +43,6 @@ import { checkUserType, goToPrivacy, sendOtp, textOnChange, toggleCTA, whatsappT
 import { RegexConfig } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
-
-
 export const template: (mobileNumber?: string) => TemplateSchema = (
   mobileNumber
 ) => ({
@@ -201,6 +199,7 @@ export const template: (mobileNumber?: string) => TemplateSchema = (
 });
 
 export const phoneNumberMF: PageType<any> = {
+
   onLoad: async (_, { mobileNumber }) => {
     const usertype = await SharedPropsService.getUserType();
     return Promise.resolve(template(mobileNumber));

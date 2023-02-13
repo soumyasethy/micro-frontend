@@ -18,35 +18,12 @@ export const SplashAction: ActionFunction<any> = async (
   if (accessToken) {
     const body = {}; /*** NOT PASSING REF CODE HERE ***/
 
-    const userContextResponse = await network.post(api.userContext, body, {
-      headers: await getAppHeader(),
-    });
-    if (userContextResponse.status === 200) {
-      const user: User = userContextResponse.data;
-      await SharedPropsService.setUser(user);
-      action?.payload?.setIsUserLoggedIn(user);
-      /****
-       * ADD YOUR CUSTOM ROUTE TO NAVIGATE
-       * ****/
-     
-      if (user.linkedApplications[0].applicationState === "COMPLETED") {
-        await navigate(ROUTE.DASHBOARD);
-      } else {
-        const nextRoute = await nextStepId(
-          user.linkedApplications[0].currentStepId
-        );
-      //  await navigate(nextRoute.routeId, nextRoute.params);
-
-       // await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-      //  await navigate(nextRoute.routeId, nextRoute.params);
-
-       //   await navigate(ROUTE.DISTRIBUTOR_PHONE_NUMBER);
-        await navigate(nextRoute.routeId, nextRoute.params);
 
     console.warn("SplashAction body", body);
     const userType = await SharedPropsService.getUserType();
     console.log("userType", userType);
     if (userType === "BORROWER") {
+
       const userContextResponse = await network.post(api.userContext, body, {
         headers: await getAppHeader(),
       });
@@ -56,7 +33,6 @@ export const SplashAction: ActionFunction<any> = async (
         /****
          * ADD YOUR CUSTOM ROUTE TO NAVIGATE
          * ****/
-        //return await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST, {})
 
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
@@ -64,14 +40,15 @@ export const SplashAction: ActionFunction<any> = async (
           const nextRoute = await nextStepId(
             user.linkedApplications[0].currentStepId
           );
-             await navigate(nextRoute.routeId, nextRoute.params);
+          await navigate(nextRoute.routeId, nextRoute.params);
+          // await navigate(ROUTE.PHONE_NUMBER);
+          //  await navigate(ROUTE.PHONE_NUMBER, {
+          //   mobileNumber: action?.payload?.mobileNumber,
+          // });
         }
-
       }
+
     } else {
-      // const userContextResponses = await network.post(api.userContext, body, {
-      //   headers: await getAppHeader(),
-      // });
       const userContextResponse = await network.post(partnerApi.userContext, body, {
         headers: await getAppHeader(),
       });
@@ -84,29 +61,21 @@ export const SplashAction: ActionFunction<any> = async (
         // return;
         if (user.linkedPartnerAccounts[0].partnerName == null || user.linkedPartnerAccounts[0].accountHolderEmail == null) {
           await navigate(ROUTE.ENTER_NAME);
-        }else if(user.linkedPartnerAccounts[0].partnerName != null){
-          console.log(`user.linkedPartnerAccounts[0].partnerName`);
+        } else if (user.linkedPartnerAccounts[0].partnerName != null) {
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
-        }else if(partnerUser !== ''){
+        } else if (partnerUser !== '') {
           await navigate(ROUTE.DISTRIBUTOR_PORTFOLIO);
-        }else{
+        } else {
           await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
         }
-      }else{
-        await navigate(ROUTE.PHONE_NUMBER);
       }
-    } 
+    }
   }
-  } else {
+  else {
     await navigate(ROUTE.PHONE_NUMBER, {
       mobileNumber: action?.payload?.mobileNumber,
     });
   }
-}else {
-  await navigate(ROUTE.PHONE_NUMBER, {
-    mobileNumber: action?.payload?.mobileNumber,
-  });
-}
   // } else {
   //   await navigate(ROUTE.LANDING_PAGE);
   // }

@@ -20,10 +20,8 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
   const userType = await SharedPropsService.getUserType();
   if (userType === "BORROWER") {
     const user: User = await SharedPropsService.getUser();
-
     user.linkedBorrowerAccounts[0].accountHolderPhoneNumber = phoneNumber;
     await SharedPropsService.setUser(user);
-  
     await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.targetWidgetId, {
       subTitle: phoneNumber.substring(3),
     });
@@ -37,8 +35,6 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
     });
     await goBack();
   }
-
-
 };
 
 export const phoneOnChange: ActionFunction<ContinuePayload> = async (

@@ -186,7 +186,6 @@ export const triggerCTA: ActionFunction<EnableDisableCTA> = async (
     email && dob) {
 
     await setDatastore(action.routeId, "continue", <ButtonProps>{ loading: true });
-
     const accountId = (await SharedPropsService.getUser())
       .linkedPartnerAccounts[0].accountId;
 

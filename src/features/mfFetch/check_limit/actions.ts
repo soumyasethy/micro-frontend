@@ -1,6 +1,7 @@
+import { api, partnerApi } from "../../../configs/api";
+import SharedPropsService, { USERTYPE } from "../../../SharedPropsService";
 import { ActionFunction } from "@voltmoney/types";
 import { ACTION, FetchPortfolioPayload, PanEditPayload } from "./types";
-import { api, partnerApi } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
 import { User } from "../../login/otp_verify/types";
 import {
@@ -9,7 +10,6 @@ import {
   InputStateToken,
   TextInputProps,
 } from "@voltmoney/schema";
-import SharedPropsService from "../../../SharedPropsService";
 import {
   AssetRepositoryMap, AssetRepositoryType,
   ConfigTokens,
@@ -51,13 +51,7 @@ export const editEmailId: ActionFunction<PanEditPayload> = async (
     applicationId: action.payload.applicationId,
   });
 };
-export const goBack: ActionFunction<any> = async (
-  action,
-  _datastore,
-  { navigate }
-): Promise<any> => {
-  await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
-};
+
 export const autoTriggerOtp: ActionFunction<any> = async (
   action,
   _datastore,
@@ -117,6 +111,7 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   _datastore,
   { network, navigate, setDatastore }
 ): Promise<any> => {
+ 
   await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
     label: "",
     type: ButtonTypeTokens.LargeOutline,
@@ -131,6 +126,8 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   if (userType == "BORROWER") {
     // updataion after implement at correct place 
     if (hasChangedInDetails) {
+
+      const user: User = await SharedPropsService.getUser();
       action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
       action.payload.phoneNumber =
         user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
@@ -141,8 +138,6 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
     }
   
     const assetRepository: AssetRepositoryType = AssetRepositoryType[action.payload.assetRepository];
-    console.log("inside borrower");
-    console.log("assetType",assetRepository);
   
     const response = await network.post(
       api.pledgeInit,
@@ -176,6 +171,33 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
       label: `${AssetRepositoryMap.get(assetRepository).NAME} depository has sent an OTP to `,
     });
     await navigate(ROUTE.OTP_AUTH_CAS, action.payload);
+
+    await network
+      .post(
+        api.pledgeInit,
+        <FetchPortfolioPayload>{
+          ...action.payload,
+        },
+        {
+          headers: await getAppHeader(),
+        }
+      )
+      .then(async (response) => {
+        const user: User = await SharedPropsService.getUser();
+        user.linkedApplications[0].currentStepId =
+          response.data.updatedApplicationObj.currentStepId;
+        await SharedPropsService.setUser(user);
+        await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
+          ...action.payload,
+        });
+      })
+      .finally(async () => {
+        await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
+          label: "Get my portfolio",
+          type: ButtonTypeTokens.LargeFilled,
+          loading: false,
+        });
+      });
   } else {
     const applicationId = await SharedPropsService.getApplicationId()
     await network
@@ -208,11 +230,16 @@ export const selectSource: ActionFunction<any> = async (
   _datastore,
   { navigate, ...props }
 ): Promise<any> => {
-// <<<<<<< HEAD
-   await navigate(ROUTE.SELECT_SOURCE, action.payload);
-// =======
+  await navigate(ROUTE.SELECT_SOURCE, action.payload);
+};
+
+export const goBack: ActionFunction<{}> = async (
+  action,
+  _datastore,
+  { network,navigate, goBack }
+): Promise<any> => {
   //await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
- // goBack();
+  goBack();
  // need to discuss about this conflict to soumya
  /* if (hasChangedInDetails) {
     action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;

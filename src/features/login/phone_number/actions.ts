@@ -12,13 +12,15 @@ import {
   TextInputProps,
 } from "@voltmoney/schema";
 
-
 import { api, partnerApi } from "../../../configs/api";
 import { getAuthHeaders, getPartnerAuthHeaders } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
 let phoneNumber: string = "";
 let isWhatsAppEnabled: boolean = true;
+
+/* check userType and call required function */
+
 
 /* check userType and call required function */
 export const checkUserType: ActionFunction<any> = async (
@@ -57,10 +59,12 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
 ): Promise<any> => {
   phoneNumber = phoneNumber.includes("+91") ? phoneNumber : `+91${phoneNumber}`;
 
+
   if (phoneNumber.length === 13) {
     await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
       loading: true,
     });
+
     const urlParams = `${await SharedPropsService.getUrlParams()}`.split("?");
     const requestUrl = `${api.login}${phoneNumber}`;
     const response = await network.get(
@@ -71,6 +75,7 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
         headers: getAuthHeaders(),
       }
     );
+
     if (response.status === 200) {
       await setDatastore(action.routeId, action.payload.widgetId, <ButtonProps>{
         loading: false,

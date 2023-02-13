@@ -246,6 +246,7 @@ export const distBasicDetailsMF: PageType<any> = {
     console.log("isDisabled",data);
    // const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
     return Promise.resolve(template(isDisabled,stepper_data));
+
   },
   actions: {
     [ACTION.ENTER_DOB]: onChangeInput,

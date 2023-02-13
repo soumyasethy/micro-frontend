@@ -33,7 +33,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
-import { authCAS, fetchMyPortfolio, goBack, navToFetch } from "./actions";
+import { authCAS, fetchMyPortfolio, goBackAction, navToFetch } from "./actions";
 
 import { FetchPortfolioPayload } from "../check_limit/types";
 
@@ -215,7 +215,7 @@ export const otpVerifyAuthCASMF: PageType<any> = {
   actions: {
     [ACTIONS.AUTH_CAS]: authCAS,
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
-    [ACTIONS.GO_BACK]: goBack,
+    [ACTIONS.GO_BACK]: goBackAction,
     [ACTIONS.NAV_TO_FETCH]: navToFetch,
     //[ACTIONS.NEXT_ROUTE]: goNext,
   },
