@@ -85,9 +85,8 @@ import { nameMF } from "./features/enter_name";
 import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
 import { basicDetailsStartMF } from "./features/Dist_basicDetails/basicDetailsStart";
 import { DistributorClientListStepperMF } from "./features/DistributorClientList/ClientListStepper";
-import { unlockLimitLandingMF } from "./features/mfPledge/unlock_limit_landing";
 
-import { portfolioUnlockMF } from "./features/selectPortfolio/portfolioUnlock";
+//import { portfolioUnlockMF } from "./features/selectPortfolio/portfolioUnlock";
 
 
 export const ROUTE_MAP: RouteMap = {
@@ -183,14 +182,12 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.DETAILS_CONFIRM]: detailsConfirmMF,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER]: DistributorClientListStepperMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
-  [ROUTE.CHECKING_LIMIT]: checkingLimitMf,
-  [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  //[ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
   [ROUTE.DIST_BANK_ACCOUNT_ADD]: distBankAccountAddMF,
   [ROUTE.DIST_BANK_SEARCH_BRANCH]: distBankSearchBranchMF,
   [ROUTE.DIST_BANK_SELECT]: distBankSelectMF,
   [ROUTE.INVESTOR]: investorMF,
-  [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,
   [ROUTE.ENTER_NAME]: nameMF,
   [ROUTE.BASIC_DETAILS_START]: basicDetailsStartMF,
-  [ROUTE.PORTFOLIO_UNLOCK]: portfolioUnlockMF,
+  //[ROUTE.PORTFOLIO_UNLOCK]: portfolioUnlockMF,
 };
