@@ -193,6 +193,9 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       labelColor: ColorTokens.Grey_Charcoal,
       bgColor: ColorTokens.Primary_02,
       alignText: MessageAlignType.CENTER,
+      customLabel:<TypographyProps>{
+        label:""
+      },
     },
   },
 });

@@ -276,7 +276,7 @@ export const template:(
         isBackButton: false,
         type: HeaderTypeTokens.HEADERCTA,
         leftIcon:<IconProps>{
-          name:IconTokens.BellNotified,
+         // name:IconTokens.BellNotified,
           size:IconSizeTokens.XXL,
          // color:ColorTokens.Grey_Charcoal
         },
@@ -350,7 +350,7 @@ export const template:(
         size: SizeTypeTokens.MD
       },
       noClientIcon: <IconProps> {
-        name: IconTokens.List,
+       // name: IconTokens.List,
         size: IconSizeTokens.XXXXXXXXL,
       },
       noClientTitle: <TypographyProps> {

@@ -11,10 +11,11 @@ import { InputPayload } from "./types";
 import {  goBack, onChangeInput, onChangeInput2, toggleCTA, toggleCTA1, triggerCTA } from "./actions";
 
 export const template: (
-  stepper: StepperItem[],
+  //stepper: StepperItem[],
   isDisabled:string,
   stepper_data:any
-) => TemplateSchema = (stepper,isDisabled,stepper_data) => {
+) => TemplateSchema = (//stepper,
+  isDisabled,stepper_data) => {
   return {
     layout: <Layout>{
       id: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
@@ -243,8 +244,8 @@ export const distBasicDetailsMF: PageType<any> = {
     }
     console.log(isDisabled);
     console.log("isDisabled",data);
-    const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
-    return Promise.resolve(template(stepper,isDisabled,stepper_data));
+   // const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
+    return Promise.resolve(template(isDisabled,stepper_data));
   },
   actions: {
     [ACTION.ENTER_DOB]: onChangeInput,

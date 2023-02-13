@@ -222,14 +222,14 @@ export const template: (
       placeholder: "Confirm Account number",
       caption: { success: "", error: "Account number didn’t match" },
       successAction: {
-        // type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
-        // routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
-        // payload:  <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
+        type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload:  <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
       },
       errorAction: {
-        // type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
-        // routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
-        // payload:  <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
+        type: ACTION.ONCHANGE_CONFIRMACCOUNT_NUMBER,
+        routeId: ROUTE.DIST_BANK_ACCOUNT_ADD,
+        payload:  <InputPayload>{ value: "", widgetId: "confirmAccountInput" },
       },
       keyboardType: KeyboardTypeToken.email,
       action: {

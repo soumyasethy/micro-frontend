@@ -101,6 +101,7 @@ export const template: (
         fontWeight: "600",
       },
       input: <TextInputProps & TextInputOtpProps & WidgetProps>{
+        isFocus: true,
         title: "Enter OTP",
         type: InputTypeToken.OTP,
         state: InputStateToken.DEFAULT,

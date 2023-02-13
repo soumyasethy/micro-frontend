@@ -232,6 +232,14 @@ export const template: (
         label: "Use mobile number & email linked to your investments.",
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.Grey_Milk_1,
+        customLabel:{
+          label: "",
+              color: ColorTokens.Grey_Charcoal,
+              lineHeight: 28,
+              fontSize: FontSizeTokens.XXS,
+              fontFamily: FontFamilyTokens.Inter,
+              fontWeight: "500"
+        },
         icon: <IconProps>{
           name: IconTokens.Info,
           size: IconSizeTokens.SM,
@@ -306,7 +314,7 @@ export const checkLimitMF: PageType<any> = {
 
   onLoad: async (
     { network, asyncStorage, ...props },
-    { applicationId, email, panNumber, mobileNumber, headTitle }
+    { setIsUserLoggedIn,assetRepository,applicationId, email, panNumber, mobileNumber, headTitle }
   ) => {
     const userType = await SharedPropsService.getUserType();
     let phoneNumber = "";
@@ -324,19 +332,23 @@ export const checkLimitMF: PageType<any> = {
       if (!applicationId) {
         applicationId = applicationId || user.linkedApplications[0].applicationId;
       }
-      const assetRepository = await SharedPropsService.getAssetRepositoryType();
+      if(!assetRepository) {
+        assetRepository = await getPrimaryAssetRepository();
+      }
+  
+     // const assetRepository = await SharedPropsService.getAssetRepositoryType();
     } else {
       phoneNumber = await (await SharedPropsService.getPartnerUser()).phoneNumber;
       emailId = await (await SharedPropsService.getPartnerUser()).emailId;
       panNumberX = await (await SharedPropsService.getPartnerUser()).panNumber;
-      const assetRepository = headTitle;
+     // const assetRepository = headTitle;
       // console.log(await SharedPropsService.getBasicData());
       //       phoneNumber = await (await SharedPropsService.getBasicData()).mobileNumber;
       //       emailId =await (await SharedPropsService.getBasicData()).email;
       //       panNumberX = await (await SharedPropsService.getBasicData()).panNumber;
       //       const assetRepository = headTitle;
     }
-    const assetRepository = await SharedPropsService.getAssetRepositoryType();
+  //  const assetRepository = await SharedPropsService.getAssetRepositoryType();
     console.log("repo", assetRepository);
     // return Promise.resolve(
     //   template(applicationId, panNumberX, phoneNumber, emailId, headTitle,assetRepository)

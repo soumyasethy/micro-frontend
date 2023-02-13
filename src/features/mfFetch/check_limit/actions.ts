@@ -131,7 +131,6 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
   if (userType == "BORROWER") {
     // updataion after implement at correct place 
     if (hasChangedInDetails) {
-      const user: User = await SharedPropsService.getUser();
       action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
       action.payload.phoneNumber =
         user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
@@ -140,32 +139,43 @@ export const fetchMyPortfolio: ActionFunction<FetchPortfolioPayload> = async (
         action.payload.applicationId = user.linkedApplications[0].applicationId;
       }
     }
-    await network
-      .post(
-        api.pledgeInit,
-        <FetchPortfolioPayload>{
-          ...action.payload,
-        },
-        {
-          headers: await getAppHeader(),
-        }
-      )
-      .then(async (response) => {
-        const user: User = await SharedPropsService.getUser();
-        user.linkedApplications[0].currentStepId =
-          response.data.updatedApplicationObj.currentStepId;
-        await SharedPropsService.setUser(user);
-        await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
-          ...action.payload,
-        });
-      })
-      .finally(async () => {
-        await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
-          label: "Get my portfolio",
-          type: ButtonTypeTokens.LargeFilled,
-          loading: false,
-        });
-      });
+  
+    const assetRepository: AssetRepositoryType = AssetRepositoryType[action.payload.assetRepository];
+    console.log("inside borrower");
+    console.log("assetType",assetRepository);
+  
+    const response = await network.post(
+      api.pledgeInit,
+      <FetchPortfolioPayload>{
+        ...action.payload,
+        assetRepository: assetRepository,
+      },
+      {
+        headers: await getAppHeader(),
+      }
+    );
+    await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
+      label: "Get my portfolio",
+      type: ButtonTypeTokens.LargeFilled,
+      loading: false,
+    });
+  
+    user.linkedApplications[0].currentStepId = _.get(
+      response,
+      "response.data.updatedApplicationObj.currentStepId",
+      response.data.updatedApplicationObj.currentStepId
+    );
+    await SharedPropsService.setUser(user);
+  
+    /*** Reset to default asset repository type if the user has changed the asset repository type from the settings page */
+    await setDatastore(ROUTE.OTP_AUTH_CAS, "input", <TextInputProps>{
+      state: InputStateToken.DEFAULT,
+      charLimit: AssetRepositoryMap.get(assetRepository).OTP_LENGTH,
+    });
+    await setDatastore(ROUTE.OTP_AUTH_CAS, "subTitle", <TextInputProps>{
+      label: `${AssetRepositoryMap.get(assetRepository).NAME} depository has sent an OTP to `,
+    });
+    await navigate(ROUTE.OTP_AUTH_CAS, action.payload);
   } else {
     const applicationId = await SharedPropsService.getApplicationId()
     await network

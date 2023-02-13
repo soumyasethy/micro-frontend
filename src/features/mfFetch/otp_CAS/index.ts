@@ -33,7 +33,7 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
-import { authCAS, fetchMyPortfolio,goNext, goBack, navToFetch } from "./actions";
+import { authCAS, fetchMyPortfolio, goBack, navToFetch } from "./actions";
 
 import { FetchPortfolioPayload } from "../check_limit/types";
 
@@ -200,15 +200,16 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     assetRepository }) => {
     const userType = await SharedPropsService.getUserType();
     if (userType === USERTYPE.BORROWER) {
+      await SharedPropsService.setAssetRepositoryType(assetRepository);
       const user: User = await SharedPropsService.getUser();
       applicationId = user.linkedApplications[0].applicationId;
       emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
       panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
       phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-      assetRepository = await SharedPropsService.getAssetRepositoryType();
+      //assetRepository = await SharedPropsService.getAssetRepositoryType();
     }
     return Promise.resolve(
-      template(applicationId, AssetRepositoryType[assetRepository], emailId, panNumber, phoneNumber)
+      template(applicationId,  AssetRepositoryType[assetRepository], emailId, panNumber, phoneNumber)
     );
   },
   actions: {
@@ -216,7 +217,7 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
     [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.NAV_TO_FETCH]: navToFetch,
-    [ACTIONS.NEXT_ROUTE]: goNext,
+    //[ACTIONS.NEXT_ROUTE]: goNext,
   },
   clearPrevious: true,
 };

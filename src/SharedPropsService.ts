@@ -97,7 +97,7 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
-  userType:USERTYPE.PARTNER,
+  userType:USERTYPE.BORROWER,
   applicationId:"",
   bankCode:"",
   bankName:"",
