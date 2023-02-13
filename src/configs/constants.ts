@@ -50,3 +50,8 @@ export const AnalyticsEventTracker = {
 export const TextConstants = {
   "GENERIC_PROCEED_MESSAGE" : "Please click continue to proceed."
 }
+
+export enum QUERY_PARAMS {
+  DELETE = 'delete',
+  PARTNER_PLATFORM = 'partnerplatform',
+}

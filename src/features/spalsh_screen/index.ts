@@ -26,6 +26,7 @@ import { SplashAction } from "./actions";
 import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
 import {clearAllData, getParameters} from "../../configs/utils";
+import {QUERY_PARAMS} from "../../configs/constants";
 
 const template: (isPartnerPlatform) => TemplateSchema = (
   isPartnerPlatform
@@ -83,7 +84,7 @@ export const splashScreenMF: PageType<any> = {
       /*** get params for custom api header if present in url
        *** example, voltmoney.in/partnerplatform?platform=VOLT_MOBILE_APP ****/
 
-      const deleteUserContextCheck = urlParams.toLowerCase().includes('delete');
+      const deleteUserContextCheck = urlParams.toLowerCase().includes(QUERY_PARAMS.DELETE);
       if(deleteUserContextCheck) {
         clearAllData().then(async ()=>{
           await standardUtilities.navigate(ROUTE.PHONE_NUMBER);
@@ -92,7 +93,7 @@ export const splashScreenMF: PageType<any> = {
 
       const partnerPlatform = urlParams
         .toLowerCase()
-        .includes("partnerplatform");
+        .includes(QUERY_PARAMS.PARTNER_PLATFORM);
       const platform = urlParams.includes("platform");
 
       if (partnerPlatform && platform) {
