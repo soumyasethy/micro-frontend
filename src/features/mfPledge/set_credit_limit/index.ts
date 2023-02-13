@@ -94,30 +94,9 @@ export const template: (
         type: WIDGET.CARD,
         padding: {
           horizontal: -16,
-          vertical: 0
+          vertical: 0,
         },
       },
-      { id: "space11", type: WIDGET.SPACE },
-      {
-        id: "bottomSheetStack2",
-        type: WIDGET.STACK,
-        padding: {
-          left: 0,
-          right: 0,
-        },
-      },
-      { id: "space12", type: WIDGET.SPACE },
-      { id: "mfStack", type: WIDGET.STACK },
-      { id: "space13", type: WIDGET.SPACE },
-      { id: "divider", type: WIDGET.DIVIDER },
-      // {
-      //   id: "bottomSheet",
-      //   type: WIDGET.BOTTOMSHEET,
-      //   position: POSITION.STICKY_BOTTOM,
-      //   padding: { left: 0, right: 0 },
-      // },
-      { id: "listItem", type: WIDGET.LIST },
-        //position: POSITION.STICKY_BOTTOM,
       {
         id: "ctaCard",
         type: WIDGET.CARD,
@@ -320,8 +299,8 @@ export const template: (
           { id: "infoRow", type: WIDGET.STACK },
           { id: "infoSpace2", type: WIDGET.SPACE },
           { id: "divider0", type: WIDGET.DIVIDER },
-          { id: "listItem", type: WIDGET.LIST }
-        ]
+          { id: "listItem", type: WIDGET.LIST },
+        ],
       },
     },
     bottomSheetStack: <StackProps>{
@@ -345,7 +324,7 @@ export const template: (
       fontSize: FontSizeTokens.MD,
       fontFamily: FontFamilyTokens.Poppins,
       lineHeight: 24,
-      color: ColorTokens.Grey_Night
+      color: ColorTokens.Grey_Night,
     },
     editText: <ButtonProps & WidgetProps>{
       label: "Edit selection",
@@ -424,7 +403,7 @@ export const template: (
       fontWeight: "400",
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
-      lineHeight: 24
+      lineHeight: 24,
     },
     space5: <SpaceProps>{
       size: SizeTypeTokens.MD,
@@ -437,7 +416,7 @@ export const template: (
     },
     divider0: <DividerProps>{
       size: DividerSizeTokens.MD,
-      type: 'solid',
+      type: "solid",
       color: ColorTokens.Grey_Milk_1,
     },
     infoRow: <StackProps>{
@@ -446,8 +425,8 @@ export const template: (
       justifyContent: StackJustifyContent.spaceBetween,
       widgetItems: [
         { id: "col1Headers", type: WIDGET.STACK },
-        { id: "col2Headers", type: WIDGET.STACK }
-      ]
+        { id: "col2Headers", type: WIDGET.STACK },
+      ],
     },
     col1Headers: <StackProps>{
       type: "row",
@@ -457,7 +436,7 @@ export const template: (
       widgetItems: [
         { id: "col1Header", type: WIDGET.TEXT },
         { id: "col1Space", type: WIDGET.SPACE },
-      ]
+      ],
     },
     col2Headers: <StackProps>{
       type: "row",
@@ -467,27 +446,27 @@ export const template: (
       widgetItems: [
         { id: "col2Header", type: WIDGET.TEXT },
         // { id:"col2Space", type: WIDGET.SPACE },
-      ]
+      ],
     },
     col1Space: <SpaceProps>{
-      size: SizeTypeTokens.XXXL
+      size: SizeTypeTokens.XXXL,
     },
     col2Space: <SpaceProps>{
-      size: SizeTypeTokens.XXXL
+      size: SizeTypeTokens.XXXL,
     },
     col1Header: <TypographyProps>{
-      label: 'Mutual fund',
+      label: "Mutual fund",
       fontSize: FontSizeTokens.XS,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: '500',
+      fontWeight: "500",
       color: ColorTokens.Grey_Charcoal,
       lineHeight: 18,
     },
     col2Header: <TypographyProps>{
-      label: 'Credit limit',
+      label: "Available Credit limit",
       fontSize: FontSizeTokens.XS,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: '500',
+      fontWeight: "500",
       color: ColorTokens.Grey_Charcoal,
       lineHeight: 18,
     },
@@ -550,8 +529,8 @@ export const setCreditLimitMf: PageType<any> = {
     const pledgeLimitResponse = authCAS
       ? { data: authCAS }
       : await fetchPledgeLimitRepo().then((response) => ({
-        data: response,
-      }));
+          data: response,
+        }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
     const creditAmount = await sharedPropsService.getCreditLimit();
     const updateAvailableCASMapSharedProps =
