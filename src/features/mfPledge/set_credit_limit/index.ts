@@ -8,6 +8,7 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
+  BorderRadiusTokens,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
@@ -22,7 +23,6 @@ import {
   IconProps,
   IconSizeTokens,
   IconTokens,
-  NotchProps,
   PaddingProps,
   ShadowTypeTokens,
   SizeTypeTokens,
@@ -91,10 +91,10 @@ export const template: (
       { id: "space4", type: WIDGET.SPACE },
       {
         id: "bottomCard",
-        type: WIDGET.NOTCH,
+        type: WIDGET.CARD,
         padding: {
           horizontal: -16,
-          vertical:0
+          vertical: 0
         },
         //position: POSITION.STICKY_BOTTOM,
       },
@@ -103,8 +103,8 @@ export const template: (
         type: WIDGET.CARD,
         padding: {
           horizontal: 0,
-          top:-16,
-          bottom:0,
+          top: -16,
+          bottom: 0,
           all: 0,
         },
         position: POSITION.STICKY_BOTTOM,
@@ -277,35 +277,32 @@ export const template: (
     //   initialOffset: 0.4,
     //   finalOffSet: 0.85,
     // },
-    bottomCard: <NotchProps & WidgetProps>{
+    bottomCard: <CardProps & WidgetProps>{
       bgColor: ColorTokens.White,
-     // border: SizeTypeTokens.LG,
-      body: { widgetItems: [
-        { id: "bottomSpace11", type: WIDGET.SPACE },
-        {
-          id: "bottomSheetStack",
-          type: WIDGET.STACK,
-        },
-        { id: "space11", type: WIDGET.SPACE },
-        {
-          id: "bottomSheetStack2",
-          type: WIDGET.STACK,
-        },
-        { id: "infoSpace", type: WIDGET.SPACE },
-        { id: "infoRow", type: WIDGET.STACK },
-        { id: "infoSpace2", type: WIDGET.SPACE },
-        { id: "divider0", type: WIDGET.DIVIDER },
-        // {
-        //   id: "bottomSheet",
-        //   type: WIDGET.BOTTOMSHEET,
-        //   position: POSITION.STICKY_BOTTOM,
-        //   padding: { left: 0, right: 0 },
-        // },
-        { id: "listItem", type: WIDGET.LIST },
-        
-      ] },
-      // alignItems: StackAlignItems.center,
-      // justifyContent: StackJustifyContent.spaceBetween,
+      borderTopLeftRadius: BorderRadiusTokens.BR4,
+      borderTopRightRadius: BorderRadiusTokens.BR4,
+      borderBottomLeftRadius: BorderRadiusTokens.BR0,
+      borderBottomRightRadius: BorderRadiusTokens.BR0,
+      // border: SizeTypeTokens.LG,
+      body: {
+        widgetItems: [
+          { id: "bottomSpace11", type: WIDGET.SPACE },
+          {
+            id: "bottomSheetStack",
+            type: WIDGET.STACK,
+          },
+          { id: "space11", type: WIDGET.SPACE },
+          {
+            id: "bottomSheetStack2",
+            type: WIDGET.STACK,
+          },
+          { id: "infoSpace", type: WIDGET.SPACE },
+          { id: "infoRow", type: WIDGET.STACK },
+          { id: "infoSpace2", type: WIDGET.SPACE },
+          { id: "divider0", type: WIDGET.DIVIDER },
+          { id: "listItem", type: WIDGET.LIST }
+        ]
+      },
     },
     bottomSheetStack: <StackProps>{
       type: StackType.row,
@@ -327,8 +324,8 @@ export const template: (
       fontWeight: "600",
       fontSize: FontSizeTokens.MD,
       fontFamily: FontFamilyTokens.Poppins,
-      lineHeight:24,
-      color:ColorTokens.Grey_Night
+      lineHeight: 24,
+      color: ColorTokens.Grey_Night
     },
     editText: <ButtonProps & WidgetProps>{
       label: "Edit selection",
@@ -373,7 +370,7 @@ export const template: (
       fontWeight: "400",
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
-      lineHeight:24
+      lineHeight: 24
     },
     space5: <SpaceProps>{
       size: SizeTypeTokens.MD,
@@ -384,47 +381,47 @@ export const template: (
     infoSpace2: <SpaceProps>{
       size: SizeTypeTokens.MD,
     },
-    divider0: <DividerProps> {
+    divider0: <DividerProps>{
       size: DividerSizeTokens.MD,
       type: 'solid',
       color: ColorTokens.Grey_Milk_1,
     },
-    infoRow: <StackProps> {
+    infoRow: <StackProps>{
       type: StackType.row,
-      width:StackWidth.FULL,
+      width: StackWidth.FULL,
       justifyContent: StackJustifyContent.spaceBetween,
       widgetItems: [
-        { id:"col1Headers", type: WIDGET.STACK },
-        { id:"col2Headers", type: WIDGET.STACK }
+        { id: "col1Headers", type: WIDGET.STACK },
+        { id: "col2Headers", type: WIDGET.STACK }
       ]
     },
-    col1Headers: <StackProps> {
-      type:"row",
-      justifyContent:StackJustifyContent.flexStart,
-      alignItems:StackAlignItems.flexStart,
-      width:StackWidth.FULL,
+    col1Headers: <StackProps>{
+      type: "row",
+      justifyContent: StackJustifyContent.flexStart,
+      alignItems: StackAlignItems.flexStart,
+      width: StackWidth.FULL,
       widgetItems: [
-        { id:"col1Header", type: WIDGET.TEXT },
-        { id:"col1Space", type: WIDGET.SPACE },
+        { id: "col1Header", type: WIDGET.TEXT },
+        { id: "col1Space", type: WIDGET.SPACE },
       ]
     },
-    col2Headers: <StackProps> {
-      type:"row",
-      justifyContent:StackJustifyContent.flexEnd,
-      alignItems:StackAlignItems.flexEnd,
-      width:StackWidth.FULL,
+    col2Headers: <StackProps>{
+      type: "row",
+      justifyContent: StackJustifyContent.flexEnd,
+      alignItems: StackAlignItems.flexEnd,
+      width: StackWidth.FULL,
       widgetItems: [
-        { id:"col2Header", type: WIDGET.TEXT },
-       // { id:"col2Space", type: WIDGET.SPACE },
+        { id: "col2Header", type: WIDGET.TEXT },
+        // { id:"col2Space", type: WIDGET.SPACE },
       ]
     },
-    col1Space:<SpaceProps>{
-      size:SizeTypeTokens.XXXL
+    col1Space: <SpaceProps>{
+      size: SizeTypeTokens.XXXL
     },
-    col2Space:<SpaceProps>{
-      size:SizeTypeTokens.XXXL
+    col2Space: <SpaceProps>{
+      size: SizeTypeTokens.XXXL
     },
-    col1Header: <TypographyProps> {
+    col1Header: <TypographyProps>{
       label: 'Mutual fund',
       fontSize: FontSizeTokens.XS,
       fontFamily: FontFamilyTokens.Inter,
@@ -432,7 +429,7 @@ export const template: (
       color: ColorTokens.Grey_Charcoal,
       lineHeight: 18,
     },
-    col2Header: <TypographyProps> {
+    col2Header: <TypographyProps>{
       label: 'Credit limit',
       fontSize: FontSizeTokens.XS,
       fontFamily: FontFamilyTokens.Inter,
@@ -457,7 +454,7 @@ export const template: (
     ...(await portfolioListDatastoreBuilderSetCreditLimit(stepResponseObject)),
     ctaCard: <CardProps>{
       bgColor: ColorTokens.White,
-      shadow:ShadowTypeTokens.E6,
+      shadow: ShadowTypeTokens.E6,
       body: { widgetItems: [{ id: "ctaBody", type: WIDGET.STACK }] },
       alignItems: StackAlignItems.center,
       justifyContent: StackJustifyContent.spaceBetween,
@@ -499,8 +496,8 @@ export const setCreditLimitMf: PageType<any> = {
     const pledgeLimitResponse = authCAS
       ? { data: authCAS }
       : await fetchPledgeLimitRepo().then((response) => ({
-          data: response,
-        }));
+        data: response,
+      }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
     const creditAmount = await sharedPropsService.getCreditLimit();
     const updateAvailableCASMapSharedProps =
