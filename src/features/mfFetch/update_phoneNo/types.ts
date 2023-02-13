@@ -3,5 +3,6 @@ export enum ACTION {
   PHONE_NUMBER_ONCHANGE = "PHONE_NUMBER_ONCHANGE",
   DISABLE_CONTINUE = "DISABLE_CONTINUE",
   ENABLE_CONTINUE = "ENABLE_CONTINUE",
+  GO_BACK = "GO_BACK",
 }
 export type UpdateMobileNumber = { value: string; targetWidgetId: string };
