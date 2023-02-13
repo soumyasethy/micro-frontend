@@ -52,6 +52,7 @@ type GlobalProps = {
   creditLimit: number;
   listItemDataCAS: any;
   desiredPortfolio?: any;
+  creditStatus?: string;
 };
 
 let _globalProps: GlobalProps = {
@@ -94,6 +95,7 @@ let _globalProps: GlobalProps = {
   creditLimit: 25000,
   listItemDataCAS: [],
   desiredPortfolio: {},
+  creditStatus: "",
 };
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
@@ -307,6 +309,14 @@ async function getDesiredPortfolio() {
   return _globalProps.desiredPortfolio;
 }
 
+async function setCreditStatus(creditStatus: any) {
+  _globalProps.creditStatus = creditStatus;
+}
+
+async function getCreditStatus() {
+  return _globalProps.creditStatus;
+}
+
 export default {
   setBuildType,
   getBuildType,
@@ -348,4 +358,6 @@ export default {
   getListItemDataCAS,
   setDesiredPortfolio,
   getDesiredPortfolio,
+  setCreditStatus,
+  getCreditStatus,
 };

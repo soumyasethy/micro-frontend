@@ -41,12 +41,12 @@ import {
 import SharedPropsService from "../../../SharedPropsService";
 import { AvailableCASItem } from "../../mfPledge/unlock_limit/types";
 import { StepResponseObject } from "../../mfPledge/unlock_limit_landing_V2/types";
-import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
 import moment from "moment";
 import { User } from "../../login/otp_verify/types";
 import { GetMoreMfPortfolioPayload } from "../unlock_limit_V2/types";
 import { addCommasToNumber } from "../../../configs/utils";
+import { AuthCASModel } from "../../../types/AuthCASModel";
+import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
 
 export const template: (
   stepResponseObject: StepResponseObject,
@@ -115,20 +115,17 @@ export const template: (
       },
       bodyOrientation: CardOrientation.HORIZONTAL,
       body: {
-        widgetItems: [
-          { id: "stack2", type: WIDGET.STACK }
-        ],
+        widgetItems: [{ id: "stack2", type: WIDGET.STACK }],
       },
     },
     stack2: <StackProps>{
       width: StackWidth.FULL,
       type: StackType.row,
-       justifyContent: StackJustifyContent.spaceBetween,
+      justifyContent: StackJustifyContent.spaceBetween,
       widgetItems: [
         { id: "head", type: WIDGET.STACK },
         { id: "headSpace", type: WIDGET.SPACE },
         { id: "tail", type: WIDGET.STACK },
-       
       ],
     },
     head: <StackProps>{
@@ -137,11 +134,10 @@ export const template: (
       widgetItems: [
         { id: "Value", type: WIDGET.TEXT },
         { id: "Value2", type: WIDGET.TEXT },
-       
       ],
     },
-    headSpace:<SpaceProps>{
-      size:SizeTypeTokens.XXXL
+    headSpace: <SpaceProps>{
+      size: SizeTypeTokens.XXXL,
     },
     tail: <StackProps>{
       width: StackWidth.FULL,
@@ -149,12 +145,11 @@ export const template: (
       widgetItems: [
         { id: "AvailableCreditLimit", type: WIDGET.TEXT },
         { id: "AvailableCreditLimit2", type: WIDGET.TEXT },
-       
       ],
     },
-  
-    AvailableCreditLimitSpace:<SpaceProps>{
-      size:SizeTypeTokens.LG
+
+    AvailableCreditLimitSpace: <SpaceProps>{
+      size: SizeTypeTokens.LG,
     },
     Value: <TypographyProps>{
       label: `Value`,
@@ -162,7 +157,7 @@ export const template: (
       fontWeight: "400",
       fontColor: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.XS,
-      lineHeight:16
+      lineHeight: 16,
     },
     AvailableCreditLimit: <TypographyProps>{
       label: `Available credit limit`,
@@ -170,7 +165,7 @@ export const template: (
       fontWeight: "400",
       fontColor: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
-      lineHeight: 18
+      lineHeight: 18,
     },
     creditLimitCard2: <CardProps>{
       borderBottomRightRadius: BorderRadiusTokens.BR3,
@@ -194,7 +189,7 @@ export const template: (
       fontWeight: "500",
       fontColor: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.SM,
-      lineHeight:18
+      lineHeight: 18,
     },
     AvailableCreditLimit2: <TypographyProps>{
       label: `₹${addCommasToNumber(totalPortfolio)}`,
@@ -202,7 +197,7 @@ export const template: (
       fontWeight: "500",
       fontColor: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XS,
-      lineHeight:16
+      lineHeight: 16,
     },
     space: <SpaceProps>{
       size: SizeTypeTokens.XL,
@@ -246,7 +241,10 @@ export const template: (
       size: DividerSizeTokens.SM,
       color: ColorTokens.Grey_Milk_1,
     },
-    ...(await portfolioListDatastoreBuilder(stepResponseObject, assetRepository)),
+    ...(await portfolioListDatastoreBuilder(
+      stepResponseObject,
+      assetRepository
+    )),
     ctaCard: <CardProps>{
       bgColor: ColorTokens.White,
       width: StackWidth.FULL,
@@ -286,7 +284,7 @@ export const template: (
         type: ACTION.GET_MORE_MF_PORTFOLIO,
         payload: <GetMoreMfPortfolioPayload>{
           casList: stepResponseObject.availableCAS,
-          assetRepository: assetRepository
+          assetRepository: assetRepository,
         },
         routeId: ROUTE.PORTFOLIO_FROM_RTA,
       },
@@ -298,11 +296,13 @@ export const portfoliofromRTAMf: PageType<any> = {
   onLoad: async ({ network }, { assetRepository }) => {
     const updateAvailableCASMap = {};
     const user: User = await SharedPropsService.getUser();
+    const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
 
-    const pledgeLimitResponse = await network.get(
-      `${api.pledgeLimit}${user.linkedApplications[0].applicationId}`,
-      { headers: await getAppHeader() }
-    );
+    const pledgeLimitResponse = authCAS
+      ? { data: authCAS }
+      : await fetchPledgeLimitRepo().then((response) => ({
+          data: response,
+        }));
     /*** update authCAS in SharedPropsService if fetched from api ***/
     await SharedPropsService.setAuthCASResponse(pledgeLimitResponse.data);
 
@@ -311,21 +311,22 @@ export const portfoliofromRTAMf: PageType<any> = {
     await SharedPropsService.setCasListOriginal(availableCAS);
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
 
-    const date = assetRepository === "CAMS"
+    const date =
+      assetRepository === "CAMS"
         ? stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate
         : stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
 
     const formattedDate = moment.unix(Number(date)).format("DD MMM, YYYY");
 
     const availableAmount =
-        assetRepository === "CAMS"
+      assetRepository === "CAMS"
         ? stepResponseObject.repositoryAssetMetadataMap.CAMS
             .availableCreditAmount
         : stepResponseObject.repositoryAssetMetadataMap.KARVY
             .availableCreditAmount;
 
     const totalPortfolio =
-        assetRepository === "CAMS"
+      assetRepository === "CAMS"
         ? stepResponseObject.repositoryAssetMetadataMap.CAMS
             .availablePortfolioAmount
         : stepResponseObject.repositoryAssetMetadataMap.KARVY

@@ -96,8 +96,28 @@ export const template: (
           horizontal: -16,
           vertical: 0
         },
-        //position: POSITION.STICKY_BOTTOM,
       },
+      { id: "space11", type: WIDGET.SPACE },
+      {
+        id: "bottomSheetStack2",
+        type: WIDGET.STACK,
+        padding: {
+          left: 0,
+          right: 0,
+        },
+      },
+      { id: "space12", type: WIDGET.SPACE },
+      { id: "mfStack", type: WIDGET.STACK },
+      { id: "space13", type: WIDGET.SPACE },
+      { id: "divider", type: WIDGET.DIVIDER },
+      // {
+      //   id: "bottomSheet",
+      //   type: WIDGET.BOTTOMSHEET,
+      //   position: POSITION.STICKY_BOTTOM,
+      //   padding: { left: 0, right: 0 },
+      // },
+      { id: "listItem", type: WIDGET.LIST },
+        //position: POSITION.STICKY_BOTTOM,
       {
         id: "ctaCard",
         type: WIDGET.CARD,
@@ -343,11 +363,45 @@ export const template: (
         routeId: ROUTE.SET_CREDIT_LIMIT,
       },
     },
+    mfStack: <StackProps>{
+      width: StackWidth.FULL,
+      type: StackType.row,
+      justifyContent: StackJustifyContent.spaceBetween,
+      alignItems: StackAlignItems.center,
+      widgetItems: [
+        { id: "mfText", type: WIDGET.TEXT },
+        { id: "mfText2", type: WIDGET.TEXT },
+      ],
+    },
+    mfText: <TypographyProps>{
+      label: `Mutual fund`,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
+      fontSize: FontSizeTokens.XS,
+      color: ColorTokens.Grey_Charcoal,
+    },
+    mfText2: <TypographyProps>{
+      label: `Available credit limit`,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
+      fontSize: FontSizeTokens.XS,
+      color: ColorTokens.Grey_Charcoal,
+    },
     bottomSpace11: <SpaceProps>{
       size: SizeTypeTokens.XXXXL,
     },
     space11: <SpaceProps>{
       size: SizeTypeTokens.MD,
+    },
+    space12: <SpaceProps>{
+      size: SizeTypeTokens.XL,
+    },
+    space13: <SpaceProps>{
+      size: SizeTypeTokens.Size10,
+    },
+    divider: <DividerProps>{
+      size: DividerSizeTokens.SM,
+      color: ColorTokens.Grey_Milk_1,
     },
     bottomSheetStack2: <StackProps>{
       type: StackType.row,
