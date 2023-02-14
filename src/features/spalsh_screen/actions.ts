@@ -3,7 +3,7 @@ import { api, partnerApi, StoreKey } from "../../configs/api";
 import { nextStepId } from "../../configs/utils";
 import { User } from "../login/otp_verify/types";
 import { ROUTE } from "../../routes";
-import SharedPropsService from "../../SharedPropsService";
+import SharedPropsService, { USERTYPE } from "../../SharedPropsService";
 
 import { getAppHeader } from "../../configs/config";
 
@@ -21,8 +21,7 @@ export const SplashAction: ActionFunction<any> = async (
 
     console.warn("SplashAction body", body);
     const userType = await SharedPropsService.getUserType();
-    console.log("userType", userType);
-    if (userType === "BORROWER") {
+    if (userType === USERTYPE.BORROWER) {
 
       const userContextResponse = await network.post(api.userContext, body, {
         headers: await getAppHeader(),

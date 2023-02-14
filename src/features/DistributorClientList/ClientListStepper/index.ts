@@ -156,12 +156,6 @@ export const template: (
         widgetItems: [
           { id: "shareSpace1", type: WIDGET.SPACE },
             { id: "ShareIconItem1", type: WIDGET.BUTTON },
-          // { id: "shareSpace1", type: WIDGET.SPACE },
-          // { id: "shareIcon", type: WIDGET.ICON },
-          // { id: "shareSpace", type: WIDGET.SPACE },
-          // { id: "shareTitle", type: WIDGET.TEXT },
-
-          // { id: "ShareSpace", type: WIDGET.SPACE },
         ]
       },
       shareIcon: <IconProps>{

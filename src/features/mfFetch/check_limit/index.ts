@@ -232,14 +232,6 @@ export const template: (
         label: "Use mobile number & email linked to your investments.",
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.Grey_Milk_1,
-        customLabel:{
-          label: "",
-              color: ColorTokens.Grey_Charcoal,
-              lineHeight: 28,
-              fontSize: FontSizeTokens.XXS,
-              fontFamily: FontFamilyTokens.Inter,
-              fontWeight: "500"
-        },
         icon: <IconProps>{
           name: IconTokens.Info,
           size: IconSizeTokens.SM,
@@ -350,13 +342,6 @@ export const checkLimitMF: PageType<any> = {
     }
   //  const assetRepository = await SharedPropsService.getAssetRepositoryType();
     console.log("repo", assetRepository);
-    // return Promise.resolve(
-    //   template(applicationId, panNumberX, phoneNumber, emailId, headTitle,assetRepository)
-
-    // if(!assetRepository) {
-    //   assetRepository = await getPrimaryAssetRepository();
-    // }
-
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_PAN_EDIT_ALLOWED
     );

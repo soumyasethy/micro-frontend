@@ -97,22 +97,6 @@ export const template: (applicationId: string) => TemplateSchema = (
           payload: <NamePayload>{ value: "", widgetId: "input" },
           routeId: ROUTE.ENTER_NAME,
         },
-        // errorAction: {
-        //   type: ACTION.DISABLE_CONTINUE,
-        //   routeId: ROUTE.ENTER_NAME,
-        //   payload: <EnableDisableCTA>{
-        //     value: false,
-        //     targetWidgetId: "continue",
-        //   },
-        // },
-        // successAction: {
-        //   type: ACTION.ENABLE_CONTINUE,
-        //   routeId: ROUTE.ENTER_NAME,
-        //   payload: <EnableDisableCTA>{
-        //     value: true,
-        //     targetWidgetId: "continue",
-        //   },
-        // },
       },
       space_input: <SpaceProps>{ size: SizeTypeTokens.XXL },
       input_email: <TextInputProps & WidgetProps>{

@@ -15,7 +15,6 @@ export const resumeSteps: ActionFunction<StepperPayload> = async (
     _datastore,
     { navigate ,setDatastore}
 ): Promise<any> => {
-    console.log(action.payload.value);
     await setDatastore(action.routeId, "continue", <ButtonProps>{
         loading: true,
     });

@@ -31,19 +31,9 @@ export const NavSearchIfscBranchInfoAction: ActionFunction<
     ...action.payload.bankRepo.POPULAR,
   };
   const bankCode = getKeyByValue(banksMap, action.payload.value);
-  console.log("action.payload.value",action.payload.value);
-  console.log("action.payload.value",bankCode);
   await SharedPropsService.setBankName(action.payload.value);
   await SharedPropsService.setBankCode(bankCode);
-  //await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD,"bankInput",<TextInputProps>{value:action.payload.value});
-  //await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD,"IFSCInput",<TextInputProps>{value:bankCode});
-  
   await goBack();
-  //await setDataStore(ROUTE.DIST_BANK_ACCOUNT_ADD,"bankInput",<TextInputProps>{value:action.payload.value});
-  // await navigate(ROUTE.DIST_BANK_ACCOUNT_ADD, {
-  //   bankCode,
-  //   bankName: action.payload.value,
-  // });
 };
 
 export const SearchAction: ActionFunction<SearchActionPayload> = async (

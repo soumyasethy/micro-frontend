@@ -61,8 +61,7 @@ type GlobalProps = {
   creditLimit: number;
   listItemDataCAS: any;
   desiredPortfolio?: any;
- // userType:USERTYPE;
-  userType:string;
+  userType:USERTYPE;
   partnerRefCode?: string;
   applicationId?:string;
   bankCode?:string;
@@ -102,7 +101,6 @@ let _globalProps: GlobalProps = {
   availableAuthCasMap: {},
   accountNumber: "",
   userType:USERTYPE.BORROWER,
-
   applicationId:"",
   bankCode:"",
   bankName:"",
@@ -161,7 +159,6 @@ let _globalProps: GlobalProps = {
   creditLimit: 25000,
   listItemDataCAS: [],
   desiredPortfolio: {},
- // userType:USERTYPE.BORROWER
   stepperData: {},
   investorName:""
 };

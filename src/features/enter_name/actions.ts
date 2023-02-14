@@ -39,13 +39,7 @@ export const saveName: ActionFunction<ContinuePayload> = async (
   });
   const updatedUser: User = response.data;
   if (updatedUser) {
-    // await SharedPropsService.setUser(updatedUser);
-    // const route = await nextStepId(
-    //   updatedUser.linkedApplications[0].currentStepId
-    // );
-    // await navigate(route.routeId, route.params);
     await navigate(ROUTE.DISTRIBUTOR_CLIENT_LIST);
-   // await navigate(ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO);
   }
 };
 export const textOnChange_name: ActionFunction<NamePayload> = async (

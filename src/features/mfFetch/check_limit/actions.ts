@@ -238,54 +238,5 @@ export const goBack: ActionFunction<{}> = async (
   _datastore,
   { network,navigate, goBack }
 ): Promise<any> => {
-  //await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
   goBack();
- // need to discuss about this conflict to soumya
- /* if (hasChangedInDetails) {
-    action.payload.panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
-    action.payload.phoneNumber =
-      user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    action.payload.emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
-    if (!action.payload.applicationId) {
-      action.payload.applicationId = user.linkedApplications[0].applicationId;
-    }
-  }
-  const response = await network.post(
-    api.pledgeInit,
-    <FetchPortfolioPayload>{
-      ...action.payload,
-      assetRepository: await SharedPropsService.getAssetRepositoryType(),
-    },
-    {
-      headers: await getAppHeader(),
-    }
-  );
-  await setDatastore(action.routeId, "fetchCTA", <ButtonProps>{
-    label: "Get my portfolio",
-    type: ButtonTypeTokens.LargeFilled,
-    loading: false,
-  });
-
-  user.linkedApplications[0].currentStepId = _.get(
-    response,
-    "response.data.updatedApplicationObj.currentStepId",
-    response.data.updatedApplicationObj.currentStepId
-  );
-  await SharedPropsService.setUser(user);
-
-  const assetRepositoryType = await SharedPropsService.getAssetRepositoryType();
-
-  /*** Reset to default asset repository type if the user has changed the asset repository type from the settings page */
-  /* await setDatastore(ROUTE.OTP_AUTH_CAS, "input", <TextInputProps>{
-    state: InputStateToken.DEFAULT,
-    charLimit: AssetRepositoryMap[assetRepositoryType].OTP_LENGTH,
-  });
-  await setDatastore(ROUTE.OTP_AUTH_CAS, "subTitle", <TextInputProps>{
-    label: `${AssetRepositoryMap[assetRepositoryType].NAME} depository has sent an OTP to `,
-  });
-
-  await navigate(ROUTE.OTP_AUTH_CAS, <FetchPortfolioPayload>{
-    ...action.payload,
-    assetRepository: await SharedPropsService.getAssetRepositoryType(),
-  }); */
 };

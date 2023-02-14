@@ -54,12 +54,7 @@ export const partnerLogin: ActionFunction<LoginAction & OTPPayload> = async (
   
     await SharedPropsService.setUser(user);
     await navigate(ROUTE.ENTER_NAME);
-   // const nextRoute = await nextStepId(
-    //   user.linkedApplications[0].currentStepId
-    // );
-    // await navigate(nextRoute.routeId, nextRoute.params);
   } else {
-    //update to error state
     await setDatastore(action.routeId, action.payload.widgetId, <
       TextInputProps
     >{
@@ -75,7 +70,6 @@ export const login: ActionFunction<LoginAction & OTPPayload> = async (
   _datastore,
   { navigate, setDatastore, network, }
 ): Promise<any> => {
-  console.log("login")
   if (action.payload.value.length !== 4) return;
   await setDatastore(action.routeId, action.payload.widgetId, <TextInputProps>{
     state: InputStateToken.LOADING,

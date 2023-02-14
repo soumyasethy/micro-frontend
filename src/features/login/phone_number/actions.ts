@@ -23,7 +23,7 @@ let isWhatsAppEnabled: boolean = true;
 
 
 /* check userType and call required function */
-export const checkUserType: ActionFunction<any> = async (
+export const sendOtpWithUserTypeCheck: ActionFunction<any> = async (
   action,
   _datastore,  { ...props }
 ): Promise<any> => {

@@ -1,7 +1,6 @@
 import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, CalendarProps, CalendarStateToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperStateToken, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
 import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
 import {  partnerApi } from "../../../configs/api";
-import { horizontalDistributorStepperRepo, horizontalStepperRepo } from "../../../configs/utils";
 import { ROUTE } from "../../../routes";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
@@ -242,9 +241,6 @@ export const distBasicDetailsMF: PageType<any> = {
     if(data.panNumber !== "" && data.mobileNumber !== "" && data.email !== ""){
       isDisabled = "true";
     }
-    console.log(isDisabled);
-    console.log("isDisabled",data);
-   // const stepper: StepperItem[] = await horizontalDistributorStepperRepo();
     return Promise.resolve(template(isDisabled,stepper_data));
 
   },
