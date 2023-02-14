@@ -416,7 +416,6 @@ export const template: (
         // fetchedAmount: KFintechAmount === 0 ? 'No portfolio fetched' : `Value: ₹ ${addCommasToNumber(KFintechAmount)}`,
         type: LimitCardTypeTokens.LIST,
         isView: false,
-        // showLottie: false,
         // isPrimaryAction: camsAmount === 0 ? false : true,
         // isSecondryAction: KFintechAmount === 0 ? false: true,
         action: {
@@ -461,7 +460,6 @@ export const template: (
         fetchedAmount: `${addCommasToNumber(totalPortfolioAmount)}`,
         isView: false,
         type: LimitCardTypeTokens.DEFAULT,
-        showLottie: false,
       },
       amountSpaces: <SpaceProps>{
         size: SizeTypeTokens.XL,
