@@ -1,4 +1,12 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   ButtonProps,
   ButtonTypeTokens,
@@ -30,7 +38,7 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
+import { ROUTE } from "../../../routes";
 import {
   ACTION,
   DropDownPayload,
@@ -40,10 +48,16 @@ import {
   MARITAL_STATUS,
   MaritalStatusPayload,
 } from "./types";
-import {GoBackAction, onChangeInput, onSelect, toggleCTA, triggerCTA,} from "./actions";
-import {horizontalStepperRepo} from "../../../configs/utils";
-import {getAppHeader} from "../../../configs/config";
-import {api} from "../../../configs/api";
+import {
+  GoBackAction,
+  onChangeInput,
+  onSelect,
+  toggleCTA,
+  triggerCTA,
+} from "./actions";
+import { horizontalStepperRepo } from "../../../configs/utils";
+import { getAppHeader } from "../../../configs/config";
+import { api } from "../../../configs/api";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
 
@@ -60,7 +74,7 @@ const qualificationInputData: Array<DropDownItemProps> = [
 export const template: (
   stepper: StepperItem[],
   stepResponseObject: { [key in string]: string }
-) => TemplateSchema = (stepper) => {
+) => TemplateSchema = (stepper, stepResponseObject) => {
   return {
     layout: <Layout>{
       id: ROUTE.KYC_ADDITIONAL_DETAILS,
@@ -260,6 +274,7 @@ export const template: (
       fatherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       fatherInputBetweenSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       fatherFirstNameInput: <TextInputProps & WidgetProps>{
+        value: `${stepResponseObject.fatherFirstName}`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "First name",
@@ -281,6 +296,7 @@ export const template: (
         },
       },
       fatherLastNameInput: <TextInputProps & WidgetProps>{
+        value: `${stepResponseObject.fatherLastName}`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "Last name",
@@ -322,6 +338,7 @@ export const template: (
         ],
       },
       motherFirstNameInput: <TextInputProps>{
+        value: `${stepResponseObject.motherFirstName}`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "First name",
@@ -342,6 +359,7 @@ export const template: (
       },
       motherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       motherLastNameInput: <TextInputProps>{
+        value: `${stepResponseObject.motherLastName}`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "Last name",
