@@ -25,7 +25,8 @@ import { ACTION } from "./types";
 import { SplashAction } from "./actions";
 import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
-import { getParameters } from "../../configs/utils";
+import {clearAllData, getParameters} from "../../configs/utils";
+import {QUERY_PARAMS} from "../../configs/constants";
 
 const template: (isPartnerPlatform) => TemplateSchema = (
   isPartnerPlatform
@@ -70,7 +71,7 @@ export const splashScreenMF: PageType<any> = {
     //Example-2
     //http://localhost:3000?ref=12345
     // access route.params -> {ref_code: '12345'}
-    const ref: string = _.get(props, "ref", null);
+    const ref: string = _.get(props, QUERY_PARAMS.REF, null);
     const urlParams: string = _.get(props, "urlParams", null);
     let mobileNumber = null;
     let isPartnerPlatform: boolean = false;
@@ -83,10 +84,17 @@ export const splashScreenMF: PageType<any> = {
       /*** get params for custom api header if present in url
        *** example, voltmoney.in/partnerplatform?platform=VOLT_MOBILE_APP ****/
 
+      const deleteUserContextCheck = urlParams.toLowerCase().includes(QUERY_PARAMS.DELETE);
+      if(deleteUserContextCheck) {
+        clearAllData().then(async ()=>{
+          await standardUtilities.navigate(ROUTE.PHONE_NUMBER);
+        })
+      }
+
       const partnerPlatform = urlParams
         .toLowerCase()
-        .includes("partnerplatform");
-      const platform = urlParams.includes("platform");
+        .includes(QUERY_PARAMS.PARTNER_PLATFORM);
+      const platform = urlParams.includes(QUERY_PARAMS.PLATFORM);
 
       if (partnerPlatform && platform) {
         isPartnerPlatform = true;
@@ -94,20 +102,20 @@ export const splashScreenMF: PageType<any> = {
           standardUtilities.metaData?.platform.OS === "web"
             ? getParameters(urlParams)
             : {};
-        const customPlatform = params["platform"];
+        const customPlatform = params[QUERY_PARAMS.PLATFORM];
         /*** setting app global api header here if not VOLT_MOBILE_APP ****/
         await SharedPropsService.setAppPlatform(customPlatform);
       }
 
       /*** if ?user=8763666620 then autofill mobile number in login screen ****/
-      const isPreFillMobileNumber = urlParams.includes("user");
+      const isPreFillMobileNumber = urlParams.includes(QUERY_PARAMS.USER);
 
       if (
         isPreFillMobileNumber &&
         standardUtilities.metaData?.platform.OS === "web"
       ) {
         const params = getParameters(urlParams);
-        mobileNumber = params["user"];
+        mobileNumber = params[QUERY_PARAMS.USER];
       }
     }
     setTimeout(
@@ -128,9 +136,5 @@ export const splashScreenMF: PageType<any> = {
   actions: {
     [ACTION.AUTH_NAV]: SplashAction,
   },
-  // action: {
-  //   type: ACTION.AUTH_NAV,
-  //   payload: {},
-  // },
   bgColor: "#1434CB",
 };
