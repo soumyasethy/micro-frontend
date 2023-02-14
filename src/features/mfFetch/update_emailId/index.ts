@@ -102,7 +102,7 @@ export const template: (email: String) => TemplateSchema = (email) => ({
       color: ColorTokens.Grey_Night,
     },
     text2: <TypographyProps>{
-      label: "Use email address linked to your investments",
+      label: "Use email linked to your investments",
       fontSize: FontSizeTokens.SM,
       fontWeight: "400",
       fontFamily: FontFamilyTokens.Inter,

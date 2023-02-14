@@ -250,7 +250,7 @@ export const template: (
       assetRepository
     )),
     ctaCard: <CardProps>{
-      shadow: ShadowTypeTokens.E5,
+      shadow: ShadowTypeTokens.E6,
       bgColor: ColorTokens.White,
       width: StackWidth.FULL,
       bodyOrientation: CardOrientation.HORIZONTAL,

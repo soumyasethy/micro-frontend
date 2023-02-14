@@ -39,19 +39,16 @@ import {
   AssetRepositoryType,
 } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
-import { User } from "../../login/otp_verify/types";
 import { heightMap } from "../../../configs/height";
 
 export const template: (
-  phoneNumber: string,
   assetRepository: AssetRepositoryType,
   sendOtpForPledgeConfirmAction: Action<any>,
-  emailId: string
+  emailOrPhone: string
 ) => TemplateSchema = (
-  phoneNumber,
   assetRepository,
   sendOtpForPledgeConfirmAction,
-  emailId
+  emailOrPhone
 ) => ({
   layout: <Layout>{
     id: ROUTE.PLEDGE_VERIFY,
@@ -145,10 +142,8 @@ export const template: (
     //   size: SizeTypeTokens.SM,
     // },
     subTitle2: <TypographyProps>{
-      label:
-        assetRepository === AssetRepositoryType.CAMS
-          ? emailId
-          : phoneNumber.substring(3),
+      // if data contains +91 then remove it
+      label: emailOrPhone.replace("+91", ""),
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
@@ -182,20 +177,14 @@ export const template: (
 });
 
 export const pledgeVerifyMF: PageType<any> = {
-  onLoad: async (_, { assetRepository, sendOtpForPledgeConfirmAction }) => {
-    const user: User = await SharedPropsService.getUser();
-    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
-
+  onLoad: async (
+    _,
+    { assetRepository, sendOtpForPledgeConfirmAction, emailOrPhone }
+  ) => {
     await SharedPropsService.setAssetRepositoryType(assetRepository);
 
     return Promise.resolve(
-      template(
-        phoneNumber,
-        assetRepository,
-        sendOtpForPledgeConfirmAction,
-        emailId
-      )
+      template(assetRepository, sendOtpForPledgeConfirmAction, emailOrPhone)
     );
   },
 
