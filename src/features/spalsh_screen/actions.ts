@@ -29,6 +29,7 @@ export const SplashAction: ActionFunction<any> = async (
       if (userContextResponse.status === 200) {
         const user: User = userContextResponse.data;
         await SharedPropsService.setUser(user);
+        action?.payload?.setIsUserLoggedIn(user);
         /****
          * ADD YOUR CUSTOM ROUTE TO NAVIGATE
          * ****/
