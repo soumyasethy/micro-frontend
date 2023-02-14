@@ -304,7 +304,7 @@ export const checkLimitMF: PageType<any> = {
     const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     const emailId =
-        `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+    `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
     const applicationId = user.linkedApplications[0].applicationId;
 
     if (!assetRepository) {

@@ -39,25 +39,22 @@ import {
   AssetRepositoryType,
 } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
-import { User } from "../../login/otp_verify/types";
-import {heightMap} from "../../../configs/height";
+import { heightMap } from "../../../configs/height";
 
 export const template: (
-  phoneNumber: string,
   assetRepository: AssetRepositoryType,
   sendOtpForPledgeConfirmAction: Action<any>,
-  emailId: string
+  emailOrPhone: string
 ) => TemplateSchema = (
-  phoneNumber,
   assetRepository,
   sendOtpForPledgeConfirmAction,
-  emailId
+  emailOrPhone
 ) => ({
   layout: <Layout>{
     id: ROUTE.PLEDGE_VERIFY,
     type: LAYOUTS.MODAL,
     style: {
-      height: heightMap[ROUTE.PLEDGE_VERIFY]
+      height: heightMap[ROUTE.PLEDGE_VERIFY],
     },
     widgets: [
       {
@@ -86,7 +83,7 @@ export const template: (
       ],
     },
     title: <TypographyProps>{
-      label: "Enter OTP",
+      label: `${AssetRepositoryMap.get(assetRepository).NAME} has sent an OTP`,
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
       fontFamily: FontFamilyTokens.Poppins,
@@ -125,30 +122,28 @@ export const template: (
     },
     titleSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
     subTitleStack: <StackProps & WidgetProps>{
-      type: StackType.column,
-      alignItems: StackAlignItems.flexStart,
+      type: StackType.row,
+      alignItems: StackAlignItems.center,
       justifyContent: StackJustifyContent.flexStart,
       widgetItems: [
         { id: "subTitle", type: WIDGET.TEXT },
-        { id: "subTitleSpace", type: WIDGET.SPACE },
+        // { id: "subTitleSpace", type: WIDGET.SPACE },
         { id: "subTitle2", type: WIDGET.TEXT },
       ],
     },
     subTitle: <TypographyProps>{
-      label: `${AssetRepositoryMap.get(assetRepository).NAME} has sent ${AssetRepositoryMap.get(assetRepository).OTP_LENGTH}-digit OTP was sent on `,
+      label: `OTP sent to `,
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
-    subTitleSpace: <SpaceProps>{
-      size: SizeTypeTokens.SM,
-    },
+    // subTitleSpace: <SpaceProps>{
+    //   size: SizeTypeTokens.SM,
+    // },
     subTitle2: <TypographyProps>{
-      label:
-        assetRepository === AssetRepositoryType.CAMS
-          ? emailId
-          : phoneNumber.substring(3),
+      // if data contains +91 then remove it
+      label: emailOrPhone.replace("+91", ""),
       color: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       fontFamily: FontFamilyTokens.Inter,
@@ -182,20 +177,14 @@ export const template: (
 });
 
 export const pledgeVerifyMF: PageType<any> = {
-  onLoad: async (_, { assetRepository, sendOtpForPledgeConfirmAction }) => {
-    const user: User = await SharedPropsService.getUser();
-    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
-
+  onLoad: async (
+    _,
+    { assetRepository, sendOtpForPledgeConfirmAction, emailOrPhone }
+  ) => {
     await SharedPropsService.setAssetRepositoryType(assetRepository);
 
     return Promise.resolve(
-      template(
-        phoneNumber,
-        assetRepository,
-        sendOtpForPledgeConfirmAction,
-        emailId
-      )
+      template(assetRepository, sendOtpForPledgeConfirmAction, emailOrPhone)
     );
   },
 

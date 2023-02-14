@@ -12,6 +12,8 @@ import {
   ButtonTypeTokens,
   ButtonWidthTypeToken,
   ColorTokens,
+  DividerProps,
+  DividerSizeTokens,
   FontFamilyTokens,
   FontSizeTokens,
   IconTokens,
@@ -84,9 +86,13 @@ export const template: (
       { id: "space3", type: WIDGET.SPACE },
       { id: "otherSourceStack", type: WIDGET.STACK },
       { id: "space4", type: WIDGET.SPACE },
+      { id: "divider", type: WIDGET.DIVIDER },
+      { id: "space5", type: WIDGET.SPACE },
       { id: "bottomSheetStack", type: WIDGET.STACK },
       { id: "bs_space0", type: WIDGET.SPACE },
       { id: "infoRow", type: WIDGET.STACK },
+      { id: "bs_space3", type: WIDGET.SPACE },
+      { id: "divider2", type: WIDGET.DIVIDER },
       shouldShowGetMorePortfolio
         ? { id: "otherSourceStack", type: WIDGET.STACK }
         : { id: "skip", type: WIDGET.SPACE },
@@ -158,9 +164,14 @@ export const template: (
     bs_space0: <SpaceProps>{ size: SizeTypeTokens.XL },
     bs_space1: <SpaceProps>{ size: SizeTypeTokens.MD },
     bs_space2: <SpaceProps>{ size: SizeTypeTokens.MD },
+    divider: <DividerProps>{
+      size: DividerSizeTokens.SM,
+      color: ColorTokens.Grey_Milk_1,
+    },
+    space5: <SpaceProps>{ size: SizeTypeTokens.XL },
     bottomSheetStack: <StackProps>{
       type: StackType.row,
-      justifyContent: StackJustifyContent.center,
+      justifyContent: StackJustifyContent.flexStart,
       alignItems: StackAlignItems.center,
       widgetItems: [{ id: "bottomSheetText", type: WIDGET.TEXT }],
     },
@@ -172,6 +183,7 @@ export const template: (
       color: ColorTokens.Grey_Night,
       lineHeight: 24,
     },
+    bs_space3: <SpaceProps>{ size: SizeTypeTokens.Size10 },
     infoRow: <StackProps>{
       type: StackType.row,
       justifyContent: StackJustifyContent.spaceBetween,
@@ -179,6 +191,10 @@ export const template: (
         { id: "col1Header", type: WIDGET.TEXT },
         { id: "col2Header", type: WIDGET.TEXT },
       ],
+    },
+    divider2: <DividerProps>{
+      size: DividerSizeTokens.SM,
+      color: ColorTokens.Grey_Milk_1,
     },
     col1Header: <TypographyProps>{
       label: "Mutual fund",

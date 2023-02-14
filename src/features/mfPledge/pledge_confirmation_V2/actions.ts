@@ -10,7 +10,8 @@ import SharedPropsService from "../../../SharedPropsService";
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
-  getAppHeader, getPrimaryAssetRepository,
+  getAppHeader,
+  getPrimaryAssetRepository,
 } from "../../../configs/config";
 import { api } from "../../../configs/api";
 import _ from "lodash";
@@ -40,7 +41,9 @@ export const sendOtpForPledgeConfirm: ActionFunction<
 
   action.payload.portFolioArray.forEach((item) => {
     if (item.pledgedUnits > 0) {
-      AssetRepositoryMap.get(AssetRepositoryType[item.assetRepository]).LIST.push({
+      AssetRepositoryMap.get(
+        AssetRepositoryType[item.assetRepository]
+      ).LIST.push({
         ...item,
         is_pledged: true,
       });
@@ -52,8 +55,9 @@ export const sendOtpForPledgeConfirm: ActionFunction<
 
   /**** check if user has empty cams portfolio then switch asset repository type ****/
   if (
-      AssetRepositoryMap.get(AssetRepositoryType.CAMS).LIST.length === 0 ||
-      AssetRepositoryMap.get(AssetRepositoryType.CAMS).IS_PLEDGED) {
+    AssetRepositoryMap.get(AssetRepositoryType.CAMS).LIST.length === 0 ||
+    AssetRepositoryMap.get(AssetRepositoryType.CAMS).IS_PLEDGED
+  ) {
     primaryType = AssetRepositoryType.KARVY;
   }
 
@@ -68,6 +72,8 @@ export const sendOtpForPledgeConfirm: ActionFunction<
     headers: await getAppHeader(),
   });
 
+  const data = _.get(response, "data.stepResponseObject");
+
   if (_.get(response, "data.status") === "SUCCESS") {
     analytics(AnalyticsEventTracker.borrower_mf_pledge_init["Event Name"], {
       ...AnalyticsEventTracker.borrower_mf_pledge_init,
@@ -75,6 +81,7 @@ export const sendOtpForPledgeConfirm: ActionFunction<
     await navigate(ROUTE.PLEDGE_VERIFY, {
       assetRepository: primaryType,
       sendOtpForPledgeConfirmAction: action,
+      emailOrPhone: data,
     });
   }
 
