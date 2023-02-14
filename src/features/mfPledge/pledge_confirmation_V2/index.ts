@@ -564,7 +564,7 @@ export const template: (
         fontSize: FontSizeTokens.SM,
       },
       durationValue: <TypographyProps>{
-        label: "12 months",
+        label: "13 months",
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
         fontSize: FontSizeTokens.SM,
@@ -703,7 +703,7 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     }
 
     const applicationId = (await SharedPropsService.getUser())
-        .linkedApplications[0].applicationId;
+      .linkedApplications[0].applicationId;
 
     if (!pledgeInProgress) {
       mfPortfolioArray = (stepResponseObject as StepResponseObject)
@@ -711,24 +711,25 @@ export const pledgeConfirmationMFV2: PageType<any> = {
       mfPortfolioArray.forEach((_item, index) => {
         mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
       });
-     portfolioForComputingProcessingCharge = mfPortfolioArray;
+      portfolioForComputingProcessingCharge = mfPortfolioArray;
 
       /// Pledging has not started save portfolio to backend
       const savePortfolioResponse = await network.post(
-          api.savePortfolio,
-          {
-            applicationId: applicationId,
-            portfolioItemList: mfPortfolioArray,
-          },
-          { headers: await getAppHeader() }
+        api.savePortfolio,
+        {
+          applicationId: applicationId,
+          portfolioItemList: mfPortfolioArray,
+        },
+        { headers: await getAppHeader() }
       );
     } else {
       mfPortfolioArray = (stepResponseObject as StepResponseObject)
         .tobePledgedPortfolio;
 
-     portfolioForComputingProcessingCharge = [...mfPortfolioArray];
-     portfolioForComputingProcessingCharge.push(...(stepResponseObject as StepResponseObject)
-         .pledgedPortfolio);
+      portfolioForComputingProcessingCharge = [...mfPortfolioArray];
+      portfolioForComputingProcessingCharge.push(
+        ...(stepResponseObject as StepResponseObject).pledgedPortfolio
+      );
     }
 
     /// fetch processing fee
@@ -753,9 +754,9 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     );
 
     const totalAmount = getTotalLimit(
-        stepResponseObject.availableCAS,
-        stepResponseObject.isinNAVMap,
-        stepResponseObject.isinLTVMap
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap,
+      stepResponseObject.isinLTVMap
     );
 
     if (pledgeInProgress) {

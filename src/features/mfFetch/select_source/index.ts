@@ -30,14 +30,12 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTIONS } from "./types";
+import { confirmCTA, goBack, toggleRadio } from "./actions";
 import {
-  confirmCTA,
-  goBack,
-  toggleRadio,
-} from "./actions";
-import SharedPropsService from "../../../SharedPropsService";
-import {AssetRepositoryType, getPrimaryAssetRepository} from "../../../configs/config";
-import {heightMap} from "../../../configs/height";
+  AssetRepositoryType,
+  getPrimaryAssetRepository,
+} from "../../../configs/config";
+import { heightMap } from "../../../configs/height";
 
 export const template: (
   assetRepository: AssetRepositoryType
@@ -47,7 +45,7 @@ export const template: (
       id: ROUTE.SELECT_SOURCE,
       type: LAYOUTS.MODAL,
       style: {
-        height: heightMap[ROUTE.SELECT_SOURCE]
+        height: heightMap[ROUTE.SELECT_SOURCE],
       },
       widgets: [
         {
@@ -117,7 +115,7 @@ export const template: (
         ],
       },
       subTitle: <TypographyProps>{
-        label: `CAMS & KFintech are regulated entity which maintain`,
+        label: `CAMS & KFintech are SEBI regulated entity which maintain`,
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",

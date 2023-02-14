@@ -131,7 +131,19 @@ export const ToggleSelectAction: ActionFunction<
     portfolioSearchKeyword
   );
 
-  if (parseInt(removeCommasFromNumber(props.outOfText1["label"])) < 25000) {
+  await setDatastore(ROUTE.PORTFOLIO, "outOfText1", <ButtonProps>{
+    label: ` ₹${addCommasToNumber(
+      parseInt(
+        removeCommasFromNumber(props.outOfText1["label"].replace("₹", ""))
+      )
+    )}`,
+  });
+
+  if (
+    parseInt(
+      removeCommasFromNumber(props.outOfText1["label"].replace("₹", ""))
+    ) < 25000
+  ) {
     await setDatastore(ROUTE.PORTFOLIO, "ContinueButton", <ButtonProps>{
       type: ButtonTypeTokens.LargeOutline,
     });
