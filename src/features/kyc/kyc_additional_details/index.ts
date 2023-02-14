@@ -274,7 +274,11 @@ export const template: (
       fatherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       fatherInputBetweenSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       fatherFirstNameInput: <TextInputProps & WidgetProps>{
-        value: `${stepResponseObject.fatherFirstName}`,
+        value: `${
+          stepResponseObject.fatherFirstName
+            ? stepResponseObject.fatherFirstName
+            : ""
+        }`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "First name",
@@ -296,7 +300,11 @@ export const template: (
         },
       },
       fatherLastNameInput: <TextInputProps & WidgetProps>{
-        value: `${stepResponseObject.fatherLastName}`,
+        value: `${
+          stepResponseObject.fatherLastName
+            ? stepResponseObject.fatherLastName
+            : ""
+        }`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "Last name",
@@ -338,7 +346,11 @@ export const template: (
         ],
       },
       motherFirstNameInput: <TextInputProps>{
-        value: `${stepResponseObject.motherFirstName}`,
+        value: `${
+          stepResponseObject.motherFirstName
+            ? stepResponseObject.motherFirstName
+            : ""
+        }`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "First name",
@@ -359,7 +371,11 @@ export const template: (
       },
       motherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       motherLastNameInput: <TextInputProps>{
-        value: `${stepResponseObject.motherLastName}`,
+        value: `${
+          stepResponseObject.motherLastName
+            ? stepResponseObject.motherLastName
+            : ""
+        }`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
         title: "Last name",
