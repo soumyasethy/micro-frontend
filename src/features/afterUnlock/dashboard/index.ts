@@ -41,7 +41,13 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import {ACTION, CreditDisbursalStatus, CreditPayload, NavPayload, RepaymentPayload} from "./types";
+import {
+  ACTION,
+  CreditDisbursalStatus,
+  CreditPayload,
+  NavPayload,
+  RepaymentPayload,
+} from "./types";
 import {
   goBack,
   navigate,
@@ -256,8 +262,7 @@ export const template: (
         bgColor: ColorTokens.System_Warning_BG,
       },
       message2: <MessageProps>{
-        label:
-          `Your previous withdrawal request of Rs.${amountDisbursal} is in progress, meanwhile you cannot raise another request.`,
+        label: `Your previous withdrawal request of Rs.${amountDisbursal} is in progress, meanwhile you cannot raise another request.`,
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.System_Warning_BG,
       },
@@ -287,7 +292,7 @@ export const template: (
       continue: <ButtonProps & WidgetProps>{
         label: "Withdraw now",
         type:
-            (isDisbursalRequestAllowed && (availableCreditAmount > 0))
+          isDisbursalRequestAllowed && availableCreditAmount > 0
             ? ButtonTypeTokens.LargeFilled
             : ButtonTypeTokens.LargeOutline,
         width: ButtonWidthTypeToken.FULL,
@@ -467,17 +472,22 @@ export const dashboardMF: PageType<any> = {
     let isPendingDisbursalStatement = false;
     let amountDisbursal = 0;
 
-    let isDisbursalRequestAllowed = user.linkedCredits[0].disbursalRequestAllowed;
+    await SharedPropsService.setCreditStatus(
+      user.linkedCredits[0].creditStatus
+    );
+
+    let isDisbursalRequestAllowed =
+      user.linkedCredits[0].disbursalRequestAllowed;
 
     /*made it false to check */
     // isDisbursalRequestAllowed = false;
 
     let creditId = user.linkedCredits[0].creditId;
-    if(!isDisbursalRequestAllowed) {
+    if (!isDisbursalRequestAllowed) {
       const listOfDisbursalResponse = await network.get(
-          `${api.getListOfDisbursalByCreditId}${creditId}`,
-          { headers: await getAppHeader() }
-      )
+        `${api.getListOfDisbursalByCreditId}${creditId}`,
+        { headers: await getAppHeader() }
+      );
       let listOfDisbursal = listOfDisbursalResponse.data;
 
       // /*made it false to check */
@@ -485,18 +495,22 @@ export const dashboardMF: PageType<any> = {
       // listOfDisbursal[1].disbursalStatus = "REQUESTED";
       // /* */
 
-      if(listOfDisbursal) {
+      if (listOfDisbursal) {
         isPendingDisbursalStatement = false;
         isPendingDisbursalApproval = true;
         listOfDisbursal.every((disbursalItem) => {
-          if(disbursalItem.disbursalStatus === CreditDisbursalStatus.APPROVED || disbursalItem.disbursalStatus === CreditDisbursalStatus.REQUESTED) {
+          if (
+            disbursalItem.disbursalStatus === CreditDisbursalStatus.APPROVED ||
+            disbursalItem.disbursalStatus === CreditDisbursalStatus.REQUESTED
+          ) {
             isPendingDisbursalStatement = true;
             isPendingDisbursalApproval = false;
             amountDisbursal = disbursalItem.amount;
             return false;
           }
           return true;
-        })}
+        });
+      }
     }
 
     let amountPercentage = Math.round(
@@ -512,7 +526,7 @@ export const dashboardMF: PageType<any> = {
         amountPercentage,
         isPendingDisbursalStatement,
         isDisbursalRequestAllowed,
-          amountDisbursal
+        amountDisbursal
       )
     );
   },

@@ -86,6 +86,7 @@ type GlobalProps = {
   assetRepositoryConfig?: {
     [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
   };
+  creditStatus?: string;
 };
 
 let _globalProps: GlobalProps = {
@@ -160,7 +161,8 @@ let _globalProps: GlobalProps = {
   listItemDataCAS: [],
   desiredPortfolio: {},
   stepperData: {},
-  investorName:""
+  investorName:"",
+  creditStatus: "",
 };
 
 export function setStepperData(StepperData) {
@@ -486,6 +488,14 @@ async function getDesiredPortfolio() {
   return _globalProps.desiredPortfolio;
 }
 
+async function setCreditStatus(creditStatus: any) {
+  _globalProps.creditStatus = creditStatus;
+}
+
+async function getCreditStatus() {
+  return _globalProps.creditStatus;
+}
+
 export default {
   setBuildType,
   getBuildType,
@@ -554,5 +564,7 @@ export default {
   getBasicDataPan,
   setBasicDataPan,
   getBasicDataPhone,
-  setBasicDataPhone
+  setBasicDataPhone,
+  setCreditStatus,
+  getCreditStatus,
 };

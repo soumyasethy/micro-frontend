@@ -94,9 +94,8 @@ export const template: (
         type: WIDGET.CARD,
         padding: {
           horizontal: -16,
-          vertical: 0
+          vertical: 0,
         },
-        //position: POSITION.STICKY_BOTTOM,
       },
       {
         id: "ctaCard",
@@ -300,8 +299,8 @@ export const template: (
           { id: "infoRow", type: WIDGET.STACK },
           { id: "infoSpace2", type: WIDGET.SPACE },
           { id: "divider0", type: WIDGET.DIVIDER },
-          { id: "listItem", type: WIDGET.LIST }
-        ]
+          { id: "listItem", type: WIDGET.LIST },
+        ],
       },
     },
     bottomSheetStack: <StackProps>{
@@ -325,7 +324,7 @@ export const template: (
       fontSize: FontSizeTokens.MD,
       fontFamily: FontFamilyTokens.Poppins,
       lineHeight: 24,
-      color: ColorTokens.Grey_Night
+      color: ColorTokens.Grey_Night,
     },
     editText: <ButtonProps & WidgetProps>{
       label: "Edit selection",
@@ -343,11 +342,45 @@ export const template: (
         routeId: ROUTE.SET_CREDIT_LIMIT,
       },
     },
+    mfStack: <StackProps>{
+      width: StackWidth.FULL,
+      type: StackType.row,
+      justifyContent: StackJustifyContent.spaceBetween,
+      alignItems: StackAlignItems.center,
+      widgetItems: [
+        { id: "mfText", type: WIDGET.TEXT },
+        { id: "mfText2", type: WIDGET.TEXT },
+      ],
+    },
+    mfText: <TypographyProps>{
+      label: `Mutual fund`,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
+      fontSize: FontSizeTokens.XS,
+      color: ColorTokens.Grey_Charcoal,
+    },
+    mfText2: <TypographyProps>{
+      label: `Available credit limit`,
+      fontFamily: FontFamilyTokens.Inter,
+      fontWeight: "500",
+      fontSize: FontSizeTokens.XS,
+      color: ColorTokens.Grey_Charcoal,
+    },
     bottomSpace11: <SpaceProps>{
       size: SizeTypeTokens.XXXXL,
     },
     space11: <SpaceProps>{
       size: SizeTypeTokens.MD,
+    },
+    space12: <SpaceProps>{
+      size: SizeTypeTokens.XL,
+    },
+    space13: <SpaceProps>{
+      size: SizeTypeTokens.Size10,
+    },
+    divider: <DividerProps>{
+      size: DividerSizeTokens.SM,
+      color: ColorTokens.Grey_Milk_1,
     },
     bottomSheetStack2: <StackProps>{
       type: StackType.row,
@@ -370,7 +403,7 @@ export const template: (
       fontWeight: "400",
       fontSize: FontSizeTokens.SM,
       color: ColorTokens.Grey_Charcoal,
-      lineHeight: 24
+      lineHeight: 24,
     },
     space5: <SpaceProps>{
       size: SizeTypeTokens.MD,
@@ -383,7 +416,7 @@ export const template: (
     },
     divider0: <DividerProps>{
       size: DividerSizeTokens.MD,
-      type: 'solid',
+      type: "solid",
       color: ColorTokens.Grey_Milk_1,
     },
     infoRow: <StackProps>{
@@ -392,8 +425,8 @@ export const template: (
       justifyContent: StackJustifyContent.spaceBetween,
       widgetItems: [
         { id: "col1Headers", type: WIDGET.STACK },
-        { id: "col2Headers", type: WIDGET.STACK }
-      ]
+        { id: "col2Headers", type: WIDGET.STACK },
+      ],
     },
     col1Headers: <StackProps>{
       type: "row",
@@ -403,7 +436,7 @@ export const template: (
       widgetItems: [
         { id: "col1Header", type: WIDGET.TEXT },
         { id: "col1Space", type: WIDGET.SPACE },
-      ]
+      ],
     },
     col2Headers: <StackProps>{
       type: "row",
@@ -413,27 +446,27 @@ export const template: (
       widgetItems: [
         { id: "col2Header", type: WIDGET.TEXT },
         // { id:"col2Space", type: WIDGET.SPACE },
-      ]
+      ],
     },
     col1Space: <SpaceProps>{
-      size: SizeTypeTokens.XXXL
+      size: SizeTypeTokens.XXXL,
     },
     col2Space: <SpaceProps>{
-      size: SizeTypeTokens.XXXL
+      size: SizeTypeTokens.XXXL,
     },
     col1Header: <TypographyProps>{
-      label: 'Mutual fund',
+      label: "Mutual fund",
       fontSize: FontSizeTokens.XS,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: '500',
+      fontWeight: "500",
       color: ColorTokens.Grey_Charcoal,
       lineHeight: 18,
     },
     col2Header: <TypographyProps>{
-      label: 'Credit limit',
+      label: "Available Credit limit",
       fontSize: FontSizeTokens.XS,
       fontFamily: FontFamilyTokens.Inter,
-      fontWeight: '500',
+      fontWeight: "500",
       color: ColorTokens.Grey_Charcoal,
       lineHeight: 18,
     },
@@ -496,8 +529,8 @@ export const setCreditLimitMf: PageType<any> = {
     const pledgeLimitResponse = authCAS
       ? { data: authCAS }
       : await fetchPledgeLimitRepo().then((response) => ({
-        data: response,
-      }));
+          data: response,
+        }));
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
     const creditAmount = await sharedPropsService.getCreditLimit();
     const updateAvailableCASMapSharedProps =
