@@ -57,4 +57,5 @@ export enum QUERY_PARAMS {
   PLATFORM = 'platform',
   USER = 'user',
   REF = 'ref',
+  PRIMARY_COLOR = 'primaryColor',
 }
