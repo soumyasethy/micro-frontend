@@ -54,8 +54,10 @@ export const getAuthHeaders = () => ({
       : "Desktop",
 });
 export const getAppHeader = async () => ({
+
   "X-AppMode": "INVESTOR_VIEW",
   "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+  //"X-AppMode": "INVESTOR_VIEW",
   Authorization: `Bearer ${await SharedPropsService.getToken()}`,
   "Content-Type": "application/json",
   "X-DeviceType":
@@ -63,6 +65,13 @@ export const getAppHeader = async () => ({
       ? "Mobile"
       : "Desktop",
 });
+
+export const getPartnerAuthHeaders = () => ({
+  "X-EntityType": "PARTNER",
+  "X-AppPlatform": __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP",
+  "Content-Type": "application/json",
+});
+
 
 export const APP_CONFIG = {
   POLLING_INTERVAL: 5000,
@@ -74,6 +83,24 @@ export enum AssetRepositoryType {
   CAMS = "CAMS",
   KARVY = "KARVY",
 }
+
+export const PartnerAssetRepositoryMap = {
+  [AssetRepositoryType.CAMS]: {
+    value: AssetRepositoryType.CAMS,
+    NAME: "Cams",
+    OTP_LENGTH: 4,
+    LIST: [],
+  },
+  [AssetRepositoryType.KARVY]: {
+    VALUE: AssetRepositoryType.KARVY,
+    NAME: "karvy",
+    OTP_LENGTH: 5,
+    LIST: [],
+  },
+};
+
+
+
 export const AssetRepositoryMap = new Map([
   [
       AssetRepositoryType.CAMS, {
@@ -101,6 +128,7 @@ export const AssetRepositoryMap = new Map([
   }
   ]]);
 
+
 export const getPrimaryAssetRepository = async () => {
   let [priorityMap] = new Map([...AssetRepositoryMap.entries()]
       .sort((a,b) => a[1].PRIORITY - b[1].PRIORITY));
@@ -113,6 +141,7 @@ export enum RegexConfig {
   PAN = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",
   AADHAR = "^[2-9]{1}[0-9]{11}$",
   ONLY_NUMBER = "^[0-9]*$",
+
 }
 
 export enum DeepLinks {
@@ -134,4 +163,5 @@ export enum ConfigTokens {
 
 export enum ConfigValues {
   MinimumAmountAllowed = 25000,
+  AADHAR = "^[2-9]{1}[0-9]{11}$"
 }

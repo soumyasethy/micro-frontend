@@ -1,15 +1,30 @@
 export enum ACTION {
   TRACK = "TRACK",
+  TRACK_PENDING = "TRACK_PENDING",
   MANAGE = "MANAGE",
   CTA="CTA",
+  ON_CHANGE="ON_CHANGE",
+  ON_CHANGES="ON_CHANGES",
 }
 
-export type TestActionPayload = {};
+export type StepperPayload = {
+  value:any,
+};
+
+export type dataTypeClient = {
+  value:any,
+  widgetID: string;
+  PendingData:any,
+  InProgressData:any,
+}
 
 export type ClientPendingPayloadType = {
   name: string,
-  stepsCompleted: number | string,
+  steps: any,
   applicationId: string,
+  data:any,
+  totalSteps:string,
+  completedSteps:string
 }
 
 export type ClientInProgressPayloadType = {

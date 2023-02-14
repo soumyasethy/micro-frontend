@@ -158,8 +158,8 @@ export const template: (email: String) => TemplateSchema = (email) => ({
 export const updateEmailMF: PageType<any> = {
   onLoad: async () => {
     const prevEmail = `${
-      (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
-        .accountHolderEmail
+        (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
+            .accountHolderEmail
     }`;
     return Promise.resolve(template(prevEmail));
   },

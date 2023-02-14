@@ -1,4 +1,7 @@
-import { User } from "./features/login/otp_verify/types";
+
+
+import { BankData, User ,PartnerUser, BasicData} from "./features/login/otp_verify/types";
+
 import {
   __isMock__,
   AssetRepositoryType,
@@ -10,7 +13,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
+
+
 import _ from "lodash";
+
+export enum USERTYPE {
+  BORROWER = "BORROWER",
+  PARTNER = "PARTNER"
+}
 
 export type AssetRepositoryConfigItemType = {
   isFetched?: boolean;
@@ -24,21 +34,20 @@ export enum BUILD_TYPE {
   PARTNER_PRODUCTION = "PARTNER_PRODUCTION",
   PARTNER_STAGING = "PARTNER_STAGING",
 }
+
 type GlobalProps = {
   buildType: BUILD_TYPE;
   user: User;
+  partnerUser: PartnerUser;
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
+ 
   authCAS?: AuthCASModel;
   ref?: string;
   url?: string;
   initialAssetRepositoryType?: AssetRepositoryType;
-  assetRepositoryConfig?: {
-    [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
-  };
-  casListOriginal?: AvailableCASItem[];
-  appPlatform?: string;
+
   config?: {
     [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean;
     [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean;
@@ -52,15 +61,71 @@ type GlobalProps = {
   creditLimit: number;
   listItemDataCAS: any;
   desiredPortfolio?: any;
+  userType:USERTYPE;
+  partnerRefCode?: string;
+  applicationId?:string;
+  bankCode?:string;
+  bankName?:string;
+  accountId?:string;
+  pbankAccNo?:string;
+  pconfirmAccNo?:string;
+  pbankIfsc?:string;
+  bankData :BankData;
+
+  basicData: BasicData;
+  assetRepositoryType?: AssetRepositoryType;
+
+  stepperData?:any,
+  basicData_pan: string;
+  basicData_phone: string;
+  basicData_email: string;
+  basicData_dob: string;
+  casListOriginal?: AvailableCASItem[];
+  appPlatform?: string;
+  investorName?:string;
+  assetRepositoryConfig?: {
+    [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
+  };
   creditStatus?: string;
 };
 
 let _globalProps: GlobalProps = {
   buildType: BUILD_TYPE.BORROWER_STAGING,
   user: {},
+  partnerUser:{
+    name:"",
+    panNumber: "",
+    phoneNumber: "",
+    emailId: "",
+  },
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
+  userType:USERTYPE.BORROWER,
+  applicationId:"",
+  bankCode:"",
+  bankName:"",
+  accountId:"",
+  pbankAccNo:"",
+  pconfirmAccNo:"",
+  pbankIfsc:"",
+  bankData:{
+    bankName: "",
+    bankCode:"",
+    accountNumber:"",
+    confirmAccountNumber:"",
+    bankIfsc:""
+  },
+  basicData:{
+    panNumber:"",
+    mobileNumber:"",
+    email:"",
+    dob:""
+  },
+  basicData_pan:"",
+  basicData_dob:"",
+  basicData_email:"",
+  basicData_phone:"",
   authCAS: null,
   ref: "",
   /*** Default asset repository */
@@ -95,8 +160,25 @@ let _globalProps: GlobalProps = {
   creditLimit: 25000,
   listItemDataCAS: [],
   desiredPortfolio: {},
+  stepperData: {},
+  investorName:"",
   creditStatus: "",
 };
+
+export function setStepperData(StepperData) {
+  _globalProps.stepperData = StepperData;
+}
+export function getStepperData(): any {
+  return _globalProps.stepperData;
+}
+
+export function setInvestorName(investorName: string) {
+  _globalProps.investorName = investorName;
+}
+export function getInvestorName(){
+  return _globalProps.investorName;
+}
+
 export function setBuildType(buildType) {
   _globalProps.buildType = buildType;
 }
@@ -135,6 +217,100 @@ async function setAssetRepositoryFetchMap(
   }
 }
 /*** End Asset repository ***/
+
+async function setBasicData(props: BasicData) {
+  _globalProps.basicData = await props;
+}
+
+async function getBasicData() {
+  return _globalProps.basicData;
+}
+
+async function setBasicDataPan(basicData_pan: string) {
+  _globalProps.basicData_pan = basicData_pan;
+}
+
+async function getBasicDataPan() {
+  return _globalProps.basicData_pan;
+}
+
+async function setBasicDataEmail(basicData_email: string) {
+  _globalProps.basicData_email = basicData_email;
+}
+
+async function getBasicDataEmail() {
+  return _globalProps.basicData_email;
+}
+async function setBasicDataDob(basicData_dob: string) {
+  _globalProps.basicData_dob = basicData_dob;
+}
+
+async function getBasicDataDob() {
+  return _globalProps.basicData_dob;
+}
+async function setBasicDataPhone(basicData_phone: string) {
+  _globalProps.basicData_phone = basicData_phone;
+}
+
+async function getBasicDataPhone() {
+  return _globalProps.basicData_phone;
+}
+
+
+async function setBankData(props: BankData) {
+  _globalProps.bankData = await props;
+}
+
+async function getBankData() {
+  return _globalProps.bankData;
+}
+
+async function setPartnerUser(props: PartnerUser) {
+  _globalProps.partnerUser = await props;
+}
+
+async function getPartnerUser() {
+  return _globalProps.partnerUser;
+}
+
+async function setAccountId(accountId: string){
+  _globalProps.accountId = accountId;
+}
+
+async function getAccountId(){
+  return _globalProps.accountId;
+}
+
+async function setBankCode(bankCode: string){
+  _globalProps.bankCode = bankCode;
+}
+
+async function getBankCode(){
+  return _globalProps.bankCode;
+}
+
+async function setBankName(bankName: string){
+  _globalProps.bankName = bankName;
+}
+
+async function getBankName(){
+  return _globalProps.bankName;
+}
+
+async function setUserType(userType: USERTYPE){
+  _globalProps.userType = userType;
+}
+
+async function getUserType(){
+  return _globalProps.userType;
+}
+
+async function setApplicationId(applicationId: string) {
+  _globalProps.applicationId = applicationId;
+}
+async function getApplicationId() {
+  return _globalProps.applicationId;
+}
 
 async function setAccountNumber(accountNumber: string) {
   _globalProps.accountNumber = accountNumber;
@@ -191,6 +367,9 @@ function getPropsValue(key?: string) {
   }
   return null;
 }
+
+
+
 async function setUser(props: User) {
   _globalProps.user = await props;
   _globalProps.config[ConfigTokens.IS_GOOGLE_LOGIN_ENABLED] = _.get(
@@ -334,8 +513,24 @@ export default {
   setAccountNumber,
   setPledgeFirstTime,
   isPledgeFirstTime,
+  setUserType,
+  getUserType,
   setPartnerRefCode,
   getPartnerRefCode,
+  setApplicationId,
+  getApplicationId,
+  setBankCode,
+  getBankCode,
+  setBankName,
+  getBankName,
+  getAccountId,
+  setAccountId,
+  setPartnerUser,
+  getPartnerUser,
+  setBankData,
+  getBankData,
+  setBasicData,
+  getBasicData,
   setAssetRepositoryType,
   getAssetRepositoryType,
   getAssetRepositoryFetchMap,
@@ -358,6 +553,18 @@ export default {
   getListItemDataCAS,
   setDesiredPortfolio,
   getDesiredPortfolio,
+  setStepperData,
+  getStepperData,
+  setInvestorName,
+  getInvestorName,
+  getBasicDataDob,
+  setBasicDataDob,
+  getBasicDataEmail,
+  setBasicDataEmail,
+  getBasicDataPan,
+  setBasicDataPan,
+  getBasicDataPhone,
+  setBasicDataPhone,
   setCreditStatus,
   getCreditStatus,
 };

@@ -90,7 +90,9 @@ export const template: (
           routeId: ROUTE.MODIFY_LIMIT,
         },
       },
+
       space0: <SpaceProps>{ size: SizeTypeTokens.XXL },
+
       inputItem: <TextInputProps & WidgetProps>{
         value: `${totalAmount}`,
         placeholder: "",

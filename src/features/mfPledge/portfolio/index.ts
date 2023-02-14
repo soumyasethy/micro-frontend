@@ -40,6 +40,7 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
+        { id: "spaceHeader", type: WIDGET.SPACE },
         // { id: "inputItem", type: WIDGET.INPUT },
         { id: "inputSpace", type: WIDGET.SPACE },
         { id: "listItem", type: WIDGET.LIST },
@@ -72,6 +73,7 @@ export const template: (
           routeId: ROUTE.PORTFOLIO,
         },
       },
+      spaceHeader: <SpaceProps>{ size: SizeTypeTokens.XL },
       inputItem: <TextInputProps & WidgetProps>{
         type: InputTypeToken.SEARCH,
         state: InputStateToken.DEFAULT,

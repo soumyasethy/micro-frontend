@@ -1,54 +1,53 @@
-import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
+import { ButtonProps, ButtonTypeTokens, ButtonWidthTypeToken, CalendarProps, CalendarStateToken, ColorTokens, FontFamilyTokens, FontSizeTokens, HeaderBaseProps, HeaderProps, HeaderTypeTokens, InputStateToken, InputTypeToken, KeyboardTypeToken, SizeTypeTokens, SpaceProps, StackAlignItems, StackJustifyContent, StackProps, StackType, StackWidth, StepperItem, StepperProps, StepperStateToken, StepperTypeTokens, TextInputProps, TextInputTypeToken, TypographyBaseProps, WIDGET } from "@voltmoney/schema";
 import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
-import { api } from "../../../configs/api";
-import { horizontalStepperRepo } from "../../../configs/utils";
+import {  partnerApi } from "../../../configs/api";
 import { ROUTE } from "../../../routes";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
 import { getAppHeader, RegexConfig } from "../../../configs/config";
 import { ACTION, EnableDisableCTA } from "./types";
 import { InputPayload } from "./types";
-import { onChangeInput, toggleCTA, triggerCTA } from "./actions";
+import {  goBack, onChangeInput, onChangeInput2, toggleCTA, toggleCTA1, triggerCTA } from "./actions";
 
 export const template: (
-  stepper: StepperItem[],
-  stepResponseObject: { [key in string]: string }
-) => TemplateSchema = (stepper) => {
+  //stepper: StepperItem[],
+  isDisabled:string,
+  stepper_data:any
+) => TemplateSchema = (//stepper,
+  isDisabled,stepper_data) => {
   return {
-    layout: <Layout> {
-       id: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-       type: LAYOUTS.LIST,
-       widgets: [
+    layout: <Layout>{
+      id: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+      type: LAYOUTS.LIST,
+      widgets: [
         { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
-        { id: "topSpace0", type: WIDGET.SPACE },
         { id: "topSpace1", type: WIDGET.SPACE },
-        { id: "panNumberInput", type: WIDGET.INPUT },
-        { id: "space0", type: WIDGET.SPACE },
-        { id: "fullNameInput", type: WIDGET.INPUT },
-        { id: "panNumberSubText", type: WIDGET.TEXT },
-        { id: "space1", type: WIDGET.SPACE },
         { id: "mobileNumberInput", type: WIDGET.INPUT },
         { id: "space2", type: WIDGET.SPACE },
         { id: "emailInput", type: WIDGET.INPUT },
+        { id: "space0", type: WIDGET.SPACE },
+        { id: "panNumberInput", type: WIDGET.INPUT },
+        { id: "space1", type: WIDGET.SPACE },
+        { id: "calendarPicker", type: WIDGET.CALENDAR_PICKER },
         { id: "bottomStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
-       ]
+      ]
     },
-    datastore: <Datastore> {
+    datastore: <Datastore>{
       header: <HeaderProps & WidgetProps>{
-        title: "Create new application",
+        title: "Create new applications",
         type: HeaderTypeTokens.verification,
         stepperProps: <StepperProps>{
-          data: stepper,
+          data: stepper_data,
           type: StepperTypeTokens.HORIZONTAL,
         },
         action: {
           type: ACTION.GO_BACK,
-          routeId: ROUTE.KYC_AADHAAR_VERIFICATION,
+          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: {},
         },
       },
-      topSpace0: <SpaceProps> { size: SizeTypeTokens.Size30 },
-      topSpace1: <SpaceProps> { size: SizeTypeTokens.XL },
+      //topSpace0: <SpaceProps>{ size: SizeTypeTokens.XXL },
+      topSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
       panNumberInput: <TextInputProps & WidgetProps>{
         regex: RegexConfig.PAN,
         type: InputTypeToken.DEFAULT,
@@ -58,7 +57,7 @@ export const template: (
         placeholder: "Enter PAN Number",
         keyboardType: KeyboardTypeToken.default,
         isUpperCase: true,
-        isFocus: true,
+        isFocus:false,
         caption: {
           success: "",
           error: "Enter a valid PAN.",
@@ -66,7 +65,7 @@ export const template: (
         action: {
           type: ACTION.CHANGE_INPUT,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <InputPayload> {
+          payload: <InputPayload>{
             value: "",
             widgetId: "panNumberInput"
           }
@@ -76,75 +75,58 @@ export const template: (
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
         },
-        successAction: {
-          type: ACTION.ENABLE_CONTINUE,
-          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <EnableDisableCTA>{ value: true, targetWidgetId: "continue" },
-        },
       },
-      panNumberSubText: <TypographyBaseProps> {
-        label: "We will fetch your name from PAN Card",
-        fontSize: FontSizeTokens.XS,
-        color: ColorTokens.Grey_Smoke,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "400",
-        lineHeight: 18,
-      },
-      space0: <SpaceProps> { size: SizeTypeTokens.Size32 },
-      space1: <SpaceProps> { size: SizeTypeTokens.XXXL },
-      space2: <SpaceProps> { size: SizeTypeTokens.Size32 },
-      fullNameInput: <TextInputProps & WidgetProps>{
-        width: TextInputTypeToken.CONTENT,
-        isFocus: false,
-        title: "Full name",
-        fontFamily: FontFamilyTokens.Inter,
-        fontSize: FontSizeTokens.MD,
-        keyboardType: KeyboardTypeToken.default,
-        lineHeight: 24,
-        fontWeight: "400",
-        placeholder: "Full name",
-        color: ColorTokens.Grey_Smoke,
-        type: InputTypeToken.DEFAULT,
-        state: InputStateToken.DEFAULT,
-        action: {
-          type: ACTION.CHANGE_INPUT,
-          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <InputPayload> {
-            value: "",
-            widgetId: "fullNameInput"
-          }
-        },
-        errorAction: {
-          type: ACTION.DISABLE_CONTINUE,
-          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
-        },
-        successAction: {
-          type: ACTION.ENABLE_CONTINUE,
-          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <EnableDisableCTA>{ value: true, targetWidgetId: "continue" },
-        },
-      },
-      mobileNumberInput: <TextInputProps & WidgetProps>{
-        width: TextInputTypeToken.CONTENT,
-        charLimit: 10,
-        isFocus: false,
+
+      space0: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+      calendarPicker: <CalendarProps & WidgetProps>{
         regex: RegexConfig.MOBILE,
-        title: "Mobile number",
-        caption: { error: "Enter a 10 digit mobile number" },
+        year: { title: "Year", value: "", placeholder: "YYYY" },
+        month: { title: "Month", value: "", placeholder: "MM" },
+        date: { title: "Date", value: "", placeholder: "DD" },
+        state: CalendarStateToken.DEFAULT,
+        caption: {
+          success: "",
+          error: "Please select a proper date",
+          default: "Date of birth as per PAN",
+        },
+      errorAction: {
+        type: ACTION.DISABLE_CONTINUE,
+        routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
+      },
+      successAction: {
+        type: ACTION.ENTER_DOB,
+        routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
+      },
+        action: {
+          type: ACTION.ENTER_DOB,
+          payload: <InputPayload>{ value: "", widgetId: "calendarPicker" },
+          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
+        },
+      },
+      space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      space2: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+
+      mobileNumberInput: <TextInputProps & WidgetProps>{
+        isFocus: true,
+        width: TextInputTypeToken.CONTENT,
+        regex: RegexConfig.MOBILE,
+        title: "Mobile Number",
+        charLimit: 10,
         fontFamily: FontFamilyTokens.Inter,
+        keyboardType: KeyboardTypeToken.email,
         fontSize: FontSizeTokens.MD,
-        keyboardType: KeyboardTypeToken.phone,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "Mobile number",
+        placeholder: "Mobile Number",
         color: ColorTokens.Grey_Smoke,
         type: InputTypeToken.MOBILE,
         state: InputStateToken.DEFAULT,
         action: {
           type: ACTION.CHANGE_INPUT,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <InputPayload> {
+          payload: <InputPayload>{
             value: "",
             widgetId: "mobileNumberInput"
           }
@@ -153,11 +135,6 @@ export const template: (
           type: ACTION.DISABLE_CONTINUE,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
           payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
-        },
-        successAction: {
-          type: ACTION.ENABLE_CONTINUE,
-          routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <EnableDisableCTA>{ value: true, targetWidgetId: "continue" },
         },
       },
       emailInput: <TextInputProps & WidgetProps>{
@@ -176,8 +153,9 @@ export const template: (
         state: InputStateToken.DEFAULT,
         action: {
           type: ACTION.CHANGE_INPUT,
+         //type: ACTION.CHANGE_INPUT_EMAIL,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <InputPayload> {
+          payload: <InputPayload>{
             value: "",
             widgetId: "emailInput"
           }
@@ -188,12 +166,15 @@ export const template: (
           payload: <EnableDisableCTA>{ value: false, targetWidgetId: "continue" },
         },
         successAction: {
-          type: ACTION.ENABLE_CONTINUE,
+          type: ACTION.CHANGE_INPUT_EMAIL,
           routeId: ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO,
-          payload: <EnableDisableCTA>{ value: true, targetWidgetId: "continue" },
+          payload: <InputPayload>{
+            value: "",
+            widgetId: "emailInput"
+          }
         },
       },
-      bottomStack: <StackProps> {
+      bottomStack: <StackProps>{
         type: StackType.row,
         width: StackWidth.FULL,
         justifyContent: StackJustifyContent.center,
@@ -202,8 +183,8 @@ export const template: (
         ]
       },
       continue: <ButtonProps & WidgetProps>{
-        type: ButtonTypeTokens.LargeOutline,
-        label: "Save & Confirm",
+        type: `${isDisabled}` ? ButtonTypeTokens.LargeFilled:ButtonTypeTokens.LargeOutline,
+        label: "Save & Continue",
         width: ButtonWidthTypeToken.FULL,
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
@@ -215,28 +196,62 @@ export const template: (
           payload: <any>{},
         },
       },
-  }}
+    }
+  }
 }
 
-export const DistributorBasicDetailsInfo: PageType<any> = {
-    onLoad: async ({ network }) => {
-    const stepper: StepperItem[] = await horizontalStepperRepo();
-    const user = await SharedPropsService.getUser();
-    const applicationId = user.linkedApplications[0].applicationId;
-
-    const response = await network.get(
-      `${api.additionalDetails}${applicationId}`,
-      { headers: await getAppHeader() }
+export const distBasicDetailsMF: PageType<any> = {
+  onLoad: async ({network}) => {
+    const data = await SharedPropsService.getBasicData();
+    const applicationId = "";
+    const response = await network.post(
+        partnerApi.stepperData,
+        {},
+        { headers: await getAppHeader() }
     );
-    
 
-    const stepResponseObject = _.get(user, "data.stepResponseObject", {});
-    return Promise.resolve(template(stepper, stepResponseObject));
-    },
-    actions: {
-      [ACTION.CHANGE_INPUT]: onChangeInput,
-      [ACTION.DISABLE_CONTINUE]: toggleCTA,
-      [ACTION.ENABLE_CONTINUE]: toggleCTA,
-      [ACTION.TRIGGER_CTA]: triggerCTA,
-    },
+    let data1 = [];
+    let stepper_data = [];
+    Object.keys(response.data.partnerViewStepperMap).map(key=> {
+      const value = response.data.partnerViewStepperMap[key];
+      const stepData:any = new Object();
+      if(value.isEditable === true){
+        if (value.horizontalDisplayName === "Basic Details") {
+          stepData.title = value.verticalDisplayName;
+          stepData.subTitle = value.verticalDescription;
+          stepData.horizontalTitle = value.horizontalDisplayName;
+          stepData.id = value.order;
+          stepData.status = StepperStateToken.IN_PROGRESS;
+      } else {
+          stepData.title = value.verticalDisplayName;
+          stepData.subTitle = value.verticalDescription;
+          stepData.id = value.order;
+          stepData.horizontalTitle = value.horizontalDisplayName;
+          stepData.status = value.status;
+      }
+       
+        data1.push(stepData);
+      }
+      })
+      stepper_data = data1.sort(function (a, b) {
+        return a.id - b.id;
+      });
+    await SharedPropsService.setStepperData(stepper_data);
+    let isDisabled = "";
+    if(data.panNumber !== "" && data.mobileNumber !== "" && data.email !== ""){
+      isDisabled = "true";
+    }
+    return Promise.resolve(template(isDisabled,stepper_data));
+
+  },
+  actions: {
+    [ACTION.ENTER_DOB]: onChangeInput,
+    [ACTION.GO_BACK]: goBack,
+    [ACTION.CHANGE_INPUT]: onChangeInput,
+    [ACTION.CHANGE_INPUT_EMAIL]: onChangeInput2,
+    [ACTION.DISABLE_CONTINUE]: toggleCTA1,
+    [ACTION.ENABLE_CONTINUE]: toggleCTA,
+    [ACTION.TRIGGER_CTA]: triggerCTA,
+  },
+  clearPrevious:true
 }

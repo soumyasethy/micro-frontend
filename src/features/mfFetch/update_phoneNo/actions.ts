@@ -7,9 +7,9 @@ import SharedPropsService from "../../../SharedPropsService";
 
 let phoneNumber = "";
 export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
-  action,
-  _datastore,
-  { navigate, setDatastore, asyncStorage, goBack, ...props }
+    action,
+    _datastore,
+    { navigate, setDatastore, asyncStorage, goBack, ...props }
 ): Promise<any> => {
   if (!phoneNumber.includes("+91")) {
     phoneNumber = `+91${phoneNumber}`;
@@ -26,16 +26,16 @@ export const updateMobileNumber: ActionFunction<UpdateMobileNumber> = async (
 };
 
 export const phoneOnChange: ActionFunction<ContinuePayload> = async (
-  action,
-  _datastore,
-  {}
+    action,
+    _datastore,
+    {}
 ): Promise<any> => {
   phoneNumber = action.payload.value;
 };
 export const emailOnChange: ActionFunction<ContinuePayload> = async (
-  action,
-  _datastore,
-  {}
+    action,
+    _datastore,
+    {}
 ): Promise<any> => {
   phoneNumber = action.payload.value;
 };

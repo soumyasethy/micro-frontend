@@ -43,17 +43,17 @@ import { User } from "../../login/otp_verify/types";
 import {heightMap} from "../../../configs/height";
 
 export const template: (
-  applicationId: string,
-  assetRepository: AssetRepositoryType,
-  emailId: string,
-  panNumber: string,
-  phoneNumber: string
+    applicationId: string,
+    assetRepository: AssetRepositoryType,
+    emailId: string,
+    panNumber: string,
+    phoneNumber: string
 ) => TemplateSchema = (
-  applicationId,
-  assetRepository,
-  emailId,
-  panNumber,
-  phoneNumber
+    applicationId,
+    assetRepository,
+    emailId,
+    panNumber,
+    phoneNumber
 ) => {
   return {
     layout: <Layout>{
@@ -121,9 +121,9 @@ export const template: (
       },
       icon: <IconProps & WidgetProps>{
         name:
-          assetRepository === AssetRepositoryType.CAMS
-            ? IconTokens.OTPEmail
-            : IconTokens.SMS,
+            assetRepository === AssetRepositoryType.CAMS
+                ? IconTokens.OTPEmail
+                : IconTokens.SMS,
         size: IconSizeTokens.Size52,
       },
       subTitleStack: <StackProps & WidgetProps>{
@@ -144,9 +144,9 @@ export const template: (
       },
       subTitle2: <TypographyProps>{
         label:
-          assetRepository === AssetRepositoryType.CAMS
-            ? emailId
-            : `${phoneNumber}`.substring(3),
+            assetRepository === AssetRepositoryType.CAMS
+                ? emailId
+                : `${phoneNumber}`.substring(3),
         color: ColorTokens.Grey_Charcoal,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
@@ -192,7 +192,7 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     const panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     return Promise.resolve(
-      template(applicationId, AssetRepositoryType[assetRepository], emailId, panNumber, phoneNumber)
+        template(applicationId, AssetRepositoryType[assetRepository], emailId, panNumber, phoneNumber)
     );
   },
   actions: {

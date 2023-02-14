@@ -8,9 +8,9 @@ import SharedPropsService from "../../../SharedPropsService";
 let emailId = "";
 
 export const updateEmailId: ActionFunction<UpdateEmailIdPayload> = async (
-  action,
-  _datastore,
-  { navigate, setDatastore, asyncStorage, goBack, ...props }
+    action,
+    _datastore,
+    { navigate, setDatastore, asyncStorage, goBack, ...props }
 ): Promise<any> => {
   const user: User = await SharedPropsService.getUser();
   user.linkedBorrowerAccounts[0].accountHolderEmail = emailId;
@@ -22,9 +22,9 @@ export const updateEmailId: ActionFunction<UpdateEmailIdPayload> = async (
 };
 
 export const emailOnChange: ActionFunction<ContinuePayload> = async (
-  action,
-  _datastore,
-  {}
+    action,
+    _datastore,
+    {}
 ): Promise<any> => {
   emailId = action.payload.value;
 };
