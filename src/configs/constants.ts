@@ -56,4 +56,5 @@ export enum QUERY_PARAMS {
   PARTNER_PLATFORM = 'partnerplatform',
   PLATFORM = 'platform',
   USER = 'user',
+  REF = 'ref',
 }

@@ -71,7 +71,7 @@ export const splashScreenMF: PageType<any> = {
     //Example-2
     //http://localhost:3000?ref=12345
     // access route.params -> {ref_code: '12345'}
-    const ref: string = _.get(props, "ref", null);
+    const ref: string = _.get(props, QUERY_PARAMS.REF, null);
     const urlParams: string = _.get(props, "urlParams", null);
     let mobileNumber = null;
     let isPartnerPlatform: boolean = false;
