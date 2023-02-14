@@ -94,7 +94,7 @@ export const splashScreenMF: PageType<any> = {
       const partnerPlatform = urlParams
         .toLowerCase()
         .includes(QUERY_PARAMS.PARTNER_PLATFORM);
-      const platform = urlParams.includes("platform");
+      const platform = urlParams.includes(QUERY_PARAMS.PLATFORM);
 
       if (partnerPlatform && platform) {
         isPartnerPlatform = true;
@@ -102,20 +102,20 @@ export const splashScreenMF: PageType<any> = {
           standardUtilities.metaData?.platform.OS === "web"
             ? getParameters(urlParams)
             : {};
-        const customPlatform = params["platform"];
+        const customPlatform = params[QUERY_PARAMS.PLATFORM];
         /*** setting app global api header here if not VOLT_MOBILE_APP ****/
         await SharedPropsService.setAppPlatform(customPlatform);
       }
 
       /*** if ?user=8763666620 then autofill mobile number in login screen ****/
-      const isPreFillMobileNumber = urlParams.includes("user");
+      const isPreFillMobileNumber = urlParams.includes(QUERY_PARAMS.USER);
 
       if (
         isPreFillMobileNumber &&
         standardUtilities.metaData?.platform.OS === "web"
       ) {
         const params = getParameters(urlParams);
-        mobileNumber = params["user"];
+        mobileNumber = params[QUERY_PARAMS.USER];
       }
     }
     setTimeout(
@@ -136,9 +136,5 @@ export const splashScreenMF: PageType<any> = {
   actions: {
     [ACTION.AUTH_NAV]: SplashAction,
   },
-  // action: {
-  //   type: ACTION.AUTH_NAV,
-  //   payload: {},
-  // },
   bgColor: "#1434CB",
 };
