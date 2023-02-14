@@ -17,12 +17,8 @@ export const SplashAction: ActionFunction<any> = async (
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
   if (accessToken) {
     const body = {}; /*** NOT PASSING REF CODE HERE ***/
-
-
-    console.warn("SplashAction body", body);
     const userType = await SharedPropsService.getUserType();
     if (userType === USERTYPE.BORROWER) {
-
       const userContextResponse = await network.post(api.userContext, body, {
         headers: await getAppHeader(),
       });
@@ -41,13 +37,12 @@ export const SplashAction: ActionFunction<any> = async (
             user.linkedApplications[0].currentStepId
           );
           await navigate(nextRoute.routeId, nextRoute.params);
-          // await navigate(ROUTE.PHONE_NUMBER);
-          //  await navigate(ROUTE.PHONE_NUMBER, {
-          //   mobileNumber: action?.payload?.mobileNumber,
-          // });
         }
+      } else {
+        await navigate(ROUTE.PHONE_NUMBER, {
+          mobileNumber: action?.payload?.mobileNumber,
+        });
       }
-
     } else {
       const userContextResponse = await network.post(partnerApi.userContext, body, {
         headers: await getAppHeader(),
