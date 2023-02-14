@@ -1,28 +1,20 @@
 import { ActionFunction } from "@voltmoney/types";
 import { UpdateEmailIdPayload } from "./types";
 import { ContinuePayload } from "../../login/phone_number/types";
-import { PartnerUser, User } from "../../login/otp_verify/types";
+import { User } from "../../login/otp_verify/types";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 
 let emailId = "";
 
 export const updateEmailId: ActionFunction<UpdateEmailIdPayload> = async (
-  action,
-  _datastore,
-  { navigate, setDatastore, asyncStorage, goBack, ...props }
+    action,
+    _datastore,
+    { navigate, setDatastore, asyncStorage, goBack, ...props }
 ): Promise<any> => {
-  const userType = await SharedPropsService.getUserType();
-  if(userType === "BORROWER"){
-    const user: User = await SharedPropsService.getUser();
-    user.linkedBorrowerAccounts[0].accountHolderEmail = emailId;
-    await SharedPropsService.setUser(user);
-  }else{
-    const partnerUser: PartnerUser = await SharedPropsService.getPartnerUser();
-    partnerUser.emailId = emailId;
-    await SharedPropsService.setPartnerUser(partnerUser);
-  }
- 
+  const user: User = await SharedPropsService.getUser();
+  user.linkedBorrowerAccounts[0].accountHolderEmail = emailId;
+  await SharedPropsService.setUser(user);
   await setDatastore(ROUTE.MF_FETCH_PORTFOLIO, action.payload.targetWidgetId, {
     subTitle: emailId,
   });
@@ -30,9 +22,9 @@ export const updateEmailId: ActionFunction<UpdateEmailIdPayload> = async (
 };
 
 export const emailOnChange: ActionFunction<ContinuePayload> = async (
-  action,
-  _datastore,
-  {}
+    action,
+    _datastore,
+    {}
 ): Promise<any> => {
   emailId = action.payload.value;
 };

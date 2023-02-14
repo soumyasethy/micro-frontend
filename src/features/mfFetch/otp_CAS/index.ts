@@ -34,30 +34,26 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTIONS, AuthCASPayload } from "./types";
 import { authCAS, fetchMyPortfolio, goBack, navToFetch } from "./actions";
-
-import { FetchPortfolioPayload } from "../check_limit/types";
-
 import {
   AssetRepositoryMap,
   AssetRepositoryType,
-  PartnerAssetRepositoryMap,
 } from "../../../configs/config";
-import SharedPropsService, { USERTYPE } from "../../../SharedPropsService";
+import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
 import {heightMap} from "../../../configs/height";
 
 export const template: (
-  applicationId: string,
-  assetRepository: AssetRepositoryType,
-  emailId: string,
-  panNumber: string,
-  phoneNumber: string
+    applicationId: string,
+    assetRepository: AssetRepositoryType,
+    emailId: string,
+    panNumber: string,
+    phoneNumber: string
 ) => TemplateSchema = (
-  applicationId,
-  assetRepository,
-  emailId,
-  panNumber,
-  phoneNumber
+    applicationId,
+    assetRepository,
+    emailId,
+    panNumber,
+    phoneNumber
 ) => {
   return {
     layout: <Layout>{
@@ -125,91 +121,78 @@ export const template: (
       },
       icon: <IconProps & WidgetProps>{
         name:
-          assetRepository === AssetRepositoryType.CAMS
-            ? IconTokens.OTPEmail
-            : IconTokens.SMS,
+            assetRepository === AssetRepositoryType.CAMS
+                ? IconTokens.OTPEmail
+                : IconTokens.SMS,
         size: IconSizeTokens.Size52,
       },
-      
-        subTitleStack: <StackProps & WidgetProps>{
-          type: StackType.column,
-          alignItems: StackAlignItems.flexStart,
-          justifyContent: StackJustifyContent.flexStart,
-          widgetItems: [
-            { id: "subTitle", type: WIDGET.TEXT },
-            { id: "subTitleSpace", type: WIDGET.SPACE },
-            { id: "subTitle2", type: WIDGET.TEXT },
-          ],
-        },
-        subTitleSpace: <SpaceProps>{
-          size: SizeTypeTokens.SM,
-        },
-        subTitle: <TypographyProps>{
-          label: `OTP sent to `,
-          color: ColorTokens.Grey_Charcoal,
-          fontFamily: FontFamilyTokens.Inter,
-          fontSize: FontSizeTokens.SM,
-          fontWeight: "500",
-        },
-        subTitle2: <TypographyProps>{
-          label:
-            assetRepository === AssetRepositoryType.CAMS
-              ? emailId
-              : `${phoneNumber}`.substring(3),
-          color: ColorTokens.Grey_Charcoal,
-          fontFamily: FontFamilyTokens.Inter,
-          fontWeight: "600",
-          fontSize: FontSizeTokens.SM,
-        },
-        input: <TextInputProps & TextInputOtpProps & WidgetProps>{
-          title: "Enter OTP",
-          type: InputTypeToken.OTP,
-          state: InputStateToken.DEFAULT,
-          keyboardType: KeyboardTypeToken.numberPad,
-          charLimit: AssetRepositoryMap.get(assetRepository).OTP_LENGTH,
-          action: {
-            type: ACTIONS.AUTH_CAS,
-            routeId: ROUTE.OTP_AUTH_CAS,
-            payload: <AuthCASPayload>{
-              value: "",
-              applicationId,
-              assetRepository,
-            },
-          },
-          otpAction: {
-            type: ACTIONS.RESEND_OTP_AUTH_CAS,
-            payload: <AuthCASPayload>{
-              value: "",
-              applicationId,
-              assetRepository
-            },
-            routeId: ROUTE.OTP_AUTH_CAS,
-          },
-        },
-        space1: <SpaceProps>{ size: SizeTypeTokens.MD },
-        space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+      subTitleStack: <StackProps & WidgetProps>{
+        type: StackType.row,
+        alignItems: StackAlignItems.flexStart,
+        justifyContent: StackJustifyContent.flexStart,
+        widgetItems: [
+          { id: "subTitle", type: WIDGET.TEXT },
+          { id: "subTitle2", type: WIDGET.TEXT },
+        ],
       },
-    };
+      subTitle: <TypographyProps>{
+        label: `OTP sent to `,
+        color: ColorTokens.Grey_Charcoal,
+        fontFamily: FontFamilyTokens.Inter,
+        fontSize: FontSizeTokens.SM,
+        fontWeight: "500",
+      },
+      subTitle2: <TypographyProps>{
+        label:
+            assetRepository === AssetRepositoryType.CAMS
+                ? emailId
+                : `${phoneNumber}`.substring(3),
+        color: ColorTokens.Grey_Charcoal,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        fontSize: FontSizeTokens.SM,
+      },
+      input: <TextInputProps & TextInputOtpProps & WidgetProps>{
+        title: "Enter OTP",
+        type: InputTypeToken.OTP,
+        state: InputStateToken.DEFAULT,
+        keyboardType: KeyboardTypeToken.numberPad,
+        charLimit: AssetRepositoryMap.get(assetRepository).OTP_LENGTH,
+        action: {
+          type: ACTIONS.AUTH_CAS,
+          routeId: ROUTE.OTP_AUTH_CAS,
+          payload: <AuthCASPayload>{
+            value: "",
+            applicationId,
+            assetRepository,
+          },
+        },
+        otpAction: {
+          type: ACTIONS.RESEND_OTP_AUTH_CAS,
+          payload: <AuthCASPayload>{
+            value: "",
+            applicationId,
+            assetRepository
+          },
+          routeId: ROUTE.OTP_AUTH_CAS,
+        },
+      },
+      space1: <SpaceProps>{ size: SizeTypeTokens.MD },
+      space2: <SpaceProps>{ size: SizeTypeTokens.XXXL },
+    },
   };
+};
 
 export const otpVerifyAuthCASMF: PageType<any> = {
-
-  onLoad: async ({ }, { applicationId, emailId,
-    phoneNumber,
-    panNumber,
-    assetRepository }) => {
-    const userType = await SharedPropsService.getUserType();
-    if (userType === USERTYPE.BORROWER) {
-      await SharedPropsService.setAssetRepositoryType(assetRepository);
-      const user: User = await SharedPropsService.getUser();
-      applicationId = user.linkedApplications[0].applicationId;
-      emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
-      panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
-      phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-      //assetRepository = await SharedPropsService.getAssetRepositoryType();
-    }
+  onLoad: async  (_, { assetRepository })  => {
+    await SharedPropsService.setAssetRepositoryType(assetRepository);
+    const user: User = await SharedPropsService.getUser();
+    const applicationId = user.linkedApplications[0].applicationId;
+    const emailId = user.linkedBorrowerAccounts[0].accountHolderEmail;
+    const panNumber = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     return Promise.resolve(
-      template(applicationId,  AssetRepositoryType[assetRepository], emailId, panNumber, phoneNumber)
+        template(applicationId, AssetRepositoryType[assetRepository], emailId, panNumber, phoneNumber)
     );
   },
   actions: {
@@ -217,7 +200,6 @@ export const otpVerifyAuthCASMF: PageType<any> = {
     [ACTIONS.RESEND_OTP_AUTH_CAS]: fetchMyPortfolio,
     [ACTIONS.GO_BACK]: goBack,
     [ACTIONS.NAV_TO_FETCH]: navToFetch,
-    //[ACTIONS.NEXT_ROUTE]: goNext,
   },
-  clearPrevious: true,
+  clearPrevious: false,
 };

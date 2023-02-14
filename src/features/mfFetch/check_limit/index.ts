@@ -29,7 +29,6 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
-  StackWidth,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -51,86 +50,83 @@ import {
   AssetRepositoryType,
   ConfigTokens,
   getPrimaryAssetRepository,
-   getAppHeader
 } from "../../../configs/config";
-import {heightMap} from "../../../configs/height";
-
-import { partnerApi } from "../../../configs/api";
+import { heightMap } from "../../../configs/height";
 
 export const template: (
-  applicationId: string,
-  panNumber: string,
-  phoneNumber: string,
-  emailId: string,
-  assetRepository: AssetRepositoryType,
-  isPanEditAllowed: boolean,
-  isGoBackAllowed: boolean,
-  setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
+    applicationId: string,
+    panNumber: string,
+    phoneNumber: string,
+    emailId: string,
+    assetRepository: AssetRepositoryType,
+    isPanEditAllowed: boolean,
+    isGoBackAllowed: boolean,
+    setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
 ) => Promise<TemplateSchema> = async (
-  applicationId,
-  panNumber,
-  phoneNumber,
-  emailId,
-  assetRepository,
-  isPanEditAllowed,
-  isGoBackAllowed,
-  setIsUserLoggedIn
+    applicationId,
+    panNumber,
+    phoneNumber,
+    emailId,
+    assetRepository,
+    isPanEditAllowed,
+    isGoBackAllowed,
+    setIsUserLoggedIn
 ) => {
   return {
     layout: <Layout>{
       id: ROUTE.MF_FETCH_PORTFOLIO,
       type: isGoBackAllowed ? LAYOUTS.MODAL : LAYOUTS.LIST,
       style: {
-        height: heightMap[ROUTE.MF_FETCH_PORTFOLIO]
+        height: heightMap[ROUTE.MF_FETCH_PORTFOLIO],
       },
-  widgets: [
-    { id: "space0", type: WIDGET.SPACE },
-    ...(isGoBackAllowed
-      ? [
-          {
-            id: "headerStack",
-            type: WIDGET.STACK,
-            position: POSITION.ABSOLUTE_TOP,
-            padding: {
-              right: 8,
-              top: 8,
-              bottom: 0,
-              left: 0,
-            },
-          },
-        ]
-      : []),
-    { id: "title", type: WIDGET.TEXT },
-    { id: "space1", type: WIDGET.SPACE },
-    { id: "subTitle", type: WIDGET.TEXT },
-    { id: "space2", type: WIDGET.SPACE },
-    { id: "panItem", type: WIDGET.LIST_ITEM },
-    { id: "mobileItem", type: WIDGET.LIST_ITEM },
-    { id: "emailItem", type: WIDGET.LIST_ITEM },
-    { id: "space3", type: WIDGET.SPACE },
-    { id: "investmentInfoTooltip", type: WIDGET.MESSAGE },
-    { id: "space4", type: WIDGET.SPACE },
-    {
-      id: "fetchCTA",
-      type: WIDGET.BUTTON,
-      position: POSITION.ABSOLUTE_BOTTOM,
+      widgets: [
+        { id: "space0", type: WIDGET.SPACE },
+        ...(isGoBackAllowed
+            ? [
+              {
+                id: "headerStack",
+                type: WIDGET.STACK,
+                position: POSITION.ABSOLUTE_TOP,
+                padding: {
+                  right: 8,
+                  top: 8,
+                  bottom: 0,
+                  left: 0,
+                },
+              },
+            ]
+            : []),
+        { id: "title", type: WIDGET.TEXT },
+        { id: "space1", type: WIDGET.SPACE },
+        { id: "subTitle", type: WIDGET.TEXT },
+        { id: "space2", type: WIDGET.SPACE },
+        { id: "panItem", type: WIDGET.LIST_ITEM },
+        { id: "mobileItem", type: WIDGET.LIST_ITEM },
+        { id: "emailItem", type: WIDGET.LIST_ITEM },
+        { id: "space3", type: WIDGET.SPACE },
+        { id: "investmentInfoTooltip", type: WIDGET.MESSAGE },
+        { id: "space4", type: WIDGET.SPACE },
+        {
+          id: "fetchCTA",
+          type: WIDGET.BUTTON,
+          position: POSITION.ABSOLUTE_BOTTOM,
+        },
+        ...(isPanEditAllowed
+            ? [
+              {
+                id: "space5",
+                type: WIDGET.SPACE,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+              {
+                id: "camsCTAStack",
+                type: WIDGET.STACK,
+                position: POSITION.ABSOLUTE_BOTTOM,
+              },
+            ]
+            : []),
+      ],
     },
-    ...(isPanEditAllowed
-      ? [
-          {
-            id: "space5",
-            type: WIDGET.SPACE,
-            position: POSITION.ABSOLUTE_BOTTOM,
-          },
-          {
-            id: "camsCTAStack",
-            type: WIDGET.STACK,
-            position: POSITION.ABSOLUTE_BOTTOM,
-          },
-        ]
-      : []),
-  ],
-},
     datastore: <Datastore>{
       header: <HeaderProps>{
         isBackButton: true,
@@ -178,7 +174,7 @@ export const template: (
       },
       subTitle: <TypographyProps>{
         label: "Cash limit is calculated using your mutual fund portfolio",
-        numberOfLines: 1,
+        numberOfLines: 2,
         fontFamily: FontFamilyTokens.Inter,
         color: ColorTokens.Grey_Charcoal,
         fontWeight: "400",
@@ -193,7 +189,7 @@ export const template: (
         trailIconName: isPanEditAllowed ? IconTokens.Edit : null,
         subTitleLineHeight: 24,
         action: isPanEditAllowed
-          ? {
+            ? {
               routeId: ROUTE.MF_FETCH_PORTFOLIO,
               type: ACTION.EDIT_PAN,
               payload: <PanEditPayload>{
@@ -202,7 +198,7 @@ export const template: (
                 panNumber: panNumber,
               },
             }
-          : null,
+            : null,
       },
       mobileItem: <ListItemProps & WidgetProps>{
         title: "Mobile Number (linked to investments)",
@@ -303,63 +299,36 @@ export const template: (
 };
 
 export const checkLimitMF: PageType<any> = {
+  onLoad: async (_, { setIsUserLoggedIn, assetRepository }) => {
+    const user: User = await SharedPropsService.getUser();
+    const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
+    const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
+    const emailId =
+        `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+    const applicationId = user.linkedApplications[0].applicationId;
 
-  onLoad: async (
-    { network, asyncStorage, ...props },
-    { setIsUserLoggedIn,assetRepository,applicationId, email, panNumber, mobileNumber, headTitle }
-  ) => {
-    const userType = await SharedPropsService.getUserType();
-    let phoneNumber = "";
-    let panNumberX = "";
-    let emailId = "";
-    console.log("userType", userType);
-    if (userType === "BORROWER") {
-      const user: User = await SharedPropsService.getUser();
-      panNumberX =
-        panNumber || user.linkedBorrowerAccounts[0].accountHolderPAN;
-      phoneNumber =
-        mobileNumber || user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
-      emailId = `${email || user.linkedBorrowerAccounts[0].accountHolderEmail
-        }`.toLowerCase();
-      if (!applicationId) {
-        applicationId = applicationId || user.linkedApplications[0].applicationId;
-      }
-      if(!assetRepository) {
-        assetRepository = await getPrimaryAssetRepository();
-      }
-  
-     // const assetRepository = await SharedPropsService.getAssetRepositoryType();
-    } else {
-      phoneNumber = await (await SharedPropsService.getPartnerUser()).phoneNumber;
-      emailId = await (await SharedPropsService.getPartnerUser()).emailId;
-      panNumberX = await (await SharedPropsService.getPartnerUser()).panNumber;
-     // const assetRepository = headTitle;
-      // console.log(await SharedPropsService.getBasicData());
-      //       phoneNumber = await (await SharedPropsService.getBasicData()).mobileNumber;
-      //       emailId =await (await SharedPropsService.getBasicData()).email;
-      //       panNumberX = await (await SharedPropsService.getBasicData()).panNumber;
-      //       const assetRepository = headTitle;
+    if (!assetRepository) {
+      assetRepository = await getPrimaryAssetRepository();
     }
-  //  const assetRepository = await SharedPropsService.getAssetRepositoryType();
-    console.log("repo", assetRepository);
+
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
-      ConfigTokens.IS_PAN_EDIT_ALLOWED
+        ConfigTokens.IS_PAN_EDIT_ALLOWED
     );
     const isGoBackAllowed: boolean = await SharedPropsService.getConfig(
-      ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
+        ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
     );
 
     return Promise.resolve(
-      template(
-        applicationId,
-        panNumberX,
-        phoneNumber,
-        emailId,
-        assetRepository,
-        isPanEditAllowed,
-        isGoBackAllowed,
-        setIsUserLoggedIn
-      )
+        template(
+            applicationId,
+            panNumberX,
+            phoneNumber,
+            emailId,
+            assetRepository,
+            isPanEditAllowed,
+            isGoBackAllowed,
+            setIsUserLoggedIn
+        )
     );
   },
   actions: {
