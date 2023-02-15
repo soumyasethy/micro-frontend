@@ -11,6 +11,7 @@ import {
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
+  CardProps,
   ColorTokens,
   DropDownInputProps,
   DropDownItemProps,
@@ -23,6 +24,7 @@ import {
   IconTokens,
   InputStateToken,
   InputTypeToken,
+  PaddingProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -87,17 +89,19 @@ export const template: (
         { id: "martialStatusSpace", type: WIDGET.SPACE },
         { id: "martialStatusStack", type: WIDGET.STACK },
         // { id: "selectQualificationTitleSpace", type: WIDGET.SPACE },
-        { id: "qualificationTitle", type: WIDGET.TEXT },
-        { id: "selectQualificationTitleSpace2", type: WIDGET.SPACE },
+        // { id: "qualificationTitle", type: WIDGET.TEXT },
+        // { id: "selectQualificationTitleSpace2", type: WIDGET.SPACE },
         { id: "qualificationInput", type: WIDGET.DROPDOWN_INPUT },
         { id: "qualificationInputSpace", type: WIDGET.SPACE },
-        { id: "fatherNameTitle", type: WIDGET.TEXT },
+        // { id: "fatherNameTitle", type: WIDGET.TEXT },
         { id: "fatherInputSpace", type: WIDGET.SPACE },
         { id: "fatherNameStack", type: WIDGET.STACK },
+        { id: "fathersCard", type: WIDGET.CARD },
         { id: "motherNameInputSpace", type: WIDGET.SPACE },
-        { id: "motherNameTitle", type: WIDGET.TEXT },
+        // { id: "motherNameTitle", type: WIDGET.TEXT },
         { id: "motherNameSpace", type: WIDGET.SPACE },
         { id: "motherNameStack", type: WIDGET.STACK },
+        { id: "mothersCard", type: WIDGET.CARD },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space2", type: WIDGET.SPACE },
         {
@@ -260,6 +264,37 @@ export const template: (
         fontWeight: "600",
         lineHeight: 24,
       },
+      fathersCard: <CardProps>{
+        width: "100%",
+        bgColor: ColorTokens.White,
+        padding: <PaddingProps>{
+          horizontal: SizeTypeTokens.NONE,
+          vertical: SizeTypeTokens.Size6,
+        },
+        body: {
+          widgetItems: [{ id: "propStack", type: WIDGET.STACK }],
+        },
+      },
+      propStack: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.flexStart,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          { id: "icon", type: WIDGET.ICON },
+          { id: "space", type: WIDGET.SPACE },
+          { id: "text", type: WIDGET.TEXT },
+        ],
+      },
+      icon: <IconProps>{
+        name: IconTokens.Info,
+        color: ColorTokens.System_Warning,
+      },
+      space: <SpaceProps>{ size: SizeTypeTokens.MD },
+      text: <TypographyProps>{
+        label: "Enter father’s name as per your Aadhaar",
+        color: ColorTokens.System_Warning,
+      },
       fatherNameStack: <StackProps>{
         type: StackType.row,
         width: StackWidth.CONTENT,
@@ -274,19 +309,14 @@ export const template: (
       fatherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       fatherInputBetweenSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       fatherFirstNameInput: <TextInputProps & WidgetProps>{
-        value: `${
-          stepResponseObject.fatherFirstName
-            ? stepResponseObject.fatherFirstName
-            : ""
-        }`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
-        title: "First name",
+        title: "Father’s first name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "First name",
+        placeholder: "",
         color: ColorTokens.Grey_Night,
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
@@ -300,19 +330,14 @@ export const template: (
         },
       },
       fatherLastNameInput: <TextInputProps & WidgetProps>{
-        value: `${
-          stepResponseObject.fatherLastName
-            ? stepResponseObject.fatherLastName
-            : ""
-        }`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
-        title: "Last name",
+        title: "Father’s last name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "Last name",
+        placeholder: "",
         color: ColorTokens.Grey_Night,
         type: InputTypeToken.DEFAULT,
         state: InputStateToken.DEFAULT,
@@ -324,6 +349,37 @@ export const template: (
           },
           routeId: ROUTE.KYC_ADDITIONAL_DETAILS,
         },
+      },
+      mothersCard: <CardProps>{
+        width: "100%",
+        bgColor: ColorTokens.White,
+        padding: <PaddingProps>{
+          horizontal: SizeTypeTokens.NONE,
+          vertical: SizeTypeTokens.Size6,
+        },
+        body: {
+          widgetItems: [{ id: "propStack2", type: WIDGET.STACK }],
+        },
+      },
+      propStack2: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.flexStart,
+        alignItems: StackAlignItems.center,
+        widgetItems: [
+          { id: "icon2", type: WIDGET.ICON },
+          { id: "space3", type: WIDGET.SPACE },
+          { id: "text2", type: WIDGET.TEXT },
+        ],
+      },
+      icon2: <IconProps>{
+        name: IconTokens.Info,
+        color: ColorTokens.System_Warning,
+      },
+      space3: <SpaceProps>{ size: SizeTypeTokens.MD },
+      text2: <TypographyProps>{
+        label: "Enter your mother’s first name & last name",
+        color: ColorTokens.System_Warning,
       },
       motherNameTitle: <TypographyProps>{
         label: "Mother’s name",
@@ -346,19 +402,14 @@ export const template: (
         ],
       },
       motherFirstNameInput: <TextInputProps>{
-        value: `${
-          stepResponseObject.motherFirstName
-            ? stepResponseObject.motherFirstName
-            : ""
-        }`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
-        title: "First name",
+        title: "Mother’s first name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "First name",
+        placeholder: "",
         color: ColorTokens.Grey_Night,
         action: {
           type: ACTION.INPUT_NAME,
@@ -371,19 +422,14 @@ export const template: (
       },
       motherInputSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       motherLastNameInput: <TextInputProps>{
-        value: `${
-          stepResponseObject.motherLastName
-            ? stepResponseObject.motherLastName
-            : ""
-        }`,
         width: TextInputTypeToken.CONTENT,
         isFocus: false,
-        title: "Last name",
+        title: "Mother’s last name",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
         fontWeight: "400",
-        placeholder: "Last name",
+        placeholder: "",
         color: ColorTokens.Grey_Night,
         action: {
           type: ACTION.INPUT_NAME,
