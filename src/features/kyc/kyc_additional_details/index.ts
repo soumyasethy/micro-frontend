@@ -378,7 +378,7 @@ export const template: (
       },
       space3: <SpaceProps>{ size: SizeTypeTokens.MD },
       text2: <TypographyProps>{
-        label: "Enter mother’s name as per your Aadhaar",
+        label: "Enter your mother’s first name & last name",
         color: ColorTokens.System_Warning,
       },
       motherNameTitle: <TypographyProps>{
