@@ -11,7 +11,7 @@ import {
   ConfigTokens,
   getAppHeader,
 } from "./config";
-import { StandardUtilities } from "@voltmoney/types";
+import {ImportScriptCustomCallbackType, StandardUtilities} from "@voltmoney/types";
 
 export const showBottomSheet = ({
   title = "Verification Failed!",
@@ -591,3 +591,29 @@ export const updateUserContextFromApi = async (
 export const removeCommasFromNumber = (num: string) => {
   return num.replace(/,/g, "");
 };
+
+export const getDigio:ImportScriptCustomCallbackType = (
+    successCB, failureCB
+) => {
+  const digioOptions = {
+    environment: 'sandbox',
+    callback: function (response: any) {
+      if (response.hasOwnProperty('error_code')) {
+        failureCB && failureCB(response)
+        return console.log('error occurred in process');
+      }
+      successCB && successCB(response)
+      console.log('Signing completed successfully');
+    },
+    logo: 'https://www.mylogourl.com/image.jpeg',
+    theme: {
+      primaryColor: '#AB3498',
+      secondaryColor: '#000000',
+    },
+    is_iframe: true,
+  }
+  //@ts-ignore
+  let digioObj = new Digio(digioOptions);
+  //@ts-ignore
+  window.digio = digioObj;
+}
