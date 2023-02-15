@@ -84,7 +84,7 @@ export const splashScreenMF: PageType<any> = {
       /*** get params for custom api header if present in url
        *** example, voltmoney.in/partnerplatform?platform=VOLT_MOBILE_APP ****/
 
-      const deleteUserContextCheck = urlParams.toLowerCase().includes(QUERY_PARAMS.DELETE);
+      const deleteUserContextCheck = urlParams.toLowerCase().includes(QUERY_PARAMS.START_NEW);
       if(deleteUserContextCheck) {
         clearAllData().then(async ()=>{
           await standardUtilities.navigate(ROUTE.PHONE_NUMBER);

@@ -53,6 +53,7 @@ export const TextConstants = {
 
 export enum QUERY_PARAMS {
   DELETE = 'delete',
+  START_NEW = 'startNew',
   PARTNER_PLATFORM = 'partnerplatform',
   PLATFORM = 'platform',
   USER = 'user',
