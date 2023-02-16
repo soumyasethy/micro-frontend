@@ -77,10 +77,10 @@ export const api = {
   getListOfDisbursalByCreditId: `${config.URL}/app/borrower/lms/disbursal/credit/`,
   pdfHoldingStatement: `${config.URL}/app/borrower/lms/holdingStatement/email/`,
   savePortfolio: `${config.URL}/app/borrower/application/pledge/save`,
-  digioKycESignInitiateRequest: `${config.URL}/app/borrower/application/kyc/digio/init/`,
+  digioKycInitiateRequest: `${config.URL}/app/borrower/application/kyc/digio/init/`,
   digioKycCheckRequestStatus: `${config.URL}/app/borrower/application/kyc/digio/status/`,
   digioKycCheckRequestStatusOnCallBack: `${config.URL}/app/borrower/application/kyc/digio/status/deep/`,
-  digioDocsESignInitiateRequest:`${config.URL}/app/borrower/application/doc/digio/init/`,
+  digioDocsInitiateRequest:`${config.URL}/app/borrower/application/doc/digio/init/`,
   digioDocsCheckRequestStatus: `${config.URL}/app/borrower/application/doc/digio/status/`,
   digioDocsCheckRequestStatusOnCallBack: `${config.URL}/app/borrower/application/doc/digio/status/deep/`,
 };
