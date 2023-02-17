@@ -35,7 +35,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { Done, goBack } from "./action";
 import moment from "moment";
-import {heightMap} from "../../../configs/height";
+import { heightMap } from "../../../configs/height";
 
 export const template: (
   disbursalAmount: string,
@@ -45,13 +45,13 @@ export const template: (
     id: ROUTE.WITHDRAWAL_SUCCESS,
     type: LAYOUTS.MODAL,
     style: {
-      height: heightMap[ROUTE.WITHDRAWAL_SUCCESS]
+      height: heightMap[ROUTE.WITHDRAWAL_SUCCESS],
     },
     widgets: [
-      {
-        id: "success",
-        type: WIDGET.VERIFICATIONCARD,
-      },
+      // {
+      //   id: "success",
+      //   type: WIDGET.VERIFICATIONCARD,
+      // },
       { id: "divider", type: WIDGET.DIVIDER },
       { id: "dividerSpace", type: WIDGET.SPACE },
       { id: "amountStack", type: WIDGET.STACK },
@@ -71,10 +71,7 @@ export const template: (
   datastore: <Datastore>{
     success: <VerificationCardProps>{
       label: "Withdrawal request successful",
-      message: "",
       type: VerificationCardTypeTokens.Success,
-      buttonType: VerificationCardButtonTypeToken.FULL,
-      buttonText: "",
     },
     divider: <DividerProps>{
       size: DividerSizeTokens.SM,
@@ -166,7 +163,6 @@ export const withdrawalSuccessMF: PageType<any> = {
   onLoad: async (_, { disbursalAmount, accountNumber }) => {
     return Promise.resolve(template(disbursalAmount, accountNumber));
   },
-
   actions: {
     [ACTION.WITHDRAWAL_SUCCESS]: Done,
     [ACTION.GO_BACK]: goBack,
