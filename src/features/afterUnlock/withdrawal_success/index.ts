@@ -48,10 +48,10 @@ export const template: (
       height: heightMap[ROUTE.WITHDRAWAL_SUCCESS],
     },
     widgets: [
-      // {
-      //   id: "success",
-      //   type: WIDGET.VERIFICATIONCARD,
-      // },
+      {
+        id: "success",
+        type: WIDGET.VERIFICATIONCARD,
+      },
       { id: "divider", type: WIDGET.DIVIDER },
       { id: "dividerSpace", type: WIDGET.SPACE },
       { id: "amountStack", type: WIDGET.STACK },
