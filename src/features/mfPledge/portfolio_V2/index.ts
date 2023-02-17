@@ -1,4 +1,12 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   ColorTokens,
   DividerProps,
@@ -9,6 +17,7 @@ import {
   InputStateToken,
   InputTypeToken,
   KeyboardTypeToken,
+  PaddingProps,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
@@ -20,12 +29,19 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION, OtpPayload, SearchPortfolioPayload} from "./types";
-import {ClearSearchPortfolio, EditItem, goBack, SearchPortfolio, ToggleSelectAction, TriggerCTA,} from "./actions";
-import {StepResponseObject} from "../unlock_limit/types";
+import { ROUTE } from "../../../routes";
+import { ACTION, OtpPayload, SearchPortfolioPayload } from "./types";
+import {
+  ClearSearchPortfolio,
+  EditItem,
+  goBack,
+  SearchPortfolio,
+  ToggleSelectAction,
+  TriggerCTA,
+} from "./actions";
+import { StepResponseObject } from "../unlock_limit/types";
 import SharedPropsService from "../../../SharedPropsService";
-import {portfolioListDatastoreBuilderV2} from "./utils";
+import { portfolioListDatastoreBuilderV2 } from "./utils";
 import { addCommasToNumber } from "../../../configs/utils";
 
 export const template: (
@@ -36,7 +52,7 @@ export const template: (
       id: ROUTE.PORTFOLIO,
       type: LAYOUTS.LIST,
       widgets: [
-        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP},
+        { id: "header", type: WIDGET.HEADER, position: POSITION.ABSOLUTE_TOP },
         { id: "titleText", type: WIDGET.TEXT },
         { id: "space0", type: WIDGET.SPACE },
         { id: "subTitleText", type: WIDGET.TEXT },
@@ -51,8 +67,9 @@ export const template: (
           type: WIDGET.STACK,
           position: POSITION.STICKY_BOTTOM,
           padding: {
-            left: 0,
-            right: 0,
+            left: -16,
+            right: -16,
+            horizontal: -16
           },
         },
       ],
@@ -77,30 +94,32 @@ export const template: (
           routeId: ROUTE.PORTFOLIO,
         },
       },
-      titleText: <TypographyProps> {
-        label: 'Select mutual funds for pledging',
+      titleText: <TypographyProps>{
+        label: "Select mutual funds for pledging",
         fontSize: FontSizeTokens.MD,
         fontFamily: FontFamilyTokens.Poppins,
-        fontWeight: '700',
+        fontWeight: "700",
         color: ColorTokens.Grey_Night,
-        lineHeight: 24
+        lineHeight: 24,
       },
-      space0: <SpaceProps> { size: SizeTypeTokens.MD },
-      space1: <SpaceProps> { size: SizeTypeTokens.LG },
-      space2: <SpaceProps> { size: SizeTypeTokens.LG},
-      subTitleText: <TypographyProps> {
-        label: `₹${addCommasToNumber(await SharedPropsService.getDesiredPortfolio())} out of ₹${addCommasToNumber(
+      space0: <SpaceProps>{ size: SizeTypeTokens.MD },
+      space1: <SpaceProps>{ size: SizeTypeTokens.LG },
+      space2: <SpaceProps>{ size: SizeTypeTokens.LG },
+      subTitleText: <TypographyProps>{
+        label: `₹${addCommasToNumber(
+          await SharedPropsService.getDesiredPortfolio()
+        )} out of ₹${addCommasToNumber(
           parseInt(stepResponseObject["totalPortfolioAmount"].toString())
         )} are selected for pledging.`,
         fontSize: FontSizeTokens.SM,
         fontFamily: FontFamilyTokens.Inter,
-        fontWeight: '400',
+        fontWeight: "400",
         color: ColorTokens.Grey_Charcoal,
-        lineHeight: 24
+        lineHeight: 24,
       },
-      divider0: <DividerProps> {
+      divider0: <DividerProps>{
         size: DividerSizeTokens.MD,
-        type: 'solid',
+        type: "solid",
         color: ColorTokens.Grey_Milk_1,
       },
       inputItem: <TextInputProps & WidgetProps>{
@@ -128,54 +147,60 @@ export const template: (
       inputSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       listSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
       ...(await portfolioListDatastoreBuilderV2(stepResponseObject)),
-      infoRow: <StackProps> {
+      infoRow: <StackProps>{
         type: StackType.row,
-        width:StackWidth.FULL,
         justifyContent: StackJustifyContent.spaceBetween,
+        alignItems: StackAlignItems.center,
+        padding: <PaddingProps>{
+          horizontal: SizeTypeTokens.XS,
+          vertical: SizeTypeTokens.XS,
+        },
         widgetItems: [
-          { id:"col1Headers", type: WIDGET.STACK },
-          { id:"col2Headers", type: WIDGET.STACK }
-        ]
+          { id: "col1Header", type: WIDGET.TEXT },
+          //{ id:"col2Header", type: WIDGET.TEXT },
+          // { id:"col1Headers", type: WIDGET.STACK },
+          { id: "col2Headers", type: WIDGET.STACK },
+        ],
       },
-      col1Headers: <StackProps> {
-        type:"row",
-        justifyContent:StackJustifyContent.flexStart,
-        alignItems:StackAlignItems.flexStart,
-        width:StackWidth.FULL,
+      col1Headers: <StackProps>{
+        type: "row",
+        justifyContent: StackJustifyContent.flexStart,
+        alignItems: StackAlignItems.flexStart,
+        width: StackWidth.FULL,
         widgetItems: [
-          { id:"col1Header", type: WIDGET.TEXT },
-          { id:"col1Space", type: WIDGET.SPACE },
-        ]
+          { id: "col1Header", type: WIDGET.TEXT },
+          { id: "col1Space", type: WIDGET.SPACE },
+        ],
       },
-      col2Headers: <StackProps> {
-        type:"row",
-        justifyContent:StackJustifyContent.flexEnd,
-        alignItems:StackAlignItems.flexEnd,
-        width:StackWidth.FULL,
+      col2Headers: <StackProps>{
+        type: "row",
+        padding: <PaddingProps>{
+          horizontal: SizeTypeTokens.XS,
+        },
         widgetItems: [
-          { id:"col2Header", type: WIDGET.TEXT },
-          { id:"col2Space", type: WIDGET.SPACE },
-        ]
+          { id: "col2Header", type: WIDGET.TEXT },
+          { id: "col2Space", type: WIDGET.SPACE },
+        ],
       },
-      col1Space:<SpaceProps>{
-        size:SizeTypeTokens.XXXL
+      col1Space: <SpaceProps>{
+        size: SizeTypeTokens.XXXL,
       },
-      col2Space:<SpaceProps>{
-        size:SizeTypeTokens.XXXL
+      col2Space: <SpaceProps>{
+        size: SizeTypeTokens.XXXL,
       },
-      col1Header: <TypographyProps> {
-        label: 'Mutual fund',
+      col1Header: <TypographyProps>{
+        label: "Mutual fund",
         fontSize: FontSizeTokens.XS,
         fontFamily: FontFamilyTokens.Inter,
-        fontWeight: '500',
+        fontWeight: "500",
         color: ColorTokens.Grey_Charcoal,
         lineHeight: 18,
       },
-      col2Header: <TypographyProps> {
-        label: 'Credit limit',
+      col2Header: <TypographyProps>{
+        label: "Credit limit",
         fontSize: FontSizeTokens.XS,
         fontFamily: FontFamilyTokens.Inter,
-        fontWeight: '500',
+        fontWeight: "500",
         color: ColorTokens.Grey_Charcoal,
         lineHeight: 18,
       },

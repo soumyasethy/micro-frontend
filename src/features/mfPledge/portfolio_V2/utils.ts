@@ -10,6 +10,7 @@ import {
   ListItemDataProps,
   ListProps,
   ListTypeTokens,
+  PaddingProps,
   ShadowTypeTokens,
   SizeTypeTokens,
   SpaceProps,
@@ -149,8 +150,11 @@ export const portfolioListDatastoreBuilderV2 = async (
     */
     totalItem: <StackProps>{
       type: StackType.column,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.center,
+       alignItems: StackAlignItems.center,
+       justifyContent: StackJustifyContent.center,
+      padding: <PaddingProps>{
+        vertical: SizeTypeTokens.XL,
+      },
       widgetItems: [
         { id: "totalCreditLineCard", type: WIDGET.CARD },
         { id: "totalItemSpace0", type: WIDGET.SPACE },
@@ -170,16 +174,21 @@ export const portfolioListDatastoreBuilderV2 = async (
     totalCreditLineCard: <CardProps>{
       bgColor: ColorTokens.Primary_05,
       shadow:ShadowTypeTokens.E6,
-      width: "100%",
       body: {
         widgetItems: [
+          { id: "CardSpaceHeader", type: WIDGET.SPACE },
           { id: "totalCreditLimitText", type: WIDGET.TEXT },
           { id: "totalCreditLimitStack", type: WIDGET.STACK },
+          { id: "CardSpaceFooter", type: WIDGET.SPACE },
         ],
       },
     },
+
+    CardSpaceHeader: <SpaceProps>{ size: SizeTypeTokens.LG },
+    CardSpaceFooter: <SpaceProps>{ size: SizeTypeTokens.LG },
     totalCreditLimitStack: <StackProps>{
       type: StackType.row,
+      width:StackWidth.FULL,
       justifyContent: StackJustifyContent.spaceBetween,
       alignItems: StackAlignItems.flexEnd,
       widgetItems: [
