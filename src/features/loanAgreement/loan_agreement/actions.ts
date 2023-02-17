@@ -1,11 +1,12 @@
-import {ActionFunction, OpenNewTabTargetType} from "@voltmoney/types";
-import {ROUTE} from "../../../routes";
-import {ACTION, LimitPayload} from "./types";
-import {IconTokens} from "@voltmoney/schema";
-import {APP_CONFIG, defaultHeaders} from "../../../configs/config";
+import { ActionFunction, OpenNewTabTargetType } from "@voltmoney/types";
+import { ROUTE } from "../../../routes";
+import { ACTION, LimitPayload } from "./types";
+import { IconTokens } from "@voltmoney/schema";
+import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
-import {api} from "../../../configs/api";
-import {User} from "../../login/otp_verify/types";
+import { api } from "../../../configs/api";
+import { User } from "../../login/otp_verify/types";
+import { POP_UP_SIZE, POPUP_TARGET_NAME } from "../../../configs/constants";
 
 export const authenticateRepayment: ActionFunction<LimitPayload> = async (
   action,
@@ -46,7 +47,11 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
 ): Promise<any> => {
   if (action.payload.value) {
     // /** manually opening tab to avoid popup blocker **/
-    openNewTab(action.payload.value, OpenNewTabTargetType.popup);
+    openNewTab(action.payload.value, OpenNewTabTargetType.popup, {
+      target: POPUP_TARGET_NAME.AGREEMENT,
+      width: POP_UP_SIZE.WIDTH,
+      height: POP_UP_SIZE.HEIGHT,
+    });
     hidePopup();
     showPopup({
       isAutoTriggerCta: true,

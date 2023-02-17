@@ -6,6 +6,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import {api} from "../../../configs/api";
 import {APP_CONFIG, defaultHeaders} from "../../../configs/config";
 import {User} from "../../login/otp_verify/types";
+import {POP_UP_SIZE, POPUP_TARGET_NAME} from "../../../configs/constants";
 
 let stepResponseObject: string = null;
 export const authenticateRepayment: ActionFunction<LimitPayload> = async (
@@ -80,8 +81,11 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
 ): Promise<any> => {
   if (action.payload.value) {
     // /** manually opening tab to avoid popup blocker **/
-    openNewTab(action.payload.value, OpenNewTabTargetType.popup);
-
+    openNewTab(action.payload.value, OpenNewTabTargetType.popup, {
+      target: POPUP_TARGET_NAME.AUTOPAY,
+      width: POP_UP_SIZE.WIDTH,
+      height: POP_UP_SIZE.HEIGHT,
+    });
     hidePopup();
     showPopup({
       isAutoTriggerCta: true,

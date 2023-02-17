@@ -59,3 +59,13 @@ export enum QUERY_PARAMS {
   REF = 'ref',
   PRIMARY_COLOR = 'primaryColor',
 }
+
+export enum POP_UP_SIZE {
+  WIDTH = 600,
+  HEIGHT = 600,
+}
+
+export enum POPUP_TARGET_NAME {
+  AGREEMENT = "volt money",
+  AUTOPAY = "volt money"
+}
