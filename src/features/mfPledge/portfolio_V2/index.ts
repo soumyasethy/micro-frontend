@@ -157,8 +157,6 @@ export const template: (
         },
         widgetItems: [
           { id: "col1Header", type: WIDGET.TEXT },
-          //{ id:"col2Header", type: WIDGET.TEXT },
-          // { id:"col1Headers", type: WIDGET.STACK },
           { id: "col2Headers", type: WIDGET.STACK },
         ],
       },
