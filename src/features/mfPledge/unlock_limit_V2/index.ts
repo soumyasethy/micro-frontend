@@ -23,11 +23,13 @@ import {
   ImageProps,
   LimitCardProps,
   ListItemProps,
+  PaddingProps,
   PromoCardProps,
   ResizeModeToken,
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
+  StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
@@ -249,6 +251,9 @@ export const template: (
       },
       card: <CardProps>{
         bgColor: ColorTokens.White,
+        padding:<PaddingProps>{
+          vertical: SizeTypeTokens.LG
+        },
         body: { widgetItems: [{ id: "header", type: WIDGET.STACK }] },
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
@@ -257,8 +262,9 @@ export const template: (
         width: StackWidth.FULL,
         type: StackType.row,
         alignItems: StackAlignItems.center,
+        height: StackHeight.CONTENT,
         justifyContent: StackJustifyContent.spaceBetween,
-        padding: { horizontal: SizeTypeTokens.LG },
+        padding: { horizontal: SizeTypeTokens.LG,vertical: SizeTypeTokens.LG },
         widgetItems: [
           { id: "title", type: WIDGET.TEXT },
           { id: "headerRight", type: WIDGET.STACK },
