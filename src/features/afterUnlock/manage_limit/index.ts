@@ -29,13 +29,21 @@ import {
   WIDGET,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { ACTION, manageLimitPayload, NavPayload } from "./types";
-import { getURL, goBack, navigation } from "./actions";
+import {
+  ACTION,
+  EnhanceLimitPayload,
+  manageLimitPayload,
+  NavPayload,
+} from "./types";
+import { enhanceLimit, getURL, goBack, navigation } from "./actions";
 import SharedPropsService from "../../../SharedPropsService";
+import { api } from "../../../configs/api";
+import { defaultHeaders, getAppHeader } from "../../../configs/config";
 
-export const template: (creditStatus: string) => TemplateSchema = (
-  creditStatus
-) => {
+export const template: (
+  creditStatus: string,
+  isAllowed: boolean
+) => TemplateSchema = (creditStatus, isAllowed) => {
   return {
     layout: <Layout>{
       id: ROUTE.MANAGE_LIMIT,
@@ -56,6 +64,12 @@ export const template: (creditStatus: string) => TemplateSchema = (
         // { id: "toInput", type: WIDGET.INPUT },
         // { id: "toInputSpace", type: WIDGET.SPACE },
         { id: "continue", type: WIDGET.BUTTON },
+        ...(isAllowed
+          ? [
+              { id: "spaceAfterContinue", type: WIDGET.SPACE },
+              { id: "enhanceLimitCTA", type: WIDGET.BUTTON },
+            ]
+          : []),
         // {
         //     id: "bottomNav",
         //     type: WIDGET.BOTTOMTAB,
@@ -156,6 +170,19 @@ export const template: (creditStatus: string) => TemplateSchema = (
           routeId: ROUTE.MANAGE_LIMIT,
         },
       },
+      spaceAfterContinue: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+      enhanceLimitCTA: <ButtonProps & WidgetProps>{
+        label: "Enhance your limit",
+        labelColor: ColorTokens.White,
+        fontFamily: FontFamilyTokens.Poppins,
+        type: ButtonTypeTokens.LargeFilled,
+        width: ButtonWidthTypeToken.FULL,
+        action: {
+          type: ACTION.ENHANCE_LIMIT,
+          payload: <EnhanceLimitPayload>{},
+          routeId: ROUTE.MANAGE_LIMIT,
+        },
+      },
       cardNav: <CardProps>{
         shadow: ShadowTypeTokens.E6,
         padding: {
@@ -231,11 +258,23 @@ export const template: (creditStatus: string) => TemplateSchema = (
 export const manageLimitMF: PageType<any> = {
   onLoad: async () => {
     const creditStatus = await SharedPropsService.getCreditStatus();
-    return Promise.resolve(template(creditStatus));
+    const user = await SharedPropsService.getUser();
+    const requestOptions = {
+      method: "GET",
+      headers: await getAppHeader(),
+    };
+
+    let response = await fetch(
+      `${api.isLimitModificationAllowed}${user.linkedBorrowerAccounts[0].accountHolderPAN}`,
+      requestOptions
+    ).then((response) => response.json());
+
+    return Promise.resolve(template(creditStatus, response.isAllowed));
   },
   actions: {
     [ACTION.EMAIL]: getURL,
     [ACTION.NAVIGATION]: navigation,
     [ACTION.MENU]: goBack,
+    [ACTION.ENHANCE_LIMIT]: enhanceLimit,
   },
 };
