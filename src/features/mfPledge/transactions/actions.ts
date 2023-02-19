@@ -100,7 +100,6 @@ export const navigation: ActionFunction<NavPayload> = async (
   _datastore,
   { navigate, setDatastore, showPopup, asyncStorage }
 ): Promise<any> => {
-  console.log("action.payload.value : ", action.payload.value)
   if (action.payload.value === 0) {
     await navigate(ROUTE.DASHBOARD);
   }
@@ -119,7 +118,7 @@ export const navigation: ActionFunction<NavPayload> = async (
     //     },
     //   },
     // });
-    await navigate(ROUTE.MANAGE_LIMIT)
+    await navigate(ROUTE.MANAGE_LIMIT);
   }
   if (action.payload.value === 3) {
     await navigate(ROUTE.ALERT_PAGE, {

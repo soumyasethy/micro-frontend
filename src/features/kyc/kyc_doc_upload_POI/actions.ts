@@ -62,9 +62,6 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
     "data.updatedApplicationObj.stepStatusMap"
   );
 
-  console.log("currentStepId", currentStepId);
-  console.log("stepStatusMap", stepStatusMap);
-
   if (
     currentStepId == undefined ||
     currentStepId == "KYC_DOCUMENT_UPLOAD_POI"

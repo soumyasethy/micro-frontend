@@ -333,9 +333,6 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
 
   const stepStatusMap = user.linkedApplications[0].stepStatusMap;
 
-  console.log("currentStepId", currentStepId);
-  console.log("stepStatusMap", stepStatusMap);
-
   if (currentStepId === ROUTE.KYC_AADHAAR_VERIFICATION) {
     return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
   } else if (currentStepId === ROUTE.KYC_PHOTO_VERIFICATION) {
