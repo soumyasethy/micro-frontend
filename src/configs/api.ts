@@ -19,17 +19,17 @@ export const StoreKey = {
 export const partnerApi = {
   login: `${config.URL}/api/client/auth/requestOtp/`,
   verifyOtp: `${config.URL}/api/client/auth/verifyOtp/`,
-  userContext:`${config.URL}/app/partner/user`,
+  userContext: `${config.URL}/app/partner/user`,
   accountAttributes: `${config.URL}/app/partner/accountAttributes/`,
   customer: `${config.URL}/app/partner/`,
-  bavAdd:`${config.URL}/app/borrower/application/bav/add`,
+  bavAdd: `${config.URL}/app/borrower/application/bav/add`,
   pledgeLimit: `${config.URL}/app/borrower/application/pledge/limit/`,
-  userProfile:`${config.URL}/app/borrower/userProfile/`,
-  pledgeInit:`${config.URL}/app/borrower/application/pledge/init`,
-  authCAS:`${config.URL}/app/borrower/application/pledge/authCAS`,
-  pledgeSave:`${config.URL}/app/borrower/application/pledge/save`,
-  referalLink:`${config.URL}/app/partner/referralLink/application/`,
-  clientList:`${config.URL}/app/partner/`,
+  userProfile: `${config.URL}/app/borrower/userProfile/`,
+  pledgeInit: `${config.URL}/app/borrower/application/pledge/init`,
+  authCAS: `${config.URL}/app/borrower/application/pledge/authCAS`,
+  pledgeSave: `${config.URL}/app/borrower/application/pledge/save`,
+  referalLink: `${config.URL}/app/partner/referralLink/application/`,
+  clientList: `${config.URL}/app/partner/`,
   stepperData: `${config.URL}/app/borrower/application/stepper/`,
 };
 
@@ -79,4 +79,6 @@ export const api = {
   getListOfDisbursalByCreditId: `${config.URL}/app/borrower/lms/disbursal/credit/`,
   pdfHoldingStatement: `${config.URL}/app/borrower/lms/holdingStatement/email/`,
   savePortfolio: `${config.URL}/app/borrower/application/pledge/save`,
+  getLimitModificationApplicationForAccount: `${config.URL}/app/borrower/creditModification/`,
+  isLimitModificationAllowed: `${config.URL}/app/borrower/creditModification/allowed/`,
 };

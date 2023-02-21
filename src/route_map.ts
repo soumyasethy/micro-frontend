@@ -69,10 +69,10 @@ import { kycDocumentUploadPOAMF } from "./features/kyc/kyc_doc_upload_POA";
 import { kycDocumentUploadPOIMF } from "./features/kyc/kyc_doc_upload_POI";
 import { loanAgreementPollingMF } from "./features/loanAgreement/loan_agreement_poll";
 import { selectSourceMF } from "./features/mfFetch/select_source";
-import {manageLimitMF} from "./features/afterUnlock/manage_limit";
+import { manageLimitMF } from "./features/afterUnlock/manage_limit";
 import { setCreditLimitMf2 } from "./features/mfPledge/set_credit_limit_v2";
 import { portfoliofromRTAMf } from "./features/mfPledge/portfoliofromRTA";
-import {distBankAccountAddMF}  from "./features/bankDetailsDistributor/bank_account_add";
+import { distBankAccountAddMF } from "./features/bankDetailsDistributor/bank_account_add";
 import { distBankSearchBranchMF } from "./features/bankDetailsDistributor/bank_search_branch";
 import { distBankSelectMF } from "./features/bankDetailsDistributor/select_bank";
 import { distributorPortfolioMF } from "./features/fetchDistributorPortfolio";
@@ -80,14 +80,13 @@ import { portfolioStartMF } from "./features/selectPortfolio/porftfolioStart";
 import { selectDistributorPortfolioMF } from "./features/selectPortfolio/selectDistributorPortfolio";
 import { investorMF } from "./features/investor";
 import { distBasicDetailsMF } from "./features/Dist_basicDetails/basicDetailsInfo";
-import {kycDocumentUploadMF} from "./features/kyc/kyc_document_upload";
+import { kycDocumentUploadMF } from "./features/kyc/kyc_document_upload";
 import { nameMF } from "./features/enter_name";
 import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
 import { basicDetailsStartMF } from "./features/Dist_basicDetails/basicDetailsStart";
 import { DistributorClientListStepperMF } from "./features/DistributorClientList/ClientListStepper";
 
 //import { portfolioUnlockMF } from "./features/selectPortfolio/portfolioUnlock";
-
 
 export const ROUTE_MAP: RouteMap = {
   [ROUTE.PHONE_NUMBER]: phoneNumberMF,
@@ -118,7 +117,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.SPLASH_SCREEN]: splashScreenMF,
   // [ROUTE.MF_PLEDGE_PORTFOLIO_OLD]: unlockLimitMF,
   // [ROUTE.MF_PLEDGE_PORTFOLIO]: unlockLimitMFV2,
- [ROUTE.MF_PLEDGE_PORTFOLIO]: setCreditLimitMf2,
+  [ROUTE.MF_PLEDGE_PORTFOLIO]: setCreditLimitMf2,
   [ROUTE.PLEDGE_CONFIRMATION_LOADING]: pledgeConfirmationLoadingMF,
   // [ROUTE.PLEDGE_CONFIRMATION_OLD]: pledgeConfirmationMF,
   [ROUTE.PLEDGE_CONFIRMATION]: pledgeConfirmationMFV2,
@@ -166,9 +165,9 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.MANAGE_LIMIT]: manageLimitMF,
   [ROUTE.SELECT_SOURCE]: selectSourceMF,
   [ROUTE.SET_CREDIT_LIMIT2]: setCreditLimitMf2,
- // [ROUTE.SET_CREDIT_LIMIT2]: setCreditLimitMf2,
+  // [ROUTE.SET_CREDIT_LIMIT2]: setCreditLimitMf2,
   [ROUTE.PORTFOLIO_FROM_RTA]: portfoliofromRTAMf,
- // [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
+  // [ROUTE.UNLOCK_LIMIT_LANDING]: unlockLimitLandingMF,
   [ROUTE.DIST_BANK_ACCOUNT_ADD]: distBankAccountAddMF,
   [ROUTE.DIST_BANK_SEARCH_BRANCH]: distBankSearchBranchMF,
   [ROUTE.DIST_BANK_SELECT]: distBankSelectMF,
@@ -178,7 +177,7 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.INVESTOR]: investorMF,
   [ROUTE.ENTER_NAME]: nameMF,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST]: DistributorClientListMF,
-  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]:distBasicDetailsMF,
+  [ROUTE.DISTRIBUTOR_BASIC_DETAILS_INFO]: distBasicDetailsMF,
   [ROUTE.DETAILS_CONFIRM]: detailsConfirmMF,
   [ROUTE.DISTRIBUTOR_CLIENT_LIST_STEPPER]: DistributorClientListStepperMF,
   [ROUTE.KYC_DOCUMENT_UPLOAD]: kycDocumentUploadMF,

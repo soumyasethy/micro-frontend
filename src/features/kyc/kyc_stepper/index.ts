@@ -27,8 +27,12 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import {Go_Next_Action} from "./actions";
-import {stepperRepo, updateUserContextFromApi} from "../../../configs/utils";
+import { Go_Next_Action } from "./actions";
+import {
+  stepperRepo,
+  updateApplicationContextFromApi,
+} from "../../../configs/utils";
+import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
   layout: <Layout>{
@@ -91,8 +95,12 @@ export const template: (data: StepperItem[]) => TemplateSchema = (data) => ({
 });
 
 export const kycStepperMF: PageType<any> = {
-  onLoad: async ({network}) => {
-    await updateUserContextFromApi(network)
+  onLoad: async ({ network }) => {
+    let user = await SharedPropsService.getUser();
+    await updateApplicationContextFromApi(
+      network,
+      user.linkedApplications[0].applicationId
+    );
     return Promise.resolve(template(await stepperRepo()));
   },
   actions: {

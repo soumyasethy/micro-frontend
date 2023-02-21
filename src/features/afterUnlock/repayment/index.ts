@@ -41,6 +41,7 @@ import { getAppHeader } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
 import { getBankIconUrl } from "../../../configs/utils";
+import _ from "lodash";
 
 export const template: (
   repaymentAmount: string,
@@ -110,7 +111,7 @@ export const template: (
         routeId: ROUTE.REPAYMENT,
       },
     },
-    space0: <SpaceProps> { size: SizeTypeTokens.XL },
+    space0: <SpaceProps>{ size: SizeTypeTokens.XL },
     //<AmountCard
     //   chipText="How?"
     //   message="Recomended to use as per limit"
@@ -249,7 +250,11 @@ export const repaymentMF: PageType<any> = {
         headers: await getAppHeader(),
       }
     );
-    const { bankName, bankCode, accountNumber, ifscCode } = response.data;
+
+    const bankName = _.get(response, "data.bankName", "");
+    const bankCode = _.get(response, "data.bankCode", "");
+    const accountNumber = _.get(response, "data.accountNumber", "");
+    const ifscCode = _.get(response, "data.ifscCode", "");
 
     return Promise.resolve(
       template(repaymentAmount, accountNumber, ifscCode, bankName, bankCode)

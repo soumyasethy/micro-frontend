@@ -1,6 +1,6 @@
 import { ActionFunction } from "@voltmoney/types";
-import {nextStepCredStepper, updateUserContextFromApi} from "../../../configs/utils";
-import {User} from "../../login/otp_verify/types";
+import { nextStepCredStepper } from "../../../configs/utils";
+import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const Go_Next_Action: ActionFunction<{ stepId?: string }> = async (
@@ -13,7 +13,9 @@ export const Go_Next_Action: ActionFunction<{ stepId?: string }> = async (
   //   ? await nextStepCredStepper(action.payload.stepId)
   //   : await nextStepCredStepper();
   let user: User = await SharedPropsService.getUser();
-  const routeObj = await nextStepCredStepper(user.linkedApplications[0].currentStepId)
+  const routeObj = await nextStepCredStepper(
+    user.linkedApplications[0].currentStepId
+  );
   console.warn("**** NextStep Route ****", routeObj);
   await navigate(routeObj.routeId, routeObj.params);
 };

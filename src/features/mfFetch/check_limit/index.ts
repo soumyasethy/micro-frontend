@@ -29,6 +29,7 @@ import {
   StackJustifyContent,
   StackProps,
   StackType,
+  StackWidth,
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
@@ -54,23 +55,22 @@ import {
 import { heightMap } from "../../../configs/height";
 
 export const template: (
-    applicationId: string,
-    panNumber: string,
-    phoneNumber: string,
-    emailId: string,
-    assetRepository: AssetRepositoryType,
-    isPanEditAllowed: boolean,
-    isGoBackAllowed: boolean,
-    setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
+  applicationId: string,
+  panNumber: string,
+  phoneNumber: string,
+  emailId: string,
+  assetRepository: AssetRepositoryType,
+  isPanEditAllowed: boolean,
+  isGoBackAllowed: boolean,
+  setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
 ) => Promise<TemplateSchema> = async (
-    applicationId,
-    panNumber,
-    phoneNumber,
-    emailId,
-    assetRepository,
-    isPanEditAllowed,
-    isGoBackAllowed,
-    setIsUserLoggedIn
+  applicationId,
+  panNumber,
+  phoneNumber,
+  emailId,
+  assetRepository,
+  isPanEditAllowed,
+  isGoBackAllowed
 ) => {
   return {
     layout: <Layout>{
@@ -82,7 +82,7 @@ export const template: (
       widgets: [
         { id: "space0", type: WIDGET.SPACE },
         ...(isGoBackAllowed
-            ? [
+          ? [
               {
                 id: "headerStack",
                 type: WIDGET.STACK,
@@ -95,7 +95,7 @@ export const template: (
                 },
               },
             ]
-            : []),
+          : []),
         { id: "title", type: WIDGET.TEXT },
         { id: "space1", type: WIDGET.SPACE },
         { id: "subTitle", type: WIDGET.TEXT },
@@ -112,7 +112,7 @@ export const template: (
           position: POSITION.ABSOLUTE_BOTTOM,
         },
         ...(isPanEditAllowed
-            ? [
+          ? [
               {
                 id: "space5",
                 type: WIDGET.SPACE,
@@ -124,7 +124,7 @@ export const template: (
                 position: POSITION.ABSOLUTE_BOTTOM,
               },
             ]
-            : []),
+          : []),
       ],
     },
     datastore: <Datastore>{
@@ -189,7 +189,7 @@ export const template: (
         trailIconName: isPanEditAllowed ? IconTokens.Edit : null,
         subTitleLineHeight: 24,
         action: isPanEditAllowed
-            ? {
+          ? {
               routeId: ROUTE.MF_FETCH_PORTFOLIO,
               type: ACTION.EDIT_PAN,
               payload: <PanEditPayload>{
@@ -198,7 +198,7 @@ export const template: (
                 panNumber: panNumber,
               },
             }
-            : null,
+          : null,
       },
       mobileItem: <ListItemProps & WidgetProps>{
         title: "Mobile Number (linked to investments)",
@@ -304,7 +304,7 @@ export const checkLimitMF: PageType<any> = {
     const panNumberX = user.linkedBorrowerAccounts[0].accountHolderPAN;
     const phoneNumber = user.linkedBorrowerAccounts[0].accountHolderPhoneNumber;
     const emailId =
-    `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
+      `${user.linkedBorrowerAccounts[0].accountHolderEmail}`.toLowerCase();
     const applicationId = user.linkedApplications[0].applicationId;
 
     if (!assetRepository) {
@@ -312,23 +312,23 @@ export const checkLimitMF: PageType<any> = {
     }
 
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
-        ConfigTokens.IS_PAN_EDIT_ALLOWED
+      ConfigTokens.IS_PAN_EDIT_ALLOWED
     );
     const isGoBackAllowed: boolean = await SharedPropsService.getConfig(
-        ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
+      ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
     );
 
     return Promise.resolve(
-        template(
-            applicationId,
-            panNumberX,
-            phoneNumber,
-            emailId,
-            assetRepository,
-            isPanEditAllowed,
-            isGoBackAllowed,
-            setIsUserLoggedIn
-        )
+      template(
+        applicationId,
+        panNumberX,
+        phoneNumber,
+        emailId,
+        assetRepository,
+        isPanEditAllowed,
+        isGoBackAllowed,
+        setIsUserLoggedIn
+      )
     );
   },
   actions: {

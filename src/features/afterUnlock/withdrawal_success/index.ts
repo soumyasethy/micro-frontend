@@ -99,8 +99,6 @@ export const template: (
       label: "",
       message: "",
       type: VerificationCardTypeTokens.Success,
-      buttonType: VerificationCardButtonTypeToken.FULL,
-      buttonText: "",
     },
     divider: <DividerProps>{
       size: DividerSizeTokens.SM,
@@ -251,7 +249,6 @@ export const withdrawalSuccessMF: PageType<any> = {
       )
     );
   },
-
   actions: {
     [ACTION.WITHDRAWAL_SUCCESS]: Done,
     [ACTION.GO_BACK]: goBack,

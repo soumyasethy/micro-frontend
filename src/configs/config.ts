@@ -77,6 +77,10 @@ export const APP_CONFIG = {
   POLLING_INTERVAL: 5000,
   AUTO_REDIRECT: 5000,
   MODAL_TRIGGER_TIMEOUT: 250,
+  POP_UP_SIZE: {
+    WIDTH: 600,
+    HEIGHT: 600,
+  },
 };
 
 export enum AssetRepositoryType {
