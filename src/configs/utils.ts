@@ -529,7 +529,7 @@ export const maskBankAccountNumber = (accountNo: string) => {
     }
     return maskString.concat(showString);
   }
-  return "Account number less than 4 digits";
+  return accountNo;
 };
 
 export const isMorePortfolioRenderCheck = async () => {
