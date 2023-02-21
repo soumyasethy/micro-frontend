@@ -31,9 +31,13 @@ import {
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, DisbursementOTPPayload } from "./types";
-import { goBack, DisbursalVerifyAction, CreateDisbursementRequest } from "./action";
+import {
+  goBack,
+  DisbursalVerifyAction,
+  CreateDisbursementRequest,
+} from "./action";
 import SharedPropsService from "../../../SharedPropsService";
-import {heightMap} from "../../../configs/height";
+import { heightMap } from "../../../configs/height";
 
 export const template: (
   disbursalAmount: string,
@@ -48,7 +52,7 @@ export const template: (
     id: ROUTE.WITHDRAWAL_OTP,
     type: LAYOUTS.MODAL,
     style: {
-      height: heightMap[ROUTE.WITHDRAWAL_OTP]
+      height: heightMap[ROUTE.WITHDRAWAL_OTP],
     },
     widgets: [
       {
@@ -135,9 +139,9 @@ export const template: (
       otpAction: {
         type: ACTION.RESEND_WITHDRAWAL_OTP,
         payload: <DisbursementOTPPayload>{
-          disbursalAmount
-          // value: "", widgetId: "input" 
-          },
+          disbursalAmount,
+          // value: "", widgetId: "input"
+        },
         routeId: ROUTE.WITHDRAWAL_OTP,
       },
     },

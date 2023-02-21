@@ -19,6 +19,7 @@ import {
   SizeTypeTokens,
   SpaceProps,
   TextInputProps,
+  TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
 import { User } from "../../login/otp_verify/types";
@@ -29,9 +30,9 @@ export const CreateDisbursementRequest: ActionFunction<
 > = async (
   action,
   _datastore,
-  { network, navigate, setDatastore }
+  { network, navigate, setDatastore, showPopup }
 ): Promise<any> => {
-  if (disbursalAmount > 0) {
+  if (disbursalAmount > 4999) {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
       loading: true,
     });
@@ -55,6 +56,13 @@ export const CreateDisbursementRequest: ActionFunction<
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
       loading: false,
     });
+  } else {
+    await showPopup({
+      title: "Please enter amount more than 5000",
+      type: "DEFAULT",
+      iconName: IconTokens.Alert,
+      ctaLabel: "OK",
+    });
   }
 };
 
@@ -73,6 +81,7 @@ export const SetRecommendedAmount: ActionFunction<AmountPayload> = async (
   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountItem", <TextInputProps>{
     value: action.payload.value,
   });
+
   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
     type: ButtonTypeTokens.LargeFilled,
   });
@@ -81,6 +90,121 @@ export const SetRecommendedAmount: ActionFunction<AmountPayload> = async (
     { id: "amountMessage", type: WIDGET.MESSAGE },
     { id: "amountSpace", type: WIDGET.SPACE },
   ]);
+};
+
+export const priceInWords = (price) => {
+  var sglDigit = [
+      "Zero",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+    ],
+    dblDigit = [
+      "Ten",
+      "Eleven",
+      "Twelve",
+      "Thirteen",
+      "Fourteen",
+      "Fifteen",
+      "Sixteen",
+      "Seventeen",
+      "Eighteen",
+      "Nineteen",
+    ],
+    tensPlace = [
+      "",
+      "Ten",
+      "Twenty",
+      "Thirty",
+      "Forty",
+      "Fifty",
+      "Sixty",
+      "Seventy",
+      "Eighty",
+      "Ninety",
+    ],
+    handle_tens = function (dgt, prevDgt) {
+      return 0 == dgt
+        ? ""
+        : " " + (1 == dgt ? dblDigit[prevDgt] : tensPlace[dgt]);
+    },
+    handle_utlc = function (dgt, nxtDgt, denom) {
+      return (
+        (0 != dgt && 1 != nxtDgt ? " " + sglDigit[dgt] : "") +
+        (0 != nxtDgt || dgt > 0 ? " " + denom : "")
+      );
+    };
+
+  var str = "",
+    digitIdx = 0,
+    digit = 0,
+    nxtDigit = 0,
+    words = [];
+  if (((price += ""), isNaN(parseInt(price)))) str = "";
+  else if (parseInt(price) > 0 && price.length <= 10) {
+    for (digitIdx = price.length - 1; digitIdx >= 0; digitIdx--)
+      switch (
+        ((digit = price[digitIdx] - 0),
+        (nxtDigit = digitIdx > 0 ? price[digitIdx - 1] - 0 : 0),
+        price.length - digitIdx - 1)
+      ) {
+        case 0:
+          words.push(handle_utlc(digit, nxtDigit, ""));
+          break;
+        case 1:
+          words.push(handle_tens(digit, price[digitIdx + 1]));
+          break;
+        case 2:
+          words.push(
+            0 != digit
+              ? " " +
+                  sglDigit[digit] +
+                  " Hundred" +
+                  (0 != price[digitIdx + 1] && 0 != price[digitIdx + 2]
+                    ? " and"
+                    : "")
+              : ""
+          );
+          break;
+        case 3:
+          words.push(handle_utlc(digit, nxtDigit, "Thousand"));
+          break;
+        case 4:
+          words.push(handle_tens(digit, price[digitIdx + 1]));
+          break;
+        case 5:
+          words.push(handle_utlc(digit, nxtDigit, "Lakh"));
+          break;
+        case 6:
+          words.push(handle_tens(digit, price[digitIdx + 1]));
+          break;
+        case 7:
+          words.push(handle_utlc(digit, nxtDigit, "Crore"));
+          break;
+        case 8:
+          words.push(handle_tens(digit, price[digitIdx + 1]));
+          break;
+        case 9:
+          words.push(
+            0 != digit
+              ? " " +
+                  sglDigit[digit] +
+                  " Hundred" +
+                  (0 != price[digitIdx + 1] || 0 != price[digitIdx + 2]
+                    ? " and"
+                    : " Crore")
+              : ""
+          );
+      }
+    str = words.reverse().join("");
+  } else str = "";
+  return str ? "Rupees" + str : str;
 };
 export const OnAmountChange: ActionFunction<AmountPayload> = async (
   action,
@@ -93,7 +217,14 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
   const availableCreditAmount = user.linkedCredits[0].availableCreditAmount;
   const recommendedAmount = 0.9 * availableCreditAmount;
 
-  if (action.payload.value.length > 0) {
+  await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountItem", <TextInputProps>{
+    valueInText: priceInWords(action.payload.value),
+  });
+
+  if (
+    action.payload.value.length > 0 &&
+    parseFloat(action.payload.value) < availableCreditAmount
+  ) {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
     });
@@ -116,28 +247,14 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
     await appendWidgets(
       ROUTE.WITHDRAW_AMOUNT,
       {
-        amountMessage: <MessageProps & WidgetProps>{
-          label: "Recommended to use 90% of the limit",
-          actionText: "Confirm",
-          icon: <IconProps>{
-            name: IconTokens.Info,
-            size: IconSizeTokens.SM,
-            color: ColorTokens.Grey_Charcoal,
-          },
-          labelColor: ColorTokens.Grey_Charcoal,
-          bgColor: ColorTokens.Grey_Milk_1,
-          action: {
-            type: ACTION.SET_RECOMENDED_AMOUNT,
-            routeId: ROUTE.WITHDRAW_AMOUNT,
-            payload: <AmountPayload>{
-              value: `${recommendedAmount}`,
-            },
-          },
+        amountMessage: <TypographyProps>{
+          label: `Amount available for withdrawal is Rs ${availableCreditAmount}. Enter a lower amount`,
+          color: ColorTokens.Red_50,
         },
         amountSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       },
       [
-        { id: "amountMessage", type: WIDGET.MESSAGE },
+        { id: "amountMessage", type: WIDGET.TEXT },
         { id: "amountSpace", type: WIDGET.SPACE },
       ],
       "amountMsgSpace"
