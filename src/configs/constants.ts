@@ -72,10 +72,10 @@ export enum DigioKycStatus {
 }
 
 export enum DigioDocsStatus {
-  REQUESTED ="REQUESTED",
+  REQUESTED = "REQUESTED",
+}
 
 export enum POPUP_TARGET_NAME {
   AGREEMENT = "volt money",
   AUTOPAY = "volt money"
-
 }
