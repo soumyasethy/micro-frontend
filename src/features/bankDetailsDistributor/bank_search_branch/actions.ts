@@ -59,13 +59,14 @@ export const OnSelectIFSCAction: ActionFunction<IFSCCodePayload> = async (
     type: ButtonTypeTokens.LargeFilled,
   });
   const accountNumber = await SharedPropsService.getAccountNumber();
-  console.log("acc no",accountNumber)
+
   if (accountNumber) {
-    await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "accountInput", <TextInputProps>{
+    await setDatastore(ROUTE.DIST_BANK_ACCOUNT_ADD, "accountInput", <
+      TextInputProps
+    >{
       value: accountNumber,
     });
   }
-  
 };
 
 const widgetItemDs = (

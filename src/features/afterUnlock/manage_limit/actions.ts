@@ -1,13 +1,48 @@
 import { ButtonProps, IconTokens } from "@voltmoney/schema";
 import { ActionFunction } from "@voltmoney/types";
 import { api } from "../../../configs/api";
-import {APP_CONFIG, defaultHeaders, getAppHeader} from "../../../configs/config";
+import {
+  APP_CONFIG,
+  ConfigTokens,
+  defaultHeaders,
+  getAppHeader,
+} from "../../../configs/config";
 import { ROUTE } from "../../../routes";
 import SharedPropsService from "../../../SharedPropsService";
 import { AlertNavProps } from "../../popup_loader/types";
-import { ACTION, NavPayload, manageLimitPayload } from "./types";
+import {
+  ACTION,
+  NavPayload,
+  manageLimitPayload,
+  EnhanceLimitPayload,
+} from "./types";
 import sharedPropsService from "../../../SharedPropsService";
-import {User} from "../../login/otp_verify/types";
+import { User } from "../../login/otp_verify/types";
+import { nextStepId } from "../../../configs/utils";
+
+export const enhanceLimit: ActionFunction<EnhanceLimitPayload> = async (
+  action,
+  _datastore,
+  { navigate, network, ...props }
+): Promise<any> => {
+  const user: User = await SharedPropsService.getUser();
+  const borrowerAccountId = user.linkedBorrowerAccounts[0].accountId;
+
+  const response = await network.get(
+    `${api.getLimitModificationApplicationForAccount}${borrowerAccountId}`,
+    {
+      headers: await getAppHeader(),
+    }
+  );
+
+  user.linkedApplications[0] = response.data;
+  await SharedPropsService.setUser(user);
+
+  const routeObj = await nextStepId(response.data.currentStepId);
+
+  await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
+  await navigate(routeObj.routeId, routeObj.params);
+};
 
 export const getURL: ActionFunction<manageLimitPayload> = async (
   action,
@@ -17,15 +52,12 @@ export const getURL: ActionFunction<manageLimitPayload> = async (
   await setDatastore(action.routeId, "continue", <ButtonProps>{
     loading: true,
   });
-  const user: User = await sharedPropsService.getUser()
+  const user: User = await sharedPropsService.getUser();
   const accountId = user.linkedBorrowerAccounts[0].accountId;
-  const response = await network.get(
-    `${api.pdfHoldingStatement}${accountId}`,
-      {
-        headers: await getAppHeader()
-      }
-  )
-  if(response.status === 200) {
+  const response = await network.get(`${api.pdfHoldingStatement}${accountId}`, {
+    headers: await getAppHeader(),
+  });
+  if (response.status === 200) {
     await setDatastore(action.routeId, "continue", <ButtonProps>{
       loading: false,
     });
@@ -57,7 +89,7 @@ export const navigation: ActionFunction<NavPayload> = async (
     await navigate(ROUTE.DASHBOARD);
   }
   if (action.payload.value === 1) {
-    await navigate(ROUTE.TRANSACTIONS)
+    await navigate(ROUTE.TRANSACTIONS);
   }
 };
 

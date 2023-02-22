@@ -10,11 +10,9 @@ export const navigate: ActionFunction<NavPayload> = async (
   { navigate, showPopup }
 ): Promise<any> => {
   if (action.payload.value === 1) {
-    console.log("Action here 1")
     await navigate(ROUTE.TRANSACTIONS);
   }
   if (action.payload.value === 2) {
-    console.log("Action here 2")
     // await navigate(ROUTE.ALERT_PAGE, {
     //   alertProps: <AlertNavProps>{
     //     type: "DEFAULT",
@@ -29,10 +27,9 @@ export const navigate: ActionFunction<NavPayload> = async (
     //     },
     //   },
     // });
-    await navigate(ROUTE.MANAGE_LIMIT, {})
+    await navigate(ROUTE.MANAGE_LIMIT, {});
   }
   if (action.payload.value === 3) {
-    console.log("Action here 3")
     await navigate(ROUTE.ALERT_PAGE, {
       alertProps: <AlertNavProps>{
         type: "DEFAULT",

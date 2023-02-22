@@ -248,7 +248,6 @@ export const template: (
       //     type: AccordionTypeTokens.LIST,
       // },
       portfolioCard: <CardProps>{
-        width: StackWidth.FULL,
         padding: {
           left: SizeTypeTokens.MD,
           right: SizeTypeTokens.MD,
@@ -738,7 +737,6 @@ export const template: (
       },
       showLessLimitCard: <CardProps>{
         bgColor: ColorTokens.Red_10,
-        width: StackWidth.FULL,
         padding: {
           top: SizeTypeTokens.LG,
           bottom: SizeTypeTokens.LG,
@@ -1052,10 +1050,8 @@ export const setCreditLimitMf2: PageType<any> = {
       activeIndex === undefined ||
       activeIndex === ""
     ) {
-      console.log("activeIndex null");
       activeIndexs = 1;
     } else {
-      console.log("activeIndex val");
       activeIndexs = activeIndex;
     }
 

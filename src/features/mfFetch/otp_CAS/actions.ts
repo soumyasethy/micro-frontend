@@ -1,18 +1,14 @@
-import { ActionFunction } from "@voltmoney/types";
-import { AuthCASPayload } from "./types";
-import { api } from "../../../configs/api";
-import { InputStateToken, TextInputProps } from "@voltmoney/schema";
-import {
-  AssetRepositoryMap, AssetRepositoryType,
-  ConfigTokens,
-  getAppHeader,
-} from "../../../configs/config";
-import { nextStepId } from "../../../configs/utils";
+import {ActionFunction} from "@voltmoney/types";
+import {AuthCASPayload} from "./types";
+import {api} from "../../../configs/api";
+import {InputStateToken, TextInputProps} from "@voltmoney/schema";
+import {AssetRepositoryMap, ConfigTokens, getAppHeader,} from "../../../configs/config";
+import {nextStepId} from "../../../configs/utils";
 import _ from "lodash";
 import SharedPropsService from "../../../SharedPropsService";
-import { AnalyticsEventTracker } from "../../../configs/constants";
-import { ROUTE } from "../../../routes";
-import { User } from "../../login/otp_verify/types";
+import {AnalyticsEventTracker} from "../../../configs/constants";
+import {ROUTE} from "../../../routes";
+import {User} from "../../login/otp_verify/types";
 
 export const fetchMyPortfolio: ActionFunction<AuthCASPayload> = async (
     action,
@@ -81,6 +77,14 @@ export const authCAS: ActionFunction<AuthCASPayload> = async (
         "data.stepResponseObject.availableCreditAmount",
         0
     );
+    /*** check max loan amount ***/
+    const maxLoanAmount = _.get(
+        response,
+        "data.stepResponseObject.maxLoanAmount",
+        0
+    );
+    /** set max loan amount in config ***/
+    await SharedPropsService.setConfig(ConfigTokens.MAX_AMOUNT_ALLOWED, maxLoanAmount);
     if (availableCreditAmount > 0) {
       analytics(AnalyticsEventTracker.borrower_mf_pull["Event Name"], {
         ...AnalyticsEventTracker.borrower_mf_pull,

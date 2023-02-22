@@ -11,6 +11,7 @@ import _ from "lodash";
 import {
   AmountCardProps,
   AmountCardTypeTokens,
+  BorderRadiusTokens,
   BottomTabProps,
   BottomTabStateToken,
   ButtonProps,
@@ -25,6 +26,7 @@ import {
   IconTokens,
   MessageProps,
   PaddingProps,
+  PaddingSizeTokens,
   PromoCardProps,
   RepaymentProps,
   ShadowTypeTokens,
@@ -69,7 +71,8 @@ export const template: (
   amountPercentage: number,
   isPendingDisbursalStatement: boolean,
   isDisbursalRequestAllowed: boolean,
-  amountDisbursal: number
+  amountDisbursal: number,
+  processingFees: number
 ) => TemplateSchema = (
   availableCreditAmount,
   actualLoanAmount,
@@ -78,7 +81,8 @@ export const template: (
   amountPercentage: number,
   isPendingDisbursalStatement: boolean,
   isDisbursalRequestAllowed: boolean,
-  amountDisbursal: number
+  amountDisbursal: number,
+  processingFess: number
 ) => {
   return {
     layout: <Layout>{
@@ -93,9 +97,12 @@ export const template: (
         ...(isPendingDisbursalApproval
           ? [
               {
-                id: "message",
-                type: WIDGET.MESSAGE,
+                id: "card2",
+                type: WIDGET.CARD,
                 position: POSITION.FIXED_TOP,
+                padding: {
+                  horizontal: -16,
+                },
               },
             ]
           : []),
@@ -159,6 +166,35 @@ export const template: (
         alignItems: StackAlignItems.center,
         justifyContent: StackJustifyContent.spaceBetween,
       },
+      card2: <CardProps>{
+        body: {
+          widgetItems: [
+            { id: "widgetText", type: WIDGET.TEXT },
+            { id: "widgetText2", type: WIDGET.TEXT },
+            { id: "widgetText3", type: WIDGET.TEXT },
+            { id: "widgetText4", type: WIDGET.TEXT },
+          ],
+        },
+        bgColor: ColorTokens.Yellow_10,
+      },
+      widgetText: <TypographyProps>{
+        label: "We’re processing your withdrawal request. Please note",
+        color: ColorTokens.Black,
+        fontWeight: "bold",
+      },
+      widgetText2: <TypographyProps>{
+        label: `\u2022 ₹${processingFess} one-time processing fee will be deducted `,
+        color: ColorTokens.Red_90,
+      },
+      widgetText3: <TypographyProps>{
+        label: "\u2022 Transfer may take up to 6 banking hours",
+        color: ColorTokens.Red_90,
+      },
+      widgetText4: <TypographyProps>{
+        label: "\u2022 Requests post 4PM may take up to 12PM of next day",
+        color: ColorTokens.Red_90,
+      },
+
       header: <StackProps>{
         width: StackWidth.FULL,
         type: StackType.row,
@@ -257,7 +293,7 @@ export const template: (
       },
       message: <MessageProps>{
         label:
-          "Your verification is in progress. Meanwhile you can’t withdraw the amount",
+          "Your verification is in progress. Meanwhile you can’t withdraw the amount ",
         labelColor: ColorTokens.Grey_Charcoal,
         bgColor: ColorTokens.System_Warning_BG,
       },
@@ -466,6 +502,11 @@ export const dashboardMF: PageType<any> = {
       "linkedCredits[0].principalOutStandingAmount",
       0
     );
+    const processingFees: number = _.get(
+      user,
+      "linkedCredits[0].processingCharges",
+      0
+    );
     await SharedPropsService.setUser(user);
 
     let isPendingDisbursalApproval = false;
@@ -526,7 +567,8 @@ export const dashboardMF: PageType<any> = {
         amountPercentage,
         isPendingDisbursalStatement,
         isDisbursalRequestAllowed,
-        amountDisbursal
+        amountDisbursal,
+        processingFees
       )
     );
   },

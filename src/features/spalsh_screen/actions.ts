@@ -50,7 +50,6 @@ export const SplashAction: ActionFunction<any> = async (
       });
       const partnerUser = await (await SharedPropsService.getPartnerUser()).panNumber;
       if (userContextResponse.status === 200) {
-        console.log(`user.linkedPartnerAccounts[0].partnerName`);
         const user: User = userContextResponse.data;
         await SharedPropsService.setUser(user);
         // await navigate(ROUTE.PORTFOLIO_UNLOCK);

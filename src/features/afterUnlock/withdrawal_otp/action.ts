@@ -57,7 +57,7 @@ export const DisbursalVerifyAction: ActionFunction<
           state: InputStateToken.DEFAULT,
           value: '0',
         });
-        await goBack();
+
       }
     );
     if (response.status === 200) {
