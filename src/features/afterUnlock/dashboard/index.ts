@@ -546,7 +546,7 @@ export const dashboardMF: PageType<any> = {
     // isDisbursalRequestAllowed = false;
 
     let creditId = user.linkedCredits[0].creditId;
-    if (isDisbursalRequestAllowed) {
+    if (!isDisbursalRequestAllowed) {
       const listOfDisbursalResponse = await network.get(
         `${api.getListOfDisbursalByCreditId}${creditId}`,
         { headers: await getAppHeader() }
