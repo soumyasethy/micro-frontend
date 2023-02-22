@@ -39,12 +39,13 @@ import {
 } from "./types";
 
 import { goToPrivacy, sendOtpWithUserTypeCheck, textOnChange, toggleCTA, whatsappToggle } from "./actions";
-import { RegexConfig } from "../../../configs/config";
+import {ConfigTokens, RegexConfig} from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
-export const template: (mobileNumber?: string) => TemplateSchema = (
-  mobileNumber
-) => ({
+export const template: (
+  mobileNumber?: string,
+  isGetUpdatesOnWhatsApp?: boolean
+) => TemplateSchema = (mobileNumber, isGetUpdatesOnWhatsApp = true) => ({
   layout: <Layout>{
     id: ROUTE.PHONE_NUMBER,
     type: LAYOUTS.LIST,
@@ -56,7 +57,9 @@ export const template: (mobileNumber?: string) => TemplateSchema = (
       { id: "space2", type: WIDGET.SPACE },
       { id: "input", type: WIDGET.INPUT },
       { id: "space3", type: WIDGET.SPACE },
-      { id: "whatsappStack", type: WIDGET.STACK },
+      ...(isGetUpdatesOnWhatsApp
+        ? [{ id: "whatsappStack", type: WIDGET.STACK }]
+        : []),
       { id: "space4", type: WIDGET.SPACE },
       {
         id: "continue",
@@ -186,10 +189,11 @@ export const template: (mobileNumber?: string) => TemplateSchema = (
 });
 
 export const phoneNumberMF: PageType<any> = {
-
   onLoad: async (_, { mobileNumber }) => {
-    const usertype = await SharedPropsService.getUserType();
-    return Promise.resolve(template(mobileNumber));
+    const isGetUpdatesOnWhatsApp = await SharedPropsService.getConfig(
+      ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED
+    );
+    return Promise.resolve(template(mobileNumber, isGetUpdatesOnWhatsApp));
   },
   actions: {
     [ACTION.CONTINUE]: sendOtpWithUserTypeCheck,
