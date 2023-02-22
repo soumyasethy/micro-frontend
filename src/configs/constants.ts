@@ -60,6 +60,21 @@ export enum QUERY_PARAMS {
   PRIMARY_COLOR = 'primaryColor',
 }
 
+export enum ImportScriptSrc {
+  DIGIO_SCRIPT="https://app.digio.in/sdk/v10/digio.js"
+}
+
+export enum DigioKycStatus {
+  CREATED = "CREATED",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  EXPIRED = "EXPIRED"
+}
+
+export enum DigioDocsStatus {
+  REQUESTED = "REQUESTED",
+}
+
 export enum POPUP_TARGET_NAME {
   AGREEMENT = "volt money",
   AUTOPAY = "volt money"

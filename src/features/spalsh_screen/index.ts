@@ -8,7 +8,6 @@ import {
   WidgetProps,
 } from "@voltmoney/types";
 import {
-  ColorTokens,
   IconProps,
   IconSizeTokens,
   IconTokens,
@@ -25,8 +24,9 @@ import { ACTION } from "./types";
 import { SplashAction } from "./actions";
 import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
-import {clearAllData, getParameters} from "../../configs/utils";
-import {QUERY_PARAMS} from "../../configs/constants";
+import { clearAllData, getParameters } from "../../configs/utils";
+import { QUERY_PARAMS } from "../../configs/constants";
+import { ConfigTokens } from "../../configs/config";
 
 const template: (isPartnerPlatform) => TemplateSchema = (
   isPartnerPlatform
@@ -84,11 +84,13 @@ export const splashScreenMF: PageType<any> = {
       /*** get params for custom api header if present in url
        *** example, voltmoney.in/partnerplatform?platform=VOLT_MOBILE_APP ****/
 
-      const deleteUserContextCheck = urlParams.toLowerCase().includes(QUERY_PARAMS.START_NEW);
-      if(deleteUserContextCheck) {
-        clearAllData().then(async ()=>{
+      const deleteUserContextCheck = urlParams
+        .toLowerCase()
+        .includes(QUERY_PARAMS.START_NEW);
+      if (deleteUserContextCheck) {
+        clearAllData().then(async () => {
           await standardUtilities.navigate(ROUTE.PHONE_NUMBER);
-        })
+        });
       }
 
       const partnerPlatform = urlParams
@@ -105,6 +107,11 @@ export const splashScreenMF: PageType<any> = {
         const customPlatform = params[QUERY_PARAMS.PLATFORM];
         /*** setting app global api header here if not VOLT_MOBILE_APP ****/
         await SharedPropsService.setAppPlatform(customPlatform);
+        /*** remove get whatsapp updates from login screen ****/
+        await SharedPropsService.setConfig(
+          ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED,
+          false
+        );
       }
 
       /*** if ?user=8763666620 then autofill mobile number in login screen ****/

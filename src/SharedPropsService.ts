@@ -1,6 +1,9 @@
-
-
-import { BankData, User ,PartnerUser, BasicData} from "./features/login/otp_verify/types";
+import {
+  BankData,
+  User,
+  PartnerUser,
+  BasicData,
+} from "./features/login/otp_verify/types";
 
 import {
   __isMock__,
@@ -14,12 +17,11 @@ import { StoreKey } from "./configs/api";
 import { AvailableCASItem } from "./features/mfPledge/unlock_limit/types";
 import { AuthCASModel } from "./types/AuthCASModel";
 
-
 import _ from "lodash";
 
 export enum USERTYPE {
   BORROWER = "BORROWER",
-  PARTNER = "PARTNER"
+  PARTNER = "PARTNER",
 }
 
 export type AssetRepositoryConfigItemType = {
@@ -42,7 +44,7 @@ type GlobalProps = {
   access_token: string;
   availableAuthCasMap: { [key in string]: AvailableCASItem };
   accountNumber: string;
- 
+
   authCAS?: AuthCASModel;
   ref?: string;
   url?: string;
@@ -57,33 +59,34 @@ type GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]?: number;
     [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
     [ConfigTokens.IS_FIRST_JOURNEY]?: boolean;
+    [ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED]?: boolean;
   };
   userDob?: string;
   creditLimit: number;
   listItemDataCAS: any;
   desiredPortfolio?: any;
-  userType:USERTYPE;
+  userType: USERTYPE;
   partnerRefCode?: string;
-  applicationId?:string;
-  bankCode?:string;
-  bankName?:string;
-  accountId?:string;
-  pbankAccNo?:string;
-  pconfirmAccNo?:string;
-  pbankIfsc?:string;
-  bankData :BankData;
+  applicationId?: string;
+  bankCode?: string;
+  bankName?: string;
+  accountId?: string;
+  pbankAccNo?: string;
+  pconfirmAccNo?: string;
+  pbankIfsc?: string;
+  bankData: BankData;
 
   basicData: BasicData;
   assetRepositoryType?: AssetRepositoryType;
 
-  stepperData?:any,
+  stepperData?: any;
   basicData_pan: string;
   basicData_phone: string;
   basicData_email: string;
   basicData_dob: string;
   casListOriginal?: AvailableCASItem[];
   appPlatform?: string;
-  investorName?:string;
+  investorName?: string;
   assetRepositoryConfig?: {
     [key in AssetRepositoryType]: AssetRepositoryConfigItemType;
   };
@@ -93,8 +96,8 @@ type GlobalProps = {
 let _globalProps: GlobalProps = {
   buildType: BUILD_TYPE.BORROWER_STAGING,
   user: {},
-  partnerUser:{
-    name:"",
+  partnerUser: {
+    name: "",
     panNumber: "",
     phoneNumber: "",
     emailId: "",
@@ -102,31 +105,31 @@ let _globalProps: GlobalProps = {
   access_token: "",
   availableAuthCasMap: {},
   accountNumber: "",
-  userType:USERTYPE.BORROWER,
-  applicationId:"",
-  bankCode:"",
-  bankName:"",
-  accountId:"",
-  pbankAccNo:"",
-  pconfirmAccNo:"",
-  pbankIfsc:"",
-  bankData:{
+  userType: USERTYPE.BORROWER,
+  applicationId: "",
+  bankCode: "",
+  bankName: "",
+  accountId: "",
+  pbankAccNo: "",
+  pconfirmAccNo: "",
+  pbankIfsc: "",
+  bankData: {
     bankName: "",
-    bankCode:"",
-    accountNumber:"",
-    confirmAccountNumber:"",
-    bankIfsc:""
+    bankCode: "",
+    accountNumber: "",
+    confirmAccountNumber: "",
+    bankIfsc: "",
   },
-  basicData:{
-    panNumber:"",
-    mobileNumber:"",
-    email:"",
-    dob:""
+  basicData: {
+    panNumber: "",
+    mobileNumber: "",
+    email: "",
+    dob: "",
   },
-  basicData_pan:"",
-  basicData_dob:"",
-  basicData_email:"",
-  basicData_phone:"",
+  basicData_pan: "",
+  basicData_dob: "",
+  basicData_email: "",
+  basicData_phone: "",
   authCAS: null,
   ref: "",
   /*** Default asset repository */
@@ -157,13 +160,14 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
     [ConfigTokens.IS_FIRST_JOURNEY] : false
+    [ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED]: true,
   },
   userDob: "",
   creditLimit: 25000,
   listItemDataCAS: [],
   desiredPortfolio: {},
   stepperData: {},
-  investorName:"",
+  investorName: "",
   creditStatus: "",
 };
 
@@ -177,7 +181,7 @@ export function getStepperData(): any {
 export function setInvestorName(investorName: string) {
   _globalProps.investorName = investorName;
 }
-export function getInvestorName(){
+export function getInvestorName() {
   return _globalProps.investorName;
 }
 
@@ -258,7 +262,6 @@ async function getBasicDataPhone() {
   return _globalProps.basicData_phone;
 }
 
-
 async function setBankData(props: BankData) {
   _globalProps.bankData = await props;
 }
@@ -275,35 +278,35 @@ async function getPartnerUser() {
   return _globalProps.partnerUser;
 }
 
-async function setAccountId(accountId: string){
+async function setAccountId(accountId: string) {
   _globalProps.accountId = accountId;
 }
 
-async function getAccountId(){
+async function getAccountId() {
   return _globalProps.accountId;
 }
 
-async function setBankCode(bankCode: string){
+async function setBankCode(bankCode: string) {
   _globalProps.bankCode = bankCode;
 }
 
-async function getBankCode(){
+async function getBankCode() {
   return _globalProps.bankCode;
 }
 
-async function setBankName(bankName: string){
+async function setBankName(bankName: string) {
   _globalProps.bankName = bankName;
 }
 
-async function getBankName(){
+async function getBankName() {
   return _globalProps.bankName;
 }
 
-async function setUserType(userType: USERTYPE){
+async function setUserType(userType: USERTYPE) {
   _globalProps.userType = userType;
 }
 
-async function getUserType(){
+async function getUserType() {
   return _globalProps.userType;
 }
 
@@ -369,8 +372,6 @@ function getPropsValue(key?: string) {
   }
   return null;
 }
-
-
 
 async function setUser(props: User) {
   _globalProps.user = await props;

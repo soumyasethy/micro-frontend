@@ -61,6 +61,7 @@ export const template: (
   minAmount: number,
   maxAmount: number,
   showLessLimit: boolean,
+  showMaxLimit: boolean,
   mfPortfolioArray,
   pledgeInProgress: boolean
 ) => Promise<TemplateSchema> = async (
@@ -72,6 +73,7 @@ export const template: (
   minAmount,
   maxAmount,
   showLessLimit = false,
+  showMaxLimit = false,
   mfPortfolioArray,
   pledgeInProgress = false
 ) => {
@@ -85,7 +87,7 @@ export const template: (
           type: WIDGET.CARD,
           position: POSITION.ABSOLUTE_TOP,
         },
-        ...(showLessLimit
+        ...(showLessLimit || showMaxLimit
           ? [
               {
                 id: "showLessLimitCard",
@@ -201,7 +203,9 @@ export const template: (
           widgetItems: [
             { id: "infoIcon2", type: WIDGET.ICON },
             { id: "infoIconSpace2", type: WIDGET.SPACE },
-            { id: "infoLabel2", type: WIDGET.TEXT },
+            showLessLimit
+              ? { id: "infoLabel2Min", type: WIDGET.TEXT }
+              : { id: "infoLabel2Max", type: WIDGET.TEXT },
           ],
         },
       },
@@ -211,8 +215,16 @@ export const template: (
       },
       infoIconSpace2: <SpaceProps>{ size: SizeTypeTokens.Size10 },
       continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
-      infoLabel2: <TypographyProps>{
-        label: "Minimum amount required to proceed is ₹25,000",
+      infoLabel2Min: <TypographyProps>{
+        label: `Minimum amount required to proceed is ₹${minAmount}`,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontColor: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XS,
+        lineHeight: 18,
+      },
+      infoLabel2Max: <TypographyProps>{
+        label: `Maximum amount required to proceed is ₹${maxAmount}`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
         fontColor: ColorTokens.Grey_Night,
@@ -794,9 +806,16 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     let showLessLimit: boolean;
 
     if (!pledgeInProgress) {
-      (await SharedPropsService.getCreditLimit()) < 25000
+      (await SharedPropsService.getCreditLimit()) < minAmount
         ? (showLessLimit = true)
         : (showLessLimit = false);
+    }
+    let showMaxLimit: boolean;
+
+    if (!pledgeInProgress) {
+      (await SharedPropsService.getCreditLimit()) > maxAmount
+        ? (showMaxLimit = true)
+        : (showMaxLimit = false);
     }
 
     return Promise.resolve(
@@ -809,6 +828,7 @@ export const pledgeConfirmationMFV2: PageType<any> = {
         minAmount,
         maxAmount,
         showLessLimit,
+        showMaxLimit,
         mfPortfolioArray,
         pledgeInProgress
       )
