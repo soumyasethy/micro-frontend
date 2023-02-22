@@ -61,18 +61,16 @@ export const template: (
       {
         id: "success",
         type: WIDGET.VERIFICATIONCARD,
-        padding: {
-          top: 120,
-        },
+        position: POSITION.ABSOLUTE_TOP
       },
-      { id: "amountStack", type: WIDGET.STACK },
-      { id: "amountSpace", type: WIDGET.SPACE },
-      { id: "amountText", type: WIDGET.TEXT },
-      { id: "amountTextSpace", type: WIDGET.SPACE },
-      { id: "timeStack", type: WIDGET.STACK },
-      { id: "timeSpace", type: WIDGET.SPACE },
-      { id: "messageStack", type: WIDGET.STACK },
-      { id: "messageSpace", type: WIDGET.SPACE },
+      { id: "amountStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_TOP },
+      { id: "amountSpace", type: WIDGET.SPACE, position: POSITION.ABSOLUTE_TOP },
+      { id: "amountText", type: WIDGET.TEXT ,position: POSITION.ABSOLUTE_TOP },
+      { id: "amountTextSpace", type: WIDGET.SPACE ,position: POSITION.ABSOLUTE_TOP },
+      { id: "timeStack", type: WIDGET.STACK ,position: POSITION.ABSOLUTE_TOP },
+      { id: "timeSpace", type: WIDGET.SPACE ,position: POSITION.ABSOLUTE_TOP },
+      { id: "messageStack", type: WIDGET.STACK,position: POSITION.ABSOLUTE_TOP  },
+      { id: "messageSpace", type: WIDGET.SPACE,position: POSITION.ABSOLUTE_TOP  },
       { id: "card", type: WIDGET.CARD, position: POSITION.ABSOLUTE_BOTTOM },
       {
         id: "cardSpace",
@@ -226,7 +224,7 @@ export const template: (
 
     },
     widgetText3: <TypographyProps>{
-      label: "  \u2022 Transfers may take up to 6 banking hours",
+      label: "  \u2022 Transfer may take up to 6 banking hours",
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XXS,
       fontWeight: '500',
