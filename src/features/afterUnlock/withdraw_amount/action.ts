@@ -58,7 +58,7 @@ export const CreateDisbursementRequest: ActionFunction<
     });
   } else {
     await showPopup({
-      title: "Please enter amount more than 5000",
+      title: "Withdrawal amount must be more than ₹5,000",
       type: "DEFAULT",
       iconName: IconTokens.Alert,
       ctaLabel: "OK",
@@ -254,7 +254,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
         amountSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       },
       [
-        { id: "amountMessage", type: WIDGET.TEXT },
+        { id: "amountMessage", type: WIDGET.TEXT, padding: {top:40} },
         { id: "amountSpace", type: WIDGET.SPACE },
       ],
       "amountMsgSpace"
