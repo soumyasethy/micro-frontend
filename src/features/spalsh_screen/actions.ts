@@ -31,7 +31,6 @@ export const SplashAction: ActionFunction<any> = async (
         /****
          * ADD YOUR CUSTOM ROUTE TO NAVIGATE
          * ****/
-        return navigate(ROUTE.KYC_DIGILOCKER, {});
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
         } else {

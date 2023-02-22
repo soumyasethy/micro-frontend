@@ -355,6 +355,8 @@ export const nextStepCredStepper = async (currentStepId?: string) => {
     return { routeId: ROUTE.KYC_SUMMARY, params: {} };
   } else if (currentStepId === ROUTE.BANK_ACCOUNT_VERIFICATION) {
     return { routeId: ROUTE.BANK_ACCOUNT_VERIFICATION, params: {} };
+  } else if (currentStepId === ROUTE.KYC_DIGILOCKER) {
+      return { routeId: ROUTE.KYC_DIGILOCKER, params: {} };
   } else if (stepStatusMap.AGREEMENT_SIGN === StepperStateToken.NOT_STARTED) {
     return { routeId: ROUTE.LOAN_AGREEMENT_POLLING, params: {} };
   } else if (stepStatusMap.AGREEMENT_SIGN === StepperStateToken.IN_PROGRESS) {
@@ -435,7 +437,8 @@ export const nextStepId = async (
           };
         }
       }
-    } else if (
+    }
+    else if (
       currentStepId === "KYC_CKYC" ||
       currentStepId === "KYC_PHOTO_VERIFICATION" ||
       currentStepId === "KYC_AADHAAR_VERIFICATION" ||
@@ -447,7 +450,8 @@ export const nextStepId = async (
       currentStepId === "CREDIT_APPROVAL" ||
       currentStepId === "AGREEMENT_SIGN" ||
       currentStepId === "KYC_DOCUMENT_UPLOAD_POA" ||
-      currentStepId === "KYC_DOCUMENT_UPLOAD_POI"
+      currentStepId === "KYC_DOCUMENT_UPLOAD_POI"||
+      currentStepId === ROUTE.KYC_DIGILOCKER
     ) {
       return { routeId: ROUTE.KYC_STEPPER, params: {} };
     }

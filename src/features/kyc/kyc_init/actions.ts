@@ -4,7 +4,7 @@ import { AadharInitPayload } from "./types";
 import { ROUTE } from "../../../routes";
 import { ButtonProps } from "@voltmoney/schema";
 import {DigioDocsStatus, DigioKycStatus, ImportScriptSrc} from "../../../configs/constants";
-import { getDigio } from "../../../configs/utils";
+import {getDigio, nextStepCredStepper, nextStepId} from "../../../configs/utils";
 import { api } from "../../../configs/api";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
@@ -36,10 +36,13 @@ export const AadharInitAction: ActionFunction<AadharInitPayload> = async (
             headers: await getAppHeader(),
           }
         )
-        .then((response) => {
+        .then(async (response) => {
           clearInterval(pollInterval);
           console.log("Success: ", response);
           console.log("Digio_Response", digio_response);
+          const routeObj = await nextStepId(response.data.updatedApplicationObj.currentStepId)
+          console.warn("**** NextStep Route ****", routeObj);
+          await navigate(routeObj.routeId, routeObj.params);
         });
     },
     async (digio_response) => {
@@ -77,7 +80,7 @@ export const AadharInitAction: ActionFunction<AadharInitPayload> = async (
                   headers: await getAppHeader(),
                 }
               )
-              .then((res) => {
+              .then(async (res) => {
                 if (
                   res &&
                   res.data &&
@@ -85,6 +88,9 @@ export const AadharInitAction: ActionFunction<AadharInitPayload> = async (
                 ) {
                   console.log("Verification Completed");
                   clearInterval(pollInterval);
+                  const routeObj = await nextStepId(res.data.updatedApplicationObj.currentStepId)
+                  console.warn("**** NextStep Route ****", routeObj);
+                  await navigate(routeObj.routeId, routeObj.params);
                 }
               });
           }, 5000);
