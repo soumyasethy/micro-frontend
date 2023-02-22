@@ -72,7 +72,8 @@ export const template: (
   isPendingDisbursalStatement: boolean,
   isDisbursalRequestAllowed: boolean,
   amountDisbursal: number,
-  processingFees: number
+  processingFees: number,
+  isFirstJourney: boolean
 ) => TemplateSchema = (
   availableCreditAmount,
   actualLoanAmount,
@@ -82,7 +83,9 @@ export const template: (
   isPendingDisbursalStatement: boolean,
   isDisbursalRequestAllowed: boolean,
   amountDisbursal: number,
-  processingFess: number
+  processingFess: number,
+  isFirstJourney
+
 ) => {
   return {
     layout: <Layout>{
@@ -168,9 +171,13 @@ export const template: (
       },
       card2: <CardProps>{
         body: {
-          widgetItems: [
+          widgetItems: isFirstJourney ? [
             { id: "widgetText", type: WIDGET.TEXT },
             { id: "widgetText2", type: WIDGET.TEXT },
+            { id: "widgetText3", type: WIDGET.TEXT },
+            { id: "widgetText4", type: WIDGET.TEXT },
+          ] : [
+            { id: "widgetText", type: WIDGET.TEXT },
             { id: "widgetText3", type: WIDGET.TEXT },
             { id: "widgetText4", type: WIDGET.TEXT },
           ],
@@ -184,15 +191,27 @@ export const template: (
       },
       widgetText2: <TypographyProps>{
         label: `\u2022 ₹${processingFess} one-time processing fee will be deducted `,
-        color: ColorTokens.Red_90,
+        color: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XXS,
+        fontWeight: '500',
+        lineHeight: 16,
+        fontFamily: FontFamilyTokens.Inter
       },
       widgetText3: <TypographyProps>{
         label: "\u2022 Transfer may take up to 6 banking hours",
-        color: ColorTokens.Red_90,
+        color: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XXS,
+        fontWeight: '500',
+        lineHeight: 16,
+        fontFamily: FontFamilyTokens.Inter
       },
       widgetText4: <TypographyProps>{
         label: "\u2022 Requests post 4PM may take up to 12PM of next day",
-        color: ColorTokens.Red_90,
+        color: ColorTokens.Grey_Night,
+        fontSize: FontSizeTokens.XXS,
+        fontWeight: '500',
+        lineHeight: 16,
+        fontFamily: FontFamilyTokens.Inter
       },
 
       header: <StackProps>{
@@ -536,6 +555,8 @@ export const dashboardMF: PageType<any> = {
       // listOfDisbursal[1].disbursalStatus = "REQUESTED";
       // /* */
 
+      var isFirstJourney = listOfDisbursal.length > 1
+
       if (listOfDisbursal) {
         isPendingDisbursalStatement = false;
         isPendingDisbursalApproval = true;
@@ -568,7 +589,8 @@ export const dashboardMF: PageType<any> = {
         isPendingDisbursalStatement,
         isDisbursalRequestAllowed,
         amountDisbursal,
-        processingFees
+        processingFees,
+          isFirstJourney
       )
     );
   },

@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   BorderRadiusTokens,
   ButtonProps,
@@ -29,32 +21,34 @@ import {
   StackProps,
   StackType,
   TypographyProps,
-  VerificationCardButtonTypeToken,
   VerificationCardProps,
   VerificationCardTypeTokens,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
-import { Done, goBack } from "./action";
+import {ROUTE} from "../../../routes";
+import {ACTION} from "./types";
+import {Done, goBack} from "./action";
 import moment from "moment";
-import { heightMap } from "../../../configs/height";
-import { priceInWords } from "../withdraw_amount/action";
+import {heightMap} from "../../../configs/height";
+import {priceInWords} from "../withdraw_amount/action";
 import SharedPropsService from "../../../SharedPropsService";
-import { getBankIconUrl } from "../../../configs/utils";
+import {getBankIconUrl} from "../../../configs/utils";
+import {ConfigTokens} from "../../../configs/config";
 
 export const template: (
   disbursalAmount: string,
   accountNumber: string,
   processingFees: number,
   bankCode: string,
-  bankName: string
+  bankName: string,
+  isFirstJourney : boolean
 ) => TemplateSchema = (
   disbursalAmount: string,
   accountNumber: string,
   processingFees: number,
   bankCode,
-  bankName
+  bankName,
+  isFirstJourney
 ) => ({
   layout: <Layout>{
     id: ROUTE.WITHDRAWAL_SUCCESS,
@@ -133,6 +127,10 @@ export const template: (
       label: priceInWords(disbursalAmount) + " Only.",
       textAlign: "center",
       color: ColorTokens.Grey_Charcoal,
+      fontSize : FontSizeTokens.XS,
+      fontWeight : '400',
+      lineHeight :18,
+      fontFamily : FontFamilyTokens.Inter
     },
     timeStack: <StackProps>{
       type: StackType.row,
@@ -165,7 +163,10 @@ export const template: (
     message: <TypographyProps>{
       label: `To: `,
       color: ColorTokens.Grey_Charcoal,
-      fontWeight: "400",
+      fontWeight: "500",
+      fontSize : FontSizeTokens.XS,
+      lineHeight: 18,
+      fontFamily: FontFamilyTokens.Inter
     },
     logo: <ImageProps>{ uri: getBankIconUrl(bankCode), width: 30, height: 30 },
     text2: <TypographyProps>{
@@ -174,6 +175,10 @@ export const template: (
         accountNumber.length
       )}`,
       color: ColorTokens.Grey_Charcoal,
+      fontWeight: "500",
+      fontSize : FontSizeTokens.XS,
+      lineHeight: 18,
+      fontFamily: FontFamilyTokens.Inter
     },
     messageSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     info: <InfoProps>{
@@ -187,9 +192,13 @@ export const template: (
     infoSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     card: <CardProps>{
       body: {
-        widgetItems: [
+        widgetItems: isFirstJourney ? [
           { id: "widgetText", type: WIDGET.TEXT },
           { id: "widgetText2", type: WIDGET.TEXT },
+          { id: "widgetText3", type: WIDGET.TEXT },
+          { id: "widgetText4", type: WIDGET.TEXT },
+        ] : [
+          { id: "widgetText", type: WIDGET.TEXT },
           { id: "widgetText3", type: WIDGET.TEXT },
           { id: "widgetText4", type: WIDGET.TEXT },
         ],
@@ -202,20 +211,34 @@ export const template: (
       borderBottomRightRadius: BorderRadiusTokens.BR2,
     },
     widgetText: <TypographyProps>{
-      label: " Please note",
-      color: ColorTokens.Red_90,
+      label: " We're processing your withdrawal request.Please note",
+      color: ColorTokens.Grey_Night,
+      fontWeight :"bold",
+      fontSize: FontSizeTokens.XXS,
+      lineHeight: 16
     },
     widgetText2: <TypographyProps>{
       label: `  \u2022 ₹${processingFees} one-time processing fee will be deducted `,
-      color: ColorTokens.Red_90,
+      color: ColorTokens.Grey_Night,
+      fontSize: FontSizeTokens.XXS,
+      fontWeight: '500',
+      lineHeight: 16
+
     },
     widgetText3: <TypographyProps>{
       label: "  \u2022 Transfers may take up to 6 banking hours",
-      color: ColorTokens.Red_90,
+      color: ColorTokens.Grey_Night,
+      fontSize: FontSizeTokens.XXS,
+      fontWeight: '500',
+      lineHeight: 16
+
     },
     widgetText4: <TypographyProps>{
       label: "  \u2022 Requests post 4PM may take up to 12PM of next day",
-      color: ColorTokens.Red_90,
+      color: ColorTokens.Grey_Night,
+      fontSize: FontSizeTokens.XXS,
+      fontWeight: '500',
+      lineHeight: 16
     },
     cardSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
     continue: <ButtonProps & WidgetProps>{
@@ -238,6 +261,7 @@ export const withdrawalSuccessMF: PageType<any> = {
     const user = await SharedPropsService.getUser();
     const bankCode = await SharedPropsService.getBankCode();
     const bankName = await SharedPropsService.getBankName();
+    const isFirstJourney = await  SharedPropsService.getConfig(ConfigTokens.IS_FIRST_JOURNEY)
     const processingFees = user.linkedCredits[0].processingCharges;
     return Promise.resolve(
       template(
@@ -245,7 +269,8 @@ export const withdrawalSuccessMF: PageType<any> = {
         accountNumber,
         processingFees,
         bankCode,
-        bankName
+        bankName,
+          isFirstJourney
       )
     );
   },

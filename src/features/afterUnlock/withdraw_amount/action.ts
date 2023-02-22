@@ -254,7 +254,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
         amountSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       },
       [
-        { id: "amountMessage", type: WIDGET.TEXT },
+        { id: "amountMessage", type: WIDGET.TEXT, padding: {top:40} },
         { id: "amountSpace", type: WIDGET.SPACE },
       ],
       "amountMsgSpace"
