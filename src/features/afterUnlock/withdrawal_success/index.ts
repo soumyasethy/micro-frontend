@@ -1,4 +1,12 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+  Datastore,
+  Layout,
+  LAYOUTS,
+  PageType,
+  POSITION,
+  TemplateSchema,
+  WidgetProps,
+} from "@voltmoney/types";
 import {
   BorderRadiusTokens,
   ButtonProps,
@@ -10,6 +18,10 @@ import {
   DividerSizeTokens,
   FontFamilyTokens,
   FontSizeTokens,
+  IconAlignmentTokens,
+  IconProps,
+  IconSizeTokens,
+  IconTokens,
   ImageProps,
   InfoProps,
   InfoStateTokens,
@@ -25,15 +37,15 @@ import {
   VerificationCardTypeTokens,
   WIDGET,
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION} from "./types";
-import {Done, goBack} from "./action";
+import { ROUTE } from "../../../routes";
+import { ACTION } from "./types";
+import { Done, goBack } from "./action";
 import moment from "moment";
-import {heightMap} from "../../../configs/height";
-import {priceInWords} from "../withdraw_amount/action";
+import { heightMap } from "../../../configs/height";
+import { priceInWords } from "../withdraw_amount/action";
 import SharedPropsService from "../../../SharedPropsService";
-import {getBankIconUrl} from "../../../configs/utils";
-import {ConfigTokens} from "../../../configs/config";
+import { getBankIconUrl } from "../../../configs/utils";
+import { ConfigTokens } from "../../../configs/config";
 
 export const template: (
   disbursalAmount: string,
@@ -41,7 +53,7 @@ export const template: (
   processingFees: number,
   bankCode: string,
   bankName: string,
-  isFirstJourney : boolean
+  isFirstJourney: boolean
 ) => TemplateSchema = (
   disbursalAmount: string,
   accountNumber: string,
@@ -58,19 +70,46 @@ export const template: (
     },
 
     widgets: [
+      // {
+      //   id: "success",
+      //   type: WIDGET.VERIFICATIONCARD,
+      //   position: POSITION.ABSOLUTE_TOP
+      // },
       {
-        id: "success",
-        type: WIDGET.VERIFICATIONCARD,
-        position: POSITION.ABSOLUTE_TOP
+        id: "iconStack",
+        type: WIDGET.STACK,
+        position: POSITION.ABSOLUTE_TOP,
+        padding: { top: 32 },
       },
-      { id: "amountStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_TOP },
-      { id: "amountSpace", type: WIDGET.SPACE, position: POSITION.ABSOLUTE_TOP },
-      { id: "amountText", type: WIDGET.TEXT ,position: POSITION.ABSOLUTE_TOP },
-      { id: "amountTextSpace", type: WIDGET.SPACE ,position: POSITION.ABSOLUTE_TOP },
-      { id: "timeStack", type: WIDGET.STACK ,position: POSITION.ABSOLUTE_TOP },
-      { id: "timeSpace", type: WIDGET.SPACE ,position: POSITION.ABSOLUTE_TOP },
-      { id: "messageStack", type: WIDGET.STACK,position: POSITION.ABSOLUTE_TOP  },
-      { id: "messageSpace", type: WIDGET.SPACE,position: POSITION.ABSOLUTE_TOP  },
+      { id: "topSpace", type: WIDGET.SPACE, position: POSITION.ABSOLUTE_TOP },
+      {
+        id: "amountStack",
+        type: WIDGET.STACK,
+        position: POSITION.ABSOLUTE_TOP,
+      },
+      {
+        id: "amountSpace",
+        type: WIDGET.SPACE,
+        position: POSITION.ABSOLUTE_TOP,
+      },
+      { id: "amountText", type: WIDGET.TEXT, position: POSITION.ABSOLUTE_TOP },
+      {
+        id: "amountTextSpace",
+        type: WIDGET.SPACE,
+        position: POSITION.ABSOLUTE_TOP,
+      },
+      { id: "timeStack", type: WIDGET.STACK, position: POSITION.ABSOLUTE_TOP },
+      { id: "timeSpace", type: WIDGET.SPACE, position: POSITION.ABSOLUTE_TOP },
+      {
+        id: "messageStack",
+        type: WIDGET.STACK,
+        position: POSITION.ABSOLUTE_TOP,
+      },
+      {
+        id: "messageSpace",
+        type: WIDGET.SPACE,
+        position: POSITION.ABSOLUTE_TOP,
+      },
       { id: "card", type: WIDGET.CARD, position: POSITION.ABSOLUTE_BOTTOM },
       {
         id: "cardSpace",
@@ -100,12 +139,29 @@ export const template: (
       },
       color: ColorTokens.Grey_Chalk,
     },
+    successIcon: <IconProps>{
+      name: IconTokens.Success,
+      align: IconAlignmentTokens.center,
+      size: IconSizeTokens.Size52,
+    },
     topSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     amountStack: <StackProps>{
       type: StackType.row,
       alignItems: StackAlignItems.center,
       justifyContent: StackJustifyContent.center,
       widgetItems: [{ id: "amount", type: WIDGET.TEXT }],
+    },
+    iconStack: <StackProps>{
+      type: StackType.row,
+      alignItems: StackAlignItems.center,
+      justifyContent: StackJustifyContent.center,
+      widgetItems: [
+        {
+          id: "successIcon",
+          type: WIDGET.ICON,
+          position: POSITION.ABSOLUTE_TOP,
+        },
+      ],
     },
     amount: <TypographyProps>{
       label: `₹${disbursalAmount}`.replace(
@@ -122,13 +178,13 @@ export const template: (
     amountTextSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
 
     amountText: <TypographyProps>{
-      label: priceInWords(disbursalAmount) + " Only.",
+      label: priceInWords(disbursalAmount) + " Only",
       textAlign: "center",
       color: ColorTokens.Grey_Charcoal,
-      fontSize : FontSizeTokens.XS,
-      fontWeight : '400',
-      lineHeight :18,
-      fontFamily : FontFamilyTokens.Inter
+      fontSize: FontSizeTokens.XS,
+      fontWeight: "400",
+      lineHeight: 18,
+      fontFamily: FontFamilyTokens.Inter,
     },
     timeStack: <StackProps>{
       type: StackType.row,
@@ -162,9 +218,9 @@ export const template: (
       label: `To: `,
       color: ColorTokens.Grey_Charcoal,
       fontWeight: "500",
-      fontSize : FontSizeTokens.XS,
+      fontSize: FontSizeTokens.XS,
       lineHeight: 18,
-      fontFamily: FontFamilyTokens.Inter
+      fontFamily: FontFamilyTokens.Inter,
     },
     logo: <ImageProps>{ uri: getBankIconUrl(bankCode), width: 30, height: 30 },
     text2: <TypographyProps>{
@@ -174,9 +230,9 @@ export const template: (
       )}`,
       color: ColorTokens.Grey_Charcoal,
       fontWeight: "500",
-      fontSize : FontSizeTokens.XS,
+      fontSize: FontSizeTokens.XS,
       lineHeight: 18,
-      fontFamily: FontFamilyTokens.Inter
+      fontFamily: FontFamilyTokens.Inter,
     },
     messageSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     info: <InfoProps>{
@@ -190,16 +246,18 @@ export const template: (
     infoSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     card: <CardProps>{
       body: {
-        widgetItems: isFirstJourney ? [
-          { id: "widgetText", type: WIDGET.TEXT },
-          { id: "widgetText2", type: WIDGET.TEXT },
-          { id: "widgetText3", type: WIDGET.TEXT },
-          { id: "widgetText4", type: WIDGET.TEXT },
-        ] : [
-          { id: "widgetText", type: WIDGET.TEXT },
-          { id: "widgetText3", type: WIDGET.TEXT },
-          { id: "widgetText4", type: WIDGET.TEXT },
-        ],
+        widgetItems: isFirstJourney
+          ? [
+              { id: "widgetText", type: WIDGET.TEXT },
+              { id: "widgetText2", type: WIDGET.TEXT },
+              { id: "widgetText3", type: WIDGET.TEXT },
+              { id: "widgetText4", type: WIDGET.TEXT },
+            ]
+          : [
+              { id: "widgetText", type: WIDGET.TEXT },
+              { id: "widgetText3", type: WIDGET.TEXT },
+              { id: "widgetText4", type: WIDGET.TEXT },
+            ],
       },
       bgColor: ColorTokens.Yellow_10,
       margin: 20,
@@ -211,32 +269,30 @@ export const template: (
     widgetText: <TypographyProps>{
       label: " We're processing your withdrawal request.Please note",
       color: ColorTokens.Grey_Night,
-      fontWeight :"bold",
+      fontWeight: "bold",
       fontSize: FontSizeTokens.XXS,
-      lineHeight: 16
+      lineHeight: 16,
     },
     widgetText2: <TypographyProps>{
       label: `  \u2022 ₹${processingFees} one-time processing fee will be deducted `,
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XXS,
-      fontWeight: '500',
-      lineHeight: 16
-
+      fontWeight: "500",
+      lineHeight: 16,
     },
     widgetText3: <TypographyProps>{
       label: "  \u2022 Transfer may take up to 6 banking hours",
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XXS,
-      fontWeight: '500',
-      lineHeight: 16
-
+      fontWeight: "500",
+      lineHeight: 16,
     },
     widgetText4: <TypographyProps>{
       label: "  \u2022 Requests post 4PM may take up to 12PM of next day",
       color: ColorTokens.Grey_Night,
       fontSize: FontSizeTokens.XXS,
-      fontWeight: '500',
-      lineHeight: 16
+      fontWeight: "500",
+      lineHeight: 16,
     },
     cardSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
     continue: <ButtonProps & WidgetProps>{
@@ -259,7 +315,9 @@ export const withdrawalSuccessMF: PageType<any> = {
     const user = await SharedPropsService.getUser();
     const bankCode = await SharedPropsService.getBankCode();
     const bankName = await SharedPropsService.getBankName();
-    const isFirstJourney = await  SharedPropsService.getConfig(ConfigTokens.IS_FIRST_JOURNEY)
+    const isFirstJourney = await SharedPropsService.getConfig(
+      ConfigTokens.IS_FIRST_JOURNEY
+    );
     const processingFees = user.linkedCredits[0].processingCharges;
     return Promise.resolve(
       template(
@@ -268,7 +326,7 @@ export const withdrawalSuccessMF: PageType<any> = {
         processingFees,
         bankCode,
         bankName,
-          isFirstJourney
+        isFirstJourney
       )
     );
   },
