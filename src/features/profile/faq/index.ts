@@ -47,7 +47,7 @@ export const template: () => TemplateSchema = () => {
     },
     datastore: <Datastore>{
       header: <HeaderProps>{
-        title: "FAQ’s",
+        title: "FAQs",
         isBackButton: true,
         type: HeaderTypeTokens.HEADERCTA,
         leftCta: "Contact Us",
@@ -127,7 +127,7 @@ export const template: () => TemplateSchema = () => {
         onPress: Function,
       },
       startDetails1: <AccordionProps>{
-        title: "What are the conditions to get a loan from Volt?",
+        title: "What are the conditions to get a loan from us?",
         description:
           "- You should be between 18 and 65 years of age. \n- Your entire mutual fund portfolio should not be less than ₹50,000. \n- You should hold Mutual Funds approved with CAMS & Kfintech (RTAs). Debt & ELSS funds (units held > 3 years) are also eligible. \n- Joint mutual fund holders are not eligible for loan.\n- You should be an Indian resident.\n- There is no minimum credit score and income requirement.",
         icon: IconTokens.DownArrow,
@@ -183,7 +183,7 @@ export const template: () => TemplateSchema = () => {
         onPress: Function,
       },
       startDetails9: <AccordionProps>{
-        title: "How do I check my limit with Volt?",
+        title: "How do I check my limit with us?",
         description:
           "We just need your PAN, mobile number and MF registered email ID to check your limit. This is done just after signing up in the journey so you know during the journey what you are getting.",
         icon: IconTokens.DownArrow,

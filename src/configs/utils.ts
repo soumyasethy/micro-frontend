@@ -631,9 +631,9 @@ export const getDigio:ImportScriptCustomCallbackType = (
   window.digio = digioObj;
 }
 
-export function convertToKLacsCore(val) {
-  if(val >= 10000000) val = (val/10000000).toFixed(2) + ' Cr';
-  else if(val >= 100000) val = (val/100000).toFixed(2) + ' Lac';
-  else if(val >= 1000) val = (val/1000).toFixed(2) + ' K';
+export function convertToKLacsCore(val, allowedDecimals = 0) {
+  if(val >= 10000000) val = (val/10000000).toFixed(allowedDecimals) + ' Cr';
+  else if(val >= 100000) val = (val/100000).toFixed(allowedDecimals) + ' Lac';
+  else if(val >= 1000) val = (val/1000).toFixed(allowedDecimals) + ' K';
   return val;
 }
