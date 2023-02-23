@@ -39,7 +39,7 @@ import {
 } from "./types";
 
 import { goToPrivacy, sendOtpWithUserTypeCheck, textOnChange, toggleCTA, whatsappToggle } from "./actions";
-import {ConfigTokens, RegexConfig} from "../../../configs/config";
+import { ConfigTokens, RegexConfig } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 
 export const template: (

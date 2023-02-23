@@ -27,7 +27,7 @@ import {ROUTE} from "../../routes";
 import {ACTION} from "./type";
 import {ApplyNowAction} from "./action";
 
-export const template: (props)=>TemplateSchema = (props)=>({
+export const template: (props:any)=>TemplateSchema = (props)=>({
     layout: <Layout>{
         id: ROUTE.TEST_PAGE,
         type: LAYOUTS.LIST,
@@ -159,7 +159,7 @@ export const template: (props)=>TemplateSchema = (props)=>({
             action: {
                 routeId: ROUTE.INTRO_PAGE,
                 type: ACTION.APPLY_NOW,
-                payload: {props}
+                payload: {...props}
             }
         },
         space1: <SpaceProps> {
@@ -202,7 +202,7 @@ export const template: (props)=>TemplateSchema = (props)=>({
 });
 
 export const introPageMF: PageType<any> = {
-    onLoad: async ({}, { ...props }) => {
+    onLoad: async (_, props) => {
         return Promise.resolve(template(props))
     },
     actions: {

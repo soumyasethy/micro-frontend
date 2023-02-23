@@ -553,9 +553,11 @@ export const getParameters: (url: string) => {
 } = (url: string) => {
   const params = {};
   let paramString = url.split("?")[1];
+  console.log("test param string", paramString)
   let queryString = new URLSearchParams(paramString);
+  console.log("test query", queryString)
   for (let pair of queryString.entries()) {
-    params[pair[0]] = pair[1];
+    params[pair[0].includes('/')?pair[0].split('/')[1]:pair[0]] = pair[1].includes('/') ? pair[1].split('/')[0] : pair[1];
   }
   return params;
 };
