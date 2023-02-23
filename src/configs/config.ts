@@ -27,10 +27,7 @@ export const defaultAuthHeaders = () => {
 export const defaultHeaders = async () => {
   const headers = new Headers();
   headers.append("X-AppMode", "INVESTOR_VIEW");
-  headers.append(
-    "X-AppPlatform",
-    __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP"
-  );
+  headers.append("X-AppPlatform", await SharedPropsService.getAppPlatform());
   headers.append(
     "Authorization",
     `Bearer ${await SharedPropsService.getToken()}`
@@ -44,9 +41,9 @@ export const defaultHeaders = async () => {
   return headers;
 };
 
-export const getAuthHeaders = () => ({
+export const getAuthHeaders = async () => ({
   "X-EntityType": "BORROWER",
-  "X-AppPlatform": __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP",
+  "X-AppPlatform": await SharedPropsService.getAppPlatform(),
   "Content-Type": "application/json",
   "X-DeviceType":
     screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL
@@ -56,7 +53,6 @@ export const getAuthHeaders = () => ({
 export const getAppHeader = async () => ({
   "X-AppMode": "INVESTOR_VIEW",
   "X-AppPlatform": await SharedPropsService.getAppPlatform(),
-  //"X-AppMode": "INVESTOR_VIEW",
   Authorization: `Bearer ${await SharedPropsService.getToken()}`,
   "Content-Type": "application/json",
   "X-DeviceType":
