@@ -31,6 +31,7 @@ export const SplashAction: ActionFunction<any> = async (
         /****
          * ADD YOUR CUSTOM ROUTE TO NAVIGATE
          * ****/
+        // return navigate(ROUTE.INTRO_PAGE, {});
         if (user.linkedApplications[0].applicationState === "COMPLETED") {
           await navigate(ROUTE.DASHBOARD);
         } else {
