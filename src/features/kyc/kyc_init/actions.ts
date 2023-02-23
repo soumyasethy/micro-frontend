@@ -38,11 +38,7 @@ export const AadharInitAction: ActionFunction<AadharInitPayload> = async (
         )
         .then(async (response) => {
           clearInterval(pollInterval);
-          console.log("Success: ", response);
-          console.log("Digio_Response", digio_response);
-          const routeObj = await nextStepId(response.data.updatedApplicationObj.currentStepId)
-          console.warn("**** NextStep Route ****", routeObj);
-          await navigate(routeObj.routeId, routeObj.params);
+          await navigate(ROUTE.KYC_ADDITIONAL_DETAILS, {});
         });
     },
     async (digio_response) => {
@@ -66,9 +62,9 @@ export const AadharInitAction: ActionFunction<AadharInitPayload> = async (
           const tokenId = response.data.stepResponseObject.tokenId;
           //@ts-ignore
           digio.init();
-          console.log("RequestId: ", requestId);
-          console.log("PhoneNumber: ", user.user.phoneNumber);
-          console.log("tokenId: ", tokenId);
+          // console.log("RequestId: ", requestId);
+          // console.log("PhoneNumber: ", user.user.phoneNumber);
+          // console.log("tokenId: ", tokenId);
           digio.submit(requestId, user.user.phoneNumber, tokenId);
           //polling
           pollInterval = setInterval(async () => {
@@ -88,9 +84,7 @@ export const AadharInitAction: ActionFunction<AadharInitPayload> = async (
                 ) {
                   console.log("Verification Completed");
                   clearInterval(pollInterval);
-                  const routeObj = await nextStepId(res.data.updatedApplicationObj.currentStepId)
-                  console.warn("**** NextStep Route ****", routeObj);
-                  await navigate(routeObj.routeId, routeObj.params);
+                  await navigate(ROUTE.KYC_ADDITIONAL_DETAILS, {});
                 }
               });
           }, 5000);
