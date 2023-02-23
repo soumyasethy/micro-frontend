@@ -8,7 +8,7 @@ import {getDigio, nextStepCredStepper, nextStepId} from "../../../configs/utils"
 import { api } from "../../../configs/api";
 import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
-import { getAppHeader } from "../../../configs/config";
+import {APP_CONFIG, getAppHeader} from "../../../configs/config";
 
 let pollInterval;
 
@@ -87,7 +87,7 @@ export const AadharInitAction: ActionFunction<AadharInitPayload> = async (
                   await navigate(ROUTE.KYC_ADDITIONAL_DETAILS, {});
                 }
               });
-          }, 5000);
+          }, APP_CONFIG.POLLING_INTERVAL);
         }
       }
     })
