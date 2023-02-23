@@ -150,7 +150,6 @@ export const onPageLoad: ActionFunction<DropDownPayload> = async (
     { headers: await getAppHeader() }
   );
 
-  console.log("documentUrlResponse", documentUrlResponse);
   documentUploadUrlMap = documentUrlResponse.data.stepResponseObject;
 
   // await SharedPropsService.setDocumentUploadUrlMap(documentUploadUrlMap);

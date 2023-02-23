@@ -59,7 +59,10 @@ export const getMoreMfPortfolio: ActionFunction<
     assetRepoMap[item.assetRepository] = true;
   }
   /*** Change page view type LAYOUT.LIST to LAYOUT.MODAL */
-  await SharedPropsService.setConfig(ConfigTokens.IS_MF_FETCH_BACK_ALLOWED, true);
+  await SharedPropsService.setConfig(
+    ConfigTokens.IS_MF_FETCH_BACK_ALLOWED,
+    true
+  );
   /*** switch between assetRepositoryType */
   for (const assetRepositoryType of Object.keys(assetRepoMap)) {
     if (assetRepositoryType === AssetRepositoryType.KARVY) {
@@ -72,6 +75,8 @@ export const getMoreMfPortfolio: ActionFunction<
   }
   /*** disable pan edit option */
   await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
+  await SharedPropsService.setConfig(ConfigTokens.IS_RTA_SWITCH_ENABLED, false);
+
   /*** Enable auto otp trigger when user lands on MF_Fetch */
   await SharedPropsService.setConfig(
     ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP,

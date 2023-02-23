@@ -2,7 +2,7 @@ import SharedPropsService from "../SharedPropsService";
 import { getScreenType } from "../configs/platfom-utils";
 import { Dimensions } from "react-native";
 import { SCREEN_SIZE } from "@voltmoney/types";
-import {IconTokens} from "@voltmoney/schema";
+import { IconTokens } from "@voltmoney/schema";
 
 export const __isTest__ = false;
 export const __isMock__ = false;
@@ -54,7 +54,6 @@ export const getAuthHeaders = () => ({
       : "Desktop",
 });
 export const getAppHeader = async () => ({
-
   "X-AppMode": "INVESTOR_VIEW",
   "X-AppPlatform": await SharedPropsService.getAppPlatform(),
   //"X-AppMode": "INVESTOR_VIEW",
@@ -71,7 +70,6 @@ export const getPartnerAuthHeaders = () => ({
   "X-AppPlatform": __isTest__ ? "VOLT_MOBILE_APP_TEST" : "VOLT_MOBILE_APP",
   "Content-Type": "application/json",
 });
-
 
 export const APP_CONFIG = {
   POLLING_INTERVAL: 5000,
@@ -103,39 +101,43 @@ export const PartnerAssetRepositoryMap = {
   },
 };
 
-
-
 export const AssetRepositoryMap = new Map([
   [
-      AssetRepositoryType.CAMS, {
-    value: AssetRepositoryType.CAMS,
-    NAME: "CAMS",
-    OTP_LENGTH: 5,
-    LIST: [],
-    isDisabled: false,
-    MODE_OF_COMM: "email",
-    PRIORITY: 1,
-    ICON: IconTokens.Cams,
-    IS_PLEDGED: false
-  }],
+    AssetRepositoryType.CAMS,
+    {
+      value: AssetRepositoryType.CAMS,
+      NAME: "CAMS",
+      OTP_LENGTH: 5,
+      LIST: [],
+      isDisabled: false,
+      MODE_OF_COMM: "email",
+      PRIORITY: 1,
+      ICON: IconTokens.Cams,
+      IS_PLEDGED: false,
+    },
+  ],
   [
-      AssetRepositoryType.KARVY, {
-    VALUE: AssetRepositoryType.KARVY,
-    NAME: "K-Fintech",
-    OTP_LENGTH: 6,
-    LIST: [],
-    isDisabled: false,
-    MODE_OF_COMM: "phone",
-    PRIORITY: 2,
-    ICON: IconTokens.Kfin,
-    IS_PLEDGED: false
-  }
-  ]]);
-
+    AssetRepositoryType.KARVY,
+    {
+      VALUE: AssetRepositoryType.KARVY,
+      NAME: "K-Fintech",
+      OTP_LENGTH: 6,
+      LIST: [],
+      isDisabled: false,
+      MODE_OF_COMM: "phone",
+      PRIORITY: 2,
+      ICON: IconTokens.Kfin,
+      IS_PLEDGED: false,
+    },
+  ],
+]);
 
 export const getPrimaryAssetRepository = async () => {
-  let [priorityMap] = new Map([...AssetRepositoryMap.entries()]
-      .sort((a,b) => a[1].PRIORITY - b[1].PRIORITY));
+  let [priorityMap] = new Map(
+    [...AssetRepositoryMap.entries()].sort(
+      (a, b) => a[1].PRIORITY - b[1].PRIORITY
+    )
+  );
   return priorityMap[0];
 };
 
@@ -145,7 +147,6 @@ export enum RegexConfig {
   PAN = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",
   AADHAR = "^[2-9]{1}[0-9]{11}$",
   ONLY_NUMBER = "^[0-9]*$",
-
 }
 
 export enum DeepLinks {
@@ -157,17 +158,18 @@ export enum DeepLinks {
 
 export enum ConfigTokens {
   IS_PAN_EDIT_ALLOWED = "IS_PAN_EDIT_ALLOWED",
+  IS_RTA_SWITCH_ENABLED = "IS_RTA_SWITCH_ENABLED",
   IS_MF_FETCH_AUTO_TRIGGER_OTP = "IS_MF_FETCH_AUTO_TRIGGER_OTP",
   IS_GOOGLE_LOGIN_ENABLED = "IS_GOOGLE_LOGIN_ENABLED",
   IS_KYC_PHOTO_VERIFICATION = "IS_KYC_PHOTO_VERIFICATION",
   IS_MF_FETCH_BACK_ALLOWED = "IS_MF_FETCH_BACK_ALLOWED",
   MIN_AMOUNT_ALLOWED = "MIN_AMOUNT_ALLOWED",
   MAX_AMOUNT_ALLOWED = "MAX_AMOUNT_ALLOWED",
-  IS_FIRST_JOURNEY = "IS_FIRST_JOURNEY"
+  IS_FIRST_JOURNEY = "IS_FIRST_JOURNEY",
   GET_UPDATES_ON_WHATSAPP_ALLOWED = "GET_UPDATES_ON_WHATSAPP_ALLOWED",
 }
 
 export enum ConfigValues {
   MinimumAmountAllowed = 25000,
-  AADHAR = "^[2-9]{1}[0-9]{11}$"
+  AADHAR = "^[2-9]{1}[0-9]{11}$",
 }

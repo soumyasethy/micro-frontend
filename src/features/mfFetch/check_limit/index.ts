@@ -61,6 +61,7 @@ export const template: (
   emailId: string,
   assetRepository: AssetRepositoryType,
   isPanEditAllowed: boolean,
+  isRTASwitchEnabled: boolean,
   isGoBackAllowed: boolean,
   setIsUserLoggedIn?: (isUserLoggedIn: boolean) => void
 ) => Promise<TemplateSchema> = async (
@@ -70,6 +71,7 @@ export const template: (
   emailId,
   assetRepository,
   isPanEditAllowed,
+  isRTASwitchEnabled,
   isGoBackAllowed
 ) => {
   return {
@@ -111,7 +113,7 @@ export const template: (
           type: WIDGET.BUTTON,
           position: POSITION.ABSOLUTE_BOTTOM,
         },
-        ...(isPanEditAllowed
+        ...(isRTASwitchEnabled
           ? [
               {
                 id: "space5",
@@ -314,6 +316,11 @@ export const checkLimitMF: PageType<any> = {
     const isPanEditAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_PAN_EDIT_ALLOWED
     );
+
+    const isRTASwitchEnabled: boolean = await SharedPropsService.getConfig(
+      ConfigTokens.IS_RTA_SWITCH_ENABLED
+    );
+
     const isGoBackAllowed: boolean = await SharedPropsService.getConfig(
       ConfigTokens.IS_MF_FETCH_BACK_ALLOWED
     );
@@ -326,6 +333,7 @@ export const checkLimitMF: PageType<any> = {
         emailId,
         assetRepository,
         isPanEditAllowed,
+        isRTASwitchEnabled,
         isGoBackAllowed,
         setIsUserLoggedIn
       )

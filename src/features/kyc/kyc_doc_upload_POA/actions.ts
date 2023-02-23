@@ -68,7 +68,6 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
   ) {
     return;
   } else {
-    console.log("else condition");
     user.linkedApplications[0].currentStepId = currentStepId;
     user.linkedApplications[0].stepStatusMap = stepStatusMap;
   }

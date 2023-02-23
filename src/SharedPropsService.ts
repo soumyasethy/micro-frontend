@@ -159,7 +159,7 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.IS_MF_FETCH_BACK_ALLOWED]: false,
     [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
-    [ConfigTokens.IS_FIRST_JOURNEY] : false
+    [ConfigTokens.IS_FIRST_JOURNEY]: false,
     [ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED]: true,
   },
   userDob: "",

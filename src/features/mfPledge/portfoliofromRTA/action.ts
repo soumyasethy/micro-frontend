@@ -94,7 +94,6 @@ export const goBackAction: ActionFunction<any> = async (
   goBack();
 };
 
-
 export const getMoreMfPortfolio: ActionFunction<
   GetMoreMfPortfolioPayload
 > = async (action, _datastore, { navigate, ...props }): Promise<any> => {
@@ -106,14 +105,16 @@ export const getMoreMfPortfolio: ActionFunction<
 
   /*** disable pan edit option */
   await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
+  await SharedPropsService.setConfig(ConfigTokens.IS_RTA_SWITCH_ENABLED, false);
+
   /*** Enable auto otp trigger when user lands on MF_Fetch */
   await SharedPropsService.setConfig(
     ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP,
     true
   );
   /*** Go to re-fetch portfolio from other Asset Type **/
-  await navigate(ROUTE.MF_FETCH_PORTFOLIO, {setIsUserLoggedIn: true,
-    assetRepository: action.payload.assetRepository });
-
+  await navigate(ROUTE.MF_FETCH_PORTFOLIO, {
+    setIsUserLoggedIn: true,
+    assetRepository: action.payload.assetRepository,
+  });
 };
-

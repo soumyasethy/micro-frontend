@@ -41,6 +41,12 @@ export const enhanceLimit: ActionFunction<EnhanceLimitPayload> = async (
   const routeObj = await nextStepId(response.data.currentStepId);
 
   await SharedPropsService.setConfig(ConfigTokens.IS_PAN_EDIT_ALLOWED, false);
+  await SharedPropsService.setConfig(ConfigTokens.IS_RTA_SWITCH_ENABLED, true);
+  await SharedPropsService.setConfig(
+    ConfigTokens.IS_MF_FETCH_BACK_ALLOWED,
+    false
+  );
+
   await navigate(routeObj.routeId, routeObj.params);
 };
 

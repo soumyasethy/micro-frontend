@@ -700,17 +700,15 @@ export const pledgeConfirmationMFV2: PageType<any> = {
     let pledgeInProgress = false;
     let mfPortfolioArray: AvailableCASItem[] = [];
     let portfolioForComputingProcessingCharge: AvailableCASItem[];
+    const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
+      (response) => ({
+        data: response,
+      })
+    );
 
     // call pledge limit api if stepResponseObject is null
-    if (stepResponseObject === undefined || stepResponseObject === null) {
+    if (pledgeLimitResponse.data.stepResponseObject.approvedCreditAmount > 0) {
       pledgeInProgress = true;
-      const authCAS: AuthCASModel =
-        await SharedPropsService.getAuthCASResponse();
-      const pledgeLimitResponse = authCAS
-        ? { data: authCAS }
-        : await fetchPledgeLimitRepo().then((response) => ({
-            data: response,
-          }));
       stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
     }
 
@@ -743,6 +741,8 @@ export const pledgeConfirmationMFV2: PageType<any> = {
         ...(stepResponseObject as StepResponseObject).pledgedPortfolio
       );
     }
+
+    console.log("mf portfolio array ", mfPortfolioArray);
 
     /// fetch processing fee
     const response = await network.post(
