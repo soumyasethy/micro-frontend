@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   IconProps,
   IconSizeTokens,
@@ -19,14 +11,14 @@ import {
   StackWidth,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../routes";
-import { ACTION } from "./types";
-import { SplashAction } from "./actions";
+import {ROUTE} from "../../routes";
+import {ACTION} from "./types";
+import {SplashAction} from "./actions";
 import _ from "lodash";
 import SharedPropsService from "../../SharedPropsService";
-import { clearAllData, getParameters } from "../../configs/utils";
-import { QUERY_PARAMS } from "../../configs/constants";
-import { ConfigTokens } from "../../configs/config";
+import {clearAllData, getParameters} from "../../configs/utils";
+import {QUERY_PARAMS} from "../../configs/constants";
+import {ConfigTokens} from "../../configs/config";
 
 const template: (isPartnerPlatform) => TemplateSchema = (
   isPartnerPlatform
@@ -112,6 +104,7 @@ export const splashScreenMF: PageType<any> = {
           ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED,
           false
         );
+        await SharedPropsService.setConfig(ConfigTokens.IS_PARTNER_PLATFORM, true);
       }
 
       /*** if ?user=8763666620 then autofill mobile number in login screen ****/
