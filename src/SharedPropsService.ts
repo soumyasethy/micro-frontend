@@ -60,6 +60,7 @@ type GlobalProps = {
     [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number;
     [ConfigTokens.IS_FIRST_JOURNEY]?: boolean;
     [ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED]?: boolean;
+    [ConfigTokens.IS_PARTNER_PLATFORM]?: boolean;
   };
   userDob?: string;
   creditLimit: number;
@@ -161,6 +162,7 @@ let _globalProps: GlobalProps = {
     [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
     [ConfigTokens.IS_FIRST_JOURNEY]: false,
     [ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED]: true,
+    [ConfigTokens.IS_PARTNER_PLATFORM]: false,
   },
   userDob: "",
   creditLimit: 25000,

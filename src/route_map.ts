@@ -85,6 +85,7 @@ import { nameMF } from "./features/enter_name";
 import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
 import { basicDetailsStartMF } from "./features/Dist_basicDetails/basicDetailsStart";
 import { DistributorClientListStepperMF } from "./features/DistributorClientList/ClientListStepper";
+import {introPageMF} from "./features/introPage";
 
 //import { portfolioUnlockMF } from "./features/selectPortfolio/portfolioUnlock";
 
@@ -189,4 +190,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.ENTER_NAME]: nameMF,
   [ROUTE.BASIC_DETAILS_START]: basicDetailsStartMF,
   //[ROUTE.PORTFOLIO_UNLOCK]: portfolioUnlockMF,
+  [ROUTE.INTRO_PAGE]: introPageMF
 };

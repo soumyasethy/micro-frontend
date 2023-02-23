@@ -47,12 +47,15 @@ import {
   logout,
 } from "./actions";
 import { fetchUserProfileRepo } from "./repo";
+import SharedPropsService from "../../../SharedPropsService";
+import {ConfigTokens} from "../../../configs/config";
 
 export const template: (
   userName: string,
   initialUserLetter: string,
-  profileData: ProfileDetails
-) => TemplateSchema = (userName, initialUserLetter, profileData) => ({
+  profileData: ProfileDetails,
+  isPartnerPlatform: boolean
+) => TemplateSchema = (userName, initialUserLetter, profileData, isPartnerPlatform) => ({
   layout: <Layout>{
     id: ROUTE.MY_PROFILE,
     type: LAYOUTS.LIST,
@@ -70,11 +73,9 @@ export const template: (
         id: "faqCard", type: WIDGET.CARD
  
       },
-      {
-        id: "contactCard", type: WIDGET.CARD,
-   
-      },
-
+        !isPartnerPlatform ? {
+          id: "contactCard", type: WIDGET.CARD,
+        }:{},
       {
         id: "bottomCard1", type: WIDGET.CARD,
         position: POSITION.ABSOLUTE_BOTTOM,
@@ -667,9 +668,10 @@ export const myProfileMF: PageType<any> = {
     const responseX = response ? response : await fetchUserProfileRepo();
     const userName: string = responseX.name;
     const initialUserLetter: string = userName.charAt(0);
+    const isPartnerPlatform = await SharedPropsService.getConfig(ConfigTokens.IS_PARTNER_PLATFORM);
     console.log("initialUserLetter", initialUserLetter);
     const profileData = responseX;
-    return Promise.resolve(template(userName, initialUserLetter, profileData));
+    return Promise.resolve(template(userName, initialUserLetter, profileData, isPartnerPlatform));
   },
 
   actions: {

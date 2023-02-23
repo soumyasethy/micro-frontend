@@ -25,8 +25,10 @@ import {
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
 import { contact, faqDetails, goBack } from "./actions";
+import SharedPropsService from "../../../SharedPropsService";
+import {ConfigTokens} from "../../../configs/config";
 
-export const template: () => TemplateSchema = () => {
+export const template: (isPartnerPlatform: boolean) => TemplateSchema = (isPartnerPlatform) => {
   return {
     layout: <Layout>{
       id: ROUTE.FAQ,
@@ -46,8 +48,8 @@ export const template: () => TemplateSchema = () => {
       ],
     },
     datastore: <Datastore>{
-      header: <HeaderProps>{
-        title: "FAQs",
+      header: !isPartnerPlatform ? <HeaderProps> {
+        title: "FAQ’s",
         isBackButton: true,
         type: HeaderTypeTokens.HEADERCTA,
         leftCta: "Contact Us",
@@ -74,6 +76,19 @@ export const template: () => TemplateSchema = () => {
         },
         leftAction: {
           type: ACTION.CONTACT,
+          payload: <{}>{
+            value: "",
+            widgetId: "continue",
+            isResend: false,
+          },
+          routeId: ROUTE.FAQ,
+        },
+      }: <HeaderProps> {
+        title: "FAQ’s",
+        isBackButton: true,
+        type: HeaderTypeTokens.HEADERCTA,
+        action: {
+          type: ACTION.BACK_BUTTON,
           payload: <{}>{
             value: "",
             widgetId: "continue",
@@ -215,7 +230,8 @@ export const template: () => TemplateSchema = () => {
 
 export const faqMF: PageType<any> = {
   onLoad: async () => {
-    return Promise.resolve(template());
+    const isPartnerPlatform = await SharedPropsService.getConfig(ConfigTokens.IS_PARTNER_PLATFORM);
+    return Promise.resolve(template(isPartnerPlatform));
   },
 
   actions: {

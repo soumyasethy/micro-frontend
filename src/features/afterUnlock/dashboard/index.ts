@@ -1,17 +1,8 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import _ from "lodash";
 import {
   AmountCardProps,
   AmountCardTypeTokens,
-  BorderRadiusTokens,
   BottomTabProps,
   BottomTabStateToken,
   ButtonProps,
@@ -26,7 +17,6 @@ import {
   IconTokens,
   MessageProps,
   PaddingProps,
-  PaddingSizeTokens,
   PromoCardProps,
   RepaymentProps,
   ShadowTypeTokens,
@@ -42,26 +32,13 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import {
-  ACTION,
-  CreditDisbursalStatus,
-  CreditPayload,
-  NavPayload,
-  RepaymentPayload,
-} from "./types";
-import {
-  goBack,
-  navigate,
-  OpenContactUS,
-  OpenProfile,
-  repayment,
-  withdrawNow,
-} from "./actions";
-import { User } from "../../login/otp_verify/types";
+import {ROUTE} from "../../../routes";
+import {ACTION, CreditDisbursalStatus, CreditPayload, NavPayload, RepaymentPayload,} from "./types";
+import {goBack, navigate, OpenContactUS, OpenProfile, repayment, withdrawNow,} from "./actions";
+import {User} from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
-import { api } from "../../../configs/api";
-import { getAppHeader } from "../../../configs/config";
+import {api} from "../../../configs/api";
+import {ConfigTokens, getAppHeader} from "../../../configs/config";
 
 export const template: (
   availableCreditAmount: number,
@@ -73,7 +50,8 @@ export const template: (
   isDisbursalRequestAllowed: boolean,
   amountDisbursal: number,
   processingFees: number,
-  isFirstJourney: boolean
+  isFirstJourney: boolean,
+  isPartnerPlatform: boolean
 ) => TemplateSchema = (
   availableCreditAmount,
   actualLoanAmount,
@@ -84,7 +62,8 @@ export const template: (
   isDisbursalRequestAllowed: boolean,
   amountDisbursal: number,
   processingFess: number,
-  isFirstJourney
+  isFirstJourney,
+  isPartnerPlatform
 ) => {
   return {
     layout: <Layout>{
@@ -235,7 +214,7 @@ export const template: (
         justifyContent: StackJustifyContent.flexEnd,
         padding: { horizontal: SizeTypeTokens.LG },
         widgetItems: [
-          { id: "contactUs", type: WIDGET.TAG },
+            ...!isPartnerPlatform ? [{ id: "contactUs", type: WIDGET.TAG }]:[],
           { id: "contactUsSpace", type: WIDGET.SPACE },
           { id: "leadIcon", type: WIDGET.BUTTON },
         ],
@@ -529,6 +508,7 @@ export const dashboardMF: PageType<any> = {
       "linkedCredits[0].processingCharges",
       0
     );
+    const isPartnerPlatform = await SharedPropsService.getConfig(ConfigTokens.IS_PARTNER_PLATFORM)
     await SharedPropsService.setUser(user);
 
     let isPendingDisbursalApproval = false;
@@ -593,7 +573,8 @@ export const dashboardMF: PageType<any> = {
         isDisbursalRequestAllowed,
         amountDisbursal,
         processingFees,
-        isFirstJourney
+        isFirstJourney,
+        isPartnerPlatform
       )
     );
   },
