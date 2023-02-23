@@ -46,9 +46,8 @@ import { api } from "../../../configs/api";
 import { ConfigTokens, getAppHeader } from "../../../configs/config";
 import { getTotalLimit } from "../portfolio/actions";
 import _ from "lodash";
-import { addCommasToNumber } from "../../../configs/utils";
+import {addCommasToNumber, convertToKLacsCore} from "../../../configs/utils";
 import { OtpPayloadForPledgeConfirm } from "../pledge_confirmation/types";
-import { AuthCASModel } from "../../../types/AuthCASModel";
 import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
 import { getDesiredValue } from "../portfolio_readonly/actions";
 
@@ -216,7 +215,7 @@ export const template: (
       infoIconSpace2: <SpaceProps>{ size: SizeTypeTokens.Size10 },
       continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
       infoLabel2Min: <TypographyProps>{
-        label: `Minimum amount required to proceed is ₹${minAmount}`,
+        label: `Minimum allowed credit limit is ₹ ${convertToKLacsCore(minAmount)}`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
         fontColor: ColorTokens.Grey_Night,
@@ -224,7 +223,7 @@ export const template: (
         lineHeight: 18,
       },
       infoLabel2Max: <TypographyProps>{
-        label: `Maximum amount required to proceed is ₹${maxAmount}`,
+        label: `Maximum allowed credit limit is ₹ ${convertToKLacsCore(maxAmount)}`,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "400",
         fontColor: ColorTokens.Grey_Night,
@@ -675,7 +674,7 @@ export const template: (
         fontWeight: "700",
         fontFamily: FontFamilyTokens.Inter,
         fontSize: FontSizeTokens.SM,
-        type: showLessLimit
+        type: (showLessLimit||showMaxLimit)
           ? ButtonTypeTokens.LargeOutline
           : ButtonTypeTokens.LargeFilled,
         width: ButtonWidthTypeToken.FULL,

@@ -72,7 +72,7 @@ export const sendOtp: ActionFunction<ContinuePayload> = async (
         urlParams.length > 1 ? `&${urlParams[1]}` : ""
       }`,
       {
-        headers: getAuthHeaders(),
+        headers: await getAuthHeaders(),
       }
     );
 

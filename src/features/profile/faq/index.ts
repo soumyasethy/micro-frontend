@@ -137,12 +137,12 @@ export const template: (isPartnerPlatform: boolean) => TemplateSchema = (isPartn
       startDetails: <AccordionProps>{
         title: "What is loan against Mutual Funds?",
         description:
-          "Loan Against Mutual Funds (LAMF) allows you to borrow cash against your mutual fund investments as collateral. You can use Volt to lien mark your mutual funds digitally to avail an instant limit without losing the ownership of your mutual funds and all the associated benefits with it. 'Funds will be made available in the form of an overdraft facility. You can utilize the required amount and repay anytime without any prepayment charges. Interest is charged only on the utilized amount and for the duration the funds are utilized. 'You can select from a list of 4500+ approved mutual funds from different asset management companies (AMCs) in India. You can lien mark mutual funds registered with both CAMS & KFintech (earlier known as KARVY), Registrars & Transfer Agents (RTAs). We recommend digital LAMF to meet any of your financial requirements like travel, gadget purchase, balance transfer for your high interest loans, medical emergency.",
+          "Loan Against Mutual Funds (LAMF) allows you to borrow cash against your mutual fund investments as collateral. You can use us to lien mark your mutual funds digitally to avail an instant limit without losing the ownership of your mutual funds and all the associated benefits with it. 'Funds will be made available in the form of an overdraft facility. You can utilize the required amount and repay anytime without any prepayment charges. Interest is charged only on the utilized amount and for the duration the funds are utilized. 'You can select from a list of 4500+ approved mutual funds from different asset management companies (AMCs) in India. You can lien mark mutual funds registered with both CAMS & KFintech (earlier known as KARVY), Registrars & Transfer Agents (RTAs). We recommend digital LAMF to meet any of your financial requirements like travel, gadget purchase, balance transfer for your high interest loans, medical emergency.",
         icon: IconTokens.DownArrow,
         onPress: Function,
       },
       startDetails1: <AccordionProps>{
-        title: "What are the conditions to get a loan from Volt?",
+        title: "What are the conditions to get a loan from us?",
         description:
           "- You should be between 18 and 65 years of age. \n- Your entire mutual fund portfolio should not be less than ₹50,000. \n- You should hold Mutual Funds approved with CAMS & Kfintech (RTAs). Debt & ELSS funds (units held > 3 years) are also eligible. \n- Joint mutual fund holders are not eligible for loan.\n- You should be an Indian resident.\n- There is no minimum credit score and income requirement.",
         icon: IconTokens.DownArrow,
@@ -165,7 +165,7 @@ export const template: (isPartnerPlatform: boolean) => TemplateSchema = (isPartn
       startDetails4: <AccordionProps>{
         title: "Do I have to pay interest on the complete line amount?",
         description:
-          "No, you do not have to pay interest on the complete line amount. Volt in completed flexible for the customer and interest is only to be paid on the amount used. Interest is calculated daily based on the loan outstanding you have day end. Some scenarios to explain:\n\n- If loan amount at day end is zero, there will be no interest charged for that day. \n- If amount is withdrawn, used and repaid in 10 days, you’ll be only charged interest for 10 days.",
+          "No, you do not have to pay interest on the complete line amount. Completely flexible for the customer and interest is only to be paid on the amount used. Interest is calculated daily based on the loan outstanding you have day end. Some scenarios to explain:\n\n- If loan amount at day end is zero, there will be no interest charged for that day. \n- If amount is withdrawn, used and repaid in 10 days, you’ll be only charged interest for 10 days.",
         icon: IconTokens.DownArrow,
         onPress: Function,
       },
@@ -193,12 +193,12 @@ export const template: (isPartnerPlatform: boolean) => TemplateSchema = (isPartn
       startDetails8: <AccordionProps>{
         title: "Which mutual fund schemes are eligible to take loans?",
         description:
-          "More than 4500+ mutual funds from different asset management companies (AMCs) in India are eligible to take loans with Volt. Not eligible - Tax Saving Fund units with date of purchase less than 3 years, i.e., not matured.",
+          "More than 4500+ mutual funds from different asset management companies (AMCs) in India are eligible to take loans with us. Not eligible - Tax Saving Fund units with date of purchase less than 3 years, i.e., not matured.",
         icon: IconTokens.DownArrow,
         onPress: Function,
       },
       startDetails9: <AccordionProps>{
-        title: "How do I check my limit with Volt?",
+        title: "How do I check my limit with us?",
         description:
           "We just need your PAN, mobile number and MF registered email ID to check your limit. This is done just after signing up in the journey so you know during the journey what you are getting.",
         icon: IconTokens.DownArrow,
@@ -213,7 +213,7 @@ export const template: (isPartnerPlatform: boolean) => TemplateSchema = (isPartn
       startDetail11: <AccordionProps>{
         title: "Can I lien mark any mutual fund units of my choice?",
         description:
-          "Volt is completely flexible in choosing which mutual funds units you want to lien mark for setting up the limit. You can change the schemes and units and have your own allocation for lien marking.",
+          "Completely flexible in choosing which mutual funds units you want to lien mark for setting up the limit. You can change the schemes and units and have your own allocation for lien marking.",
         icon: IconTokens.DownArrow,
         onPress: Function,
       },
