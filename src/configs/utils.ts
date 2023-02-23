@@ -162,7 +162,7 @@ export const distributorStepperRepo = async () => {
   let message = "We’re processing. Check after sometime.";
   /* API response needed for mapping
   const user = await SharedPropsService.getUser();
- 
+
   if (
     (user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION ===
       StepperStateToken.COMPLETED ||
@@ -629,4 +629,11 @@ export const getDigio:ImportScriptCustomCallbackType = (
   let digioObj = new Digio(digioOptions);
   //@ts-ignore
   window.digio = digioObj;
+}
+
+export function convertToKLacsCore(val) {
+  if(val >= 10000000) val = (val/10000000).toFixed(2) + ' Cr';
+  else if(val >= 100000) val = (val/100000).toFixed(2) + ' Lac';
+  else if(val >= 1000) val = (val/1000).toFixed(2) + ' K';
+  return val;
 }
