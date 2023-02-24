@@ -26,6 +26,7 @@ import {
 import {ROUTE} from "../../routes";
 import {ACTION} from "./type";
 import {ApplyNowAction} from "./action";
+import SharedPropsService from "../../SharedPropsService";
 
 export const template: (props:any)=>TemplateSchema = (props)=>({
     layout: <Layout>{
@@ -203,6 +204,10 @@ export const template: (props:any)=>TemplateSchema = (props)=>({
 
 export const introPageMF: PageType<any> = {
     onLoad: async (_, props) => {
+        const token = await SharedPropsService.getToken()
+        if (token) {
+            await _.navigate(ROUTE.SPLASH_SCREEN, props);
+        }
         return Promise.resolve(template(props))
     },
     actions: {
