@@ -1,8 +1,12 @@
 import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
+  AspectRatioToken,
   IconProps,
   IconSizeTokens,
   IconTokens,
+  LottieProps,
+  LottieSizeTokens,
+  LottieTokens,
   StackAlignItems,
   StackHeight,
   StackJustifyContent,
@@ -27,9 +31,13 @@ const template: (isPartnerPlatform) => TemplateSchema = (
     id: ROUTE.SPLASH_SCREEN,
     type: LAYOUTS.LIST,
     widgets: [
-      {
+       !isPartnerPlatform ? {
         id: "splashStack",
         type: WIDGET.STACK,
+        position: POSITION.ABSOLUTE_CENTER,
+      } : {
+        id: "Loading",
+        type: WIDGET.LOTTIE,
         position: POSITION.ABSOLUTE_CENTER,
       },
     ],
@@ -42,6 +50,13 @@ const template: (isPartnerPlatform) => TemplateSchema = (
       justifyContent: StackJustifyContent.center,
       alignItems: StackAlignItems.center,
       widgetItems: isPartnerPlatform ? [] : [{ id: "icon", type: WIDGET.ICON }],
+    },
+    Loading: <LottieProps> {
+      uri: LottieTokens.LoadingSplash,
+      size: LottieSizeTokens.MD,
+      aspectRatio: AspectRatioToken.A1_1,
+      loop: true,
+      autoplay: true
     },
     icon: <IconProps & WidgetProps>{
       name: IconTokens.Volt,
@@ -88,7 +103,8 @@ export const splashScreenMF: PageType<any> = {
       const partnerPlatform = urlParams
         .toLowerCase()
         .includes(QUERY_PARAMS.PARTNER_PLATFORM);
-      const platform = urlParams.includes(QUERY_PARAMS.PLATFORM);
+      const platform = urlParams.toLowerCase().includes(QUERY_PARAMS.PLATFORM);
+
 
       if (partnerPlatform && platform) {
         isPartnerPlatform = true;
