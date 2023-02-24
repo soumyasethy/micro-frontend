@@ -101,7 +101,7 @@ export const template: () => TemplateSchema = () => {
       startDetails: <StackProps>{
         type: StackType.row,
         width: StackWidth.FULL,
-        flex: 1,
+        justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
           { id: "infoItems", type: WIDGET.STACK },
           { id: "cta", type: WIDGET.STACK },
@@ -194,6 +194,7 @@ export const template: () => TemplateSchema = () => {
       privacyDetails: <StackProps>{
         type: StackType.row,
         width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
           { id: "privacyItems", type: WIDGET.STACK },
           { id: "ctaprivacy", type: WIDGET.STACK },
