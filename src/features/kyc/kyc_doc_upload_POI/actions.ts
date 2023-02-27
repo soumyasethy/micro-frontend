@@ -16,6 +16,7 @@ import { getAppHeader } from "../../../configs/config";
 import { nextStepCredStepper } from "../../../configs/utils";
 import _ from "lodash";
 
+
 let documentUploadUrlMap = {
   frontDocURL: null,
   backDocURL: null,
@@ -81,9 +82,17 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
 
 export const documentPickerAction: ActionFunction<
   DocumentUploadPayload
-> = async (action, _datastore, { network, setDatastore }): Promise<any> => {
+> = async (action, _datastore, { network,navigate, setDatastore }): Promise<any> => {
+  console.log("payload",action.payload)
+  console.log("payloads",action.payload.value)
+
   if (action.payload.value) {
-    const fileExtension = action.payload.value.name.split(".").pop();
+    let fileExtension = '';
+    if(action.payload.value.name === undefined){
+       fileExtension = action.payload.value.fileName.split(".").pop();
+    }else{
+       fileExtension = action.payload.value.name.split(".").pop();
+    }
     await setDatastore(ROUTE.KYC_DOCUMENT_UPLOAD_POI, action.payload.widgetID, <
       DocumentPickerProps
     >{
