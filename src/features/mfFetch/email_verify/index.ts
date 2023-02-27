@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   ButtonBaseProps,
   ButtonProps,
@@ -22,7 +14,6 @@ import {
   SizeTypeTokens,
   SpaceProps,
   StackAlignItems,
-  StackFlexWrap,
   StackHeight,
   StackJustifyContent,
   StackProps,
@@ -31,9 +22,9 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTIONS, OtherEmail } from "./types";
-import { loginGoogle, otherEmail } from "./actions";
+import {ROUTE} from "../../../routes";
+import {ACTIONS, OtherEmail} from "./types";
+import {loginGoogle, otherEmail} from "./actions";
 
 export const template: (applicationId: string) => TemplateSchema = (
   applicationId
@@ -53,9 +44,8 @@ export const template: (applicationId: string) => TemplateSchema = (
     stack_root: <StackProps>{
       type: StackType.column,
       width: StackWidth.FULL,
-      height: StackHeight.FULL,
-      flexWrap: StackFlexWrap.wrap,
-      justifyContent: StackJustifyContent.spaceAround,
+      height: StackHeight.MATCH_PARENT,
+      justifyContent: StackJustifyContent.center,
       alignItems: StackAlignItems.flexStart,
       widgetItems: [
         // { id: "space0", type: WIDGET.SPACE },

@@ -21,32 +21,26 @@ export const listItems = [
   {
     id: "titleSpace1",
     type: WIDGET.SPACE,
-    position: POSITION.CENTER,
   },
   {
     id: "listItemStack1",
     type: WIDGET.STACK,
-    position: POSITION.CENTER,
   },
   {
     id: "titleSpace2",
     type: WIDGET.SPACE,
-    position: POSITION.CENTER,
   },
   {
     id: "listItemStack2",
     type: WIDGET.STACK,
-    position: POSITION.CENTER,
   },
   {
     id: "titleSpace3",
     type: WIDGET.SPACE,
-    position: POSITION.CENTER,
   },
   {
     id: "listItemStack3",
     type: WIDGET.STACK,
-    position: POSITION.CENTER,
   },
 ];
 export const buildDataStore = () => {

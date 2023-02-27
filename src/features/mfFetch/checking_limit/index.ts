@@ -1,14 +1,7 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, TemplateSchema,} from "@voltmoney/types";
 
-import { ROUTE } from "../../../routes";
-import { commonTemplates } from "../../../configs/common";
+import {ROUTE} from "../../../routes";
+import {commonTemplates} from "../../../configs/common";
 import {
   FontFamilyTokens,
   FontSizeTokens,
@@ -23,9 +16,9 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { assetsMap } from "../../../configs/assets";
-import { addListItemsOnUI, navigateToNext } from "./actions";
-import { ACTION } from "./types";
+import {assetsMap} from "../../../configs/assets";
+import {addListItemsOnUI, navigateToNext} from "./actions";
+import {ACTION} from "./types";
 
 export const template: () => TemplateSchema = () => {
   return {
@@ -37,20 +30,17 @@ export const template: () => TemplateSchema = () => {
         {
           id: "topSpace",
           type: WIDGET.SPACE,
-          position: POSITION.CENTER,
         },
         {
-          id: "placeholder",
-          type: WIDGET.IMAGE,
-          position: POSITION.CENTER,
-          padding: { horizontal: 0 },
+          id: 'placeholderStack',
+          type: WIDGET.STACK,
         },
+
         {
           id: "placeholderSpace",
           type: WIDGET.SPACE,
-          position: POSITION.CENTER,
         },
-        { id: "titleStack", type: WIDGET.STACK, position: POSITION.CENTER },
+        { id: "titleStack", type: WIDGET.STACK },
       ],
     },
     datastore: <Datastore>{
@@ -62,11 +52,23 @@ export const template: () => TemplateSchema = () => {
         height: 180,
       },
       placeholderSpace: <SpaceProps>{ size: SizeTypeTokens.Size32 },
+      placeholderStack: <StackProps> {
+        type: StackType.row,
+        width: StackWidth.MATCH_PARENT,
+        justifyContent: StackJustifyContent.center,
+        widgetItems: [
+          {
+            id: "placeholder",
+            type: WIDGET.IMAGE,
+            padding: { horizontal: 0 },
+          },
+        ]
+      },
       titleStack: <StackProps>{
         type: StackType.column,
-        width: StackWidth.CONTENT,
+        width: StackWidth.MATCH_PARENT,
         justifyContent: StackJustifyContent.flexStart,
-        alignItems: StackAlignItems.flexStart,
+        alignItems: StackAlignItems.center,
         widgetItems: [{ id: "title", type: WIDGET.TEXT }],
       },
       title: <TypographyProps>{
