@@ -223,7 +223,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
 
   if (
     action.payload.value.length > 0 &&
-    parseFloat(action.payload.value) < availableCreditAmount
+    parseFloat(action.payload.value) <= availableCreditAmount
   ) {
     await setDatastore(ROUTE.WITHDRAW_AMOUNT, "continue", <ButtonProps>{
       type: ButtonTypeTokens.LargeFilled,
@@ -243,7 +243,8 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
   await setDatastore(ROUTE.WITHDRAW_AMOUNT, "interestItem", <TextInputProps>{
     value: `${monthlyInterest || 0}`,
   });
-  if (disbursalAmount > recommendedAmount) {
+  if (disbursalAmount > availableCreditAmount) {
+    console.log("available credit amount is", disbursalAmount,availableCreditAmount)
     await appendWidgets(
       ROUTE.WITHDRAW_AMOUNT,
       {
