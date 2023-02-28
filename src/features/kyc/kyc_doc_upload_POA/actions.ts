@@ -14,7 +14,8 @@ import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { StepStatusMap, User } from "../../login/otp_verify/types";
 import { getAppHeader } from "../../../configs/config";
-import { nextStepCredStepper } from "../../../configs/utils";
+import { nextStepCredStepper, uploadToS3Bucket } from "../../../configs/utils";
+import { Platform } from "react-native";
 
 let documentUploadUrlMap = {
   frontDocURL: null,
@@ -84,12 +85,63 @@ export const documentPickerAction: ActionFunction<
   DocumentUploadPayload
 > = async (action, _datastore, { network, setDatastore }): Promise<any> => {
   if (action.payload.value) {
-    const fileExtension = action.payload.value.name.split(".").pop();
+    let fileExtension;
+    if (action.payload.value.name === undefined) {
+      fileExtension = action.payload.value.fileName.split(".").pop();
+    } else {
+      fileExtension = action.payload.value.name.split(".").pop();
+    }
     await setDatastore(ROUTE.KYC_DOCUMENT_UPLOAD_POA, action.payload.widgetID, <
       DocumentPickerProps
     >{
       state: DocumentPickerState.LOADING,
     });
+
+    if (Platform.OS === "android") {
+      uploadToS3Bucket(
+          action.payload.widgetID === "frontSide"
+              ? documentUploadUrlMap.frontDocURL
+              : documentUploadUrlMap.backDocURL,
+        action.payload.value,
+        await getContentType(fileExtension)
+      )
+        .then(async () => {
+          if (action.payload.widgetID === "frontSide") {
+            validation.isFrontDocUploaded = true;
+          }
+           if (action.payload.widgetID === "backSide") {
+            validation.isBackDocUploaded = true;
+          }
+          if (documentUploadUrlMap.backDocURL === null) {
+            validation.isBackDocUploaded = true;
+          }
+          await setDatastore(
+            ROUTE.KYC_DOCUMENT_UPLOAD_POI,
+            action.payload.widgetID,
+            <DocumentPickerProps>{
+              state: DocumentPickerState.SUCCESS,
+            }
+          );
+          await setDatastore(ROUTE.KYC_DOCUMENT_UPLOAD_POI, "continue", <
+            ButtonProps
+          >{
+            type: ButtonTypeTokens.LargeFilled,
+          });
+
+          return;
+        })
+        .catch(async () => {
+          await setDatastore(
+            ROUTE.KYC_DOCUMENT_UPLOAD_POI,
+            action.payload.widgetID,
+            <DocumentPickerProps>{
+              state: DocumentPickerState.DEFAULT,
+            }
+          );
+        });
+
+      // uploadImage(action.payload.value,documentUploadUrlMap.frontDocURL, fileExtension, action.payload.value.type)
+    }
     const response = await network.put(
       action.payload.widgetID === "frontSide"
         ? documentUploadUrlMap.frontDocURL

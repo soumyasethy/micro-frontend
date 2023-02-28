@@ -635,3 +635,40 @@ export function convertToKLacsCore(val, allowedDecimals = 0) {
     else if (val >= 1000) val = (val / 1000).toFixed(allowedDecimals) + ' K'
     return val
 }
+
+export const  uploadToS3Bucket = function (url , uri, contentType){
+  return new Promise(function (resolve, reject) {
+    console.log("Url received", url)
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', url);
+    console.log('OPENED UPLOAD GATE', xhr.status);
+
+    xhr.onprogress = function () {
+      console.log('LOADING UPLOAD GATE', xhr.status);
+    };
+
+    xhr.onerror = function (){
+      console.log('ERROR', xhr.status);
+
+    }
+    xhr.onload = function () {
+      console.log('DONE', xhr.status);
+    };
+    xhr.setRequestHeader("Content-Type", contentType )
+    xhr.send({uri: uri.uri, type: uri.type, name: uri.fileName});
+
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          resolve("Successfully fetched")
+        } else {
+          reject("Error in upload")
+        }
+      }
+      else {
+        console.log("totally outside")
+      }
+    }
+  });
+};
