@@ -100,7 +100,11 @@ export const template: (
                 borderColor: ColorTokens.Primary_05,
                 borderWidth: 1,
                 borderRadius: BorderRadiusTokens.BR2,
-                shadow: ShadowTypeTokens.E2,
+                shadow: ShadowTypeTokens.E7,
+                margin: {
+                  top: SizeTypeTokens.NONE,
+                  bottom: SizeTypeTokens.NONE
+                },
                 body: {
                     widgetItems: [{ id: 'list1', type: WIDGET.LIST_ITEM }],
                 },
@@ -149,7 +153,11 @@ export const template: (
                 borderWidth: 1,
                 borderColor: ColorTokens.Primary_05,
                 borderRadius: BorderRadiusTokens.BR2,
-                shadow: ShadowTypeTokens.E2,
+                shadow: ShadowTypeTokens.E7,
+                margin: {
+                  top: SizeTypeTokens.NONE,
+                  bottom: SizeTypeTokens.NONE
+                },
                 body: {
                     widgetItems: [
                         // { id: "imageOrder1", type: WIDGET.STACK },
@@ -189,7 +197,11 @@ export const template: (
                 borderRadius: BorderRadiusTokens.BR2,
                 borderWidth: 1,
                 borderColor: ColorTokens.Primary_05,
-                shadow: ShadowTypeTokens.E2,
+                shadow: ShadowTypeTokens.E7,
+                margin: {
+                  top: SizeTypeTokens.NONE,
+                  bottom: SizeTypeTokens.NONE
+                },
                 body: {
                     widgetItems: [{ id: 'list3', type: WIDGET.LIST_ITEM }],
                 },
