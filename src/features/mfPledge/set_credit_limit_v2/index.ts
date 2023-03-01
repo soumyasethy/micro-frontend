@@ -315,7 +315,9 @@ export const template: (
       },
       portfolioValue: <StackProps>{
         type: StackType.row,
+        width: StackWidth.FULL,
         alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
           { id:  "space1", type: WIDGET.STACK },
 
@@ -324,7 +326,7 @@ export const template: (
       },
       space1: <StackProps>{
         type: StackType.row,
-
+        width: StackWidth.CONTENT,
         widgetItems: [{ id: "key1", type: WIDGET.TEXT }],
       },
       interestOptions: <StackProps> {
@@ -874,6 +876,8 @@ export const template: (
       },
       availableValue: <StackProps>{
         type: StackType.row,
+        width: StackWidth.FULL,
+        justifyContent: StackJustifyContent.spaceBetween,
         widgetItems: [
           { id: "space2", type: WIDGET.STACK },
           { id: "value2", type: WIDGET.TEXT },
@@ -881,6 +885,7 @@ export const template: (
       },
       space2: <StackProps>{
         type: StackType.row,
+        width: StackWidth.CONTENT,
         // },
         widgetItems: [{ id: "key2", type: WIDGET.TEXT }],
       },
