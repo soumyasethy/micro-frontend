@@ -11,11 +11,13 @@ import {ImportScriptSrc} from "../../configs/constants";
 export const SplashAction: ActionFunction<any> = async (
   action,
   _datastore,
-  { network, navigate, asyncStorage, importScript }
+  { network, navigate, asyncStorage, importScript, metaData }
 ): Promise<any> => {
   // const isSeen = await SharedPropsService.getOnboarding();
   // if (isSeen) {
-  importScript(ImportScriptSrc.DIGIO_SCRIPT);
+  if(metaData.platform.OS ==='web') {
+    importScript(ImportScriptSrc.DIGIO_SCRIPT);
+  }
   const accessToken = await asyncStorage.get(StoreKey.accessToken);
   if (accessToken) {
     const body = {}; /*** NOT PASSING REF CODE HERE ***/
