@@ -30,24 +30,26 @@ export const verifyKycSummary: ActionFunction<any> = async (
     const applicationId = (await SharedPropsService.getUser())
         .linkedApplications[0].applicationId
 
-    const response = await network.get(
-        `${api.kycSummaryVerify}${applicationId}`,
-        { headers: await getAppHeader() },
-    )
-    await setDatastore(ROUTE.KYC_SUMMARY, 'continue', <ButtonProps>{
-        loading: false,
-    })
-    if (_.get(response, 'data.updatedApplicationObj.currentStepId', false)) {
-        const user: User = await SharedPropsService.getUser()
-        user.linkedApplications[0].stepStatusMap.KYC_SUMMARY =
-            StepperStateToken.COMPLETED
-        user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION =
-            StepperStateToken.COMPLETED
-        user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION =
-            StepperStateToken.COMPLETED
-        user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
-            StepperStateToken.IN_PROGRESS
-        await SharedPropsService.setUser(user)
+  const response = await network.get(
+    `${api.kycSummaryVerify}${applicationId}`,
+    { headers: await getAppHeader() }
+  );
+  await setDatastore(ROUTE.KYC_SUMMARY, "continue", <ButtonProps>{
+    loading: false,
+  });
+  if (_.get(response, "data.updatedApplicationObj.currentStepId", false)) {
+    const user: User = await SharedPropsService.getUser();
+    user.linkedApplications[0].stepStatusMap.KYC_SUMMARY =
+      StepperStateToken.COMPLETED;
+    user.linkedApplications[0].stepStatusMap.KYC_AADHAAR_VERIFICATION =
+      StepperStateToken.COMPLETED;
+    user.linkedApplications[0].stepStatusMap.KYC_PHOTO_VERIFICATION =
+      StepperStateToken.COMPLETED;
+    user.linkedApplications[0].stepStatusMap.BANK_ACCOUNT_VERIFICATION =
+      StepperStateToken.IN_PROGRESS;
+    user.linkedApplications[0].currentStepId =
+      _.get(response, "data.updatedApplicationObj.currentStepId");
+    await SharedPropsService.setUser(user);
 
         analytics(AnalyticsEventTracker.borrower_kyc_complete['Event Name'], {
             ...AnalyticsEventTracker.borrower_kyc_complete,
