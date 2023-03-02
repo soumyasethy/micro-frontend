@@ -72,12 +72,9 @@ export const template: (
         position: POSITION.ABSOLUTE_TOP,
       },
       {
-        id: "creditLimitCard",
-        type: WIDGET.CARD,
-      },
-      {
-        id: "creditLimitCard2",
-        type: WIDGET.CARD,
+        id: "creditLimitStack",
+        type: WIDGET.STACK,
+        
       },
       {
         id: "space",
@@ -106,21 +103,28 @@ export const template: (
         payload: {},
       },
     },
-    creditLimitCard: <CardProps>{
-      borderTopRightRadius: BorderRadiusTokens.BR3,
-      borderTopLeftRadius: BorderRadiusTokens.BR3,
-      bgColor: ColorTokens.Grey_Milk_1,
+    creditLimitStack:<StackProps>{
       width: StackWidth.FULL,
+      type: StackType.row,
+      bgColor: ColorTokens.Grey_Milk_1,
       padding: {
         top: SizeTypeTokens.LG,
-        bottom: SizeTypeTokens.Size6,
-        left: SizeTypeTokens.LG,
-        right: SizeTypeTokens.LG,
+         left: SizeTypeTokens.LG,
+         right: SizeTypeTokens.LG,
       },
-      bodyOrientation: CardOrientation.HORIZONTAL,
-      body: {
-        widgetItems: [{ id: "stack2", type: WIDGET.STACK }],
+      borderConfig:{
+        borderRadius: BorderRadiusTokens.BR3,
+        borderWidth: {
+          		all: SizeTypeTokens.XS,
+          	},
+        borderColor: ColorTokens.Grey_Milk_1
       },
+      justifyContent: StackJustifyContent.spaceBetween,
+      widgetItems: [
+        { id: "head", type: WIDGET.STACK },
+        { id: "headSpace", type: WIDGET.SPACE },
+        { id: "tail", type: WIDGET.STACK },
+      ],
     },
     stack2: <StackProps>{
       width: StackWidth.FULL,
@@ -132,19 +136,20 @@ export const template: (
         { id: "tail", type: WIDGET.STACK },
       ],
     },
+    headSpace:<SpaceProps>{
+      size: SizeTypeTokens.XXXXXXL
+    },
     head: <StackProps>{
-      width: StackWidth.FULL,
+      width: StackWidth.CONTENT,
       type: StackType.column,
+      //alignItems: StackAlignItems.flexStart,
       widgetItems: [
         { id: "Value", type: WIDGET.TEXT },
         { id: "Value2", type: WIDGET.TEXT },
       ],
     },
-    headSpace: <SpaceProps>{
-      size: SizeTypeTokens.XXXL,
-    },
     tail: <StackProps>{
-      width: StackWidth.FULL,
+      width: StackWidth.CONTENT,
       type: StackType.column,
       widgetItems: [
         { id: "AvailableCreditLimit", type: WIDGET.TEXT },
@@ -170,22 +175,6 @@ export const template: (
       fontColor: ColorTokens.Grey_Charcoal,
       fontSize: FontSizeTokens.SM,
       lineHeight: 18,
-    },
-    creditLimitCard2: <CardProps>{
-      borderBottomRightRadius: BorderRadiusTokens.BR3,
-      borderBottomLeftRadius: BorderRadiusTokens.BR3,
-      bgColor: ColorTokens.Grey_Milk_1,
-      width: StackWidth.FULL,
-      padding: {
-        top: SizeTypeTokens.NONE,
-        bottom: SizeTypeTokens.LG,
-        left: SizeTypeTokens.LG,
-        right: SizeTypeTokens.LG,
-      },
-      bodyOrientation: CardOrientation.HORIZONTAL,
-      body: {
-        widgetItems: [{ id: "stack3", type: WIDGET.STACK }],
-      },
     },
     Value2: <TypographyProps>{
       label: `₹${addCommasToNumber(totalPortfolio)}`,
