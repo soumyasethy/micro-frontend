@@ -3,6 +3,8 @@ import SharedPropsService, { BUILD_TYPE } from "../SharedPropsService";
 export const BASE_URL = {
   [BUILD_TYPE.BORROWER_STAGING]: "https://api.staging.voltmoney.in",
   [BUILD_TYPE.BORROWER_PRODUCTION]: "https://api.voltmoney.in",
+  [BUILD_TYPE.PARTNER_STAGING]: 'https://api.staging.voltmoney.in',
+  [BUILD_TYPE.PARTNER_PRODUCTION]: 'https://api.voltmoney.in',
 };
 export const config = {
   URL: BASE_URL[SharedPropsService.getBuildType()], /// change this to BASE_URL.PRODUCTION for production

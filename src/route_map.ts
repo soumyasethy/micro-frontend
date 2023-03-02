@@ -86,6 +86,10 @@ import { detailsConfirmMF } from "./features/Dist_basicDetails/details_confirm";
 import { basicDetailsStartMF } from "./features/Dist_basicDetails/basicDetailsStart";
 import { DistributorClientListStepperMF } from "./features/DistributorClientList/ClientListStepper";
 import {introPageMF} from "./features/introPage";
+import { PartnerWebDashboardPageMF } from './partnerWeb_Features/partnerWeb_Dashboard'
+import { PartnerReferredPartnerMF } from './partnerWeb_Features/referredPartner/indexMF'
+import { PartnerActiveCustomerMF } from './partnerWeb_Features/activeCustomer/indexMf'
+import { PartnerLeadsMF } from './partnerWeb_Features/leads/indexMF'
 
 //import { portfolioUnlockMF } from "./features/selectPortfolio/portfolioUnlock";
 
@@ -190,5 +194,9 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.ENTER_NAME]: nameMF,
   [ROUTE.BASIC_DETAILS_START]: basicDetailsStartMF,
   //[ROUTE.PORTFOLIO_UNLOCK]: portfolioUnlockMF,
-  [ROUTE.INTRO_PAGE]: introPageMF
+  [ROUTE.INTRO_PAGE]: introPageMF,
+  [ROUTE.PARTNER_DASHBOARD]: PartnerWebDashboardPageMF,
+  [ROUTE.PARTNER_REFERRED_PARTNER]: PartnerReferredPartnerMF,
+  [ROUTE.PARTNER_ACTIVE_CUSTOMER]: PartnerActiveCustomerMF,
+  [ROUTE.PARTNER_LEAD]: PartnerLeadsMF,
 };

@@ -33,6 +33,206 @@ export enum BUILD_TYPE {
     PARTNER_STAGING = 'PARTNER_STAGING',
 }
 
+export interface PartnerLeadsType {
+    assetDetails:           AssetDetails;
+    borrowerAccountProfile: BorrowerAccountProfile;
+    credit:                 Credit;
+    creditApplication:      CreditApplication;
+    partnerViewStepperMap:  PartnerViewStepperMap;
+    currentStepName: string;
+}
+
+export interface AssetDetails {
+    applicationId:               string;
+    approvedCreditAmount:        number;
+    availableCAS:                AvailableCA[];
+    availableCreditAmount:       number;
+    casFetchDates:               CasFetchDates;
+    interestRate:                number;
+    isinLTVMap:                  IsinLtvMap;
+    isinNAVMap:                  IsinLtvMap;
+    loanTenureInMonths:          number;
+    maxLoanAmount:               number;
+    nonEligiblePortfolioAmounts: IsinLtvMap;
+    pledgedPortfolio:            AvailableCA[];
+    processingFees:              number;
+    processingFeesBreakUp:       IsinLtvMap;
+    repositoryAssetMetadataMap:  RepositoryAssetMetadataMap;
+    requestedCreditAmount:       number;
+    tobePledgedPortfolio:        AvailableCA[];
+    totalPortfolioAmount:        number;
+}
+
+export interface AvailableCA {
+    amcCode:              string;
+    amcName:              string;
+    assetRepository:      string;
+    fetchedOn:            Date;
+    folioNo:              string;
+    is_pledged:           boolean;
+    is_pledged_confirmed: boolean;
+    isinNo:               string;
+    modeOfHolding:        string;
+    pledgeReferenceNo:    string;
+    pledgedOn:            Date;
+    pledgedUnits:         number;
+    schemeCode:           string;
+    schemeName:           string;
+    schemeType:           string;
+    totalAvailableUnits:  number;
+}
+
+export interface CasFetchDates {
+    additionalProp1: string;
+    additionalProp2: string;
+    additionalProp3: string;
+}
+
+export interface IsinLtvMap {
+    additionalProp1: number;
+    additionalProp2: number;
+    additionalProp3: number;
+}
+
+export interface RepositoryAssetMetadataMap {
+    additionalProp1: RepositoryAssetMetadataMapAdditionalProp1;
+    additionalProp2: RepositoryAssetMetadataMapAdditionalProp1;
+    additionalProp3: RepositoryAssetMetadataMapAdditionalProp1;
+}
+
+export interface RepositoryAssetMetadataMapAdditionalProp1 {
+    approvedCreditAmount:     number;
+    approvedPortfolioAmount:  number;
+    availableCreditAmount:    number;
+    availablePortfolioAmount: number;
+    casFetchDate:             Date;
+}
+
+export interface BorrowerAccountProfile {
+    bankDetails: BankDetails;
+    dob:         string;
+    emailId:     string;
+    name:        string;
+    panNumber:   string;
+    phoneNumber: string;
+}
+
+export interface BankDetails {
+    accountNumber: string;
+    bankCode:      string;
+    bankName:      string;
+    branchAddress: string;
+    branchName:    string;
+    city:          string;
+    ifscCode:      string;
+    micrCode:      string;
+}
+
+export interface Credit {
+    accountId:                     string;
+    actualLoanAmount:              number;
+    applicationId:                 string;
+    approvedCreditAmount:          number;
+    availableCreditAmount:         number;
+    chargesDue:                    number;
+    createdOn:                     CreatedOn;
+    creditId:                      string;
+    creditStatus:                  string;
+    creditType:                    string;
+    currentApplicableInterestRate: number;
+    currentTermStartDate:          CreatedOn;
+    disbursalRequestAllowed:       boolean;
+    lastUpdatedOn:                 CreatedOn;
+    lenderCreditId:                string;
+    lendingPartnerId:              string;
+    marginCallStatus:              string;
+    originalStartDate:             CreatedOn;
+    outstandingInterestDue:        number;
+    partnerAccountId:              string;
+    penalInterestDue:              number;
+    platformAccountId:             string;
+    principalOutStandingAmount:    number;
+    processingChargeDetails:       string;
+    processingCharges:             number;
+    renewalDate:                   CreatedOn;
+    tenureInDays:                  number;
+    totalValueOfAssetsPledged:     number;
+}
+
+export interface CreatedOn {
+    date:           number;
+    day:            number;
+    hours:          number;
+    minutes:        number;
+    month:          number;
+    nanos:          number;
+    seconds:        number;
+    time:           number;
+    timezoneOffset: number;
+    year:           number;
+}
+
+export interface CreditApplication {
+    accountId:                 string;
+    applicationApprovalStatus: string;
+    applicationId:             string;
+    applicationState:          string;
+    applicationType:           string;
+    completedOn:               Date;
+    createdOn:                 Date | number;
+    creditAmount:              number;
+    currentStepId:             string;
+    lastUpdatedOn:             Date;
+    lenderAccountId:           string;
+    partnerAccountId:          string;
+    platformAccountId:         string;
+    stepStatusMap:             CasFetchDates;
+}
+
+export interface PartnerViewStepperMap {
+    additionalProp1: PartnerViewStepperMapAdditionalProp1;
+    additionalProp2: PartnerViewStepperMapAdditionalProp1;
+    additionalProp3: PartnerViewStepperMapAdditionalProp1;
+}
+
+export interface PartnerViewStepperMapAdditionalProp1 {
+    horizontalDisplayName: string;
+    isEditable:            boolean;
+    message:               string;
+    order:                 number;
+    status:                string;
+    verticalDescription:   string;
+    verticalDisplayName:   string;
+}
+
+export type PartnerLeadsListType = {
+    customerMetadataList: PartnerLeadsType[]
+    nextToken: string
+}
+
+export type PartnerActiveCustomerListType = {
+    customerMetadataList: PartnerLeadsType[]
+    nextToken: string
+}
+export type ReferredPartnerDataType = {
+    accountHolderEmail: string;
+    accountHolderPhoneNumber: string;
+    accountId: string;
+    accountState: string;
+    accountTier: string;
+    addedOnTimeStamp: Date;
+    address: string;
+    isInternal: boolean;
+    lastUpdatedTimeStamp: Date;
+    partnerAccountType: string;
+    partnerCode: string;
+    partnerLogoImgSrc: string;
+    partnerName: string;
+    partnerShipCommenceDate: Date;
+    partnerShipEndDate: Date;
+    partnershipAgreementIdUri: string;
+}
+
 type GlobalProps = {
     buildType: BUILD_TYPE
     user: User
@@ -87,10 +287,14 @@ type GlobalProps = {
         [key in AssetRepositoryType]: AssetRepositoryConfigItemType
     }
     creditStatus?: string
+    partnerLeadsList?: PartnerLeadsListType
+    PartnerActiveCustomerList?: PartnerLeadsListType,
+    PartnerSideBarActiveId?: string,
+    ReferredPartnerData?: ReferredPartnerDataType[],
 }
 
 let _globalProps: GlobalProps = {
-    buildType: BUILD_TYPE.BORROWER_STAGING,
+    buildType: BUILD_TYPE.PARTNER_STAGING,
     user: {},
     partnerUser: {
         name: '',
@@ -166,6 +370,10 @@ let _globalProps: GlobalProps = {
     stepperData: {},
     investorName: '',
     creditStatus: '',
+    partnerLeadsList: {customerMetadataList: [], nextToken: null},
+    PartnerActiveCustomerList: {customerMetadataList: [], nextToken: null},
+    PartnerSideBarActiveId: '',
+    ReferredPartnerData: [],
 }
 
 export function setStepperData(StepperData) {
@@ -504,6 +712,38 @@ async function getCreditStatus() {
     return _globalProps.creditStatus
 }
 
+async function setPartnerLeadsList(partnerLeadsList: PartnerLeadsListType) {
+    _globalProps.partnerLeadsList = partnerLeadsList
+}
+
+async function getPartnerLeadsList() {
+    return _globalProps.partnerLeadsList
+}
+
+async function setPartnerActiveCustomerList(PartnerActiveCustomerList: PartnerActiveCustomerListType) {
+    _globalProps.PartnerActiveCustomerList = PartnerActiveCustomerList
+}
+
+async function getPartnerActiveCustomerList() {
+    return _globalProps.PartnerActiveCustomerList
+}
+
+async function setPartnerSideBarActiveId(activeId: string) {
+    _globalProps.PartnerSideBarActiveId = activeId
+}
+
+async function getPartnerSideBarActiveId() {
+    return _globalProps.PartnerSideBarActiveId
+}
+
+async function setReferredPartnerData(referredPartnerData: ReferredPartnerDataType[]) {
+    _globalProps.ReferredPartnerData = referredPartnerData
+}
+
+async function getReferredPartnerData() {
+    return _globalProps.ReferredPartnerData
+}
+
 export default {
     setBuildType,
     getBuildType,
@@ -579,4 +819,12 @@ export default {
     setBasicDataPhone,
     setCreditStatus,
     getCreditStatus,
+    setPartnerLeadsList,
+    getPartnerLeadsList,
+    setPartnerActiveCustomerList,
+    getPartnerActiveCustomerList,
+    setPartnerSideBarActiveId,
+    getPartnerSideBarActiveId,
+    setReferredPartnerData,
+    getReferredPartnerData
 }

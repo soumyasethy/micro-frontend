@@ -1,3 +1,5 @@
+import {BUILD_TYPE, getBuildType} from "../SharedPropsService";
+
 export const AnalyticsEventTracker = {
   borrower_sign_up: {
     "Event Name": "borrower_sign_up",
@@ -58,6 +60,7 @@ export enum QUERY_PARAMS {
   USER = 'user',
   REF = 'ref',
   PRIMARY_COLOR = 'primaryColor',
+  DASHBOARD_ACTIVE_ID = 'dashboardActiveId'
 }
 
 export enum ImportScriptSrc {
@@ -79,3 +82,49 @@ export enum POPUP_TARGET_NAME {
   AGREEMENT = "volt money",
   AUTOPAY = "volt money"
 }
+
+export enum CreditApplicationStepId {
+  MF_FETCH_PORTFOLIO = 'MF_FETCH_PORTFOLIO',
+  MF_PLEDGE_PORTFOLIO = 'MF_PLEDGE_PORTFOLIO',
+  KYC_CKYC = 'KYC_CKYC',
+  KYC_AADHAAR_VERIFICATION = 'KYC_AADHAAR_VERIFICATION',
+  KYC_DOCUMENT_UPLOAD = 'KYC_DOCUMENT_UPLOAD',
+  KYC_DOCUMENT_UPLOAD_POI = 'KYC_DOCUMENT_UPLOAD_POI',
+  KYC_DOCUMENT_UPLOAD_POA = 'KYC_DOCUMENT_UPLOAD_POA',
+  KYC_PAN_VERIFICATION = 'KYC_PAN_VERIFICATION',
+  KYC_PHOTO_VERIFICATION = 'KYC_PHOTO_VERIFICATION',
+  KYC_DIGIO_DIGILOCKER = 'KYC_DIGIO_DIGILOCKER',
+  DIGIO_AGREEMENT_SIGN = 'DIGIO_AGREEMENT_SIGN',
+  DIGIO_MANDATE_SIGN = 'DIGIO_MANDATE_SIGN',
+  KYC_SUMMARY = 'KYC_SUMMARY',
+  KYC_ADDITIONAL_DETAILS = 'KYC_ADDITIONAL_DETAILS',
+  AGREEMENT_SIGN = 'AGREEMENT_SIGN',
+  BANK_ACCOUNT_VERIFICATION = 'BANK_ACCOUNT_VERIFICATION',
+  MANDATE_SETUP = 'MANDATE_SETUP',
+  CREDIT_APPROVAL = 'CREDIT_APPROVAL',
+  COMMUNICATION = 'COMMUNICATION',
+}
+
+export const stepIdToNameMap = {
+  MF_FETCH_PORTFOLIO: "Pending MF pull",
+  MF_PLEDGE_PORTFOLIO: "Pending MF pledge",
+  KYC_DOCUMENT_UPLOAD_POI: "MF pledge done, Pending KYC",
+  KYC_DOCUMENT_UPLOAD_POA: "MF pledge done, Pending KYC",
+  KYC_PAN_VERIFICATION: "Pending PAN and other details",
+  KYC_SUMMARY: "MF pledge done, Pending KYC",
+  KYC_ADDITIONAL_DETAILS: "MF pledge done, Pending KYC",
+  AGREEMENT_SIGN: "Pending agreement",
+  BANK_ACCOUNT_VERIFICATION: "Pending bank account verification",
+  MANDATE_SETUP: "Pending autopay setup"
+}
+
+export enum CreditApplicationState {
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED ='COMPLETED',
+  NOT_STARTED = 'NOT_STARTED'
+}
+
+export const PartnerLink =
+    getBuildType() === BUILD_TYPE.PARTNER_PRODUCTION
+        ? 'https://voltmoney.in/partner/'
+        : 'https://staging.voltmoney.in/partner/';

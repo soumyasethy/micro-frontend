@@ -1,5 +1,5 @@
 import { StepperItem, StepperStateToken } from '@voltmoney/schema'
-import SharedPropsService from '../SharedPropsService'
+import SharedPropsService, {PartnerActiveCustomerListType, PartnerLeadsType} from '../SharedPropsService'
 import { StepStatusMap, User } from '../features/login/otp_verify/types'
 import { ROUTE } from '../routes'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -69,7 +69,7 @@ export const clearAllData = async () => {
 
 export const stepperRepo = async () => {
     let KYC_VERIFICATION: StepperStateToken
-    let message = 'We’re processing. Check after sometime.'
+    const message = 'We’re processing. Check after sometime.'
     const user = await SharedPropsService.getUser()
     const application = user.linkedApplications[0]
 
@@ -168,7 +168,7 @@ export const horizontalStepperRepo = stepperRepo
 
 export const distributorStepperRepo = async () => {
     let DISTRIBUTOR_VERIFICATION: StepperStateToken
-    let message = 'We’re processing. Check after sometime.'
+    const message = 'We’re processing. Check after sometime.'
     /* API response needed for mapping
   const user = await SharedPropsService.getUser();
 
@@ -527,7 +527,7 @@ export const ceilToNearestHundred = (num: number) => {
 
 export const maskBankAccountNumber = (accountNo: string) => {
     if (accountNo.length > 4) {
-        let showString = accountNo.slice(accountNo.length - 4)
+        const showString = accountNo.slice(accountNo.length - 4)
         let maskString = ''
         let index = accountNo.length - 4
         while (index > 0) {
@@ -540,22 +540,36 @@ export const maskBankAccountNumber = (accountNo: string) => {
 }
 
 export const isMorePortfolioRenderCheck = async () => {
-    const casList = await SharedPropsService.getCasListOriginal()
-    /*** check if the user has pledged any mf portfolio */
-    const assetRepoMap = {}
-    /*** Get unique asset repository from the cas list */
-    for (let i = 0; i < casList.length; i++) {
-        const item = casList[i]
-        assetRepoMap[item.assetRepository] = true
-    }
-    /*** remove if both Karvy and Cams are present */
-    return !(
-        Object.keys(assetRepoMap).length === 2 ||
-        (Object.keys(assetRepoMap).length == 1 &&
-            (AssetRepositoryMap.get(AssetRepositoryType.CAMS).isDisabled ||
-                AssetRepositoryMap.get(AssetRepositoryType.KARVY).isDisabled))
-    )
+  const casList = await SharedPropsService.getCasListOriginal()
+  /*** check if the user has pledged any mf portfolio */
+  const assetRepoMap = {}
+  /*** Get unique asset repository from the cas list */
+  for (let i = 0; i < casList.length; i++) {
+    const item = casList[i]
+    assetRepoMap[item.assetRepository] = true
+  }
+  /*** remove if both Karvy and Cams are present */
+  return !(
+      Object.keys(assetRepoMap).length === 2 ||
+      (Object.keys(assetRepoMap).length == 1 &&
+          (AssetRepositoryMap.get(AssetRepositoryType.CAMS).isDisabled ||
+              AssetRepositoryMap.get(AssetRepositoryType.KARVY).isDisabled))
+  )
 }
+
+export const getParameters: (url: string) => {
+  [key in string]: string;
+} = (url: string) => {
+  const params = {};
+  const paramString = url.split("?")[1];
+  console.log("test param string", paramString)
+  const queryString = new URLSearchParams(paramString);
+  console.log("test query", queryString)
+  for (const pair of queryString.entries()) {
+    params[pair[0].includes('/')?pair[0].split('/')[1]:pair[0]] = pair[1].includes('/') ? pair[1].split('/')[0] : pair[1];
+  }
+  return params;
+};
 
 export const isLimitMoreThanPledgeThreshold = async () => {
     const pledgeThreshold = await SharedPropsService.getCreditLimit()
@@ -570,7 +584,7 @@ export const updateApplicationContextFromApi = async (
     network: StandardUtilities['network'],
     applicationId,
 ) => {
-    let user: User = await SharedPropsService.getUser()
+    const user: User = await SharedPropsService.getUser()
 
     const updatedApplicationResponse = await network.get(
         `${api.borrowerApplication}${applicationId}`,
@@ -584,7 +598,7 @@ export const updateApplicationContextFromApi = async (
 export const updateUserContextFromApi = async (
     network: StandardUtilities['network'],
 ) => {
-    let user: User = await SharedPropsService.getUser()
+    const user: User = await SharedPropsService.getUser()
     const onboardingPartnerCode = user.user.onboardingPartnerCode
     const relationshipManagerCode = user.user.onboardingRelationshipManagerCode
     const updateUserProfileResponse = await network.post(
@@ -624,7 +638,7 @@ export const getDigio: ImportScriptCustomCallbackType = (
         is_iframe: true,
     }
     //@ts-ignore
-    let digioObj = new Digio(digioOptions)
+    const digioObj = new Digio(digioOptions)
     //@ts-ignore
     window.digio = digioObj
 }
@@ -674,3 +688,32 @@ export const  uploadToS3Bucket = function (url , uri, contentType){
     }
   });
 };
+
+export const getLimitIncreaseAvailable = (data: PartnerLeadsType) => {
+  return Math.max((data?.credit?.availableCreditAmount - data?.credit?.approvedCreditAmount), 0).toString();
+}
+
+export const convertDateToISO = (dateString: string) => {
+  const [day, month, year] = dateString.split("-");
+  return `${year}-${month}-${day}`;
+}
+
+export const convertISOToTimestamp = (isoDateString:string) => {
+  const timestamp = Date.parse(isoDateString);
+  return timestamp; // Convert milliseconds to seconds
+}
+
+export const convertDateToTimeStamp = (dateString: string) => {// example date string
+  const dateParts = dateString.split("-"); // split the date string into day, month, and year parts
+  const dateObject = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`); // create a new Date object from the date parts in YYYY-MM-DD format
+  const timestamp = dateObject.getTime();
+  return timestamp;
+}
+
+export const addYearToEpochTime = (epochTime: number, year: number) => {
+  const oneYearLater = new Date(epochTime * 1000); // Convert to Date object
+  oneYearLater.setFullYear(oneYearLater.getFullYear() + year); // Add 1 year
+  const oneYearLaterEpochTime = Math.floor(oneYearLater.getTime() / 1000); // Convert back to epoch time (seconds)
+  console.log(oneYearLaterEpochTime); // Output: 1646832000 (March 9, 2022
+  return  oneYearLaterEpochTime;
+}
