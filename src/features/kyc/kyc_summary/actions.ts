@@ -6,20 +6,18 @@ import {
     ToggleKYCVerifyCTA,
 } from '../kyc_init/types'
 import {
-    ButtonProps,
-    ButtonTypeTokens,
-    StepperStateToken,
-} from '@voltmoney/schema'
-import { ROUTE } from '../../../routes'
-import { ACTION } from './types'
-import _ from 'lodash'
-import { api } from '../../../configs/api'
-import { APP_CONFIG, getAppHeader } from '../../../configs/config'
-import { User } from '../../login/otp_verify/types'
-import {
-    AnalyticsEventTracker,
-    TextConstants,
-} from '../../../configs/constants'
+  ButtonProps,
+  ButtonTypeTokens,
+  StepperStateToken,
+} from "@voltmoney/schema";
+import { ROUTE } from "../../../routes";
+import { ACTION } from "./types";
+import _ from "lodash";
+import { api } from "../../../configs/api";
+import { APP_CONFIG, getAppHeader } from "../../../configs/config";
+import { User } from "../../login/otp_verify/types";
+import {AnalyticsEventTracker, TextConstants} from "../../../configs/constants";
+import { nextStepCredStepper } from "../../../configs/utils";
 
 export const verifyKycSummary: ActionFunction<any> = async (
     action,
@@ -82,9 +80,10 @@ export const NavigateNext: ActionFunction<NavigationNext> = async (
     _datastore,
     { navigate, goBack },
 ): Promise<any> => {
-    // await goBack();
-    if (action.payload.stepId) await navigate(action.payload.stepId)
-}
+    //await goBack()
+    const routeObj = await nextStepCredStepper()
+    await navigate(routeObj.routeId, routeObj.params)
+};
 
 export const GoBackAction: ActionFunction<AadharInitPayload> = async (
     action,
