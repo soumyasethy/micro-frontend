@@ -48,8 +48,9 @@ import {
   ToggleSelectAction,
 } from "./actions";
 import {
+  getBankPNGUrl,
   horizontalStepperRepo,
-  maskBankAccountNumber,
+  maskBankAccountNumber
 } from "../../../configs/utils";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
@@ -76,10 +77,11 @@ export const template: (
         state: SelectiveListItemStateTokens.NOT_SELECTED,
         subTitle: maskBankAccountNumber(accountNo),
         title: name,
-        imageUrl: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${ifscCode.substring(
+        imageUrl: getBankPNGUrl(ifscCode.substring(
           0,
           4
-        )}.svg`,
+        )),
+
         action: {
           type: ACTION.TOGGLE_SELECT,
           routeId: ROUTE.BANK_ACCOUNT_VERIFICATION,

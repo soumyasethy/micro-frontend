@@ -52,6 +52,7 @@ import {
 } from "./actions";
 import { BAVVerifyActionPayload } from "../bank_account_verification/types";
 import SharedPropsService from "../../../SharedPropsService";
+import { getBankDefaultPng, getBankPNGUrl } from "../../../configs/utils";
 
 export const template: (
   bankCode: string,
@@ -112,8 +113,8 @@ export const template: (
       ],
     },
     leadIcon: <ImageProps>{
-      uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`,
-      defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
+      uri: getBankPNGUrl(bankCode),
+      defaultUri: getBankDefaultPng(),
       size: ImageSizeTokens.MD,
       padding: SizeTypeTokens.NONE,
     },

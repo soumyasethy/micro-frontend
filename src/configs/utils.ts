@@ -27,25 +27,26 @@ export const showBottomSheet = ({
     ctaLabel,
     primary,
 }: AlertNavProps) => {
-    return {
-        routeId: ROUTE.ALERT_PAGE,
-        params: {
-            alertProps: <AlertNavProps>{
-                title,
-                subTitle,
-                message,
-                iconName,
-                ctaAction,
-                ctaLabel,
-                primary,
-            },
-        },
-    }
-}
-
-export const getBankIconUrl = bankCode =>
-    `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`
-
+  return {
+    routeId: ROUTE.ALERT_PAGE,
+    params: {
+      alertProps: <AlertNavProps>{
+        title,
+        subTitle,
+        message,
+        iconName,
+        ctaAction,
+        ctaLabel,
+        primary,
+      },
+    },
+  };
+};
+export const getBankIconUrl = (bankCode) =>
+  `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${bankCode}.svg`;
+export const getBankPNGUrl = (bankCode) =>
+  `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/pngs/${bankCode}.png`;
+export  const getBankDefaultPng = () => `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/pngs/default.png`
 export const updateStepStatusMap = async (stepStatusMap: StepStatusMap) => {
     const user: User = await SharedPropsService.getUser()
     user.linkedApplications[0].stepStatusMap = stepStatusMap

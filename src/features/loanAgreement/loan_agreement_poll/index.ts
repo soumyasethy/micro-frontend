@@ -58,7 +58,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       },
       { id: "headerSpace", type: WIDGET.SPACE },
       { id: "headerSpace1", type: WIDGET.SPACE },
-      { id: "iconStack", type: WIDGET.STACK },
+      // { id: "iconStack", type: WIDGET.STACK },
 
       { id: "iconSpace", type: WIDGET.SPACE },
       { id: "progressItem", type: WIDGET.PROGRESSINDICATOR },

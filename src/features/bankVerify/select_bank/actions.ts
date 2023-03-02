@@ -10,7 +10,7 @@ import {
   HeaderProps,
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
-import { getBankIconUrl } from "../../../configs/utils";
+import { getBankDefaultPng, getBankPNGUrl } from "../../../configs/utils";
 
 function getKeyByValue(object, value) {
   return Object.keys(object).find((key) => object[key] === value);
@@ -76,8 +76,8 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
     data: [
       ...Object.keys(dataSearchMap).map((key) => ({
         label: allBankMap[key],
-        image: getBankIconUrl(key),
-        defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
+        image: getBankPNGUrl(key),
+        defaultUri: getBankDefaultPng(),
       })),
     ],
     otherItem: [],

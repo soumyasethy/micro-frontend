@@ -34,6 +34,7 @@ import {
 import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
+import { getBankDefaultPng, getBankPNGUrl } from "../../../configs/utils";
 
 export const template: (BanksRepo: {
   ALLBANKS: { [key in string]: string };
@@ -88,15 +89,15 @@ export const template: (BanksRepo: {
         data: [
           ...Object.keys(BanksRepo.POPULAR).sort().map((key) => ({
             label: BanksRepo.POPULAR[key],
-            image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
-            defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
+            image: getBankPNGUrl(key),
+            defaultUri: getBankDefaultPng(),
           })),
         ],
         otherItem: [
           ...Object.keys(BanksRepo.ALLBANKS).sort().map((key) => ({
             label: BanksRepo.ALLBANKS[key],
-            image: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${key}.svg`,
-            defaultUri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/default.svg`,
+            image: getBankPNGUrl(key),
+            defaultUri: getBankDefaultPng(),
           })),
         ],
         title: "Popular banks",
