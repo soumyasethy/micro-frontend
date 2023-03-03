@@ -52,8 +52,8 @@ export const template: () => TemplateSchema = () => {
           id: "detailScreen",
           type: WIDGET.STACK,
           padding: {
-            left: 0,
-            right: 0,
+            left: 16,
+            right: 16,
           },
         },
       ],
@@ -76,6 +76,9 @@ export const template: () => TemplateSchema = () => {
       },
       space0: <SpaceProps>{ size: SizeTypeTokens.XL },
       detailScreen: <StackProps>{
+        width: StackWidth.CONTENT,
+        type: StackType.column,
+        alignItems: StackAlignItems.center,
         widgetItems: [
           { id: "Card1", type: WIDGET.CARD },
           { id: "Card2", type: WIDGET.CARD },
@@ -83,6 +86,9 @@ export const template: () => TemplateSchema = () => {
       },
       Card1: <CardProps & WidgetProps>{
         bgColor: ColorTokens.White,
+        padding: {
+          horizontal: SizeTypeTokens.LG,
+        },
         body: {
           widgetItems: [
             { id: "startDetails", type: WIDGET.STACK },
@@ -93,10 +99,7 @@ export const template: () => TemplateSchema = () => {
         action: {
           payload: {},
           type: ACTION.GO_TO_PRIVACY,
-        },
-        padding: <PaddingProps>{
-          right: SizeTypeTokens.XL,
-        },
+        }
       },
       startDetails: <StackProps>{
         type: StackType.row,
@@ -109,9 +112,7 @@ export const template: () => TemplateSchema = () => {
       },
       infoItems: <StackProps>{
         type: StackType.row,
-        width: StackWidth.FULL,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.flexStart,
+        width: StackWidth.CONTENT,
         widgetItems: [
           { id: "iconName", type: WIDGET.ICON },
           { id: "infoSpace", type: WIDGET.SPACE },
@@ -138,10 +139,8 @@ export const template: () => TemplateSchema = () => {
       },
       cta: <StackProps>{
         type: StackType.row,
-        flex: 1,
-        width: StackWidth.FULL,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.flexEnd,
+        width: StackWidth.CONTENT,
+         justifyContent: StackJustifyContent.flexEnd,
         widgetItems: [{ id: "cta1", type: WIDGET.BUTTON }],
       },
       cta1: <ButtonProps>{
@@ -175,6 +174,10 @@ export const template: () => TemplateSchema = () => {
       },
       Card2: <CardProps & WidgetProps>{
         bgColor: ColorTokens.White,
+        padding: {
+          horizontal: SizeTypeTokens.LG,
+          top: SizeTypeTokens.XL
+        },
         body: {
           widgetItems: [
             { id: "privacyDetails", type: WIDGET.STACK },
@@ -185,11 +188,7 @@ export const template: () => TemplateSchema = () => {
         action: {
           payload: {},
           type: ACTION.GO_TO_PRIVACY,
-        },
-        padding: <PaddingProps>{
-          right: SizeTypeTokens.XL,
-          top: SizeTypeTokens.XL,
-        },
+        }
       },
       privacyDetails: <StackProps>{
         type: StackType.row,
@@ -202,8 +201,7 @@ export const template: () => TemplateSchema = () => {
       },
       privacyItems: <StackProps & WidgetProps>{
         type: StackType.row,
-        flex: 1,
-        alignItems: StackAlignItems.center,
+        width: StackWidth.CONTENT,
         justifyContent: StackJustifyContent.flexStart,
         widgetItems: [
           { id: "privacyName", type: WIDGET.ICON },
@@ -229,6 +227,7 @@ export const template: () => TemplateSchema = () => {
       },
       ctaprivacy: <StackProps & WidgetProps>{
         type: StackType.row,
+        width: StackWidth.CONTENT,
         alignItems: StackAlignItems.flexEnd,
         justifyContent: StackJustifyContent.flexEnd,
         widgetItems: [{ id: "cta1privacy", type: WIDGET.BUTTON }],
@@ -238,7 +237,7 @@ export const template: () => TemplateSchema = () => {
         width: ButtonWidthTypeToken.CONTENT,
         icon: <IconProps>{
           name: IconTokens.ChervonDownRight,
-          size: IconSizeTokens.SM,
+          size: IconSizeTokens.MD,
           color: ColorTokens.Grey_Charcoal,
         },
         action: {

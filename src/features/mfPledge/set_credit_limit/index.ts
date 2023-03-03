@@ -345,7 +345,6 @@ export const template: (
     mfStack: <StackProps>{
       width: StackWidth.FULL,
       type: StackType.row,
-      justifyContent: StackJustifyContent.spaceBetween,
       alignItems: StackAlignItems.center,
       widgetItems: [
         { id: "mfText", type: WIDGET.TEXT },
@@ -432,7 +431,7 @@ export const template: (
       type: "row",
       justifyContent: StackJustifyContent.flexStart,
       alignItems: StackAlignItems.flexStart,
-      width: StackWidth.FULL,
+      width: StackWidth.CONTENT,
       widgetItems: [
         { id: "col1Header", type: WIDGET.TEXT },
         { id: "col1Space", type: WIDGET.SPACE },
@@ -442,7 +441,7 @@ export const template: (
       type: "row",
       justifyContent: StackJustifyContent.flexEnd,
       alignItems: StackAlignItems.flexEnd,
-      width: StackWidth.FULL,
+      width: StackWidth.CONTENT,
       widgetItems: [
         { id: "col2Header", type: WIDGET.TEXT },
         // { id:"col2Space", type: WIDGET.SPACE },
