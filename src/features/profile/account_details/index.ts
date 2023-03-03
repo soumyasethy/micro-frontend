@@ -33,7 +33,7 @@ import { ROUTE } from "../../../routes";
 import { ACTION, AccountPayload } from "./types";
 import { goBack } from "./actions";
 import { ProfileDetails } from "../my_profile/types";
-import { maskSensitiveDetails } from "../../../configs/utils";
+import {getBankPNGUrl, maskSensitiveDetails} from "../../../configs/utils";
 export const template: (
     profileData: ProfileDetails
 ) => TemplateSchema = (profileData
@@ -134,7 +134,7 @@ export const template: (
                     ]
                 },
                 imageItem: <ImageProps>{
-                    uri: `https://volt-images.s3.ap-south-1.amazonaws.com/bank-logos/${profileData.bankDetails.bankCode}.svg`,
+                    uri: getBankPNGUrl(profileData.bankDetails.bankCode),
                     size: ImageSizeTokens.Size_40,
                     aspectRatio: AspectRatioToken.A1_1,
                     borderRadius: BorderRadiusTokens.BR5,
