@@ -48,13 +48,17 @@ export const template: (
   bankAccountNumber: string,
   bankIfscCode: string,
   bankName: string,
-  bankCode: string
+  bankCode: string,
+  beneficiaryName: string,
+  branchName: string
 ) => TemplateSchema = (
   repaymentAmount,
   bankAccountNumber: string,
   bankIfscCode: string,
   bankName: string,
-  bankCode: string
+  bankCode: string,
+  beneficiaryName: string,
+  branchName: string
 ) => ({
   layout: <Layout>{
     id: ROUTE.REPAYMENT,
@@ -84,6 +88,14 @@ export const template: (
       },
       {
         id: "listItem2",
+        type: WIDGET.LIST_ITEM,
+      },
+      {
+        id: "listItem3",
+        type: WIDGET.LIST_ITEM,
+      },
+      {
+        id: "listItem4",
         type: WIDGET.LIST_ITEM,
       },
       { id: "listSpace", type: WIDGET.SPACE },
@@ -216,10 +228,48 @@ export const template: (
         fontWeight: "500",
       },
       trailIconName: IconTokens.Copy,
+      isDivider: true,
       action: {
         type: ACTION.COPY,
         routeId: ROUTE.REPAYMENT,
         payload: <CopyToClipboardPayload>{ value: `${bankAccountNumber}` },
+      },
+    },
+    listItem3: <ListItemProps & WidgetProps>{
+      title: "Beneficiary name",
+      subTitle: `${beneficiaryName}`,
+      trailLabel: <TypographyProps>{
+        label: "Copy",
+        fontSize: FontSizeTokens.XS,
+        color: ColorTokens.Primary_100,
+        fontFamily: FontFamilyTokens.Inter,
+        lineHeight: 18,
+        fontWeight: "500",
+      },
+      trailIconName: IconTokens.Copy,
+      isDivider: true,
+      action: {
+        type: ACTION.COPY,
+        routeId: ROUTE.REPAYMENT,
+        payload: <CopyToClipboardPayload>{ value: `${beneficiaryName}` },
+      },
+    },
+    listItem4: <ListItemProps & WidgetProps>{
+      title: "Branch name",
+      subTitle: `${branchName}`,
+      trailLabel: <TypographyProps>{
+        label: "Copy",
+        fontSize: FontSizeTokens.XS,
+        color: ColorTokens.Primary_100,
+        fontFamily: FontFamilyTokens.Inter,
+        lineHeight: 18,
+        fontWeight: "500",
+      },
+      trailIconName: IconTokens.Copy,
+      action: {
+        type: ACTION.COPY,
+        routeId: ROUTE.REPAYMENT,
+        payload: <CopyToClipboardPayload>{ value: `${branchName}` },
       },
     },
     listSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
@@ -255,9 +305,11 @@ export const repaymentMF: PageType<any> = {
     const bankCode = _.get(response, "data.bankCode", "");
     const accountNumber = _.get(response, "data.accountNumber", "");
     const ifscCode = _.get(response, "data.ifscCode", "");
+    const beneficiaryName = 'Bajaj Finance Ltd';
+    const branchName = 'Nariman Point, Mumbai';
 
     return Promise.resolve(
-      template(repaymentAmount, accountNumber, ifscCode, bankName, bankCode)
+      template(repaymentAmount, accountNumber, ifscCode, bankName, bankCode, beneficiaryName, branchName)
     );
   },
   actions: {
