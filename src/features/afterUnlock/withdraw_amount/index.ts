@@ -29,7 +29,7 @@ import {ConfigTokens, getAppHeader} from "../../../configs/config";
 import {User} from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
-import {getBankIconUrl} from "../../../configs/utils";
+import { getBankPNGUrl } from "../../../configs/utils";
 
 export const template: (
   availableCreditAmount: number,
@@ -100,6 +100,10 @@ export const template: (
       },
 
       card: <CardProps>{
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG
+        },
         body: {
           widgetItems: isFirstJourney ? [
             { id: "widgetText", type: WIDGET.TEXT },
@@ -114,10 +118,7 @@ export const template: (
         },
         bgColor: ColorTokens.Yellow_10,
         margin: 20,
-        borderTopRightRadius: BorderRadiusTokens.BR2,
-        borderTopLeftRadius: BorderRadiusTokens.BR2,
-        borderBottomLeftRadius: BorderRadiusTokens.BR2,
-        borderBottomRightRadius: BorderRadiusTokens.BR2,
+        borderRadius: BorderRadiusTokens.BR2,
       },
       widgetText: <TypographyProps>{
         label: " Please note",
@@ -155,7 +156,7 @@ export const template: (
       cardSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       text: <TypographyProps>{ label: "To: ", fontFamily: FontFamilyTokens.Inter, fontWeight: '500', fontSize : FontSizeTokens.XS, lineHeight : 18 },
       logo: <ImageProps>{
-        uri: getBankIconUrl(bankCode),
+        uri: getBankPNGUrl(bankCode),
         width: 30,
         height: 30,
       },

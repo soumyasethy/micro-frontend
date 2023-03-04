@@ -53,36 +53,35 @@ export const template: (
     mobileNumber?: string,
     isGetUpdatesOnWhatsApp?: boolean,
 ) => TemplateSchema = (mobileNumber, isGetUpdatesOnWhatsApp = true) => ({
-    layout: <Layout>{
-        id: ROUTE.PHONE_NUMBER,
-        type: LAYOUTS.LIST,
-        widgets: [
-            { id: 'space0', type: WIDGET.SPACE },
-            { id: 'title', type: WIDGET.TEXT },
-            { id: 'space1', type: WIDGET.SPACE },
-            { id: 'subTitle', type: WIDGET.TEXT },
-            { id: 'space2', type: WIDGET.SPACE },
-            { id: 'input', type: WIDGET.INPUT },
-            { id: 'space3', type: WIDGET.SPACE },
-            ...(isGetUpdatesOnWhatsApp
-                ? [{ id: 'whatsappStack', type: WIDGET.STACK }]
-                : []),
-            { id: 'space4', type: WIDGET.SPACE },
-            {
-                id: 'continue',
-                type: WIDGET.BUTTON,
-            },
-            { id: 'space5', type: WIDGET.SPACE },
-            {
-                id: 'tc_text',
-                type: WIDGET.TERMS_TEXT,
-            },
-            //{id:"dateItem",type:WIDGET.TEXT},
-        ],
-    },
-    datastore: <Datastore>{
-        tc_text: <TermsTextProps>{
-            html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
+  layout: <Layout>{
+    id: ROUTE.PHONE_NUMBER,
+    type: LAYOUTS.LIST,
+    widgets: [
+      { id: "space0", type: WIDGET.SPACE },
+      { id: "title", type: WIDGET.TEXT },
+      { id: "space1", type: WIDGET.SPACE },
+      { id: "subTitle", type: WIDGET.TEXT },
+      { id: "space2", type: WIDGET.SPACE },
+      { id: "input", type: WIDGET.INPUT },
+      { id: "space3", type: WIDGET.SPACE },
+      ...(isGetUpdatesOnWhatsApp
+        ? [{ id: "whatsappStack", type: WIDGET.STACK }]
+        : []),
+      { id: "space4", type: WIDGET.SPACE },
+      {
+        id: "continue",
+        type: WIDGET.BUTTON,
+      },
+      {
+        id: "tc_text",
+        type: WIDGET.TERMS_TEXT,
+      },
+      //{id:"dateItem",type:WIDGET.TEXT},
+    ],
+  },
+  datastore: <Datastore>{
+    tc_text: <TermsTextProps>{
+      html: ` <p style='color:#667085;font-size:10px;font-weight: 400;line-height: 16px;'>
       By proceeding, I accept <span style='color:#1434CB;'>T&Cs, Privacy Policy </span> and<span style="color:#1434CB"; > Authorize</span> to obtain my KYC & bureau information.
       </p>`,
             action: {

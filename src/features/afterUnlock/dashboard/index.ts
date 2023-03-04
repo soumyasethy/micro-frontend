@@ -116,6 +116,9 @@ export const template: (
                               id: 'message2',
                               type: WIDGET.MESSAGE,
                               position: POSITION.FIXED_TOP,
+                              padding: {
+                                horizontal: -16,
+                              },
                           },
                       ]
                     : []),

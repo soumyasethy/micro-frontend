@@ -134,7 +134,7 @@ export const template: (
         fontSize: FontSizeTokens.MD,
         fontFamily: FontFamilyTokens.Poppins,
         fontWeight: "700",
-        lineHeight: 12,
+        lineHeight: 20,
       },
       spaceSubTitle: <SpaceProps>{ size: SizeTypeTokens.XL },
       spaceInput: <SpaceProps>{ size: SizeTypeTokens.XL },
