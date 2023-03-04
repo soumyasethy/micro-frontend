@@ -44,7 +44,7 @@ import moment from "moment";
 import { heightMap } from "../../../configs/height";
 import { priceInWords } from "../withdraw_amount/action";
 import SharedPropsService from "../../../SharedPropsService";
-import { getBankIconUrl } from "../../../configs/utils";
+import { getBankPNGUrl } from "../../../configs/utils";
 import { ConfigTokens } from "../../../configs/config";
 
 export const template: (
@@ -222,7 +222,7 @@ export const template: (
       lineHeight: 18,
       fontFamily: FontFamilyTokens.Inter,
     },
-    logo: <ImageProps>{ uri: getBankIconUrl(bankCode), width: 30, height: 30 },
+    logo: <ImageProps>{ uri: getBankPNGUrl(bankCode), width: 30, height: 30 },
     text2: <TypographyProps>{
       label: `${bankName} XXXX ${accountNumber.substring(
         accountNumber.length - 4,

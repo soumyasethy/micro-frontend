@@ -40,7 +40,7 @@ import { api } from "../../../configs/api";
 import { getAppHeader } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { User } from "../../login/otp_verify/types";
-import { getBankIconUrl } from "../../../configs/utils";
+import { getBankPNGUrl } from "../../../configs/utils";
 import _ from "lodash";
 
 export const template: (
@@ -178,7 +178,7 @@ export const template: (
       ],
     },
     leadItem: <ImageProps>{
-      uri: getBankIconUrl(bankCode),
+      uri: getBankPNGUrl(bankCode),
       size: ImageSizeTokens.SM,
       aspectRatio: AspectRatioToken.A1_1,
       borderRadius: BorderRadiusTokens.BR5,
