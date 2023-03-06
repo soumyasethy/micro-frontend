@@ -324,6 +324,7 @@ export const template: (
                 justifyContent: StackJustifyContent.spaceBetween,
             },
             selectedLimit: <StackProps>{
+                padding: { top: SizeTypeTokens.LG, bottom: SizeTypeTokens.LG },
                 width: StackWidth.FULL,
                 type: StackType.column,
                 alignItems: StackAlignItems.flexStart,
