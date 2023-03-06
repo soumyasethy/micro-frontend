@@ -1,4 +1,4 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
 import {
   BorderRadiusTokens,
   ButtonProps,
@@ -19,14 +19,14 @@ import {
   StackType,
   TextInputProps,
   TypographyProps,
-  WIDGET,
+  WIDGET
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION, AmountPayload, CreateDisbursementRequestPayload,} from "./types";
-import {CreateDisbursementRequest, goBack, OnAmountChange, SetRecommendedAmount,} from "./action";
-import {api} from "../../../configs/api";
-import {ConfigTokens, getAppHeader} from "../../../configs/config";
-import {User} from "../../login/otp_verify/types";
+import { ROUTE } from "../../../routes";
+import { ACTION, AmountPayload, CreateDisbursementRequestPayload } from "./types";
+import { CreateDisbursementRequest, goBack, OnAmountChange, SetRecommendedAmount } from "./action";
+import { api } from "../../../configs/api";
+import { ConfigTokens, getAppHeader } from "../../../configs/config";
+import { User } from "../../login/otp_verify/types";
 import SharedPropsService from "../../../SharedPropsService";
 import _ from "lodash";
 import { getBankPNGUrl } from "../../../configs/utils";
@@ -58,7 +58,7 @@ export const template: (
         { id: "amountMsgSpace", type: WIDGET.SPACE },
         // { id: "amountMessage", type: WIDGET.MESSAGE },
         // { id: "amountSpace", type: WIDGET.SPACE },
-        { id: "card", type: WIDGET.CARD, position: POSITION.ABSOLUTE_BOTTOM },
+        { id: "card", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
         {
           id: "cardSpace",
           type: WIDGET.SPACE,
@@ -98,30 +98,29 @@ export const template: (
           { id: "text2", type: WIDGET.TEXT },
         ],
       },
-
-      card: <CardProps>{
+      card: <StackProps>{
         padding: {
+          left: SizeTypeTokens.LG,
+          right: SizeTypeTokens.LG,
           top: SizeTypeTokens.LG,
-          bottom: SizeTypeTokens.LG
-        },
-        body: {
-          widgetItems: isFirstJourney ? [
-            { id: "widgetText", type: WIDGET.TEXT },
-            { id: "widgetText2", type: WIDGET.TEXT },
-            { id: "widgetText3", type: WIDGET.TEXT },
-            { id: "widgetText4", type: WIDGET.TEXT },
-          ] : [
-            { id: "widgetText", type: WIDGET.TEXT },
-            { id: "widgetText3", type: WIDGET.TEXT },
-            { id: "widgetText4", type: WIDGET.TEXT },
-          ],
+          bottom: SizeTypeTokens.LG,
         },
         bgColor: ColorTokens.Yellow_10,
-        margin: 20,
-        borderRadius: BorderRadiusTokens.BR2,
-      },
+        borderConfig:{
+          borderRadius: BorderRadiusTokens.BR2,
+        },
+        widgetItems: isFirstJourney ? [
+          { id: "widgetText", type: WIDGET.TEXT },
+          { id: "widgetText2", type: WIDGET.TEXT },
+          { id: "widgetText3", type: WIDGET.TEXT },
+          { id: "widgetText4", type: WIDGET.TEXT },
+        ] : [
+          { id: "widgetText", type: WIDGET.TEXT },
+          { id: "widgetText3", type: WIDGET.TEXT },
+          { id: "widgetText4", type: WIDGET.TEXT },
+        ],},
       widgetText: <TypographyProps>{
-        label: " Please note",
+        label: "Please note",
         color: ColorTokens.Grey_Night,
         fontWeight: "bold",
         fontFamily: FontFamilyTokens.Inter,

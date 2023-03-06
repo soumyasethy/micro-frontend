@@ -69,7 +69,7 @@ export const template: (
         type: WIDGET.HEADER,
         position: POSITION.ABSOLUTE_TOP,
       },
-      { id: "space0", type: WIDGET.SPACE },
+      // { id: "space0", type: WIDGET.SPACE },
       { id: "amountItem", type: WIDGET.AMOUNTCARD },
       { id: "amountSpace", type: WIDGET.SPACE },
       { id: "headStack", type: WIDGET.TEXT },

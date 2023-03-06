@@ -173,7 +173,7 @@ export const portfolioListDatastoreBuilderV2 = async (
     totalItemSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
     totalCreditLineCard: <CardProps>{
       bgColor: ColorTokens.Primary_05,
-      shadow:ShadowTypeTokens.E6,
+      shadow:ShadowTypeTokens.E2,
       body: {
         widgetItems: [
           { id: "CardSpaceHeader", type: WIDGET.SPACE },

@@ -1,4 +1,12 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
+import {
+    Datastore,
+    Layout,
+    LAYOUTS,
+    PageType,
+    POSITION,
+    TemplateSchema,
+    WidgetProps,
+} from '@voltmoney/types'
 import {
     AccordionArrow,
     AccordionProps,
@@ -42,7 +50,7 @@ import {api} from "../../../configs/api";
 import {ConfigTokens, getAppHeader} from "../../../configs/config";
 import {getTotalLimit} from "../portfolio/actions";
 import _ from "lodash";
-import {addCommasToNumber} from "../../../configs/utils";
+import {addCommasToNumber, convertToKLacsCore} from "../../../configs/utils";
 import {OtpPayloadForPledgeConfirm} from "../pledge_confirmation/types";
 import {AuthCASModel} from "../../../types/AuthCASModel";
 import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
@@ -270,11 +278,19 @@ export const template: (
                         { id: "headerRight", type: WIDGET.STACK },
                     ]
                     : [
-                        { id: "backButton", type: WIDGET.ICON },
-                        { id: "space0", type: WIDGET.SPACE },
-                        { id: "title", type: WIDGET.TEXT },
-                        { id: "headerRight", type: WIDGET.STACK },
-                    ],
+                          { id: 'headerLeftStack', type: WIDGET.STACK },
+                          { id: 'headerRight', type: WIDGET.STACK },
+                      ],
+            },
+            headerLeftStack: <StackProps>{
+                type: StackType.row,
+                width: StackWidth.CONTENT,
+                alignItems: StackAlignItems.center,
+                widgetItems: [
+                    { id: 'backButton', type: WIDGET.ICON },
+                    { id: 'space0', type: WIDGET.SPACE },
+                    { id: 'title', type: WIDGET.TEXT },
+                ],
             },
             backButton: <IconProps & WidgetProps>{
                 name: IconTokens.ChevronLeft,
@@ -1091,8 +1107,11 @@ export const template: (
                     top: SizeTypeTokens.XS,
                 },
                 widgetItems: [
-                    { id: "lendingTXT", type: WIDGET.TEXT },
-                    { id: "bajaj", type: WIDGET.IMAGE },
+                    { id: 'lendingTXT', type: WIDGET.TEXT },
+                    { id: 'space11', type: WIDGET.SPACE },
+                    { id: 'bajaj', type: WIDGET.ICON },
+                    // { id: "space12", type: WIDGET.SPACE },
+                    // { id: "mirae", type: WIDGET.IMAGE },
                 ],
             },
             lendingTXT: <TypographyProps>{
@@ -1102,12 +1121,9 @@ export const template: (
                 fontSize: FontSizeTokens.XS,
             },
             space11: <SpaceProps>{ size: SizeTypeTokens.MD },
-            bajaj: <ImageProps>{
-                uri: "https://volt-images.s3.ap-south-1.amazonaws.com/bajaj.svg",
-                height: 18,
-                width: 68,
-                resizeMode: ResizeModeToken.CONTAIN,
-                padding: SizeTypeTokens.NONE,
+            bajaj: <IconProps>{
+                name: IconTokens.Bajaj,
+                size: IconSizeTokens.Size52,
             },
             spaceMD: <SpaceProps>{ size: SizeTypeTokens.MD },
             // mirae: <ImageProps>{

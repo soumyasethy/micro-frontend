@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
 import {
   BorderRadiusTokens,
   ButtonProps,
@@ -34,22 +26,13 @@ import {
   StackType,
   StackWidth,
   TypographyProps,
-  WIDGET,
+  WIDGET
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION } from "./types";
-import {
-  editSliderAmount,
-  goBack,
-  goConfirmPledge,
-  goToEditPortFolio,
-  OnChangeSlider,
-} from "./action";
+import { editSliderAmount, goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider } from "./action";
 import { addCommasToNumber } from "../../../configs/utils";
-import {
-  StepResponseObject,
-  UpdateAvailableCASMap,
-} from "../unlock_limit/types";
+import { StepResponseObject, UpdateAvailableCASMap } from "../unlock_limit/types";
 import { AuthCASModel } from "../../../types/AuthCASModel";
 import SharedPropsService from "../../../SharedPropsService";
 import sharedPropsService from "../../../SharedPropsService";
@@ -98,15 +81,9 @@ export const template: (
         },
       },
       {
-        id: "ctaCard",
-        type: WIDGET.CARD,
-        padding: {
-          horizontal: 0,
-          top: -16,
-          bottom: 0,
-          all: 0,
-        },
-        position: POSITION.STICKY_BOTTOM,
+        id: "ctaButton",
+        type: WIDGET.BUTTON,
+        position: POSITION.ABSOLUTE_BOTTOM,
       },
     ],
   },
@@ -484,25 +461,6 @@ export const template: (
       size: SizeTypeTokens.MD,
     },
     ...(await portfolioListDatastoreBuilderSetCreditLimit(stepResponseObject)),
-    ctaCard: <CardProps>{
-      bgColor: ColorTokens.White,
-      shadow: ShadowTypeTokens.E6,
-      body: { widgetItems: [{ id: "ctaBody", type: WIDGET.STACK }] },
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.spaceBetween,
-    },
-    ctaBody: <StackProps>{
-      width: StackWidth.FULL,
-      type: StackType.column,
-      alignItems: StackAlignItems.center,
-      justifyContent: StackJustifyContent.center,
-      widgetItems: [
-        {
-          id: "ctaButton",
-          type: WIDGET.BUTTON,
-        },
-      ],
-    },
     ctaButton: <ButtonProps & WidgetProps>{
       label: "Confirm amount and assets",
       fontWeight: "700",

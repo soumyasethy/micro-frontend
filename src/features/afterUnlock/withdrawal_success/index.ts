@@ -110,7 +110,7 @@ export const template: (
         type: WIDGET.SPACE,
         position: POSITION.ABSOLUTE_TOP,
       },
-      { id: "card", type: WIDGET.CARD, position: POSITION.ABSOLUTE_BOTTOM },
+      { id: "card", type: WIDGET.STACK, position: POSITION.ABSOLUTE_BOTTOM },
       {
         id: "cardSpace",
         type: WIDGET.SPACE,
@@ -244,27 +244,29 @@ export const template: (
       state: InfoStateTokens.GRADIENT,
     },
     infoSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    card: <CardProps>{
-      body: {
-        widgetItems: isFirstJourney
-          ? [
-              { id: "widgetText", type: WIDGET.TEXT },
-              { id: "widgetText2", type: WIDGET.TEXT },
-              { id: "widgetText3", type: WIDGET.TEXT },
-              { id: "widgetText4", type: WIDGET.TEXT },
-            ]
-          : [
-              { id: "widgetText", type: WIDGET.TEXT },
-              { id: "widgetText3", type: WIDGET.TEXT },
-              { id: "widgetText4", type: WIDGET.TEXT },
-            ],
+    card: <StackProps>{
+      padding: {
+        left: SizeTypeTokens.LG,
+        right: SizeTypeTokens.LG,
+        top: SizeTypeTokens.LG,
+        bottom: SizeTypeTokens.LG,
       },
       bgColor: ColorTokens.Yellow_10,
-      margin: 20,
-      borderTopRightRadius: BorderRadiusTokens.BR2,
-      borderTopLeftRadius: BorderRadiusTokens.BR2,
-      borderBottomLeftRadius: BorderRadiusTokens.BR2,
-      borderBottomRightRadius: BorderRadiusTokens.BR2,
+      borderConfig:{
+        borderRadius: BorderRadiusTokens.BR2,
+      },
+      widgetItems: isFirstJourney
+        ? [
+          { id: "widgetText", type: WIDGET.TEXT },
+          { id: "widgetText2", type: WIDGET.TEXT },
+          { id: "widgetText3", type: WIDGET.TEXT },
+          { id: "widgetText4", type: WIDGET.TEXT },
+        ]
+        : [
+          { id: "widgetText", type: WIDGET.TEXT },
+          { id: "widgetText3", type: WIDGET.TEXT },
+          { id: "widgetText4", type: WIDGET.TEXT },
+        ],
     },
     widgetText: <TypographyProps>{
       label: " We're processing your withdrawal request.Please note",
