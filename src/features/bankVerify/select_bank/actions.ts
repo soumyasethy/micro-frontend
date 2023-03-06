@@ -71,11 +71,9 @@ export const SearchAction: ActionFunction<SearchActionPayload> = async (
     GridImageItemProps & WidgetProps
   >{
     type: GridItemTypeTokens.VERITICAL,
-    title: "",
-    other: "",
     data: [
       ...Object.keys(dataSearchMap).map((key) => ({
-        label: allBankMap[key],
+        label: dataSearchMap[key],
         image: getBankPNGUrl(key),
         defaultUri: getBankDefaultPng(),
       })),
