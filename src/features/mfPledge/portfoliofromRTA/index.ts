@@ -1,12 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   BorderRadiusTokens,
   ButtonProps,
@@ -32,22 +24,18 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
-import {
-  getMoreMfPortfolio,
-  goBackAction,
-  portfolioListDatastoreBuilder,
-} from "./action";
+import {ROUTE} from "../../../routes";
+import {ACTION} from "./types";
+import {getMoreMfPortfolio, goBackAction, portfolioListDatastoreBuilder,} from "./action";
 import SharedPropsService from "../../../SharedPropsService";
-import { AvailableCASItem } from "../../mfPledge/unlock_limit/types";
-import { StepResponseObject } from "../../mfPledge/unlock_limit_landing_V2/types";
+import {AvailableCASItem} from "../../mfPledge/unlock_limit/types";
+import {StepResponseObject} from "../../mfPledge/unlock_limit_landing_V2/types";
 import moment from "moment";
-import { User } from "../../login/otp_verify/types";
-import { GetMoreMfPortfolioPayload } from "../unlock_limit_V2/types";
-import { addCommasToNumber } from "../../../configs/utils";
-import { AuthCASModel } from "../../../types/AuthCASModel";
-import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
+import {User} from "../../login/otp_verify/types";
+import {GetMoreMfPortfolioPayload} from "../unlock_limit_V2/types";
+import {addCommasToNumber} from "../../../configs/utils";
+import {AuthCASModel} from "../../../types/AuthCASModel";
+import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
 
 export const template: (
     stepResponseObject: StepResponseObject,
@@ -86,7 +74,10 @@ export const template: (
       { id: "space3", type: WIDGET.SPACE },
       { id: "divider", type: WIDGET.DIVIDER },
       { id: "listItem", type: WIDGET.LIST },
-      { id: "ctaStack", type: WIDGET.STACK, position: POSITION.STICKY_BOTTOM },
+      { id: "ctaCard", type: WIDGET.CARD, position: POSITION.STICKY_BOTTOM },
+      { id: "space3", type: WIDGET.SPACE },
+      { id: "space3", type: WIDGET.SPACE },
+
     ],
   },
   datastore: <Datastore>{
@@ -246,6 +237,7 @@ export const template: (
       justifyContent: StackJustifyContent.spaceBetween,
       alignItems: StackAlignItems.center,
       widgetItems: [
+        { id: "ctaSpace", type: WIDGET.SPACE },
         { id: "ctaTextStack", type: WIDGET.STACK },
         { id: "ctaSpace", type: WIDGET.SPACE },
         { id: "ctaButton", type: WIDGET.BUTTON },
