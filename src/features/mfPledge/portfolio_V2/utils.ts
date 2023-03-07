@@ -206,7 +206,7 @@ export const portfolioListDatastoreBuilderV2 = async (
       ],
     },
     outOfText1: <TypographyProps>{
-      label: ` ₹${addCommasToNumber(
+      label: `₹${addCommasToNumber(
         roundDownToNearestHundred(
           getTotalLimit(
             stepResponseObject.availableCAS,
@@ -215,7 +215,6 @@ export const portfolioListDatastoreBuilderV2 = async (
           )
         )
       )}`,
-      fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "600",
       fontSize: FontSizeTokens.XL,
       color: ColorTokens.Grey_Night,
