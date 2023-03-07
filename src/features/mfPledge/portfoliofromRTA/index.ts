@@ -50,17 +50,17 @@ import { AuthCASModel } from "../../../types/AuthCASModel";
 import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
 
 export const template: (
-  stepResponseObject: StepResponseObject,
-  formattedDate: string,
-  availableAmount: number,
-  totalPortfolio: number,
-  assetRepository: string
+    stepResponseObject: StepResponseObject,
+    formattedDate: string,
+    availableAmount: number,
+    totalPortfolio: number,
+    assetRepository: string
 ) => Promise<TemplateSchema> = async (
-  stepResponseObject,
-  formattedDate,
-  availableAmount,
-  totalPortfolio,
-  assetRepository
+    stepResponseObject,
+    formattedDate,
+    availableAmount,
+    totalPortfolio,
+    assetRepository
 ) => ({
   layout: <Layout>{
     id: ROUTE.PORTFOLIO_FROM_RTA,
@@ -74,7 +74,7 @@ export const template: (
       {
         id: "creditLimitStack",
         type: WIDGET.STACK,
-        
+
       },
       {
         id: "space",
@@ -86,7 +86,7 @@ export const template: (
       { id: "space3", type: WIDGET.SPACE },
       { id: "divider", type: WIDGET.DIVIDER },
       { id: "listItem", type: WIDGET.LIST },
-      { id: "ctaCard", type: WIDGET.CARD, position: POSITION.STICKY_BOTTOM },
+      { id: "ctaStack", type: WIDGET.STACK, position: POSITION.STICKY_BOTTOM },
     ],
   },
   datastore: <Datastore>{
@@ -94,9 +94,9 @@ export const template: (
       isBackButton: true,
       type: HeaderTypeTokens.DEFAULT,
       title:
-        assetRepository === "KARVY"
-          ? `Portfolio from KFintech`
-          : `Portfolio from ${assetRepository}`,
+          assetRepository === "KARVY"
+              ? `Portfolio from KFintech`
+              : `Portfolio from ${assetRepository}`,
       action: {
         type: ACTION.GO_BACK,
         routeId: ROUTE.PORTFOLIO_FROM_RTA,
@@ -109,14 +109,14 @@ export const template: (
       bgColor: ColorTokens.Grey_Milk_1,
       padding: {
         top: SizeTypeTokens.LG,
-         left: SizeTypeTokens.LG,
-         right: SizeTypeTokens.LG,
+        left: SizeTypeTokens.LG,
+        right: SizeTypeTokens.LG,
       },
       borderConfig:{
         borderRadius: BorderRadiusTokens.BR3,
         borderWidth: {
-          		all: SizeTypeTokens.XS,
-          	},
+          all: SizeTypeTokens.XS,
+        },
         borderColor: ColorTokens.Grey_Milk_1
       },
       justifyContent: StackJustifyContent.spaceBetween,
@@ -235,20 +235,13 @@ export const template: (
       color: ColorTokens.Grey_Milk_1,
     },
     ...(await portfolioListDatastoreBuilder(
-      stepResponseObject,
-      assetRepository
+        stepResponseObject,
+        assetRepository
     )),
-    ctaCard: <CardProps>{
-      shadow: ShadowTypeTokens.E6,
-      bgColor: ColorTokens.White,
-      width: StackWidth.FULL,
-      bodyOrientation: CardOrientation.HORIZONTAL,
-      body: {
-        widgetItems: [{ id: "ctaStack", type: WIDGET.STACK }],
-      },
-    },
     ctaStack: <StackProps>{
-      width: StackWidth.FULL,
+      padding:{bottom:SizeTypeTokens.LG, left:SizeTypeTokens.LG, right:SizeTypeTokens.LG},
+      shadow: ShadowTypeTokens.E6,
+      width: StackWidth.MATCH_PARENT,
       type: StackType.column,
       justifyContent: StackJustifyContent.spaceBetween,
       alignItems: StackAlignItems.center,
@@ -256,6 +249,7 @@ export const template: (
         { id: "ctaTextStack", type: WIDGET.STACK },
         { id: "ctaSpace", type: WIDGET.SPACE },
         { id: "ctaButton", type: WIDGET.BUTTON },
+        { id: "ctaSpace", type: WIDGET.SPACE },
       ],
     },
     ctaTextStack: <StackProps>{
@@ -315,38 +309,38 @@ export const portfoliofromRTAMf: PageType<any> = {
     const authCAS: AuthCASModel = await SharedPropsService.getAuthCASResponse();
 
     const pledgeLimitResponse = authCAS
-      ? { data: authCAS }
-      : await fetchPledgeLimitRepo().then((response) => ({
+        ? { data: authCAS }
+        : await fetchPledgeLimitRepo().then((response) => ({
           data: response,
         }));
     /*** update authCAS in SharedPropsService if fetched from api ***/
     await SharedPropsService.setAuthCASResponse(pledgeLimitResponse.data);
 
     const availableCAS: AvailableCASItem[] =
-      pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
+        pledgeLimitResponse.data.stepResponseObject.availableCAS || [];
     await SharedPropsService.setCasListOriginal(availableCAS);
     const stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
 
     const date =
-      assetRepository === "CAMS"
-        ? stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate
-        : stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
+        assetRepository === "CAMS"
+            ? stepResponseObject.repositoryAssetMetadataMap.CAMS.casFetchDate
+            : stepResponseObject.repositoryAssetMetadataMap.KARVY.casFetchDate;
 
     const formattedDate = moment.unix(Number(date)).format("DD MMMM, YYYY");
 
     const availableAmount =
-      assetRepository === "CAMS"
-        ? stepResponseObject.repositoryAssetMetadataMap.CAMS
-            .availableCreditAmount
-        : stepResponseObject.repositoryAssetMetadataMap.KARVY
-            .availableCreditAmount;
+        assetRepository === "CAMS"
+            ? stepResponseObject.repositoryAssetMetadataMap.CAMS
+                .availableCreditAmount
+            : stepResponseObject.repositoryAssetMetadataMap.KARVY
+                .availableCreditAmount;
 
     const totalPortfolio =
-      assetRepository === "CAMS"
-        ? stepResponseObject.repositoryAssetMetadataMap.CAMS
-            .availablePortfolioAmount
-        : stepResponseObject.repositoryAssetMetadataMap.KARVY
-            .availablePortfolioAmount;
+        assetRepository === "CAMS"
+            ? stepResponseObject.repositoryAssetMetadataMap.CAMS
+                .availablePortfolioAmount
+            : stepResponseObject.repositoryAssetMetadataMap.KARVY
+                .availablePortfolioAmount;
 
     /*** Prefill pledgeUnit ***/
     stepResponseObject.availableCAS.map((item, index) => {
@@ -355,13 +349,13 @@ export const portfoliofromRTAMf: PageType<any> = {
       updateAvailableCASMap[key] = item;
     });
     return Promise.resolve(
-      template(
-        stepResponseObject,
-        formattedDate,
-        availableAmount,
-        totalPortfolio,
-        assetRepository
-      )
+        template(
+            stepResponseObject,
+            formattedDate,
+            availableAmount,
+            totalPortfolio,
+            assetRepository
+        )
     );
   },
   actions: {
