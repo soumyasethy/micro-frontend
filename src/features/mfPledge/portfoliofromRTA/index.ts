@@ -74,10 +74,9 @@ export const template: (
       { id: "space3", type: WIDGET.SPACE },
       { id: "divider", type: WIDGET.DIVIDER },
       { id: "listItem", type: WIDGET.LIST },
-      { id: "ctaCard", type: WIDGET.CARD, position: POSITION.STICKY_BOTTOM },
+      { id: "ctaStack", type: WIDGET.STACK, position: POSITION.STICKY_BOTTOM },
       { id: "space3", type: WIDGET.SPACE },
       { id: "space3", type: WIDGET.SPACE },
-
     ],
   },
   datastore: <Datastore>{
