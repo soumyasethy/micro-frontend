@@ -126,6 +126,7 @@ export const template: (prevMob: string) => TemplateSchema = (prevMob) => ({
     input: <TextInputProps & WidgetProps>{
       value: prevMob,
       regex: RegexConfig.MOBILE,
+      clearEnabled: true,
       type: InputTypeToken.MOBILE,
       state: InputStateToken.DEFAULT,
       title: "Mobile Number",

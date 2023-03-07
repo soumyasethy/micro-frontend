@@ -126,6 +126,7 @@ export const template: (email: String) => TemplateSchema = (email) => ({
     input: <TextInputProps & WidgetProps>{
       value: email,
       isLowerCase: true,
+      clearEnabled: true,
       type: InputTypeToken.EMAIL,
       state: InputStateToken.DEFAULT,
       title: "Email Id",
