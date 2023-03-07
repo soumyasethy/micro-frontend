@@ -61,7 +61,6 @@ import SharedPropsService from '../../../SharedPropsService'
 import { api } from '../../../configs/api'
 import { ConfigTokens, getAppHeader } from '../../../configs/config'
 import { shouldShowVoltContactUs } from '../../../configs/uri-config-utils'
-import { Share } from 'react-native'
 
 export const template: (
     availableCreditAmount: number,
@@ -169,6 +168,7 @@ export const template: (
         datastore: <Datastore>{
             card: <CardProps>{
                 bgColor: ColorTokens.White,
+                shadow: ShadowTypeTokens.E2,
                 body: { widgetItems: [{ id: 'header', type: WIDGET.STACK }] },
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
@@ -230,7 +230,6 @@ export const template: (
                 padding: { horizontal: SizeTypeTokens.LG },
               widgetItems: [
                     { id: 'title', type: WIDGET.TEXT },
-                    // { id: "leadIcon", type: WIDGET.BUTTON },
                     { id: 'headerRight', type: WIDGET.STACK },
                 ],
             },
