@@ -241,6 +241,7 @@ export const template: (
         { id: "ctaSpace", type: WIDGET.SPACE },
         { id: "ctaButton", type: WIDGET.BUTTON },
         { id: "ctaSpace", type: WIDGET.SPACE },
+        { id: "ctaSpace", type: WIDGET.SPACE },
       ],
     },
     ctaTextStack: <StackProps>{
