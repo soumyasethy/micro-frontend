@@ -50,13 +50,10 @@ type GlobalProps = {
         [ConfigTokens.IS_PAN_EDIT_ALLOWED]?: boolean
         [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]?: boolean
         [ConfigTokens.IS_KYC_PHOTO_VERIFICATION]?: boolean
-        [ConfigTokens.IS_GOOGLE_LOGIN_ENABLED]?: boolean
         [ConfigTokens.IS_MF_FETCH_BACK_ALLOWED]?: boolean
         [ConfigTokens.MIN_AMOUNT_ALLOWED]?: number
         [ConfigTokens.MAX_AMOUNT_ALLOWED]?: number
         [ConfigTokens.IS_FIRST_JOURNEY]?: boolean
-        [ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED]?: boolean
-        [ConfigTokens.IS_PARTNER_PLATFORM]?: boolean
         [ConfigTokens.IS_RTA_SWITCH_ENABLED]: boolean
     }
     userDob?: string
@@ -112,6 +109,7 @@ let _globalProps: GlobalProps = {
     pbankAccNo: '',
     pconfirmAccNo: '',
     pbankIfsc: '',
+    url: '',
     bankData: {
         bankName: '',
         bankCode: '',
@@ -155,14 +153,11 @@ let _globalProps: GlobalProps = {
         [ConfigTokens.IS_PAN_EDIT_ALLOWED]: true,
         [ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP]: false,
         [ConfigTokens.IS_KYC_PHOTO_VERIFICATION]: false,
-        [ConfigTokens.IS_GOOGLE_LOGIN_ENABLED]: false,
         [ConfigTokens.IS_MF_FETCH_BACK_ALLOWED]: false,
         [ConfigTokens.MIN_AMOUNT_ALLOWED]: 25000,
         [ConfigTokens.MAX_AMOUNT_ALLOWED]: 10000000,
         [ConfigTokens.IS_RTA_SWITCH_ENABLED]: true,
         [ConfigTokens.IS_FIRST_JOURNEY]: false,
-        [ConfigTokens.GET_UPDATES_ON_WHATSAPP_ALLOWED]: true,
-        [ConfigTokens.IS_PARTNER_PLATFORM]: false,
     },
     userDob: '',
     creditLimit: 25000,
@@ -178,6 +173,13 @@ export function setStepperData(StepperData) {
 }
 export function getStepperData(): any {
     return _globalProps.stepperData
+}
+
+export function setURL(url: string) {
+    _globalProps.url = url
+}
+export function getURL(): any {
+    return _globalProps.url
 }
 
 export function setInvestorName(investorName: string) {
@@ -375,15 +377,8 @@ function getPropsValue(key?: string) {
     return null
 }
 
-async function setUser(props: User) {
-    _globalProps.user = await props
-    _globalProps.config[ConfigTokens.IS_GOOGLE_LOGIN_ENABLED] = _.get(
-        props,
-        'linkedPlatformAccounts[0].platformCode',
-        '',
-    )
-        .toUpperCase()
-        .includes('VOLT')
+async function setUser(user: User) {
+    _globalProps.user = await user
 }
 
 async function getUser() {
@@ -516,6 +511,8 @@ export default {
     getPropsValue,
     setUser,
     getUser,
+    setURL,
+    getURL,
     setToken,
     getToken,
     setAvailableCASMap,
