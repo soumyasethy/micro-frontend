@@ -104,6 +104,8 @@ export const template: (
         { id: "mothersCard", type: WIDGET.CARD },
         { id: "space1", type: WIDGET.SPACE },
         { id: "space2", type: WIDGET.SPACE },
+        { id: "keyboardSpace", type: WIDGET.SPACE },
+        { id: "keyboardSpace2", type: WIDGET.SPACE },
         {
           id: "stackBottom",
           type: WIDGET.STACK,
@@ -162,6 +164,8 @@ export const template: (
         },
       },
       space2: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
+      keyboardSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
+      keyboardSpace2: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
       spaceContinue: <SpaceProps>{ size: SizeTypeTokens.MD },
       martialStatusStack: <StackProps>{
         width: StackWidth.FULL,
@@ -472,7 +476,7 @@ export const template: (
         color: ColorTokens.Secondary_100,
         fontSize: FontSizeTokens.XS,
       },
-      space1: <SpaceProps>{ size: SizeTypeTokens.XXL },
+      space1: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     },
   };
 };
