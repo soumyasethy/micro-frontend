@@ -79,11 +79,6 @@ export const template: (
           type: WIDGET.SPACE,
           position: POSITION.ABSOLUTE_BOTTOM,
         },
-        {
-          id: "disclaimerStack",
-          type: WIDGET.STACK,
-          position: POSITION.ABSOLUTE_BOTTOM,
-        },
       ],
     },
     datastore: <Datastore>{
@@ -161,36 +156,6 @@ export const template: (
       space5: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       space3: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       space4: <SpaceProps>{ size: SizeTypeTokens.Size32 },
-      disclaimerStack: <StackProps>{
-        type: StackType.row,
-        justifyContent: StackJustifyContent.center,
-        alignItems: StackAlignItems.center,
-        widgetItems: [
-          {
-            id: "disclaimerIcon",
-            type: WIDGET.ICON,
-          },
-
-          { id: "disclaimerSpace", type: WIDGET.SPACE },
-          {
-            id: "disclaimerText",
-            type: WIDGET.TEXT,
-          },
-        ],
-      },
-      disclaimerText: <TypographyProps>{
-        fontSize: FontSizeTokens.XXS,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "500",
-        label: "Your data is secure with us",
-        color: ColorTokens.System_Happy,
-      },
-      disclaimerSpace: <SpaceProps>{ size: SizeTypeTokens.MD },
-      disclaimerIcon: <IconProps>{
-        name: IconTokens.Secure,
-        size: IconSizeTokens.XS,
-        color: ColorTokens.Secondary_100,
-      },
     },
   };
 };
