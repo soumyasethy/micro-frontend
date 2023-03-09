@@ -18,7 +18,7 @@ import {
   FontSizeTokens,
   IconTokens,
   LimitCardProps,
-  LottieProps,
+  LottieProps, LottieSizeTokens,
   LottieTokens,
   SizeTypeTokens,
   SpaceProps,
@@ -28,7 +28,7 @@ import {
   StackType,
   StepperStateToken,
   TypographyProps,
-  WIDGET,
+  WIDGET
 } from "@voltmoney/schema";
 import { ROUTE } from "../../../routes";
 import { ACTION, StepResponseObject } from "./types";
@@ -106,6 +106,7 @@ export const template: (
       uri: LottieTokens.UnlockNew,
       autoplay: true,
       loop: false,
+      size: LottieSizeTokens.FULL,
     },
     congratulationsText: <TypographyProps>{
       label: "Congratulations!",
