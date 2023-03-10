@@ -8,24 +8,20 @@ import SharedPropsService from "../../../SharedPropsService";
 import { saveAttribute } from "../enter_email/repo";
 import { nextStepId } from "../../../configs/utils";
 import { User } from "../../login/otp_verify/types";
-import { ButtonProps } from "@voltmoney/schema";
+import { Platform } from "react-native";
 
 export const loginGoogle: ActionFunction<any> = async (
   action,
   _datastore,
-  { navigate }
+  { navigate,metaData }
 ): Promise<any> => {
-  // const responseWeb = await signInGoogleWeb();
-  // console.warn("responseWeb-->", responseWeb);
-  // const response: GoogleLoginResponse = await signInGoogle();
-  // console.warn("email id ------>", response.user.email);
-  // navigate(ROUTE.ENTER_EMAIL, { applicationId: action.payload.applicationId });
   const accountId = (await SharedPropsService.getUser())
     .linkedBorrowerAccounts[0].accountId;
   const updatedUser: User = await saveAttribute(
     accountId,
     "EMAIL",
-    action.payload.value.profileObj.email
+    action.payload.value,
+    metaData.platform.OS,
   );
   await SharedPropsService.setUser(updatedUser);
   const route = await nextStepId(
@@ -36,7 +32,7 @@ export const loginGoogle: ActionFunction<any> = async (
 export const otherEmail: ActionFunction<OtherEmail> = async (
   action,
   _datastore,
-  { setDatastore, navigate }
+  { navigate }
 ): Promise<any> => {
   navigate(ROUTE.ENTER_EMAIL, { applicationId: action.payload.applicationId });
 };

@@ -6,7 +6,8 @@ import SharedPropsService from "../../../SharedPropsService";
 export const saveAttribute = async (
   applicationId: string,
   key: string,
-  value: string
+  value: string,
+  platform: string
 ): Promise<User> => {
   applicationId = (await SharedPropsService.getUser()).linkedBorrowerAccounts[0]
     .accountId;
@@ -17,7 +18,7 @@ export const saveAttribute = async (
           value: value,
           sources: ["SELF"],
           verified: true,
-          verificationSources: [`web`],
+          verificationSources: [platform],
           collectedOn: `${Date.now()}`,
           verifiedOn: `${Date.now()}`,
         },
