@@ -1,4 +1,4 @@
-import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps} from "@voltmoney/types";
+import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
 import {
   BorderRadiusTokens,
   ButtonProps,
@@ -16,6 +16,7 @@ import {
   IconSizeTokens,
   IconTokens,
   PaddingProps,
+  ShadowTypeTokens,
   SizeTypeTokens,
   SliderBaseProps,
   SpaceProps,
@@ -27,17 +28,24 @@ import {
   TypographyProps,
   WIDGET
 } from "@voltmoney/schema";
-import {ROUTE} from "../../../routes";
-import {ACTION} from "./types";
-import {editSliderAmount, goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider} from "./action";
-import {addCommasToNumber} from "../../../configs/utils";
-import {StepResponseObject, UpdateAvailableCASMap} from "../unlock_limit/types";
-import {AuthCASModel} from "../../../types/AuthCASModel";
+import { ROUTE } from "../../../routes";
+import { ACTION } from "./types";
+import {
+  editSliderAmount,
+  goBack,
+  goConfirmPledge,
+  goToEditPortFolio,
+  OnChangeCompleteSlider,
+  OnChangeSlider
+} from "./action";
+import { addCommasToNumber } from "../../../configs/utils";
+import { StepResponseObject, UpdateAvailableCASMap } from "../unlock_limit/types";
+import { AuthCASModel } from "../../../types/AuthCASModel";
 import SharedPropsService from "../../../SharedPropsService";
 import sharedPropsService from "../../../SharedPropsService";
-import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
-import {portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
-import {getDesiredValue} from "../portfolio_readonly/actions";
+import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
+import { portfolioListDatastoreBuilderSetCreditLimit } from "./utils";
+import { getDesiredValue } from "../portfolio_readonly/actions";
 
 export const template: (
   maxAmount: number,
@@ -136,11 +144,8 @@ export const template: (
       widgetItems: [
         { id: "rupee", type: WIDGET.TEXT },
         { id: "amount", type: WIDGET.TEXT },
-        { id: "spaceLG", type: WIDGET.SPACE },
-        { id: "icon", type: WIDGET.ICON, padding: {
-          horizontal: 4,
-          vertical: 4
-          } },
+        { id: "space", type: WIDGET.SPACE },
+        { id: "icon", type: WIDGET.ICON },
       ],
     },
     rupee: <TypographyProps>{
@@ -158,12 +163,9 @@ export const template: (
     space: <SpaceProps>{
       size: SizeTypeTokens.Size10,
     },
-    spaceLG: <SpaceProps> {
-      size: SizeTypeTokens.LG
-    },
     icon: <IconProps & WidgetProps>{
       name: IconTokens.EditBlue,
-      size: IconSizeTokens.XXL,
+      size: IconSizeTokens.XL,
       action: {
         type: ACTION.EDIT_LIMIT,
         routeId: ROUTE.SET_CREDIT_LIMIT,
@@ -183,8 +185,15 @@ export const template: (
       maximumValue: maxAmount,
       step: 1000,
       paddingHorizontal: 10,
-      action: {
+      onValueChangeAction:{
         type: ACTION.ON_CHANGE_SLIDER,
+        routeId: ROUTE.SET_CREDIT_LIMIT,
+        payload: {
+          stepResponseObject: stepResponseObject,
+        },
+      },
+      action: {
+        type: ACTION.ON_CHANGE_COMPLETE_SLIDER,
         routeId: ROUTE.SET_CREDIT_LIMIT,
         payload: {
           stepResponseObject: stepResponseObject,
@@ -313,8 +322,8 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
       type: ButtonTypeTokens.MediumGhost,
-      paddingHorizontal: SizeTypeTokens.MD,
-      paddingVertical: SizeTypeTokens.MD,
+      paddingHorizontal: SizeTypeTokens.Size6,
+      paddingVertical: SizeTypeTokens.Size6,
       action: {
         type: ACTION.EDIT_PORTFOLIO,
         payload: {
@@ -550,6 +559,7 @@ export const setCreditLimitMf: PageType<any> = {
   },
   actions: {
     [ACTION.ON_CHANGE_SLIDER]: OnChangeSlider,
+    [ACTION.ON_CHANGE_COMPLETE_SLIDER]: OnChangeCompleteSlider,
     [ACTION.GO_BACK]: goBack,
     [ACTION.GO_CONFIRM_PLEDGE]: goConfirmPledge,
     [ACTION.EDIT_PORTFOLIO]: goToEditPortFolio,

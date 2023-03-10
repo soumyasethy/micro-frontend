@@ -131,6 +131,11 @@ export const ToggleSelectAction: ActionFunction<
     portfolioSearchKeyword
   );
 
+
+  await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps & WidgetProps>{
+    ...props.listItem,
+  });
+
   await setDatastore(ROUTE.PORTFOLIO, "outOfText1", <ButtonProps>{
     label: ` ₹${addCommasToNumber(
       parseInt(
@@ -152,9 +157,7 @@ export const ToggleSelectAction: ActionFunction<
       type: ButtonTypeTokens.LargeFilled,
     });
   }
-  await setDatastore(ROUTE.PORTFOLIO, "listItem", <ListProps & WidgetProps>{
-    ...props.listItem,
-  });
+
   await setDatastore(ROUTE.PORTFOLIO, "outOfText1", <TypographyProps>{
     ...props.outOfText1,
   });
@@ -184,6 +187,7 @@ export const ToggleSelectAction: ActionFunction<
     )} are selected for pledging.`,
   });
 };
+
 
 export const SearchPortfolio: ActionFunction<SearchPortfolioPayload> = async (
   action,

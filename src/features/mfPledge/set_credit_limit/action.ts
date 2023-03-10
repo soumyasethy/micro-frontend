@@ -46,14 +46,87 @@ const getUpdateAvailableCAS = (
   }
   return updateAvailableCAS;
 };
-
 export const OnChangeSlider: ActionFunction<any> = async (
+    action,
+    _datastore,
+    { navigate, goBack, setDatastore }
+) => {
+  value = action.payload.value;
+  /** On change of value update updateAvailableCASMap **/
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "amount", <TypographyProps>{
+    label: `${addCommasToNumber(parseInt(value))}`,
+  });
+  return
+
+  const stepResponseObject = action.payload.stepResponseObject;
+  const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap();
+  if (parseInt(value) > 0) {
+    stepResponseObject.availableCAS.forEach((item, index) => {
+      stepResponseObject.availableCAS[index].pledgedUnits =
+          item.totalAvailableUnits;
+    });
+    stepResponseObject.availableCAS = getUpdateAvailableCAS(
+        parseInt(value),
+        stepResponseObject.availableCAS,
+        stepResponseObject.isinNAVMap,
+        stepResponseObject.isinLTVMap
+    );
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      updateAvailableCASMap[key] = item;
+    });
+  } else {
+    stepResponseObject.availableCAS.map((item, index) => {
+      let key = `${item.isinNo}-${item.folioNo}`;
+      item.pledgedUnits = item.totalAvailableUnits;
+      updateAvailableCASMap[key] = item;
+    });
+  }
+  await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
+  /** **/
+  const updatedListProps = await listItemDataBuilder(stepResponseObject);
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "listItem", <ListProps>{
+    data: updatedListProps,
+  });
+
+  await SharedPropsService.setCreditLimit(parseInt(value));
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "slider", <TypographyProps>{
+    value: SharedPropsService.getCreditLimit(),
+  });
+
+  const portValue = getDesiredValue(
+      stepResponseObject.availableCAS,
+      stepResponseObject.isinNAVMap
+  );
+
+  await SharedPropsService.setDesiredPortfolio(portValue);
+
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomStackText", <
+      TypographyProps
+      >{
+    label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
+        parseInt(stepResponseObject["totalPortfolioAmount"].toString())
+    )} are selected for pledging.`,
+  });
+
+  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "bottomSheetText2", <
+      TypographyProps
+      >{
+    label: `₹${addCommasToNumber(portValue)} out of ₹${addCommasToNumber(
+        parseInt(
+            action.payload.stepResponseObject["totalPortfolioAmount"].toString()
+        )
+    )} are selected for pledging.`,
+  });
+};
+export const OnChangeCompleteSlider: ActionFunction<any> = async (
   action,
   _datastore,
   { navigate, goBack, setDatastore }
 ) => {
   value = action.payload.value;
   /** On change of value update updateAvailableCASMap **/
+
   const stepResponseObject = action.payload.stepResponseObject;
   const updateAvailableCASMap = await sharedPropsService.getAvailableCASMap();
   if (parseInt(value) > 0) {
@@ -84,9 +157,7 @@ export const OnChangeSlider: ActionFunction<any> = async (
   await setDatastore(ROUTE.SET_CREDIT_LIMIT, "listItem", <ListProps>{
     data: updatedListProps,
   });
-  await setDatastore(ROUTE.SET_CREDIT_LIMIT, "amount", <TypographyProps>{
-    label: `${addCommasToNumber(parseInt(value))}`,
-  });
+
   await SharedPropsService.setCreditLimit(parseInt(value));
   await setDatastore(ROUTE.SET_CREDIT_LIMIT, "slider", <TypographyProps>{
     value: SharedPropsService.getCreditLimit(),
