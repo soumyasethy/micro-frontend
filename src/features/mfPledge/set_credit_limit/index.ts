@@ -1,4 +1,4 @@
-import { Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps } from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps} from "@voltmoney/types";
 import {
   BorderRadiusTokens,
   ButtonProps,
@@ -16,7 +16,6 @@ import {
   IconSizeTokens,
   IconTokens,
   PaddingProps,
-  ShadowTypeTokens,
   SizeTypeTokens,
   SliderBaseProps,
   SpaceProps,
@@ -28,17 +27,17 @@ import {
   TypographyProps,
   WIDGET
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTION } from "./types";
-import { editSliderAmount, goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider } from "./action";
-import { addCommasToNumber } from "../../../configs/utils";
-import { StepResponseObject, UpdateAvailableCASMap } from "../unlock_limit/types";
-import { AuthCASModel } from "../../../types/AuthCASModel";
+import {ROUTE} from "../../../routes";
+import {ACTION} from "./types";
+import {editSliderAmount, goBack, goConfirmPledge, goToEditPortFolio, OnChangeSlider} from "./action";
+import {addCommasToNumber} from "../../../configs/utils";
+import {StepResponseObject, UpdateAvailableCASMap} from "../unlock_limit/types";
+import {AuthCASModel} from "../../../types/AuthCASModel";
 import SharedPropsService from "../../../SharedPropsService";
 import sharedPropsService from "../../../SharedPropsService";
-import { fetchPledgeLimitRepo } from "../unlock_limit/repo";
-import { portfolioListDatastoreBuilderSetCreditLimit } from "./utils";
-import { getDesiredValue } from "../portfolio_readonly/actions";
+import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
+import {portfolioListDatastoreBuilderSetCreditLimit} from "./utils";
+import {getDesiredValue} from "../portfolio_readonly/actions";
 
 export const template: (
   maxAmount: number,
@@ -137,8 +136,11 @@ export const template: (
       widgetItems: [
         { id: "rupee", type: WIDGET.TEXT },
         { id: "amount", type: WIDGET.TEXT },
-        { id: "space", type: WIDGET.SPACE },
-        { id: "icon", type: WIDGET.ICON },
+        { id: "spaceLG", type: WIDGET.SPACE },
+        { id: "icon", type: WIDGET.ICON, padding: {
+          horizontal: 4,
+          vertical: 4
+          } },
       ],
     },
     rupee: <TypographyProps>{
@@ -156,9 +158,12 @@ export const template: (
     space: <SpaceProps>{
       size: SizeTypeTokens.Size10,
     },
+    spaceLG: <SpaceProps> {
+      size: SizeTypeTokens.LG
+    },
     icon: <IconProps & WidgetProps>{
       name: IconTokens.EditBlue,
-      size: IconSizeTokens.XL,
+      size: IconSizeTokens.XXL,
       action: {
         type: ACTION.EDIT_LIMIT,
         routeId: ROUTE.SET_CREDIT_LIMIT,
@@ -308,8 +313,8 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
       type: ButtonTypeTokens.MediumGhost,
-      paddingHorizontal: SizeTypeTokens.Size6,
-      paddingVertical: SizeTypeTokens.Size6,
+      paddingHorizontal: SizeTypeTokens.MD,
+      paddingVertical: SizeTypeTokens.MD,
       action: {
         type: ACTION.EDIT_PORTFOLIO,
         payload: {
