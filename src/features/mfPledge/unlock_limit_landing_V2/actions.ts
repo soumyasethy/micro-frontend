@@ -84,12 +84,7 @@ export const removeGetMorePortfolio: ActionFunction<any> = async (
   _datastore,
   { removeWidgets }
 ): Promise<any> => {
-  console.log(
-    "isMorePortfolioRenderCheck: ",
-    await isMorePortfolioRenderCheck()
-  );
   if (!(await isMorePortfolioRenderCheck())) {
-    console.log("Remove Widget");
     await removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
       { id: "otherSourceStack", type: WIDGET.STACK },
     ]);
@@ -102,7 +97,6 @@ export const onLoad: ActionFunction<any> = async (
   { removeWidgets }
 ): Promise<any> => {
   if (!(await isMorePortfolioRenderCheck())) {
-    console.log("Remove Widget");
     await removeWidgets(ROUTE.UNLOCK_LIMIT_LANDING, [
       { id: "otherSourceStack", type: WIDGET.STACK },
     ]);
