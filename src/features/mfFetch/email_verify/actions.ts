@@ -1,14 +1,10 @@
 import { ActionFunction } from "@voltmoney/types";
-// import { signInGoogle, signInGoogleWeb } from "./repo";
-import { GoogleLoginResponse, OtherEmail } from "./types";
+import { OtherEmail } from "./types";
 import { ROUTE } from "../../../routes";
-// import { saveEmailId } from "../enter_email/actions";
-// import { ContinuePayload } from "../enter_email/types";
 import SharedPropsService from "../../../SharedPropsService";
 import { saveAttribute } from "../enter_email/repo";
 import { nextStepId } from "../../../configs/utils";
 import { User } from "../../login/otp_verify/types";
-import { Platform } from "react-native";
 
 export const loginGoogle: ActionFunction<any> = async (
   action,
