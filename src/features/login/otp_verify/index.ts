@@ -94,11 +94,13 @@ export const template: (
         fontWeight: "600",
       },
       editNumber: <TypographyProps>{
-        label: `  Edit`,
+        label: `   Edit`,
         color: ColorTokens.Primary_100,
         fontSize: FontSizeTokens.SM,
         fontFamily: FontFamilyTokens.Inter,
         fontWeight: "600",
+        paddingLeft: 6,
+        paddingRight: 6,
       },
       input: <TextInputProps & TextInputOtpProps & WidgetProps>{
         isFocus: true,
