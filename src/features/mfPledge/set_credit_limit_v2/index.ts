@@ -410,7 +410,7 @@ export const template: (
           {
             id: 2,
             header: {
-              widgetItems: [{ id: "interestAndOthersStack", type: WIDGET.STACK }],
+              widgetItems: [{ id: "interestRateStack", type: WIDGET.STACK }],
             },
             body: {
               widgetItems: [
