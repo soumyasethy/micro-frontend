@@ -74,11 +74,11 @@ export const template: (
         // { id: "calendarInput", type: WIDGET.INPUT },
         { id: "calendarPicker", type: WIDGET.CALENDAR_PICKER },
         { id: "space3", type: WIDGET.SPACE },
-        {
-          id: "space4",
-          type: WIDGET.SPACE,
-          position: POSITION.ABSOLUTE_BOTTOM,
-        },
+        // {
+        //   id: "space4",
+        //   type: WIDGET.SPACE,
+        //   position: POSITION.ABSOLUTE_BOTTOM,
+        // },
       ],
     },
     datastore: <Datastore>{
