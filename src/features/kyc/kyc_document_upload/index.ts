@@ -158,8 +158,8 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         widgetItems: [
           { id: "continue", type: WIDGET.BUTTON },
           { id: "sbSpace1", type: WIDGET.SPACE },
-          { id: "sbStack", type: WIDGET.STACK },
-          { id: "sbSpace2", type: WIDGET.SPACE },
+          // { id: "sbStack", type: WIDGET.STACK },
+          // { id: "sbSpace2", type: WIDGET.SPACE },
         ],
       },
       sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
