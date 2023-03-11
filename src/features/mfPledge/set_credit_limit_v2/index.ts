@@ -139,7 +139,7 @@ export const template: (
           {
             id: 1,
             header: {
-              widgetItems: [{ id: "portfolioTitle", type: WIDGET.TEXT }],
+              widgetItems: [{ id: "portfolioTitleStack", type: WIDGET.STACK }],
             },
             body: {
               widgetItems: [
@@ -157,7 +157,7 @@ export const template: (
           {
             id: 2,
             header: {
-              widgetItems: [{ id: "CreditTitle", type: WIDGET.TEXT }],
+              widgetItems: [{ id: "setCreditLimitStack", type: WIDGET.STACK }],
             },
             body: {
               widgetItems: [
@@ -195,7 +195,7 @@ export const template: (
           {
             id: 4,
             header: {
-              widgetItems: [{ id: "worksTitle", type: WIDGET.TEXT }],
+              widgetItems: [{ id: "benefitsStack", type: WIDGET.STACK }],
             },
             body: {
               widgetItems: [{ id: "promoStackRoot", type: WIDGET.STACK }],
@@ -410,7 +410,7 @@ export const template: (
           {
             id: 2,
             header: {
-              widgetItems: [{ id: "interestRateStack", type: WIDGET.STACK }],
+              widgetItems: [{ id: "interestAndOthersStack", type: WIDGET.STACK }],
             },
             body: {
               widgetItems: [
