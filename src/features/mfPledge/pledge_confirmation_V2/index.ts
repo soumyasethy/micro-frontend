@@ -1,13 +1,8 @@
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
-    Datastore,
-    Layout,
-    LAYOUTS,
-    PageType,
-    POSITION,
-    TemplateSchema,
-    WidgetProps,
-} from '@voltmoney/types'
-import {
+    AccordionArrow,
+    AccordionProps,
+    AccordionTypeTokens,
     ButtonProps,
     ButtonTypeTokens,
     ButtonWidthTypeToken,
@@ -28,6 +23,7 @@ import {
     SizeTypeTokens,
     SpaceProps,
     StackAlignItems,
+    StackHeight,
     StackJustifyContent,
     StackProps,
     StackType,
@@ -36,21 +32,21 @@ import {
     TagTypeTokens,
     TypographyProps,
     WIDGET,
-} from '@voltmoney/schema'
-import { ROUTE } from '../../../routes'
-import { ACTION } from './types'
-import { goBack, goToFaq, sendOtpForPledgeConfirm } from './actions'
-import { AvailableCASItem, StepResponseObject } from '../unlock_limit/types'
-import SharedPropsService from '../../../SharedPropsService'
-import { api } from '../../../configs/api'
-import { ConfigTokens, getAppHeader } from '../../../configs/config'
-import { getTotalLimit } from '../portfolio/actions'
-import _ from 'lodash'
-import { addCommasToNumber, convertToKLacsCore } from '../../../configs/utils'
-import { OtpPayloadForPledgeConfirm } from '../pledge_confirmation/types'
-import { fetchPledgeLimitRepo } from '../unlock_limit/repo'
-import { getDesiredValue } from '../portfolio_readonly/actions'
-import { Share } from 'react-native'
+} from "@voltmoney/schema";
+import {ROUTE} from "../../../routes";
+import {ACTION} from "./types";
+import {goBack, goToFaq, sendOtpForPledgeConfirm} from "./actions";
+import {AvailableCASItem, StepResponseObject} from "../unlock_limit/types";
+import SharedPropsService from "../../../SharedPropsService";
+import {api} from "../../../configs/api";
+import {ConfigTokens, getAppHeader} from "../../../configs/config";
+import {getTotalLimit} from "../portfolio/actions";
+import _ from "lodash";
+import {addCommasToNumber} from "../../../configs/utils";
+import {OtpPayloadForPledgeConfirm} from "../pledge_confirmation/types";
+import {AuthCASModel} from "../../../types/AuthCASModel";
+import {fetchPledgeLimitRepo} from "../unlock_limit/repo";
+import {getDesiredValue} from "../portfolio_readonly/actions";
 
 export const template: (
     totalAmount: number,
@@ -61,9 +57,10 @@ export const template: (
     minAmount: number,
     maxAmount: number,
     showLessLimit: boolean,
-    showMaxLimit: boolean,
     mfPortfolioArray,
     pledgeInProgress: boolean,
+    term: string,
+    interestRate: string
 ) => Promise<TemplateSchema> = async (
     totalAmount = 0,
     totalCharges = 0,
@@ -73,9 +70,10 @@ export const template: (
     minAmount,
     maxAmount,
     showLessLimit = false,
-    showMaxLimit = false,
     mfPortfolioArray,
     pledgeInProgress = false,
+    term,
+    interestRate
 ) => {
     return {
         layout: <Layout>{
@@ -83,26 +81,26 @@ export const template: (
             type: LAYOUTS.LIST,
             widgets: [
                 {
-                    id: 'card',
+                    id: "card",
                     type: WIDGET.CARD,
                     position: POSITION.ABSOLUTE_TOP,
                 },
-                ...(showLessLimit || showMaxLimit
+                ...(showLessLimit
                     ? [
-                          {
-                              id: 'showLessLimitCard',
-                              type: WIDGET.CARD,
-                              position: POSITION.ABSOLUTE_TOP,
-                          },
-                          {
-                              id: 'continueSpace',
-                              type: WIDGET.SPACE,
-                              position: POSITION.ABSOLUTE_BOTTOM,
-                          },
-                      ]
+                        {
+                            id: "showLessLimitCard",
+                            type: WIDGET.CARD,
+                            position: POSITION.ABSOLUTE_TOP,
+                        },
+                        {
+                            id: "continueSpace",
+                            type: WIDGET.SPACE,
+                            position: POSITION.ABSOLUTE_BOTTOM,
+                        },
+                    ]
                     : []),
                 {
-                    id: 'card2',
+                    id: "card2",
                     type: WIDGET.CARD,
                     padding: {
                         horizontal: 0,
@@ -110,41 +108,40 @@ export const template: (
                     },
                     position: POSITION.ABSOLUTE_TOP,
                 },
-                { id: 'card3Body', type: WIDGET.STACK },
                 {
-                    id: 'iconCard',
+                    id: "iconCard",
                     type: WIDGET.CARD,
                     padding: {
-                        horizontal: 0,
-                        all: 0,
-                    },
-                    position: POSITION.STICKY_BOTTOM,
+                        horizontal: -16
+                    }
                 },
+                { id: "continueSpace2", type: WIDGET.SPACE },
+                { id: "interestOptions", type: WIDGET.STACK },
                 {
-                    id: 'spaceCard',
+                    id: "spaceCard",
                     type: WIDGET.SPACE,
                     position: POSITION.STICKY_BOTTOM,
                 },
                 ...(showOtpConfirmation
                     ? [
-                          {
-                              id: 'otpConfirmInfo',
-                              type: WIDGET.CARD,
-                              position: POSITION.STICKY_BOTTOM,
-                          },
-                      ]
+                        {
+                            id: "otpConfirmInfo",
+                            type: WIDGET.CARD,
+                            position: POSITION.STICKY_BOTTOM,
+                        },
+                    ]
                     : []),
                 ...(pledgeInProgress
                     ? [
-                          {
-                              id: 'showPledgeInProgressCard',
-                              type: WIDGET.CARD,
-                              position: POSITION.STICKY_BOTTOM,
-                          },
-                      ]
+                        {
+                            id: "showPledgeInProgressCard",
+                            type: WIDGET.CARD,
+                            position: POSITION.STICKY_BOTTOM,
+                        },
+                    ]
                     : []),
                 {
-                    id: 'ctaCard',
+                    id: "ctaCard",
                     type: WIDGET.CARD,
                     padding: {
                         horizontal: 0,
@@ -167,9 +164,9 @@ export const template: (
                 bodyOrientation: CardOrientation.HORIZONTAL,
                 body: {
                     widgetItems: [
-                        { id: 'infoIcon3', type: WIDGET.ICON },
-                        { id: 'infoIconSpace3', type: WIDGET.SPACE },
-                        { id: 'infoLabel3', type: WIDGET.TEXT },
+                        { id: "infoIcon3", type: WIDGET.ICON },
+                        { id: "infoIconSpace3", type: WIDGET.SPACE },
+                        { id: "infoLabel3", type: WIDGET.TEXT },
                     ],
                 },
             },
@@ -181,10 +178,10 @@ export const template: (
             continueSpace2: <SpaceProps>{ size: SizeTypeTokens.LG },
             infoLabel3: <TypographyProps>{
                 label: `Rs. ${addCommasToNumber(
-                    stepResponseObject.approvedCreditAmount,
+                    stepResponseObject.approvedCreditAmount
                 )} were pledged successfully. We require 1 OTP to pledge remaining portfolio.`,
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontColor: ColorTokens.Grey_Night,
                 fontSize: FontSizeTokens.XS,
                 lineHeight: 18,
@@ -201,11 +198,9 @@ export const template: (
                 bodyOrientation: CardOrientation.HORIZONTAL,
                 body: {
                     widgetItems: [
-                        { id: 'infoIcon2', type: WIDGET.ICON },
-                        { id: 'infoIconSpace2', type: WIDGET.SPACE },
-                        showLessLimit
-                            ? { id: 'infoLabel2Min', type: WIDGET.TEXT }
-                            : { id: 'infoLabel2Max', type: WIDGET.TEXT },
+                        { id: "infoIcon2", type: WIDGET.ICON },
+                        { id: "infoIconSpace2", type: WIDGET.SPACE },
+                        { id: "infoLabel2", type: WIDGET.TEXT },
                     ],
                 },
             },
@@ -215,22 +210,10 @@ export const template: (
             },
             infoIconSpace2: <SpaceProps>{ size: SizeTypeTokens.Size10 },
             continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
-            infoLabel2Min: <TypographyProps>{
-                label: `Minimum allowed credit limit is ₹ ${convertToKLacsCore(
-                    minAmount,
-                )}`,
+            infoLabel2: <TypographyProps>{
+                label: "Minimum amount required to proceed is ₹25,000",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
-                fontColor: ColorTokens.Grey_Night,
-                fontSize: FontSizeTokens.XS,
-                lineHeight: 18,
-            },
-            infoLabel2Max: <TypographyProps>{
-                label: `Maximum allowed credit limit is ₹ ${convertToKLacsCore(
-                    maxAmount,
-                )}`,
-                fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontColor: ColorTokens.Grey_Night,
                 fontSize: FontSizeTokens.XS,
                 lineHeight: 18,
@@ -250,9 +233,9 @@ export const template: (
                 bodyOrientation: CardOrientation.HORIZONTAL,
                 body: {
                     widgetItems: [
-                        { id: 'infoIcon', type: WIDGET.ICON },
-                        { id: 'infoIconSpace', type: WIDGET.SPACE },
-                        { id: 'infoLabel', type: WIDGET.TEXT },
+                        { id: "infoIcon", type: WIDGET.ICON },
+                        { id: "infoIconSpace", type: WIDGET.SPACE },
+                        { id: "infoLabel", type: WIDGET.TEXT },
                     ],
                 },
             },
@@ -262,16 +245,16 @@ export const template: (
             },
             infoIconSpace: <SpaceProps>{ size: SizeTypeTokens.Size10 },
             infoLabel: <TypographyProps>{
-                label: 'We will trigger 2 OTP’s to confirm your pledge',
+                label: "We will trigger 2 OTP’s to confirm your pledge",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontColor: ColorTokens.Grey_Night,
                 fontSize: FontSizeTokens.XS,
                 lineHeight: 18,
             },
             card: <CardProps>{
                 bgColor: ColorTokens.White,
-                body: { widgetItems: [{ id: 'header', type: WIDGET.STACK }] },
+                body: { widgetItems: [{ id: "header", type: WIDGET.STACK }] },
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
             },
@@ -283,15 +266,15 @@ export const template: (
                 // padding: { horizontal: SizeTypeTokens.LG },
                 widgetItems: pledgeInProgress
                     ? [
-                          { id: 'title', type: WIDGET.TEXT },
-                          { id: 'headerRight', type: WIDGET.STACK },
-                      ]
+                        { id: "title", type: WIDGET.TEXT },
+                        { id: "headerRight", type: WIDGET.STACK },
+                    ]
                     : [
-                          { id: 'backButton', type: WIDGET.ICON },
-                          { id: 'space0', type: WIDGET.SPACE },
-                          { id: 'title', type: WIDGET.TEXT },
-                          { id: 'headerRight', type: WIDGET.STACK },
-                      ],
+                        { id: "backButton", type: WIDGET.ICON },
+                        { id: "space0", type: WIDGET.SPACE },
+                        { id: "title", type: WIDGET.TEXT },
+                        { id: "headerRight", type: WIDGET.STACK },
+                    ],
             },
             backButton: <IconProps & WidgetProps>{
                 name: IconTokens.ChevronLeft,
@@ -308,7 +291,7 @@ export const template: (
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.flexEnd,
                 // padding: { horizontal: SizeTypeTokens.LG },
-                widgetItems: [{ id: 'contactUs', type: WIDGET.TAG }],
+                widgetItems: [{ id: "contactUs", type: WIDGET.TAG }],
             },
             contactUs: <TagProps & WidgetProps>{
                 icon: {
@@ -316,7 +299,7 @@ export const template: (
                     name: IconTokens.FAQ,
                     size: IconSizeTokens.XL,
                 },
-                label: 'FAQ',
+                label: "FAQ",
                 labelColor: ColorTokens.Primary_100,
                 type: TagTypeTokens.DEFAULT,
                 bgColor: ColorTokens.Primary_05,
@@ -328,17 +311,15 @@ export const template: (
             },
             contactUsSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
             title: <TypographyProps>{
-                label: 'Confirm pledge',
+                label: "Confirm pledge",
                 fontSize: FontSizeTokens.MD,
                 color: ColorTokens.Grey_Night,
                 fontFamily: FontFamilyTokens.Poppins,
-                fontWeight: '700',
+                fontWeight: "700",
             },
             card2: <CardProps>{
                 bgColor: ColorTokens.Primary_05,
-                body: {
-                    widgetItems: [{ id: 'selectedLimit', type: WIDGET.STACK }],
-                },
+                body: { widgetItems: [{ id: "selectedLimit", type: WIDGET.STACK }] },
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
             },
@@ -347,20 +328,22 @@ export const template: (
                 type: StackType.column,
                 alignItems: StackAlignItems.flexStart,
                 widgetItems: [
-                    { id: 'selectedLimitText', type: WIDGET.TEXT },
-                    { id: 'space1', type: WIDGET.SPACE },
-                    { id: 'selectedLimitValue', type: WIDGET.STACK },
-                    { id: 'space2', type: WIDGET.SPACE },
-                    { id: 'divider', type: WIDGET.DIVIDER },
-                    { id: 'space3', type: WIDGET.SPACE },
-                    { id: 'selectedLimitText2', type: WIDGET.TEXT },
-                    { id: 'selectedLimitValue2', type: WIDGET.STACK },
+                    { id: "selectedLimitText", type: WIDGET.TEXT },
+                    { id: "space1", type: WIDGET.SPACE },
+                    { id: "selectedLimitValue", type: WIDGET.STACK },
+                    { id: "space3", type: WIDGET.SPACE },
+                    { id: "space3", type: WIDGET.SPACE },
+                    { id: "divider", type: WIDGET.DIVIDER },
+                    { id: "space3", type: WIDGET.SPACE },
+                    { id: "selectedLimitText2", type: WIDGET.TEXT },
+                    { id: "selectedLimitValue2", type: WIDGET.STACK },
+                    { id: "spaceMD", type: WIDGET.SPACE },
                 ],
             },
             selectedLimitText: <TypographyProps>{
-                label: 'Selected Limit',
+                label: "Selected credit limit",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontSize: FontSizeTokens.SM,
                 color: ColorTokens.Grey_Charcoal,
             },
@@ -369,36 +352,36 @@ export const template: (
                 type: StackType.row,
                 alignItems: StackAlignItems.baseline,
                 widgetItems: [
-                    { id: 'ruppee', type: WIDGET.TEXT },
-                    { id: 'selectedLimitValueText', type: WIDGET.TEXT },
+                    { id: "ruppee", type: WIDGET.TEXT },
+                    { id: "selectedLimitValueText", type: WIDGET.TEXT },
                 ],
             },
             ruppee: <TypographyProps>{
-                label: '₹',
+                label: "₹",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '700',
+                fontWeight: "700",
                 fontSize: FontSizeTokens.XXL,
                 color: ColorTokens.Secondary_100,
             },
             selectedLimitValueText: <TypographyProps>{
                 label: `${addCommasToNumber(
-                    await SharedPropsService.getCreditLimit(),
+                    await SharedPropsService.getCreditLimit()
                 )}`,
                 fontFamily: FontFamilyTokens.Poppins,
-                fontWeight: '700',
+                fontWeight: "900",
                 fontSize: FontSizeTokens.XXL,
                 color: ColorTokens.Secondary_100,
             },
-            space2: <SpaceProps>{ size: SizeTypeTokens.XL },
+            space: <SpaceProps>{ size: SizeTypeTokens.XL },
             divider: <DividerProps>{
                 size: DividerSizeTokens.SM,
                 color: ColorTokens.Grey_Chalk,
             },
-            space3: <SpaceProps>{ size: SizeTypeTokens.XL },
+            space3: <SpaceProps>{ size: SizeTypeTokens.Size6 },
             selectedLimitText2: <TypographyProps>{
-                label: 'Selected mutual funds',
+                label: "Selected mutual funds",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontSize: FontSizeTokens.SM,
                 color: ColorTokens.Grey_Charcoal,
             },
@@ -406,58 +389,316 @@ export const template: (
                 type: StackType.row,
                 alignItems: StackAlignItems.baseline,
                 widgetItems: [
-                    { id: 'ruppee2', type: WIDGET.TEXT },
-                    { id: 'selectedLimitValueText3', type: WIDGET.TEXT },
-                    { id: 'selectedLimitValueText4', type: WIDGET.TEXT },
+                    { id: "ruppee2", type: WIDGET.TEXT },
+                    { id: "selectedLimitValueText3", type: WIDGET.TEXT },
+                    { id: "selectedLimitValueText4", type: WIDGET.TEXT },
                 ],
             },
             ruppee2: <TypographyProps>{
-                label: '₹',
+                label: "₹",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '700',
+                fontWeight: "700",
                 fontSize: FontSizeTokens.MD,
             },
             selectedLimitValueText3: <TypographyProps>{
                 label: `${addCommasToNumber(
-                    parseInt(await SharedPropsService.getDesiredPortfolio()),
+                    parseInt(await SharedPropsService.getDesiredPortfolio())
                 )}`,
                 fontFamily: FontFamilyTokens.Poppins,
-                fontWeight: '700',
+                fontWeight: "700",
                 fontSize: FontSizeTokens.MD,
                 color: ColorTokens.Grey_Night,
             },
             selectedLimitValueText4: <TypographyProps>{
                 label: ` out of ₹${addCommasToNumber(
-                    parseInt(
-                        stepResponseObject['totalPortfolioAmount'].toString(),
-                    ),
+                    parseInt(stepResponseObject["totalPortfolioAmount"].toString())
                 )}`,
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontSize: FontSizeTokens.XS,
                 color: ColorTokens.Grey_Night,
             },
-            card3Body: <StackProps>{
+            processingFeeDropDown: <StackProps> {
                 width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
                 type: StackType.column,
                 alignItems: StackAlignItems.flexStart,
                 widgetItems: [
-                    { id: 'otherChargesStack', type: WIDGET.STACK },
-                    { id: 'space4', type: WIDGET.SPACE },
-                    { id: 'processingFeeStack', type: WIDGET.STACK },
-                    { id: 'space5', type: WIDGET.SPACE },
-                    { id: 'divider2', type: WIDGET.DIVIDER },
-                    { id: 'space6', type: WIDGET.SPACE },
-                    { id: 'interestRateStack', type: WIDGET.STACK },
-                    { id: 'space7', type: WIDGET.SPACE },
-                    { id: 'divider3', type: WIDGET.DIVIDER },
-                    { id: 'space8', type: WIDGET.SPACE },
-                    { id: 'autoPayStack', type: WIDGET.STACK },
-                    { id: 'space9', type: WIDGET.SPACE },
-                    { id: 'divider4', type: WIDGET.DIVIDER },
-                    { id: 'space10', type: WIDGET.SPACE },
-                    { id: 'durationStack', type: WIDGET.STACK },
+                    {id: "processingCard", type: WIDGET.STACK},
                 ],
+            },
+            processingText: <TypographyProps> {
+                label: "Processing fee",
+                fontSize: FontSizeTokens.MD,
+                color: ColorTokens.Grey_Charcoal,
+                lineHeight: 24
+            },
+            processingValue: <TypographyProps> {
+                label: `₹1000`,
+                fontSize: FontSizeTokens.MD,
+                marginRight: 8,
+                color: ColorTokens.Grey_Charcoal
+            },
+            processingGSTText: <TypographyProps> {
+                label: "GST @18%",
+                fontSize: FontSizeTokens.MD,
+                color: ColorTokens.Grey_Charcoal,
+                lineHeight: 24
+            },
+            processingGSTValue: <TypographyProps> {
+                label: `₹180`,
+                fontSize: FontSizeTokens.MD,
+                marginRight: 8,
+                color: ColorTokens.Grey_Charcoal
+            },
+            processingCard: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                bgColor: ColorTokens.Yellow_10,
+                padding: {
+                    top: SizeTypeTokens.Size10,
+                    bottom: SizeTypeTokens.Size10
+                },
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "pCardText", type: WIDGET.TEXT}
+                ],
+            },
+            interestRateS1: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                },
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "interestRateT1", type: WIDGET.TEXT}
+                ],
+            },
+            interestRateS2: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                },
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "interestRateT2", type: WIDGET.TEXT}
+                ],
+            },
+            interestAutoPayS1: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                },
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "interestAutoPayT1", type: WIDGET.TEXT}
+                ],
+            },
+            interestAutoPayS2: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                },
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "interestAutoPayT2", type: WIDGET.TEXT}
+                ],
+            },
+            withdrawalS1: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "withdrawalT1", type: WIDGET.TEXT}
+                ],
+            },
+            withdrawalS2: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                },
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "withdrawalT2", type: WIDGET.TEXT}
+                ],
+            },
+            termCard: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                bgColor: ColorTokens.Yellow_10,
+                padding: {
+                    top: SizeTypeTokens.LG,
+                    bottom: SizeTypeTokens.LG,
+                },
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "termT1", type: WIDGET.TEXT}
+                ],
+            },
+            foreclosureCard: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.row,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                bgColor: ColorTokens.Yellow_10,
+                padding: {
+                    top: SizeTypeTokens.LG,
+                    bottom: SizeTypeTokens.LG
+                },
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "pCardIcon", type: WIDGET.ICON},
+                    {id: "space1", type: WIDGET.SPACE},
+                    {id: "foreClosureT1", type: WIDGET.TEXT}
+                ],
+            },
+            interestRateCard: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.column,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                marginRight: 12,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM
+                },
+                bgColor: ColorTokens.Yellow_10,
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "interestRateS1", type: WIDGET.STACK},
+                    {id: "contactUsSpace", type: WIDGET.SPACE},
+                    {id: "interestRateS2", type: WIDGET.STACK},
+                    {id: "space3", type: WIDGET.SPACE},
+                ],
+            },
+            interestAutoPayCard: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.column,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                marginRight: 12,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM
+                },
+                bgColor: ColorTokens.Yellow_10,
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "interestAutoPayS1", type: WIDGET.STACK},
+                    {id: "contactUsSpace", type: WIDGET.SPACE},
+                    {id: "interestAutoPayS2", type: WIDGET.STACK},
+                    {id: "space3", type: WIDGET.SPACE},
+                ],
+            },
+            withdrawalCard: <StackProps> {
+                width: StackWidth.FULL,
+                height: StackHeight.CONTENT,
+                type: StackType.column,
+                alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                marginRight: 12,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM
+                },
+                bgColor: ColorTokens.Yellow_10,
+                widgetItems: [
+                    {id: "space3", type: WIDGET.SPACE},
+                    {id: "withdrawalS1", type: WIDGET.STACK},
+                    {id: "contactUsSpace", type: WIDGET.SPACE},
+                    {id: "withdrawalS2", type: WIDGET.STACK},
+                    {id: "space3", type: WIDGET.SPACE},
+                ],
+            },
+            pCardIcon: <IconProps> {
+                name: IconTokens.CoveredRightArrow,
+                size: IconSizeTokens.SM,
+                align: IconAlignmentTokens.center,
+                color: ColorTokens.Grey_Charcoal,
+            },
+            pCardText: <TypographyProps> {
+                label: "One-time processing fee, no hidden charges",
+                fontSize: FontSizeTokens.XS,
+            },
+            interestRateT1: <TypographyProps> {
+                label: "Interest charged only on usage",
+                fontSize: FontSizeTokens.XS,
+            },
+            interestRateT2: <TypographyProps> {
+                label: "Monthly interest of ₹79 on withdrawal of ₹10,000",
+                fontSize: FontSizeTokens.XS,
+            },
+            interestAutoPayT1: <TypographyProps> {
+                label: "Interest statement will be generated at the end of month",
+                fontSize: FontSizeTokens.XS,
+            },
+            interestAutoPayT2: <TypographyProps> {
+                label: "Hassle-free auto repayment of interest on 7th of month",
+                fontSize: FontSizeTokens.XS,
+            },
+            withdrawalT1: <TypographyProps> {
+                label: "Withdraw money as per your convenience",
+                fontSize: FontSizeTokens.XS,
+            },
+            withdrawalT2: <TypographyProps> {
+                label: "Repay anytime during the month",
+                fontSize: FontSizeTokens.XS,
+            },
+            termT1: <TypographyProps> {
+                label: "Term can be renewed without repaying principal.",
+                fontSize: FontSizeTokens.XS,
+            },
+            foreClosureT1: <TypographyProps> {
+                label: "No hidden charges",
+                fontSize: FontSizeTokens.XS,
             },
             otherChargesStack: <StackProps>{
                 width: StackWidth.FULL,
@@ -465,161 +706,354 @@ export const template: (
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
                 widgetItems: [
-                    { id: 'otherChargesText', type: WIDGET.TEXT },
-                    // { id: "viewMore", type: WIDGET.TEXT },
+                    { id: "otherChargesText", type: WIDGET.TEXT },
                 ],
             },
             otherChargesText: <TypographyProps>{
-                label: 'Interest and other charges',
+                label: "Interest and other charges",
                 fontFamily: FontFamilyTokens.Poppins,
-                fontWeight: '500',
+                fontWeight: "500",
                 fontSize: FontSizeTokens.MD,
             },
-            // viewMore: <TypographyProps>{
-            //   label: "View more",
-            //   fontFamily: FontFamilyTokens.Inter,
-            //   fontWeight: "600",
-            //   fontSize: FontSizeTokens.SM,
-            //   color: ColorTokens.Primary_100,
-            // },
-            space4: <SpaceProps>{ size: SizeTypeTokens.XL },
-            processingFeeStack: <StackProps>{
+
+            interestAccordion: <AccordionProps> {
+                icon: IconTokens.DownArrow,
+                rightIcon: AccordionArrow.LEFT,
+                data: [
+                    {
+                        id: 2,
+                        header: {
+                            widgetItems: [{ id: "interestRateStack", type: WIDGET.STACK }],
+                        },
+                        body: {
+                            widgetItems: [
+                                { id: "interestRateCard", type: WIDGET.STACK, },
+                            ],
+                        },
+                    },
+                ],
+                type: AccordionTypeTokens.LIST
+            },
+            autoPayAccordion: <AccordionProps> {
+                icon: IconTokens.DownArrow,
+                rightIcon: AccordionArrow.LEFT,
+                data: [
+                    {
+                        id: 2,
+                        header: {
+                            widgetItems: [{ id: "autoPayStack", type: WIDGET.STACK }],
+                        },
+                        body: {
+                            widgetItems: [
+                                { id: "interestAutoPayCard", type: WIDGET.STACK },
+                            ],
+                        },
+                    },
+                ],
+                type: AccordionTypeTokens.LIST
+            },
+            withdrawalAccordion: <AccordionProps> {
+                icon: IconTokens.DownArrow,
+                rightIcon: AccordionArrow.LEFT,
+                data: [
+                    {
+                        id: 2,
+                        header: {
+                            widgetItems: [{ id: "withdrawalStack", type: WIDGET.STACK }],
+                        },
+                        body: {
+                            widgetItems: [
+                                { id: "withdrawalCard", type: WIDGET.STACK },
+                            ],
+                        },
+                    },
+                ],
+                type: AccordionTypeTokens.LIST,
+            },
+            termAccordion: <AccordionProps> {
+                icon: IconTokens.DownArrow,
+                rightIcon: AccordionArrow.LEFT,
+                data: [
+                    {
+                        id: 2,
+                        header: {
+                            widgetItems: [{id: "termStack", type: WIDGET.STACK}],
+                        },
+                        body: {
+                            widgetItems: [
+                                {id: "termCard", type: WIDGET.STACK, padding: {
+                                        bottom: -12
+                                    }},
+                            ],
+                        },
+                    },
+                ],
+                type: AccordionTypeTokens.LIST
+            },
+
+            foreClosureAccordion: <AccordionProps> {
+                icon: IconTokens.DownArrow,
+                rightIcon: AccordionArrow.LEFT,
+                data: [
+                    {
+                        id: 2,
+                        header: {
+                            widgetItems: [{ id: "foreClosureStack", type: WIDGET.STACK }],
+                        },
+                        body: {
+                            widgetItems: [
+                                { id: "foreclosureCard", type: WIDGET.STACK },
+                            ],
+                        },
+                    },
+                ],
+                type: AccordionTypeTokens.LIST
+            },
+
+            processingAccordion: <AccordionProps> {
+                rightIcon: AccordionArrow.LEFT,
+                data: [
+                    {
+                        id: 2,
+                        header: {
+                            widgetItems: [{ id: "processingStack", type: WIDGET.STACK },
+                            ],
+                        },
+                        body: {
+                            widgetItems: [
+                                {id: "processingFeeDropDown", type: WIDGET.STACK},
+                            ],
+
+                        },
+                    },
+                ],
+                type: AccordionTypeTokens.LIST
+            },
+            spaceXL: <SpaceProps>{ size: SizeTypeTokens.XL },
+            interestOptions: <StackProps>{
+                width: StackWidth.FULL,
+                type: StackType.column,
+                widgetItems: [
+                    { id: "otherChargesStack", type: WIDGET.STACK },
+                    {id: "processingAccordion", type: WIDGET.ACCORDION},
+                    {id: "divider", type: WIDGET.DIVIDER},
+                    {id: "interestAccordion", type: WIDGET.ACCORDION},
+                    {id: "divider", type: WIDGET.DIVIDER},
+                    {id: "autoPayAccordion", type: WIDGET.ACCORDION},
+                    {id: "divider", type: WIDGET.DIVIDER},
+                    {id: "withdrawalAccordion", type: WIDGET.ACCORDION},
+                    {id: "divider", type: WIDGET.DIVIDER},
+                    {id: "termAccordion", type: WIDGET.ACCORDION},
+                    {id: "divider", type: WIDGET.DIVIDER},
+                    {id: "foreClosureAccordion", type: WIDGET.ACCORDION},
+                ]
+            },
+            processingMainStack: <StackProps> {
+                width: StackWidth.FULL,
+                type: StackType.column,
+
+            },
+            processingStack: <StackProps> {
                 width: StackWidth.FULL,
                 type: StackType.row,
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM,
+                },
                 widgetItems: [
-                    { id: 'processingFeeText', type: WIDGET.TEXT },
-                    { id: 'processingFeeValue', type: WIDGET.TEXT },
+                    { id: "processingFeeText", type: WIDGET.TEXT },
+                    { id: "processingFeeValue", type: WIDGET.TEXT },
                 ],
             },
             processingFeeText: <TypographyProps>{
-                label: 'Processing fee (excl. GST)',
+                label: "Processing fee (excl. GST)",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontSize: FontSizeTokens.SM,
             },
             processingFeeValue: <TypographyProps>{
-                label: `₹${processingFeesBreakUp['Processing Fee']}`,
+                label: `₹${stepResponseObject["processingFees"]}`,
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '600',
+                fontWeight: "600",
                 fontSize: FontSizeTokens.SM,
+                marginRight: 20
             },
-            space5: <SpaceProps>{ size: SizeTypeTokens.LG },
-            divider2: <DividerProps>{
-                size: DividerSizeTokens.SM,
-                color: ColorTokens.Grey_Milk_1,
-            },
-            space6: <SpaceProps>{ size: SizeTypeTokens.LG },
+            spaceLG: <SpaceProps>{ size: SizeTypeTokens.LG },
             interestRateStack: <StackProps>{
                 type: StackType.row,
                 width: StackWidth.FULL,
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM,
+                },
                 widgetItems: [
-                    { id: 'interestRateText', type: WIDGET.TEXT },
-                    { id: 'interestRateValue', type: WIDGET.TEXT },
+                    { id: "interestRateText", type: WIDGET.TEXT },
+                    { id: "interestRateValue", type: WIDGET.TEXT },
                 ],
             },
             interestRateText: <TypographyProps>{
-                label: 'Interest rate',
+                label: "Interest rate",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontSize: FontSizeTokens.SM,
             },
             interestRateValue: <TypographyProps>{
-                label: `${stepResponseObject['interestRate']}%`,
+                label: `${interestRate}%`,
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '600',
+                fontWeight: "600",
                 fontSize: FontSizeTokens.SM,
+                marginRight: 20
             },
-            space7: <SpaceProps>{ size: SizeTypeTokens.LG },
-            divider3: <DividerProps>{
-                size: DividerSizeTokens.SM,
-                color: ColorTokens.Grey_Milk_1,
-            },
-            space8: <SpaceProps>{ size: SizeTypeTokens.LG },
             autoPayStack: <StackProps>{
                 width: StackWidth.FULL,
                 type: StackType.row,
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM,
+                },
                 widgetItems: [
-                    { id: 'autoPayText', type: WIDGET.TEXT },
-                    { id: 'autoPayValue', type: WIDGET.TEXT },
+                    { id: "autoPayText", type: WIDGET.TEXT },
+                    { id: "autoPayValue", type: WIDGET.TEXT },
                 ],
             },
             autoPayText: <TypographyProps>{
-                label: 'Interest autopay',
+                label: "Interest autopay",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontSize: FontSizeTokens.SM,
             },
             autoPayValue: <TypographyProps>{
-                label: '5th of every month',
+                label: "7th of every month",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '600',
+                fontWeight: "600",
                 fontSize: FontSizeTokens.SM,
+                marginRight: 20
             },
-            space9: <SpaceProps>{ size: SizeTypeTokens.LG },
-            divider4: <DividerProps>{
-                size: DividerSizeTokens.SM,
-                color: ColorTokens.Grey_Milk_1,
-            },
-            space10: <SpaceProps>{ size: SizeTypeTokens.LG },
-            durationStack: <StackProps>{
+            withdrawalStack: <StackProps> {
                 width: StackWidth.FULL,
                 type: StackType.row,
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM,
+                },
                 widgetItems: [
-                    { id: 'durationText', type: WIDGET.TEXT },
-                    { id: 'durationValue', type: WIDGET.TEXT },
+                    { id: "withdrawalText", type: WIDGET.TEXT },
+                    { id: "withdrawalType", type: WIDGET.TEXT },
                 ],
             },
-            durationText: <TypographyProps>{
-                label: 'Duration',
-                fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
-                fontSize: FontSizeTokens.SM,
-            },
-            durationValue: <TypographyProps>{
-                label: '13 months',
-                fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '600',
-                fontSize: FontSizeTokens.SM,
-            },
-            iconStack: <StackProps>{
-                padding: <PaddingProps>{
-                    horizontal: SizeTypeTokens.NONE,
-                },
+            termStack: <StackProps> {
                 width: StackWidth.FULL,
                 type: StackType.row,
                 alignItems: StackAlignItems.center,
-                justifyContent: StackJustifyContent.center,
+                justifyContent: StackJustifyContent.spaceBetween,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM,
+                },
                 widgetItems: [
-                    { id: 'lendingTXT', type: WIDGET.TEXT },
-                    { id: 'space11', type: WIDGET.SPACE },
-                    { id: 'bajaj', type: WIDGET.IMAGE },
-                    // { id: "space12", type: WIDGET.SPACE },
-                    // { id: "mirae", type: WIDGET.IMAGE },
+                    { id: "termText", type: WIDGET.TEXT },
+                    { id: "durationValue", type: WIDGET.TEXT },
+                ],
+            },
+            foreClosureStack: <StackProps> {
+                width: StackWidth.FULL,
+                type: StackType.row,
+                alignItems: StackAlignItems.center,
+                justifyContent: StackJustifyContent.spaceBetween,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM,
+                },
+                widgetItems: [
+                    { id: "foreClosureText", type: WIDGET.TEXT },
+                    { id: "foreClosureType", type: WIDGET.TEXT },
+                ],
+            },
+            durationText: <TypographyProps>{
+                label: "Duration",
+                fontFamily: FontFamilyTokens.Inter,
+                fontWeight: "400",
+                fontSize: FontSizeTokens.SM,
+            },
+            withdrawalText: <TypographyProps> {
+                label: "Withdrawal & repayment",
+                fontFamily: FontFamilyTokens.Inter,
+                fontWeight: "400",
+                fontSize: FontSizeTokens.SM,
+            },
+            downArrow: <IconProps> {
+                name: IconTokens.ChevronDown,
+                align: IconAlignmentTokens.center
+            },
+            termText: <TypographyProps> {
+                label: "Term",
+                fontFamily: FontFamilyTokens.Inter,
+                fontWeight: "400",
+                fontSize: FontSizeTokens.SM,
+            },
+            foreClosureText: <TypographyProps> {
+                label: "Foreclosure",
+                fontFamily: FontFamilyTokens.Inter,
+                fontWeight: "400",
+                fontSize: FontSizeTokens.SM,
+            },
+            durationValue: <TypographyProps>{
+                label: `${term} months`,
+                fontFamily: FontFamilyTokens.Inter,
+                fontWeight: "600",
+                fontSize: FontSizeTokens.SM,
+                marginRight: 20
+            },
+            withdrawalType: <TypographyProps> {
+                label: "Flexi",
+                fontFamily: FontFamilyTokens.Inter,
+                fontWeight: "600",
+                fontSize: FontSizeTokens.SM,
+                marginRight: 20
+            },
+            foreClosureType: <TypographyProps> {
+                label: "Free",
+                fontFamily: FontFamilyTokens.Inter,
+                fontWeight: "600",
+                fontSize: FontSizeTokens.SM,
+                marginRight: 16
+            },
+            iconStack: <StackProps>{
+                width: StackWidth.FULL,
+                type: StackType.row,
+                color: ColorTokens.Grey_Milk,
+                justifyContent: StackJustifyContent.spaceBetween,
+                padding: {
+                    top: SizeTypeTokens.XS,
+                },
+                widgetItems: [
+                    { id: "lendingTXT", type: WIDGET.TEXT },
+                    { id: "bajaj", type: WIDGET.IMAGE },
                 ],
             },
             lendingTXT: <TypographyProps>{
-                label: 'Lending partner',
+                label: "Lending partner",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontSize: FontSizeTokens.XS,
             },
             space11: <SpaceProps>{ size: SizeTypeTokens.MD },
             bajaj: <ImageProps>{
-                uri: 'https://volt-images.s3.ap-south-1.amazonaws.com/bajaj.svg',
-                height: 14,
-                width: 52,
+                uri: "https://volt-images.s3.ap-south-1.amazonaws.com/bajaj.svg",
+                height: 18,
+                width: 68,
                 resizeMode: ResizeModeToken.CONTAIN,
                 padding: SizeTypeTokens.NONE,
             },
-            // space12: <SpaceProps>{ size: SizeTypeTokens.MD },
+            spaceMD: <SpaceProps>{ size: SizeTypeTokens.MD },
             // mirae: <ImageProps>{
             //   uri: "https://volt-images.s3.ap-south-1.amazonaws.com/mirae-assets.svg",
             //   height: 22,
@@ -629,41 +1063,42 @@ export const template: (
             // },
             // spaceCard: <SpaceProps>{ size: SizeTypeTokens.LG },
             ctaText: <TypographyProps>{
-                label: 'Total amount',
+                label: "Total amount",
                 fontFamily: FontFamilyTokens.Inter,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontSize: FontSizeTokens.SM,
             },
-            iconCard: <CardProps>{
-                bgColor: ColorTokens.White,
-                body: { widgetItems: [{ id: 'iconBody', type: WIDGET.STACK }] },
-                alignItems: StackAlignItems.center,
-                justifyContent: StackJustifyContent.spaceBetween,
-                padding: <PaddingProps>{
-                    vertical: SizeTypeTokens.NONE,
-                    horizontal: SizeTypeTokens.NONE,
-                },
+            portfolioTitle: <TypographyProps>{
+                label: "Processing fee (incl. GST)",
+                fontFamily: FontFamilyTokens.Poppins,
+                color: ColorTokens.Grey_Night,
+                fontWeight: "400",
+                fontSize: FontSizeTokens.SM,
+                lineHeight: 24,
             },
-            iconBody: <StackProps>{
-                width: StackWidth.FULL,
-                type: StackType.column,
-                alignItems: StackAlignItems.center,
-                justifyContent: StackJustifyContent.center,
-                widgetItems: [
-                    {
-                        id: 'iconStack',
-                        type: WIDGET.STACK,
-                    },
-                ],
+            //portfolioCard
+            portfolioCard: <TypographyProps>{
+                label: "Check portfolio credit limit",
+                fontFamily: FontFamilyTokens.Poppins,
+                color: ColorTokens.Grey_Night,
+                fontWeight: "600",
+                fontSize: FontSizeTokens.MD,
+                lineHeight: 24,
+            },
+            iconCard: <CardProps>{
+                width: '100%',
+                bgColor: ColorTokens.Grey_Milk,
+                body: { widgetItems: [{ id: "iconStack", type: WIDGET.STACK }] },
+                justifyContent: StackJustifyContent.spaceBetween,
             },
             ctaCard: <CardProps>{
                 bgColor: ColorTokens.White,
-                body: { widgetItems: [{ id: 'ctaBody', type: WIDGET.STACK }] },
+                body: { widgetItems: [{ id: "ctaBody", type: WIDGET.STACK }] },
                 alignItems: StackAlignItems.center,
                 justifyContent: StackJustifyContent.spaceBetween,
                 padding: <PaddingProps>{
-                    top: SizeTypeTokens.XL,
-                    bottom: SizeTypeTokens.XL,
+                    top: SizeTypeTokens.SIZE18,
+                    bottom: SizeTypeTokens.SIZE18,
                 },
             },
             ctaBody: <StackProps>{
@@ -673,27 +1108,26 @@ export const template: (
                 justifyContent: StackJustifyContent.center,
                 widgetItems: [
                     {
-                        id: 'ctaButton',
+                        id: "ctaButton",
                         type: WIDGET.BUTTON,
                     },
                 ],
             },
             ctaButton: <ButtonProps & WidgetProps>{
-                label: 'Continue to get OTP',
-                fontWeight: '700',
+                label: "Continue to get OTP",
+                fontWeight: "700",
                 fontFamily: FontFamilyTokens.Inter,
                 fontSize: FontSizeTokens.SM,
-                type:
-                    showLessLimit || showMaxLimit
-                        ? ButtonTypeTokens.LargeOutline
-                        : ButtonTypeTokens.LargeFilled,
+                type: showLessLimit
+                    ? ButtonTypeTokens.LargeOutline
+                    : ButtonTypeTokens.LargeFilled,
                 width: ButtonWidthTypeToken.FULL,
                 action: {
                     type: ACTION.SEND_OTP_FOR_PLEDGE_CONFIRM,
                     routeId: ROUTE.PLEDGE_CONFIRMATION,
                     payload: <OtpPayloadForPledgeConfirm>{
                         value: stepResponseObject,
-                        widgetId: 'ctaButton',
+                        widgetId: "ctaButton",
                         isResend: false,
                         portFolioArray: mfPortfolioArray,
                     },
@@ -701,38 +1135,38 @@ export const template: (
             },
             spaceCard: <SpaceProps>{ size: SizeTypeTokens.LG },
         },
-    }
-}
+    };
+};
 
 export const pledgeConfirmationMFV2: PageType<any> = {
     onLoad: async ({ network, setDatastore }, { stepResponseObject }) => {
-        let pledgeInProgress = false
-        let mfPortfolioArray: AvailableCASItem[] = []
-        let portfolioForComputingProcessingCharge: AvailableCASItem[]
-        const pledgeLimitResponse = await fetchPledgeLimitRepo().then(
-            response => ({
-                data: response,
-            }),
-        )
+        let pledgeInProgress = false;
+        let mfPortfolioArray: AvailableCASItem[] = [];
+        let portfolioForComputingProcessingCharge: AvailableCASItem[];
 
         // call pledge limit api if stepResponseObject is null
-        if (
-            pledgeLimitResponse.data.stepResponseObject.approvedCreditAmount > 0
-        ) {
-            pledgeInProgress = true
-            stepResponseObject = pledgeLimitResponse.data.stepResponseObject
+        if (stepResponseObject === undefined || stepResponseObject === null) {
+            pledgeInProgress = true;
+            const authCAS: AuthCASModel =
+                await SharedPropsService.getAuthCASResponse();
+            const pledgeLimitResponse = authCAS
+                ? { data: authCAS }
+                : await fetchPledgeLimitRepo().then((response) => ({
+                    data: response,
+                }));
+            stepResponseObject = pledgeLimitResponse.data.stepResponseObject;
         }
 
         const applicationId = (await SharedPropsService.getUser())
-            .linkedApplications[0].applicationId
+            .linkedApplications[0].applicationId;
 
         if (!pledgeInProgress) {
             mfPortfolioArray = (stepResponseObject as StepResponseObject)
-                .availableCAS
+                .availableCAS;
             mfPortfolioArray.forEach((_item, index) => {
-                mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0
-            })
-            portfolioForComputingProcessingCharge = mfPortfolioArray
+                mfPortfolioArray[index].is_pledged = _item.pledgedUnits > 0;
+            });
+            portfolioForComputingProcessingCharge = mfPortfolioArray;
 
             /// Pledging has not started save portfolio to backend
             const savePortfolioResponse = await network.post(
@@ -741,20 +1175,17 @@ export const pledgeConfirmationMFV2: PageType<any> = {
                     applicationId: applicationId,
                     portfolioItemList: mfPortfolioArray,
                 },
-                { headers: await getAppHeader() },
-            )
+                { headers: await getAppHeader() }
+            );
         } else {
             mfPortfolioArray = (stepResponseObject as StepResponseObject)
-                .tobePledgedPortfolio
+                .tobePledgedPortfolio;
 
-            portfolioForComputingProcessingCharge = [...mfPortfolioArray]
+            portfolioForComputingProcessingCharge = [...mfPortfolioArray];
             portfolioForComputingProcessingCharge.push(
-                ...(stepResponseObject as StepResponseObject).pledgedPortfolio,
-            )
+                ...(stepResponseObject as StepResponseObject).pledgedPortfolio
+            );
         }
-
-        console.log('mf portfolio array ', mfPortfolioArray)
-        await SharedPropsService.setToBePledgedAssets(mfPortfolioArray)
 
         /// fetch processing fee
         const response = await network.post(
@@ -763,72 +1194,70 @@ export const pledgeConfirmationMFV2: PageType<any> = {
                 applicationId: applicationId,
                 mutualFundPortfolioItems: portfolioForComputingProcessingCharge,
             },
-            { headers: await getAppHeader() },
-        )
+            { headers: await getAppHeader() }
+        );
+        const pledgeData = await network.get(`${api.pledgeLimit}${applicationId}`, {
+            headers: await getAppHeader(),
+        });
 
         const portValue = getDesiredValue(
             mfPortfolioArray,
-            stepResponseObject.isinNAVMap,
-        )
+            stepResponseObject.isinNAVMap
+        );
 
         const desiredLimit = getTotalLimit(
             mfPortfolioArray,
             stepResponseObject.isinNAVMap,
-            stepResponseObject.isinLTVMap,
-        )
+            stepResponseObject.isinLTVMap
+        );
 
         const totalAmount = getTotalLimit(
             stepResponseObject.availableCAS,
             stepResponseObject.isinNAVMap,
-            stepResponseObject.isinLTVMap,
-        )
+            stepResponseObject.isinLTVMap
+        );
 
         if (pledgeInProgress) {
-            await SharedPropsService.setCreditLimit(desiredLimit)
+            await SharedPropsService.setCreditLimit(desiredLimit);
         }
 
-        await SharedPropsService.setDesiredPortfolio(portValue)
+        const interestRate = _.get(pledgeData, "data.stepResponseObject.interestRate")
+        const term = _.get(pledgeData, "data.stepResponseObject.loanTenureInMonths")
+
+        await SharedPropsService.setDesiredPortfolio(portValue);
 
         const processingFeesBreakUp = _.get(
             response,
-            'data.stepResponseObject.processingChargesBreakup',
-            {},
-        )
+            "data.stepResponseObject.processingChargesBreakup",
+            {}
+        );
         const totalCharges = _.get(
             response,
-            'data.stepResponseObject.totalCharges',
-            0,
-        )
+            "data.stepResponseObject.totalCharges",
+            0
+        );
 
-        const assetTypeMap = {}
+        const assetTypeMap = {};
         /*** check unique asset type */
-        mfPortfolioArray.forEach(item => {
-            if (item.is_pledged) assetTypeMap[item.assetRepository] = true
-        })
+        mfPortfolioArray.forEach((item) => {
+            if (item.is_pledged) assetTypeMap[item.assetRepository] = true;
+        });
         /*** show 2 otp confirmation if both Karvy and CAMS is present */
-        const showOtpConfirmation: boolean =
-            Object.keys(assetTypeMap).length > 1
+        const showOtpConfirmation: boolean = Object.keys(assetTypeMap).length > 1;
 
         const minAmount = await SharedPropsService.getConfig(
-            ConfigTokens.MIN_AMOUNT_ALLOWED,
-        )
+            ConfigTokens.MIN_AMOUNT_ALLOWED
+        );
         const maxAmount = await SharedPropsService.getConfig(
-            ConfigTokens.MAX_AMOUNT_ALLOWED,
-        )
+            ConfigTokens.MAX_AMOUNT_ALLOWED
+        );
 
-        let showLessLimit: boolean
+        let showLessLimit: boolean;
 
         if (!pledgeInProgress) {
-            ;(await SharedPropsService.getCreditLimit()) < minAmount
+            (await SharedPropsService.getCreditLimit()) < 25000
                 ? (showLessLimit = true)
-                : (showLessLimit = false)
-        }
-        let showMaxLimit: boolean
-
-        if (!pledgeInProgress) {
-            ;(await SharedPropsService.getCreditLimit()) > maxAmount
-                ? (showMaxLimit = true)
-                : (showMaxLimit = false)
+                : (showLessLimit = false);
         }
 
         return Promise.resolve(
@@ -841,11 +1270,12 @@ export const pledgeConfirmationMFV2: PageType<any> = {
                 minAmount,
                 maxAmount,
                 showLessLimit,
-                showMaxLimit,
                 mfPortfolioArray,
                 pledgeInProgress,
-            ),
-        )
+                term,
+                interestRate,
+            )
+        );
     },
     actions: {
         [ACTION.NAV_TO_FAQ]: goToFaq,
@@ -853,4 +1283,4 @@ export const pledgeConfirmationMFV2: PageType<any> = {
         [ACTION.SEND_OTP_FOR_PLEDGE_CONFIRM]: sendOtpForPledgeConfirm,
     },
     clearPrevious: true,
-}
+};
