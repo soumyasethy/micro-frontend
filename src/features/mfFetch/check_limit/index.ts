@@ -285,10 +285,10 @@ export const template: (
       editText: <ButtonBaseProps & WidgetProps>{
         label: "Edit",
         fontFamily: FontFamilyTokens.Inter,
-        fontSize: FontSizeTokens.XS,
+        fontSize: FontSizeTokens.SM,
         type: ButtonTypeTokens.MediumGhost,
-        paddingHorizontal: SizeTypeTokens.NONE,
-        paddingVertical: SizeTypeTokens.NONE,
+        paddingHorizontal: SizeTypeTokens.SM,
+        paddingVertical: SizeTypeTokens.SM,
         action: {
           type: ACTION.SELECT_SOURCE,
           routeId: ROUTE.MF_FETCH_PORTFOLIO,
