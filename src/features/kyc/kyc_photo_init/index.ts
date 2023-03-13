@@ -65,11 +65,6 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         type: WIDGET.SPACE,
         position: POSITION.ABSOLUTE_BOTTOM,
       },
-      {
-        id: "bottomStack",
-        type: WIDGET.STACK,
-        position: POSITION.ABSOLUTE_BOTTOM,
-      },
     ],
   },
   datastore: <Datastore>{
@@ -137,29 +132,6 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
       },
     },
     space2: <SpaceProps>{ size: SizeTypeTokens.XXXXXL },
-    bottomStack: <StackProps>{
-      type: StackType.row,
-      justifyContent: StackJustifyContent.center,
-      alignItems: StackAlignItems.center,
-      widgetItems: [
-        { id: "image2", type: WIDGET.ICON },
-        { id: "space3", type: WIDGET.SPACE },
-        { id: "tcText2", type: WIDGET.TEXT },
-      ],
-    },
-    image2: <IconProps>{
-      name: IconTokens.Secure,
-      size: IconSizeTokens.MD,
-      color: ColorTokens.Secondary_100,
-    },
-    space3: <SpaceProps>{ size: SizeTypeTokens.XS },
-    tcText2: <TypographyProps>{
-      label: "Your data is secure with us",
-      fontWeight: "500",
-      fontFamily: FontFamilyTokens.Inter,
-      fontSize: FontSizeTokens.XS,
-      color: ColorTokens.Secondary_100,
-    },
   },
 });
 

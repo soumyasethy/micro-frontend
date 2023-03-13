@@ -158,33 +158,10 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
         widgetItems: [
           { id: "continue", type: WIDGET.BUTTON },
           // { id: "sbSpace1", type: WIDGET.SPACE },
-          // { id: "sbStack", type: WIDGET.STACK },
           // { id: "sbSpace2", type: WIDGET.SPACE },
         ],
       },
       sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
-      sbSpace2: <SpaceProps>{ size: SizeTypeTokens.MD },
-      sbStack: <StackProps>{
-        type: StackType.row,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.center,
-        widgetItems: [
-          { id: "image2", type: WIDGET.ICON },
-          { id: "sbpace3", type: WIDGET.SPACE },
-          { id: "disclaimer", type: WIDGET.TEXT },
-        ],
-      },
-      image2: <IconProps>{
-        name: IconTokens.Secure,
-        size: IconSizeTokens.MD,
-        color: ColorTokens.Secondary_100,
-      },
-      sbpace3: <SpaceProps>{ size: SizeTypeTokens.MD },
-      disclaimer: <TypographyProps>{
-        label: "Your data is secure with us",
-        color: ColorTokens.Secondary_100,
-        fontSize: FontSizeTokens.XS,
-      },
     },
   };
 };

@@ -93,11 +93,6 @@ export const template: (
       widgetItems: [
         { id: "continue", type: WIDGET.BUTTON },
         { id: "space2", type: WIDGET.SPACE },
-        { id: "disclaimerSpace", type: WIDGET.SPACE },
-        {
-          id: "disclaimerStack",
-          type: WIDGET.STACK,
-        },
       ],
     },
     previewImage: <ImageProps>{
@@ -130,26 +125,8 @@ export const template: (
         payload: <PhotoVerifyPayload>{ base64Image: photo },
       },
     },
-    disclaimerStack: <StackProps>{
-      type: StackType.row,
-      widgetItems: [
-        { id: "image2", type: WIDGET.ICON },
-        { id: "space3", type: WIDGET.SPACE },
-        { id: "disclaimer", type: WIDGET.TEXT },
-      ],
-    },
-    image2: <IconProps>{
-      name: IconTokens.Secure,
-      size: IconSizeTokens.MD,
-      color: ColorTokens.Secondary_100,
-    },
+
     space3: <SpaceProps>{ size: SizeTypeTokens.MD },
-    disclaimerSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
-    disclaimer: <TypographyProps>{
-      label: "Your data is secure with us",
-      color: ColorTokens.Secondary_100,
-      fontSize: FontSizeTokens.XS,
-    },
   },
 });
 

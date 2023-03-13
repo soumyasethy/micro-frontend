@@ -140,8 +140,6 @@ export const template: (
       alignItems: StackAlignItems.center,
       widgetItems: [
         { id: "btnItem", type: WIDGET.BUTTON },
-        // { id: "btnSpace", type: WIDGET.SPACE },
-        // { id: "disclaimerStack", type: WIDGET.STACK },
       ],
     },
     btnItem: <ButtonProps & WidgetProps>{
@@ -160,30 +158,6 @@ export const template: (
       },
     },
     btnSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
-    disclaimerStack: <StackProps>{
-      type: StackType.row,
-      justifyContent: StackJustifyContent.center,
-      alignItems: StackAlignItems.center,
-      widgetItems: [
-        { id: "secureIcon", type: WIDGET.ICON },
-        { id: "secureSpace", type: WIDGET.SPACE },
-        { id: "secureText", type: WIDGET.TEXT },
-      ],
-    },
-    secureIcon: <IconProps>{
-      name: IconTokens.SafeGuard,
-      size: IconSizeTokens.XS,
-    },
-    secureSpace: <SpaceProps>{
-      size: SizeTypeTokens.LG,
-    },
-    secureText: <TypographyProps>{
-      label: "Your data is secure with us",
-      color: ColorTokens.Secondary_100,
-      fontSize: FontSizeTokens.XXS,
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "500",
-    },
   },
 });
 
