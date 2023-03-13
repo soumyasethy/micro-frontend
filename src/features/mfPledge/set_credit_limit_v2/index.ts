@@ -34,7 +34,7 @@ import {
   LimitCardTypeTokens,
   SizeTypeTokens,
   SpaceProps,
-  StackAlignItems,
+  StackAlignItems, StackHeight,
   StackJustifyContent,
   StackProps,
   StackType,
@@ -212,6 +212,56 @@ export const template: (
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
       },
+      portfolioTitleStack: <StackProps> {
+        type: StackType.column,
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        padding: {
+          top: SizeTypeTokens.Size6,
+          bottom: SizeTypeTokens.Size6
+        },
+        widgetItems: [
+          {id: "portfolioTitle", type: WIDGET.TEXT}
+        ],
+      },
+
+      setCreditLimitStack: <StackProps> {
+        type: StackType.column,
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        padding: {
+          top: SizeTypeTokens.Size6,
+          bottom: SizeTypeTokens.Size6
+        },
+        widgetItems: [
+          {id: "CreditTitle", type: WIDGET.TEXT}
+        ],
+      },
+      interestAndOthersStack: <StackProps> {
+        type: StackType.column,
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        padding: {
+          top: SizeTypeTokens.Size6,
+          bottom: SizeTypeTokens.Size6
+        },
+        widgetItems: [
+          {id: "InterestTitle", type: WIDGET.TEXT}
+        ],
+      },
+
+      benefitsStack: <StackProps> {
+        type: StackType.column,
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        padding: {
+          top: SizeTypeTokens.Size6,
+          bottom: SizeTypeTokens.Size6
+        },
+        widgetItems: [
+          {id: "worksTitle", type: WIDGET.TEXT}
+        ],
+      },
       portfolioTitle: <TypographyProps>{
         label: "Check portfolio credit limit",
         fontFamily: FontFamilyTokens.Poppins,
@@ -279,6 +329,472 @@ export const template: (
         type: StackType.row,
 
         widgetItems: [{ id: "key1", type: WIDGET.TEXT }],
+      },
+      interestOptions: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.column,
+        widgetItems: [
+          {id: "processingAccordion", type: WIDGET.ACCORDION},
+          {id: "divider", type: WIDGET.DIVIDER},
+          {id: "interestAccordion", type: WIDGET.ACCORDION},
+          {id: "divider", type: WIDGET.DIVIDER},
+          {id: "autoPayAccordion", type: WIDGET.ACCORDION},
+          {id: "divider", type: WIDGET.DIVIDER},
+          {id: "withdrawalAccordion", type: WIDGET.ACCORDION},
+          {id: "divider", type: WIDGET.DIVIDER},
+          {id: "termAccordion", type: WIDGET.ACCORDION},
+          {id: "divider", type: WIDGET.DIVIDER},
+          {id: "foreClosureAccordion", type: WIDGET.ACCORDION},
+        ]
+      },
+      divider: <DividerProps>{
+        size: DividerSizeTokens.SM,
+        color: ColorTokens.Grey_Chalk,
+      },
+      pCardText: <TypographyProps> {
+        label: "One-time processing fee, no hidden charges",
+        fontSize: FontSizeTokens.XS,
+      },
+      interestRateT1: <TypographyProps> {
+        label: "Interest charged only on usage",
+        fontSize: FontSizeTokens.XS,
+      },
+      interestRateT2: <TypographyProps> {
+        label: "Monthly interest of ₹79 on withdrawal of ₹10,000",
+        fontSize: FontSizeTokens.XS,
+      },
+      interestAutoPayT1: <TypographyProps> {
+        label: "Interest statement will be generated at the end of month",
+        fontSize: FontSizeTokens.XS,
+      },
+      interestAutoPayT2: <TypographyProps> {
+        label: "Hassle-free auto repayment of interest on 7th of month",
+        fontSize: FontSizeTokens.XS,
+      },
+      withdrawalT1: <TypographyProps> {
+        label: "Withdraw money as per your convenience",
+        fontSize: FontSizeTokens.XS,
+      },
+      withdrawalT2: <TypographyProps> {
+        label: "Repay anytime during the month",
+        fontSize: FontSizeTokens.XS,
+      },
+      termT1: <TypographyProps> {
+        label: "Term can be renewed without repaying principal.",
+        fontSize: FontSizeTokens.XS,
+      },
+      foreClosureT1: <TypographyProps> {
+        label: "No hidden charges",
+        fontSize: FontSizeTokens.XS,
+      },
+      otherChargesStack: <StackProps>{
+        width: StackWidth.FULL,
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        widgetItems: [
+          { id: "otherChargesText", type: WIDGET.TEXT },
+        ],
+      },
+      otherChargesText: <TypographyProps>{
+        label: "Interest and other charges",
+        fontFamily: FontFamilyTokens.Poppins,
+        fontWeight: "500",
+        fontSize: FontSizeTokens.MD,
+      },
+
+      interestAccordion: <AccordionProps> {
+        icon: IconTokens.DownArrow,
+        rightIcon: AccordionArrow.LEFT,
+        data: [
+          {
+            id: 2,
+            header: {
+              widgetItems: [{ id: "interestRateStack", type: WIDGET.STACK }],
+            },
+            body: {
+              widgetItems: [
+                { id: "interestRateCard", type: WIDGET.STACK, },
+              ],
+            },
+          },
+        ],
+        type: AccordionTypeTokens.LIST
+      },
+      autoPayAccordion: <AccordionProps> {
+        icon: IconTokens.DownArrow,
+        rightIcon: AccordionArrow.LEFT,
+        data: [
+          {
+            id: 2,
+            header: {
+              widgetItems: [{ id: "autoPayStack", type: WIDGET.STACK }],
+            },
+            body: {
+              widgetItems: [
+                { id: "interestAutoPayCard", type: WIDGET.STACK },
+              ],
+            },
+          },
+        ],
+        type: AccordionTypeTokens.LIST
+      },
+      withdrawalAccordion: <AccordionProps> {
+        icon: IconTokens.DownArrow,
+        rightIcon: AccordionArrow.LEFT,
+        data: [
+          {
+            id: 2,
+            header: {
+              widgetItems: [{ id: "withdrawalStack", type: WIDGET.STACK }],
+            },
+            body: {
+              widgetItems: [
+                { id: "withdrawalCard", type: WIDGET.STACK },
+              ],
+            },
+          },
+        ],
+        type: AccordionTypeTokens.LIST,
+      },
+      termAccordion: <AccordionProps> {
+        icon: IconTokens.DownArrow,
+        rightIcon: AccordionArrow.LEFT,
+        data: [
+          {
+            id: 2,
+            header: {
+              widgetItems: [{id: "termStack", type: WIDGET.STACK}],
+            },
+            body: {
+              widgetItems: [
+                {id: "termCard", type: WIDGET.STACK, padding: {
+                    bottom: -12
+                  }},
+              ],
+            },
+          },
+        ],
+        type: AccordionTypeTokens.LIST
+      },
+
+      foreClosureAccordion: <AccordionProps> {
+        icon: IconTokens.DownArrow,
+        rightIcon: AccordionArrow.LEFT,
+        data: [
+          {
+            id: 2,
+            header: {
+              widgetItems: [{ id: "foreClosureStack", type: WIDGET.STACK }],
+            },
+            body: {
+              widgetItems: [
+                { id: "foreclosureCard", type: WIDGET.STACK },
+              ],
+            },
+          },
+        ],
+        type: AccordionTypeTokens.LIST
+      },
+
+      processingAccordion: <AccordionProps> {
+        rightIcon: AccordionArrow.LEFT,
+        data: [
+          {
+            id: 2,
+            header: {
+              widgetItems: [{ id: "processingStack", type: WIDGET.STACK },
+              ],
+            },
+            body: {
+              widgetItems: [
+                {id: "processingFeeDropDown", type: WIDGET.STACK},
+              ],
+
+            },
+          },
+        ],
+        type: AccordionTypeTokens.LIST
+      },
+      withdrawalS1: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.row,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "pCardIcon", type: WIDGET.ICON},
+          {id: "space1", type: WIDGET.SPACE},
+          {id: "withdrawalT1", type: WIDGET.TEXT}
+        ],
+      },
+      withdrawalS2: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.row,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        padding: {
+          top: SizeTypeTokens.SM,
+        },
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "pCardIcon", type: WIDGET.ICON},
+          {id: "space1", type: WIDGET.SPACE},
+          {id: "withdrawalT2", type: WIDGET.TEXT}
+        ],
+      },
+      withdrawalCard: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.column,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        marginRight: 12,
+        padding: {
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM
+        },
+        bgColor: ColorTokens.Yellow_10,
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "withdrawalS1", type: WIDGET.STACK},
+          {id: "contactUsSpace", type: WIDGET.SPACE},
+          {id: "withdrawalS2", type: WIDGET.STACK},
+          {id: "space3", type: WIDGET.SPACE},
+        ],
+      },
+      termCard: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.row,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        bgColor: ColorTokens.Yellow_10,
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG,
+        },
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "pCardIcon", type: WIDGET.ICON},
+          {id: "space1", type: WIDGET.SPACE},
+          {id: "termT1", type: WIDGET.TEXT}
+        ],
+      },
+      foreclosureCard: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.row,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        bgColor: ColorTokens.Yellow_10,
+        padding: {
+          top: SizeTypeTokens.LG,
+          bottom: SizeTypeTokens.LG
+        },
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "pCardIcon", type: WIDGET.ICON},
+          {id: "space1", type: WIDGET.SPACE},
+          {id: "foreClosureT1", type: WIDGET.TEXT}
+        ],
+      },
+
+      interestAutoPayCard: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.column,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        marginRight: 12,
+        padding: {
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM
+        },
+        bgColor: ColorTokens.Yellow_10,
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "interestAutoPayS1", type: WIDGET.STACK},
+          {id: "contactUsSpace", type: WIDGET.SPACE},
+          {id: "interestAutoPayS2", type: WIDGET.STACK},
+          {id: "space3", type: WIDGET.SPACE},
+        ],
+      },
+      interestRateS1: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.row,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        padding: {
+          top: SizeTypeTokens.SM,
+        },
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "pCardIcon", type: WIDGET.ICON},
+          {id: "space1", type: WIDGET.SPACE},
+          {id: "interestRateT1", type: WIDGET.TEXT}
+        ],
+      },
+      interestRateS2: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.row,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        padding: {
+          top: SizeTypeTokens.SM,
+        },
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "pCardIcon", type: WIDGET.ICON},
+          {id: "space1", type: WIDGET.SPACE},
+          {id: "interestRateT2", type: WIDGET.TEXT}
+        ],
+      },
+      interestRateCard: <StackProps> {
+        width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
+        type: StackType.column,
+        alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        marginRight: 12,
+        padding: {
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM
+        },
+        bgColor: ColorTokens.Yellow_10,
+        widgetItems: [
+          {id: "space3", type: WIDGET.SPACE},
+          {id: "interestRateS1", type: WIDGET.STACK},
+          {id: "contactUsSpace", type: WIDGET.SPACE},
+          {id: "interestRateS2", type: WIDGET.STACK},
+          {id: "space3", type: WIDGET.SPACE},
+        ],
+      },
+      interestRateStack: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.FULL,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        padding: {
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM,
+        },
+        widgetItems: [
+          { id: "interestRateText", type: WIDGET.TEXT },
+          { id: "interestRateValue", type: WIDGET.TEXT },
+        ],
+      },
+      interestRateValue: <TypographyProps>{
+        label: `${interestRate}%`,
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        fontSize: FontSizeTokens.SM,
+        marginRight: 20
+      },
+      autoPayStack: <StackProps>{
+        width: StackWidth.FULL,
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        padding: {
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM,
+        },
+        widgetItems: [
+          { id: "autoPayText", type: WIDGET.TEXT },
+          { id: "autoPayValue", type: WIDGET.TEXT },
+        ],
+      },
+      autoPayText: <TypographyProps>{
+        label: "Interest autopay",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontSize: FontSizeTokens.SM,
+      },
+      autoPayValue: <TypographyProps>{
+        label: "7th of every month",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        fontSize: FontSizeTokens.SM,
+        marginRight: 20
+      },
+      withdrawalStack: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        padding: {
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM,
+        },
+        widgetItems: [
+          { id: "withdrawalText", type: WIDGET.TEXT },
+          { id: "withdrawalType", type: WIDGET.TEXT },
+        ],
+      },
+      withdrawalText: <TypographyProps> {
+        label: "Withdrawal & repayment",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontSize: FontSizeTokens.SM,
+      },
+      withdrawalType: <TypographyProps> {
+        label: "Flexi",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        fontSize: FontSizeTokens.SM,
+        marginRight: 20
+      },
+      termStack: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        padding: {
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM,
+        },
+        widgetItems: [
+          { id: "termText", type: WIDGET.TEXT },
+          { id: "durationValue", type: WIDGET.TEXT },
+        ],
+      },
+      foreClosureStack: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        padding: {
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM,
+        },
+        widgetItems: [
+          { id: "foreClosureText", type: WIDGET.TEXT },
+          { id: "foreClosureType", type: WIDGET.TEXT },
+        ],
+      },
+      foreClosureText: <TypographyProps> {
+        label: "Foreclosure",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontSize: FontSizeTokens.SM,
+      },
+      foreClosureType: <TypographyProps> {
+        label: "Free",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "600",
+        fontSize: FontSizeTokens.SM,
+        marginRight: 16
+      },
+      termText: <TypographyProps> {
+        label: "Term",
+        fontFamily: FontFamilyTokens.Inter,
+        fontWeight: "400",
+        fontSize: FontSizeTokens.SM,
       },
       space11: <SpaceProps>{
         size: SizeTypeTokens.MD,
@@ -572,16 +1088,6 @@ export const template: (
         color: ColorTokens.Grey_Milk_1,
       },
       space6: <SpaceProps>{ size: SizeTypeTokens.LG },
-      interestRateStack: <StackProps>{
-        type: StackType.row,
-        width: StackWidth.FULL,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.spaceBetween,
-        widgetItems: [
-          { id: "interestRateTextStack", type: WIDGET.STACK },
-          { id: "interestRateValue", type: WIDGET.TEXT },
-        ],
-      },
       interestRateTextStack: <StackProps>{
         type: StackType.row,
         width: StackWidth.FULL,
@@ -600,28 +1106,12 @@ export const template: (
         fontWeight: "400",
         fontSize: FontSizeTokens.SM,
       },
-      interestRateValue: <TypographyProps>{
-        label: `${stepResponseObject["interestRate"]}%`, // refrence - pledge confirmation v2
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "600",
-        fontSize: FontSizeTokens.SM,
-      },
       space7: <SpaceProps>{ size: SizeTypeTokens.LG },
       divider3: <DividerProps>{
         size: DividerSizeTokens.SM,
         color: ColorTokens.Grey_Milk_1,
       },
       space8: <SpaceProps>{ size: SizeTypeTokens.LG },
-      autoPayStack: <StackProps>{
-        width: StackWidth.FULL,
-        type: StackType.row,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.spaceBetween,
-        widgetItems: [
-          { id: "autoPayTextStack", type: WIDGET.STACK },
-          { id: "autoPayValue", type: WIDGET.TEXT },
-        ],
-      },
       autoPayTextStack: <StackProps>{
         width: StackWidth.FULL,
         type: StackType.row,
@@ -645,19 +1135,6 @@ export const template: (
       //     color: ColorTokens.Grey_Charcoal,
       //     size: IconSizeTokens.MD
       // },
-      autoPayText: <TypographyProps>{
-        label: "Interest autopay",
-        color: ColorTokens.Grey_Night,
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "400",
-        fontSize: FontSizeTokens.SM,
-      },
-      autoPayValue: <TypographyProps>{
-        label: "5th of every month",
-        fontFamily: FontFamilyTokens.Inter,
-        fontWeight: "600",
-        fontSize: FontSizeTokens.SM,
-      },
       space9: <SpaceProps>{ size: SizeTypeTokens.LG },
       divider4: <DividerProps>{
         size: DividerSizeTokens.SM,
