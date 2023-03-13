@@ -1,5 +1,4 @@
 import { QUERY_PARAMS } from './constants'
-import SharedPropsService from '../SharedPropsService'
 import { User } from '../features/login/otp_verify/types'
 
 /**
@@ -39,7 +38,7 @@ export const isGoogleLoginEnabled = (user: User) => {
 
 export const shouldShowVoltBrandingSplashScreen = (url: string) => {
     const params = getParameters(url)
-    if (params[QUERY_PARAMS.PLATFORM].includes(AppPlatform.SDK_INVESTWELL)) {
+    if (getPlatformName(params).includes(AppPlatform.SDK_INVESTWELL)) {
         return false
     } else {
         return true
@@ -48,7 +47,7 @@ export const shouldShowVoltBrandingSplashScreen = (url: string) => {
 
 export const areWhatsappUpdatesAllowed = (url: string) => {
     const params = getParameters(url)
-    if (params[QUERY_PARAMS.PLATFORM].includes(AppPlatform.SDK_INVESTWELL)) {
+    if (getPlatformName(params).includes(AppPlatform.SDK_INVESTWELL)) {
         return false
     } else {
         return true
@@ -57,9 +56,13 @@ export const areWhatsappUpdatesAllowed = (url: string) => {
 
 export const shouldShowVoltContactUs = (url: string) => {
     const params = getParameters(url)
-    if (params[QUERY_PARAMS.PLATFORM].includes(AppPlatform.SDK_INVESTWELL)) {
+    if (getPlatformName(params).includes(AppPlatform.SDK_INVESTWELL)) {
         return false
     } else {
         return true
     }
+}
+
+export const getPlatformName = (params: any) => {
+    return params[QUERY_PARAMS.PLATFORM] || ''
 }
