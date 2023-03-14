@@ -423,6 +423,13 @@ export const template: (
                 height: StackHeight.CONTENT,
                 type: StackType.column,
                 alignItems: StackAlignItems.flexStart,
+                borderRadius: 4,
+                marginRight: 12,
+                bgColor: ColorTokens.Yellow_10,
+                padding: {
+                    top: SizeTypeTokens.SM,
+                    bottom: SizeTypeTokens.SM
+                },
                 widgetItems: [
                     {id: "processingCard", type: WIDGET.STACK},
                 ],
@@ -457,11 +464,6 @@ export const template: (
                 type: StackType.row,
                 alignItems: StackAlignItems.flexStart,
                 borderRadius: 4,
-                bgColor: ColorTokens.Yellow_10,
-                padding: {
-                    top: SizeTypeTokens.Size10,
-                    bottom: SizeTypeTokens.Size10
-                },
                 widgetItems: [
                     {id: "space3", type: WIDGET.SPACE},
                     {id: "pCardIcon", type: WIDGET.ICON},
@@ -821,7 +823,7 @@ export const template: (
                         },
                         body: {
                             widgetItems: [
-                                {id: "processingFeeDropDown", type: WIDGET.STACK},
+                                {id: "processingFeeDropDown", type: WIDGET.STACK },
                             ],
 
                         },

@@ -1084,10 +1084,15 @@ export const template: (
       },
       processingFeeDropDown: <StackProps> {
         width: StackWidth.FULL,
+        height: StackHeight.CONTENT,
         type: StackType.column,
         alignItems: StackAlignItems.flexStart,
+        borderRadius: 4,
+        marginRight: 12,
+        bgColor: ColorTokens.Yellow_10,
         padding: {
-          top: SizeTypeTokens.Size10,
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM
         },
         widgetItems: [
           {id: "processingCard", type: WIDGET.STACK},
