@@ -1,30 +1,19 @@
 import { ActionFunction } from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
-import { AccordionProps, ListProps, TypographyProps } from "@voltmoney/schema";
-import { addCommasToNumber } from "../../../configs/utils";
+import { AccordionProps } from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
-import sharedPropsService from "../../../SharedPropsService";
-import {
-  AvailableCASItem,
-  IsinLTVMap,
-  IsinNAVMap,
-} from "../unlock_limit/types";
-import { getTotalLimit } from "../portfolio/actions";
 import {
   AssetRepositoryType,
   ConfigTokens,
   ConfigValues,
 } from "../../../configs/config";
-import { listItemDataBuilder } from "./utils";
-import { getDesiredValue } from "../portfolio_readonly/actions";
-import { removeGetMorePortfolio } from "../unlock_limit_V2/actions";
 import { accordionData, GetMoreMfPortfolioPayload, pagePayload } from "./types";
 let value = ConfigValues.MinimumAmountAllowed.toString();
 
 export const goKfin: ActionFunction<pagePayload> = async (
-  action,
-  _datastore,
-  { navigate, goBack, setDatastore }
+    action,
+    _datastore,
+    { navigate, goBack, setDatastore }
 ) => {
   await navigate(ROUTE.PORTFOLIO_FROM_RTA, {
     assetRepository: action.payload.value,
@@ -32,17 +21,17 @@ export const goKfin: ActionFunction<pagePayload> = async (
 };
 
 export const goPortfolio: ActionFunction<pagePayload> = async (
-  action,
-  _datastore,
-  { navigate, goBack, setDatastore }
+    action,
+    _datastore,
+    { navigate, goBack, setDatastore }
 ) => {
   await navigate(ROUTE.SET_CREDIT_LIMIT);
 };
 
 export const goToNext: ActionFunction<accordionData> = async (
-  action,
-  _datastore,
-  { navigate, goBack, setDatastore }
+    action,
+    _datastore,
+    { navigate, goBack, setDatastore }
 ) => {
   await setDatastore(ROUTE.MF_PLEDGE_PORTFOLIO, "trial", <AccordionProps>{
     activeIndex: action.payload.activeIndex,
@@ -54,7 +43,7 @@ export const goToNext: ActionFunction<accordionData> = async (
 };
 
 export const getMoreMfPortfolio: ActionFunction<
-  GetMoreMfPortfolioPayload
+    GetMoreMfPortfolioPayload
 > = async (action, _datastore, { navigate, ...props }): Promise<any> => {
   const assetRepoMap = {};
   /*** Get unique asset repository from the cas list */
@@ -64,8 +53,8 @@ export const getMoreMfPortfolio: ActionFunction<
   }
   /*** Change page view type LAYOUT.LIST to LAYOUT.MODAL */
   await SharedPropsService.setConfig(
-    ConfigTokens.IS_MF_FETCH_BACK_ALLOWED,
-    true
+      ConfigTokens.IS_MF_FETCH_BACK_ALLOWED,
+      true
   );
   /*** switch between assetRepositoryType */
   const assetType = action.payload.value;
@@ -76,8 +65,8 @@ export const getMoreMfPortfolio: ActionFunction<
 
   /*** Enable auto otp trigger when user lands on MF_Fetch */
   await SharedPropsService.setConfig(
-    ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP,
-    true
+      ConfigTokens.IS_MF_FETCH_AUTO_TRIGGER_OTP,
+      true
   );
   /*** Go to re-fetch portfolio from other Asset Type **/
   await navigate(ROUTE.MF_FETCH_PORTFOLIO, {
@@ -88,9 +77,9 @@ export const getMoreMfPortfolio: ActionFunction<
 };
 
 export const goBack: ActionFunction<any> = async (
-  action,
-  _datastore,
-  { navigate, goBack, setDatastore }
+    action,
+    _datastore,
+    { navigate, goBack, setDatastore }
 ) => {
   await navigate(ROUTE.MF_PLEDGE_PORTFOLIO);
 };
