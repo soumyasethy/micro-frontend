@@ -140,6 +140,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
                 await showPopup({
                     autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
                     isAutoTriggerCta: false,
+                    titleFont: false,
                     title: `₹ ${addCommasToNumber(
                         roundDownToNearestHundred(
                             _.get(

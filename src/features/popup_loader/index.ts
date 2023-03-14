@@ -51,6 +51,7 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
   type,
   isAutoTriggerCta = false,
   autoTriggerTimerInMilliseconds,
+  titleFont= true
 }) => ({
   layout: <Layout>{
     id: ROUTE.ALERT_PAGE,
@@ -76,6 +77,7 @@ export const template: (alertProps: AlertProps) => TemplateSchema = ({
       type: _applyType(type),
       iconName: (iconName as IconTokens) || IconTokens.Alert,
       buttonText: ctaLabel,
+      titleFont: titleFont,
       action: ctaAction
         ? ctaAction
         : {
