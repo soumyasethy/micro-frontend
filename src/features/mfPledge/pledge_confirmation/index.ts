@@ -19,7 +19,7 @@ import {
   DividerSizeTokens,
   FontFamilyTokens,
   FontSizeTokens,
-  HeaderProps,
+  HeaderProps, HeaderTypeTokens,
   IconProps,
   IconTokens,
   ListItemProps,
@@ -207,7 +207,7 @@ export const template: (
         title: "Confirm pledge",
         leadIcon: "https://reactnative.dev/img/tiny_logo.png",
         isBackButton: true,
-        type: "DEFAULT",
+        type: HeaderTypeTokens.DEFAULT,
         action: {
           type: ACTION.BACK_BUTTON,
           payload: {},

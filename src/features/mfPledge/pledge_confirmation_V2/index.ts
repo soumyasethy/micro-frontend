@@ -1,12 +1,4 @@
-import {
-    Datastore,
-    Layout,
-    LAYOUTS,
-    PageType,
-    POSITION,
-    TemplateSchema,
-    WidgetProps,
-} from '@voltmoney/types'
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from '@voltmoney/types'
 import {
     AccordionArrow,
     AccordionProps,
@@ -25,11 +17,10 @@ import {
     IconProps,
     IconSizeTokens,
     IconTokens,
-    ImageProps,
     PaddingProps,
-    ResizeModeToken,
     SizeTypeTokens,
     SpaceProps,
+    StackAlignContent,
     StackAlignItems,
     StackHeight,
     StackJustifyContent,
@@ -286,6 +277,7 @@ export const template: (
                 type: StackType.row,
                 width: StackWidth.CONTENT,
                 alignItems: StackAlignItems.center,
+                justifyContent: StackJustifyContent.center,
                 widgetItems: [
                     { id: 'backButton', type: WIDGET.ICON },
                     { id: 'space0', type: WIDGET.SPACE },
@@ -294,7 +286,8 @@ export const template: (
             },
             backButton: <IconProps & WidgetProps>{
                 name: IconTokens.ChevronLeft,
-                size: IconSizeTokens.XS,
+                size: IconSizeTokens.XL,
+                align: IconAlignmentTokens.center,
                 action: {
                     type: ACTION.BACK_BUTTON,
                     routeId: ROUTE.PLEDGE_CONFIRMATION,
