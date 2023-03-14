@@ -169,7 +169,12 @@ export const template: (
             alignItems: StackAlignItems.center,
             justifyContent: StackJustifyContent.flexStart,
             widgetItems: [
-                { id: 'radio', type: WIDGET.RADIO },
+                { id: 'radio', type: WIDGET.RADIO, padding: {
+                    top: 6,
+                    bottom: 6,
+                    left: 6,
+                    right: 6
+                  } },
                 { id: 'whatsapp_space', type: WIDGET.SPACE },
                 { id: 'whatsapp', type: WIDGET.TEXT },
             ],
