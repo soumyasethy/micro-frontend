@@ -133,26 +133,6 @@ export const template: (
     space1: <SpaceProps>{
       size: SizeTypeTokens.XL,
     },
-    amountStack2: <StackProps>{
-      width: StackWidth.FULL,
-      type: StackType.row,
-      justifyContent: StackJustifyContent.center,
-      alignItems: StackAlignItems.center,
-      padding: <PaddingProps>{
-        horizontal: SizeTypeTokens.NONE,
-      },
-      widgetItems: [
-        { id: "rupee", type: WIDGET.TEXT },
-        { id: "amount", type: WIDGET.TEXT },
-        { id: "space", type: WIDGET.SPACE },
-        { id: "icon", type: WIDGET.ICON, padding: {
-          left: 4,
-            right: 4,
-            top: 4,
-            bottom: 4
-          }},
-      ],
-    },
     rupee: <TypographyProps>{
       label: "₹",
       fontFamily: FontFamilyTokens.Inter,
@@ -204,7 +184,15 @@ export const template: (
           stepResponseObject: stepResponseObject,
         },
       },
-    },
+      onEditIconClickAction: {
+        type: ACTION.EDIT_LIMIT,
+        routeId: ROUTE.SET_CREDIT_LIMIT,
+        payload: {
+          maxAmount,
+          stepResponseObject,
+          updateAvailableCASMap,
+        },
+      }    },
     space3: <SpaceProps>{
       size: SizeTypeTokens.XXL,
     },

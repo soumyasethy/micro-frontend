@@ -92,6 +92,8 @@ export const SetRecommendedAmount: ActionFunction<AmountPayload> = async (
   ]);
 };
 
+
+
 export const priceInWords = (price) => {
   var sglDigit = [
       "Zero",
@@ -206,6 +208,9 @@ export const priceInWords = (price) => {
   } else str = "";
   return str ? "Rupees" + str : str;
 };
+
+
+
 export const OnAmountChange: ActionFunction<AmountPayload> = async (
   action,
   _datastore,
@@ -217,9 +222,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
   const availableCreditAmount = user.linkedCredits[0].availableCreditAmount;
   const recommendedAmount = 0.9 * availableCreditAmount;
 
-  await setDatastore(ROUTE.WITHDRAW_AMOUNT, "amountItem", <TextInputProps>{
-    valueInText: priceInWords(action.payload.value),
-  });
+
 
   if (
     action.payload.value.length > 0 &&
@@ -234,8 +237,7 @@ export const OnAmountChange: ActionFunction<AmountPayload> = async (
     });
   }
 
-  const currentApplicableInterestRate = (await SharedPropsService.getUser())
-    .linkedCredits[0].currentApplicableInterestRate;
+  const currentApplicableInterestRate = user.linkedCredits[0].currentApplicableInterestRate
   const monthlyInterest =
     Math.round(
       ((disbursalAmount * currentApplicableInterestRate) / 1200) * 100
