@@ -159,10 +159,10 @@ export enum RegexConfig {
 }
 
 export enum DeepLinks {
-    MOBILE_WHATSAPP = 'whatsapp://send?phone=919611749097',
-    WHATSAPP = 'https://wa.me/919611749097',
-    CALL = 'tel:+919611749097',
-    MAILTO = 'mailto:support@voltmoney.in',
+    MOBILE_WHATSAPP = 'whatsapp://send?phone=',
+    WHATSAPP = 'https://wa.me/',
+    CALL = 'tel:',
+    MAILTO = 'mailto:',
 }
 
 export enum ConfigTokens {

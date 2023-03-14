@@ -66,3 +66,25 @@ export const shouldShowVoltContactUs = (url: string) => {
 export const getPlatformName = (params: any) => {
     return params[QUERY_PARAMS.PLATFORM] || ''
 }
+
+export const getContactNumberForCall = (url: string) => {
+    const params = getParameters(url)
+    const platformName = getPlatformName(params)
+
+    if (platformName === AppPlatform.FREO) {
+        return '+916364465607'
+    } else {
+        return '+919611749097'
+    }
+}
+
+export const getContactNumberForWhatsapp = (url: string) => {
+    const params = getParameters(url)
+    const platformName = getPlatformName(params)
+
+    if (platformName === AppPlatform.FREO) {
+        return '916364465607'
+    } else {
+        return '919611749097'
+    }
+}
