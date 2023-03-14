@@ -145,7 +145,12 @@ export const template: (
         { id: "rupee", type: WIDGET.TEXT },
         { id: "amount", type: WIDGET.TEXT },
         { id: "space", type: WIDGET.SPACE },
-        { id: "icon", type: WIDGET.ICON },
+        { id: "icon", type: WIDGET.ICON, padding: {
+          left: 4,
+            right: 4,
+            top: 4,
+            bottom: 4
+          }},
       ],
     },
     rupee: <TypographyProps>{
@@ -165,7 +170,7 @@ export const template: (
     },
     icon: <IconProps & WidgetProps>{
       name: IconTokens.EditBlue,
-      size: IconSizeTokens.XL,
+      size: IconSizeTokens.XXL,
       action: {
         type: ACTION.EDIT_LIMIT,
         routeId: ROUTE.SET_CREDIT_LIMIT,
@@ -322,8 +327,8 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "600",
       type: ButtonTypeTokens.MediumGhost,
-      paddingHorizontal: SizeTypeTokens.Size6,
-      paddingVertical: SizeTypeTokens.Size6,
+      paddingHorizontal: SizeTypeTokens.MD,
+      paddingVertical: SizeTypeTokens.MD,
       action: {
         type: ACTION.EDIT_PORTFOLIO,
         payload: {
