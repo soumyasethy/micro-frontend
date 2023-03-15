@@ -86,7 +86,7 @@ export const template: (
         payload: {},
       },
     },
-    headerSpace: <SpaceProps>{ size: SizeTypeTokens.XXL },
+    headerSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
     headItem: <TypographyProps>{
       label: "Link bank account for AutoPay",
       fontSize: FontSizeTokens.MD,
@@ -104,18 +104,23 @@ export const template: (
       fontFamily: FontFamilyTokens.Inter,
       fontWeight: "400",
     },
-    contentSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
+    contentSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     iconStack: <StackProps>{
       type: StackType.column,
       justifyContent: StackJustifyContent.center,
       alignItems: StackAlignItems.center,
       widgetItems: [
         { id: "upsideSpace", type: WIDGET.SPACE },
+        { id: "upsideSpace1", type: WIDGET.SPACE },
         { id: "iconcontent", type: WIDGET.SHIMMERICON },
         { id: "downsideSpace", type: WIDGET.SPACE },
+        { id: "downsideSpace1", type: WIDGET.SPACE },
       ],
     },
     upsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+    upsideSpace1: <SpaceProps>{ size: SizeTypeTokens.MD },
+    downsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+    downsideSpace1: <SpaceProps>{ size: SizeTypeTokens.MD },
     iconcontent: <ShimmerIconProps>{
       icon: <IconProps>{
         name: IconTokens.Group74508,
@@ -126,7 +131,6 @@ export const template: (
       borderRadius: BorderRadiusTokens.BR0,
       padding: SizeTypeTokens.SM,
     },
-    downsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     iconSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     btnData: <StackProps>{
       type: StackType.column,

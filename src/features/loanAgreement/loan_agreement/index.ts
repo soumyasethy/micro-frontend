@@ -113,7 +113,6 @@ export const template: (
       widgetItems: [
         { id: "upsideSpace", type: WIDGET.SPACE },
         { id: "upsideSpace1", type: WIDGET.SPACE },
-        // { id: "iconcontent", type: WIDGET.ICON },
         { id: "iconcontent", type: WIDGET.SHIMMERICON },
         { id: "downsideSpace", type: WIDGET.SPACE },
         { id: "downsideSpace1", type: WIDGET.SPACE },
@@ -121,6 +120,8 @@ export const template: (
     },
     upsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
     upsideSpace1: <SpaceProps>{ size: SizeTypeTokens.MD },
+    downsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
+    downsideSpace1: <SpaceProps>{ size: SizeTypeTokens.MD },
     iconcontent: <ShimmerIconProps>{
       icon: <IconProps>{
         name: IconTokens.ContractFile,
@@ -131,8 +132,6 @@ export const template: (
       borderRadius: BorderRadiusTokens.BR0,
       padding: SizeTypeTokens.SM,
     },
-    downsideSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXL },
-    downsideSpace1: <SpaceProps>{ size: SizeTypeTokens.MD },
     iconSpace: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
     btnData: <StackProps>{
       type: StackType.column,

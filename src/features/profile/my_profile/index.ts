@@ -214,14 +214,17 @@ export const template: (
       type: StackType.row,
       alignItems: StackAlignItems.flexEnd,
       justifyContent: StackJustifyContent.flexEnd,
-      widgetItems: [{ id: "cta1", type: WIDGET.BUTTON }],
+      widgetItems: [{ id: "cta1", type: WIDGET.BUTTON, padding: {
+        left: 4,
+          right: 4
+        } }],
     },
     cta1: <ButtonProps>{
       type: ButtonTypeTokens.MediumGhost,
       // width: ButtonWidthTypeToken.CONTENT,
       icon: <IconProps>{
         name: IconTokens.ChervonDownRight,
-        size: IconSizeTokens.MD,
+        size: IconSizeTokens.XXL,
         color: ColorTokens.Grey_Charcoal,
       },
       action: {
@@ -302,14 +305,17 @@ export const template: (
       type: StackType.row,
       alignItems: StackAlignItems.flexEnd,
       justifyContent: StackJustifyContent.flexEnd,
-      widgetItems: [{ id: "cta1Faq", type: WIDGET.BUTTON }],
+      widgetItems: [{ id: "cta1Faq", type: WIDGET.BUTTON,padding: {
+          left: 4,
+          right: 4
+        } }],
     },
     cta1Faq: <ButtonProps>{
       type: ButtonTypeTokens.MediumGhost,
       //  width: ButtonWidthTypeToken.CONTENT,
       icon: <IconProps>{
         name: IconTokens.ChervonDownRight,
-        size: IconSizeTokens.SM,
+        size: IconSizeTokens.XXL,
         color: ColorTokens.Grey_Night,
       },
       action: {
@@ -393,14 +399,17 @@ export const template: (
       type: StackType.row,
       alignItems: StackAlignItems.flexEnd,
       justifyContent: StackJustifyContent.flexEnd,
-      widgetItems: [{ id: "cta1Contact", type: WIDGET.BUTTON }],
+      widgetItems: [{ id: "cta1Contact", type: WIDGET.BUTTON, padding: {
+          left: 4,
+          right: 4
+        } }],
     },
     cta1Contact: <ButtonProps>{
       type: ButtonTypeTokens.MediumGhost,
       // width: ButtonWidthTypeToken.CONTENT,
       icon: <IconProps>{
         name: IconTokens.ChervonDownRight,
-        size: IconSizeTokens.SM,
+        size: IconSizeTokens.XXL,
         color: ColorTokens.Grey_Night,
       },
     },
