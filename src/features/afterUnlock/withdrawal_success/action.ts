@@ -5,9 +5,9 @@ import { ROUTE } from "../../../routes";
 export const Done: ActionFunction<OtpPledgePayload> = async (
   action,
   _datastore,
-  { navigate }
+  { navigate,navigateWithReset, goBack }
 ): Promise<any> => {
-  await navigate(ROUTE.DASHBOARD);
+goBack()
 };
 
 export const goBack: ActionFunction<OtpPledgePayload> = async (
