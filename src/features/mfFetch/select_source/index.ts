@@ -1,11 +1,4 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   ButtonBaseProps,
   ButtonProps,
@@ -28,14 +21,11 @@ import {
   TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTIONS } from "./types";
-import { confirmCTA, goBack, toggleRadio } from "./actions";
-import {
-  AssetRepositoryType,
-  getPrimaryAssetRepository,
-} from "../../../configs/config";
-import { heightMap } from "../../../configs/height";
+import {ROUTE} from "../../../routes";
+import {ACTIONS} from "./types";
+import {confirmCTA, goBack, toggleRadio} from "./actions";
+import {AssetRepositoryType, getPrimaryAssetRepository,} from "../../../configs/config";
+import {heightMap} from "../../../configs/height";
 
 export const template: (
   assetRepository: AssetRepositoryType
@@ -61,6 +51,7 @@ export const template: (
         { id: "kfinStack", type: WIDGET.STACK },
         { id: "space4", type: WIDGET.SPACE },
         { id: "continueButton", type: WIDGET.BUTTON },
+        { id: "subTitleSpace", type: WIDGET.SPACE }
       ],
     },
     datastore: <Datastore>{

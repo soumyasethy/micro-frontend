@@ -1,26 +1,14 @@
-import {
-  Datastore,
-  Layout,
-  LAYOUTS,
-  PageType,
-  POSITION,
-  TemplateSchema,
-  WidgetProps,
-} from "@voltmoney/types";
+import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
   AspectRatioToken,
   BorderRadiusTokens,
   ButtonProps,
   ButtonTypeTokens,
   ButtonWidthTypeToken,
-  ColorTokens,
   FontFamilyTokens,
   FontSizeTokens,
   HeaderProps,
   HeaderTypeTokens,
-  IconProps,
-  IconSizeTokens,
-  IconTokens,
   ImageProps,
   ImageSizeTokens,
   SizeTypeTokens,
@@ -32,13 +20,12 @@ import {
   StepperItem,
   StepperProps,
   StepperTypeTokens,
-  TypographyProps,
   WIDGET,
 } from "@voltmoney/schema";
-import { ROUTE } from "../../../routes";
-import { ACTION, PhotoVerifyPayload } from "./types";
-import { GoBackAction, PhotoVerifyAction, RetakePhoto } from "./actions";
-import { horizontalStepperRepo } from "../../../configs/utils";
+import {ROUTE} from "../../../routes";
+import {ACTION, PhotoVerifyPayload} from "./types";
+import {GoBackAction, PhotoVerifyAction, RetakePhoto} from "./actions";
+import {horizontalStepperRepo} from "../../../configs/utils";
 
 export const template: (
   stepper: StepperItem[],
@@ -92,7 +79,7 @@ export const template: (
       alignItems: StackAlignItems.center,
       widgetItems: [
         { id: "continue", type: WIDGET.BUTTON },
-        { id: "space2", type: WIDGET.SPACE },
+        { id: "spaceXS", type: WIDGET.SPACE },
       ],
     },
     previewImage: <ImageProps>{
@@ -127,6 +114,7 @@ export const template: (
     },
 
     space3: <SpaceProps>{ size: SizeTypeTokens.MD },
+    spaceXS: <SpaceProps> { size: SizeTypeTokens.XS }
   },
 });
 

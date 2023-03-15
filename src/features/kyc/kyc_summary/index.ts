@@ -119,12 +119,8 @@ export const template: (
       type: StackType.column,
       widgetItems: [
         { id: "continue", type: WIDGET.BUTTON },
-        // { id: "sbSpace1", type: WIDGET.SPACE },
-        // { id: "sbSpace2", type: WIDGET.SPACE },
       ],
     },
-    sbSpace1: <SpaceProps>{ size: SizeTypeTokens.XL },
-    sbSpace2: <SpaceProps>{ size: SizeTypeTokens.MD },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     image: <ImageProps>{
       aspectRatio: AspectRatioToken.A1_1,

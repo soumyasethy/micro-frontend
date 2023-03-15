@@ -83,7 +83,7 @@ export const template: (stepper: StepperItem[]) => TemplateSchema = (
     },
     spaceTop: <SpaceProps>{ size: SizeTypeTokens.XXXL },
     space1: <SpaceProps>{ size: SizeTypeTokens.XXXXXXL },
-    continueSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+    continueSpace: <SpaceProps>{ size: SizeTypeTokens.XS },
     title: <TypographyProps>{
       label: "Take photo",
       fontWeight: "600",
