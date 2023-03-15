@@ -71,7 +71,7 @@ export const template: (
         id: "amountStack",
         type: WIDGET.STACK,
       },
-      { id: "space2", type: WIDGET.SPACE },
+      { id: "spaceSize6", type: WIDGET.SPACE },
       {
         id: "slider",
         type: WIDGET.SLIDER,
@@ -116,8 +116,6 @@ export const template: (
       widgetItems: [
         { id: "space0", type: WIDGET.SPACE },
         { id: "selectText", type: WIDGET.TEXT },
-        { id: "space1", type: WIDGET.SPACE },
-        { id: "amountStack2", type: WIDGET.STACK },
       ],
     },
     space0: <SpaceProps>{
@@ -130,36 +128,11 @@ export const template: (
       fontSize: FontSizeTokens.MD,
       color: ColorTokens.Grey_Night,
     },
-    space1: <SpaceProps>{
-      size: SizeTypeTokens.XL,
-    },
-    rupee: <TypographyProps>{
-      label: "₹",
-      fontFamily: FontFamilyTokens.Inter,
-      fontWeight: "700",
-      fontSize: FontSizeTokens.XXXXL,
-    },
     amount: <TypographyProps>{
       label: `${addCommasToNumber(await SharedPropsService.getCreditLimit())}`,
       fontFamily: FontFamilyTokens.Poppins,
       fontWeight: "700",
       fontSize: FontSizeTokens.XXXXL,
-    },
-    space: <SpaceProps>{
-      size: SizeTypeTokens.Size10,
-    },
-    icon: <IconProps & WidgetProps>{
-      name: IconTokens.EditBlue,
-      size: IconSizeTokens.XXL,
-      action: {
-        type: ACTION.EDIT_LIMIT,
-        routeId: ROUTE.SET_CREDIT_LIMIT,
-        payload: {
-          maxAmount,
-          stepResponseObject,
-          updateAvailableCASMap,
-        },
-      },
     },
     space2: <SpaceProps>{
       size: SizeTypeTokens.XXXXXL,
@@ -361,6 +334,11 @@ export const template: (
     space13: <SpaceProps>{
       size: SizeTypeTokens.Size10,
     },
+
+    spaceSize6: <StackProps> {
+      size: SizeTypeTokens.SM
+    },
+
     divider: <DividerProps>{
       size: DividerSizeTokens.SM,
       color: ColorTokens.Grey_Milk_1,

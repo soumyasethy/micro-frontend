@@ -179,78 +179,71 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
                     iconName: IconTokens.Volt,
                 })
 
-                /***** Starting Polling to check status of MF_PLEDGE_PORTFOLIO *****/
-                const PollerRef = setInterval(async () => {
-                    const mfPledgeStatusResponse = await network.get(
-                        `${api.borrowerApplication}${applicationId}`,
-                        { headers: await getAppHeader() },
-                    )
-                    user.linkedApplications[0] = _.get(
-                        mfPledgeStatusResponse,
-                        'data',
-                    )
-                    await SharedPropsService.setUser(user)
-                    if (
-                        _.get(
-                            mfPledgeStatusResponse,
-                            'data.stepStatusMap.MF_PLEDGE_PORTFOLIO',
-                        ) === 'COMPLETED' &&
-                        _.get(mfPledgeStatusResponse, 'data.currentStepId') !==
-                            'MF_PLEDGE_PORTFOLIO'
-                    ) {
-                        clearInterval(PollerRef)
-                        await goBack()
-                        await showPopup({
-                            autoTriggerTimerInMilliseconds:
-                                APP_CONFIG.POLLING_INTERVAL,
-                            isAutoTriggerCta: false,
-                            title: `₹ ${addCommasToNumber(
-                                roundDownToNearestHundred(
-                                    _.get(
-                                        authPledgeResponse,
-                                        'data.stepResponseObject.approvedCreditAmount',
-                                        0,
-                                    ),
-                                ),
-                            )} unlocked successfully!`,
-                            subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
-                            type: 'SUCCESS',
-                            ctaLabel: 'Continue',
-                            primary: true,
-                            ctaAction: {
-                                type: ACTION.NAV_NEXT,
-                                routeId: ROUTE.PLEDGE_VERIFY,
-                                payload: <NavigationNext>{
-                                    stepId: _.get(
-                                        mfPledgeStatusResponse,
-                                        'data.currentStepId',
-                                    ),
-                                },
-                            },
-                        })
-                    }
-                }, APP_CONFIG.POLLING_INTERVAL)
-            }
-        } else {
+        /***** Starting Polling to check status of MF_PLEDGE_PORTFOLIO *****/
+        const PollerRef = setInterval(async () => {
+          const mfPledgeStatusResponse = await network.get(
+            `${api.borrowerApplication}${applicationId}`,
+            { headers: await getAppHeader() }
+          );
+          user.linkedApplications[0] = _.get(mfPledgeStatusResponse, "data");
+          await SharedPropsService.setUser(user);
+          if (
+            _.get(
+              mfPledgeStatusResponse,
+              "data.stepStatusMap.MF_PLEDGE_PORTFOLIO"
+            ) === "COMPLETED" &&
+            _.get(mfPledgeStatusResponse, "data.currentStepId") !==
+              "MF_PLEDGE_PORTFOLIO"
+          ) {
+            clearInterval(PollerRef);
+            await goBack();
             await showPopup({
-                autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
-                isAutoTriggerCta: false,
-                title: `₹ ${addCommasToNumber(
-                    roundDownToNearestHundred(
-                        _.get(
-                            authPledgeResponse,
-                            'data.stepResponseObject.approvedCreditAmount',
-                            0,
-                        ),
-                    ),
-                )} unlocked successfully!`,
-                subTitle: 'Please continue to unlock the remaining amount',
-                type: 'SUCCESS',
-                ctaLabel: 'Continue',
-                primary: true,
-                ctaAction: action.payload.sendOtpForPledgeConfirmAction,
-            })
-        }
+              autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
+              isAutoTriggerCta: false,
+              title: `₹ ${addCommasToNumber(
+                roundDownToNearestHundred(
+                  _.get(
+                    authPledgeResponse,
+                    "data.stepResponseObject.approvedCreditAmount",
+                    0
+                  )
+                )
+              )} unlocked successfully!`,
+              subTitle: TextConstants.GENERIC_PROCEED_MESSAGE,
+              type: "SUCCESS",
+              ctaLabel: "Continue",
+              primary: true,
+              ctaAction: {
+                type: ACTION.NAV_NEXT,
+                routeId: ROUTE.PLEDGE_VERIFY,
+                payload: <NavigationNext>{
+                  stepId: _.get(mfPledgeStatusResponse, "data.currentStepId"),
+                },
+              },
+            });
+          }
+        }, APP_CONFIG.POLLING_INTERVAL);
+      }
+    } else {
+      await showPopup({
+        autoTriggerTimerInMilliseconds: APP_CONFIG.POLLING_INTERVAL,
+        isAutoTriggerCta: false,
+        titleFont: false,
+        title: `₹ ${addCommasToNumber(
+          roundDownToNearestHundred(
+            _.get(
+              authPledgeResponse,
+              "data.stepResponseObject.approvedCreditAmount",
+              0
+            )
+          )
+        )} unlocked successfully!`,
+        subTitle: "Please continue to unlock the remaining amount",
+        type: "SUCCESS",
+        ctaLabel: "Continue",
+        primary: true,
+        ctaAction: action.payload.sendOtpForPledgeConfirmAction,
+      });
     }
 }
 
