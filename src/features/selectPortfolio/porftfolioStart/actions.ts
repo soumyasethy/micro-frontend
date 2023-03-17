@@ -58,7 +58,7 @@ const getUpdateAvailableCAS = (
       let ratio = amountRequired / individualAmount;
       let newItem = {
         ...item,
-        pledgedUnits: Math.ceil(item.totalAvailableUnits * ratio * 100) / 100,
+        pledgedUnits: Math.ceil(item.totalAvailableUnits * ratio * 1000) / 1000,
       };
       updateAvailableCAS.push(newItem);
       amountRequired = 0;

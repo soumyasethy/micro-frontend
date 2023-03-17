@@ -131,7 +131,7 @@ export const togglePortfolio = async (
   const item = stepResponseObject.availableCAS[index];
   const key = `${item.isinNo}-${item.folioNo}`;
   updateAvailableCASMap[key].pledgedUnits = isPledged
-    ? updateAvailableCASMap[key].totalAvailableUnits
+    ? updateAvailableCASMap[key].totalAvailableUnits.toFixed(3)
     : 0;
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   return updateAvailableCASMap;
@@ -146,7 +146,7 @@ export const customEditPortfolio = async (
   const item = stepResponseObject.availableCAS[index];
   const key = `${item.isinNo}-${item.folioNo}`;
 
-  updateAvailableCASMap[key].pledgedUnits = Math.min(
+  updateAvailableCASMap[key].pledgedUnits = (Math.min(
     // ceil number after 7 decimal places
     Math.ceil(
       (amount /
@@ -155,7 +155,7 @@ export const customEditPortfolio = async (
         Math.pow(10, 10)
     ) / Math.pow(10, 10),
     item["totalAvailableUnits"]
-  );
+  )).toFixed(3);
   
   await SharedPropsService.setAvailableCASMap(updateAvailableCASMap);
   await sharedPropsService.setCreditLimit(getTotalLimit(

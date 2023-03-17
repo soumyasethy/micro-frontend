@@ -1188,7 +1188,7 @@ export const pledgeConfirmationMFV2: PageType<any> = {
                 ...(stepResponseObject as StepResponseObject).pledgedPortfolio
             );
         }
-
+        await SharedPropsService.setToBePledgedAssets(mfPortfolioArray)
         /// fetch processing fee
         const response = await network.post(
             api.processingCharges,
