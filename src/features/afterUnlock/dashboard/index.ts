@@ -93,8 +93,8 @@ export const template: (
       type: LAYOUTS.LIST,
       widgets: [
         {
-          id: "card",
-          type: WIDGET.CARD,
+          id: "header",
+          type: WIDGET.STACK,
           position: POSITION.ABSOLUTE_TOP,
         },
         ...(isPendingDisbursalApproval
@@ -123,10 +123,7 @@ export const template: (
           : []),
         {
           id: "cardItem",
-          type: WIDGET.CARD,
-          padding: {
-            horizontal: 0,
-          },
+          type: WIDGET.STACK,
         },
         ...(repaymentAmount > 0
           ? [
@@ -166,14 +163,6 @@ export const template: (
       ],
     },
     datastore: <Datastore>{
-      card: <CardProps>{
-        bgColor: ColorTokens.White,
-        shadow: ShadowTypeTokens.E2,
-        body: { widgetItems: [{ id: "header", type: WIDGET.STACK }] },
-        marginTop: -6,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.spaceBetween,
-      },
       card2: <CardProps>{
         body: {
           widgetItems: isFirstJourney
@@ -223,46 +212,46 @@ export const template: (
         fontFamily: FontFamilyTokens.Inter,
       },
 
-            header: <StackProps>{
-                width: StackWidth.FULL,
-                type: StackType.row,
-                alignItems: StackAlignItems.center,
-                justifyContent: StackJustifyContent.spaceBetween,
-                padding: { horizontal: SizeTypeTokens.LG },
-              widgetItems: [
-                    { id: 'title', type: WIDGET.TEXT },
-                    { id: 'headerRight', type: WIDGET.STACK },
-                ],
-            },
-            headerRight: <StackProps>{
-                type: StackType.row,
-                alignItems: StackAlignItems.center,
-                justifyContent: StackJustifyContent.flexEnd,
-                padding: { horizontal: SizeTypeTokens.LG },
-                widgetItems: [
-                    ...(showContactUs
-                        ? [{ id: 'contactUs', type: WIDGET.TAG }]
-                        : []),
-                    { id: 'contactUsSpace', type: WIDGET.SPACE },
-                    { id: 'leadIcon', type: WIDGET.BUTTON },
-                ],
-            },
-            contactUs: <TagProps & WidgetProps>{
-                icon: {
-                    align: IconAlignmentTokens.left,
-                    name: IconTokens.Support,
-                    size: IconSizeTokens.XL,
-                },
-                label: 'Contact us',
-                labelColor: ColorTokens.Primary_100,
-                type: TagTypeTokens.DEFAULT,
-                bgColor: ColorTokens.Primary_05,
-                action: {
-                    type: ACTION.CONTACT_US,
-                    routeId: ROUTE.DASHBOARD,
-                    payload: {},
-                },
-            },
+      header: <StackProps>{
+        bgColor: ColorTokens.White,
+        shadow: ShadowTypeTokens.E2,
+        padding:{ top:SizeTypeTokens.LG, bottom:SizeTypeTokens.LG, left:SizeTypeTokens.XL, right:SizeTypeTokens.XL},
+        width: StackWidth.MATCH_PARENT,
+        type: StackType.row,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.spaceBetween,
+        widgetItems: [
+          { id: 'title', type: WIDGET.TEXT },
+          { id: "headerRight", type: WIDGET.STACK },
+        ],
+      },
+      headerRight: <StackProps>{
+        type: StackType.row,
+        width: StackWidth.CONTENT,
+        alignItems: StackAlignItems.center,
+        justifyContent: StackJustifyContent.flexEnd,
+        widgetItems: [
+            ...(showContactUs ? [{ id: "contactUs", type: WIDGET.TAG }]:[]),
+          { id: "contactUsSpace", type: WIDGET.SPACE },
+          { id: "leadIcon", type: WIDGET.BUTTON },
+        ],
+      },
+      contactUs: <TagProps & WidgetProps>{
+        icon: {
+          align: IconAlignmentTokens.left,
+          name: IconTokens.Support,
+          size: IconSizeTokens.XL,
+        },
+        label: "Contact us",
+        labelColor: ColorTokens.Primary_100,
+        type: TagTypeTokens.DEFAULT,
+        bgColor: ColorTokens.Primary_05,
+        action: {
+          type: ACTION.CONTACT_US,
+          routeId: ROUTE.DASHBOARD,
+          payload: {},
+        },
+      },
 
       contactUsSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
       title: <TypographyProps>{
@@ -292,33 +281,28 @@ export const template: (
           routeId: ROUTE.DASHBOARD,
         },
       },
-      cardItem: <CardProps>{
+      cardItem: <StackProps>{
+        width: StackWidth.MATCH_PARENT,
         bgColor: ColorTokens.Primary_05,
-        padding: <PaddingProps>{
-          horizontal: SizeTypeTokens.NONE,
-          vertical: SizeTypeTokens.NONE,
-        },
-        body: {
-          widgetItems: [
-            { id: "amountItem", type: WIDGET.AMOUNTCARD },
-            { id: "cardSpace", type: WIDGET.SPACE },
-            { id: "continue", type: WIDGET.BUTTON },
-            { id: "continueSpace", type: WIDGET.SPACE },
-            ...(repaymentAmount > 0
-              ? [
-                  {
-                    id: "repaymentCard",
-                    type: WIDGET.CARD,
-                    padding: {
-                      horizontal: 0,
-                      all: 0,
-                    },
-                  },
-                  { id: "repaymentSpace", type: WIDGET.SPACE },
-                ]
-              : []),
-          ],
-        },
+        widgetItems: [
+          { id: "amountItem", type: WIDGET.AMOUNTCARD },
+          { id: "cardSpace", type: WIDGET.SPACE },
+          { id: "continue", type: WIDGET.BUTTON },
+          { id: "continueSpace", type: WIDGET.SPACE },
+          ...(repaymentAmount > 0
+            ? [
+              {
+                id: "repaymentCard",
+                type: WIDGET.CARD,
+                padding: {
+                  horizontal: 0,
+                  all: 0,
+                },
+              },
+              { id: "repaymentSpace", type: WIDGET.SPACE },
+            ]
+            : []),
+        ]
       },
       message: <MessageProps>{
         label:
@@ -370,7 +354,7 @@ export const template: (
           routeId: ROUTE.DASHBOARD,
         },
       },
-      continueSpace: <SpaceProps>{ size: SizeTypeTokens.LG },
+      continueSpace: <SpaceProps>{ size: SizeTypeTokens.XXXL },
       repaymentItem: <RepaymentProps>{
         title: "Repayment",
         message: "Outstanding amount",
