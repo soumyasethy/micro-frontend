@@ -1,7 +1,15 @@
-import { ActionFunction, OpenNewTabTargetType } from "@voltmoney/types";
+import {ActionFunction, OpenNewTabTargetType, POSITION} from "@voltmoney/types";
 import { ROUTE } from "../../../routes";
 import { ACTION, LimitPayload } from "./types";
-import { IconTokens } from "@voltmoney/schema";
+import {
+  ColorTokens,
+  IconTokens,
+  SizeTypeTokens,
+  SpaceProps,
+  TypographyProps,
+  WebViewProps,
+  WIDGET
+} from "@voltmoney/schema";
 import { APP_CONFIG, defaultHeaders } from "../../../configs/config";
 import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
@@ -43,29 +51,35 @@ export const goBack: ActionFunction<LimitPayload> = async (
 export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { navigate, openNewTab, showPopup, hidePopup }
+  {  appendWidgets, removeWidgets,...props }
 ): Promise<any> => {
   if (action.payload.value) {
     // /** manually opening tab to avoid popup blocker **/
-    openNewTab(action.payload.value, OpenNewTabTargetType.popup, {
-      target: POPUP_TARGET_NAME.AGREEMENT,
-      width: APP_CONFIG.POP_UP_SIZE.WIDTH,
-      height: APP_CONFIG.POP_UP_SIZE.HEIGHT,
-    });
-    hidePopup();
-    showPopup({
-      isAutoTriggerCta: true,
-      type: "DEFAULT",
-      iconName: IconTokens.Redirecting,
-      title: "Waiting for response",
-      subTitle: "Please wait while we process your request",
-      ctaAction: {
-        type: ACTION.POLL_AGREEMENT_STATUS,
-        routeId: ROUTE.LOAN_AGREEMENT,
-        payload: {},
-      },
-      primary: false,
-    });
+    await removeWidgets(ROUTE.LOAN_AGREEMENT, [
+      { id: "contentItem", type: WIDGET.TEXT },
+      { id: "contentSpace", type: WIDGET.SPACE },
+      { id: "iconStack", type: WIDGET.STACK },
+      { id: "iconSpace", type: WIDGET.SPACE },
+      { id: "btnData", type: WIDGET.STACK},
+      { id: "btnItem", type: WIDGET.BUTTON },
+
+    ]);
+    await appendWidgets(
+        ROUTE.LOAN_AGREEMENT,
+        {
+          agreementWebView: <WebViewProps>{
+            uri: action.payload.value
+          },
+          amountSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
+        },
+        [
+          { id: "agreementWebView", type: WIDGET.WEB_VIEW},
+        ],
+        "headerSpace"
+    );
+
+    await PollAgreementStatusAction(action,{},{appendWidgets, removeWidgets,...props})
+
   }
 };
 
@@ -92,7 +106,7 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
           const user: User = await SharedPropsService.getUser();
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
-          hidePopup();
+          console.log("Polling success")
           showPopup({
             isAutoTriggerCta: false,
             type: "SUCCESS",

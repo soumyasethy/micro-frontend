@@ -1,12 +1,13 @@
-import {ActionFunction, OpenNewTabTargetType} from "@voltmoney/types";
+import {ActionFunction, OpenNewTabTargetType, POSITION} from "@voltmoney/types";
 import {ROUTE} from "../../../routes";
 import {ACTION, LimitPayload} from "./types";
-import {IconTokens} from "@voltmoney/schema";
+import {IconTokens, SizeTypeTokens, SpaceProps, WebViewProps, WIDGET} from "@voltmoney/schema";
 import SharedPropsService from "../../../SharedPropsService";
 import {api} from "../../../configs/api";
 import {APP_CONFIG, defaultHeaders} from "../../../configs/config";
 import {User} from "../../login/otp_verify/types";
 import {POPUP_TARGET_NAME} from "../../../configs/constants";
+import {PollAgreementStatusAction} from "../loan_agreement/actions";
 
 let stepResponseObject: string = null;
 export const authenticateRepayment: ActionFunction<LimitPayload> = async (
@@ -77,30 +78,34 @@ export const goBack: ActionFunction<LimitPayload> = async (
 export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  { navigate, openNewTab, showPopup, hidePopup }
+  {  appendWidgets , removeWidgets, ...props }
 ): Promise<any> => {
+  console.log("Packet payload is ", action.payload)
   if (action.payload.value) {
-    // /** manually opening tab to avoid popup blocker **/
-    openNewTab(action.payload.value, OpenNewTabTargetType.popup, {
-      target: POPUP_TARGET_NAME.AUTOPAY,
-      width: APP_CONFIG.POP_UP_SIZE.WIDTH,
-      height: APP_CONFIG.POP_UP_SIZE.HEIGHT,
-    });
-    hidePopup();
-    showPopup({
-      isAutoTriggerCta: true,
-      type: "DEFAULT",
-      iconName: IconTokens.Redirecting,
-      title: "Waiting for response",
-      subTitle: "Please wait while we process your request",
-      ctaAction: {
-        type: ACTION.POLL_MANDATE_STATUS,
-        routeId: ROUTE.LOAN_REPAYMENT,
-        payload: {},
-      },
-      primary: false,
-    });
+
+    await appendWidgets(
+        ROUTE.LOAN_REPAYMENT,
+        {
+          repaymentWebView: <WebViewProps>{
+            uri: action.payload.value
+          },
+        },
+        [
+          {id: "repaymentWebView", type: WIDGET.WEB_VIEW},
+        ],
+        "headerSpace"
+    );
+    await removeWidgets(ROUTE.LOAN_REPAYMENT, [
+      {id: "contentItem", type: WIDGET.TEXT},
+      {id: "contentSpace", type: WIDGET.SPACE},
+      {id: "iconStack", type: WIDGET.STACK},
+      {id: "iconSpace", type: WIDGET.SPACE},
+      {id: "btnData", type: WIDGET.STACK},
+    ]);
+
+    await PollMandateStatus(action, {}, {appendWidgets, removeWidgets, ...props})
   }
+
 };
 
 export const PollMandateStatus: ActionFunction<any> = async (
@@ -124,7 +129,6 @@ export const PollMandateStatus: ActionFunction<any> = async (
           const user: User = await SharedPropsService.getUser();
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
-          hidePopup();
           showPopup({
             isAutoTriggerCta: false,
             type: "SUCCESS",
