@@ -1,3 +1,6 @@
+import { ColorTokens, IconTokens } from "@voltmoney/schema";
+import { Action, POSITION } from "@voltmoney/types";
+
 export enum ACTION {
     CONTACT_US = "CONTACT_US",
     PROFILE = "PROFILE",
@@ -32,3 +35,15 @@ export enum ACTION {
     ifscCode: string,
     micrCode: string
   };
+
+export type MenuList = {
+  iconName: IconTokens
+  titleLabel: string
+  titleFontWeight: string
+  titleColor: ColorTokens
+  position: POSITION
+  hasRightArrow: boolean
+  hasDivider: boolean
+  iconColor: ColorTokens
+  action: Action<any>
+}
