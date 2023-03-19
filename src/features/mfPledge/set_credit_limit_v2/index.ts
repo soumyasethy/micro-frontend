@@ -194,6 +194,7 @@ export const template: (
         padding: {
           top: SizeTypeTokens.SM,
           bottom: SizeTypeTokens.SM,
+          right: SizeTypeTokens.XL
         },
         widgetItems: [
           { id: "processingFeeText", type: WIDGET.TEXT },
@@ -230,7 +231,9 @@ export const template: (
           bottom: SizeTypeTokens.Size6
         },
         widgetItems: [
-          {id: "portfolioTitle", type: WIDGET.TEXT}
+          { id: "space3", type: WIDGET.SPACE },
+          {id: "portfolioTitle", type: WIDGET.TEXT},
+          { id: "space3", type: WIDGET.SPACE }
         ],
       },
 
@@ -243,19 +246,9 @@ export const template: (
           bottom: SizeTypeTokens.Size6
         },
         widgetItems: [
-          {id: "CreditTitle", type: WIDGET.TEXT}
-        ],
-      },
-      interestAndOthersStack: <StackProps> {
-        type: StackType.column,
-        width: StackWidth.FULL,
-        height: StackHeight.CONTENT,
-        padding: {
-          top: SizeTypeTokens.Size6,
-          bottom: SizeTypeTokens.Size6
-        },
-        widgetItems: [
-          {id: "InterestTitle", type: WIDGET.TEXT}
+          { id: "space3", type: WIDGET.SPACE },
+          { id: "creditTitle", type: WIDGET.TEXT },
+          { id: "space3", type: WIDGET.SPACE }
         ],
       },
 
@@ -268,7 +261,9 @@ export const template: (
           bottom: SizeTypeTokens.Size6
         },
         widgetItems: [
-          {id: "worksTitle", type: WIDGET.TEXT}
+          { id: "space3", type: WIDGET.SPACE },
+          { id: "worksTitle", type: WIDGET.TEXT },
+          { id: "space3", type: WIDGET.SPACE },
         ],
       },
       portfolioTitle: <TypographyProps>{
@@ -279,16 +274,8 @@ export const template: (
         fontSize: FontSizeTokens.MD,
         lineHeight: 24,
       },
-      CreditTitle: <TypographyProps>{
+      creditTitle: <TypographyProps>{
         label: "Set credit limit",
-        fontFamily: FontFamilyTokens.Poppins,
-        color: ColorTokens.Grey_Night,
-        fontWeight: "600",
-        fontSize: FontSizeTokens.MD,
-        lineHeight: 24,
-      },
-      InterestTitle: <TypographyProps>{
-        label: "Interest and other charges",
         fontFamily: FontFamilyTokens.Poppins,
         color: ColorTokens.Grey_Night,
         fontWeight: "600",
@@ -330,7 +317,7 @@ export const template: (
         type: StackType.row,
         alignItems: StackAlignItems.center,
         widgetItems: [
-          { id: "space1", type: WIDGET.STACK },
+          { id:  "space1", type: WIDGET.STACK },
 
           { id: "value1", type: WIDGET.TEXT },
         ],
@@ -343,6 +330,10 @@ export const template: (
       interestOptions: <StackProps> {
         width: StackWidth.FULL,
         type: StackType.column,
+        padding: {
+          left: SizeTypeTokens.LG,
+          right: SizeTypeTokens.MD
+        },
         widgetItems: [
           {id: "processingAccordion", type: WIDGET.ACCORDION},
           {id: "divider", type: WIDGET.DIVIDER},
@@ -374,11 +365,11 @@ export const template: (
         fontSize: FontSizeTokens.XS,
       },
       interestAutoPayT1: <TypographyProps> {
-        label: "Interest statement will be generated at the end of month",
+        label: `Interest statement will be generated at the end of month`,
         fontSize: FontSizeTokens.XS,
       },
       interestAutoPayT2: <TypographyProps> {
-        label: "Hassle-free auto repayment of interest on 7th of month",
+        label: `Hassle-free auto repayment of interest on 7th of month`,
         fontSize: FontSizeTokens.XS,
       },
       withdrawalT1: <TypographyProps> {
@@ -399,11 +390,11 @@ export const template: (
       },
       otherChargesStack: <StackProps>{
         width: StackWidth.FULL,
-        type: StackType.row,
-        alignItems: StackAlignItems.center,
-        justifyContent: StackJustifyContent.spaceBetween,
+        type: StackType.column,
         widgetItems: [
+          { id: "space3", type: WIDGET.SPACE },
           { id: "otherChargesText", type: WIDGET.TEXT },
+          { id: "sourceSpaces", type: WIDGET.SPACE },
         ],
       },
       otherChargesText: <TypographyProps>{
@@ -424,7 +415,7 @@ export const template: (
             },
             body: {
               widgetItems: [
-                { id: "interestRateCard", type: WIDGET.STACK, },
+                { id: "interestRateAccordionStack", type: WIDGET.STACK, },
               ],
             },
           },
@@ -442,7 +433,7 @@ export const template: (
             },
             body: {
               widgetItems: [
-                { id: "interestAutoPayCard", type: WIDGET.STACK },
+                { id: "interestAutopayAccordionStack", type: WIDGET.STACK },
               ],
             },
           },
@@ -460,7 +451,7 @@ export const template: (
             },
             body: {
               widgetItems: [
-                { id: "withdrawalCard", type: WIDGET.STACK },
+                { id: "withdrawAccordionStack", type: WIDGET.STACK },
               ],
             },
           },
@@ -478,7 +469,7 @@ export const template: (
             },
             body: {
               widgetItems: [
-                {id: "termCard", type: WIDGET.STACK, padding: {
+                {id: "termAccordionStack", type: WIDGET.STACK, padding: {
                     bottom: -12
                   }},
               ],
@@ -499,7 +490,7 @@ export const template: (
             },
             body: {
               widgetItems: [
-                { id: "foreclosureCard", type: WIDGET.STACK },
+                { id: "foreClosureAccordionStack", type: WIDGET.STACK },
               ],
             },
           },
@@ -518,7 +509,7 @@ export const template: (
             },
             body: {
               widgetItems: [
-                {id: "processingFeeDropDown", type: WIDGET.STACK},
+                {id: "processingFeeDropDown", type: WIDGET.STACK },
               ],
 
             },
@@ -535,7 +526,7 @@ export const template: (
         widgetItems: [
           {id: "space3", type: WIDGET.SPACE},
           {id: "pCardIcon", type: WIDGET.ICON},
-          {id: "space1", type: WIDGET.SPACE},
+          {id: "space3", type: WIDGET.SPACE},
           {id: "withdrawalT1", type: WIDGET.TEXT}
         ],
       },
@@ -551,9 +542,17 @@ export const template: (
         widgetItems: [
           {id: "space3", type: WIDGET.SPACE},
           {id: "pCardIcon", type: WIDGET.ICON},
-          {id: "space1", type: WIDGET.SPACE},
+          {id: "space3", type: WIDGET.SPACE},
           {id: "withdrawalT2", type: WIDGET.TEXT}
         ],
+      },
+      withdrawAccordionStack: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.row,
+        widgetItems: [
+          { id: "withdrawalCard", type: WIDGET.STACK },
+          { id: "spaceSize6", type: WIDGET.SPACE },
+        ]
       },
       withdrawalCard: <StackProps> {
         width: StackWidth.FULL,
@@ -575,6 +574,14 @@ export const template: (
           {id: "space3", type: WIDGET.SPACE},
         ],
       },
+      termAccordionStack: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.row,
+        widgetItems: [
+          { id: "termCard", type: WIDGET.STACK },
+          { id: "spaceSize6", type: WIDGET.SPACE },
+        ]
+      },
       termCard: <StackProps> {
         width: StackWidth.FULL,
         height: StackHeight.CONTENT,
@@ -589,9 +596,17 @@ export const template: (
         widgetItems: [
           {id: "space3", type: WIDGET.SPACE},
           {id: "pCardIcon", type: WIDGET.ICON},
-          {id: "space1", type: WIDGET.SPACE},
+          {id: "space3", type: WIDGET.SPACE},
           {id: "termT1", type: WIDGET.TEXT}
         ],
+      },
+      foreClosureAccordionStack: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.row,
+        widgetItems: [
+          { id: "foreclosureCard", type: WIDGET.STACK },
+          { id: "spaceSize6", type: WIDGET.SPACE },
+        ]
       },
       foreclosureCard: <StackProps> {
         width: StackWidth.FULL,
@@ -607,7 +622,7 @@ export const template: (
         widgetItems: [
           {id: "space3", type: WIDGET.SPACE},
           {id: "pCardIcon", type: WIDGET.ICON},
-          {id: "space1", type: WIDGET.SPACE},
+          {id: "space3", type: WIDGET.SPACE},
           {id: "foreClosureT1", type: WIDGET.TEXT}
         ],
       },
@@ -664,6 +679,24 @@ export const template: (
           {id: "interestRateT2", type: WIDGET.TEXT}
         ],
       },
+      interestRateAccordionStack: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.row,
+        borderRadius: 4,
+        widgetItems: [
+          { id: "interestRateCard", type: WIDGET.STACK },
+          { id: "spaceSize6", type: WIDGET.SPACE },
+        ]
+      },
+      interestAutopayAccordionStack: <StackProps> {
+        width: StackWidth.FULL,
+        type: StackType.row,
+        borderRadius: 4,
+        widgetItems: [
+          { id: "interestAutoPayCard", type: WIDGET.STACK },
+          { id: "spaceSize6", type: WIDGET.SPACE },
+        ]
+      },
       interestRateCard: <StackProps> {
         width: StackWidth.FULL,
         height: StackHeight.CONTENT,
@@ -692,6 +725,7 @@ export const template: (
         padding: {
           top: SizeTypeTokens.SM,
           bottom: SizeTypeTokens.SM,
+          right: SizeTypeTokens.XL
         },
         widgetItems: [
           { id: "interestRateText", type: WIDGET.TEXT },
@@ -719,6 +753,7 @@ export const template: (
         padding: {
           top: SizeTypeTokens.SM,
           bottom: SizeTypeTokens.SM,
+          right: SizeTypeTokens.XL
         },
         widgetItems: [
           { id: "autoPayText", type: WIDGET.TEXT },
@@ -746,6 +781,7 @@ export const template: (
         padding: {
           top: SizeTypeTokens.SM,
           bottom: SizeTypeTokens.SM,
+          right: SizeTypeTokens.XL
         },
         widgetItems: [
           { id: "withdrawalText", type: WIDGET.TEXT },
@@ -773,6 +809,7 @@ export const template: (
         padding: {
           top: SizeTypeTokens.SM,
           bottom: SizeTypeTokens.SM,
+          right: SizeTypeTokens.XL
         },
         widgetItems: [
           { id: "termText", type: WIDGET.TEXT },
@@ -787,6 +824,7 @@ export const template: (
         padding: {
           top: SizeTypeTokens.SM,
           bottom: SizeTypeTokens.SM,
+          right: SizeTypeTokens.XL
         },
         widgetItems: [
           { id: "foreClosureText", type: WIDGET.TEXT },
@@ -971,19 +1009,6 @@ export const template: (
       portfolioSpace: <SpaceProps>{
         size: SizeTypeTokens.XL,
       },
-      // creditAccordion: <AccordionProps>{
-      //     body: {
-      //         widgetItems: [
-      //             { id: "amountCard", type: WIDGET.LIMIT_CARD },
-      //             { id: "amountSpaces", type: WIDGET.SPACE },
-      //             { id: "amountcontinue", type: WIDGET.BUTTON },
-      //         ]
-      //     },
-      //     title: 'Set credit limit',
-      //     description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
-      //     icon: IconTokens.DownArrow,
-      //     type: AccordionTypeTokens.LIST,
-      // },
       amountCard: <LimitCardProps>{
         label: "Available credit limit",
         limitAmount: `${addCommasToNumber(availableCreditAmount)}`,
@@ -1010,6 +1035,10 @@ export const template: (
       },
       cardSpaces: <SpaceProps>{
         size: SizeTypeTokens.XL,
+      },
+
+      spaceSize6: <SpaceProps> {
+        size: SizeTypeTokens.XL
       },
       continue: <ButtonProps>{
         label: "Continue to set credit limit",
@@ -1047,13 +1076,6 @@ export const template: (
         marginRight: 8,
         color: ColorTokens.Grey_Charcoal
       },
-      processingFeeTextStack: <StackProps>{
-        type: StackType.row,
-        widgetItems: [
-          { id: "processingFeeSpace", type: WIDGET.SPACE },
-          { id: "processingFeeText", type: WIDGET.TEXT },
-        ],
-      },
       processingFeeSpace: <SpaceProps>{
         size: SizeTypeTokens.MD,
       },
@@ -1085,34 +1107,27 @@ export const template: (
       processingFeeDropDown: <StackProps> {
         width: StackWidth.FULL,
         height: StackHeight.CONTENT,
-        type: StackType.column,
+        type: StackType.row,
         alignItems: StackAlignItems.flexStart,
-        borderRadius: 4,
-        marginRight: 12,
-        bgColor: ColorTokens.Yellow_10,
-        padding: {
-          top: SizeTypeTokens.SM,
-          bottom: SizeTypeTokens.SM
-        },
         widgetItems: [
-          {id: "processingCard", type: WIDGET.STACK},
+          {id: "processingCard", type: WIDGET.STACK },
+          {id: "spaceSize6", type: WIDGET.SPACE},
         ],
       },
       processingCard: <StackProps> {
-        width: StackWidth.FULL,
-        height: StackHeight.CONTENT,
         type: StackType.row,
         alignItems: StackAlignItems.flexStart,
         borderRadius: 4,
         bgColor: ColorTokens.Yellow_10,
         padding: {
-          top: SizeTypeTokens.Size10,
-          bottom: SizeTypeTokens.Size10
+          top: SizeTypeTokens.SM,
+          bottom: SizeTypeTokens.SM,
+          right: SizeTypeTokens.XXXXXL
         },
         widgetItems: [
           {id: "space3", type: WIDGET.SPACE},
           {id: "pCardIcon", type: WIDGET.ICON},
-          {id: "space1", type: WIDGET.SPACE},
+          {id: "space3", type: WIDGET.SPACE},
           {id: "pCardText", type: WIDGET.TEXT}
         ],
       },
@@ -1128,7 +1143,7 @@ export const template: (
         widgetItems: [
           {id: "space3", type: WIDGET.SPACE},
           {id: "pCardIcon", type: WIDGET.ICON},
-          {id: "space1", type: WIDGET.SPACE},
+          {id: "space3", type: WIDGET.SPACE},
           {id: "interestAutoPayT1", type: WIDGET.TEXT}
         ],
       },
@@ -1150,7 +1165,7 @@ export const template: (
         widgetItems: [
           {id: "space3", type: WIDGET.SPACE},
           {id: "pCardIcon", type: WIDGET.ICON},
-          {id: "space1", type: WIDGET.SPACE},
+          {id: "space3", type: WIDGET.SPACE},
           {id: "interestAutoPayT2", type: WIDGET.TEXT}
         ],
       },
@@ -1263,17 +1278,6 @@ export const template: (
       interestSpace: <SpaceProps>{
         size: SizeTypeTokens.XL,
       },
-      // workAccordion: <AccordionProps>{
-      //     body: {
-      //         widgetItems: [
-      //             { id: "typo", type: WIDGET.TEXT }
-      //         ]
-      //     },
-      //     title: 'Benefits for you',
-      //     description: 'We would love to hear from you. You can get back to us via Call, Email or WhatsApp.',
-      //     icon: IconTokens.DownArrow,
-      //     type: AccordionTypeTokens.LIST,
-      // },
       workSpace: <SpaceProps>{
         size: SizeTypeTokens.XL,
       },
