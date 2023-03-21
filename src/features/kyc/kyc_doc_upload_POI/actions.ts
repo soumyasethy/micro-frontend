@@ -85,11 +85,8 @@ export const documentPickerAction: ActionFunction<
 > = async (
   action,
   _datastore,
-  { network, navigate, setDatastore }
+  { network, setDatastore }
 ): Promise<any> => {
-  console.log("payload", action.payload);
-  console.log("payloads", action.payload.value);
-
   if (action.payload.value) {
     let fileExtension = "";
     if (action.payload.value.name === undefined) {
@@ -102,8 +99,6 @@ export const documentPickerAction: ActionFunction<
     >{
       state: DocumentPickerState.LOADING,
     });
-
-    console.log("FORM DATA CREATED NEW", action.payload.value.toString());
     if (Platform.OS === "android") {
       uploadToS3Bucket(
         documentUploadUrlMap.frontDocURL,
@@ -111,7 +106,6 @@ export const documentPickerAction: ActionFunction<
         await getContentType(fileExtension)
       )
         .then(async () => {
-          console.log("Successfully got the callback");
           validation.isFrontDocUploaded = true;
           await setDatastore(
             ROUTE.KYC_DOCUMENT_UPLOAD_POI,

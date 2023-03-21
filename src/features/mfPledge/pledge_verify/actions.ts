@@ -1,8 +1,6 @@
 import { ActionFunction } from '@voltmoney/types'
 import { ACTION, OtpPledgePayload } from './types'
-import SharedPropsService, {
-    AssetRepositoryConfigItemType,
-} from '../../../SharedPropsService'
+import SharedPropsService from '../../../SharedPropsService'
 import _ from 'lodash'
 import { ROUTE } from '../../../routes'
 import { NavigationNext } from '../../kyc/kyc_init/types'
@@ -245,6 +243,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         ctaAction: action.payload.sendOtpForPledgeConfirmAction,
       });
     }
+}
 }
 
 export const goBack: ActionFunction<OtpPledgePayload> = async (

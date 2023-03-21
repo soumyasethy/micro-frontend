@@ -76,7 +76,6 @@ export const triggerAction: ActionFunction<AadharInitPayload> = async (
   if (currentStepId) {
     await SharedPropsService.setUser(user);
     const routeObj = await nextStepCredStepper();
-    console.log("routeObj", routeObj);
     await navigate(routeObj.routeId, routeObj.params);
   }
 };

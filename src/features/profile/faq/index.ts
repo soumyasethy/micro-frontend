@@ -8,7 +8,6 @@ import {
 } from '@voltmoney/types'
 import {
     AccordionProps,
-    CardProps,
     ColorTokens,
     HeaderProps,
     HeaderTypeTokens,
@@ -16,19 +15,17 @@ import {
     IconSizeTokens,
     IconTokens,
     SizeTypeTokens,
-    SpaceProps,
+    SpaceProps, StackAlignItems,
     StackProps,
     StackWidth,
     TagTypeTokens,
-    WIDGET,
-} from '@voltmoney/schema'
+    WIDGET
+} from "@voltmoney/schema";
 import { ROUTE } from '../../../routes'
 import { ACTION } from './types'
 import { contact, faqDetails, goBack } from './actions'
 import SharedPropsService from '../../../SharedPropsService'
-import { ConfigTokens } from '../../../configs/config'
 import { shouldShowVoltContactUs } from '../../../configs/uri-config-utils'
-import { Share } from 'react-native'
 
 export const template: (
     showContactUs: boolean,
