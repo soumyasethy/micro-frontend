@@ -24,10 +24,11 @@ import sharedPropsService from "../../SharedPropsService";
 import SharedPropsService, {PartnerActiveCustomerListType} from "../../SharedPropsService";
 import {partnerApi} from "../../configs/api";
 import {getAppHeader} from "../../configs/config";
-import {CreditApplicationState} from "../../configs/constants";
+import {CreditApplicationState, PARTNER_CACHE_EXPIRE_TIME} from "../../configs/constants";
 import {ActiveCustomerEmptyStatePageBuilder} from "../emptyState/indexActiveCustomer";
 import {ActiveCustomerTableBuilder} from "../partnerWeb_Dashboard/utils";
 import {SearchInputActionPayload, SortActionPayload} from "./types";
+import {addMinutesToCurrentTimeStamp} from "../../configs/utils";
 
 export const template: (
     partnerActiveCustomerData: PartnerActiveCustomerListType,
@@ -192,27 +193,42 @@ export const PartnerActiveCustomerMF: PageType<any> = {
         // ---- //
         console.log('api: ', partnerApi.customer);
         console.log('auth token: ', authToken);
-        const response = await network.get(
-            `${partnerApi.clientList}${partnerAccountId}/customers/all`,
-            {
-                headers: await getAppHeader(),
-            }
-        );
-        const partnerActiveCustomerData: PartnerActiveCustomerListType = {
+
+        let partnerActiveCustomerData: PartnerActiveCustomerListType = {
             customerMetadataList: [],
             nextToken: null
         }
-        if(response.status === 200) {
-            partnerActiveCustomerData['customerMetadataList'] = response?.data?.customerMetadataList.filter((item, index)=>{
-                if(item?.creditApplication?.applicationState === CreditApplicationState.COMPLETED) {
-                    return true;
+        const currentTimeStamp = Date.now().valueOf();
+        const cacheExpireTime = await sharedPropsService.getPartnerCacheExpireTime();
+        const partnerActiveCustomerDataSharedPropsService = await sharedPropsService.getPartnerActiveCustomerList();
+
+        //if cache data is empty then call from network
+        if (
+            partnerActiveCustomerDataSharedPropsService.customerMetadataList.length === 0 ||
+            currentTimeStamp > cacheExpireTime.ActiveCustomerCacheExpireTime
+        ) {
+            const response = await network.get(
+                `${partnerApi.clientList}${partnerAccountId}/customers/all`,
+                {
+                    headers: await getAppHeader(),
                 }
-                return false;
-            });
-            await sharedPropsService.setPartnerActiveCustomerList(partnerActiveCustomerData);
+            );
+            if(response.status === 200) {
+                partnerActiveCustomerData['customerMetadataList'] = response?.data?.customerMetadataList.filter((item, index)=>{
+                    if(item?.creditApplication?.applicationState === CreditApplicationState.COMPLETED) {
+                        return true;
+                    }
+                    return false;
+                });
+                await sharedPropsService.setPartnerActiveCustomerList(partnerActiveCustomerData);
+                await sharedPropsService.setPartnerCacheExpireTime({...cacheExpireTime, ActiveCustomerCacheExpireTime: addMinutesToCurrentTimeStamp(PARTNER_CACHE_EXPIRE_TIME)})
+            } else {
+                console.log("partnerApi.clientList call failed");
+            }
         } else {
-            console.log("partnerApi.clientList call failed");
+            partnerActiveCustomerData = await sharedPropsService.getPartnerActiveCustomerList();
         }
+
         const activeWidgetID = await SharedPropsService.getPartnerSideBarActiveId();
         console.log("activeWidgetID: ", activeWidgetID);
         return Promise.resolve(template(

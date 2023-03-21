@@ -26,11 +26,12 @@ import sharedPropsService from "../../SharedPropsService";
 import SharedPropsService, {PartnerLeadsListType} from "../../SharedPropsService";
 import {partnerApi} from "../../configs/api";
 import {getAppHeader} from "../../configs/config";
-import {CreditApplicationState} from "../../configs/constants";
+import {CreditApplicationState, PARTNER_CACHE_EXPIRE_TIME} from "../../configs/constants";
 import {TableDataBuilder} from "../partnerWeb_Dashboard/utils";
 import {SearchInputActionPayload, SortActionPayload} from "../partnerWeb_Dashboard/types";
 import {EmptyStatePageBuilder} from "../emptyState";
 import {onChangeTab} from "./actions";
+import {addMinutesToCurrentTimeStamp} from "../../configs/utils";
 
 export const template: (
     partnerListData: PartnerLeadsListType,
@@ -284,27 +285,41 @@ export const PartnerLeadsMF: PageType<any> = {
         // ---- //
         console.log('api: ', partnerApi.customer);
         console.log('auth token: ', authToken);
-        const response = await network.get(
-            `${partnerApi.clientList}${partnerAccountId}/customers/all`,
-            {
-                headers: await getAppHeader(),
-            }
-        );
-        const partnerLeadsData:PartnerLeadsListType = {
+
+        const currentTimeStamp = Date.now().valueOf();
+        const cacheExpireTime = await sharedPropsService.getPartnerCacheExpireTime();
+        let partnerLeadsData:PartnerLeadsListType = {
             customerMetadataList: [],
             nextToken: null
         }
-        if(response.status === 200) {
-            partnerLeadsData['customerMetadataList'] = response?.data?.customerMetadataList.filter((item , index)=>{
-                if(item?.creditApplication?.applicationState !== CreditApplicationState.COMPLETED) {
-                    return true;
+        const partnerLeadsDataSharedPropsService = await sharedPropsService.getPartnerLeadsList();
+
+        if (
+            currentTimeStamp > cacheExpireTime.LeadsCacheExpireTime ||
+            partnerLeadsDataSharedPropsService.customerMetadataList.length === 0
+        ) {
+            const response = await network.get(
+                `${partnerApi.clientList}${partnerAccountId}/customers/all`,
+                {
+                    headers: await getAppHeader(),
                 }
-                return false;
-            });
-            await sharedPropsService.setPartnerLeadsList(partnerLeadsData);
+            );
+            if(response.status === 200) {
+                partnerLeadsData['customerMetadataList'] = response?.data?.customerMetadataList.filter((item , index)=>{
+                    if(item?.creditApplication?.applicationState !== CreditApplicationState.COMPLETED) {
+                        return true;
+                    }
+                    return false;
+                });
+                await sharedPropsService.setPartnerLeadsList(partnerLeadsData);
+                await sharedPropsService.setPartnerCacheExpireTime({...cacheExpireTime, LeadsCacheExpireTime: addMinutesToCurrentTimeStamp(PARTNER_CACHE_EXPIRE_TIME)})
+            } else {
+                console.log("partnerApi.clientList call failed");
+            }
         } else {
-            console.log("partnerApi.clientList call failed");
+            partnerLeadsData = await sharedPropsService.getPartnerLeadsList();
         }
+
         const activeWidgetID = await SharedPropsService.getPartnerSideBarActiveId();
         console.log("activeWidgetID: ", activeWidgetID);
         return Promise.resolve(template(

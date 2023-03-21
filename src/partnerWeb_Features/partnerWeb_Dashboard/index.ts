@@ -8,6 +8,8 @@ import {SideBarBuilderDS} from "../sideNavBar";
 import sharedPropsService  from "../../SharedPropsService";
 import SharedPropsService  from "../../SharedPropsService";
 import {onChangeTab} from "./actions";
+import {PARTNER_CACHE_EXPIRE_TIME} from "../../configs/constants";
+import {addMinutesToCurrentTimeStamp} from "../../configs/utils";
 
 
 export const template: () => Promise<TemplateSchema> = async () => ({
@@ -36,6 +38,12 @@ export const PartnerWebDashboardPageMF: PageType<any> = {
     // const partnerAccountId = user?.linkedPartnerAccounts[0].accountId;
     // const authToken = await SharedPropsService.getToken();
     console.log("dashboardActiveId: ", dashboardActiveId);
+
+    // every 3 mins update the cache
+    // setInterval(async ()=>{
+    //   await sharedPropsService.setPartnerCacheExpireTime(addMinutesToCurrentTimeStamp(PARTNER_CACHE_EXPIRE_TIME))
+    // }, PARTNER_CACHE_EXPIRE_TIME);
+
     await sharedPropsService.setPartnerSideBarActiveId(dashboardActiveId);
     if(dashboardActiveId === 'activeCustomerPage') {
       await navigate(ROUTE.PARTNER_ACTIVE_CUSTOMER);

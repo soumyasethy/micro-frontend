@@ -128,3 +128,5 @@ export const PartnerLink =
     getBuildType() === BUILD_TYPE.PARTNER_PRODUCTION
         ? 'https://voltmoney.in/partner/'
         : 'https://staging.voltmoney.in/partner/';
+
+export const PARTNER_CACHE_EXPIRE_TIME = 1;

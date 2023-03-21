@@ -291,6 +291,13 @@ type GlobalProps = {
     PartnerActiveCustomerList?: PartnerLeadsListType,
     PartnerSideBarActiveId?: string,
     ReferredPartnerData?: ReferredPartnerDataType[],
+    PartnerCacheExpireTime?: PartnerCacheType,
+}
+
+export type PartnerCacheType = {
+    ReferredPartnerCacheExpireTime: number;
+    ActiveCustomerCacheExpireTime: number;
+    LeadsCacheExpireTime: number;
 }
 
 let _globalProps: GlobalProps = {
@@ -374,6 +381,11 @@ let _globalProps: GlobalProps = {
     PartnerActiveCustomerList: {customerMetadataList: [], nextToken: null},
     PartnerSideBarActiveId: '',
     ReferredPartnerData: [],
+    PartnerCacheExpireTime: {
+        ActiveCustomerCacheExpireTime: null,
+        LeadsCacheExpireTime: null,
+        ReferredPartnerCacheExpireTime: null,
+    }
 }
 
 export function setStepperData(StepperData) {
@@ -744,6 +756,14 @@ async function getReferredPartnerData() {
     return _globalProps.ReferredPartnerData
 }
 
+async function setPartnerCacheExpireTime(newPartnerCacheExpireTime: PartnerCacheType) {
+    _globalProps.PartnerCacheExpireTime = newPartnerCacheExpireTime
+}
+
+async function getPartnerCacheExpireTime() {
+    return _globalProps.PartnerCacheExpireTime
+}
+
 export default {
     setBuildType,
     getBuildType,
@@ -826,5 +846,7 @@ export default {
     setPartnerSideBarActiveId,
     getPartnerSideBarActiveId,
     setReferredPartnerData,
-    getReferredPartnerData
+    getReferredPartnerData,
+    setPartnerCacheExpireTime,
+    getPartnerCacheExpireTime
 }

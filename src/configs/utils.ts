@@ -717,3 +717,12 @@ export const addYearToEpochTime = (epochTime: number, year: number) => {
   console.log(oneYearLaterEpochTime); // Output: 1646832000 (March 9, 2022
   return  oneYearLaterEpochTime;
 }
+
+export const addMinutesToCurrentTimeStamp = (minutes: number) => {
+  // get the current date and time
+  const currentDate = new Date();
+// add 3 minutes to the current time
+  currentDate.setMinutes(currentDate.getMinutes() + minutes);
+// display the updated timestamp
+  return currentDate.valueOf()
+}

@@ -28,6 +28,8 @@ import { ReferredPartnerTableBuilder} from "../partnerWeb_Dashboard/utils";
 import {SearchInputActionPayload, SortActionPayload} from "../partnerWeb_Dashboard/types";
 import {ReferredPartnerEmptyStatePageBuilder} from "../emptyState/indexReferredPartner";
 import SharedPropsService from "../../SharedPropsService";
+import {addMinutesToCurrentTimeStamp} from "../../configs/utils";
+import {PARTNER_CACHE_EXPIRE_TIME} from "../../configs/constants";
 
 export const template: (
     referredPartnerData: ReferredPartnerDataType[],
@@ -200,17 +202,30 @@ export const PartnerReferredPartnerMF: PageType<any> = {
         await sharedPropsService.setPartnerSideBarActiveId(dashboardActiveId);
         // ------ //
 
+        const currentTimeStamp = Date.now().valueOf();
+        const cacheExpireTime = await sharedPropsService.getPartnerCacheExpireTime();
         let referredPartnerData:ReferredPartnerDataType[] = [];
-        const partnerResponse = await network.get(
-            `${partnerApi.clientList}${partnerAccountId}/partners/all`,
-            {
-                headers: await getAppHeader(),
+        const partnerReferredPartnerDataSharedPropsService = await sharedPropsService.getReferredPartnerData();
+
+        if(
+            currentTimeStamp > cacheExpireTime.ReferredPartnerCacheExpireTime ||
+            partnerReferredPartnerDataSharedPropsService.length === 0
+        ) {
+            const partnerResponse = await network.get(
+                `${partnerApi.clientList}${partnerAccountId}/partners/all`,
+                {
+                    headers: await getAppHeader(),
+                }
+            );
+            if(partnerResponse.status === 200) {
+                referredPartnerData = partnerResponse.data;
+                await sharedPropsService.setReferredPartnerData(referredPartnerData);
+                await sharedPropsService.setPartnerCacheExpireTime({...cacheExpireTime, ReferredPartnerCacheExpireTime: addMinutesToCurrentTimeStamp(PARTNER_CACHE_EXPIRE_TIME)})
             }
-        );
-        if(partnerResponse.status === 200) {
-            referredPartnerData = partnerResponse.data;
-            await sharedPropsService.setReferredPartnerData(referredPartnerData);
+        } else {
+            referredPartnerData = await sharedPropsService.getReferredPartnerData();
         }
+
         const activeWidgetID = await SharedPropsService.getPartnerSideBarActiveId();
         console.log("activeWidgetID: ", activeWidgetID);
         return Promise.resolve(template(
