@@ -337,7 +337,7 @@ export const template: (
           (Math.max(availableCreditAmount, 0) * 100) / actualLoanAmount
         }%`,
       },
-      cardSpace: <SpaceProps>{ size: SizeTypeTokens.SM },
+      cardSpace: <SpaceProps>{ size: SizeTypeTokens.XL },
       continue: <ButtonProps & WidgetProps>{
         label: "Withdraw now",
         type:
