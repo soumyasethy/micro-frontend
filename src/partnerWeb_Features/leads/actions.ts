@@ -1,6 +1,7 @@
 import {ActionFunction} from "@voltmoney/types";
 import SharedPropsService, {PartnerLeadsListType, PartnerLeadsType} from "../../SharedPropsService";
 import {
+    onTrackCustomer,
     rebuildLeadsTable,
     searchObject,
     sideBarNavigate,
@@ -8,6 +9,7 @@ import {
 } from "../partnerWeb_Dashboard/utils";
 import {ColorTokens, IconProps, TypographyProps} from "@voltmoney/schema";
 import {ROUTE} from "../../routes";
+import sharedPropsService from "../../SharedPropsService";
 
 let PartnerLeadsData: PartnerLeadsType[] = []
 let PartnerLeadsDataOriginal: PartnerLeadsListType = {
@@ -16,6 +18,9 @@ let PartnerLeadsDataOriginal: PartnerLeadsListType = {
 }
 let tableSearchString = ''
 let ascOrder = true;
+// export const itemsPerPage_Leads = 5;
+// export let startIndex_Leads = 0;
+// let pageCount = 0;
 
 export const onLoadLeadsAction: ActionFunction<any> = async (
     action,
@@ -25,31 +30,17 @@ export const onLoadLeadsAction: ActionFunction<any> = async (
     console.warn('**** onLoadLeadsAction Action Triggered ****', action)
     PartnerLeadsData = { ...(await SharedPropsService.getPartnerLeadsList()) }
         ?.customerMetadataList
+    // PartnerLeadsData = { ...(await SharedPropsService.getPartnerLeadsList()) }
+    //     ?.customerMetadataList.slice(startIndex_Leads, startIndex_Leads + itemsPerPage_Leads);
     PartnerLeadsDataOriginal = {
         ...(await SharedPropsService.getPartnerLeadsList()),
     }
-    // ON Change tab
-    // await setDatastore(ROUTE.PARTNER_LEAD, 'leadsStackText', <
-    //     TypographyProps
-    //     >{ fontWeight: '600', color: ColorTokens.Primary_100 })
-    // await setDatastore(ROUTE.PARTNER_LEAD, 'leadsStackIcon', <IconProps>{
-    //     color: ColorTokens.Primary_100,
-    // })
-    //     // reset other tabs
-    // await setDatastore(ROUTE.PARTNER_LEAD, 'activeCustomerText', <
-    //     TypographyProps
-    //     >{ fontWeight: '400', color: ColorTokens.Grey_Charcoal })
-    // await setDatastore(ROUTE.PARTNER_LEAD, 'activeCustomerIcon', <
-    //     IconProps
-    //     >{ color: ColorTokens.Grey_Charcoal })
-    //
-    // await setDatastore(ROUTE.PARTNER_LEAD, 'referredPartnerStackText', <
-    //     TypographyProps
-    //     >{ fontWeight: '400', color: ColorTokens.Grey_Charcoal })
-    // await setDatastore(ROUTE.PARTNER_LEAD, 'referredPartnerStackIcon', <
-    //     IconProps
-    //     >{ color: ColorTokens.Grey_Charcoal })
-    ///
+    //set page count
+    // if( PartnerLeadsDataOriginal &&
+    //     PartnerLeadsDataOriginal.customerMetadataList
+    // ) {
+    //     pageCount =  Math.ceil(PartnerLeadsDataOriginal.customerMetadataList.length / itemsPerPage_Leads);
+    // }
 }
 
 export const onSearchLead: ActionFunction<any> = async (
@@ -99,3 +90,35 @@ export const onChangeTab: ActionFunction<any> = async (
     console.warn('**** onChangeTab leads Action Triggered ****', action);
     await sideBarNavigate(standardUtilities, action);
 }
+
+export const onLoadMoreData: ActionFunction<any> = async (
+    action,
+    _datastore,
+    standardUtilities
+): Promise<any> => {
+    console.warn('**** onLoadMoreData leads Action Triggered ****', action);
+    // if(action.payload.value === 'left') {
+    //
+    // } else if (action.payload.value === 'right') {
+    //     if((startIndex_Leads + itemsPerPage_Leads) <= PartnerLeadsDataOriginal.customerMetadataList.length - 1) {
+    //         startIndex_Leads = startIndex_Leads + itemsPerPage_Leads;
+    //         PartnerLeadsData = PartnerLeadsDataOriginal.customerMetadataList.splice(startIndex_Leads, startIndex_Leads + itemsPerPage_Leads);
+    //         await rebuildLeadsTable(standardUtilities, PartnerLeadsData, action);
+    //     } else {
+    //         PartnerLeadsData = PartnerLeadsDataOriginal.customerMetadataList.slice(startIndex_Leads, PartnerLeadsDataOriginal.customerMetadataList.length-1);
+    //         await rebuildLeadsTable(standardUtilities, PartnerLeadsData, action);
+    //     }
+    // }
+}
+
+export const onTrackCustomerJourney: ActionFunction<any> = async (
+    action,
+    _datastore,
+    standardUtilities
+): Promise<any> => {
+   console.warn('**** onLoadMoreData leads Action Triggered ****', action);
+   await standardUtilities.navigate(ROUTE.VOLT_APP, {user: action.payload.value});
+}
+
+
+

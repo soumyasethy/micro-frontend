@@ -21,6 +21,7 @@ export enum ACTION {
   FILTER_BY_DATE = 'FILTER_BY_DATE',
   ON_SEARCH_RP = 'ON_SEARCH_RP',
   ON_SORT_RP = 'ON_SORT_RP',
+  ON_TRACK_CUSTOMER_JOURNEY = 'ON_TRACK_CUSTOMER_JOURNEY'
 }
 export type TestActionPayload = {};
 

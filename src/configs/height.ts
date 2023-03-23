@@ -18,4 +18,5 @@ export const heightMap: HeightMapType = {
   [ROUTE.MODIFY_PLEDGED_AMOUNT]: 247+16,
   [ROUTE.SELECT_SOURCE]: 272,
   [ROUTE.UPDATE_SLIDER_AMOUNT]: 176,
+  [ROUTE.VOLT_APP]: 550,
 };

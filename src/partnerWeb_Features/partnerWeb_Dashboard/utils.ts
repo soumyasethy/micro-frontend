@@ -1,21 +1,13 @@
-import {
-    Action, OpenNewTabTargetType,
-    StandardUtilities,
-    WidgetItem,
-    WidgetProps,
-} from '@voltmoney/types'
+import {Action, OpenNewTabTargetType, StandardUtilities, WidgetItem, WidgetProps,} from '@voltmoney/types'
 import {
     BorderRadiusTokens,
     ColorTokens,
     FontFamilyTokens,
     FontSizeTokens,
-    IconProps,
     IconSizeTokens,
-    IconTokens,
     RadioProps,
-    RenderWidgetGroupProps,
     SizeTypeTokens,
-    SpaceProps,
+    StackAlignContent,
     StackAlignItems,
     StackJustifyContent,
     StackProps,
@@ -25,14 +17,11 @@ import {
     TypographyProps,
     WIDGET,
 } from '@voltmoney/schema'
-import {
-    PartnerLeadsType,
-    ReferredPartnerDataType,
-} from '../../SharedPropsService'
-import { ACTION, SelectActionPayload } from './types'
-import { ROUTE } from '../../routes'
-import {PartnerLink, stepIdToNameMap} from '../../configs/constants'
-import { addCommasToNumber, addYearToEpochTime } from '../../configs/utils'
+import {PartnerLeadsType, ReferredPartnerDataType,} from '../../SharedPropsService'
+import {ACTION, SelectActionPayload} from './types'
+import {ROUTE} from '../../routes'
+import {PartnerLink} from '../../configs/constants'
+import {addCommasToNumber, addYearToEpochTime} from '../../configs/utils'
 
 export type TableDataType = {
     // name: WidgetItem[],
@@ -46,7 +35,8 @@ export type TableDataType = {
     approvedCreditAmount: WidgetItem[]
     currentStepName: WidgetItem[]
     createdOn: WidgetItem[]
-    lastUpdatedOn: WidgetItem[]
+    // lastUpdatedOn: WidgetItem[]
+    customerJourney: WidgetItem[]
 }
 
 export type ActiveCustomerTableDataType = {
@@ -72,7 +62,8 @@ export const TableDataBuilder = (mockDATA: PartnerLeadsType[]) => {
         approvedCreditAmount: [],
         currentStepName: [],
         createdOn: [],
-        lastUpdatedOn: [],
+        // lastUpdatedOn: [],
+        customerJourney: []
     }
     const Title_MAP = {
         // selectMap: '',
@@ -120,11 +111,16 @@ export const TableDataBuilder = (mockDATA: PartnerLeadsType[]) => {
             flex: 2,
             cellMinWidth: 96,
         },
-        lastUpdatedOn: {
-            title: 'Last updated',
+        // lastUpdatedOn: {
+        //     title: 'Last updated',
+        //     flex: 2,
+        //     cellMinWidth: 96,
+        // },
+        customerJourney: {
+            title: 'Customer journey',
             flex: 2,
             cellMinWidth: 96,
-        },
+        }
     }
     console.log('*** mockDATA ***: ', mockDATA)
 
@@ -144,6 +140,8 @@ export const TableDataBuilder = (mockDATA: PartnerLeadsType[]) => {
             currentStepName: item.currentStepName ? item.currentStepName : '',
             createdOn: item?.creditApplication.lastUpdatedOn,
             lastUpdatedOn: item?.creditApplication.lastUpdatedOn,
+            // customerJourney: item?.borrowerAccountProfile.userId,
+            customerJourney: item
         }
         TABLE_DATA.push(tableObject)
         Object.keys(DATA).forEach((fieldName, index_j) => {
@@ -298,7 +296,52 @@ export const TableDataBuilder = (mockDATA: PartnerLeadsType[]) => {
                         lineHeight: 18,
                     },
                 }
-            } else {
+            } else if(fieldName === 'customerJourney') {
+                DATA[fieldName].push({
+                    id: `${fieldName}_${index_i}`,
+                    type: WIDGET.STACK,
+                })
+                DATA_STORE = {
+                    ...DATA_STORE,
+                    [`${fieldName}_${index_i}`]: <StackProps & WidgetProps>{
+                        type: StackType.row,
+                        alignItems: StackAlignItems.center,
+                        bgColor: ColorTokens.Primary_100,
+                        justifyContent: StackJustifyContent.center,
+                        alignContent: StackAlignContent.center,
+                        borderConfig: {
+                          borderRadius: BorderRadiusTokens.BR3,
+                        },
+                        padding: {
+                            top: SizeTypeTokens.XS,
+                            left: SizeTypeTokens.XS,
+                            bottom: SizeTypeTokens.XS
+                        },
+                        widgetItems: [
+                            {
+                                id: `trackbutton_${fieldName}_${index_i}`,
+                                type: WIDGET.TEXT,
+                            }
+                        ],
+                        action: {
+                            routeId: ROUTE.PARTNER_LEAD,
+                            type: ACTION.ON_TRACK_CUSTOMER_JOURNEY,
+                            payload: {
+                                value : tableObject[fieldName]
+                            }
+                        }
+                    },
+                    [`trackbutton_${fieldName}_${index_i}`]: <TypographyProps>{
+                        label: `Track`,
+                        fontSize: FontSizeTokens.SM,
+                        fontWeight: '600',
+                        fontFamily: FontFamilyTokens.Inter,
+                        color: ColorTokens.White,
+                        lineHeight: 18,
+                    },
+                }
+            }
+                else{
                 DATA[fieldName].push({
                     id: `${fieldName}_${index_i}`,
                     type: WIDGET.TEXT,
@@ -874,7 +917,37 @@ export const rebuildLeadsTable = async (
                                 label: `${date} ${month.slice(0, 3)}, ${year}`,
                             },
                         )
-                    } else {
+                    } else if (
+                        fieldName === 'customerJourney'
+                    ) {
+                        StandardUtilities.setDatastore(
+                            ROUTE.PARTNER_LEAD,
+                            `${fieldName}_${index_i}`,
+                            <StackProps>{
+                                action: {
+                                    routeId: ROUTE.PARTNER_LEAD,
+                                    type: ACTION.ON_TRACK_CUSTOMER_JOURNEY,
+                                    payload: {
+                                        value : TABLE_DATA[index_i][fieldName],
+                                    }
+                                }
+                            },
+                        )
+                        // StandardUtilities.setDatastore(
+                        //     ROUTE.PARTNER_LEAD,
+                        //     `trackbutton_${fieldName}_${index_i}`,
+                        //     <ButtonProps & WidgetProps>{
+                        //        action: {
+                        //            type: ACTION.ON_TRACK_CUSTOMER_JOURNEY,
+                        //            routeId: ROUTE.PARTNER_LEAD,
+                        //            payload: {
+                        //                value: TABLE_DATA[index_i][fieldName]
+                        //            },
+                        //        }
+                        //     },
+                        // )
+                    }
+                    else {
                         StandardUtilities.setDatastore(
                             ROUTE.PARTNER_LEAD,
                             `${fieldName}_${index_i}`,
@@ -1090,4 +1163,56 @@ export const sideBarNavigate = async (standardUtilities: StandardUtilities, acti
     } else {
         await standardUtilities.navigate(action.payload.routeId);
     }
+}
+
+const postMessageChildToParent = (
+    message: string | object,
+    targetOrigin = '*',
+) => {
+    window.parent.postMessage(message, targetOrigin);
+};
+const postMessageParentToChild = (
+    message: string | object,
+    targetOrigin = '*',
+) => {
+    const iframe = document.querySelector('iframe');
+    iframe.contentWindow.postMessage(
+        message,
+        targetOrigin,
+    );
+};
+const postMessageObserver = (
+    callBack: (event: MessageEvent) => void,
+) => {
+    window.addEventListener('message', callBack);
+};
+export const WebViewUtils = {
+    postMessageChildToParent,
+    postMessageParentToChild,
+    postMessageObserver,
+};
+
+export const onTrackCustomer = (userId: string) => {
+    const myHeaders = new Headers();
+    myHeaders.append('X-AppPlatform', 'VOLT_WEB_APP');
+    myHeaders.append(
+        'Authorization',
+        `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`,
+    );
+
+    const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+    };
+    fetch(
+        `http://api.staging.voltmoney.in/app/partner/getToken/user/${userId}`,
+        requestOptions,
+    )
+        .then(response => response.json())
+        .then(result => {
+            // await standardUtilites.navigate(ROUTE.VOLT_APP);
+            console.log('**** posting result *****', result);
+            setTimeout(()=>WebViewUtils.postMessageParentToChild(result), 5000);
+        })
+        .catch(error => console.log('error', error));
 }

@@ -90,6 +90,7 @@ import { PartnerWebDashboardPageMF } from './partnerWeb_Features/partnerWeb_Dash
 import { PartnerReferredPartnerMF } from './partnerWeb_Features/referredPartner/indexMF'
 import { PartnerActiveCustomerMF } from './partnerWeb_Features/activeCustomer/indexMf'
 import { PartnerLeadsMF } from './partnerWeb_Features/leads/indexMF'
+import {voltAppMF} from "./partnerWeb_Features/volt-App";
 
 //import { portfolioUnlockMF } from "./features/selectPortfolio/portfolioUnlock";
 
@@ -199,4 +200,5 @@ export const ROUTE_MAP: RouteMap = {
   [ROUTE.PARTNER_REFERRED_PARTNER]: PartnerReferredPartnerMF,
   [ROUTE.PARTNER_ACTIVE_CUSTOMER]: PartnerActiveCustomerMF,
   [ROUTE.PARTNER_LEAD]: PartnerLeadsMF,
+  [ROUTE.VOLT_APP]: voltAppMF
 };

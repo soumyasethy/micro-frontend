@@ -115,6 +115,7 @@ export interface BorrowerAccountProfile {
     name:        string;
     panNumber:   string;
     phoneNumber: string;
+    userId: string;
 }
 
 export interface BankDetails {

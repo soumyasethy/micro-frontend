@@ -129,4 +129,9 @@ export const PartnerLink =
         ? 'https://voltmoney.in/partner/'
         : 'https://staging.voltmoney.in/partner/';
 
+export const AppLink =
+    getBuildType() === BUILD_TYPE.BORROWER_PRODUCTION
+        ? 'https://app.voltmoney.in/'
+        : 'https://app.staging.voltmoney.in/';
+
 export const PARTNER_CACHE_EXPIRE_TIME = 1;

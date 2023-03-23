@@ -1,6 +1,6 @@
 import {Datastore, Layout, LAYOUTS, PageType, POSITION, TemplateSchema, WidgetProps,} from "@voltmoney/types";
 import {
-    BorderRadiusTokens, ButtonProps, ButtonTypeTokens, CalendarProps, CalendarStateToken,
+    BorderRadiusTokens,
     ColorTokens,
     FontFamilyTokens,
     FontSizeTokens,
@@ -10,16 +10,21 @@ import {
     StackHeight,
     StackProps,
     StackType,
-    StackWidth, TableProps, TextInputProps,
-    TypographyProps,
+    StackWidth,
+    TableProps,
+    TextInputProps,
+    TypographyProps, WebViewProps,
     WIDGET,
 } from "@voltmoney/schema";
 import {ROUTE} from "../../routes";
-import {ACTION} from "../partnerWeb_Dashboard/types";
+import {ACTION, PaginationActionPayloadType} from "./types";
 import {
+    onChangeTab,
     onLoadLeadsAction,
+    onLoadMoreData,
     onSearchLead,
     onSortLeads,
+    onTrackCustomerJourney,
 } from "./actions";
 import {SideBarBuilderDS} from "../sideNavBar";
 import sharedPropsService from "../../SharedPropsService";
@@ -30,7 +35,6 @@ import {CreditApplicationState, PARTNER_CACHE_EXPIRE_TIME} from "../../configs/c
 import {TableDataBuilder} from "../partnerWeb_Dashboard/utils";
 import {SearchInputActionPayload, SortActionPayload} from "../partnerWeb_Dashboard/types";
 import {EmptyStatePageBuilder} from "../emptyState";
-import {onChangeTab} from "./actions";
 import {addMinutesToCurrentTimeStamp} from "../../configs/utils";
 
 export const template: (
@@ -69,6 +73,7 @@ export const template: (
                         // { id: 'noDataMessageLeads', type: WIDGET.MESSAGE},
                         { id: 'leadspace1', type: WIDGET.SPACE },
                         { id: 'leadTable', type: WIDGET.TABLE },
+                        // { id: 'voltAppWebView', type: WIDGET.WEB_VIEW }
                     ]
                     : [{ id: 'emptyStateStack', type: WIDGET.STACK }],
         },
@@ -121,6 +126,21 @@ export const template: (
             //     routeId: ROUTE.PARTNER_DASHBOARD,
             //     payload: {},
             // },
+            enablePagination: false,
+            // paginationLeftAction: {
+            //     type: ACTION.ON_LEFT_PAGINATION,
+            //     routeId: ROUTE.PARTNER_LEAD,
+            //     payload: <PaginationActionPayloadType> {
+            //         value: 'left'
+            //     }
+            // },
+            // paginationRightAction: {
+            //     type: ACTION.ON_RIGHT_PAGINATION,
+            //     routeId: ROUTE.PARTNER_LEAD,
+            //     payload: <PaginationActionPayloadType> {
+            //         value: 'right'
+            //     }
+            // }
         },
         ...TableDataBuilder(partnerListData?.customerMetadataList).DATA_STORE,
         topStack: <StackProps>{
@@ -194,6 +214,10 @@ export const template: (
                 { id: 'dateFilterBtn', type: WIDGET.BUTTON },
             ],
         },
+        // voltAppWebView: <WebViewProps>{
+        //     iframe: true,
+        //     uri: 'https://app.staging.voltmoney.in/plj',
+        // },
         // applicationStatusFilterInput: <DropDownInputProps & WidgetProps>{
         //     label: 'Filter by Application Status',
         //     data: qualificationInputData,
@@ -206,53 +230,53 @@ export const template: (
         //         routeId: ROUTE.PARTNER_DASHBOARD,
         //     },
         // },
-        leadDate1: <CalendarProps & WidgetProps>{
-            year: { title: 'Year', value: '', placeholder: 'YYYY' },
-            month: { title: 'Month', value: '', placeholder: 'MM' },
-            date: { title: 'Date', value: '', placeholder: 'DD' },
-            state: CalendarStateToken.DEFAULT,
-            // caption: {
-            //     success: "",
-            //     error: "Age should be between 18 and 65",
-            //     default: "Date of birth as per PAN",
-            // },
-            action: {
-                type: ACTION.VALIDATE_FORM_1,
-                payload: <SearchInputActionPayload>{
-                    value: '',
-                    widgetId: 'calendarPicker',
-                },
-                routeId: ROUTE.PARTNER_LEAD,
-            },
-        },
-        leadDate2: <CalendarProps & WidgetProps>{
-            year: { title: 'Year', value: '', placeholder: 'YYYY' },
-            month: { title: 'Month', value: '', placeholder: 'MM' },
-            date: { title: 'Date', value: '', placeholder: 'DD' },
-            state: CalendarStateToken.DEFAULT,
-            // caption: {
-            //     success: "",
-            //     error: "Age should be between 18 and 65",
-            //     default: "Date of birth as per PAN",
-            // },
-            action: {
-                type: ACTION.VALIDATE_FORM_2,
-                payload: <SearchInputActionPayload>{
-                    value: '',
-                    widgetId: 'calendarPicker',
-                },
-                routeId: ROUTE.PARTNER_LEAD,
-            },
-        },
-        dateFilterBtn: <ButtonProps & WidgetProps>{
-            label: 'Search by date',
-            type: ButtonTypeTokens.LargeFilled,
-            action: {
-                type: ACTION.FILTER_BY_DATE,
-                payload: {},
-                routeId: ROUTE.PARTNER_LEAD,
-            },
-        },
+        // leadDate1: <CalendarProps & WidgetProps>{
+        //     year: { title: 'Year', value: '', placeholder: 'YYYY' },
+        //     month: { title: 'Month', value: '', placeholder: 'MM' },
+        //     date: { title: 'Date', value: '', placeholder: 'DD' },
+        //     state: CalendarStateToken.DEFAULT,
+        //     // caption: {
+        //     //     success: "",
+        //     //     error: "Age should be between 18 and 65",
+        //     //     default: "Date of birth as per PAN",
+        //     // },
+        //     action: {
+        //         type: ACTION.VALIDATE_FORM_1,
+        //         payload: <SearchInputActionPayload>{
+        //             value: '',
+        //             widgetId: 'calendarPicker',
+        //         },
+        //         routeId: ROUTE.PARTNER_LEAD,
+        //     },
+        // },
+        // leadDate2: <CalendarProps & WidgetProps>{
+        //     year: { title: 'Year', value: '', placeholder: 'YYYY' },
+        //     month: { title: 'Month', value: '', placeholder: 'MM' },
+        //     date: { title: 'Date', value: '', placeholder: 'DD' },
+        //     state: CalendarStateToken.DEFAULT,
+        //     // caption: {
+        //     //     success: "",
+        //     //     error: "Age should be between 18 and 65",
+        //     //     default: "Date of birth as per PAN",
+        //     // },
+        //     action: {
+        //         type: ACTION.VALIDATE_FORM_2,
+        //         payload: <SearchInputActionPayload>{
+        //             value: '',
+        //             widgetId: 'calendarPicker',
+        //         },
+        //         routeId: ROUTE.PARTNER_LEAD,
+        //     },
+        // },
+        // dateFilterBtn: <ButtonProps & WidgetProps>{
+        //     label: 'Search by date',
+        //     type: ButtonTypeTokens.LargeFilled,
+        //     action: {
+        //         type: ACTION.FILTER_BY_DATE,
+        //         payload: {},
+        //         routeId: ROUTE.PARTNER_LEAD,
+        //     },
+        // },
         // noDataMessageLeads: <MessageProps>{
         //     label: 'Sorry, but nothing match your search term',
         //     icon: <IconProps>{
@@ -322,6 +346,10 @@ export const PartnerLeadsMF: PageType<any> = {
 
         const activeWidgetID = await SharedPropsService.getPartnerSideBarActiveId();
         console.log("activeWidgetID: ", activeWidgetID);
+
+        // splice the data before sending to template
+        // partnerLeadsData.customerMetadataList = partnerLeadsData.customerMetadataList.slice(startIndex_Leads, startIndex_Leads + itemsPerPage_Leads);
+
         return Promise.resolve(template(
             partnerLeadsData,
         ));
@@ -330,7 +358,9 @@ export const PartnerLeadsMF: PageType<any> = {
         [ACTION.ON_SEARCH_LEADS]: onSearchLead,
         [ACTION.ON_SORT]: onSortLeads,
         [ACTION.ON_LOAD]: onLoadLeadsAction,
-        [ACTION.CHANGE_TAB]: onChangeTab
+        [ACTION.CHANGE_TAB]: onChangeTab,
+        [ACTION.ON_LOAD_MORE_DATA]: onLoadMoreData,
+        [ACTION.ON_TRACK_CUSTOMER_JOURNEY]: onTrackCustomerJourney
     },
     action: {
         routeId: ROUTE.PARTNER_LEAD,
