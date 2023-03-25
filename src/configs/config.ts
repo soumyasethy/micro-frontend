@@ -1,8 +1,9 @@
-import SharedPropsService from '../SharedPropsService'
-import { getScreenType } from '../configs/platfom-utils'
-import { Dimensions } from 'react-native'
-import { SCREEN_SIZE } from '@voltmoney/types'
-import { IconTokens } from '@voltmoney/schema'
+import SharedPropsService from "../SharedPropsService";
+import { getScreenType } from "../configs/platfom-utils";
+import {Dimensions, Platform} from "react-native";
+import { SCREEN_SIZE } from "@voltmoney/types";
+import { IconTokens } from "@voltmoney/schema";
+import DeviceInfo from "react-native-device-info";
 
 export const __isTest__ = false
 export const __isMock__ = false
@@ -48,24 +49,30 @@ export const defaultHeaders = async () => {
 }
 
 export const getAuthHeaders = async () => ({
-    'X-EntityType': 'BORROWER',
-    'X-AppPlatform': await SharedPropsService.getAppPlatform(),
-    'Content-Type': 'application/json',
-    'X-DeviceType':
-        screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL
-            ? 'Mobile'
-            : 'Desktop',
-})
+  "X-EntityType": "BORROWER",
+  "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+  "Content-Type": "application/json",
+  "X-DeviceType":
+    screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL
+      ? DeviceInfo.getModel()
+      : "Desktop",
+});
+
+export const getDeviceName =  () => {
+  return DeviceInfo.getBrand()
+}
 export const getAppHeader = async () => ({
-    'X-AppMode': 'INVESTOR_VIEW',
-    'X-AppPlatform': await SharedPropsService.getAppPlatform(),
-    Authorization: `Bearer ${await SharedPropsService.getToken()}`,
-    'Content-Type': 'application/json',
-    'X-DeviceType':
-        screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL
-            ? 'Mobile'
-            : 'Desktop',
-})
+  "X-AppMode": "INVESTOR_VIEW",
+  "X-DeviceId" : Platform.OS === "web" ? ""  :  DeviceInfo.getDeviceId(),
+  "X-AppPlatform": await SharedPropsService.getAppPlatform(),
+  "X-AppVersion" :  Platform.OS === "web" ? "": DeviceInfo.getVersion(),
+  Authorization: `Bearer ${await SharedPropsService.getToken()}`,
+  "Content-Type": "application/json",
+  "X-DeviceType":
+    screenType === SCREEN_SIZE.X_SMALL || screenType === SCREEN_SIZE.SMALL
+      ?  DeviceInfo.getModel()
+      : "Desktop",
+});
 
 export const getPartnerAuthHeaders = () => ({
     'X-EntityType': 'PARTNER',

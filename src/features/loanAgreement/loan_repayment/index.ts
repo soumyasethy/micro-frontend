@@ -148,7 +148,7 @@ export const template: (
       labelColor: ColorTokens.White,
       width: ButtonWidthTypeToken.FULL,
       action: {
-        type: ACTION.REPAYMENT,
+        type: ACTION.OPEN_TAB,
         payload: <LimitPayload>{ value: url },
         routeId: ROUTE.LOAN_REPAYMENT,
       },

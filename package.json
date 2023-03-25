@@ -50,7 +50,8 @@
     "@voltmoney/types": "^1.0.22",
     "lodash": "4.17.21",
     "moment": "^2.29.4",
-    "react-google-login": "^5.2.2"
+    "react-google-login": "^5.2.2",
+    "react-native-device-info": "^10.4.0"
   },
   "bugs": {
     "url": "https://github.com/VOLTMoney/micro-frontend/issues"

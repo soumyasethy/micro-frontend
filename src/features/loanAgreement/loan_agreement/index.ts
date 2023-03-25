@@ -147,7 +147,7 @@ export const template: (
       labelColor: ColorTokens.White,
       width: ButtonWidthTypeToken.FULL,
       action: {
-        type: ACTION.REPAYMENT,
+        type: ACTION.OPEN_TAB,
         payload: <{}>{
           value: urlData,
           widgetId: "input",

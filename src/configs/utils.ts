@@ -660,6 +660,7 @@ export const  uploadToS3Bucket = function (url , uri, contentType){
 
 
     xhr.onreadystatechange = function() {
+      console.log("Inside the upload trajectory", xhr.readyState)
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
           resolve("Successfully fetched")
