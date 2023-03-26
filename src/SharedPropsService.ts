@@ -302,7 +302,7 @@ export type PartnerCacheType = {
 }
 
 let _globalProps: GlobalProps = {
-    buildType: BUILD_TYPE.PARTNER_STAGING,
+    buildType: BUILD_TYPE.BORROWER_STAGING,
     user: {},
     partnerUser: {
         name: '',
