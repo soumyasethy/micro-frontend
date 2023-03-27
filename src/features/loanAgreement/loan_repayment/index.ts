@@ -47,6 +47,7 @@ import {
   PollMandateStatus,
 } from "./actions";
 import { fetchLinkRepo } from "./repo";
+import {Platform} from "react-native";
 
 export const template: (
   stepper: StepperItem[],
@@ -148,7 +149,7 @@ export const template: (
       labelColor: ColorTokens.White,
       width: ButtonWidthTypeToken.FULL,
       action: {
-        type: ACTION.OPEN_TAB,
+        type: Platform.OS === 'web' ? ACTION.REPAYMENT :  ACTION.OPEN_TAB,
         payload: <LimitPayload>{ value: url },
         routeId: ROUTE.LOAN_REPAYMENT,
       },

@@ -8,6 +8,7 @@ import {APP_CONFIG, defaultHeaders} from "../../../configs/config";
 import {User} from "../../login/otp_verify/types";
 import {POPUP_TARGET_NAME} from "../../../configs/constants";
 import {PollAgreementStatusAction} from "../loan_agreement/actions";
+import {Platform} from "react-native";
 
 let stepResponseObject: string = null;
 export const authenticateRepayment: ActionFunction<LimitPayload> = async (
@@ -78,10 +79,30 @@ export const goBack: ActionFunction<LimitPayload> = async (
 export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  {  appendWidgets , removeWidgets, ...props }
+  {  appendWidgets , removeWidgets,showPopup ,...props }
 ): Promise<any> => {
-  console.log("Packet payload is ", action.payload)
   if (action.payload.value) {
+
+
+    if(Platform.OS === 'web'){
+      showPopup({
+        type: "DEFAULT",
+        iconName: IconTokens.Redirecting,
+        title: "Please click continue for AutoPay",
+        subTitle: "Return to Volt after successful completion",
+        ctaLabel: "Continue",
+        ctaAction: {
+          type: ACTION.OPEN_TAB,
+          routeId: ROUTE.LOAN_REPAYMENT,
+          payload: {
+            value: action.payload.value,
+          },
+        },
+        primary: false,
+      });
+      return
+    }
+
 
     await appendWidgets(
         ROUTE.LOAN_REPAYMENT,
@@ -103,9 +124,9 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
       {id: "btnData", type: WIDGET.STACK},
     ]);
 
-    await PollMandateStatus(action, {}, {appendWidgets, removeWidgets, ...props})
-  }
+    await PollMandateStatus(action, {}, {appendWidgets, removeWidgets, showPopup, ...props})
 
+  }
 };
 
 export const PollMandateStatus: ActionFunction<any> = async (
@@ -129,6 +150,7 @@ export const PollMandateStatus: ActionFunction<any> = async (
           const user: User = await SharedPropsService.getUser();
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
+          Platform.OS === 'web' && hidePopup()
           showPopup({
             isAutoTriggerCta: false,
             type: "SUCCESS",

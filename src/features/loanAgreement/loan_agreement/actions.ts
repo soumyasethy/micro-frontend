@@ -15,6 +15,7 @@ import SharedPropsService from "../../../SharedPropsService";
 import { api } from "../../../configs/api";
 import { User } from "../../login/otp_verify/types";
 import { POPUP_TARGET_NAME } from "../../../configs/constants";
+import {Platform} from "react-native";
 
 export const authenticateRepayment: ActionFunction<LimitPayload> = async (
   action,
@@ -51,9 +52,37 @@ export const goBack: ActionFunction<LimitPayload> = async (
 export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
   action,
   _datastore,
-  {  appendWidgets, removeWidgets,...props }
+  {  appendWidgets, removeWidgets,openNewTab,hidePopup,showPopup ,...props }
 ): Promise<any> => {
+
+
   if (action.payload.value) {
+
+
+    if(Platform.OS === 'web'){
+      openNewTab(action.payload.value, OpenNewTabTargetType.popup, {
+        target: POPUP_TARGET_NAME.AGREEMENT,
+        width: APP_CONFIG.POP_UP_SIZE.WIDTH,
+        height: APP_CONFIG.POP_UP_SIZE.HEIGHT,
+      });
+      hidePopup();
+      showPopup({
+        isAutoTriggerCta: true,
+        type: "DEFAULT",
+        iconName: IconTokens.Redirecting,
+        title: "Waiting for response",
+        subTitle: "Please wait while we process your request",
+        ctaAction: {
+          type: ACTION.POLL_AGREEMENT_STATUS,
+          routeId: ROUTE.LOAN_AGREEMENT,
+          payload: {},
+        },
+        primary: false,
+      });
+
+      return
+    }
+
     // /** manually opening tab to avoid popup blocker **/
     await removeWidgets(ROUTE.LOAN_AGREEMENT, [
       { id: "contentItem", type: WIDGET.TEXT },
@@ -78,7 +107,7 @@ export const openLinkInNewTab: ActionFunction<LimitPayload> = async (
         "headerSpace"
     );
 
-    await PollAgreementStatusAction(action,{},{appendWidgets, removeWidgets,...props})
+    await PollAgreementStatusAction(action,{},{appendWidgets, removeWidgets,openNewTab,hidePopup,showPopup,...props})
 
   }
 };
@@ -106,7 +135,7 @@ export const PollAgreementStatusAction: ActionFunction<any> = async (
           const user: User = await SharedPropsService.getUser();
           user.linkedApplications[0] = response.updatedApplicationObj;
           await SharedPropsService.setUser(user);
-          console.log("Polling success")
+          Platform.OS === "web" && hidePopup()
           showPopup({
             isAutoTriggerCta: false,
             type: "SUCCESS",
