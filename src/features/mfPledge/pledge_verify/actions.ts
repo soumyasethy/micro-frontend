@@ -75,7 +75,7 @@ export const verifyOTP: ActionFunction<OtpPledgePayload> = async (
         await setDatastore(ROUTE.PLEDGE_VERIFY, 'input', <TextInputProps>{
             state: InputStateToken.SUCCESS,
         })
-        await goBack()
+        //await goBack()
         AssetRepositoryMap.get(assetRepositoryType).IS_PLEDGED = true
         /*** update user application obj ***/
         user.linkedApplications[0] = _.get(
